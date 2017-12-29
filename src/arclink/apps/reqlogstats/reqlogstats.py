@@ -10,6 +10,7 @@
 #
 #import glob
 import email
+import hashlib
 import optparse
 import os
 import sqlite3
@@ -417,13 +418,24 @@ def report_insert(tablename, heads):
 
 def insert_user(con, k, user):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsUser VALUES (?, ?, ?, ?, ?, ?, ?)"
+    q = "INSERT INTO ArcStatsUser VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     heads = user[0]
     report_insert('User', heads)
 
+    # Change 'nonce' to any random-ish 7-char + ':' string for your site.
+    # If you change hash algorithm, change the value of userhash too.
+    nonce = 'aC28gfz:'
     for row in user[1:]:
-        items = row[0:5]  # User  Requests  Lines  Nodata/Errors  Size
-        v = (k[0], k[1], items[0], items[1], items[2], items[3], items[4])
+        items = row[0:5]  # User  Client  Requests  Lines  Nodata/Errors  Size
+        user_0 = items[0]
+        client = items[1]
+        if client == 'fdsnws':
+            user = user_0
+            alg = 0
+        else:
+            user = hashlib.sha256(nonce + user_0).hexdigest()
+            alg = 256
+        v = (k[0], k[1], user, alg, items[1], items[2], items[3], items[4])
         cursor.execute(q, v)
     con.commit()
 
