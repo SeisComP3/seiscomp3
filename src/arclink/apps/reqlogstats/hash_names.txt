@@ -1,0 +1,67 @@
+Reduce number of distinct names:
+- strip/trim
+- lowercase domain name (but not first part, per RFC ???)
+
+
+
+Generating old hashes is easy:
+
+$ time for x in $(awk -e '{print $4}' users_2016_removed.list ) ; do echo -n $x | shasum -a 224 ; done | tail
+
+25 seconds on my laptop)
+
+
+Note the aim is not to prevent discovery - the original user names
+are in the Arclink db and webreqlog reports. Rather, hashing prevents
+casual peeping and snooping, and associated moral hazard along the
+lines of "I wonder what X is looking at." Further, it protects against
+accidental disclosure *from this application*. An attacker can just
+go elsewhere.
+
+"I don't have to run faster than the bear; I just have to run faster than *you*"
+
+If hashes became available from upstream (looking at *you*, webreqlog),
+I'd store those instead.
+
+Finally, a halfway determined adversary can generate guesses for
+preimages ... "pevans@gfz-potsdam.de", anyone? ... to see if their
+hash is present. And then use this likely plaintext to find the
+salt. But salting prevents you from looking up the hash in some
+table/service on the Internet in future.
+(cf.  http://www.sha1-lookup.com )
+
+If hashes became available from upstream (looking at *you*, webreqlog),
+I'd store those instead.
+
+I might as well tell you the salt: 'aC28gfz', so the value stored is
+
+  HASH( {salt} + ':' + {e-mail address} )
+
+The downside is the length of the hashes compared to the original mail addresses. Being longer prevents collision risk.
+
+SHA-256 sum is 64 chars; -512 is 128. Longest mail address seen is 48 chars.
+SHA-1 is 40 chars, not always long enough, especially with 8 chars lost to salting. SHA-224 is 56 chars, and vulnerable to length extension attack, so might as well just use SHA-256 sum.
+
+(awk '{print $4}' users_2016_removed.list | sed -e 's/[-_a-zA-Z0-9.,@:\/\?]/x/g' | sort | uniq | tail -1 | wc )
+
+OTOH, this is not about *security*, just avoiding collision most of the time. Git uses SHA-1.
+
+
+While we're at it, we should allow users so see what personal
+data we hold about them.
+Send a request to ...  for a report for (e-mail address) and mail
+it to that address.
+As always, we assume that only one user controls their own e-mail address,
+so only the individual making the request receives the report.
+
+  "Someone, possibly you, has requested a summary of personally identifiable
+  information we hold on you. Here is a report for data requests which were
+  made using the identifier {{ email-addr }}. 
+  We do/do not have infromation about requests for metadata (inventory),
+  QC (wfparams) or routing (routingscv)
+
+  We retain information about the times of these requests in accordance
+  with our privacy policy [REF]. We can make this availble to you on request."
+
+
+
