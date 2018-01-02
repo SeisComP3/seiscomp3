@@ -1845,7 +1845,11 @@ class Connection: private CFIFO_Partner
         authentication(false), downloading(false), download_fd(-1),
         download_pos(0), _sslPasswordFile(password_file) {}
     
-    ~Connection() { }
+    ~Connection()
+      {
+        if(download_fd != -1)
+            close(download_fd);
+      }
 
     bool deliver();
     bool input();
