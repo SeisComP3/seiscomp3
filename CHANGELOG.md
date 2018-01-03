@@ -1,5 +1,15 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scvsmag
+
+  * Catch exception when origin.quality.azimuthalGap is not set
+
+* arclink
+
+  * Avoid leaking file descriptors when connections close unexpectedly
+
 ## Release 2017.334 patch2
 
 ```SC_API_VERSION 11.1.0```
