@@ -14,7 +14,7 @@ curday = None
 
 def flush_day(day, row):
     s = sum(float(row[x]) for x in row.keys())
-    print "%s %10.1f" % (day, s),
+    print "%s %12.3f" % (day, s),
     for dcid in dcid_list:
         # if row.has_key(dcid):
         # Ugly: ideally would be None if there were no data

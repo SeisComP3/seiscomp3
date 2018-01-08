@@ -334,7 +334,10 @@ def lookup_source(con, host, port, dcid, description):
     found = (result[0][0] != 0)
     #print result, 'found=', found
     if not found:
-        q = "INSERT INTO ArcStatsSource (host, port, dcid, description) VALUES (?, ?, ?, ?)"
+        q = '''
+INSERT INTO ArcStatsSource
+  (host, port, dcid, description) VALUES (?, ?, ?, ?)
+'''
         v = (host, port, dcid, description)
         print "SQLITE: %s" % q
         cursor.execute(q, v)
@@ -383,12 +386,21 @@ def insert_summary(con, k, summary):
         tl = summary['lines']
         ts = summary['size']
 
+        col_heads = '(start_day, src, requests, requests_with_errors, error_count, users, stations, total_lines, total_size)'
         if 'stations' in summary.keys():
             st = summary['stations']
-            q = "INSERT INTO ArcStatsSummary (start_day, src, requests, requests_with_errors, error_count, users, stations, total_lines, total_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            q = '''
+INSERT INTO ArcStatsSummary
+  ''' + col_heads + '''
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+'''
             v = (k[0], k[1], r, rwe, e, u, st, tl, ts)
         else:
-            q = "INSERT INTO ArcStatsSummary VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?)"
+            q = '''
+INSERT INTO ArcStatsSummary
+  ''' + col_heads + '''
+  VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?)
+'''
             v = (k[0], k[1], r, rwe, e, u, tl, ts)
 
     except KeyError as e:
@@ -418,7 +430,11 @@ def report_insert(tablename, heads):
 
 def insert_user(con, k, user):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsUser VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    q = '''
+INSERT INTO ArcStatsUser
+  (start_day, src, userID, userHash, requests, lines, errors, size)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+'''
     heads = user[0]
     report_insert('User', heads)
 
@@ -442,7 +458,11 @@ def insert_user(con, k, user):
 
 def insert_request(con, k, table):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsRequest VALUES (?, ?, ?, ?, ?, NULL, ?, NULL)"
+    q = '''
+INSERT INTO ArcStatsRequest
+  (start_day, src, type, requests, lines, nodata, errors, size)
+  VALUES (?, ?, ?, ?, ?, NULL, ?, NULL)
+'''
     heads = table[0]
     report_insert('Request', heads)
     for row in table[1:]:
@@ -454,7 +474,11 @@ def insert_request(con, k, table):
 
 def insert_volume(con, k, table):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsVolume VALUES (?, ?, ?, ?, NULL, ?, ?)"
+    q = '''
+INSERT INTO ArcStatsVolume
+  (start_day, src, type, requests, lines, errors, size)
+  VALUES (?, ?, ?, ?, NULL, ?, ?)
+'''
     heads = table[0]
     report_insert('Volume', heads)
 
@@ -473,7 +497,11 @@ def insert_station(con, k, table):
 
 def insert_network(con, k, table):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsNetwork VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)"
+    q = '''
+INSERT INTO ArcStatsNetwork
+  (start_day, src, networkCode, requests, lines, nodata, errors, size, time)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)
+'''
     heads = table[0]
     report_insert('Network', heads)
 
@@ -501,9 +529,12 @@ def insert_network(con, k, table):
 
 def insert_messages(con, k, table):
     cursor = con.cursor()
-    q = "INSERT INTO ArcStatsMessages VALUES (?, ?, ?, ?)"
+    q = '''
+INSERT INTO ArcStatsMessages
+  (start_day, src, message, count) VALUES (?, ?, ?, ?)
+'''
     heads = table[0]
-    report_insert("Messages", heads)
+    report_insert('Messages', heads)
 
     for row in table[1:]:
         items = row[0:2]  # Count    Message
@@ -515,8 +546,12 @@ def insert_messages(con, k, table):
 def insert_clientIP(con, k, table):
     cursor = con.cursor()
     heads = table[0]
-    report_insert("ClientIP", heads)
-    q = "INSERT INTO ArcStatsClientIP VALUES (?, ?, ?, ?, ?, ?, NULL)"
+    report_insert('ClientIP', heads)
+    q = '''
+INSERT INTO ArcStatsClientIP
+  (start_day, src, clientIP, requests, lines, errors, size)
+  VALUES (?, ?, ?, ?, ?, ?, NULL)
+'''
 
     for row in table[1:]:
         items = row[0:4]  # ClientIP    Requests    Lines    Nodata/Errors
@@ -528,8 +563,12 @@ def insert_clientIP(con, k, table):
 def insert_userIP(con, k, table):
     cursor = con.cursor()
     heads = table[0]
-    report_insert("UserIP", heads)
-    q = "INSERT INTO ArcStatsUserIP VALUES (?, ?, ?, ?, ?, ?, NULL)"
+    report_insert('UserIP', heads)
+    q = '''
+INSERT INTO ArcStatsUserIP
+  (start_day, src, userIP, requests, lines, errors, size)
+  VALUES (?, ?, ?, ?, ?, ?, NULL)
+'''
 
     for row in table[1:]:
         items = row[0:4]  # UserIP    Requests    Lines    Nodata/Errors
