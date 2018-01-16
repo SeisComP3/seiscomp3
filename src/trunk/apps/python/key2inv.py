@@ -382,7 +382,7 @@ class StationWrapper(object):
                     loc.setLongitude(self.obj.longitude())
                     loc.setElevation(self.obj.elevation())
 
-                    stream = StreamWrapper(seiscomp3.DataModel.Stream())
+                    stream = StreamWrapper(seiscomp3.DataModel.Stream.Create())
                     stream.obj.setCode(streamCode)
                     stream.obj.setStart(start)
                     loc.add(stream.obj)

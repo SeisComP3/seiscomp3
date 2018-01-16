@@ -677,7 +677,13 @@ void VsMagnitude::handleEvent(Event *event) {
 	SEISCOMP_DEBUG("dmax; %f, davg: %f, dthresh: %f", dmax, davg, dthresh);
 
 	// Get azimuthal gap
-	vsevent->azGap = org->quality().azimuthalGap();
+	try {
+		vsevent->azGap = org->quality().azimuthalGap();
+	}
+	catch ( ... ) {
+		vsevent->azGap = 360;
+		SEISCOMP_INFO("origin has no quality or azimuthalGap, setting azGap to default (360).");
+	}
 }
 
 namespace {

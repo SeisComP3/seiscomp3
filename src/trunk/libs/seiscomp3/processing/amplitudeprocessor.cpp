@@ -512,7 +512,7 @@ void AmplitudeProcessor::prepareData(DoubleArray &data) {
 		// cannot be correctly. We do not want to assume a unit here
 		// to prevent computation errors in case of bad configuration.
 		SignalUnit unit;
-		if ( !unit.fromString(sensor->unit().c_str()) ) {
+		if ( !unit.fromString(_streamConfig[_usedComponent].gainUnit.c_str()) ) {
 			// Invalid unit string
 			setStatus(IncompatibleUnit, 2);
 			return;
@@ -549,7 +549,7 @@ void AmplitudeProcessor::prepareData(DoubleArray &data) {
 		// changed in the future and checked more strictly.
 		if ( sensor ) {
 			SignalUnit unit;
-			if ( !unit.fromString(sensor->unit().c_str()) ) {
+			if ( !unit.fromString(_streamConfig[_usedComponent].gainUnit.c_str()) ) {
 				// Invalid unit string
 				setStatus(IncompatibleUnit, 4);
 				return;

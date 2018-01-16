@@ -500,7 +500,7 @@ class _RequestTrackerDB(object):
         tw = self.averageTimeWindow.seconds()
         if self.totalLineCount > 0:
             tw = self.averageTimeWindow.seconds() / self.totalLineCount # avarage request time window
-        if tw > 2**32: tw = -1 # prevent 32bit int overflow
+        if tw >= 2**31: tw = -1 # prevent 32bit int overflow
         ars.setAverageTimeWindow(tw)
         ars.setTotalLineCount(self.totalLineCount)
         ars.setOkLineCount(self.okLineCount)
