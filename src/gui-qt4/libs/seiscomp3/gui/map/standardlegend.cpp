@@ -108,10 +108,11 @@ void StandardLegendItem::drawSymbol(QPainter *painter, const QRect &rect) {
 	}
 	else {
 		QPen p(pen);
-		p.setWidth(qMin(4, rect.height()));
+		int h = qMin(4, rect.height());
+		p.setWidth(h);
 		painter->setPen(p);
-		painter->drawLine(rect.left(), (rect.top()+rect.bottom())/2,
-		                  rect.right(), (rect.top()+rect.bottom())/2);
+		painter->drawLine(rect.left(), (rect.top()+rect.bottom()+h)/2,
+		                  rect.right(), (rect.top()+rect.bottom()+h)/2);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -268,6 +269,7 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 	int fontHeight = fm.height();
 
 	painter.save();
+	painter.setFont(font());
 
 	switch ( _orientation ) {
 		case Qt::Vertical:
@@ -304,10 +306,8 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 
 		case Qt::Horizontal:
 		{
-			int textWidth = rect.width() - fontHeight - fontHeight*3/2;
-
 			QRect symbolRect(rect.left() + fontHeight/2, 0, 0, 0);
-			QRect textRect(rect.left() + fontHeight*2, 0, 0, 0);
+			QRect textRect(rect.left() + fontHeight/2 + fontHeight + fontHeight/2, 0, 0, 0);
 
 			for ( int c = 0; c < _columns; ++c ) {
 				symbolRect.setTop(rect.top() + fontHeight/2);
@@ -320,7 +320,7 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 				for ( int i = 0; i < cnt; ++i ) {
 					int idx = i*_columns+c;
 					symbolRect.setWidth(fontHeight); symbolRect.setHeight(fontHeight);
-					textRect.setWidth(textWidth); textRect.setHeight(fontHeight);
+					textRect.setWidth(_columnWidth); textRect.setHeight(fontHeight);
 
 					_items[idx]->draw(&painter, symbolRect, textRect);
 
@@ -328,8 +328,8 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 					textRect.setTop(textRect.top() + fontHeight*3/2);
 				}
 
-				symbolRect.setLeft(symbolRect.left() + _columnWidth + fontHeight*2);
-				textRect.setLeft(textRect.left() + _columnWidth + fontHeight*2);
+				symbolRect.setLeft(symbolRect.left() + _columnWidth + fontHeight/2 + fontHeight + fontHeight/2);
+				textRect.setLeft(textRect.left() + _columnWidth + fontHeight/2 + fontHeight + fontHeight/2);
 			}
 			break;
 		}

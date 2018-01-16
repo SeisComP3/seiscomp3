@@ -119,25 +119,26 @@ class RequestOptions:
 			self.endBefore   = None
 			self.endAfter    = None
 
-		# used by FDSN Station only
+		# used by FDSN Station and DataSelect
 		def match(self, start, end=None):
-			# simple time
-			if self.simpleTime:
-				# limit to metadata epochs active on or after the specified
-				# start time and starting before specified end time
-				return \
-					(not self.start or (end is None or end >= self.start)) and \
-					(not self.end or start <= self.end)
+			# simple time: limit to epochs intersecting with the specified time
+			# range
+			res = (not self.start or (end is None or end >= self.start)) and \
+			      (not self.end or start <= self.end)
 
-			# window time
-			return \
-				(not self.startBefore or (
-				     start is not None and start < self.startBefore)) and \
-				(not self.startAfter or (
-				     start is not None and start > self.startAfter)) and \
-				(not self.endBefore or (
-				     end is not None and end < self.endBefore)) and \
-				(not self.endAfter or end is None or end > self.endAfter)
+			# window time: limit to epochs strictly starting or ending before or
+			# after a specified time value
+			if not self.simpleTime:
+				res = res and \
+				      (not self.startBefore or (
+				           start is not None and start < self.startBefore)) and \
+				      (not self.startAfter or (
+				           start is not None and start > self.startAfter)) and \
+				      (not self.endBefore or (
+				           end is not None and end < self.endBefore)) and \
+				      (not self.endAfter or end is None or end > self.endAfter)
+
+			return res
 
 
 	#---------------------------------------------------------------------------
@@ -293,30 +294,24 @@ class RequestOptions:
 		t.start = self.parseTimeStr(self.PStart)
 		t.end = self.parseTimeStr(self.PEnd)
 
-		# if we do not parse window time we can stop here
 		simpleTime = t.start is not None or t.end is not None
-		if not parseWindowTime:
-			if simpleTime:
-				self.time = t
-			return
 
 		# [start,end][before,after]
-		t.startBefore = self.parseTimeStr(self.PStartBefore)
-		t.startAfter  = self.parseTimeStr(self.PStartAfter)
-		t.endBefore   = self.parseTimeStr(self.PEndBefore)
-		t.endAfter    = self.parseTimeStr(self.PEndAfter)
+		if parseWindowTime:
+			t.startBefore = self.parseTimeStr(self.PStartBefore)
+			t.startAfter  = self.parseTimeStr(self.PStartAfter)
+			t.endBefore   = self.parseTimeStr(self.PEndBefore)
+			t.endAfter    = self.parseTimeStr(self.PEndAfter)
 
-		windowTime = t.startBefore is not None or t.startAfter is not None or \
-		             t.endBefore is not None or t.endAfter is not None
-		if simpleTime and windowTime:
-			raise ValueError, "simple time and window time parameters may " \
-			                  "not be combined"
-		if simpleTime:
+			windowTime = t.startBefore is not None or t.startAfter is not None or \
+			             t.endBefore is not None or t.endAfter is not None
+			if simpleTime or windowTime:
+				self.time = t
+				self.time.simpleTime = not windowTime
+
+		elif simpleTime:
 			self.time = t
 			self.time.simpleTime = True
-		elif windowTime:
-			self.time = t
-			self.time.simpleTime = False
 
 
 	#---------------------------------------------------------------------------
