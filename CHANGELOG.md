@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2017.334 patch3
 
 * scvsmag
 
@@ -9,6 +9,28 @@
 * arclink
 
   * Avoid leaking file descriptors when connections close unexpectedly
+
+* scm
+
+  * Fix keyboard handling of ncurses plugin. Prior to that fix, keyboard input
+    was ignored in combination with some Linux distributions.
+
+* fdsnws
+
+  * Allow combination of simple and window time in station requests
+
+* trunk
+
+  * Fix SDK implementation of Seiscomp::DataModel::DiffMerge
+  * Use processed gainUnit (converted to uppercase) rather than Sensor.unit to
+    prepare data in AmplitudeProcessor. This affect amplitude computation
+    for inventories where the gainUnit is given in lowercase characters, e.g. "m/s"
+    rather than "M/S".
+
+* key2inv
+
+  * Fix stream creation API call with respect to latest API version
+
 
 ## Release 2017.334 patch2
 
