@@ -767,13 +767,15 @@ bool DiffMerge::equalsIndex(Object *o1, Object *o2) {
 		_currentNode = nodeCopy;
 		return false;
 	}
-	
+
+	bool hasIndex = false;
+
 	// iterate over all properties
 	for ( size_t i = 0; i < o1->meta()->propertyCount(); ++i ) {
-		const Core::MetaProperty* metaProp = o1->meta()->property(i);
+		const Core::MetaProperty *metaProp = o1->meta()->property(i);
 		
 		// we do only compare index properties
-		if ( ! metaProp->isIndex() )
+		if ( !metaProp->isIndex() )
 			continue;
 		
 		if ( metaProp->isClass() )
@@ -781,10 +783,22 @@ bool DiffMerge::equalsIndex(Object *o1, Object *o2) {
 				"Violation of contract: property " +
 				metaProp->name() +
 				" is of class type and marked as index");
-			
-		if ( ! compareNonArrayProperty(metaProp, o1, o2) ){
+
+		hasIndex = true;
+
+		if ( !compareNonArrayProperty(metaProp, o1, o2) ) {
 			_currentNode = nodeCopy;
 			return false;
+		}
+	}
+
+	if ( !hasIndex ) {
+		PublicObject *po1 = PublicObject::Cast(o1);
+		if ( po1 != NULL ) {
+			if ( po1->publicID() != PublicObject::Cast(o2)->publicID() ) {
+				_currentNode = nodeCopy;
+				return false;
+			}
 		}
 	}
 
@@ -1301,16 +1315,18 @@ void DiffMerge::mergeRecursive(Object* o1, Object* o2, std::map<std::string, std
 		// o2 array is used to mark previously found matchings.
 		std::vector<Object*> v_o2;
 		for ( size_t i_o2 = 0; i_o2 < prop->arrayElementCount(o2); ++i_o2 ) {
-			const Core::BaseObject* bo = prop->arrayObject(o2, i_o2);
+			const Core::BaseObject *bo = prop->arrayObject(o2, i_o2);
 			v_o2.push_back(Object::Cast(const_cast<Core::BaseObject*>(bo)));
 		}
+
 		// For each element of the o1 array search counterpart in the o2
 		// and and merge it
 		for ( size_t i_o1 = 0; i_o1 < prop->arrayElementCount(o1); ++i_o1 ) {
-			const Core::BaseObject* bo = prop->arrayObject(o1, i_o1);
-			Object* o1Child = Object::Cast(const_cast<Core::BaseObject*>(bo));
+			const Core::BaseObject *bo = prop->arrayObject(o1, i_o1);
+			Object *o1Child = Object::Cast(const_cast<Core::BaseObject*>(bo));
+
 			std::vector<Object*>::iterator it_o2 = v_o2.begin();
-			for ( ; it_o2 != v_o2.end(); ++it_o2) {
+			for ( ; it_o2 != v_o2.end(); ++it_o2 ) {
 				if ( equalsIndex(o1Child, *it_o2) ) {
 					mergeRecursive(o1Child, *it_o2, idMap);
 					v_o2.erase(it_o2);
@@ -1326,6 +1342,7 @@ void DiffMerge::mergeRecursive(Object* o1, Object* o2, std::map<std::string, std
 		for ( ; it_o2 != v_o2.end(); ++it_o2 ) {
 			prop->arrayAddObject(o1, dc.clone(*it_o2).get());
 		}
+
 		v_o2.clear();
 	}
 }
@@ -1381,9 +1398,8 @@ bool DiffMerge::merge(Object* mergeResult, const std::vector<Object*>& objects) 
 	// Merge all objects of the vector
 	bool retn = true;
 	std::vector<Object*>::const_iterator it = objects.begin();
-	for ( ; it != objects.end(); ++it ) {
+	for ( ; it != objects.end(); ++it )
 		retn = merge(mergeResult, *it, idMap) && retn;
-	}
 
 	// Repair references
 	size_t mappingsPerformed = mapReferences(mergeResult, idMap);
