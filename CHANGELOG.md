@@ -26,6 +26,7 @@
     prepare data in AmplitudeProcessor. This affect amplitude computation
     for inventories where the gainUnit is given in lowercase characters, e.g. "m/s"
     rather than "M/S".
+  * Order Seedlink requests from wildcarded to concrete
 
 * key2inv
 
