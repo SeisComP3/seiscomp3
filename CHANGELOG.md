@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2016.333.p1
+
+* trunk
+
+  * Backported fix from 2017.334: order Seedlink requests from wildcarded to concrete
+
 ## Release 2016.333
 
 The database schema has changed since the previous version. To upgrade your
