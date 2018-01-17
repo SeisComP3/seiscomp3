@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2017.124 patch2
+
+* trunk
+
+  * Backported fix from 2017.334: order Seedlink requests from wildcarded to concrete
+
 ## Release 2017.124
 
 * seiscomp
@@ -110,7 +116,6 @@
 * seedlink
 
   * Added ps2400_eth plugin configuration
-
 
 ## Release 2016.333
 
