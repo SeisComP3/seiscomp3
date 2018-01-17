@@ -73,19 +73,50 @@ SLStreamIdx& SLStreamIdx::operator=(const SLStreamIdx &other) {
 bool SLStreamIdx::operator<(const SLStreamIdx &other) const {
 	if ( _net < other._net )
 		return true;
-	else if ( _net == other._net ) {
-		if ( _sta < other._sta )
-			return true;
-		else if ( _sta == other._sta ) {
+	else if ( _net > other._net )
+		return false;
+
+	if ( _sta < other._sta )
+		return true;
+	else if ( _sta > other._sta )
+		return false;
+
+	// Wildcards precede concrete location codes
+	bool isWildcard = _loc.find_first_of("*?") != string::npos;
+	bool isOtherWildcard = other._loc.find_first_of("*?") != string::npos;
+
+	if ( isWildcard ) {
+		if ( isOtherWildcard ) {
 			if ( _loc < other._loc )
 				return true;
-			else if ( _loc == other._loc ) {
-				if ( _cha < other._cha ) return true;
-			}
+			else if ( _loc > other._loc )
+				return false;
 		}
+
+		return true;
+	}
+	else {
+		if ( isOtherWildcard )
+			return false;
+
+		if ( _loc < other._loc )
+			return true;
+		else if ( _loc > other._loc )
+			return false;
 	}
 
-	return false;
+	isWildcard = _cha.find_first_of("*?") != string::npos;
+	isOtherWildcard = other._cha.find_first_of("*?") != string::npos;
+	if ( isWildcard ) {
+		if ( !isOtherWildcard )
+			return true;
+	}
+	else {
+		if ( isOtherWildcard )
+			return false;
+	}
+
+	return _cha < other._cha;
 }
 
 bool SLStreamIdx::operator==(const SLStreamIdx &other) const {
