@@ -258,7 +258,7 @@ begin
       sprintf(s1, "[%s] ", jul_string(dt, addr(s2))) ;
     else
       strcpy(s1, " ") ;
-  sprintf(s, "{%d}%s%s%s", msgcode, s1, lib_get_msg (msgcode, addr(s2)), msgsuf) ;
+  sprintf(s, "{%d}%s%s%s", msgcode, s1, lib_get_msg (msgcode, addr(s2)), (char *)msgsuf) ;
   if (((msgcode div 100) != 7) lor (q330->cur_verbosity and VERB_AUXMSG))
     then
       begin

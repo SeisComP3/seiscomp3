@@ -22,12 +22,12 @@ RANLIB	= ranlib
 
 .PRECIOUS:	$(TARGET)
 
-CC	= gcc
-CFLAGS  = -g
+#CC	= gcc
+CFLAGS  += -g ${GLOBALFLAGS}
 COPT	= 
 
 
-$(TARGET)  := CFLAGS += $(COPT)
+$(TARGET)  = $(CFLAGS) + $(COPT)
 
 ALL	=  $(TARGET)
 

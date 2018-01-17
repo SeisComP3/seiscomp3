@@ -274,7 +274,7 @@ begin
     then
       begin /* have a frame */
         pcom->frame_buffer[0] = pcom->flag_word ;
-        p = (pointer)((integer)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
+        p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
         storeframe (addr(p), addr(pcom->frame_buffer)) ;
         memset(addr(pcom->frame_buffer), 0, sizeof(compressed_frame)) ;
         inc(pcom->frame) ;
@@ -423,7 +423,7 @@ begin
     then
       begin /* have a frame */
         pcom->frame_buffer[0] = pcom->flag_word ;
-        p = (pointer)((integer)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
+        p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
         storeframe (addr(p), addr(pcom->frame_buffer)) ;
         memset(addr(pcom->frame_buffer), 0, sizeof(compressed_frame)) ;
         inc(pcom->frame) ;

@@ -999,7 +999,7 @@ begin
                   pdp->insamps_size = pdp->datapts * sizeof(tfloat) ;
                 else
                   pdp->insamps_size = pdp->datapts * sizeof(longint) ;
-              getbuf (q330, addr(pdp->insamps), pdp->insamps_size) ;
+              getbuf (q330, (pointer *)addr(pdp->insamps), pdp->insamps_size) ;
             end
           else
             pdp->insamps = NIL ;
@@ -1067,7 +1067,7 @@ begin
           pcc = pd->cont ;
           pone = addr(detstat->entries[detstat->count]) ;
           sprintf(addr(pone->name), "%s:%s", seed2string(q->location, q->seedname, addr(s)),
-                  addr(pd->detector_def->detname)) ;
+                  (char *)addr(pd->detector_def->detname)) ;
           pone->ison = pcc->detector_on ;
           pone->declared = pcc->detection_declared ;
           pone->first = pcc->first_detection ;
@@ -1100,7 +1100,7 @@ begin
         begin
           pcc = pd->cont ;
           sprintf(s, "%s:%s", seed2string(q->location, q->seedname, addr(s)),
-                  addr(pd->detector_def->detname)) ;
+                  (char *)addr(pd->detector_def->detname)) ;
           if (strcmp(addr(detchange->name), addr(s)) == 0)
             then
               begin
@@ -1114,3 +1114,4 @@ begin
 end
 
 #endif
+

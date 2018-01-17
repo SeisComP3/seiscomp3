@@ -82,7 +82,7 @@ Edit History:
 #define longint __int32 /* 32 bit signed */
 #define longword unsigned __int32 /* 32 bit unsigned */
 #define integer __int32 /* 32 bit signed */
-#define uninteger unsigned __int32 /* 32 bit unsigned */
+#define pntrint size_t /* unsigned integer, same size as pointer */
 #define single float /* 32 bit floating point */
 typedef HANDLE tfile_handle ;
 typedef struct _stat tfile_state ;
@@ -121,15 +121,14 @@ typedef struct _stat tfile_state ;
 #define word uint16_t /* 16 bit unsigned */
 #define longint int32_t /* 32 bit signed */
 #define longword uint32_t /* 32 bit unsigned */
+#define integer int32_t /* 32 bit signed  */
 #if defined(X86_UNIX64) || defined(__x86_64__)
-#define integer int64_t /* 64 bit signed, same size as pointer */
-#define uninteger uint64_t /* 64 bit unsigned, same size as pointer */
+#define pntrint uint64_t /* 64 bit unsigned, same size as pointer */
 #else
-#define integer int32_t /* 32 bit signed, same size as pointer */
-#define uninteger uint32_t /* 32 bit unsigned, same size as pointer */
+#define pntrint uint32_t /* 32 bit unsigned, same size as pointer */
 #endif
 #define single float /* 32 bit floating point */
-typedef integer tfile_handle ;
+typedef pntrint tfile_handle ;
 typedef struct stat tfile_state ;
 #define INVALID_FILE_HANDLE -1
 #define INVALID_IO_HANDLE -1
@@ -162,15 +161,14 @@ typedef struct stat tfile_state ;
 #define word uint16_t /* 16 bit unsigned */
 #define longint int32_t /* 32 bit signed */
 #define longword uint32_t /* 32 bit unsigned */
-#if defined(__x86_64__)
-#define integer int64_t /* 64 bit signed, same size as pointer */
-#define uninteger uint64_t /* 64 bit unsigned, same size as pointer */
-#else
 #define integer int32_t /* 32 bit signed, same size as pointer */
-#define uninteger uint32_t /* 32 bit unsigned, same size as pointer */
+#if defined(__x86_64__)
+#define pntrint uint64_t /* 64 bit unsigned, same size as pointer */
+#else
+#define pntrint uint32_t /* 32 bit unsigned, same size as pointer */
 #endif
 #define single float /* 32 bit floating point */
-typedef integer tfile_handle ;
+typedef pntrint tfile_handle ;
 typedef struct stat tfile_state ;
 #define INVALID_FILE_HANDLE -1
 #define INVALID_IO_HANDLE -1
@@ -193,7 +191,7 @@ typedef struct stat tfile_state ;
 #define longint long /* 32 bit signed */
 #define longword unsigned long /* 32 bit unsigned */
 #define integer int /* 32 bit signed */
-#define uninteger unsigned int /* 32 bit unsigned */
+#define pntrint unsigned int /* 32 bit unsigned */
 #define single float /* 32 bit floating point */
 #define FALSE 0
 #define TRUE 1
@@ -208,7 +206,7 @@ typedef struct stat tfile_state ;
 #define CPU_HZ 12000000 /* Osc0 direct */
 #endif
 #endif
-typedef integer tfile_handle ;
+typedef pntrint tfile_handle ;
 typedef void *pvoid ;
 
 #include "cmexnix.h"
