@@ -85,36 +85,19 @@ bool SLStreamIdx::operator<(const SLStreamIdx &other) const {
 	bool isWildcard = _loc.find_first_of("*?") != string::npos;
 	bool isOtherWildcard = other._loc.find_first_of("*?") != string::npos;
 
-	if ( isWildcard ) {
-		if ( isOtherWildcard ) {
-			if ( _loc < other._loc )
-				return true;
-			else if ( _loc > other._loc )
-				return false;
-		}
+	if ( isWildcard != isOtherWildcard )
+		return isWildcard;
 
+	if ( _loc < other._loc )
 		return true;
-	}
-	else {
-		if ( isOtherWildcard )
-			return false;
-
-		if ( _loc < other._loc )
-			return true;
-		else if ( _loc > other._loc )
-			return false;
-	}
+	else if ( _loc > other._loc )
+		return false;
 
 	isWildcard = _cha.find_first_of("*?") != string::npos;
 	isOtherWildcard = other._cha.find_first_of("*?") != string::npos;
-	if ( isWildcard ) {
-		if ( !isOtherWildcard )
-			return true;
-	}
-	else {
-		if ( isOtherWildcard )
-			return false;
-	}
+
+	if ( isWildcard != isOtherWildcard )
+		return isWildcard;
 
 	return _cha < other._cha;
 }
