@@ -382,7 +382,7 @@ begin
                     return ;
                   end
             end
-        sprintf(s, "\"%s:%d\" to netserv[%d] port", addr(hostname), client_port, nsstr->ns_par.server_number) ;
+        sprintf(s, "\"%s:%d\" to netserv[%d] port", (char *)addr(hostname), client_port, nsstr->ns_par.server_number) ;
         lib_msg_add (nsstr->ns_par.stnctx, AUXMSG_CONN, 0, addr(s)) ;
         lth = sizeof(integer) ;
 #ifdef X86_WIN32

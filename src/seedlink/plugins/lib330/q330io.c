@@ -147,7 +147,7 @@ begin
 end
 
 #ifndef OMIT_NETWORK
-static longword baler_socket (pq330 q330, integer sockpath, enum tbaler_socket socktype)
+static longword baler_socket (pq330 q330, pntrint sockpath, enum tbaler_socket socktype)
 begin
 
   if (q330->par_create.call_baler)
@@ -157,7 +157,7 @@ begin
         q330->baler_call.baler_type = BT_SOCKET ;
         memcpy(addr(q330->baler_call.station_name), addr(q330->station_ident), sizeof(string9)) ;
         q330->baler_call.info = socktype ;
-        q330->baler_call.info2 = (pointer) sockpath ;
+        q330->baler_call.info2 = (void *) sockpath ;
         q330->baler_call.response = 0 ;
         q330->par_create.call_baler (addr(q330->baler_call)) ;
         return q330->baler_call.response ;
@@ -499,7 +499,7 @@ typedef byte tenc[4] ;
       actual = q330->recvhdr.datalength + QDP_HDR_LTH ; /* replace with exact length */
     else
       return -1 ; /* no good, return */
-  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((integer)psave + 4), actual - 4) ;
+  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)psave + 4), actual - 4) ;
   if (thiscrc == q330->recvhdr.crc)
     then
       return actual ; /* good crc, return actual length */
@@ -513,7 +513,7 @@ begin
   pbyte p ;
 
   p = addr(q330->datain.qdp) ;
-  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((integer)p + 4), lth - 4) ;
+  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)p + 4), lth - 4) ;
   loadqdphdr (addr(p), addr(q330->recvhdr)) ;
   if (thiscrc == q330->recvhdr.crc)
     then
@@ -620,7 +620,7 @@ begin
 
   add_status (q330, AC_READ, msglth + IP_HDR_LTH + UDP_HDR_LTH) ;
   p = addr(q330->commands.cmsgin.qdp) ;
-  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((integer)p + 4), msglth - 4) ;
+  thiscrc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)p + 4), msglth - 4) ;
   loadqdphdr (addr(p), addr(q330->recvhdr)) ;
   if (thiscrc != q330->recvhdr.crc)
     then
@@ -864,7 +864,7 @@ begin
   if (q330->recvhdr.datalength > MAXDATA)
     then
       return ;
-  if (q330->recvhdr.crc != gcrccalc (addr(q330->crc_table), (pointer)((integer)psave + 4),
+  if (q330->recvhdr.crc != gcrccalc (addr(q330->crc_table), (pointer)((pntrint)psave + 4),
                        q330->recvhdr.datalength + QDP_HDR_LTH - 4))
     then
       begin
@@ -1010,7 +1010,7 @@ begin
             case SLIP_FRM :
               q330->escpend = FALSE ;
               q330->needframe = FALSE ;
-              bufidx = (integer)pout - (integer)addr(q330->commands.cmsgin.headers) ;
+              bufidx = (integer)((pntrint)pout - (pntrint)addr(q330->commands.cmsgin.headers)) ;
               if (bufidx)
                 then
                   begin
@@ -1050,7 +1050,7 @@ begin
               *pout++ = c ;
               break ;
           end
-      if ((longint)pout > ((longint)maxp + 1))
+      if ((pntrint)pout > ((pntrint)maxp + 1))
         then
           begin
             pout = addr(q330->commands.cmsgin.headers) ;

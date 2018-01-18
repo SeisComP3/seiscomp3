@@ -185,7 +185,7 @@ begin
       break ;
     case CE_JUMP :
       lib330_padright ("UnExp Timemark", addr(ptim->exception_type), 16) ;
-      sprintf (s, "Jump of %s Seconds", jump_amount) ;
+      sprintf (s, "Jump of %s Seconds", (char *)jump_amount) ;
       lib330_padright (addr(s), addr(ptim->clock_status), 128) ;
       break ;
   end
@@ -617,7 +617,7 @@ begin
         phdr->dob.encoding_format = 0 ;
       end
   strcat(msg, "\x0D\x0A") ;
-  pc = (pointer)((integer)addr(pcom->ring->rec) + 56 + pcom->frame) ; /* add text to data area */
+  pc = (pointer)((pntrint)addr(pcom->ring->rec) + 56 + pcom->frame) ; /* add text to data area */
   memcpy(pc, msg, strlen(msg)) ;
   incn(pcom->frame, strlen(msg)) ;
   paqs->log_timer = LOG_TIMEOUT ;
@@ -657,3 +657,4 @@ begin
   paqs->log_timer = 0 ;
 end
 #endif
+

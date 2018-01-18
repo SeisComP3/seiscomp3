@@ -377,17 +377,17 @@ begin
 
   psgps = addr(q330->share.stat_gps) ;
   libmsgadd(q330, LIBMSG_GPS, "GPS Status") ;
-  sprintf(s, "Time: %s", addr(psgps->time)) ;
+  sprintf(s, "Time: %s", (char *)addr(psgps->time)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
-  sprintf(s, "Date: %s", addr(psgps->date)) ;
+  sprintf(s, "Date: %s", (char *)addr(psgps->date)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
-  sprintf(s, "Fix Type: %s", addr(psgps->fix)) ;
+  sprintf(s, "Fix Type: %s", (char *)addr(psgps->fix)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
-  sprintf(s, "Height: %s", addr(psgps->height)) ;
+  sprintf(s, "Height: %s", (char *)addr(psgps->height)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
-  sprintf(s, "Latitude: %s", addr(psgps->lat)) ;
+  sprintf(s, "Latitude: %s", (char *)addr(psgps->lat)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
-  sprintf(s, "Longitude: %s", addr(psgps->longt)) ;
+  sprintf(s, "Longitude: %s", (char *)addr(psgps->longt)) ;
   libmsgadd(q330, LIBMSG_GPS, addr(s)) ;
   if (psgps->gpson)
     then

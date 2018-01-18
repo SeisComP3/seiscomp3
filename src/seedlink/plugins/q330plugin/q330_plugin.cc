@@ -49,7 +49,7 @@ extern "C" {
 #include "libsupport.h"
 }
 
-#define MYVERSION "2.0 (2016.106)"
+#define MYVERSION "2.0 (2018.017)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/plugins.ini"

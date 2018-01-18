@@ -278,7 +278,7 @@ begin
   q330 = paqs->owner ;
   pclock = addr(q330->qclock) ;
   phdr = addr(pcom->ring->hdr_buf) ;
-  p = (pointer)((integer)addr(pcom->ring->rec) + (pcom->blockette_count + 1) * FRAME_SIZE + 8) ; /* ending sample address */
+  p = (pointer)((pntrint)addr(pcom->ring->rec) + (pcom->blockette_count + 1) * FRAME_SIZE + 8) ; /* ending sample address */
   storelongint (addr(p), pcom->last_sample) ;
   phdr->samples_in_record = pcom->next_compressed_sample - 1 ;
   phdr->activity_flags = 0 ; /* Activity Flags set in finish/ringman */
@@ -502,7 +502,7 @@ begin
             begin /* complete partial frame */
               pcom->flag_word = pcom->flag_word shl ((WORDS_PER_FRAME - pcom->block) shl 1) ;
               pcom->frame_buffer[0] = pcom->flag_word ;
-              p = (pointer)((integer)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
+              p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->frame * FRAME_SIZE) ;
               storeframe (addr(p), addr(pcom->frame_buffer)) ;
               memset(addr(pcom->frame_buffer), 0, sizeof(compressed_frame)) ;
               inc(pcom->frame) ;
@@ -531,16 +531,16 @@ begin
   if (pcom->frame > (pcom->blockette_count + 1))
     then
       begin
-        psrc = (pointer)((integer)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 1)) ;
-        pdest = (pointer)((integer)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 2)) ;
+        psrc = (pointer)((pntrint)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 1)) ;
+        pdest = (pointer)((pntrint)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 2)) ;
         memmove (pdest, psrc, FRAME_SIZE * (pcom->frame - pcom->blockette_count - 1)) ;
       end
-  pdest = (pointer)((integer)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 1)) ;
+  pdest = (pointer)((pntrint)addr(pcom->ring->rec) + FRAME_SIZE * (pcom->blockette_count + 1)) ;
   memcpy (pdest, pw, FRAME_SIZE) ;
   if (pcom->blockette_count)
     then
       begin /* extended link from previous blockette */
-        plink = (pointer)((integer)addr(pcom->ring->rec) + FRAME_SIZE * pcom->blockette_count + 2) ;
+        plink = (pointer)((pntrint)addr(pcom->ring->rec) + FRAME_SIZE * pcom->blockette_count + 2) ;
         storeword (addr(plink), FRAME_SIZE * (pcom->blockette_count + 1)) ;
       end
   inc(pcom->blockette_count) ;
@@ -561,7 +561,7 @@ begin
   memset (addr(paqs->detcal_buf), 0, sizeof(tcompressed_buffer_ring)) ;
   phdr = addr(paqs->detcal_buf.hdr_buf) ;
   phdr->starting_time.seed_fpt = time ;
-  pdest = (pointer)((integer)addr(paqs->detcal_buf.rec) + FRAME_SIZE) ;
+  pdest = (pointer)((pntrint)addr(paqs->detcal_buf.rec) + FRAME_SIZE) ;
   memcpy (pdest, pw, FRAME_SIZE) ;
   phdr->activity_flags = SAF_BEGIN_EVENT ;
   phdr->seed_record_type = 'D' ;
@@ -608,7 +608,7 @@ begin
               then
                 begin
                   p->fir->fcount = p->fir->flen - 1 ;
-                  p->fir->f = (pointer)((integer)p->fir->fbuf + (p->fir->flen - 1) * sizeof(tfloat)) ;
+                  p->fir->f = (pointer)((pntrint)p->fir->fbuf + (p->fir->flen - 1) * sizeof(tfloat)) ;
                 end
           end
       set_slip (paqs, p) ; /* recursive */
@@ -1094,8 +1094,8 @@ begin
           then
             q->seg_next->link = q->pseg ; /* was already something there */
         q->pseg = q->seg_next ; /* first in list */
-        q->seg_next = (pointer)((integer)q->seg_next + size + sizeof(pointer)) ;
-        if (((integer)q->seg_next - (integer)q->segbuf) > q->segsize)
+        q->seg_next = (pointer)((pntrint)q->seg_next + size + sizeof(pointer)) ;
+        if (((pntrint)q->seg_next - (pntrint)q->segbuf) > q->segsize)
           then
             libdatamsg (q330, LIBMSG_SEGOVER, addr(s)) ;
         inc(q->seg_count) ;
@@ -1141,8 +1141,8 @@ begin
                 lps->link = q->seg_next ; /* add this to end of current list */
               else
                 q->pseg = q->seg_next ; /* first one in list */
-        q->seg_next = (pointer)((integer)q->seg_next + size + sizeof(pointer)) ;
-        if (((integer)q->seg_next - (integer)q->segbuf) > q->segsize)
+        q->seg_next = (pointer)((pntrint)q->seg_next + size + sizeof(pointer)) ;
+        if (((pntrint)q->seg_next - (pntrint)q->segbuf) > q->segsize)
           then
             libdatamsg (q330, LIBMSG_SEGOVER, addr(s)) ;
         inc(q->seg_count) ;
@@ -1167,7 +1167,7 @@ begin
                   pcmp->pmap = p ; /* flags start here */
                   pcmp->pdata = (pointer)q->mergedbuf ;
                   pcmp->mapidx = 0 ;
-                  p = (pointer)((integer)addr(ps->seg) + offset) ; /* data starts here */
+                  p = (pointer)((pntrint)addr(ps->seg) + offset) ; /* data starts here */
                   memcpy (addr((*(q->mergedbuf))[0]), p, size - offset) ;
                   pcmp->blocks = (size - offset) shr 2 ; /* number of 32 bit blocks so far */
                   have_first = TRUE ;

@@ -174,13 +174,13 @@ begin
   storeqdphdr (addr(p), DT_OPEN, 0, 0, 0) ;
   pref = p ; /* pointer after header for length calculation */
   libmsgadd (q330, LIBMSG_DTOPEN, "") ;
-  lth = (integer)p - (integer)pref ; /* length of data */
+  lth = (integer)((pntrint)p - (pntrint)pref) ; /* length of data */
   p = psave ;
   incn(p, 6) ; /* point at length */
   storeword (addr(p), lth) ;
   msglth = QDP_HDR_LTH + lth ;
   p = psave ;
-  storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((integer)p + 4), msglth - 4)) ;
+  storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((pntrint)p + 4), msglth - 4)) ;
   if (q330->cur_verbosity and VERB_PACKET)
     then
       begin /* log the message sent */
@@ -207,7 +207,7 @@ begin
               if (q330->cpath == INVALID_SOCKET)
                 then
                   return ;
-              p = (pointer)((integer)addr(q330->dataout.qdp) - 4) ;
+              p = (pointer)((pntrint)addr(q330->dataout.qdp) - 4) ;
               pref = p ; /* save start of tcp packet */
               storeword (addr(p), 1) ; /* data port */
               storeword (addr(p), msglth) ; /* qdp length */
@@ -386,7 +386,7 @@ begin
       q330->lastseq = paqs->dt_data_sequence ;
       pend = psave ;
       incn(pend, lth) ; /* one past end of blockettes */
-      while ((loops < 100) land ((integer)p < (integer)pend))
+      while ((loops < 100) land ((pntrint)p < (pntrint)pend))
         begin
           inc(loops) ;
           pstart = p ;
@@ -910,7 +910,7 @@ begin
                   psave = p ; /* start of blockette + 4 */
                   skip = (wordval - 1) and 0xFFFC ; /* + 3 not including first 4 */
                   if ((wordval > MAXDATA) lor
-                      ((wordval + (integer)pstart) > (integer)pend))
+                      ((wordval + (pntrint)pstart) > (pntrint)pend))
                     then
                       begin
                         v1 = wordval ;
@@ -937,7 +937,7 @@ begin
                   psave = p ; /* start of blockette + 4 */
                   skip = ((wordval and DMSZ) - 1) and 0xFFFC ; /* + 3 not including first 4 */
                   if (((wordval and DMSZ) > MAXDATA) lor
-                     (((wordval and DMSZ) + (integer)pstart) > (integer)pend))
+                     (((wordval and DMSZ) + (pntrint)pstart) > (pntrint)pend))
                     then
                       begin
                         v1 = wordval and DMSZ ;
@@ -1066,7 +1066,7 @@ begin
                         else
                           begin /* compressed data */
                             if ((wordval > MAXDATA) lor
-                                ((wordval + (integer)pstart) > (integer)pend))
+                                ((wordval + (pntrint)pstart) > (pntrint)pend))
                               then
                                 begin
                                   v1 = wordval ;
@@ -1181,7 +1181,7 @@ begin
               if (q330->cpath == INVALID_SOCKET)
                 then
                   return ;
-              p = (pointer)((integer)addr(q330->dataout.qdp) - 4) ;
+              p = (pointer)((pntrint)addr(q330->dataout.qdp) - 4) ;
               pref = p ; /* save start of tcp packet */
               storeword (addr(p), 1) ; /* data port */
               storeword (addr(p), msglth) ; /* qdp length */
@@ -1271,13 +1271,13 @@ begin
   storeqdphdr (addr(p), DT_DACK, 0, 0, lowseq) ;
   pref = p ; /* pointer after header for length calculation */
   storedack (addr(p), addr(pack)) ;
-  lth = (integer)p - (integer)pref ; /* length of data */
+  lth = (integer)((pntrint)p - (pntrint)pref) ; /* length of data */
   p = psave ;
   incn(p, 6) ; /* point at length */
   storeword (addr(p), lth) ;
   msglth = QDP_HDR_LTH + lth ;
   p = psave ;
-  storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((integer)p + 4), msglth - 4)) ;
+  storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((pntrint)p + 4), msglth - 4)) ;
   inc(q330->ack_counter) ;
   lock (q330) ;
   if (q330->ack_counter < q330->share.log.ack_cnt)
@@ -1324,7 +1324,7 @@ begin
         packet_time (now(), addr(s)) ;
         command_name (q330->recvhdr.command, addr(s1)) ;
         strcat (s, s1) ;
-        p = (pointer) ((integer)(addr(q330->datain.qdp)) + QDP_HDR_LTH) ;
+        p = (pointer) ((pntrint)(addr(q330->datain.qdp)) + QDP_HDR_LTH) ;
         dsn = loadlongword(addr(p)) ;
         sprintf(s1, ", Lth=%d Seq=%d DSN=%d", q330->recvhdr.datalength, q330->recvhdr.sequence,
                 dsn) ;

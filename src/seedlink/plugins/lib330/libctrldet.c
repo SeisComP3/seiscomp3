@@ -57,7 +57,7 @@ typedef struct {
 typedef struct { /* "C" doesn't allow nested procedures, create structure to simulate */
   ret result, nextoke ;
   pdetector_operation curpt ;
-  integer tempcnt ;
+  pntrint tempcnt ;
   pcontrol_detector pcs ;
   pdop pop ;
   pq330 q330 ;
@@ -145,7 +145,7 @@ begin
             switch (*unop) begin
               case DEO_NOT :
                 stackdetop (pexp, uno->ret_dx, NIL, DEO_NOT) ;
-                uno->ret_dx = (pointer)pexp->tempcnt ;
+                uno->ret_dx = (pboolean)pexp->tempcnt ;
                 break ;
             end
       end
@@ -211,7 +211,7 @@ begin
                 then
                   begin
                     stackdetop (pexp, ter->ret_dx, nfac.ret_dx, DEO_AND) ;
-                    ter->ret_dx = (pointer)pexp->tempcnt ;
+                    ter->ret_dx = (pboolean)pexp->tempcnt ;
                   end
                 else
                   begin
@@ -224,7 +224,7 @@ begin
                 then
                   begin
                     stackdetop (pexp, ter->ret_dx, nfac.ret_dx, DEO_EOR) ;
-                    ter->ret_dx = (pointer)pexp->tempcnt ;
+                    ter->ret_dx = (pboolean)pexp->tempcnt ;
                   end
                 else
                   begin
@@ -255,7 +255,7 @@ begin
             then
               begin
                 stackdetop (pexp, expr->ret_dx, nter.ret_dx, DEO_OR) ;
-                expr->ret_dx = (pointer)pexp->tempcnt ;
+                expr->ret_dx = (pboolean)pexp->tempcnt ;
               end
         end /* while */
 end
@@ -308,14 +308,14 @@ begin
     begin
       pdt1 = pop->tospt ;
       pdt2 = pop->nospt ;
-      if ((uninteger)pdt1 < EVALUATION_STACK_DEPTH)
+      if ((pntrint)pdt1 < EVALUATION_STACK_DEPTH)
         then
-          b1 = temps[(uninteger)pdt1] ;
+          b1 = temps[(pntrint)pdt1] ;
         else
           b1 = *pdt1 ;
-      if ((uninteger)pdt2 < EVALUATION_STACK_DEPTH)
+      if ((pntrint)pdt2 < EVALUATION_STACK_DEPTH)
         then
-          b2 = temps[(uninteger)pdt2] ;
+          b2 = temps[(pntrint)pdt2] ;
         else
           b2 = *pdt2 ;
       switch (pop->op) begin

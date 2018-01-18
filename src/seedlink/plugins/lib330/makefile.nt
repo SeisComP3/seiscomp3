@@ -18,7 +18,7 @@ HDRS =	libarchive.h libclient.h libcmds.h libcompress.h libcont.h libctrldet.h\
 
 
 
-DEFINES = -DWIN32 -DX86_WIN32 -D_CRT_SECURE_NO_DEPRECATE
+DEFINES = -DWIN32 -DX86_WIN32 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -w24005 -w24047 -w24024 -w24048 -w24133
 
 all:	lib330.lib
 

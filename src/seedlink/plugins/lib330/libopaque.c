@@ -137,11 +137,11 @@ begin
       end
     else
       begin /* extend link */
-        p = (pointer)((integer)addr(pcom->ring->rec) + pcom->last_blockette + 2) ;
+        p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->last_blockette + 2) ;
         storeword (addr(p), pcom->blockette_index) ;
       end ;
   pcom->last_blockette = pcom->blockette_index ;
-  p = (pointer)((integer)addr(pcom->ring->rec) + pcom->blockette_index) ;
+  p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->blockette_index) ;
   hdr.blockette_type = 2000 ;
   hdr.next_blockette = 0 ;
   hdr.blk_lth = OPAQUE_HDR_SIZE + size - 2 ; /* only 2 character record type */
@@ -283,11 +283,11 @@ begin
       end
     else
       begin /* extend link */
-        p = (pointer)((integer)addr(pcom->ring->rec) + pcom->last_blockette + 2) ;
+        p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->last_blockette + 2) ;
         storeword (addr(p), pcom->blockette_index) ;
       end
   pcom->last_blockette = pcom->blockette_index ;
-  p = (pointer)((integer)addr(pcom->ring->rec) + pcom->blockette_index) ;
+  p = (pointer)((pntrint)addr(pcom->ring->rec) + pcom->blockette_index) ;
   hdr.blockette_type = 2000 ;
   hdr.next_blockette = 0 ;
   hdr.blk_lth = OPAQUE_HDR_SIZE + size - 4 ; /* use blockette size minus 4 */

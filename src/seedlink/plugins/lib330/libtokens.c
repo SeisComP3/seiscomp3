@@ -340,7 +340,7 @@ begin
 #ifndef OMIT_SEED
         if (b != 0xFF)
           then
-            cur_lcq->ctrl = (pointer)(0xFFFFFF00 or b) ; /* have to resolve these later */
+            cur_lcq->ctrl = (pcontrol_detector)((pntrint)0xFFFFFF00 or (pntrint)b) ; /* have to resolve these later */
 #endif
       end
   if (cur_lcq->lcq_opt and LO_DEC)
@@ -560,7 +560,7 @@ begin
           begin
             pc = paqs->ctrlchain ;
             while (pc)
-              if (pc->ctrl_num == ((integer)cur_lcq->ctrl and 0xFF))
+              if (pc->ctrl_num == ((pntrint)cur_lcq->ctrl and 0xFF))
                 then
                   break ;
                 else
@@ -578,7 +578,7 @@ begin
   byte b ;
   integer lth ;
 
-  while ((integer)*p < (integer)stop)
+  while ((pntrint)*p < (pntrint)stop)
     begin
       b = loadbyte(p) ; /* comm event number */
       lth = loadbyte(p) ;
@@ -738,7 +738,7 @@ end
 pointer tonext (pointer base, integer offset)
 begin
 
-  return (pointer)((integer)base + offset) ;
+  return (pointer)((pntrint)base + offset) ;
 end
 
 void decode_cfg (pq330 q330)
@@ -766,7 +766,7 @@ begin
   p = (pointer)q330->cfgbuf ;
   pend = p ;
   incn(pend, q330->cfgsize) ;
-  while ((integer)p < (integer)pend)
+  while ((pntrint)p < (pntrint)pend)
     begin
       tok = loadbyte (addr(p)) ;
       switch (tok) begin
@@ -861,7 +861,7 @@ begin
         case T2_CNAMES :
           pref = p ;
           next = loadword (addr(p)) ;
-          read_comm_events (paqs, addr(p), (pointer)((integer)pref + next)) ;
+          read_comm_events (paqs, addr(p), (pointer)((pntrint)pref + next)) ;
           p = tonext(pref, next) ;
           break ;
         case T2_OPAQUE :
