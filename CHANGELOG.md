@@ -32,6 +32,9 @@
 
   * Fix stream creation API call with respect to latest API version
 
+* scdispatch
+
+  * Add operation "merge-no-remove" which filters out remove operations
 
 ## Release 2017.334 patch2
 

@@ -268,10 +268,12 @@ class ObjectMerger : public BaseObjectDispatcher {
 	// ----------------------------------------------------------------------
 	public:
 		ObjectMerger(Communication::Connection *connection,
-		             DatabaseReader *db, bool test)
+		             DatabaseReader *db, bool test, bool allowRemove)
 		: BaseObjectDispatcher(Visitor::TM_TOPDOWN, connection, test)
 		, _db(db)
-		, _msgCount(0) {}
+		, _msgCount(0)
+		, _allowRemove(allowRemove)
+		{}
 
 
 	// ----------------------------------------------------------------------
@@ -350,6 +352,11 @@ class ObjectMerger : public BaseObjectDispatcher {
 
 			for ( size_t i = 0; i < diffs.size(); ++i ) {
 				Notifier *n = diffs[i].get();
+
+				if ( !_allowRemove && (n->operation() == OP_REMOVE) )
+					// Block removes if requested
+					continue;
+
 				po = PublicObject::Cast(n->object());
 				if ( po != NULL ) flush();
 				write(n->object()->parent(), n->object(), n->operation());
@@ -439,6 +446,7 @@ class ObjectMerger : public BaseObjectDispatcher {
 		int                 _msgCount;
 		string              _targetGroup;
 		string              _inputIndent;
+		bool                _allowRemove;
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -504,7 +512,7 @@ class DispatchTool : public Seiscomp::Client::Application {
 		void createCommandLineDescription() {
 			commandline().addGroup("Dispatch");
 			commandline().addOption("Dispatch", "input,i", "File to dispatch to messaging", &_inputFile, false);
-			commandline().addOption("Dispatch", "operation,O", "Notifier operation: add, update, remove or merge",
+			commandline().addOption("Dispatch", "operation,O", "Notifier operation: add, update, remove, merge or merge-without-remove",
 			                        &_notifierOperation, true);
 			commandline().addOption("Dispatch", "routingtable",
 			                        "Specify routing table as list of object:group pairs",
@@ -529,14 +537,13 @@ class DispatchTool : public Seiscomp::Client::Application {
 					if ( entry.size() == 2 )
 						_routingTable.insert(make_pair(entry[0], entry[1]));
 				}
-
 			}
 
-			if ( _notifierOperation != "merge" )
+			if ( _notifierOperation != "merge" && _notifierOperation != "merge-without-remove" )
 				setDatabaseEnabled(false, false);
 
 			if ( commandline().hasOption("operation") ) {
-				if ( _notifierOperation != "merge" ) {
+				if ( _notifierOperation != "merge" && _notifierOperation != "merge-without-remove" ) {
 					if ( !_operation.fromString(_notifierOperation) ) {
 						cout << "Notifier operation " << _notifierOperation << " is not valid" << endl;
 						cout << "Operations are add, update, remove or merge" << endl;
@@ -613,7 +620,9 @@ class DispatchTool : public Seiscomp::Client::Application {
 
 			BaseObjectDispatcher *dispatcher = NULL;
 			if ( _notifierOperation == "merge" )
-				dispatcher = new ObjectMerger(connection(), query(), commandline().hasOption("test"));
+				dispatcher = new ObjectMerger(connection(), query(), commandline().hasOption("test"), true);
+			else if ( _notifierOperation == "merge-without-remove" )
+				dispatcher = new ObjectMerger(connection(), query(), commandline().hasOption("test"), false);
 			else
 				dispatcher = new ObjectDispatcher(connection(), _operation, commandline().hasOption("test"));
 
