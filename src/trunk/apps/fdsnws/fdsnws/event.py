@@ -415,6 +415,16 @@ class FDSNEvent(resource.Resource):
 					if not HTTP.checkObjects(req, objCount, maxObj):
 						return False
 
+			# find ID of origin containing preferred Magnitude
+			if e.preferredMagnitudeID():
+				obj = dbq.getObject(DataModel.Magnitude.TypeInfo(),
+				                    e.preferredMagnitudeID())
+				m = DataModel.Magnitude.Cast(obj)
+				if m is not None:
+					oID = dbq.parentPublicID(m)
+					if oID:
+						originIDs.add(oID)
+
 			# origins
 			for oID in originIDs:
 				if req._disconnected:

@@ -15,6 +15,7 @@
   * Add sh2proc script which converts Seismic Handler event files to
     EventParameters
   * Add FocalMechanism support in FDSNWS event query
+  * Add support for cross-referenced preferred magnitude in FDSNWS event query
 
 * Seedlink
 
