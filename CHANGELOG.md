@@ -14,6 +14,7 @@
     than a relative time
   * Add sh2proc script which converts Seismic Handler event files to
     EventParameters
+  * Add FocalMechanism support in FDSNWS event query
 
 * Seedlink
 

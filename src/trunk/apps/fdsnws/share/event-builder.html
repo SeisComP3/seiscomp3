@@ -103,20 +103,32 @@
           <td><input type="text" size="10" maxlength="10" name="magnitudetype" value="" placeholder="M" /></td>
         </tr>
         <tr>
-          <td>Include All Origins</td>
+          <td>All Origins</td>
           <td><input type="checkbox" name="includeallorigins" value="true" /></td>
         </tr>
         <tr>
-          <td>Include All Magnitudes</td>
+          <td>All Magnitudes</td>
           <td><input type="checkbox" name="includeallmagnitudes" value="true" /></td>
         </tr>
         <tr>
-          <td>Include Arrivals</td>
+          <td>Arrivals</td>
           <td><input type="checkbox" name="includearrivals" value="true" /></td>
         </tr>
         <tr title="Note: Picks are available only in combination with includearrivals=true">
           <td>Exclude Picks</td>
           <td><input type="checkbox" name="includepicks" value="false" /></td>
+        </tr>
+        <tr title="Include Preferred Focal Mechanism and Momenttensor Solution">
+          <td>Focal Mechanism</td>
+          <td><input type="checkbox" name="includefocalmechanism" value="true" /></td>
+        </tr>
+        <tr title="Include All Focal Mechanism and Momenttensor Solutions">
+          <td>All Focal Mechanisms</td>
+          <td><input type="checkbox" name="includeallfocalmechanisms" value="true" /></td>
+        </tr>
+        <tr title="Include Moment Tensor Station Contributions">
+          <td>MT Station Contributions</td>
+          <td><input type="checkbox" name="includestationmts" value="true" /></td>
         </tr>
         <tr>
           <td>Include Comments</td>

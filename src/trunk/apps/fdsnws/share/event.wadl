@@ -64,6 +64,21 @@
 							only be available if arrivals are requested.
 						</doc>
 					</param>
+					<param name="includefocalmechanism" style="query" type="xsd:boolean" default="false">
+						<doc title="definition">
+							Adds peferred focal mechanism information including momentensor solution if available.
+						</doc>
+					</param>
+					<param name="includeallfocalmechanisms" style="query" type="xsd:boolean" default="false">
+						<doc title="definition">
+							Adds all focal mechanism information including momentensor solution if available.
+						</doc>
+					</param>
+					<param name="includestationmts" style="query" type="xsd:boolean" default="false">
+						<doc title="definition">
+							Adds all momentensor station contributions.
+						</doc>
+					</param>
 					<param name="includecomments" style="query" type="xsd:boolean" default="false">
 						<doc title="definition">
 							SeisComP3 supports comments for most datamodel
