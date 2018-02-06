@@ -330,7 +330,7 @@ PluginRegistry::PluginEntry PluginRegistry::open(const std::string &file) const 
 #ifdef WIN32
 	void *handle = LoadLibrary(file.c_str());
 #else
-	void *handle = dlopen(file.c_str(), RTLD_NOW);
+	void *handle = dlopen(file.c_str(), RTLD_NOW | RTLD_GLOBAL);
 #endif
 	if ( !handle ) {
 		SEISCOMP_ERROR("Loading plugin %s failed: %s", file.c_str(), sysLastError().c_str());
