@@ -32,7 +32,7 @@ QString getStreamID(const DataModel::WaveformStreamID& wfid) {
 	std::string streamID = wfid.networkCode()+"."+wfid.stationCode()+"."+
 	                       wfid.locationCode()+"."+wfid.channelCode();
 	
-	return QString(streamID.c_str());
+	return streamID.c_str();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -91,8 +91,8 @@ void QcModel::addColumn(const QString& qcParameterName) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::timeout() {
-	if (_dataChanged) {
-		reset();
+	if ( _dataChanged ) {
+		//reset();
 		_dataChanged = false;
 	}
 
@@ -104,7 +104,14 @@ void QcModel::timeout() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::dataChanged() {
+void QcModel::invalidateData(const QString &key) {
+	StreamMap::iterator it = _streamMap.find(key);
+	if ( it == _streamMap.end() ) return;
+	int idx = 0;
+	StreamMap::iterator it2 = _streamMap.begin();
+	while ( it2++ != it ) ++idx;
+
+	emit dataChanged(index(idx, 0), index(idx, _columns.size()-1));
 
 	_dataChanged = true;
 }
@@ -114,20 +121,8 @@ void QcModel::dataChanged() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::reset() {
-
-	QAbstractItemModel::reset();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::setCleanUpTime(double time) {
-
 	_cleanUpTime = time;
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -135,8 +130,7 @@ void QcModel::setCleanUpTime(double time) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool QcModel::hasAlerts(const QString& streamID) {
-
+bool QcModel::hasAlerts(const QString &streamID) {
 	if (_streamMap.empty())
 		return false;
 
@@ -151,8 +145,7 @@ bool QcModel::hasAlerts(const QString& streamID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::setStreams(const std::list<std::pair<std::string, bool> >& streams) {
-
+void QcModel::setStreams(const std::list<std::pair<std::string, bool> > &streams) {
 	for (std::list<std::pair<std::string, bool> >::const_iterator it = streams.begin(); it != streams.end(); ++it) {
 		addStream(QString(it->first.c_str()), it->second);
 	}
@@ -164,29 +157,37 @@ void QcModel::setStreams(const std::list<std::pair<std::string, bool> >& streams
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::setStationEnabled(const QString& network, const QString& station, bool enabled) {
-
+void QcModel::setStationEnabled(const QString &network, const QString &station, bool enabled) {
 	QRegExp netSta("^"+network+"\\."+station+".*$");
 
-	foreach (QString streamID, _streamMap.keys()) {
-		if (streamID.contains(netSta))
+	SEISCOMP_DEBUG("Change station enable state: %s.%s: %s",
+	               network.toStdString().c_str(), station.toStdString().c_str(),
+	               enabled ? "on" : "off");
+
+	foreach ( QString streamID, _streamMap.keys() ) {
+		if ( streamID.contains(netSta) )
 			setStreamEnabled(streamID, enabled);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::setStreamEnabled(const QString& streamID, bool enabled) {
-
-	if (_streamMap.contains(streamID))
+	if ( _streamMap.contains(streamID) )
 		_streamMap[streamID].enabled = enabled;
 
-	dataChanged();
-	//reset();
+	invalidateData(streamID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::setStreamEnabled(const QModelIndex& index, bool enabled) {
-
 	(_streamMap.begin()+index.row()).value().enabled = enabled;
 
 	// trigger: send configStation message
@@ -201,7 +202,6 @@ void QcModel::setStreamEnabled(const QModelIndex& index, bool enabled) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool QcModel::streamEnabled(const QModelIndex& index) const {
-
 	return (_streamMap.begin()+index.row()).value().enabled;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -210,20 +210,19 @@ bool QcModel::streamEnabled(const QModelIndex& index) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::addStream(const QString& streamID, bool enabled) {
-
-	StreamEntry se;
-	se.streamID = streamID;
-	se.enabled = enabled;
-	se.report.fill(NULL, _columns.size());
-	se.alert.fill(NULL, _columns.size());
-
-	if (_streamMap.contains(streamID))
+void QcModel::addStream(const QString &streamID, bool enabled) {
+	if ( _streamMap.contains(streamID) )
 		_streamMap[streamID].enabled = enabled;
-	else
+	else {
+		StreamEntry se;
+		se.streamID = streamID;
+		se.enabled = enabled;
+		se.report.fill(NULL, _columns.size());
+		se.alert.fill(NULL, _columns.size());
 		_streamMap.insert(streamID, se);
+	}
 
-	dataChanged();
+	invalidateData(streamID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -232,9 +231,7 @@ void QcModel::addStream(const QString& streamID, bool enabled) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::removeStream(const QString& streamID) {
-
 	_streamMap.remove(streamID);
-
 	reset();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -243,43 +240,45 @@ void QcModel::removeStream(const QString& streamID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcModel::setWaveformQuality(DataModel::WaveformQuality* wfq) {
-
-	if (!wfq) return;
-	if (_columns.isEmpty()) return;
+void QcModel::setWaveformQuality(DataModel::WaveformQuality *wfq) {
+	if ( !wfq ) return;
+	if ( _columns.isEmpty() ) return;
 
 	int column = _columns.indexOf(QString(wfq->parameter().c_str()));
 
 	// ignore unknown (not/wrong specified in cfg file) parameters
-	if (column == -1) {
-// 		SEISCOMP_DEBUG("setWaveformQuality: unknown parameter received: %s", wfq->parameter().c_str());
+	if ( column == -1 ) {
+		SEISCOMP_DEBUG("Unknown parameter received: %s", wfq->parameter().c_str());
 		return;
 	}
-	
+
 	QString streamID = getStreamID(wfq->waveformID());
 
-	if (!_streamMap.contains(streamID)) {
-		if (_config->cumulative())
+	/*
+	SEISCOMP_DEBUG("Received %s: %s %s",
+	               streamID.toStdString().c_str(),
+	               wfq->type().c_str(), wfq->parameter().c_str());
+	*/
+
+	if ( !_streamMap.contains(streamID) ) {
+		if ( _config->cumulative() )
 			addStream(streamID);
 		else
 			return;
-	}	
-	
-	WfQList* wfqList;
+	}
 
-	if (wfq->type() == "report")
+	WfQList *wfqList;
+
+	if ( wfq->type() == "report" )
 		wfqList = &_streamMap[streamID].report;
-	else if (wfq->type() == "alert")
+	else if ( wfq->type() == "alert" )
 		wfqList = &_streamMap[streamID].alert;
-	else return;
+	else
+		return;
 
-	
 	(*wfqList)[column] = wfq;
 
-	dataChanged();
-
-/*	QModelIndex inx = createIndex(_streamMap.keys().indexOf(streamID), column);
-	emit QAbstractItemModel::dataChanged(inx, inx);*/
+	invalidateData(streamID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -288,31 +287,35 @@ void QcModel::setWaveformQuality(DataModel::WaveformQuality* wfq) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcModel::cleanUp() {
-	
-	if (_cleanUpTime == 0.0)
+	if ( _cleanUpTime == 0.0 )
 		return;
 
-	for (StreamMap::iterator it = _streamMap.begin(); it != _streamMap.end(); ++it) {
+	int row = 0;
+	for ( StreamMap::iterator it = _streamMap.begin(); it != _streamMap.end(); ++it, ++row ) {
 		WfQList wfqList = it.value().alert;
 
-		for (WfQList::iterator it2 = wfqList.begin(); it2 != wfqList.end(); ++it2) {
-			const DataModel::WaveformQuality* wfq = it2->get();
-			if (!wfq) continue;
+		bool dirty = false;
+
+		for ( WfQList::iterator it2 = wfqList.begin(); it2 != wfqList.end(); ++it2 ) {
+			const DataModel::WaveformQuality *wfq = it2->get();
+			if ( !wfq ) continue;
+
 			try {
 				double dt = (double)(Core::Time::GMT() - wfq->end());
 				SEISCOMP_DEBUG("[%f s] cleaning up alert entries for: %s", dt, getStreamID(wfq->waveformID()).toAscii().data());
 				if (dt > _cleanUpTime) {
 					QString streamID = getStreamID(wfq->waveformID());
- 					SEISCOMP_WARNING("[%f s] cleaning up alert entries for: %s", dt, getStreamID(wfq->waveformID()).toAscii().data());
+ 					SEISCOMP_WARNING("[%f s] cleaning up alert entries for: %s", dt, streamID.toStdString().c_str());
 					*it2 = NULL;
+					dirty = true;
 				}
 			}
 			catch(...){SEISCOMP_ERROR("cleaning up alert entries FAILED!");}
 		}
-	
+
+		if ( dirty )
+			emit dataChanged(index(row, 0), index(row, _columns.size()-1));
 	}
-
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -330,7 +333,6 @@ void QcModel::cleanUp() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int QcModel::rowCount(const QModelIndex &) const {
-
 	return _streamMap.size();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -340,7 +342,6 @@ int QcModel::rowCount(const QModelIndex &) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int QcModel::columnCount(const QModelIndex &) const {
-
 	return _columns.size();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -351,7 +352,6 @@ int QcModel::columnCount(const QModelIndex &) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const QString& QcModel::getHeader(int section) const {
-
 	return _columns.at(section);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -361,8 +361,9 @@ const QString& QcModel::getHeader(int section) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QString QcModel::getKey(const QModelIndex& index) const {
-
-	try {return (_streamMap.begin()+index.row()).key();}
+	try {
+		return (_streamMap.begin()+index.row()).key();
+	}
 	catch (...){};
 
 	return "";
@@ -374,7 +375,6 @@ QString QcModel::getKey(const QModelIndex& index) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const DataModel::WaveformQuality* QcModel::getAlertData(const QModelIndex& index) const {
-
 	if (_streamMap.empty())
 		return NULL;
 
@@ -394,9 +394,8 @@ const DataModel::WaveformQuality* QcModel::getAlertData(const QModelIndex& index
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const DataModel::WaveformQuality* QcModel::getData(const QModelIndex& index) const {
-	
-	if (_streamMap.empty())
+const DataModel::WaveformQuality* QcModel::getData(const QModelIndex &index) const {
+	if ( _streamMap.empty() )
 		return NULL;
 
 	DataModel::WaveformQuality* wfq = NULL;
@@ -421,7 +420,7 @@ const DataModel::WaveformQuality* QcModel::getData(const QModelIndex& index) con
 			return wfq;
 	}
 	catch (std::exception& e) {
- 		qDebug() << e.what();
+		qDebug() << e.what();
 		return NULL;
 	}
 }
@@ -431,14 +430,11 @@ const DataModel::WaveformQuality* QcModel::getData(const QModelIndex& index) con
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QColor QcModel::getColor(const QModelIndex& index) const {
-
-	if (data(index, Qt::UserRole).isValid() ) {
+QColor QcModel::getColor(const QModelIndex &index) const {
+	if ( data(index, Qt::UserRole).isValid() )
 		return _config->color(_columns.at(index.column()), data(index, Qt::UserRole).toDouble());
-	}
 
 	return _config->color("default", 1.0);
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -447,7 +443,6 @@ QColor QcModel::getColor(const QModelIndex& index) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QVariant QcModel::data(const QModelIndex &index, int role) const {
-
 	if ( !index.isValid() )
 		return QVariant();
 
@@ -464,8 +459,8 @@ QVariant QcModel::data(const QModelIndex &index, int role) const {
 			return streamEnabled(index)?"on":"off";
 		}
 
-		const DataModel::WaveformQuality* wfq = getData(index);
-		if (wfq)
+		const DataModel::WaveformQuality *wfq = getData(index);
+		if ( wfq )
 			return _config->format(_columns.at(index.column()), wfq->value());
 		else
 			return QVariant();
@@ -476,15 +471,15 @@ QVariant QcModel::data(const QModelIndex &index, int role) const {
 	//!---------------------------------------------------------------------------------
 	// for correct sorting and coloring: return 'raw' data
 	if ( role == Qt::UserRole ) {
-		if (index.column() == 0) {
+		if ( index.column() == 0 ) {
 			return getKey(index);
 		}
-		if (index.column() == 1) {
+		if ( index.column() == 1 ) {
 			return streamEnabled(index);
 		}
 
 		const DataModel::WaveformQuality* wfq = getData(index);
-		if (wfq) {
+		if ( wfq ) {
 			if (_config->useAbsoluteValue(_columns.at(index.column())))
 				return fabs(wfq->value());
 			else
@@ -499,7 +494,7 @@ QVariant QcModel::data(const QModelIndex &index, int role) const {
 	//!---------------------------------------------------------------------------------
 	else if ( role == Qt::TextAlignmentRole ) {
 		// stream enabled column
-		if (index.column() == 1) {
+		if ( index.column() == 1 ) {
 			return int(Qt::AlignCenter | Qt::AlignVCenter);
 		}
 		return int(Qt::AlignRight | Qt::AlignVCenter);
@@ -509,11 +504,9 @@ QVariant QcModel::data(const QModelIndex &index, int role) const {
 
 	//!---------------------------------------------------------------------------------
 	else if ( role == Qt::BackgroundColorRole ) {
-
-		if (index.column() == 1) {
+		if ( index.column() == 1 ) {
 			return streamEnabled(index)?QColor(0,255,0,255):QColor(255,0,0,255);
 		}
-
 
 		return getColor(index);
 	}
@@ -546,7 +539,6 @@ QVariant QcModel::data(const QModelIndex &index, int role) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QString QcModel::wfq2str(const DataModel::WaveformQuality* wfq) const {
-
 	QString text = QString();
 
 	text.append(QString("value: %1 (+/- %2)\n").arg(wfq->value()).arg(wfq->lowerUncertainty()));
@@ -557,7 +549,6 @@ QString QcModel::wfq2str(const DataModel::WaveformQuality* wfq) const {
 	catch(...) {};
 
 	return text+"\n";
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -566,7 +557,6 @@ QString QcModel::wfq2str(const DataModel::WaveformQuality* wfq) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QVariant QcModel::headerData(int section, Qt::Orientation orientation, int role) const {
-
 	if ( orientation == Qt::Horizontal ) {
 		switch ( role ) {
 			case Qt::DisplayRole:

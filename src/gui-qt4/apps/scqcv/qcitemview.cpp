@@ -47,15 +47,14 @@ QcItemDelegate::~QcItemDelegate() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcItemDelegate::setModel(QAbstractItemModel* model) {
-
-	if (!model)
-		throw Core::GeneralException();	
+	if ( !model )
+		throw Core::GeneralException();
 
 	try {
 		_model = static_cast<const QAbstractProxyModel*>(model);
 		_qcModel = static_cast<QcModel*>(_model->sourceModel());
 	}
-	catch(std::exception &e){
+	catch ( std::exception &e ){
 		SEISCOMP_ERROR("%s", e.what());
 		exit(1);
 	}
@@ -72,7 +71,7 @@ void QcItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, c
 		paint0(painter, opt, index);
 	else
 		paint1(painter, opt, index);
-		
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -81,9 +80,7 @@ void QcItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, c
 //! (normal) table view
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcItemDelegate::paint0(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const {
-
  	painter->save();
-
 
 	//! translate: proxyModelIndex --> ModelIndex
 	QModelIndex rawindex(_model->mapToSource(index));
@@ -120,6 +117,7 @@ void QcItemDelegate::paint0(QPainter *painter, const QStyleOptionViewItem &opt, 
 #endif	
 
 
+	/*
 	if (_qcModel->getAlertData(rawindex) != NULL) {
 			QPen p;
 			p.setStyle(Qt::SolidLine);
@@ -134,6 +132,7 @@ void QcItemDelegate::paint0(QPainter *painter, const QStyleOptionViewItem &opt, 
 			r.setHeight(opt.rect.height()-1);
 			painter->drawRect(r);
 	}
+	*/
 
 	painter->restore();
 }
@@ -144,8 +143,7 @@ void QcItemDelegate::paint0(QPainter *painter, const QStyleOptionViewItem &opt, 
 //! summary view
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcItemDelegate::paint1(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const {
-
- 	painter->save();
+	painter->save();
 
 		painter->setClipRect(opt.rect);
 
@@ -170,7 +168,7 @@ void QcItemDelegate::paint1(QPainter *painter, const QStyleOptionViewItem &opt, 
 
 		painter->setPen(Qt::SolidLine);
 		painter->setFont(option.font);
- 		painter->drawText(3, option.rect.height()-2, streamID);
+		painter->drawText(3, option.rect.height()-2, streamID);
 
 		if (_qcModel->hasAlerts(streamID)) {
 				painter->setBrush(Qt::NoBrush);
@@ -189,7 +187,7 @@ void QcItemDelegate::paint1(QPainter *painter, const QStyleOptionViewItem &opt, 
 	
 
 		
- 	painter->restore();
+	painter->restore();
 
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -209,7 +207,6 @@ QSize QcItemDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelInde
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 inline QColor QcItemDelegate::getSumColor(const QModelIndex& index) const {
-
 	QModelIndex inx;
 	int unset = 0;
 	int score = 0;
@@ -530,8 +527,8 @@ void QcItemView::rowsInserted(const QModelIndex &parent, int start, int end)
 		double value = model()->data(index, Qt::UserRole).toDouble();
 
 		if (value > 0.0) {
-			totalValue += value;
-			validItems++;
+			_totalValue += value;
+			_validItems++;
 		}
 	}
 
@@ -550,8 +547,8 @@ void QcItemView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int 
 		QModelIndex index = model()->index(row, 1, rootIndex());
 		double value = model()->data(index, Qt::UserRole).toDouble();
 		if (value > 0.0) {
-			totalValue -= value;
-			validItems--;
+			_totalValue -= value;
+			_validItems--;
 		}
 	}
 

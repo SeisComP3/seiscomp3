@@ -33,7 +33,6 @@ int main(int argc, char** argv) {
 		app.setPrimaryMessagingGroup("GUI");
 		app.addMessagingSubscription("QC");
 
-
 		retCode = app();
 
 		SEISCOMP_DEBUG("Number of remaining objects before destroying application: %d", Seiscomp::Core::BaseObject::ObjectCount());

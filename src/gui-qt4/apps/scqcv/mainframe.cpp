@@ -73,7 +73,7 @@ MainFrame::MainFrame() {
 	_qcReportView = new QcTableView(_qcModel);
 	_qcReportView->setRecordStreamURL(SCApp->recordStreamURL());
 	_qcReportView->setDatabaseQueryInterface(SCApp->query());
-	QLayout* Rlayout = new QVBoxLayout(_ui.tabQcReport);
+	QLayout *Rlayout = new QVBoxLayout(_ui.tabQcReport);
 	Rlayout->setMargin(2);
 	Rlayout->addWidget(_qcReportView);
 
@@ -81,10 +81,9 @@ MainFrame::MainFrame() {
 	_qcOverView = new QcOverView(_qcModel, this);
 	_qcOverView->setRecordStreamURL(SCApp->recordStreamURL());
 	_qcOverView->setDatabaseQueryInterface(SCApp->query());
-	QLayout* Olayout = new QVBoxLayout(_ui.tabQcOver);
+	QLayout *Olayout = new QVBoxLayout(_ui.tabQcOver);
 	Olayout->setMargin(2);
 	Olayout->addWidget(_qcOverView);
-
 
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
 	        this, SLOT(readMessage(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)) );
@@ -123,40 +122,34 @@ void MainFrame::toggledFullScreen(bool isFullScreen) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainFrame::readMessage(Core::Message* msg, Communication::NetworkMessage* nmsg) {
-
+void MainFrame::readMessage(Core::Message *msg, Communication::NetworkMessage *nmsg) {
 	//! handle data messages
-	Core::DataMessage* dataMessage = Core::DataMessage::Cast(msg);
-	if (dataMessage) {
+	Core::DataMessage *dataMessage = Core::DataMessage::Cast(msg);
+	if ( dataMessage != NULL ) {
 		// read contents
-		for (Core::DataMessage::iterator it = dataMessage->begin(); it != dataMessage->end(); ++it)
-		{
+		for ( Core::DataMessage::iterator it = dataMessage->begin(); it != dataMessage->end(); ++it ) {
 			// QualitiyControl messages
-			DataModel::WaveformQuality* waveformQuality = DataModel::WaveformQuality::Cast(*it);
-			if (waveformQuality) {
-					_qcModel->setWaveformQuality(waveformQuality);
-			}
+			DataModel::WaveformQuality *waveformQuality = DataModel::WaveformQuality::Cast(*it);
+			if ( waveformQuality != NULL )
+				_qcModel->setWaveformQuality(waveformQuality);
 		}
+
 		return;
 	}
 
 	//! handle Notifier Messages
-	DataModel::NotifierMessage* notifierMessage = DataModel::NotifierMessage::Cast(msg);
-	if (notifierMessage) {
+	DataModel::NotifierMessage *notifierMessage = DataModel::NotifierMessage::Cast(msg);
+	if ( notifierMessage != NULL ) {
 		// Read contents
-		for (DataModel::NotifierMessage::iterator it = notifierMessage->begin(); it != notifierMessage->end(); ++it)
-		{
+		for ( DataModel::NotifierMessage::iterator it = notifierMessage->begin(); it != notifierMessage->end(); ++it ) {
 			// Station-Config messages
-			DataModel::ConfigStation* configStation = DataModel::ConfigStation::Cast((*it)->object());
-			if (configStation) {
+			DataModel::ConfigStation *configStation = DataModel::ConfigStation::Cast((*it)->object());
+			if ( configStation != NULL )
 				_qcModel->setStationEnabled(QString(configStation->networkCode().c_str()), QString(configStation->stationCode().c_str()), configStation->enabled());
-			}
 		}
+
 		return;
 	}
-
-
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

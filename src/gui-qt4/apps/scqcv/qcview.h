@@ -59,18 +59,18 @@ class QcView : public QWidget {
 		void updateStreamCount();
 
 	protected:
-		QcModel* _qcModel;
-		QSortFilterProxyModel* _qcProxyModel;
-		QVBoxLayout* _layout;
-		QHBoxLayout* _layout2;
-		QWidget* _filterWidget;
-		QLabel* _lbVSecCount;
-		QLineEdit* _leFilter;
-		QLabel* _lbLeFilter;
-		QWidget* _parent;
+		QcModel                        *_qcModel;
+		QSortFilterProxyModel          *_qcProxyModel;
+		QVBoxLayout                    *_layout;
+		QHBoxLayout                    *_layout2;
+		QWidget                        *_filterWidget;
+		QLabel                         *_lbVSecCount;
+		QLineEdit                      *_leFilter;
+		QLabel                         *_lbLeFilter;
+		QWidget                        *_parent;
 
-		std::string _recordStreamURL;
-		const DataModel::DatabaseQuery* _dbQuery;
+		std::string                     _recordStreamURL;
+		const DataModel::DatabaseQuery *_dbQuery;
 
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -123,7 +123,7 @@ class QcOverView : public QcView {
 		void init();
 
 	private:
-		QcItemView* _overView;
+		QcItemView *_overView;
 
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -136,19 +136,18 @@ class QcTableCornerButton : public QPushButton {
 	Q_OBJECT
 
 	public:
-    	QcTableCornerButton(QWidget* parent)
-			: QPushButton(parent) {}
+		QcTableCornerButton(QWidget* parent) : QPushButton(parent) {}
 
 		void paintEvent(QPaintEvent*) {
 			QStyleOptionButton opt;
 			opt.init(this);
 			opt.state = QStyle::State_None;
 			opt.features = QStyleOptionButton::Flat;
- 			opt.rect = rect();
+			opt.rect = rect();
 			opt.text = text();
 			QPainter painter(this);
 			painter.setBackgroundMode(Qt::TransparentMode);
- 			style()->drawControl(QStyle::CE_PushButton, &opt, &painter, this);
+			style()->drawControl(QStyle::CE_PushButton, &opt, &painter, this);
 		}
 
 };
