@@ -79,7 +79,7 @@ class QcItemView : public QAbstractItemView {
 	protected:
 	// 	bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event);
 		QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction,
-								Qt::KeyboardModifiers modifiers);
+		                       Qt::KeyboardModifiers modifiers);
 
 		int horizontalOffset() const;
 		int verticalOffset() const;
@@ -101,25 +101,23 @@ class QcItemView : public QAbstractItemView {
 		QRegion visualRegionForSelection(const QItemSelection &selection) const;
 
 	private:
-		QWidget* _parent;
+		QWidget *_parent;
 		QRect itemRect(const QModelIndex &item) const;
-	// 	QRegion itemRegion(const QModelIndex &index) const;
 		int rows(const QModelIndex &index = QModelIndex()) const;
 		void updateGeometries();
 
-		bool _compactView;
-		int margin;
-		int _totalSize;
-		int pieSize;
-		int validItems;
-		double totalValue;
-		QPoint origin;
+	private:
+		bool           _compactView;
+		int            _totalSize;
+		int            _validItems;
+		double         _totalValue;
+
 		typedef QMap<QModelIndex, QRect> ItemPositions;
-		ItemPositions _itemPositions;
-		QcTableView* _infoTable; // FIXME
-		QWidget* _infoWidget;
-		QStatusBar* _statusBar;
-		QCheckBox* _hideInfoWidget;
+		ItemPositions  _itemPositions;
+		QcTableView   *_infoTable; // FIXME
+		QWidget       *_infoWidget;
+		QStatusBar    *_statusBar;
+		QCheckBox     *_hideInfoWidget;
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

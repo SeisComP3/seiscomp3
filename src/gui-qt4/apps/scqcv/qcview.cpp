@@ -30,16 +30,16 @@ namespace Qc {
 class QcSortFilterProxyModel : public QSortFilterProxyModel {
 	public:
 		QcSortFilterProxyModel(QObject* obj=0) 
-			:	QSortFilterProxyModel(obj) {
-		};
+		:	QSortFilterProxyModel(obj) {}
+
 		bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
 			if ( sourceModel()->data(left).type() == QVariant::Invalid )
 				return true;
 			if ( sourceModel()->data(right).type() == QVariant::Invalid )
 				return false;
 
- 			return QSortFilterProxyModel::lessThan(left, right);
-		};
+			return QSortFilterProxyModel::lessThan(left, right);
+		}
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,8 +48,7 @@ class QcSortFilterProxyModel : public QSortFilterProxyModel {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QcView::QcView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
-	 : QWidget(parent, f) {
-
+: QWidget(parent, f) {
 	_qcModel = qcModel;
 	_qcProxyModel = new QcSortFilterProxyModel(this);
 	_qcProxyModel->setSourceModel(_qcModel);
@@ -59,7 +58,6 @@ QcView::QcView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
 
 	_layout = new QVBoxLayout(this);
 	_layout->setMargin(2);
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 QcView::~QcView(){}
@@ -70,8 +68,6 @@ QcView::~QcView(){}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::init() {
-
-
 	_filterWidget = new QWidget(this);
 	_layout->addWidget(_filterWidget);
 
@@ -105,7 +101,12 @@ void QcView::init() {
 void QcView::setRecordStreamURL(const std::string& recordStreamURL) {
 	_recordStreamURL = recordStreamURL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const std::string& QcView::recordStreamURL() const {
 	return _recordStreamURL;
 }
@@ -118,7 +119,12 @@ const std::string& QcView::recordStreamURL() const {
 void QcView::setDatabaseQueryInterface(const DataModel::DatabaseQuery* dbQuery) {
 	_dbQuery = dbQuery;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const DataModel::DatabaseQuery* QcView::databaseQueryInterface() const {
 	return _dbQuery;
 }
@@ -129,7 +135,6 @@ const DataModel::DatabaseQuery* QcView::databaseQueryInterface() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::setExpireTime(double time) {
-
 	_qcModel->setCleanUpTime(time);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -139,7 +144,6 @@ void QcView::setExpireTime(double time) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::hideFilterWidget(bool hide){
-
 	hide?_filterWidget->hide():_filterWidget->show();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -149,7 +153,6 @@ void QcView::hideFilterWidget(bool hide){
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::setFilterRegExp(const QString& expr){
-
 	_leFilter->setText(expr);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -159,7 +162,6 @@ void QcView::setFilterRegExp(const QString& expr){
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::filterRegExpChanged(const QString& filter) {
-
 	QRegExp regExp(filter, Qt::CaseInsensitive, QRegExp::RegExp);
 	_qcProxyModel->setFilterRegExp(regExp);
 
@@ -172,25 +174,19 @@ void QcView::filterRegExpChanged(const QString& filter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcView::updateStreamCount() {
-
 	_lbVSecCount->setText(QString(" %1 / %2 streams listed")
 	             .arg(_qcProxyModel->rowCount())
 	             .arg(_qcModel->rowCount()));
-
- }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QcTableView::QcTableView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
-	 : QcView(qcModel, parent, f) {
-
+: QcView(qcModel, parent, f) {
 	_cornerButton = NULL;
-
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -202,7 +198,6 @@ QcTableView::~QcTableView(){}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTableView::init() {
-
 	_qcTable = new QTableView();
 	_qcTable->verticalHeader()->setDefaultSectionSize(fontMetrics().height()+6);
 	_qcTable->verticalHeader()->setDefaultAlignment(Qt::AlignLeft);
@@ -244,9 +239,7 @@ void QcTableView::init() {
 
 	_streamWidgetLength = _qcModel->config()->streamWidgetLength();
 
-
 	connect(_qcTable, SIGNAL(pressed(const QModelIndex&)), this, SLOT(showDialog(const QModelIndex&)));
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -255,7 +248,6 @@ void QcTableView::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QTableView* QcTableView::qTableView() {
-	
 	return _qcTable;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -265,7 +257,6 @@ QTableView* QcTableView::qTableView() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTableView::showStream(int sec) {
-
 	//! translate: proxyModelIndex --> ModelIndex
 	QModelIndex index = _qcProxyModel->index(sec, 0);
 	QModelIndex rawindex(_qcProxyModel->mapToSource(index));
@@ -287,7 +278,6 @@ void QcTableView::showStream(int sec) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTableView::setStreamWidgetLength(double length){
-
 	_streamWidgetLength = length;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -297,7 +287,6 @@ void QcTableView::setStreamWidgetLength(double length){
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double QcTableView::streamWidgetLength() const {
-
 	return _streamWidgetLength;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -308,7 +297,6 @@ double QcTableView::streamWidgetLength() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTableView::alterCornerButton() {
-
 	if (_qcProxyModel->rowCount() == 0)
 		_cornerButton->hide();
 	else {
@@ -324,7 +312,6 @@ void QcTableView::alterCornerButton() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //! install eventFilter for the Table Corner Widget
 bool QcTableView::eventFilter(QObject* o, QEvent* e) {
-
 	if (e->type() == QEvent::Paint){
 		QcTableCornerButton* btn = qobject_cast<QcTableCornerButton*>(o);
 			
@@ -338,7 +325,6 @@ bool QcTableView::eventFilter(QObject* o, QEvent* e) {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 void QcTableView::showDialog(const QModelIndex& index) {
-
 	QModelIndex inx(_qcProxyModel->mapToSource(index));
 
 	if (inx.column() != 1) return;
@@ -366,17 +352,13 @@ void QcTableView::showDialog(const QModelIndex& index) {
 		// should never be reached
 		break;
 	}
-	
-
 }
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTableView::resetTableSorting() {
-
 	_qcTable->sortByColumn(0, Qt::AscendingOrder);
-
  }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -384,18 +366,9 @@ void QcTableView::resetTableSorting() {
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QcOverView::QcOverView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
-	 : QcView(qcModel, parent, f) {
-
+: QcView(qcModel, parent, f) {
 	init();
-
 }
 QcOverView::~QcOverView(){}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -405,7 +378,6 @@ QcOverView::~QcOverView(){}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcOverView::init() {
-
 	_overView = new QcItemView(this);
 	_overView->setModel(_qcProxyModel);
 
@@ -431,6 +403,8 @@ void QcOverView::init() {
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

@@ -70,15 +70,16 @@ class MainFrame : public MainWindow {
 
 	private:
 		void prepareNotifier(QString streamID, bool enable);
-		DataModel::ConfigStation* configStation(const std::string& net, const std::string& sta) const;
-		Ui::MainFrame _ui;
-		QLabel* _wt;
+		DataModel::ConfigStation *configStation(const std::string& net, const std::string& sta) const;
 
-		QcViewConfig* _config;
-		QcModel* _qcModel;
-		QcView* _qcReportView;
-		QcView* _qcOverView;
+	private:
+		Ui::MainFrame  _ui;
+		QLabel        *_wt;
 
+		QcViewConfig  *_config;
+		QcModel       *_qcModel;
+		QcView        *_qcReportView;
+		QcView        *_qcOverView;
 };
 
 
