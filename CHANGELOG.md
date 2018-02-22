@@ -1,5 +1,26 @@
 # Jakarta
 
+## Release 2017.334 patch4
+
+* dlsv2inv
+
+  * Add continuation support for blockette 54
+
+* scqcv
+
+  * Fix crash that happened after some time receiving
+    QC updates
+
+* scolv
+
+  * If ```olv.computeMagnitudesSilently``` is enabled and magnitudes are computed with
+    all amplitudes from cache/database then the popup window appeared anyhow. This has
+    been fixed.
+
+* scmag
+
+  * Fix crash if an amplitude value is not set
+
 ## Release 2017.334 patch3
 
 * scvsmag
