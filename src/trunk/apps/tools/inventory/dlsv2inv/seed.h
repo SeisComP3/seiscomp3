@@ -400,6 +400,7 @@ DECLARE_BLOCKETTE2(ResponsePolesZerosDictionary, ResponsePolesZeros) {
 DECLARE_BLOCKETTE2(ResponseCoefficients, SequenceRecord) {
 	public:
 		virtual ParseResult Parse(std::string record);
+		virtual ParseResult Merge(std::string);
 
 		int GetSignalInUnits(){return signal_in_units;}
 		int GetSignalOutUnits(){return signal_out_units;}

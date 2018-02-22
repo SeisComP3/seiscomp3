@@ -437,8 +437,55 @@ bool Parse(int blockette, C &container, bool merge, std::string record) {
 	return res != PR_Error;
 }
 
+template <typename T, typename C>
+bool ParseStage(int blockette, C &container, bool merge, std::string record) {
+	ParseResult res = PR_OK;
+
+	if ( merge ) {
+		SEISCOMP_DEBUG("Blockette %d: continuation", blockette);
+		res = container.back()->Merge(record);
+	}
+	else {
+		typename Seiscomp::Core::SmartPointer<T>::Impl rec = new T;
+		res = rec->Parse(record);
+
+		if ( res == PR_Error ) {
+			SEISCOMP_ERROR("Blockette %d: Parse error: %s", blockette, record.c_str());
+			return false;
+		}
+
+		if ( !container.empty() && (rec->GetStageSequenceNumber() == container.back()->GetStageSequenceNumber()) ) {
+			SEISCOMP_DEBUG("Blockette %d: continuation", blockette);
+			res = container.back()->Merge(record);
+			if ( res == PR_Error ) {
+				SEISCOMP_ERROR("Blockette %d: Merge error: %s", blockette, record.c_str());
+				return false;
+			}
+			else if ( res == PR_NotSupported ) {
+				SEISCOMP_ERROR("Blockette %d: Merge not supported but required", blockette);
+				return false;
+			}
+		}
+		else
+			container.push_back(rec);
+	}
+
+	if ( res == PR_Partial ) {
+		SEISCOMP_DEBUG("Blockette %d: requires more data, try to continue on next record", blockette);
+		lastIncompleteBlockette = blockette;
+	}
+	else
+		lastIncompleteBlockette = -1;
+
+	return res != PR_Error;
+}
+
+
 #define PARSE(TYPE, CONTAINTER) \
 	Parse<TYPE>(blockette, CONTAINTER, lastIncompleteBlockette == blockette, substr(record, 7, data_size))
+
+#define PARSE_STAGE(TYPE, CONTAINTER) \
+	ParseStage<TYPE>(blockette, CONTAINTER, lastIncompleteBlockette == blockette, substr(record, 7, data_size))
 
 
 /****************************************************************************************************************************
@@ -489,28 +536,28 @@ void AbbreviationDictionaryControl::ParseVolumeRecord(string record)
 						PARSE(BeamConfiguration, bc);
 						break;
 					case(41):
-						PARSE(FIRDictionary, fird);
+						PARSE_STAGE(FIRDictionary, fird);
 						break;
 					case(42):
-						PARSE(ResponsePolynomialDictionary, rpd);
+						PARSE_STAGE(ResponsePolynomialDictionary, rpd);
 						break;
 					case(43):
-						PARSE(ResponsePolesZerosDictionary, rpzd);
+						PARSE_STAGE(ResponsePolesZerosDictionary, rpzd);
 						break;
 					case(44):
-						PARSE(ResponseCoefficientsDictionary, rcd);
+						PARSE_STAGE(ResponseCoefficientsDictionary, rcd);
 						break;
 					case(45):
-						PARSE(ResponseListDictionary, rld);
+						PARSE_STAGE(ResponseListDictionary, rld);
 						break;
 					case(46):
-						PARSE(GenericResponseDictionary, grd);
+						PARSE_STAGE(GenericResponseDictionary, grd);
 						break;
 					case(47):
-						PARSE(DecimationDictionary, dd);
+						PARSE_STAGE(DecimationDictionary, dd);
 						break;
 					case(48):
-						PARSE(ChannelSensitivityGainDictionary, csgd);
+						PARSE_STAGE(ChannelSensitivityGainDictionary, csgd);
 						break;
 					default:
 						proceed = false;
@@ -1061,22 +1108,22 @@ void StationControl::ParseVolumeRecord(string record)
 							break;
 						}
 						case(53):
-							PARSE(ResponsePolesZeros, si[eos]->ci[eoc]->rpz);
+							PARSE_STAGE(ResponsePolesZeros, si[eos]->ci[eoc]->rpz);
 							break;
 						case(54):
-							PARSE(ResponseCoefficients, si[eos]->ci[eoc]->rc);
+							PARSE_STAGE(ResponseCoefficients, si[eos]->ci[eoc]->rc);
 							break;
 						case(55):
-							PARSE(ResponseList, si[eos]->ci[eoc]->rl);
+							PARSE_STAGE(ResponseList, si[eos]->ci[eoc]->rl);
 							break;
 						case(56):
-							PARSE(GenericResponse, si[eos]->ci[eoc]->gr);
+							PARSE_STAGE(GenericResponse, si[eos]->ci[eoc]->gr);
 							break;
 						case(57):
-							PARSE(Decimation, si[eos]->ci[eoc]->dec);
+							PARSE_STAGE(Decimation, si[eos]->ci[eoc]->dec);
 							break;
 						case(58):
-							PARSE(ChannelSensitivityGain, si[eos]->ci[eoc]->csg);
+							PARSE_STAGE(ChannelSensitivityGain, si[eos]->ci[eoc]->csg);
 							break;
 						case(59):
 							PARSE(Comment, si[eos]->ci[eoc]->cc);
@@ -1085,10 +1132,10 @@ void StationControl::ParseVolumeRecord(string record)
 							PARSE(ResponseReference, si[eos]->ci[eoc]->rr);
 							break;
 						case(61):
-							PARSE(FIRResponse, si[eos]->ci[eoc]->firr);
+							PARSE_STAGE(FIRResponse, si[eos]->ci[eoc]->firr);
 							break;
 						case(62):
-							PARSE(ResponsePolynomial, si[eos]->ci[eoc]->rp);
+							PARSE_STAGE(ResponsePolynomial, si[eos]->ci[eoc]->rp);
 							break;
 						default:
 							SEISCOMP_WARNING("Unhandled blockette: %d", blockette);
@@ -1514,14 +1561,14 @@ ParseResult ResponseCoefficients::Parse(string record)
 		number_of_numerators = nn;
 	}
 
-	for(int i=0; i<number_of_numerators; i++)
-	{
+	for ( int i = 0; i < number_of_numerators; ++i ) {
 		coeff.coefficient = FromString<double>(substr(record, pos1, 12));
 		pos1 += 12;
 		coeff.error = FromString<double>(substr(record, pos1, 12));
 		pos1 += 12;
 		numerators.push_back(coeff);
 	}
+
 	number_of_denominators = FromString<int>(substr(record, pos1, 4));
 	pos1 += 4;
 
@@ -1533,16 +1580,25 @@ ParseResult ResponseCoefficients::Parse(string record)
 		number_of_denominators = nd;
 	}
 
-	for(int i=0; i<number_of_denominators; i++)
-	{
+	for ( int i = 0; i < number_of_denominators; ++i ) {
 		coeff.coefficient = FromString<double>(substr(record, pos1, 12));
 		pos1 += 12;
 		coeff.error = FromString<double>(substr(record, pos1, 12));
 		pos1 += 12;
 		denominators.push_back(coeff);
 	}
+
+	number_of_numerators = numerators.size();
+	number_of_denominators = denominators.size();
+
 	return PR_OK;
 }
+
+
+ParseResult ResponseCoefficients::Merge(std::string record) {
+	return Parse(record);
+}
+
 
 /****************************************************************************************************************************
 * Function:     GetNumerators												    *

@@ -32,12 +32,12 @@ class QcViewConfig;
 
 typedef QVector<DataModel::WaveformQualityPtr> WfQList; // <indexRow, WfQ>
 
-typedef struct  {
+struct StreamEntry {
 	QString streamID;
-	bool enabled;
+	bool    enabled;
 	WfQList report;
 	WfQList alert;
-} StreamEntry;
+};
 
 typedef QMap<QString, StreamEntry> StreamMap; // <StreamID, StreamEntry>
 
@@ -45,9 +45,6 @@ typedef QMap<QString, StreamEntry> StreamMap; // <StreamID, StreamEntry>
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class QcModel : public QAbstractTableModel {
 	Q_OBJECT
-
-	private:
-
 
 	public:
 		QcModel(const QcViewConfig* config, QObject* parent=0);
@@ -62,32 +59,34 @@ class QcModel : public QAbstractTableModel {
 
 		void setStationEnabled(const QString& net, const QString& sta, bool enabled);
 		void setStreamEnabled(const QString& streamID, bool enabled);
-		void setStreamEnabled(const QModelIndex& index, bool enabled);
-		bool streamEnabled(const QModelIndex& index) const;
+		void setStreamEnabled(const QModelIndex &index, bool enabled);
+		bool streamEnabled(const QModelIndex &index) const;
 	
-		int rowCount(const QModelIndex& parent = QModelIndex()) const;
-		int columnCount(const QModelIndex& parent = QModelIndex()) const;
+		int rowCount(const QModelIndex &parent = QModelIndex()) const;
+		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-		QVariant data(const QModelIndex& index, int role) const;
-		QVariant rawData(const QModelIndex& index, int role) const;
+		QVariant data(const QModelIndex &index, int role) const;
 
 		QVariant headerData(int section, Qt::Orientation orientation,
 		                    int role = Qt::DisplayRole) const;
 
 		const QString& getHeader(int section) const ;
-		bool hasAlerts(const QString& streamID);
-		const DataModel::WaveformQuality* getAlertData(const QModelIndex& index) const;
-		const DataModel::WaveformQuality* getData(const QModelIndex& index) const;
-		QString getKey(const QModelIndex& index) const;
-		QColor getColor(const QModelIndex& index) const;
+		bool hasAlerts(const QString &streamID);
+
+		QString getKey(const QModelIndex &index) const;
 
 	signals:
 		void stationStateChanged(QString, bool);
 		
 	private slots:
 		void timeout();
-		void reset();
 		void cleanUp();
+
+	private:
+		const DataModel::WaveformQuality *getAlertData(const QModelIndex &index) const;
+		const DataModel::WaveformQuality *getData(const QModelIndex &index) const;
+		QColor getColor(const QModelIndex &index) const;
+		void invalidateData(const QString &key);
 
 	private:
 		const QcViewConfig* _config;
@@ -95,10 +94,8 @@ class QcModel : public QAbstractTableModel {
 		QStringList _columns;
 		StreamMap _streamMap;
 		bool _dataChanged;
-		void dataChanged();
 		double _cleanUpTime;
 		QString wfq2str(const DataModel::WaveformQuality* wfq) const;
-
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

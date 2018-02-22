@@ -1349,7 +1349,8 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 		// blockette that should have been handled by the reader. Issue an
 		// error
 		if ( lastStage && *lastStage == stages[i].stage ) {
-			SEISCOMP_ERROR("Same stage number in subsequent responses: this must be checked!");
+			SEISCOMP_ERROR("Same stage number (%d) in subsequent responses: this must be checked!",
+			               (int)*lastStage);
 			throw Core::GeneralException("Undefined behaviour expected, conversion aborted");
 		}
 
