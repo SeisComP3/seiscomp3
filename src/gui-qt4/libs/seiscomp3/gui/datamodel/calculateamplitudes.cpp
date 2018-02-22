@@ -142,6 +142,9 @@ int CalculateAmplitudes::exec() {
 	if ( !process() )
 		return QDialog::Rejected;
 
+	if ( _computeSilently && (!_thread || !_thread->isRunning()) )
+		return QDialog::Accepted;
+
 	return QDialog::exec();
 }
 
