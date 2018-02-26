@@ -509,6 +509,20 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 			continue;
 
 		double mag;
+		double ampValue;
+		try {
+			ampValue = ampl->amplitude().value();
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("Amplitude value not set, this is not expected: sid=%s.%s.%s.%s, type=%s",
+			                 ampl->waveformID().networkCode().c_str(),
+			                 ampl->waveformID().stationCode().c_str(),
+			                 ampl->waveformID().locationCode().c_str(),
+			                 ampl->waveformID().channelCode().c_str(),
+			                 ampl->type().c_str());
+			continue;
+		}
+
 		MagnitudeProcessor::Status status =
 			it->second->computeMagnitude(ampl->amplitude().value(),
 			                             period, distance, depth,
