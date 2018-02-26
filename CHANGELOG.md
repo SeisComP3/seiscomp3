@@ -17,6 +17,10 @@
     all amplitudes from cache/database then the popup window appeared anyhow. This has
     been fixed.
 
+* scmag
+
+  * Fix crash if an amplitude value is not set
+
 ## Release 2017.334 patch3
 
 * scvsmag
