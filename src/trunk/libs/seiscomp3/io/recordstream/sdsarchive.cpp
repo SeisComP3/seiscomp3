@@ -347,6 +347,13 @@ bool SDSArchive::setStart(const string &fname) {
 		if ( (half == 1) && (recstime > stime) )
 			half = 0;
 		offset = half*reclen;
+
+		/* Check if the next record can be loaded if there are still data in
+		 * the file and the requested start time is not yet reached. This is
+		 * currently disabled because it will fail anyway downstream.
+		if ( (recetime < stime) && (offset < size) )
+			retcode = ms_readmsr_r(&pfp,&prec,const_cast<char *>(fname.c_str()),0,&fpos,NULL,1,0,0);
+		*/
 	}
 #else
 	while((retcode = ms_readmsr_r(&pfp,&prec,const_cast<char *>(fname.c_str()),0,NULL,NULL,1,0,0)) == MS_NOERROR) {
@@ -379,7 +386,7 @@ bool SDSArchive::setStart(const string &fname) {
 	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
 
 	_recstream.seekg(offset,ios::beg);
-	if ( offset >= size )
+	if ( offset >= size || retcode == MS_ENDOFFILE )
 		_recstream.clear(ios::eofbit);
 
 	return result;
@@ -469,6 +476,7 @@ bool SDSArchive::stepStream() {
 		while ( !_fnames.empty() ) {
 			string fname = _fnames.front();
 			_fnames.pop();
+			_recstream.close();
 			_recstream.clear();
 			_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
 			if ( !_recstream.is_open() ) {
@@ -501,6 +509,8 @@ bool SDSArchive::stepStream() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::Record *SDSArchive::next() {
 	while ( stepStream() ) {
+		fstream::pos_type initialReadPos = _recstream.tellg();
+
 		MSeedRecord *rec = new MSeedRecord();
 		if ( rec == NULL )
 			return NULL;
@@ -510,14 +520,17 @@ Seiscomp::Record *SDSArchive::next() {
 		try {
 			rec->read(_recstream);
 		}
-		catch ( Core::EndOfStreamException & ) {
-			_recstream.close();
-			delete rec;
-			continue;
-		}
 		catch ( std::exception &e ) {
+			fstream::pos_type currentReadPos = _recstream.tellg();
+
 			SEISCOMP_ERROR("file read exception: %s", e.what());
 			delete rec;
+
+			if ( initialReadPos == currentReadPos ) {
+				// Skip potentially corrupt header
+				_recstream.seekg(64, ios::cur);
+			}
+
 			continue;
 		}
 
