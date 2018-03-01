@@ -529,6 +529,18 @@ class FDSNDataSelect(resource.Resource):
 				for sta in self._stationIter(net, s):
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
+							try:
+								start_time = max(cha.start(), s.time.start)
+
+							except Exception:
+								start_time = s.time.start
+
+							try:
+								end_time = min(cha.end(), s.time.end)
+
+							except Exception:
+								end_time = s.time.end
+
 							if utils.isRestricted(cha) and \
 							    (not self.__user or (self.__access and
 								not self.__access.authorize(self.__user,
@@ -536,8 +548,8 @@ class FDSNDataSelect(resource.Resource):
 											    sta.code(),
 											    loc.code(),
 											    cha.code(),
-											    s.time.start,
-											    s.time.end))):
+											    start_time,
+											    end_time))):
 								continue
 
 							# enforce maximum sample per request restriction
@@ -555,7 +567,7 @@ class FDSNDataSelect(resource.Resource):
 
 								# calculate number of samples for requested
 								# time window
-								diffSec = (s.time.end - s.time.start).length()
+								diffSec = (end_time - start_time).length()
 								samples += int(diffSec * n / d)
 								if samples > maxSamples:
 									msg = "maximum number of %sM samples " \
@@ -566,10 +578,10 @@ class FDSNDataSelect(resource.Resource):
 
 							Logging.debug("adding stream: %s.%s.%s.%s %s - %s" \
 							              % (net.code(), sta.code(), loc.code(),
-							                 cha.code(), s.time.start.iso(),
-							                 s.time.end.iso()))
+							                 cha.code(), start_time.iso(),
+							                 end_time.iso()))
 							rs.addStream(net.code(), sta.code(), loc.code(),
-							             cha.code(), s.time.start, s.time.end,
+							             cha.code(), start_time, end_time,
 							             utils.isRestricted(cha), sta.archiveNetworkCode())
 
 		# Build output filename
