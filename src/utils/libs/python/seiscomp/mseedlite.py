@@ -261,7 +261,6 @@ class Record(object):
                 self.end_time = self.begin_time
 
         except ValueError as e:
-            print("tms = " + str(bt_tms) + ", micros = " + str(micros))
             raise MSeedError("invalid time: %s" % str(e))
 
         self.size = 1 << rec_len_exp
@@ -440,5 +439,3 @@ class Input(object):
             except MSeedNoData:
                 pass
 
-            except MSeedError as e:
-                print(str(e))
