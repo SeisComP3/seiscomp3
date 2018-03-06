@@ -198,7 +198,11 @@ class xml_Comment(object):
         self.id = src.id
         self.start = src.start
         self.end = src.end
-        self.creationInfo = src.creationInfo
+        # creationInfo is an XML attribute, but we are missing
+        # CreationInfo_fromxml() [string->object] and _CreationInfo_toxml()
+        # [object->string] serialization within the creationInfo() property.
+        # Could be JSON??? Ignore CreationInfo for now.
+        #self.creationInfo = src.creationInfo
 
     def _copy_to(self, dest):
         if self._element.get("text") is not None:

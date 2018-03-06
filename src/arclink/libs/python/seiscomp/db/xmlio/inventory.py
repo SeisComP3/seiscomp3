@@ -727,7 +727,7 @@ def _auxDevice_out(xinventory, auxDevice, modified_after, used):
 
 def _Comment_out(xelem, com, modified_after, used_instr):
     if modified_after is None or com.last_modified >= modified_after:
-        xcom = xsl._new_comment()
+        xcom = xelem._new_comment()
         xcom._copy_from(com)
         xelem._append_child(xcom)
         return True
@@ -753,8 +753,7 @@ def _Stream_out(xsl, strm, modified_after, used_instr):
         xstrm.start = strm.start
         retval = False
     for i in strm.comment.itervalues():
-        for j in i.itervalues():
-            retval |= _Comment_out(xstrm, j, modified_after, used_instr)
+        retval |= _Comment_out(xstrm, i, modified_after, used_instr)
     if retval:
         xsl._append_child(xstrm)
     return retval
@@ -791,8 +790,7 @@ def _SensorLocation_out(xsta, sl, modified_after, used_instr):
         for j in i.itervalues():
             retval |= _AuxStream_out(xsl, j, modified_after, used_instr)
     for i in sl.comment.itervalues():
-        for j in i.itervalues():
-            retval |= _Comment_out(xsl, j, modified_after, used_instr)
+        retval |= _Comment_out(xsl, i, modified_after, used_instr)
     if retval:
         xsta._append_child(xsl)
     return retval
@@ -813,8 +811,7 @@ def _Station_out(xnet, sta, modified_after, used_instr):
         for j in i.itervalues():
             retval |= _SensorLocation_out(xsta, j, modified_after, used_instr)
     for i in sta.comment.itervalues():
-        for j in i.itervalues():
-            retval |= _Comment_out(xsta, j, modified_after, used_instr)
+        retval |= _Comment_out(xsta, i, modified_after, used_instr)
     if retval:
         xnet._append_child(xsta)
     return retval
@@ -835,8 +832,7 @@ def _Network_out(xinventory, net, modified_after, used_instr):
         for j in i.itervalues():
             retval |= _Station_out(xnet, j, modified_after, used_instr)
     for i in net.comment.itervalues():
-        for j in i.itervalues():
-            retval |= _Comment_out(xnet, j, modified_after, used_instr)
+        retval |= _Comment_out(xnet, i, modified_after, used_instr)
     if retval:
         xinventory._append_child(xnet)
     return retval
