@@ -1,5 +1,22 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scart
+
+  * Support loading of plugins via scart.cfg
+
+* trunk
+
+  * Fix sdsarchive handler with respect to corrupt files which caused
+    and endless loop
+
+* Seedlink
+
+  * Fix scream_plugin scream2sl.map parser if a stream id is composed
+    from sysid.streamid. The internal parser has rejected lines which
+    duplicate streamid without taking the sysid into account.
+
 ## Release 2017.334 patch4
 
 * dlsv2inv
@@ -56,10 +73,6 @@
 * scdispatch
 
   * Add operation "merge-no-remove" which filters out remove operations
-
-* scart
-
-  * Support loading of plugins via scart.cfg
 
 ## Release 2017.334 patch2
 
