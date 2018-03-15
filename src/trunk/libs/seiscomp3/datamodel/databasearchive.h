@@ -45,14 +45,14 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	// ----------------------------------------------------------------------
 	protected:
 		//! Protected c'tor used by DatabaseArchive
-		DatabaseIterator(DatabaseArchive* database,
-		                 const Seiscomp::Core::RTTI* rtti);
+		DatabaseIterator(DatabaseArchive *database,
+		                 const Seiscomp::Core::RTTI *rtti);
 
 	public:
 		//! C'tor
 		DatabaseIterator();
 		//! Copy c'tor
-		DatabaseIterator(const DatabaseIterator& iter);
+		DatabaseIterator(const DatabaseIterator &iter);
 
 		//! D'tor
 		~DatabaseIterator();
@@ -62,7 +62,7 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	//  Public interface
 	// ----------------------------------------------------------------------
 	public:
-		Object* get() const;
+		Object *get() const;
 
 		//! Returns the current result column count
 		size_t fieldCount() const;
@@ -70,11 +70,11 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 		//! Returns the current result field
 		const char *field(size_t index) const;
 
-		DatabaseIterator& operator=(const DatabaseIterator& it);
+		DatabaseIterator &operator=(const DatabaseIterator& it);
 		Object* operator*() const;
 
-		DatabaseIterator& operator++();
-		DatabaseIterator& operator++(int);
+		DatabaseIterator &operator++();
+		DatabaseIterator &operator++(int);
 
 		//! Returns if the current objectiterator is valid
 		//! and has a valid result set
@@ -110,12 +110,12 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	//  Implementation
 	// ----------------------------------------------------------------------
 	private:
-		Object* fetch() const;
+		Object *fetch() const;
 
 
 	private:
-		const Seiscomp::Core::RTTI* _rtti;
-		DatabaseArchive* _reader;
+		const Seiscomp::Core::RTTI *_rtti;
+		DatabaseArchive *_reader;
 		mutable size_t _count;
 		ObjectPtr _object;
 
