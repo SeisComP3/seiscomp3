@@ -51,6 +51,20 @@ size_t findClosingParenthesis(const string &s, size_t p) {
 }
 
 
+bool timeFromString(Core::Time &time, const std::string &s) {
+	if ( Core::fromString(time, s) )
+		return true;
+
+	if ( time.fromString(s.c_str(), "%F") )
+		return true;
+
+	if ( time.fromString(s.c_str(), "%Y") )
+		return true;
+
+	return false;
+}
+
+
 }
 
 
@@ -83,6 +97,8 @@ bool CombinedConnection::setRecordType(const char* type) {
 
 bool CombinedConnection::setSource(const std::string &serverloc) {
 	size_t p1,p2;
+
+	_archiveEndTime = Core::Time();
 
 	/*
 	 * Format of source is:
@@ -266,6 +282,24 @@ bool CombinedConnection::setSource(const std::string &serverloc) {
 				               number*multiplicator, number, multiplicator);
 				_realtimeAvailability = Core::TimeSpan(number*multiplicator);
 			}
+			else if ( name == "splitTime" ) {
+				if ( value.empty() ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' is empty",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
+				}
+
+				if ( !timeFromString(_archiveEndTime, value) ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' not datetime",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
+				}
+
+				_realtimeAvailability = Core::TimeSpan(0,0);
+			}
+
 		}
 	}
 
@@ -300,7 +334,11 @@ bool CombinedConnection::setSource(const std::string &serverloc) {
 	}
 
 	_curtime = Time::GMT();
-	_archiveEndTime = _curtime - _realtimeAvailability;
+
+	if ( !_archiveEndTime.valid() )
+		_archiveEndTime = _curtime - _realtimeAvailability;
+
+	SEISCOMP_DEBUG("Split   : %s", _archiveEndTime.iso().c_str());
 
 	return true;
 }
