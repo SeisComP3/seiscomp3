@@ -7,5 +7,5 @@ HYPO71PC_HOME=`dirname $0`
 cd ${HYPO71PC_HOME}/
 
 # Executing binary with input file as argument
-./$HYPO71PC_BINARY < input
+${SEISCOMP_ROOT}/bin/$HYPO71PC_BINARY < input
 
