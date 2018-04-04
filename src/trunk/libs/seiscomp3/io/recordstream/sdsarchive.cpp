@@ -386,7 +386,7 @@ bool SDSArchive::setStart(const string &fname) {
 	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
 
 	_recstream.seekg(offset,ios::beg);
-	if ( offset >= size )
+	if ( offset >= size || retcode == MS_ENDOFFILE )
 		_recstream.clear(ios::eofbit);
 
 	return result;
