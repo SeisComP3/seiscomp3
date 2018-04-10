@@ -3138,10 +3138,7 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 			              info->event->publicID().c_str());
 
 			// User has manually fixed an origin, don't touch the event type
-			if ( info->constraints.fixedOrigin() )
-				notExistingEvent = false;
-
-			if ( !notExistingEvent ) {
+			if ( !info->constraints.fixedOrigin() && !notExistingEvent ) {
 				SEISCOMP_INFO("%s: set type to 'not existing' since preferred origin is rejected",
 				              info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Set type to 'not existing' since preferred origin is rejected in event %s",
@@ -3152,12 +3149,9 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 		}
 		else {
 			// User has manually fixed an origin, don't touch the event type
-			if ( info->constraints.fixedOrigin() )
-				notExistingEvent = false;
-
 			// Preferred origin is not rejected, remove the event type if it is
 			// set to 'not existing'
-			if ( notExistingEvent ) {
+			if ( !info->constraints.fixedOrigin() && notExistingEvent ) {
 				SEISCOMP_INFO("%s: remove type since preferred origin changed to not rejected",
 				              info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Remove type since preferred origin is changed from rejected in event %s",
