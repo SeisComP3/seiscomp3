@@ -17,6 +17,11 @@
     from sysid.streamid. The internal parser has rejected lines which
     duplicate streamid without taking the sysid into account.
 
+* scevent
+
+  * Fix sending updates if automatic fake event declaration is activated
+    and the event.type would actually not change
+
 ## Release 2017.334 patch4
 
 * dlsv2inv
