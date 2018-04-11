@@ -135,7 +135,8 @@ Seiscomp::DataModel::Origin *Autoloc::convertToSC3(const Autoloc::Origin* origin
 		sc3arr->setDistance( arr.distance);
 		sc3arr->setAzimuth(  arr.azimuth);
 		sc3arr->setTimeResidual( arr.residual);
-		sc3arr->setWeight(   arr.excluded ? 0 : 1);
+		sc3arr->setTimeUsed(arr.excluded == Arrival::NotExcluded);
+		sc3arr->setWeight(arr.excluded == Arrival::NotExcluded ? 1. : 0.);
 		sc3arr->setPhase(phase);
 
 		Seiscomp::DataModel::PickPtr sc3pick
@@ -255,9 +256,15 @@ Autoloc::Origin *Seiscomp::Applications::Autoloc::App::convertFromSC3(const Seis
 			// for manual origins we do allow secondary phases like pP
 			arr.phase = sc3origin->arrival(i)->phase();
 
-			if (sc3origin->arrival(i)->weight() < 0.5) {
+			try {
+				if (sc3origin->arrival(i)->timeUsed() == false)
+					arr.excluded = ::Autoloc::Arrival::ManuallyExcluded;
+			}
+			catch(...) {
+				// In a manual origin in which the time is not
+				// explicitly used we treat the arrival as if
+				// it was explicitly excluded.
 				arr.excluded = ::Autoloc::Arrival::ManuallyExcluded;
-//				arr.weight   = sc3origin->arrival(i)->weight();
 			}
 		}
 
