@@ -509,6 +509,8 @@ bool SDSArchive::stepStream() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::Record *SDSArchive::next() {
 	while ( stepStream() ) {
+		fstream::pos_type initialReadPos = _recstream.tellg();
+
 		MSeedRecord *rec = new MSeedRecord();
 		if ( rec == NULL )
 			return NULL;
@@ -519,8 +521,16 @@ Seiscomp::Record *SDSArchive::next() {
 			rec->read(_recstream);
 		}
 		catch ( std::exception &e ) {
+			fstream::pos_type currentReadPos = _recstream.tellg();
+
 			SEISCOMP_ERROR("file read exception: %s", e.what());
 			delete rec;
+
+			if ( initialReadPos == currentReadPos ) {
+				// Skip potentially corrupt header
+				_recstream.seekg(64, ios::cur);
+			}
+
 			continue;
 		}
 
