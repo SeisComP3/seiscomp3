@@ -1937,7 +1937,18 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 		used = true;
 	}
 	catch ( ... ) {
-		setBackazimuthUsed(row, true);
+		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
+		try {
+			if ( pick ) {
+				pick->backazimuth().value();
+				setBackazimuthUsed(row, true);
+			}
+			else
+				setBackazimuthUsed(row, false);
+		}
+		catch ( ValueException& ) {
+			setBackazimuthUsed(row, false);
+		}
 	}
 
 	try {
@@ -1945,7 +1956,18 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 		used = true;
 	}
 	catch ( ... ) {
-		setHorizontalSlownessUsed(row, true);
+		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
+		try {
+			if ( pick ) {
+				pick->horizontalSlowness().value();
+				setHorizontalSlownessUsed(row, true);
+			}
+			else
+				setHorizontalSlownessUsed(row, false);
+		}
+		catch ( ValueException& ) {
+			setHorizontalSlownessUsed(row, false);
+		}
 	}
 
 	try {
