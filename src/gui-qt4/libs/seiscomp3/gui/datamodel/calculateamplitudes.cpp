@@ -575,6 +575,17 @@ void CalculateAmplitudes::addProcessor(
 		return;
 	}
 
+	try {
+		proc->setHint(WaveformProcessor::Time, (double) _origin->time().value());
+		if ( proc->isFinished() ) {
+			pair<TableRowMap::iterator, TableRowMap::iterator> itp = _rows.equal_range(proc.get());
+			for ( TableRowMap::iterator row_it = itp.first; row_it != itp.second; ++row_it )
+				setError(row_it->second, QString("%1 (%2)").arg(proc->status().toString()).arg(proc->statusValue(), 0, 'f', 2));
+			return;
+		}
+	}
+	catch ( ... ) {}
+
 	proc->computeTimeWindow();
 
 	switch ( proc->usedComponent() ) {
