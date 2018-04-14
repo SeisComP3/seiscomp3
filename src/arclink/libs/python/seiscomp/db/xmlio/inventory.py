@@ -108,6 +108,7 @@ def _responseFIR_in(xresponseFIR, inventory):
 
     except KeyError:
         responseFIR = inventory.insert_responseFIR(xresponseFIR.name, publicID=xresponseFIR.publicID)
+        xresponseFIR.publicID = responseFIR.publicID
         
     xresponseFIR._copy_to(responseFIR)
 
@@ -128,6 +129,7 @@ def _responseIIR_in(xresponseIIR, inventory):
 
     except KeyError:
         responseIIR = inventory.insert_responseIIR(xresponseIIR.name, publicID=xresponseIIR.publicID)
+        xresponseIIR.publicID = responseIIR.publicID
 
     xresponseIIR._copy_to(responseIIR)
 
@@ -148,6 +150,7 @@ def _responsePAZ_in(xresponsePAZ, inventory):
 
     except KeyError:
         responsePAZ = inventory.insert_responsePAZ(xresponsePAZ.name, publicID=xresponsePAZ.publicID)
+        xresponsePAZ.publicID = responsePAZ.publicID
         
     xresponsePAZ._copy_to(responsePAZ)
 
@@ -168,6 +171,7 @@ def _responsePolynomial_in(xresponsePolynomial, inventory):
 
     except KeyError:
         responsePolynomial = inventory.insert_responsePolynomial(xresponsePolynomial.name, publicID=xresponsePolynomial.publicID)
+        xresponsePolynomial.publicID = responsePolynomial.publicID
         
     xresponsePolynomial._copy_to(responsePolynomial)
 
@@ -188,6 +192,7 @@ def _responseFAP_in(xresponseFAP, inventory):
 
     except KeyError:
         responseFAP = inventory.insert_responseFAP(xresponseFAP.name, publicID=xresponseFAP.publicID)
+        xresponseFAP.publicID = responseFAP.publicID
 
     xresponseFAP._copy_to(responseFAP)
 
@@ -248,6 +253,7 @@ def _datalogger_in(xlogger, inventory):
 
     except KeyError:
         logger = inventory.insert_datalogger(xlogger.name, publicID=xlogger.publicID)
+        xlogger.publicID = logger.publicID
         
     xlogger._copy_to(logger)
 
@@ -274,6 +280,7 @@ def _sensor_in(xsensor, inventory):
 
     except KeyError:
         sensor = inventory.insert_sensor(xsensor.name, publicID=xsensor.publicID)
+        xsensor.publicID = sensor.publicID
         
     xsensor._copy_to(sensor)
 
@@ -314,6 +321,7 @@ def _auxDevice_in(xauxDevice, inventory):
 
     except KeyError:
         auxDevice = inventory.insert_auxDevice(xauxDevice.name, publicID=xauxDevice.publicID)
+        xauxDevice.publicID = auxDevice.publicID
         
     xauxDevice._copy_to(auxDevice)
 
@@ -352,17 +360,23 @@ def _AuxStream_in(xaux, sl):
     xaux._copy_to(aux)
 
 
-def _Stream_in(xstrm, sta):
+def _Stream_in(xstrm, sl):
     if xstrm.action == "delete":
         try:
-            sta.remove_Stream(xstrm.code, xstrm.start)
+            sl.remove_Stream(xstrm.code, xstrm.start)
         except KeyError:
             pass
         return
     try:
-        strm = sta.stream[xstrm.code][xstrm.start]
+        strm = sl.stream[xstrm.code][xstrm.start]
+        if strm.publicID != xstrm.publicID:
+            sl.remove_stream(xstrm.code, xstrm.start)
+            raise KeyError
+
     except KeyError:
-        strm = sta.insert_stream(xstrm.code, xstrm.start)
+        strm = sl.insert_stream(xstrm.code, xstrm.start, publicID=xstrm.publicID)
+        xstrm.publicID = strm.publicID
+
     xstrm._copy_to(strm)
 
     for xcom in xstrm.comment:
@@ -384,9 +398,13 @@ def _SensorLocation_in(xsl, sta):
 
     except KeyError:
         sl = sta.insert_sensorLocation(xsl.code, xsl.start, publicID=xsl.publicID)
+        xsl.publicID = sl.publicID
+
     xsl._copy_to(sl)
+
     for xStream in xsl.stream:
         _Stream_in(xStream, sl)
+
     for xAuxStream in xsl.auxStream:
         _AuxStream_in(xAuxStream, sl)
 
@@ -409,8 +427,10 @@ def _Station_in(xsta, net):
 
     except KeyError:
         sta = net.insert_station(xsta.code, xsta.start, publicID=xsta.publicID)
+        xsta.publicID = sta.publicID
 
     xsta._copy_to(sta)
+
     for xsensorLocation in xsta.sensorLocation:
         _SensorLocation_in(xsensorLocation, sta)
 
@@ -433,7 +453,10 @@ def _Network_in(xnet, inventory):
 
     except KeyError:
         net = inventory.insert_network(xnet.code, xnet.start, publicID=xnet.publicID)
+        xnet.publicID = net.publicID
+
     xnet._copy_to(net)
+
     for xsta in xnet.station:
         _Station_in(xsta, net)
 
@@ -470,7 +493,10 @@ def _StationGroup_in(xgr, inventory):
 
     except KeyError:
         gr = inventory.insert_stationGroup(xgr.code, publicID=xgr.publicID)
+        xgr.publicID = gr.publicID
+
     xgr._copy_to(gr)
+
     for xsref in xgr.stationReference:
         _StationReference_in(xsref, gr)
 

@@ -76,6 +76,7 @@ def _route_in(xroute, routing):
 
     except KeyError:
         route = routing.insert_route(xroute.networkCode, xroute.stationCode, xroute.locationCode, xroute.streamCode, publicID=xroute.publicID)
+        xroute.publicID = route.publicID
         
     xroute._copy_to(route)
 
