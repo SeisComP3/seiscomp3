@@ -21,6 +21,7 @@ SET(SERIALPLUGIN_SOURCES
 	proto_ws2300.cc
 	proto_mws.cc
 	proto_solar.cc
+	proto_modbus.cc
 )
 
 INCLUDE_DIRECTORIES(../../libs/plugin)
