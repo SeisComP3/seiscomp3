@@ -48135,7 +48135,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"TimeSpan_MaxTime",Swig_var_TimeSpan_MaxTime_get, Swig_var_TimeSpan_MaxTime_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Time_Null",Swig_var_Time_Null_get, Swig_var_Time_Null_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0B0000)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0B0100)));
   SWIG_addvarlink(SWIG_globals(),(char *)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));
