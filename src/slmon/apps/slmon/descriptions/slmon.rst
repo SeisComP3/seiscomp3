@@ -28,6 +28,15 @@ Setup
 
        */3 * * * * /home/sysop/seiscomp3/bin/seiscomp check slmon >/dev/null 2>&1
 
+   .. note::
+
+      The crontab entry can be generated and added automatically
+      using the seiscomp script:
+
+      ..  code-block:: sh
+
+         seiscomp print crontab | crontab -
+
 A comprehensive example for monitoring many stations of a large number of networks
 is provided by `GEOFON <http://geofon.gfz-potsdam.de/waveform/status/>`_ at
 `GFZ Potsdam <http://www.gfz-potsdam.de>`_, Germany. A simple example of a website
