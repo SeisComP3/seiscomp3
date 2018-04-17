@@ -10,6 +10,8 @@
 
   * Fix sdsarchive handler with respect to corrupt files which caused
     and endless loop
+  * Add parameter splitTime to sdsarchive which is an absolute time rather
+    than a relative time
 
 * Seedlink
 
