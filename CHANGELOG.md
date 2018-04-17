@@ -12,17 +12,36 @@
     and endless loop
   * Add parameter splitTime to sdsarchive which is an absolute time rather
     than a relative time
+  * Add sh2proc script which converts Seismic Handler event files to
+    EventParameters
 
 * Seedlink
 
   * Fix scream_plugin scream2sl.map parser if a stream id is composed
     from sysid.streamid. The internal parser has rejected lines which
     duplicate streamid without taking the sysid into account.
+  * Enable modbus support in serial plugin
 
 * scevent
 
   * Fix sending updates if automatic fake event declaration is activated
     and the event.type would actually not change
+
+* slmon
+
+  * Fix default paths and streams regular expression which is used to gather
+    station information
+
+* fdsnws
+
+  * Set default data source to sdsarchive:// and do not use the global default
+    which most likely is set to a streaming source such as Seedlink
+  * Fix queryauth exception in combination with htpasswd
+
+* scolv
+
+  * Fix arrival used flags evaluation. This resulted in activated arrivals in
+    the various plots event if they were not used.
 
 ## Release 2017.334 patch4
 
