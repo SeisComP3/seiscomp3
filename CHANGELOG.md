@@ -22,6 +22,10 @@
     duplicate streamid without taking the sysid into account.
   * Enable modbus support in serial plugin
 
+* Arclink
+  * Fix crash of Python components when inventory comments are used
+  * Fix re-generation of empty or conflicting publicIDs
+
 * scevent
 
   * Fix sending updates if automatic fake event declaration is activated
@@ -37,6 +41,7 @@
   * Set default data source to sdsarchive:// and do not use the global default
     which most likely is set to a streaming source such as Seedlink
   * Fix queryauth exception in combination with htpasswd
+  * Fix incorrect epoch usage when request spans multiple epochs
 
 * scolv
 
