@@ -320,7 +320,7 @@ class FDSNDataSelectRealm(object):
 		if resource.IResource in interfaces:
 			return (resource.IResource,
 				FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
-					{"mail": avatarId}),
+					{"mail": avatarId, "blacklisted": False}),
 				lambda: None)
 
 		raise NotImplementedError()
@@ -543,13 +543,9 @@ class FDSNDataSelect(resource.Resource):
 
 							if utils.isRestricted(cha) and \
 							    (not self.__user or (self.__access and
-								not self.__access.authorize(self.__user,
-											    net.code(),
-											    sta.code(),
-											    loc.code(),
-											    cha.code(),
-											    start_time,
-											    end_time))):
+							     not self.__access.authorize(self.__user,
+							         net.code(), sta.code(), loc.code(),
+							         cha.code(), start_time, end_time))):
 								continue
 
 							# enforce maximum sample per request restriction
