@@ -83,7 +83,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 
 		int addProcessor(Seiscomp::Processing::AmplitudeProcessor *,
 		                 const Seiscomp::DataModel::Pick *pick,
-		                 OPT(double) distance, OPT(double) depth);
+		                 OPT(double) distance, OPT(double) depth, OPT(double) originTime);
 
 		size_t loadAmplitudes(const std::string &pickID,
 		                      Seiscomp::DataModel::Amplitude *ignoreAmp = NULL);

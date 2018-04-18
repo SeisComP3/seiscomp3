@@ -3797,6 +3797,11 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 
 	label->processor->setHint(Processing::WaveformProcessor::Distance, delta);
 
+	try {
+		label->processor->setHint(Processing::WaveformProcessor::Time, (double) _origin->time().value());
+	}
+	catch ( ... ) {}
+
 	label->processor->computeTimeWindow();
 
 	label->timeWindow.set(referenceTime+Core::TimeSpan(label->processor->config().noiseBegin-_config.preOffset),

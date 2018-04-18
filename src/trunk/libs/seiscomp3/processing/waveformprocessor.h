@@ -57,7 +57,8 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 
 		enum ProcessingHint {
 			Distance,
-			Depth
+			Depth,
+			Time
 		};
 
 		MAKEENUM(
