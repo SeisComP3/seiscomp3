@@ -43,6 +43,11 @@
   * Fix arrival used flags evaluation. This resulted in activated arrivals in
     the various plots event if they were not used.
 
+* scautoloc
+
+  * Fix bug with respect to latest data model changes and taking Arrival.timeUsed()
+    into account.
+
 ## Release 2017.334 patch4
 
 * dlsv2inv
