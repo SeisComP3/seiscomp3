@@ -95,6 +95,7 @@ bool Import::init() {
 	}
 	catch ( ... ) {}
 
+
 	std::string sinkName = "localhost";
 	if (commandline().hasOption("sink")) {
 		sinkName = commandline().option<std::string>("sink");
@@ -108,6 +109,23 @@ bool Import::init() {
 
 	if (connectToSink(sinkName) != Core::Status::SEISCOMP_SUCCESS)
 		return false;
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Import::initConfiguration() {
+	if (!Application::initConfiguration())
+		return false;
+
+	try {
+		_filter = configGetBool("useFilter");
+	}
+	catch ( ... ) {}
 
 	return true;
 }
@@ -142,8 +160,8 @@ void Import::createCommandLineDescription() {
 	cl.addGroup(clGroupName.c_str());
 	cl.addOption(clGroupName.c_str(), "sink,o", "Sink master", static_cast<std::string*>(NULL));
 	cl.addOption(clGroupName.c_str(), "import,i", "Switch to import mode (default is relay)\n"
-		             "import mode: You have your own routing table specified\n"
-		             "relay mode: The routing table will be calculated automatically");
+	                                  "import mode: You have your own routing table specified\n"
+	                                  "relay mode: The routing table will be calculated automatically");
 	cl.addOption(clGroupName.c_str(), "no-filter", "Don't filter messages");
 	cl.addOption(clGroupName.c_str(), "routeunknowngroup", "Route unknown groups to the default group IMPORT_GROUP");
 	cl.addOption(clGroupName.c_str(), "ignore-groups", "Ignore user specified groups");
