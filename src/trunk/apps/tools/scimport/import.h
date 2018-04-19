@@ -54,6 +54,7 @@ public:
 	// ------------------------------------------------------------------
 private:
 	virtual bool init();
+	virtual bool initConfiguration();
 	virtual void createCommandLineDescription();
 	virtual void handleNetworkMessage(const Communication::NetworkMessage* msg);
 	virtual void done();

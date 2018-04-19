@@ -22,6 +22,9 @@
 				table. This parameter allows to override to source query result.
 				</description>
 			</parameter>
+			<parameter name="useFilter" type="boolean" default="true">
+				Enable/Disable filtering of messages
+			</parameter>
 			<group name="filter">
 				<group name="pick">
 					<parameter name="mode" type="string">
