@@ -53,6 +53,17 @@
   * Fix bug with respect to latest data model changes and taking Arrival.timeUsed()
     into account.
 
+* scimport
+
+  * Add support to enable/disable message filtering in configuration file
+
+    ```
+    useFilter = false
+    ```
+
+    Settings ```useFilter``` to false is equal to passing ```--no-filter``` via
+    command-line.
+
 ## Release 2017.334 patch4
 
 * dlsv2inv
