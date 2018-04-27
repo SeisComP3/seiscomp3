@@ -30,7 +30,7 @@ class SendOrigin(Client.Application):
             cstr = self.commandline().optionString("coord")
             tstr  = self.commandline().optionString("time")
         except:
-            print>>sys.stderr, "must specify origin using '--coord lat,lon,dep --time time'"
+            sys.stderr.write("must specify origin using '--coord lat,lon,dep --time time'\n")
             return False
 
         self.origin = DataModel.Origin.Create()

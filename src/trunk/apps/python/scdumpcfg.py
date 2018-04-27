@@ -20,7 +20,7 @@ def readParams(sc_params):
   if sc_params.baseID():
     sc_params_base = seiscomp3.DataModel.ParameterSet.Find(sc_params.baseID())
     if sc_params_base is None:
-      print >> sys.stderr, "Warning: %s: base parameter set for %s not found" % (sc_params.baseID(), sc_params.publicID())
+      sys.stderr.write("Warning: %s: base parameter set for %s not found\n" % (sc_params.baseID(), sc_params.publicID()))
       params = {}
     else:
       params = readParams(sc_params_base)
@@ -37,7 +37,7 @@ def readParams(sc_params):
 class DumpCfg(seiscomp3.Client.Application):
   def __init__(self, argc, argv):
     if argc < 2:
-      print >> sys.stderr, "scdumpcfg {modname} [options]"
+      sys.stderr.write("scdumpcfg {modname} [options]\n")
       raise RuntimeError
 
     self.appName = argv[1]
@@ -108,21 +108,21 @@ class DumpCfg(seiscomp3.Client.Application):
         sym = symtab.get(name)
         if self.formatCfg:
           if sym.comment:
-            if count > 0: print ""
-            print sym.comment
-          print sym.name + " = " + sym.content
+            if count > 0: sys.stdout.write("\n")
+            sys.stdout.write("%s\n" % sym.comment)
+          sys.stdout.write("%s = %s\n" % (sym.name, sym.content))
         else:
-          print sym.name
-          print '  value(s) : %s' % ", ".join(sym.values)
-          print '  source   : %s' % sym.uri
+          sys.stdout.write("%s\n" % sym.name)
+          sys.stdout.write("  value(s) : %s\n" % ", ".join(sym.values))
+          sys.stdout.write("  source   : %s\n" % sym.uri)
         count = count + 1
 
       if self.param and count == 0:
-        print >> sys.stderr, "%s: definition not found." % self.param
+        sys.stderr.write("%s: definition not found\n." % self.param)
     else:
       cfg = self.configModule()
       if cfg is None:
-        print >> sys.stderr, "No config module read"
+        sys.stderr.write("No config module read\n")
         return False
 
       tmp = {}
@@ -154,7 +154,7 @@ class DumpCfg(seiscomp3.Client.Application):
           out += "%s.%s%s\n" % (cfg_sta.networkCode(), cfg_sta.stationCode(), suffix)
           params = seiscomp3.DataModel.ParameterSet.Find(cfg_setup.parameterSetID())
           if params is None:
-            print >> sys.stderr, "ERROR: %s: ParameterSet not found" % cfg_setup.parameterSetID()
+            sys.stderr.write("ERROR: %s: ParameterSet not found\n" % cfg_setup.parameterSetID())
             return False
 
           params = readParams(params)

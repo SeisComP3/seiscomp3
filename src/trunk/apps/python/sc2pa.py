@@ -121,7 +121,7 @@ class ProcAlert(seiscomp3.Client.Application):
                     seiscomp3.Logging.warning("Origin %s not published" % orid)
                     return
 
-                txt = self.bulletin.printEvent(evt)
+                txt = self.bulletin.writeEvent(evt)
 
                 for line in txt.split("\n"):
                     line = line.rstrip()
@@ -134,7 +134,7 @@ class ProcAlert(seiscomp3.Client.Application):
                 return
 
         except:
-            print >> sys.stderr, sys.exc_info()
+            sys.stderr.write("%s\n" % sys.exc_info())
 
 
     def hasValidNetworkMagnitude(self, org, evt):

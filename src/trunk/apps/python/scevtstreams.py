@@ -76,9 +76,9 @@ class EventStreams(seiscomp3.Client.Application):
       return True
     except:
       cla, exc, trbk = sys.exc_info()
-      print cla.__name__
-      print exc.__dict__["args"]
-      print traceback.format_tb(trbk, 5)
+      sys.stderr.write("%s\n" % cla.__name__)
+      sys.stderr.write("%s\n" % exc.__dict__["args"])
+      sys.stderr.write("%s\n" % traceback.format_tb(trbk, 5))
 
 
   def run(self):

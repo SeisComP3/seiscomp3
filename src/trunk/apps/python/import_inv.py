@@ -27,33 +27,33 @@ class Importer(seiscomp3.Client.Application):
 
     def run(self):
         if len(self._args) == 0:
-            print >> sys.stderr, "Usage: import_inv [{format}|help] input output"
+            sys.stderr.write("Usage: import_inv [{format}|help] input output\n")
             return False
 
         if self._args[0] == "help":
             if len(self._args) < 2:
-                print >> sys.stderr, "'help' can only be used with 'formats'"
-                print >> sys.stderr, "import_inv help formats"
+                sys.stderr.write("'help' can only be used with 'formats'\n")
+                sys.stderr.write("import_inv help formats\n")
                 return False
 
             if self._args[1] == "formats":
                 return self.printFormats()
 
-            print >> sys.stderr, "unknown topic '%s'" % self._args[1]
+            sys.stderr.write("unknown topic '%s'\n" % self._args[1])
             return False
 
-        format = self._args[0]
-        try: prog = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "%s2inv" % format)
+        fmt = self._args[0]
+        try: prog = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "%s2inv" % fmt)
         except:
-            print >> sys.stderr, "Could not get SeisComP3 root path, SEISCOMP_ROOT not set?"
+            sys.stderr.write("Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
             return False
 
         if not os.path.exists(prog):
-            print >> sys.stderr, "Format '%s' is not supported" % format
+            sys.stderr.write("Format '%s' is not supported\n" % fmt)
             return False
 
         if len(self._args) < 2:
-            print >> sys.stderr, "Input missing"
+            sys.stderr.write("Input missing\n")
             return False
 
         input = self._args[1]
@@ -61,7 +61,7 @@ class Importer(seiscomp3.Client.Application):
         if len(self._args) < 3:
             filename = os.path.basename(os.path.abspath(input))
             if not filename:
-                filename = format;
+                filename = fmt;
 
             # Append .xml if the ending is not already .xml
             if filename[-4:] != ".xml": filename = filename + ".xml"
@@ -69,14 +69,14 @@ class Importer(seiscomp3.Client.Application):
             output = os.path.join(storage_dir, filename)
             try: os.makedirs(storage_dir)
             except: pass
-            print >> sys.stderr, "Generating output to %s" % output
+            sys.stderr.write("Generating output to %s\n" % output)
         else:
             output = self._args[2]
 
         proc = subprocess.Popen([prog, input, output], stdout=None, stderr=None, shell=False)
         chans = proc.communicate()
         if proc.returncode != 0:
-            print >> sys.stderr, "Conversion failed, return code: %d" % proc.returncode
+            sys.stderr.write("Conversion failed, return code: %d\n" % proc.returncode)
             return False
 
         return True
@@ -85,14 +85,14 @@ class Importer(seiscomp3.Client.Application):
     def printFormats(self):
         try: path = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "*2inv")
         except:
-            print >> sys.stderr, "Could not get SeisComP3 root path, SEISCOMP_ROOT not set?"
+            sys.stderr.write("Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
             return False
 
         files = glob.glob(path)
         for f in files:
             prog = os.path.basename(f)
             prog = prog[:prog.find("2inv")]
-            print prog
+            sys.stderr.write("%s\n" % prog)
 
         return True
 

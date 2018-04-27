@@ -26,7 +26,7 @@ def iterinv(obj):
 
 def main():
     if len(sys.argv) < 1 or len(sys.argv) > 3:
-        print "Usage inv2dlsv [in_xml [out_dataless]]"
+        sys.stderr.write("Usage inv2dlsv [in_xml [out_dataless]]\n")
         return 1
 
     if len(sys.argv) > 1:
@@ -67,7 +67,7 @@ def main():
                         vol.add_chan(net.code, sta.code, loc.code, strm.code, strm.start, strm.end)
 
                     except SEEDError, e:
-                        print >> sys.stderr, "Error (%s,%s,%s,%s):" % (net.code, sta.code, loc.code, strm.code), str(e)
+                        sys.stderr.write("Error (%s,%s,%s,%s): %s\n" % (net.code, sta.code, loc.code, strm.code, str(e)))
 
     if not out or out == "-":
         output = StringIO.StringIO()
@@ -84,5 +84,5 @@ def main():
 if __name__ == "__main__":
     try: sys.exit(main())
     except Exception, e:
-        print >> sys.stderr, "ERROR: %s" % str(e)
+        sys.stderr.write("Error: %s" % str(e))
         sys.exit(1)

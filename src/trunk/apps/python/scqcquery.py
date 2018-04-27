@@ -47,22 +47,22 @@ class WfqQuery(Client.Application):
     if self.commandline().hasOption("filename"):
       self._outfile = self.commandline().optionString("filename")
     else:
-      print "Please specify the xml output filename!"
+      sys.stderr.write("Please specify the xml output filename!\n")
       return False
     
     if (not self.commandline().hasOption("streamID") or not self.commandline().hasOption("parameter") or
         not self.commandline().hasOption("startTime") or not self.commandline().hasOption("endTime")):
-      print "Please give me all query parameters (--streamID, --parameter, --startTime, --endTime)!"
+      sys.stderr.write("Please give me all query parameters (--streamID, --parameter, --startTime, --endTime)!\n")
       return False
 
     self._streamID = self.commandline().optionString("streamID")
     if re.search("[*?]",self._streamID):
-      print "Please do not use wildcards in the streamID!"
+      sys.stderr.write("Please do not use wildcards in the streamID!\n")
       return False
 
     self._parameter = self.commandline().optionString("parameter")
     #if not self._parameter in ([DataModel.EQCNameNames.name(i).replace(" ","_").upper() for i in xrange(DataModel.EQCNameQuantity)]):
-      #print "The given parameter name (%s) is unknown" % self._parameter
+      #sys.stderr.write("The given parameter name (%s) is unknown\n" % self._parameter)
       #return False
 
     self._start = self.commandline().optionString("startTime")
@@ -73,12 +73,12 @@ class WfqQuery(Client.Application):
 
   def run(self):
     if not self.query():
-      print "No database connection"
+      sys.stderr.write("No database connection!\n")
       return False
     
     xarc = IO.XMLArchive()
     if not xarc.create(self._outfile, True, True):
-      print "Could not create xml output file %s!" % self._outfile
+      sys.stderr.write("Could not create xml output file %s!\n" % self._outfile)
       return False
 
     xarc.setFormattedOutput(self.commandline().hasOption("formatted"))

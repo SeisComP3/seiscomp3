@@ -15,7 +15,7 @@
 #
 # 2010/09/23 Marco Olivieri
 # minimum weight is now configurable and not fixed to 0.5 that remains the default value.
-# If assigning --weight 0.0, scbulletin will count and print out all the picks that where
+# If assigning --weight 0.0, scbulletin will count and write out all the picks that where
 # associated to the corresponding location
 # By default minweight = 0.5 and scbulletin reports only picks with small residuals.
 #
@@ -109,7 +109,7 @@ class Bulletin(object):
         return ampl
 
 
-    def _printOriginAutoloc3(self, org, extra=False):
+    def _writeOriginAutoloc3(self, org, extra=False):
         orid = org.publicID()
 
         dist_arr = self._getDistancesArrivalsSorted(org)
@@ -302,9 +302,9 @@ class Bulletin(object):
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
                 except ValueError:
-                    pass # just don't print any error, that's it
+                    pass # just don't write any error, that's it
                 except Exception, e:
-                    sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
+                    sys.stderr.write("_writeOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
             if mag.publicID() == preferredMagnitudeID:
                     preferredMarker = "preferred"
                     foundPrefMag = True
@@ -334,9 +334,9 @@ class Bulletin(object):
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
                 except ValueError:
-                    pass # just don't print any error, that's it
+                    pass # just don't write any error, that's it
                 except Exception, e:
-                    sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
+                    sys.stderr.write("_writeOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
                 preferredMarker = "preferred"
                 if extra:
                     try: agencyID = mag.creationInfo().agencyID()
@@ -495,7 +495,7 @@ class Bulletin(object):
         return txt
 
 
-    def _printOriginAutoloc1(self, org):
+    def _writeOriginAutoloc1(self, org):
         evt = self._evt
         enhanced = self.enhanced
 
@@ -690,7 +690,7 @@ class Bulletin(object):
         return txt
 
 
-    def printOrigin(self, origin):
+    def writeOrigin(self, origin):
         org = None
         if isinstance(origin, seiscomp3.DataModel.Origin):
             org = origin
@@ -705,16 +705,16 @@ class Bulletin(object):
             raise TypeError, "illegal type for origin"
 
         if self.format == "autoloc1":
-            return self._printOriginAutoloc1(org)
+            return self._writeOriginAutoloc1(org)
         elif self.format == "autoloc3":
-            return self._printOriginAutoloc3(org, extra=False)
+            return self._writeOriginAutoloc3(org, extra=False)
         elif self.format == "autoloc3extra":
-            return self._printOriginAutoloc3(org, extra=True)
+            return self._writeOriginAutoloc3(org, extra=True)
         else:
             pass
 
 
-    def printEvent(self, event):
+    def writeEvent(self, event):
         try:
             evt = None
             if isinstance(event, seiscomp3.DataModel.Event):
@@ -722,7 +722,7 @@ class Bulletin(object):
                 org = seiscomp3.DataModel.Origin.Find(event.preferredOriginID())
                 if not org:
                     org = event.preferredOriginID()
-                return self.printOrigin(org)
+                return self.writeOrigin(org)
             elif isinstance(event, str):
                 if self._dbq:
                     evt = self._dbq.loadObject(seiscomp3.DataModel.Event.TypeInfo(), event)
@@ -730,7 +730,7 @@ class Bulletin(object):
                     self._evt = evt
                 if evt is None:
                     raise TypeError, "unknown event '" + event + "'"
-                return self.printOrigin(evt.preferredOriginID())
+                return self.writeOrigin(evt.preferredOriginID())
             else:
                 raise TypeError, "illegal type for event"
         finally:
@@ -841,9 +841,9 @@ class BulletinApp(seiscomp3.Client.Application):
 
             try:
                 if evid:
-                    txt = bulletin.printEvent(evid)
+                    txt = bulletin.writeEvent(evid)
                 elif orid:
-                    txt = bulletin.printOrigin(orid)
+                    txt = bulletin.writeOrigin(orid)
                 else:
                     inputFormat = "xml"
                     inputFile = "-"
@@ -881,32 +881,31 @@ class BulletinApp(seiscomp3.Client.Application):
                         else:
                             if self.commandline().hasOption("first-only"):
                                 org = ep.origin(0)
-                                txt = bulletin.printOrigin(org)
+                                txt = bulletin.writeOrigin(org)
                             else:
                                 txt = ""
                                 for i in xrange(ep.originCount()):
                                     org = ep.origin(i)
-                                    txt += bulletin.printOrigin(org)
+                                    txt += bulletin.writeOrigin(org)
                     else:
                         if self.commandline().hasOption("first-only"):
                             ev = ep.event(0)
                             if ev is None:
                                raise TypeError, inputFile + ": invalid event"
 
-                            txt = bulletin.printEvent(ev)
+                            txt = bulletin.writeEvent(ev)
                         else:
                             txt = ""
                             for i in xrange(ep.eventCount()):
                                 ev = ep.event(i)
-                                txt += bulletin.printEvent(ev)
+                                txt += bulletin.writeEvent(ev)
 
             except Exception, exc:
                 sys.stderr.write("ERROR: " + str(exc) + "\n")
                 return False
 
-            try:
-                if txt: print txt
-            except: pass
+            if txt:
+                sys.stdout.write("%s\n" % txt)
 
             return True
         except:

@@ -48,7 +48,8 @@ class EventParameterLog(seiscomp3.Client.Application):
       ar.close()
       # Hack to avoid the "close failed in file object destructor"
       # exception
-      print ""
+#     print ""
+      sys.stdout.write("\n")
 
     return True
 
