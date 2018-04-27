@@ -34,7 +34,7 @@ OPTION(SC_GLOBAL_PYTHON_WRAPPER_NUMPY "Add Numpy support for Python wrapper" OFF
 FIND_PACKAGE(PythonInterp)
 EXEC_PROGRAM(
 	${PYTHON_EXECUTABLE}
-	ARGS "-c \"import sys;print sys.version[:3]\""
+	ARGS "-c \"from __future__ import print_function;import sys;print(sys.version[:3])\""
 	OUTPUT_VARIABLE PYTHON_VERSION
 )
 
