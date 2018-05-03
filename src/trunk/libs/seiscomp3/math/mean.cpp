@@ -13,6 +13,7 @@
 
 #include<algorithm>
 #include<vector>
+#include<stdexcept> 
 using namespace std;
 
 #include<seiscomp3/math/math.h>
@@ -38,6 +39,8 @@ double median(const std::vector<double> &v)
 
 double median(int n, const double *f)
 {
+	if (n==0)
+		throw std::out_of_range("attempted computation of median for zero-length array");
 	vector<double> v(&f[0], &f[n]);
 	sort(v.begin(), v.end());
 	int mid = n/2;
