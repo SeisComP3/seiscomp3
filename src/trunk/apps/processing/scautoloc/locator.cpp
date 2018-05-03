@@ -201,6 +201,10 @@ Origin* Locator::_sc3relocate(const Origin *origin, double fixedDepth)
 
 		if ( sc3pick == NULL ) {
 			sc3pick = Seiscomp::DataModel::Pick::Create(arr.pick->id);
+			if ( sc3pick == NULL ) {
+				SEISCOMP_ERROR_S("Locator::_sc3relocate(): Failed to create pick "+arr.pick->id+" - giving up");
+				return NULL;
+			}
 			const Station *sta = arr.pick->station();
 			Seiscomp::DataModel::WaveformStreamID wfid(sta->net, sta->code, "", "XYZ", "");
 			sc3pick->setWaveformID(wfid);
