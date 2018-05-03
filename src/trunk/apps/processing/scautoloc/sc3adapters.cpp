@@ -167,7 +167,9 @@ Seiscomp::DataModel::Origin *Autoloc::convertToSC3(const Autoloc::Origin* origin
 	oq.setUsedPhaseCount(origin->definingPhaseCount());
 	oq.setAssociatedStationCount(origin->associatedStationCount());
 	oq.setUsedStationCount(origin->definingStationCount());
-	oq.setMedianDistance(origin->medianStationDistance());
+	double msd = origin->medianStationDistance();
+	if (msd>0)
+		oq.setMedianDistance(msd);
 	oq.setStandardError(origin->rms());
 
 	double minDist, maxDist, aziGap;

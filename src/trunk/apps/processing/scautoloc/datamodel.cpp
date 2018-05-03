@@ -303,6 +303,9 @@ double Origin::medianStationDistance() const
 			distance.push_back(arrivals[i].distance);
 	}
 
+	if (distance.size() == 0)
+		return -1;
+
 	return Seiscomp::Math::Statistics::median(distance);
 }
 

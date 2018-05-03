@@ -235,6 +235,10 @@ class Origin : public Hypocenter {
 	int associatedStationCount() const;
 
 	double rms() const;
+
+	// compute the median station distance. Returns a negative number if
+	// the number of used stations is zero. Perhaps replace this by an
+	// exception.
 	double medianStationDistance() const;
 
 	void geoProperties(double &min, double &max, double &gap) const;
