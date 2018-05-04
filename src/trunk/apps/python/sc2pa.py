@@ -121,7 +121,7 @@ class ProcAlert(seiscomp3.Client.Application):
                     seiscomp3.Logging.warning("Origin %s not published" % orid)
                     return
 
-                txt = self.bulletin.writeEvent(evt)
+                txt = self.bulletin.printEvent(evt)
 
                 for line in txt.split("\n"):
                     line = line.rstrip()
