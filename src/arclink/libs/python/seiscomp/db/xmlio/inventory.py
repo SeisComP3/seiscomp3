@@ -11,7 +11,10 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
-import xmlwrap as _xmlwrap
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+import seiscomp.db.xmlio.xmlwrap as _xmlwrap
 from seiscomp.db import DBError
 
 try:
@@ -652,15 +655,15 @@ def _datalogger_out(xinventory, logger, modified_after, used, filters):
         xlogger.publicID = logger.publicID
         retval = False
 
-    for i in logger.decimation.itervalues():
-        for j in i.itervalues():
+    for i in logger.decimation.values():
+        for j in i.values():
             if used is None or \
                 (j.sampleRateNumerator, j.sampleRateDenominator) in used.decimation:
                 retval |= _decimation_out(xlogger, j, modified_after, filters)
     
-    for c in [t for sn in logger.calibration.itervalues()\
-        for ch in sn.itervalues()\
-            for t in ch.itervalues()]:
+    for c in [t for sn in logger.calibration.values()\
+        for ch in sn.values()\
+            for t in ch.values()]:
         if used is None or c.serialNumber in used.calibration:
             retval |= _dataloggerCalibration_out(xlogger, c, modified_after)
     
@@ -681,9 +684,9 @@ def _sensor_out(xinventory, sensor, modified_after, used, filters):
         xsensor.publicID = sensor.publicID
         retval = False
     
-    for c in [t for sn in sensor.calibration.itervalues()\
-        for ch in sn.itervalues()\
-            for t in ch.itervalues()]:
+    for c in [t for sn in sensor.calibration.values()\
+        for ch in sn.values()\
+            for t in ch.values()]:
         if used is None or c.serialNumber in used.calibration:
             retval |= _sensorCalibration_out(xsensor, c, modified_after)
 
@@ -711,7 +714,7 @@ def _auxDevice_out(xinventory, auxDevice, modified_after, used):
         xauxDevice.publicID = auxDevice.publicID
         retval = False
 
-    for i in auxDevice.source.itervalues():
+    for i in auxDevice.source.values():
         if used is None or i.name in used.source:
             retval |= _aux_source_out(xauxDevice, i, modified_after)
 
@@ -752,7 +755,7 @@ def _Stream_out(xsl, strm, modified_after, used_instr):
         xstrm.code = strm.code
         xstrm.start = strm.start
         retval = False
-    for i in strm.comment.itervalues():
+    for i in strm.comment.values():
         retval |= _Comment_out(xstrm, i, modified_after, used_instr)
     if retval:
         xsl._append_child(xstrm)
@@ -783,13 +786,13 @@ def _SensorLocation_out(xsta, sl, modified_after, used_instr):
         xsl.code = sl.code
         xsl.start = sl.start
         retval = False
-    for i in sl.stream.itervalues():
-        for j in i.itervalues():
+    for i in sl.stream.values():
+        for j in i.values():
             retval |= _Stream_out(xsl, j, modified_after, used_instr)
-    for i in sl.auxStream.itervalues():
-        for j in i.itervalues():
+    for i in sl.auxStream.values():
+        for j in i.values():
             retval |= _AuxStream_out(xsl, j, modified_after, used_instr)
-    for i in sl.comment.itervalues():
+    for i in sl.comment.values():
         retval |= _Comment_out(xsl, i, modified_after, used_instr)
     if retval:
         xsta._append_child(xsl)
@@ -807,10 +810,10 @@ def _Station_out(xnet, sta, modified_after, used_instr):
         xsta.code = sta.code
         xsta.start = sta.start
         retval = False
-    for i in sta.sensorLocation.itervalues():
-        for j in i.itervalues():
+    for i in sta.sensorLocation.values():
+        for j in i.values():
             retval |= _SensorLocation_out(xsta, j, modified_after, used_instr)
-    for i in sta.comment.itervalues():
+    for i in sta.comment.values():
         retval |= _Comment_out(xsta, i, modified_after, used_instr)
     if retval:
         xnet._append_child(xsta)
@@ -828,10 +831,10 @@ def _Network_out(xinventory, net, modified_after, used_instr):
         xnet.code = net.code
         xnet.start = net.start
         retval = False
-    for i in net.station.itervalues():
-        for j in i.itervalues():
+    for i in net.station.values():
+        for j in i.values():
             retval |= _Station_out(xnet, j, modified_after, used_instr)
-    for i in net.comment.itervalues():
+    for i in net.comment.values():
         retval |= _Comment_out(xnet, i, modified_after, used_instr)
     if retval:
         xinventory._append_child(xnet)
@@ -853,7 +856,7 @@ def _StationGroup_out(xinventory, gr, modified_after, used_instr):
         xgr = xinventory._new_stationGroup()
         xgr._copy_from(gr)
         xinventory._append_child(xgr)
-        for i in gr.stationReference.itervalues():
+        for i in gr.stationReference.values():
             _StationReference_out(xgr, i, modified_after, used_instr)
         return True
 
@@ -865,88 +868,88 @@ def _StationGroup_out(xinventory, gr, modified_after, used_instr):
 
 def _xmldoc_out(xinventory, inventory, instr, modified_after):
     if instr == 0:
-        for i in inventory.network.itervalues():
-            for j in i.itervalues():
+        for i in inventory.network.values():
+            for j in i.values():
                 _Network_out(xinventory, j, modified_after, None)
 
-        for i in inventory.stationGroup.itervalues():
+        for i in inventory.stationGroup.values():
             _StationGroup_out(xinventory, i, modified_after, None)
 
     elif instr == 1:
         used_instr = _UsedInstruments()
         used_filters = _UsedFilters()
 
-        for i in inventory.network.itervalues():
-            for j in i.itervalues():
+        for i in inventory.network.values():
+            for j in i.values():
                 _Network_out(xinventory, j, modified_after, used_instr)
 
-        for i in inventory.stationGroup.itervalues():
+        for i in inventory.stationGroup.values():
             _StationGroup_out(xinventory, i, modified_after, None)
 
-        for i in inventory.datalogger.itervalues():
+        for i in inventory.datalogger.values():
             used_logger = used_instr.datalogger.get(i.publicID)
             if used_logger is not None:
                 _datalogger_out(xinventory, i, modified_after, used_logger, used_filters)
 
-        for i in inventory.sensor.itervalues():
+        for i in inventory.sensor.values():
             used_sensor = used_instr.sensor.get(i.publicID)
             if used_sensor is not None:
                 _sensor_out(xinventory, i, modified_after, used_sensor, used_filters)
 
-        for i in inventory.auxDevice.itervalues():
+        for i in inventory.auxDevice.values():
             used_auxDevice = used_instr.auxDevice.get(i.publicID)
             if used_auxDevice is not None:
                 _auxDevice_out(xinventory, i, modified_after, used_auxDevice)
 
-        for i in inventory.responseFIR.itervalues():
+        for i in inventory.responseFIR.values():
             if i.publicID in used_filters.filters:
                 _responseFIR_out(xinventory, i, modified_after)
 
-        for i in inventory.responseIIR.itervalues():
+        for i in inventory.responseIIR.values():
             if i.publicID in used_filters.filters:
                 _responseIIR_out(xinventory, i, modified_after)
 
-        for i in inventory.responsePAZ.itervalues():
+        for i in inventory.responsePAZ.values():
             if i.publicID in used_filters.filters:
                 _responsePAZ_out(xinventory, i, modified_after)
 
-        for i in inventory.responsePolynomial.itervalues():
+        for i in inventory.responsePolynomial.values():
             if i.publicID in used_filters.filters:
                 _responsePolynomial_out(xinventory, i, modified_after)
 
-        for i in inventory.responseFAP.itervalues():
+        for i in inventory.responseFAP.values():
             if i.publicID in used_filters.filters:
                 _responseFAP_out(xinventory, i, modified_after)
     elif instr == 2:
-        for i in inventory.network.itervalues():
-            for j in i.itervalues():
+        for i in inventory.network.values():
+            for j in i.values():
                 _Network_out(xinventory, j, modified_after, None)
         
-        for i in inventory.stationGroup.itervalues():
+        for i in inventory.stationGroup.values():
             _StationGroup_out(xinventory, i, modified_after, None)
 
-        for i in inventory.datalogger.itervalues():
+        for i in inventory.datalogger.values():
             _datalogger_out(xinventory, i, modified_after, None, None)
 
-        for i in inventory.sensor.itervalues():
+        for i in inventory.sensor.values():
             _sensor_out(xinventory, i, modified_after, None, None)
 
-        for i in inventory.auxDevice.itervalues():
+        for i in inventory.auxDevice.values():
             _auxDevice_out(xinventory, i, modified_after, used_auxDevice)
 
-        for i in inventory.responseFIR.itervalues():
+        for i in inventory.responseFIR.values():
             _responseFIR_out(xinventory, i, modified_after)
 
-        for i in inventory.responseIIR.itervalues():
+        for i in inventory.responseIIR.values():
             _responseIIR_out(xinventory, i, modified_after)
 
-        for i in inventory.responsePAZ.itervalues():
+        for i in inventory.responsePAZ.values():
             _responsePAZ_out(xinventory, i, modified_after)
 
-        for i in inventory.responsePolynomial.itervalues():
+        for i in inventory.responsePolynomial.values():
             _responsePolynomial_out(xinventory, i, modified_after)
 
-        for i in inventory.responseFAP.itervalues():
+        for i in inventory.responseFAP.values():
             _responseFAP_out(xinventory, i, modified_after)
 
 #***************************************************************************** 
@@ -964,7 +967,7 @@ class _IncrementalParser(object):
     def close(self):
         root = self.__p.close()
         if root.tag != _root_tag:
-            raise DBError, "unrecognized root element: " + root.tag
+            raise DBError("unrecognized root element: " + root.tag)
 
         xinventory = _xmlwrap.xml_Inventory(root)
         _xmldoc_in(xinventory, self.__inventory)
@@ -980,7 +983,7 @@ def xml_in(inventory, src):
     doc = ET.parse(src)
     root = doc.getroot()
     if root.tag != _root_tag:
-        raise DBError, "unrecognized root element: " + root.tag
+        raise DBError("unrecognized root element: " + root.tag)
 
     xinventory = _xmlwrap.xml_Inventory(root)
     _xmldoc_in(xinventory, inventory)
@@ -1006,22 +1009,22 @@ def xml_out(inventory, dest, instr=0, modified_after=None, stylesheet=None, inde
     
     _xmldoc_out(xinventory, inventory, instr, modified_after)
 
-    if isinstance(dest, basestring):
-        fd = file(dest, "w")
+    if isinstance(dest, str):
+        fd = open(dest, "wb")
     elif hasattr(dest, "write"):
         fd = dest
     else:
-        raise TypeError, "invalid file object"
+        raise TypeError("invalid file object")
 
     try:
         filename = fd.name
     except AttributeError:
         filename = '<???>'
 
-    fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
+    fd.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
 
     if stylesheet is not None:
-        fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
+        fd.write(b'<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     
     if indent is True:
@@ -1029,6 +1032,6 @@ def xml_out(inventory, dest, instr=0, modified_after=None, stylesheet=None, inde
     
     ET.ElementTree(xinventory._element).write(fd, encoding="utf-8")
     
-    if isinstance(dest, basestring):
+    if isinstance(dest, str):
         fd.close()
 

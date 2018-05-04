@@ -41,11 +41,11 @@ def main():
 	error = False
 	
 	if len(args) < 1:
-		print >> sys.stderr, "No input file(s) to digest"
+		print("No input file(s) to digest", file=sys.stderr)
 		error = True
 	
 	if error:
-		print >> sys.stderr, "Use -h for help on usage"
+		print("Use -h for help on usage", file=sys.stderr)
 		return 1
 
 	# Execution
@@ -55,8 +55,8 @@ def main():
 		for f in args:
 			try:
 				t.digest(f)
-			except Exception,e:
-				print >> sys.stderr, "Error digesting %s:\n %s" % (f, e)
+			except Exception as e:
+				print("Error digesting %s:\n %s" % (f, e), file=sys.stderr)
 				if not options.force:
 					raise e
 
@@ -68,17 +68,17 @@ def main():
 			inv = t.sc3Obj()
 			if inv:
 				ar = IO.XMLArchive()
-				print >> sys.stderr, "Generating file: %s" % options.outFile
+				print("Generating file: %s" % options.outFile, file=sys.stderr)
 				ar.create(options.outFile)
 				ar.setFormattedOutput(True)
 				ar.setCompression(False)
 				ar.writeObject(inv)
 				ar.close()
-	except Exception, e:
-		print >> sys.stderr, "Error: " + str(e)
+	except Exception as e:
+		print("Error: " + str(e), file=sys.stderr)
 		return 1
 	finally: 
-		print >>sys.stderr, "Ending."
+		print("Ending.", file=sys.stderr)
 
 	return 0
 

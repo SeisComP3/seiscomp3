@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(directors="1") DataModel
+%module(package="seiscomp3", directors="1") DataModel
 %{
 #include "seiscomp3/datamodel/types.h"
 #include "seiscomp3/datamodel/journaling_package.h"

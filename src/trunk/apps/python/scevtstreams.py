@@ -31,30 +31,30 @@ def readXML(self):
         elif self.inputFormat == "binary":
             ar = seiscomp3.IO.VBinaryArchive()
         else:
-            raise TypeError, "unknown input format '" + inputFormat + "'"
+            raise TypeError("unknown input format '" + inputFormat + "'")
 
         if ar.open(self.inputFile) == False:
-            raise IOError, self.inputFile + ": unable to open"
+            raise IOError(self.inputFile + ": unable to open")
 
         obj = ar.readObject()
         if obj is None:
-            raise TypeError, self.inputFile + ": invalid format"
+            raise TypeError(self.inputFile + ": invalid format")
 
         ep = seiscomp3.DataModel.EventParameters.Cast(obj)
         if ep is None:
-            raise TypeError, self.inputFile + ": no eventparameters found"
+            raise TypeError(self.inputFile + ": no eventparameters found")
 
         if ep.eventCount() <= 0:
             if ep.originCount() <= 0:
-                raise TypeError, self.inputFile + \
-                    ": no origin and no event in eventparameters found"
+                raise TypeError(self.inputFile + \
+                    ": no origin and no event in eventparameters found")
         else:
             if ep.eventCount() > 1:
                 if not self.event:
                     sys.stderr.write(
                         "\nERROR: input contains more than 1 event. Considering only first event\n")
 
-            for i in xrange(ep.eventCount()):
+            for i in range(ep.eventCount()):
                 ev = ep.event(i)
                 if self.eventID:
                     if self.eventID != ev.publicID():
@@ -62,14 +62,14 @@ def readXML(self):
                         continue
 
                 # sys.stderr.write("Working on event ID" + ev.publicID() + "\n")
-                for iorg in xrange(ev.originReferenceCount()):
+                for iorg in range(ev.originReferenceCount()):
                     org = seiscomp3.DataModel.Origin.Find(
                         ev.originReference(iorg).originID())
                     if org is None:
                         continue
 #           sys.stderr.write("Working on origin" + org.publicID() + "\n")
 
-                    for iarrival in xrange(org.arrivalCount()):
+                    for iarrival in range(org.arrivalCount()):
                         pickID = org.arrival(iarrival).pickID()
                         pickIDs.add(pickID)
 
@@ -79,7 +79,7 @@ def readXML(self):
 
                 break
 
-    except Exception, exc:
+    except Exception as exc:
         sys.stderr.write("ERROR: " + str(exc) + "\n")
         return False
 

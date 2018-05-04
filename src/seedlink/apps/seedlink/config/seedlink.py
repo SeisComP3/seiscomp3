@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, string, time, re, glob, shutil, sys, imp, resource
 import seiscomp3.Kernel, seiscomp3.Config
 try:
@@ -39,7 +40,7 @@ def _loadDatabase(dbUrl):
         registry = seiscomp3.Client.PluginRegistry.Instance()
         registry.addPluginName("db" + db["dbDriverName"])
         registry.loadPlugins()
-    except Exception, e:
+    except Exception as e:
         raise(e) ### "Cannot load database driver: %s" % e)
     dbDriver = seiscomp3.IO.DatabaseInterface.Create(db["dbDriverName"])
     if dbDriver is None:
@@ -49,12 +50,12 @@ def _loadDatabase(dbUrl):
     dbQuery = seiscomp3.DataModel.DatabaseQuery(dbDriver)
     if dbQuery is None:
         raise Exception("Cannot get DB query object")
-    print >> sys.stderr, " Loading inventory from database ... ",
+    print(" Loading inventory from database ... ", file=sys.stderr)
     inventory = seiscomp3.DataModel.Inventory()
     dbQuery.loadNetworks(inventory)
     for ni in xrange(inventory.networkCount()):
         dbQuery.loadStations(inventory.network(ni))
-    print >> sys.stderr, "Done."
+    print("Done.", file=sys.stderr)
     return inventory
 
 
@@ -69,7 +70,7 @@ def _loadStationDescriptions(inv):
     for ni in xrange(inv.networkCount()):
         n = inv.network(ni)
         net = n.code()
-        if not d.has_key(net):
+        if net not in d:
             d[net] = {}
 
             for si in xrange(n.stationCount()):
@@ -112,7 +113,7 @@ class TemplateModule(seiscomp3.Kernel.Module):
         self.config_dir = os.path.join(self.pkgroot, "var", "lib", self.name)
 
         self.database_str = ""
-        if self.global_params.has_key("inventory_connection"):
+        if "inventory_connection" in self.global_params:
             #WRONG self.database_str = cfg.getStrings("seedlink.readConnection")
             self.database_str = self.global_params["inventory_connection"]
         #self.database_str = cfg.getStrings("seedlink.database.type")+cfg.getStrings("seedlink.database.parameters")
@@ -176,9 +177,9 @@ class TemplateModule(seiscomp3.Kernel.Module):
 
         if print_warning:
             if station_scope:
-                print "warning: parameter '%s' is not defined for station %s %s" % (name, self.net, self.sta)
+                print("warning: parameter '%s' is not defined for station %s %s" % (name, self.net, self.sta))
             else:
-                print "warning: parameter '%s' is not defined at global scope" % (name,)
+                print("warning: parameter '%s' is not defined at global scope" % (name,))
 
         raise KeyError
 
@@ -215,25 +216,25 @@ class Module(TemplateModule):
             resource.setrlimit(resource.RLIMIT_NOFILE, (lim[1], lim[1]))
 
             lim = resource.getrlimit(resource.RLIMIT_NOFILE)
-            print >> sys.stderr, " maximum number of open files set to", lim[0]
+            print(" maximum number of open files set to", lim[0], file=sys.stderr)
 
-        except Exception, e:
-            print >> sys.stderr, " failed to raise the maximum number open files:", str(e)
+        except Exception as e:
+            print(" failed to raise the maximum number open files:", str(e), file=sys.stderr)
 
-        if self.global_params.has_key("sequence_file_cleanup"):
+        if "sequence_file_cleanup" in self.global_params:
             try:
                 max_minutes = int(self.global_params["sequence_file_cleanup"])
                 if max_minutes > 0:
                     files = glob.glob(os.path.join(self.run_dir, "*.seq"))
                     for f in files:
                         if (time.time()-os.path.getmtime(f))/60 >= max_minutes:
-                            print >> sys.stderr, " removing sequence file %s" % f
+                            print(" removing sequence file %s" % f, file=sys.stderr)
                             os.remove(f)
                 else:
-                    print >>sys.stderr, " sequence_file_cleanup disabled"
+                    prin(" sequence_file_cleanup disabled", file=sys.stderr)
 
             except ValueError:
-                print >>sys.stderr, " sequence_file_cleanup parameter is not a number: '%s'" % str(self.global_params["sequence_file_cleanup"])
+                prin(" sequence_file_cleanup parameter is not a number: '%s'" % str(self.global_params["sequence_file_cleanup"]), file=sys.stderr)
                 return 1
 
         return self.env.start(self.name, self.env.binaryFile(self.name), daemon_opt,\
@@ -248,7 +249,7 @@ class Module(TemplateModule):
             except: return None
 
             modname = '__seiscomp_seedlink_plugins_' + source_type
-            if sys.modules.has_key(modname):
+            if modname in sys.modules:
                 mod = sys.modules[modname]
             else:
                 # create a module
@@ -265,7 +266,7 @@ class Module(TemplateModule):
             if not hasattr(mod, 'SeedlinkPluginHandler'):
                 code = f.read()
                 # compile and exec dynamic code in the module
-                exec compile(code, '', 'exec') in namespace
+                exec(compile(code, '', 'exec'), namespace)
 
             mod = namespace.get('SeedlinkPluginHandler')
             handler = mod()
@@ -342,7 +343,7 @@ class Module(TemplateModule):
                 rc = seiscomp3.Config.Config()
                 rc.readConfig(os.path.join(self.rc_dir, "station_%s_%s" % (self.net, self.sta)))
                 description = rc.getString("description")
-            except Exception, e:
+            except Exception as e:
                 # Maybe the rc file doesn't exist, maybe there's no readable description.
                 pass
 
@@ -354,10 +355,10 @@ class Module(TemplateModule):
         self.station_count += 1
 
         if self._last_net != self.net:
-            print "+ network %s" % self.net
+            print("+ network %s" % self.net)
             self._last_net = self.net
 
-        print "  + station %s %s" % (self.sta, description)
+        print("  + station %s %s" % (self.sta, description))
 
         # If real-time simulation is activated do not parse the sources
         # and force the usage of the mseedfifo_plugin
@@ -372,7 +373,7 @@ class Module(TemplateModule):
             source_alias = source_type
             toks = source_type.split(':')
             if len(toks) > 2:
-                print "Error: invalid source identifier '%s', expected '[alias:]type'"
+                print("Error: invalid source identifier '%s', expected '[alias:]type'")
                 continue
             elif len(toks) == 2:
                 source_alias = toks[0]
@@ -384,14 +385,14 @@ class Module(TemplateModule):
             # share/templates/seedlink/$type/setup.py
             pluginHandler = self._getPluginHandler(source_type)
             if pluginHandler is None:
-                print "Error: no handler for plugin %s defined" % source_type
+                print("Error: no handler for plugin %s defined" % source_type)
                 continue
 
             stat = source_type
             if source_alias != source_type:
                 stat += " as " + source_alias
 
-            print "    + source %s" % stat
+            print("    + source %s" % stat)
 
             # Backup original binding parameters
             station_params = self.station_params.copy()
@@ -435,7 +436,7 @@ class Module(TemplateModule):
             else:
                 source_key = (source_type, source_key)
 
-            if not source_dict.has_key(source_key):
+            if source_key not in source_dict:
                 source_id = source_type + str(len(source_dict))
 
             else:
@@ -456,7 +457,7 @@ class Module(TemplateModule):
                     if sproc:
                         self.sproc[sproc_name] = sproc
                     else:
-                        print "WARNING: cannot find streams_%s.tpl" % sproc_name
+                        print("WARNING: cannot find streams_%s.tpl" % sproc_name)
 
             # Read plugins.ini template for this source and store content
             # under the provided key for this binding
@@ -499,7 +500,7 @@ class Module(TemplateModule):
         self._set('seedlink.streams', os.path.join(self.config_dir, "streams.xml"), False)
 
         self.templates = set()
-        self.templates.add(("backup_seqfiles", None, 0755))
+        self.templates.add(("backup_seqfiles", None, 0o755))
 
         rx_binding = re.compile(r'(?P<module>[A-Za-z0-9_\.-]+)(:(?P<profile>[A-Za-z0-9_-]+))?$')
 
@@ -511,10 +512,10 @@ class Module(TemplateModule):
             try:
                 (path, net, sta) = f.split('_')[-3:]
                 if not path.endswith("station"):
-                    print "invalid path", f
+                    print("invalid path", f)
 
             except ValueError:
-                print "invalid path", f
+                print("invalid path", f)
                 continue
 
             self.net = net
@@ -530,7 +531,7 @@ class Module(TemplateModule):
 
                 m = rx_binding.match(line)
                 if not m:
-                    print "invalid binding in %s: %s" % (f, line)
+                    print("invalid binding in %s: %s" % (f, line))
                     line = fd.readline()
                     continue
 
@@ -611,11 +612,11 @@ class Module(TemplateModule):
         # Load descriptions from inventory:
         if self.database_str:
             if dbAvailable == True:
-                print >>sys.stderr, " Loading station descriptions from %s" % self.database_str
+                print(" Loading station descriptions from %s" % self.database_str, file=sys.stderr)
                 inv = _loadDatabase(self.database_str)
                 self.seedlink_station_descr = _loadStationDescriptions(inv)
             else:
-                print >>sys.stderr, " Database configured but trunk is not installed"
+                print(" Database configured but trunk is not installed", file=sys.stderr)
                 self.seedlink_station_descr = dict()
 
         self.__load_stations()
@@ -727,5 +728,5 @@ class Module(TemplateModule):
 
 
     def printCrontab(self):
-        print "55 23 * * * %s >/dev/null 2>&1" % (os.path.join(self.config_dir, "backup_seqfiles"),)
+        print("55 23 * * * %s >/dev/null 2>&1" % (os.path.join(self.config_dir, "backup_seqfiles"),))
 

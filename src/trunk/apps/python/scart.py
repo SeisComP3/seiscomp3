@@ -195,7 +195,7 @@ class Archive:
             rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
         # Read only valid records
         while True:
-            rec = ri.next()
+            rec = next(ri)
             if rec is None:
                 break
             if rec.samplingFrequency() <= 0:
@@ -244,7 +244,7 @@ class StreamIterator:
             self.current = self.record.startTime()
             self.currentEnd = self.record.endTime()
 
-    def next(self):
+    def __next__(self):
         while True:
             self.record, self.index = self.archive.readRecord(
                 self.file, self.index)
@@ -307,7 +307,7 @@ class ArchiveIterator:
 
         rec = stream.record
 
-        stream.next()
+        next(stream)
 
         if stream.record is not None:
             # Put the stream back on the right (sorted) position
@@ -325,7 +325,7 @@ class Copy:
             rec = stream.record
             while rec:
                 yield rec
-                rec = stream.next()
+                rec = next(stream)
 
         raise StopIteration
 
@@ -532,7 +532,7 @@ archiveDirectory = "./"
 
 for flag, arg in opts:
     if flag == "-t":
-        tmin, tmax = map(str2time, arg.split("~"))
+        tmin, tmax = list(map(str2time, arg.split("~")))
     elif flag == "-E":
         endtime = True
     elif flag in ["-h", "--help"]:
@@ -673,7 +673,7 @@ else:
         for p in plugins:
             registry.addPluginName(p)
         registry.loadPlugins()
-    except Exception, e:
+    except Exception as e:
         pass
 
     rs = seiscomp3.IO.RecordStream.Open(recordURL)
@@ -745,5 +745,5 @@ else:
             if verbose:
                 sys.stderr.write("%s %s %s\n" %
                                  (rec.streamID(), rec.startTime().iso(), file))
-    except Exception, e:
+    except Exception as e:
         sys.stderr.write("Exception: %s\n" % str(e))

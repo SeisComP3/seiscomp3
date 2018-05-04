@@ -115,8 +115,8 @@ class _Datalogger(_sc3wrap.base_datalogger):
 			del self.decimation[(sampleRateNumerator, sampleRateDenominator)]
 
 		except KeyError:
-			raise DBError, "decimation %d/%d not found" % \
-				(sampleRateNumerator, sampleRateDenominator)
+			raise DBError("decimation %d/%d not found" % \
+				(sampleRateNumerator, sampleRateDenominator))
 
 	def remove_calibration(self, serialNumber, channel, start):
 		try:
@@ -128,18 +128,18 @@ class _Datalogger(_sc3wrap.base_datalogger):
 					del self.calibration[serialNumber]
 
 		except KeyError:
-			raise DBError, "calibration of datalogger [%s][%s][%s] not found" % (serialNumber, channeli, start)
+			raise DBError("calibration of datalogger [%s][%s][%s] not found" % (serialNumber, channeli, start))
 
 	def flush(self):
 		self._sync_update()
 
-		for i in self.decimation.itervalues():
-			for j in i.itervalues():
+		for i in self.decimation.values():
+			for j in i.values():
 				j.flush()
 
-		for i in self.calibration.itervalues():
-			for j in i.itervalues():
-				for k in j.itervalues():
+		for i in self.calibration.values():
+			for j in i.values():
+				for k in j.values():
 					k.flush()
 
 class _SeismometerCalibration(_sc3wrap.base_sensorcalibration):
@@ -180,13 +180,13 @@ class _Seismometer(_sc3wrap.base_sensor):
 					del self.calibration[serialNumber]
 
 		except KeyError:
-			raise DBError, "calibration of sensor [%s][%s][%s] not found" % (serialNumber, channeli, start)
+			raise DBError("calibration of sensor [%s][%s][%s] not found" % (serialNumber, channeli, start))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.calibration.itervalues():
-			for j in i.itervalues():
-				for k in j.itervalues():
+		for i in self.calibration.values():
+			for j in i.values():
+				for k in j.values():
 					k.flush()
 
 
@@ -218,11 +218,11 @@ class _AuxilliaryDevice(_sc3wrap.base_auxdevice):
 			del self.source[source_id]
 
 		except KeyError:
-			raise DBError, "auxilliary source %s not found" % (source_id,)
+			raise DBError("auxilliary source %s not found" % (source_id,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.source.itervalues():
+		for i in self.source.values():
 			i.flush()
 
 class _Comment(_sc3wrap.base_comment):
@@ -252,11 +252,11 @@ class _Stream(_sc3wrap.base_stream):
 			del self.comment[id]
 
 		except KeyError:
-			raise DBError, "comment [%s] not found" % (id,)
+			raise DBError("comment [%s] not found" % (id,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.comment.itervalues():
+		for i in self.comment.values():
 			i.flush()
 
 class _AuxilliaryStream(_sc3wrap.base_auxstream):
@@ -315,7 +315,7 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 				del self.stream[code]
 
 		except KeyError:
-			raise DBError, "stream [%s,%s][%s] not found" % (code, loc, start)
+			raise DBError("stream [%s,%s][%s] not found" % (code, loc, start))
 
 	def remove_auxStream(self, code, start):
 		try:
@@ -325,7 +325,7 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 				del self.auxStream[code]
 				
 		except KeyError:
-			raise DBError, "stream [%s,%s][%s] not found" % (code, loc, start)
+			raise DBError("stream [%s,%s][%s] not found" % (code, loc, start))
 
 	def remove_comment(self, id):
 		try:
@@ -333,17 +333,17 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 			del self.comment[id]
 
 		except KeyError:
-			raise DBError, "comment [%s] not found" % (id,)
+			raise DBError("comment [%s] not found" % (id,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.stream.itervalues():
-			for j in i.itervalues():
+		for i in self.stream.values():
+			for j in i.values():
 				j.flush()
-		for i in self.auxStream.itervalues():
-			for j in i.itervalues():
+		for i in self.auxStream.values():
+			for j in i.values():
 				j.flush()
-		for i in self.comment.itervalues():
+		for i in self.comment.values():
 			i.flush()
 
 class _Station(_sc3wrap.base_station):
@@ -381,7 +381,7 @@ class _Station(_sc3wrap.base_station):
 				del self.sensorLocation[code]
 
 		except KeyError:
-			raise DBError, "sensor location [%s][%s] not found" % (code, start)
+			raise DBError("sensor location [%s][%s] not found" % (code, start))
 
 	def remove_comment(self, id):
 		try:
@@ -389,14 +389,14 @@ class _Station(_sc3wrap.base_station):
 			del self.comment[id]
 
 		except KeyError:
-			raise DBError, "comment [%s] not found" % (id,)
+			raise DBError("comment [%s] not found" % (id,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.sensorLocation.itervalues():
-			for j in i.itervalues():
+		for i in self.sensorLocation.values():
+			for j in i.values():
 				j.flush()
-		for i in self.comment.itervalues():
+		for i in self.comment.values():
 			i.flush()
 
 class _Network(_sc3wrap.base_network):
@@ -433,7 +433,7 @@ class _Network(_sc3wrap.base_network):
 				del self.station[code]
 
 		except KeyError:
-			raise DBError, "station [%s][%s] not found" % (code, start)
+			raise DBError("station [%s][%s] not found" % (code, start))
 
 	def remove_comment(self, id):
 		try:
@@ -441,14 +441,14 @@ class _Network(_sc3wrap.base_network):
 			del self.comment[id]
 
 		except KeyError:
-			raise DBError, "comment [%s] not found" % (id,)
+			raise DBError("comment [%s] not found" % (id,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.station.itervalues():
-			for j in i.itervalues():
+		for i in self.station.values():
+			for j in i.values():
 				j.flush()
-		for i in self.comment.itervalues():
+		for i in self.comment.values():
 			i.flush()
 		
 class _StationReference(_sc3wrap.base_stationreference):
@@ -478,11 +478,11 @@ class _StationGroup(_sc3wrap.base_stationgroup):
 			del self.stationReference[stationID]
 
 		except KeyError:
-			raise DBError, "stationReference [%s] not found" % (stationID,)
+			raise DBError("stationReference [%s] not found" % (stationID,))
 
 	def flush(self):
 		self._sync_update()
-		for i in self.stationReference.itervalues():
+		for i in self.stationReference.values():
 			i.flush()
 		
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -582,8 +582,8 @@ def _qccompliant(wfID, start, end, constraints):
 		return True
 
 	retval = True
-	consdict = dict([ (key,value) for key,value in constraints.items() if value is not None ])
-	parset = set([key[:-4].replace("_"," ") for key in consdict.keys()])
+	consdict = dict([ (key,value) for key,value in list(constraints.items()) if value is not None ])
+	parset = set([key[:-4].replace("_"," ") for key in list(consdict.keys())])
 
 	for qcParameter in parset:
 		count = 0
@@ -731,7 +731,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.responseFIR[name]
 
 		except KeyError:
-			raise DBError, "FIR response %s not found" % (name,)
+			raise DBError("FIR response %s not found" % (name,))
 			
 	def remove_responseIIR(self, name):
 		try:
@@ -739,7 +739,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.responseIIR[name]
 
 		except KeyError:
-			raise DBError, "IIR response %s not found" % (name,)
+			raise DBError("IIR response %s not found" % (name,))
 
 	def remove_responsePAZ(self, name):
 		try:
@@ -747,7 +747,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.responsePAZ[name]
 
 		except KeyError:
-			raise DBError, "PAZ response %s not found" % (name,)
+			raise DBError("PAZ response %s not found" % (name,))
 			
 	def remove_responsePolynomial(self, name):
 		try:
@@ -755,7 +755,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.responsePolynomial[name]
 
 		except KeyError:
-			raise DBError, "Polynomial response %s not found" % (name,)
+			raise DBError("Polynomial response %s not found" % (name,))
 			
 	def remove_responseFAP(self, name):
 		try:
@@ -763,7 +763,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.responseFAP[name]
 
 		except KeyError:
-			raise DBError, "FAP response %s not found" % (name,)
+			raise DBError("FAP response %s not found" % (name,))
 
 	def remove_datalogger(self, name):
 		try:
@@ -771,7 +771,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.datalogger[name]
 
 		except KeyError:
-			raise DBError, "datalogger %s not found" % (name,)
+			raise DBError("datalogger %s not found" % (name,))
 			
 	def remove_sensor(self, name):
 		try:
@@ -779,7 +779,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.sensor[name]
 
 		except KeyError:
-			raise DBError, "sensor %s not found" % (name,)
+			raise DBError("sensor %s not found" % (name,))
 			
 	def remove_auxDevice(self, name):
 		try:
@@ -787,7 +787,7 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.auxDevice[name]
 
 		except KeyError:
-			raise DBError, "auxilliary device %s not found" % (name,)
+			raise DBError("auxilliary device %s not found" % (name,))
 			
 	def remove_network(self, code, start):
 		try:
@@ -797,7 +797,7 @@ class Inventory(_sc3wrap.base_inventory):
 				del self.network[code]
 
 		except KeyError:
-			raise DBError, "network [%s][%s] not found" % (code, start)
+			raise DBError("network [%s][%s] not found" % (code, start))
 
 	def remove_stationGroup(self, code):
 		try:
@@ -805,35 +805,35 @@ class Inventory(_sc3wrap.base_inventory):
 			del self.stationGroup[code]
 
 		except KeyError:
-			raise DBError, "station group %s not found" % (code,)
+			raise DBError("station group %s not found" % (code,))
 			
 	def flush(self):
-		for i in self.responseFIR.itervalues():
+		for i in self.responseFIR.values():
 			i.flush()
 
-		for i in self.responseIIR.itervalues():
+		for i in self.responseIIR.values():
 			i.flush()
 
-		for i in self.responsePAZ.itervalues():
+		for i in self.responsePAZ.values():
 			i.flush()
 
-		for i in self.responseFAP.itervalues():
+		for i in self.responseFAP.values():
 			i.flush()
 
-		for i in self.datalogger.itervalues():
+		for i in self.datalogger.values():
 			i.flush()
 
-		for i in self.sensor.itervalues():
+		for i in self.sensor.values():
 			i.flush()
 
-		for i in self.auxDevice.itervalues():
+		for i in self.auxDevice.values():
 			i.flush()
 
-		for i in self.network.itervalues():
-			for j in i.itervalues():
+		for i in self.network.values():
+			for j in i.values():
 				j.flush()
 
-		for i in self.stationGroup.itervalues():
+		for i in self.stationGroup.values():
 			i.flush()
 
 
@@ -1118,19 +1118,19 @@ class Inventory(_sc3wrap.base_inventory):
 
 	# D E B U G
 	def print_stations(self):
-		print "printing networks, stations, ..."
-		for net in sum([i.values() for i in self.network.itervalues()], []):
-			print net.code
-			for sta in sum([i.values() for i in net.station.itervalues()], []):
-				print "---> " + sta.code
-				for sl in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
-					print "--------> " + sl.code
-					for stream in sl.stream.itervalues():
-						for t,s in stream.iteritems():
-							print "---- seis ---> " + str(t), s.code
-					for stream in sl.auxStream.itervalues():
-						for t,s in stream.iteritems():
-							print "---- aux- ---> " + str(t), s.code
+		print("printing networks, stations, ...")
+		for net in sum([list(i.values()) for i in self.network.values()], []):
+			print(net.code)
+			for sta in sum([list(i.values()) for i in net.station.values()], []):
+				print("---> " + sta.code)
+				for sl in sum([list(i.values()) for i in sta.sensorLocation.values()], []):
+					print("--------> " + sl.code)
+					for stream in sl.stream.values():
+						for t,s in stream.items():
+							print("---- seis ---> " + str(t), s.code)
+					for stream in sl.auxStream.values():
+						for t,s in stream.items():
+							print("---- aux- ---> " + str(t), s.code)
 		sys.stdout.flush()
 
 	def clear_stations(self):

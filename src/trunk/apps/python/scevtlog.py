@@ -273,12 +273,12 @@ class EventHistory(seiscomp3.Client.Application):
 
         if org:
             narr = org.arrivalCount()
-            for i in xrange(narr):
+            for i in range(narr):
                 picks.append(self._cache.get(
                     seiscomp3.DataModel.Pick, org.arrival(i).pickID()))
 
             nstamags = org.stationMagnitudeCount()
-            for i in xrange(nstamags):
+            for i in range(nstamags):
                 amps.append(self._cache.get(
                     seiscomp3.DataModel.Amplitude, org.stationMagnitude(i).amplitudeID()))
 
@@ -396,7 +396,7 @@ class EventHistory(seiscomp3.Client.Application):
                 evt_cloned.add(fm_ref_cloned)
 
             nmt = fm.momentTensorCount()
-            for i in xrange(nmt):
+            for i in range(nmt):
                 mt = fm.momentTensor(i)
                 if not mt.derivedOriginID():
                     continue
@@ -441,7 +441,7 @@ class EventHistory(seiscomp3.Client.Application):
 
             # Copy event comments
             ncmts = evt.commentCount()
-            for i in xrange(ncmts):
+            for i in range(ncmts):
                 cmt_cloned = seiscomp3.DataModel.Comment.Cast(
                     evt.comment(i).clone())
                 evt_cloned.add(cmt_cloned)
@@ -458,7 +458,7 @@ class EventHistory(seiscomp3.Client.Application):
                 evt_cloned.add(org_ref_cloned)
 
             # Copy event descriptions
-            for i in xrange(evt.eventDescriptionCount()):
+            for i in range(evt.eventDescriptionCount()):
                 ed_cloned = seiscomp3.DataModel.EventDescription.Cast(
                     evt.eventDescription(i).clone())
                 evt_cloned.add(ed_cloned)
@@ -468,14 +468,14 @@ class EventHistory(seiscomp3.Client.Application):
 
             # Copy origin comments
             ncmts = org.commentCount()
-            for i in xrange(ncmts):
+            for i in range(ncmts):
                 cmt_cloned = seiscomp3.DataModel.Comment.Cast(
                     org.comment(i).clone())
                 org_cloned.add(cmt_cloned)
 
             # Copy arrivals
             narr = org.arrivalCount()
-            for i in xrange(narr):
+            for i in range(narr):
                 arr_cloned = seiscomp3.DataModel.Arrival.Cast(
                     org.arrival(i).clone())
                 org_cloned.add(arr_cloned)
@@ -492,7 +492,7 @@ class EventHistory(seiscomp3.Client.Application):
 
             # Copy network magnitudes
             nmag = org.magnitudeCount()
-            for i in xrange(nmag):
+            for i in range(nmag):
                 mag = org.magnitude(i)
 
                 mag_cloned = seiscomp3.DataModel.Magnitude.Cast(mag.clone())
@@ -505,7 +505,7 @@ class EventHistory(seiscomp3.Client.Application):
 
                 # Copy magnitude references
                 nmagref = mag.stationMagnitudeContributionCount()
-                for j in xrange(nmagref):
+                for j in range(nmagref):
                     mag_ref_cloned = seiscomp3.DataModel.StationMagnitudeContribution.Cast(
                         mag.stationMagnitudeContribution(j).clone())
                     mag_cloned.add(mag_ref_cloned)
@@ -515,11 +515,11 @@ class EventHistory(seiscomp3.Client.Application):
             # Copy station magnitudes and station amplitudes
             smag = org.stationMagnitudeCount()
             amp_map = dict()
-            for i in xrange(smag):
+            for i in range(smag):
                 mag_cloned = seiscomp3.DataModel.StationMagnitude.Cast(
                     org.stationMagnitude(i).clone())
                 org_cloned.add(mag_cloned)
-                if amp_map.has_key(mag_cloned.amplitudeID()) == False:
+                if (mag_cloned.amplitudeID() in amp_map) == False:
                     amp_map[mag_cloned.amplitudeID()] = True
                     seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(
                         wasEnabled)
@@ -646,7 +646,7 @@ class EventHistory(seiscomp3.Client.Application):
 
     def eventProgress(self, evtID, directory):
         # The progress is already stored
-        if self._eventProgress.has_key(evtID):
+        if evtID in self._eventProgress:
             return self._eventProgress[evtID]
 
         # Find the maximum file counter

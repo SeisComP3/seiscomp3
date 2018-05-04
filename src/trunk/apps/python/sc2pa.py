@@ -157,7 +157,7 @@ class ProcAlert(seiscomp3.Client.Application):
 
     def hasValidNetworkMagnitude(self, org, evt):
         nmag = org.magnitudeCount()
-        for imag in xrange(nmag):
+        for imag in range(nmag):
             mag = org.magnitude(imag)
             if mag.publicID() == evt.preferredMagnitudeID():
                 return True

@@ -6,6 +6,10 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 #import genwrap as _genwrap
 import datetime
 from seiscomp.db.xmlio import routing as _xmlio
@@ -35,7 +39,7 @@ class _RouteArclink(object):
 		self.myRoute = myRoute
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.address = address
@@ -67,7 +71,7 @@ class _RouteSeedlink(object):
 		self.myRoute = myRoute
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.address = address
@@ -106,7 +110,7 @@ class _Route(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.networkCode = networkCode
@@ -125,7 +129,7 @@ class _Route(object):
 		if address not in self.arclink:
 			self.arclink[address] = {}
 		if start in self.arclink[address]:
-			raise DBError, "RouteArclink [%s][%s] already defined" % (address, start)
+			raise DBError("RouteArclink [%s][%s] already defined" % (address, start))
 		obj = _RouteArclink(self, address, start, args)
 		self.arclink[address][start] = obj
 		return obj
@@ -136,11 +140,11 @@ class _Route(object):
 			if len(self.arclink[address]) == 0:
 				del self.arclink[address]
 		except KeyError:
-			raise DBError, "RouteArclink [%s][%s] not found" % (address, start)
+			raise DBError("RouteArclink [%s][%s] not found" % (address, start))
 
 	def insert_seedlink(self, address, **args):
 		if address in self.seedlink:
-			raise DBError, "RouteSeedlink %s already defined" % address
+			raise DBError("RouteSeedlink %s already defined" % address)
 		obj = _RouteSeedlink(self, address, args)
 		self.seedlink[address] = obj
 		return obj
@@ -149,7 +153,7 @@ class _Route(object):
 		try:
 			del self.seedlink[address]
 		except KeyError:
-			raise DBError, "RouteSeedlink [%s] not found" % (address)
+			raise DBError("RouteSeedlink [%s] not found" % (address))
 # ---------------------------------------------------------------------------------------
 
 
@@ -182,7 +186,7 @@ class _Access(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.networkCode = networkCode
@@ -232,7 +236,7 @@ class Routing(object):
 		if locationCode not in self.route[networkCode][stationCode]:
 			self.route[networkCode][stationCode][locationCode] = {}
 		if streamCode in self.route[networkCode][stationCode][locationCode]:
-			raise DBError, "Route [%s][%s][%s][%s] already defined" % (networkCode, stationCode, locationCode, streamCode)
+			raise DBError("Route [%s][%s][%s][%s] already defined" % (networkCode, stationCode, locationCode, streamCode))
 		obj = _Route(self, networkCode, stationCode, locationCode, streamCode, args)
 		self.route[networkCode][stationCode][locationCode][streamCode] = obj
 		self.object[obj.publicID] = obj
@@ -248,7 +252,7 @@ class Routing(object):
 			if len(self.route[networkCode]) == 0:
 				del self.route[networkCode]
 		except KeyError:
-			raise DBError, "Route [%s][%s][%s][%s] not found" % (networkCode, stationCode, locationCode, streamCode)
+			raise DBError("Route [%s][%s][%s][%s] not found" % (networkCode, stationCode, locationCode, streamCode))
 
 	def insert_access(self, networkCode, stationCode, locationCode, streamCode, user, start, **args):
 		if networkCode not in self.access:
@@ -262,7 +266,7 @@ class Routing(object):
 		if user not in self.access[networkCode][stationCode][locationCode][streamCode]:
 			self.access[networkCode][stationCode][locationCode][streamCode][user] = {}
 		if start in self.access[networkCode][stationCode][locationCode][streamCode][user]:
-			raise DBError, "Access [%s][%s][%s][%s][%s][%s] already defined" % (networkCode, stationCode, locationCode, streamCode, user, start)
+			raise DBError("Access [%s][%s][%s][%s][%s][%s] already defined" % (networkCode, stationCode, locationCode, streamCode, user, start))
 		obj = _Access(self, networkCode, stationCode, locationCode, streamCode, user, start, args)
 		self.access[networkCode][stationCode][locationCode][streamCode][user][start] = obj
 		return obj
@@ -281,7 +285,7 @@ class Routing(object):
 			if len(self.access[networkCode]) == 0:
 				del self.access[networkCode]
 		except KeyError:
-			raise DBError, "Access [%s][%s][%s][%s][%s][%s] not found" % (networkCode, stationCode, locationCode, streamCode, user, start)
+			raise DBError("Access [%s][%s][%s][%s][%s][%s] not found" % (networkCode, stationCode, locationCode, streamCode, user, start))
 
 	def clear_routes(self):
 		self.route = {}

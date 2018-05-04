@@ -32,11 +32,7 @@ except ImportError:
 
 
 def get_tags(s):
-    return list(filter(lambda x: x,
-                       map(lambda x: x.strip(),
-                           s.split(' ')
-                           )
-                       )
+    return list([x for x in [x.strip() for x in s.split(' ')] if x]
                 )
 
 

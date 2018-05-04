@@ -1,6 +1,6 @@
-from lineType import Sl, Nw, Sr, Sg
-from nodesi import Instruments
-from basesc3 import sc3
+from .lineType import Sl, Nw, Sr, Sg
+from .nodesi import Instruments
+from .basesc3 import sc3
 import sys
 
 debug = 0
@@ -36,9 +36,9 @@ class nslc(object):
 			att['End'] =  self.end
 		att['Code'] = self.code
 
-		for (key,value) in self.att.iteritems():
+		for (key,value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att:
-				print >> sys.stderr, "[%s] type %s ignoring attribute %s = %s " % (self.code, self.sc3Mode, key,value)
+				print("[%s] type %s ignoring attribute %s = %s " % (self.code, self.sc3Mode, key,value), file=sys.stderr)
 				continue
 
 			att[key] = value
@@ -164,7 +164,7 @@ class Network(nslc, sc3):
 			try:
 				where = "%s" % (sta._span())
 				sta.Sl(sl)
-				if debug: print >>sys.stderr,"[%s] inserted at %s -> %s" % (self, where, sta._span())
+				if debug: print("[%s] inserted at %s -> %s" % (self, where, sta._span()), file=sys.stderr)
 				inserted = True
 				for other in self.stations:
 					if other is sta: continue
@@ -175,7 +175,7 @@ class Network(nslc, sc3):
 				pass
 		if not inserted:
 			st = Station(self, sl)
-			if debug: print >>sys.stderr,"[%s] created new station %s %s" % (self, st, st._span())
+			if debug: print("[%s] created new station %s %s" % (self, st, st._span()), file=sys.stderr)
 			for sta in self.stations:
 				if sta.conflict(st):
 					raise Exception("Station conflict with already existing station (%s/%s/%s)" % (sta, sta.start, sta.end))
@@ -280,7 +280,7 @@ class Station(nslc, sc3):
 			try:
 				where = loc._span()
 				loc.Sl(sl)
-				if debug: print >>sys.stderr," [%s] inserted at %s -> %s" % (self, where, loc._span())
+				if debug: print(" [%s] inserted at %s -> %s" % (self, where, loc._span()), file=sys.stderr)
 				inserted = True
 				for other in self.locations:
 					if other is loc: continue
@@ -292,7 +292,7 @@ class Station(nslc, sc3):
 		
 		if not inserted:
 			loc = Location(self, sl)
-			if debug: print >>sys.stderr," [%s] created new location %s %s" % (self, loc, loc._span())
+			if debug: print(" [%s] created new location %s %s" % (self, loc, loc._span()), file=sys.stderr)
 			for lc in self.locations:
 				if lc.conflict(loc):
 					raise Exception("Location conflict with already existing location")
@@ -388,7 +388,7 @@ class Location(nslc, sc3):
 		# Create Channels
 		for code in sl.channels:
 			channel = (Channel(self, code, sl))
-			if debug: print >>sys.stderr,"  [%s] created new channel %s/%s" % (self, channel, channel._span())
+			if debug: print("  [%s] created new channel %s/%s" % (self, channel, channel._span()), file=sys.stderr)
 			for echan in self.channels:
 				if echan.conflict(channel):
 					raise Exception("[%s] channel %s conflict with already existing channel" % (self, code))
@@ -446,7 +446,7 @@ class Channel(nslc, sc3):
 
 	def sc3Resolv(self, inventory):
 		if not inventory:
-			print >>sys.stderr,"[%s] Warning, inventory not supplied" % self.code 
+			print("[%s] Warning, inventory not supplied" % self.code, file=sys.stderr) 
 			return
 	
 		try:
@@ -460,8 +460,8 @@ class Channel(nslc, sc3):
 			
 			# Sensor Calibration
 			inventory.loadSensorCalibrations(ssm, ssn, sch, ssg, self.start, self.end, ss)
-		except Exception,e:
-			print >>sys.stderr,"[%s] Sensor Resolution Error %s" % (self, e)
+		except Exception as e:
+			print("[%s] Sensor Resolution Error %s" % (self, e), file=sys.stderr)
 			ss = None
 		
 		try:
@@ -473,13 +473,13 @@ class Channel(nslc, sc3):
 			dt = inventory.dataloggerID(dsm, dsg)
 			self.att['Datalogger'] = dt
 			inventory.loadDataloggerCalibrations(dsm, dsn, dch, dsg, self.start, self.end, dt)
-		except Exception,e:
-			print >>sys.stderr,"[%s] Datalogger Resolution Error %s" % (self, e)
+		except Exception as e:
+			print("[%s] Datalogger Resolution Error %s" % (self, e), file=sys.stderr)
 			dt = None
 		
 		try:
 			up = self.att['SampleRateNumerator']
 			down = self.att['SampleRateDenominator']
 			self.att.update(inventory.getChannelGainAttribute(dt, ss, dsn, ssn, dch, sch, up, down, self.start))
-		except Exception,e:
-			print >>sys.stderr,"[%s] Cannot find gain back for the channel: %s" % (self,e)
+		except Exception as e:
+			print("[%s] Cannot find gain back for the channel: %s" % (self,e), file=sys.stderr)

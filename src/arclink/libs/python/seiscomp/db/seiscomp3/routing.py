@@ -94,8 +94,8 @@ class _Route(_sc3wrap.base_route):
 				del self.arclink[address]
 
 		except KeyError:
-			raise DBError, "ArcLink route (%s,%s) not found" % \
-				(address, start)
+			raise DBError("ArcLink route (%s,%s) not found" % \
+				(address, start))
 	
 	def remove_seedlink(self, address):
 		try:
@@ -103,16 +103,16 @@ class _Route(_sc3wrap.base_route):
 			del self.seedlink[address]
 
 		except KeyError:
-			raise DBError, "SeedLink route %s not found" % (address,)
+			raise DBError("SeedLink route %s not found" % (address,))
 	
 	def flush(self):
 		self._sync_update()
 		
-		for i in self.arclink.itervalues():
-			for j in i.itervalues():
+		for i in self.arclink.values():
+			for j in i.values():
 				j.flush()
 
-		for i in self.seedlink.itervalues():
+		for i in self.seedlink.values():
 			i.flush()
 
 class _Access(_sc3wrap.base_access):
@@ -227,8 +227,8 @@ class Routing(_sc3wrap.base_routing):
 				del self.route[networkCode]
 
 		except KeyError:
-			raise DBError, "route to stream (%s,%s,%s,%s) not found" % (networkCode, stationCode,
-				locationCode, streamCode)
+			raise DBError("route to stream (%s,%s,%s,%s) not found" % (networkCode, stationCode,
+				locationCode, streamCode))
 	
 	def remove_access(self, networkCode, stationCode, locationCode, streamCode, user, start):
 		try:
@@ -251,22 +251,22 @@ class Routing(_sc3wrap.base_routing):
 				del self.access[networkCode]
 
 		except KeyError:
-			raise DBError, "access rule (%s,%s,%s,%s,%s,%s) not found" % \
-				(networkCode, stationCode, locationCode, streamCode, user, start)
+			raise DBError("access rule (%s,%s,%s,%s,%s,%s) not found" % \
+				(networkCode, stationCode, locationCode, streamCode, user, start))
 
 	def flush(self):
-		for i in self.route.itervalues():
-			for j in i.itervalues():
-				for k in j.itervalues():
-					for l in k.itervalues():
+		for i in self.route.values():
+			for j in i.values():
+				for k in j.values():
+					for l in k.values():
 						l.flush()
 
-		for i in self.access.itervalues():
-			for j in i.itervalues():
-				for k in j.itervalues():
-					for l in k.itervalues():
-						for m in l.itervalues():
-							for n in m.itervalues():
+		for i in self.access.values():
+			for j in i.values():
+				for k in j.values():
+					for l in k.values():
+						for m in l.values():
+							for n in m.values():
 								n.flush()
 
 

@@ -58,9 +58,9 @@ enum(Seiscomp::Core::GreensFunctionComponent);
 /* There is a bytes() method in Array we don't want to wrap.
  * Using the same name bytes() to do something different is not
  * quite optimal and thus may change.
- */
 %ignore Seiscomp::Array::bytes() const;
 %ignore Seiscomp::Array::str() const;
+ */
 
 %include "seiscomp3/core/status.h"
 %include "seiscomp3/core/array.h"
@@ -238,12 +238,16 @@ enum(Seiscomp::Core::GreensFunctionComponent);
 	}
 
 	%pythoncode %{
-		def next(self):
+		def __next__(self):
 			o = self.get()
 			if not o:
 				raise StopIteration
 			
 			self.step()
 			return o
+
+		# for Python 2 compatibility
+		def next(self):
+			return self.__next__()
 	%}
 };

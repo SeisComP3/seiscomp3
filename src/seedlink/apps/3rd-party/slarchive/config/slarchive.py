@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, string, time, re, glob
 import seiscomp3.Kernel, seiscomp3.Config
 
@@ -113,7 +114,7 @@ class Module(seiscomp3.Kernel.Module):
       fd = open(os.path.join(self.config_dir, "purge_datafiles"), "w")
       fd.write(purge_script)
       fd.close()
-      os.chmod(os.path.join(self.config_dir, "purge_datafiles"), 0755)
+      os.chmod(os.path.join(self.config_dir, "purge_datafiles"), 0o755)
     else:
       try: os.remove(os.path.join(self.config_dir, "purge_datafiles"))
       except: pass
@@ -134,10 +135,10 @@ class Module(seiscomp3.Kernel.Module):
       try:
         (path, net, sta) = f.split('_')[-3:]
         if not path.endswith("station"):
-          print "invalid path", f
+          print("invalid path", f)
 
       except ValueError:
-        print "invalid path", f
+        print("invalid path", f)
         continue
 
       self.net = net
@@ -153,7 +154,7 @@ class Module(seiscomp3.Kernel.Module):
 
         m = rx_binding.match(line)
         if not m:
-          print "invalid binding in %s: %s" % (f, line)
+          print("invalid binding in %s: %s" % (f, line))
           line = fd.readline()
           continue
 
@@ -192,4 +193,4 @@ class Module(seiscomp3.Kernel.Module):
 
 
   def printCrontab(self):
-    print "20 3 * * * %s/purge_datafiles >/dev/null 2>&1" % (self.config_dir)
+    print("20 3 * * * %s/purge_datafiles >/dev/null 2>&1" % (self.config_dir))

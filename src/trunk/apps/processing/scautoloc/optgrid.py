@@ -19,7 +19,7 @@ class _GridPoint:
 def readGrid(gridfile):
     gridfile = file(gridfile)
     grid = []
-    for line in gridfile.xreadlines():
+    for line in gridfile:
         line = line.strip()
         if line.startswith("#"):
             continue
@@ -76,11 +76,11 @@ class InvApp(seiscomp3.Client.Application):
             inv = seiscomp3.DataModel.Inventory()
             dbr.loadNetworks(inv)
             nnet = inv.networkCount()
-            for inet in xrange(nnet):
+            for inet in range(nnet):
                 net = inv.network(inet)
                 dbr.load(net)
                 nsta = net.stationCount()
-                for ista in xrange(nsta):
+                for ista in range(nsta):
                     sta = net.station(ista)
                     line = "%-2s %-5s %9.4f %9.4f %6.1f" % (
                         net.code(), sta.code(), sta.latitude(), sta.longitude(), sta.elevation())

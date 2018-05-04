@@ -25,6 +25,7 @@ from seiscomp.keyfile import Keyfile
 from seiscomp.db.seiscomp3.inventory import Inventory
 from nettab.nettab import Instruments, NettabError
 import seiscomp3.Client
+from functools import reduce
 
 if sys.version_info < (2, 6, 0):
     from sets import Set as set
@@ -32,7 +33,7 @@ if sys.version_info < (2, 6, 0):
 
 def sortDictionary(dict):
     newDict = {}
-    sortedKeys = dict.keys()
+    sortedKeys = list(dict.keys())
     sortedKeys.sort()
 
     for key in sortedKeys:
@@ -77,7 +78,7 @@ def loadGains(fileName):
         finally:
             fd.close()
 
-    except IOError, e:
+    except IOError as e:
         logs.error("cannot open %s: %s" % (fileName, str(e)))
         sys.exit(1)
 
@@ -114,7 +115,7 @@ def getGain(datalogger, dataloggerId, seismometer, seismometerId, streamCode):
 
                 return 0
 
-    except KeyError, e:
+    except KeyError as e:
         logs.error("cannot find gain for " + str(e))
         return 0
 
@@ -302,7 +303,7 @@ class StreamWrapper(object):
             (datalogger, dlgain, seismometer, smgain, gainFreq, gainUnit) = instdb.update_inventory(inv,
                                                                                                     datalogger, dataloggerId, gainMult, seismometer, smsn, smgain, rate, rateDiv)
 
-        except NettabError, e:
+        except NettabError as e:
             errmsg = str(e)
             dlgain = []
             smgain = []
@@ -351,11 +352,11 @@ class StationWrapper(object):
         self.__loc = {}
         self.__usedStreams = set()
 
-        for i in xrange(station.sensorLocationCount()):
+        for i in range(station.sensorLocationCount()):
             loc = station.sensorLocation(i)
             self.__loc[loc.code()] = loc
 
-            for j in xrange(loc.streamCount()):
+            for j in range(loc.streamCount()):
                 stream = loc.stream(j)
                 try:
                     s = self.streams[(loc.code(), stream.code())]
@@ -481,11 +482,11 @@ class InventoryWrapper(object):
         self.networks = {}
         self.stations = {}
 
-        for i in xrange(inventory.networkCount()):
+        for i in range(inventory.networkCount()):
             network = inventory.network(i)
             self.networks[network.code()] = NetworkWrapper(network)
 
-            for j in xrange(network.stationCount()):
+            for j in range(network.stationCount()):
                 station = network.station(j)
                 self.stations[(network.code(), station.code())
                               ] = StationWrapper(network.code(), station)
@@ -514,9 +515,9 @@ class InventoryWrapper(object):
         station = self.stations.get((netCode, staCode))
         (start, startString) = parseDate(kf.startDate)
         if station and station.obj.start() < start:
-            for i in xrange(station.obj.sensorLocationCount()):
+            for i in range(station.obj.sensorLocationCount()):
                 loc = station.obj.sensorLocation(i)
-                for j in xrange(loc.streamCount()):
+                for j in range(loc.streamCount()):
                     try:
                         loc.stream(j).end()
                         continue
@@ -564,7 +565,7 @@ class InventoryWrapper(object):
             station.obj.setRestricted(state)
             station.obj.update()
 
-        for stream in station.streams.itervalues():
+        for stream in station.streams.values():
             try:
                 if stream.obj.restricted() != state:
                     stream.obj.setRestricted(state)
@@ -647,7 +648,7 @@ class Key2DB(seiscomp3.Client.Application):
                 self.__load_file(instdb.load_datalogger_attr, os.path.join(
                     seiscompRoot, "resp", "datalogger_attr.csv"))
 
-            except (IOError, NettabError), e:
+            except (IOError, NettabError) as e:
                 logs.error("fatal error: " + str(e))
                 return False
 
@@ -663,7 +664,7 @@ class Key2DB(seiscomp3.Client.Application):
                     netCode = f.split("/network_")[-1]
                     try:
                         kf = Keyfile(f)
-                    except IOError, e:
+                    except IOError as e:
                         logs.error(str(e))
                         continue
 
@@ -672,7 +673,7 @@ class Key2DB(seiscomp3.Client.Application):
 
                     inventory.updateNetwork(netCode, kf)
 
-                except ValueError, e:
+                except ValueError as e:
                     logs.error("%s: %s" % (f, str(e)))
 
             for f in glob.glob(os.path.join(seiscompRoot, "key", "station_*")):
@@ -681,7 +682,7 @@ class Key2DB(seiscomp3.Client.Application):
                     (netCode, staCode) = f.split("/station_")[-1].split('_', 1)
                     try:
                         kf = Keyfile(f)
-                    except IOError, e:
+                    except IOError as e:
                         logs.error(str(e))
                         continue
 
@@ -753,19 +754,19 @@ class Key2DB(seiscomp3.Client.Application):
 
                         incNet.add(staCode)
 
-                except ValueError, e:
+                except ValueError as e:
                     logs.error("%s: %s" % (f, str(e)))
 
-            for (netCode, restricted) in networkRestricted.iteritems():
+            for (netCode, restricted) in networkRestricted.items():
                 inventory.setNetworkRestricted(netCode, restricted)
 
-            for (netCode, network) in inventory.networks.iteritems():
+            for (netCode, network) in inventory.networks.items():
                 if netCode not in existingNetworks:
                     logs.notice("deleting network %s from inventory" %
                                 (netCode,))
                     inventory.obj.remove(network.obj)
 
-            for ((netCode, staCode), station) in inventory.stations.iteritems():
+            for ((netCode, staCode), station) in inventory.stations.items():
                 if netCode in existingNetworks and (netCode, staCode) not in existingStations:
                     logs.notice("deleting station %s_%s from inventory" %
                                 (netCode, staCode))
@@ -779,7 +780,7 @@ class Key2DB(seiscomp3.Client.Application):
                 # for netCode in sorted(incompleteResponse.keys()):
                 #    logs.info("%s: %s" % (netCode, " ".join(sorted(list(incompleteResponse[netCode])))))
                 tmpDict = sortDictionary(incompleteResponse)
-                for netCode in tmpDict.keys():
+                for netCode in list(tmpDict.keys()):
                     tmpSortedList = list(tmpDict[netCode])
                     tmpSortedList.sort()
                     logs.info("%s: %s" % (netCode, " ".join(tmpSortedList)))

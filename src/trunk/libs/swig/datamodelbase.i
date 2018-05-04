@@ -73,6 +73,7 @@
 %newobject Seiscomp::DataModel::Notifier::Create;
 %ignore Seiscomp::DataModel::Diff::diff;
 %ignore Seiscomp::DataModel::Diff2::diff;
+%ignore Seiscomp::DataModel::DatabaseIterator::next;
 
 optional(Seiscomp::DataModel::Operation);
 enum(Seiscomp::DataModel::Operation);
@@ -124,13 +125,17 @@ namespace std {
 		def __iter__(self):
 		    return self
 
-		def next(self):
+		def __next__(self):
 		    o = self.get()
 		    if not o:
 		        raise StopIteration
 
 		    self.step()
 		    return o
+
+		# for Python 2 compatibility
+		def next(self):
+		    return self.__next__()
 	%}
 };
 

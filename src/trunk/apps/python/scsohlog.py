@@ -123,7 +123,7 @@ class Client:
     # from a status message.
     #----------------------------------------------------------------------------
     def updateTests(self, updateTime, tests):
-        for name, value in tests.items():
+        for name, value in list(tests.items()):
             if name == "pid":
                 self.pid = value
             elif name == "programname":
@@ -131,7 +131,7 @@ class Client:
             elif name == "hostname":
                 self.host = value
 
-            if not Tests.has_key(name):
+            if name not in Tests:
                 continue
 
             # Convert d:h:m:s to seconds
@@ -144,7 +144,7 @@ class Client:
                     continue
                 value = str(t[0]*86400+t[1]*3600+t[2]*60+t[3])
 
-            if not self.tests.has_key(name):
+            if name not in self.tests:
                 log = TestLog()
                 log.uom = Tests[name]
                 self.tests[name] = log
@@ -183,7 +183,7 @@ class Client:
 
         name = params.get("name", "")
         channel = params.get("chan", "")
-        if not logs.has_key((name, channel)):
+        if (name, channel) not in logs:
             logObj = ObjectLog()
             logs[(name, channel)] = logObj
         else:
@@ -204,16 +204,16 @@ class Client:
         if self.progname:
             f.write(' prog="%s"' % self.progname)
         f.write('>')
-        for name, log in self.tests.items():
+        for name, log in list(self.tests.items()):
             log.toXML(f, name)
         if len(self.inputLogs) > 0:
             f.write('<input>')
-            for id, log in self.inputLogs.items():
+            for id, log in list(self.inputLogs.items()):
                 log.toXML(f, id[0], id[1])
             f.write('</input>')
         if len(self.outputLogs) > 0:
             f.write('<output>')
-            for id, log in self.outputLogs.items():
+            for id, log in list(self.outputLogs.items()):
                 log.toXML(f, id[0], id[1])
             f.write('</output>')
         f.write("</service>")
@@ -308,12 +308,12 @@ class Monitor(seiscomp3.Client.Application):
     def handleNetworkMessage(self, msg):
         # A state of health message
         if msg.type() == seiscomp3.Communication.Protocol.STATE_OF_HEALTH_RESPONSE_MSG:
-            data = filter(None, msg.data().split("&"))
+            data = [_f for _f in msg.data().split("&") if _f]
             self.updateStatus(msg.clientName(), data)
 
         # If a client disconnected, remove it from the list
         elif msg.type() == seiscomp3.Communication.Protocol.CLIENT_DISCONNECTED_MSG:
-            if self._clients.has_key(msg.clientName()):
+            if msg.clientName() in self._clients:
                 del self._clients[msg.clientName()]
 
     def handleDisconnect(self):
@@ -349,12 +349,12 @@ class Monitor(seiscomp3.Client.Application):
     def toXML(self, f):
         f.write('<?xml version="1.0" encoding="UTF-8"?>')
         f.write('<server name="seiscomp" host="%s">' % self.messagingHost())
-        for name, client in self._clients.items():
+        for name, client in list(self._clients.items()):
             client.toXML(f, name)
         f.write('</server>')
 
     def updateStatus(self, name, items):
-        if not self._clients.has_key(name):
+        if name not in self._clients:
             self._clients[name] = Client()
 
         now = seiscomp3.Core.Time.GMT()
@@ -371,7 +371,7 @@ class Monitor(seiscomp3.Client.Application):
             except:
                 objs.append(t)
 
-        if params.has_key("time"):
+        if "time" in params:
             update = params["time"]
             del params["time"]
         else:

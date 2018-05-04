@@ -475,7 +475,7 @@ class DBCleaner(seiscomp3.Client.Application):
 
             return True
 
-        except RuntimeException, e:
+        except RuntimeException as e:
             error.write("\nException: %s\n" % str(e))
             return False
 
@@ -750,7 +750,7 @@ class DBCleaner(seiscomp3.Client.Application):
 
             return True
 
-        except RuntimeException, e:
+        except RuntimeException as e:
             error.write("\nException: %s\n" % str(e))
             return False
 

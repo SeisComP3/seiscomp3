@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, sys, subprocess as sub
 import seiscomp3.Kernel, seiscomp3.Config
 
@@ -38,7 +39,7 @@ class Module(seiscomp3.Kernel.Module):
       if msg.find('\n') < 0:
         # Nothing to do
         try: os.remove(statfile)
-        except: print "ERROR: could not remove stat file %s" % statfile
+        except: print("ERROR: could not remove stat file %s" % statfile)
         return 1
 
       # Message already sent?
@@ -50,7 +51,7 @@ class Module(seiscomp3.Kernel.Module):
 
       msg = "The following disks at %s are nearly full:\n\n" % hostname + msg
       try: open(statfile, "w")
-      except: print "ERROR: could not create stat file in %s" % statfile
+      except: print("ERROR: could not create stat file in %s" % statfile)
 
       os.system('echo "%s" | mail -s "disk nearly full" %s' % (msg, " ".join(emails)))
       return 0

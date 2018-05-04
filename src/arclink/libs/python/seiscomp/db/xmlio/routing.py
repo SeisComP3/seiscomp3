@@ -11,7 +11,7 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
-import xmlwrap as _xmlwrap
+from . import xmlwrap as _xmlwrap
 from seiscomp.db import DBError
 
 try:
@@ -146,11 +146,11 @@ def _route_out(xrouting, route, modified_after):
         xroute.stationCode = route.stationCode
         retval = False
 
-    for i in route.arclink.itervalues():
-        for j in i.itervalues():
+    for i in route.arclink.values():
+        for j in i.values():
             retval |= _arclink_out(xroute, j, modified_after)
 
-    for i in route.seedlink.itervalues():
+    for i in route.seedlink.values():
         retval |= _seedlink_out(xroute, i, modified_after)
 
     if retval:
@@ -169,19 +169,19 @@ def _access_out(xrouting, acc, modified_after):
     return False
 
 def _xmldoc_out(xrouting, routing, use_access, modified_after):
-    for i in routing.route.itervalues():
-        for j in i.itervalues():
-            for k in j.itervalues():
-                for l in k.itervalues():
+    for i in routing.route.values():
+        for j in i.values():
+            for k in j.values():
+                for l in k.values():
                     _route_out(xrouting, l, modified_after)
 
     if use_access:
-        for i in routing.access.itervalues():
-            for j in i.itervalues():
-                for k in j.itervalues():
-                    for l in k.itervalues():
-                        for m in l.itervalues():
-                            for n in m.itervalues():
+        for i in routing.access.values():
+            for j in i.values():
+                for k in j.values():
+                    for l in k.values():
+                        for m in l.values():
+                            for n in m.values():
                                 _access_out(xrouting, n, modified_after)
 
 #***************************************************************************** 
@@ -200,7 +200,7 @@ class _IncrementalParser(object):
     def close(self):
         root = self.__p.close()
         if root.tag != _root_tag:
-            raise DBError, "unrecognized root element: " + root.tag
+            raise DBError("unrecognized root element: " + root.tag)
 
         xrouting = _xmlwrap.xml_Routing(root)
         _xmldoc_in(xrouting, self.__routing, self.__use_access)
@@ -216,7 +216,7 @@ def xml_in(routing, src, use_access=False):
     doc = ET.parse(src)
     root = doc.getroot()
     if root.tag != _root_tag:
-        raise DBError, "unrecognized root element: " + root.tag
+        raise DBError("unrecognized root element: " + root.tag)
 
     xrouting = _xmlwrap.xml_Routing(root)
     _xmldoc_in(xrouting, routing, use_access)
@@ -242,22 +242,22 @@ def xml_out(routing, dest, use_access=False, modified_after=None, stylesheet=Non
 
     _xmldoc_out(xrouting, routing, use_access, modified_after)
 
-    if isinstance(dest, basestring):
-        fd = file(dest, "w")
+    if isinstance(dest, str):
+        fd = open(dest, "wb")
     elif hasattr(dest, "write"):
         fd = dest
     else:
-        raise TypeError, "invalid file object"
+        raise TypeError("invalid file object")
 
     try:
         filename = fd.name
     except AttributeError:
         filename = '<???>'
 
-    fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
+    fd.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
 
     if stylesheet is not None:
-        fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
+        fd.write(b'<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     
     if indent is True:
@@ -265,6 +265,6 @@ def xml_out(routing, dest, use_access=False, modified_after=None, stylesheet=Non
     
     ET.ElementTree(xrouting._element).write(fd, encoding="utf-8")
     
-    if isinstance(dest, basestring):
+    if isinstance(dest, str):
         fd.close()
 

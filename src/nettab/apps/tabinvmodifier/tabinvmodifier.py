@@ -142,7 +142,7 @@ class InventoryModifier(Client.Application):
                     raise Exception("Type not supported.")
                 elif Type == "Pz":
                     raise Exception("Type not supported.")
-        except Exception,e:
+        except Exception as e:
             raise e
     
         finally:
@@ -164,23 +164,23 @@ class InventoryModifier(Client.Application):
             self.relaxed = True
 
         if self.commandline().hasOption("inventory-db") and outputFile is None:
-            print >>sys.stderr,"Cannot send notifiers when loading inventory from file."
+            print("Cannot send notifiers when loading inventory from file.", file=sys.stderr)
             return False
 
         if self.commandline().unrecognizedOptions():
-            print >>sys.stderr,"Invalid options: ",
+            print("Invalid options: ", end=' ', file=sys.stderr)
             for i in self.commandline().unrecognizedOptions():
-                print >>sys.stderr, i,
-            print >>sys.stderr,""
+                print(i, end=' ', file=sys.stderr)
+            print("", file=sys.stderr)
             return False
 
         if not rulesFile:
-            print >>sys.stderr, "No rule file was supplied for processing"
+            print("No rule file was supplied for processing", file=sys.stderr)
             return False
 
         if not os.path.isfile(rulesFile):
             argv0 = os.path.basename(self.arguments()[0])
-            print >>sys.stderr, "%s: %s: No such file or directory" % (argv0, rulesFile)
+            print("%s: %s: No such file or directory" % (argv0, rulesFile), file=sys.stderr)
             return False
 
         if self.commandline().hasOption("inventory-db"):
@@ -244,7 +244,7 @@ class InventoryModifier(Client.Application):
                         msg.clear()
                         mcount = 0
                         self.sync()
-                    it.next()
+                    next(it)
             except:
                 pass
         finally:
@@ -275,7 +275,7 @@ class InventoryModifier(Client.Application):
     def _modifyInventory(mode, obj, att):
         valid = sc3._findValidOnes(mode)
         if att:
-            for (k,p) in att.iteritems():
+            for (k,p) in att.items():
                 try:
                     p = valid['attributes'][k]['validator'](p)
                     getattr(obj, 'set'+k)(p)
@@ -284,7 +284,7 @@ class InventoryModifier(Client.Application):
                     hint = ''
                     if k[0] in string.lowercase:
                         hint = " (try '%s' instead)" % ( k[0].upper() + k[1:])
-                    print >>sys.stderr, 'Modifiying %s: \'%s\' is not a valid key%s' % (mode, k, hint)
+                    print('Modifiying %s: \'%s\' is not a valid key%s' % (mode, k, hint), file=sys.stderr)
             obj.update()
         return
 

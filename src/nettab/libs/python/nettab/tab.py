@@ -1,8 +1,8 @@
-from lineType import Nw, Sg, Sr, Sl, Sa, Na, Dl, Se, Ff, Pz, Ia, Cl
-from nodesi import Instruments
-from nodesnslc import Network, StationGroup, DontFit
+from .lineType import Nw, Sg, Sr, Sl, Sa, Na, Dl, Se, Ff, Pz, Ia, Cl
+from .nodesi import Instruments
+from .nodesnslc import Network, StationGroup, DontFit
 from seiscomp3 import DataModel, IO, Client
-from stationResolver import StationResolver
+from .stationResolver import StationResolver
 import sys
 import os
 import glob
@@ -25,10 +25,10 @@ class Tab(object):
 		
 		self._filterFolder = None
 		
-		print >>sys.stderr, "Starting tab2inv version %s" % self.version()
+		print("Starting tab2inv version %s" % self.version(), file=sys.stderr)
 		
 		if not filterFolder:
-			print >>sys.stderr, " Warning, not filter folder supplied."
+			print(" Warning, not filter folder supplied.", file=sys.stderr)
 		else:  
 			if not os.path.isdir(filterFolder):
 				raise Exception("Filter folder does not exist.")
@@ -50,7 +50,7 @@ class Tab(object):
 		nas = []
 		try:
 			fd = open(filename)
-			print >> sys.stderr, " Parsing defaults file: %s" % (filename)
+			print(" Parsing defaults file: %s" % (filename), file=sys.stderr)
 			for line in fd:
 				line = line.strip()
 				if not line or line[0] == "#": continue
@@ -78,10 +78,10 @@ class Tab(object):
 				elif Type == "Pz":
 					raise Exception("Defaults file can only contain attributes")
 				else:
-					print >> sys.stderr," Ignored line", line
+					print(" Ignored line", line, file=sys.stderr)
 			fd.close()
-		except Exception, e:
-			print >> sys.stderr, " Warning: %s" % e
+		except Exception as e:
+			print(" Warning: %s" % e, file=sys.stderr)
 			pass
 		
 		self.sas = sas
@@ -99,8 +99,8 @@ class Tab(object):
 			registry = Client.PluginRegistry.Instance()
 			registry.addPluginName("dbmysql")
 			registry.loadPlugins()
-		except Exception,e:
-			raise("Cannot load database driver: %s" % e)
+		except Exception as e:
+			raise "Cannot load database driver: %s"
 		
 		dbDriver = IO.DatabaseInterface.Create(db["dbDriverName"])
 		if dbDriver is None:
@@ -113,17 +113,17 @@ class Tab(object):
 		if dbQuery is None:
 			raise Exception("Cannot get DB query object")
 
-		print >> sys.stderr," Loading inventory from database ... ",
+		print(" Loading inventory from database ... ", end=' ', file=sys.stderr)
 		inventory = DataModel.Inventory()
 		dbQuery.loadNetworks(inventory)
-		for ni in xrange(inventory.networkCount()):
+		for ni in range(inventory.networkCount()):
 			dbQuery.loadStations(inventory.network(ni))
-		print >> sys.stderr,"Done."
+		print("Done.", file=sys.stderr)
 		if inventory:
 			self.stationResolver.collectStations(inventory, True)
 
 	def _loadXml(self, folder):
-		print >> sys.stderr," Loading inventory from XML file ... ",
+		print(" Loading inventory from XML file ... ", end=' ', file=sys.stderr)
 		for f in glob.glob(os.path.join(folder, "*.xml")):
 			ar = IO.XMLArchive()
 			ar.open(f)
@@ -132,7 +132,7 @@ class Tab(object):
 
 			if inventory:
 				self.stationResolver.collectStations(inventory)
-		print >> sys.stderr, "Done."
+		print("Done.", file=sys.stderr)
 
 	def digest(self, tabFilename):
 		sas = []
@@ -141,12 +141,12 @@ class Tab(object):
 		
 		n = None
 		g = None
-		print >> sys.stderr," Parsing file: %s" % (tabFilename)
+		print(" Parsing file: %s" % (tabFilename), file=sys.stderr)
 
 		if not tabFilename or not os.path.isfile(tabFilename):
 			raise Exception("Supplied filename is invalid.")
 		
-		if tabFilename in self.n.keys() or tabFilename in self.g.keys():
+		if tabFilename in list(self.n.keys()) or tabFilename in list(self.g.keys()):
 			raise Exception("File %s is already digested." % tabFilename)
 		filename = 1
 		try:
@@ -164,11 +164,11 @@ class Tab(object):
 						raise Exception("Network or Station Group already defined, only one Hr line should be defined per file.")
 					try:
 						nw = Nw(Content)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating nw from '%s': %s" % (Content, e))
 					try:
 						for na in self.nas:	nw.Na(na) # Defaults
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading (defaults) %s into %s: %s" % (na, nw, e))
 
 				elif Type == "Sg":
@@ -177,11 +177,11 @@ class Tab(object):
 
 					try:
 						sg = Sg(Content)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating sg from '%s': %s" % (Content, e))
 					try:
 						for na in self.nas:	sg.Na(na) # Defaults
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading (defaults) %s into %s: %s" % (na, sg, e))
 
 				elif Type == "Na":
@@ -191,17 +191,17 @@ class Tab(object):
 						raise Exception("No Na lines after a Sl line. Network has already been defined.")
 					try:
 						na = Na(Content)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating na from '%s': %s" % (Content, e))
 					if nw:
 						try:
 							nw.Na(na)
-						except Exception,e:
+						except Exception as e:
 							raise Exception("Error while adding %s to %s: %s" % (na, nw, e))
 					else:
 						try:
 							sg.Na(na)
-						except Exception,e:
+						except Exception as e:
 							raise Exception("Error while adding %s to %s: %s" % (na, sg, e))
 
 
@@ -210,7 +210,7 @@ class Tab(object):
 						raise Exception("Not Sa line before a hr line allowed.")
 					try:
 						sas.append(Sa(Content))
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating Sa from '%s': %s" % (Content,e))
 
 				elif Type == "Sl":
@@ -219,28 +219,28 @@ class Tab(object):
 							raise Exception("No network defined, Hr line should come before station line.")
 						else:
 							n = Network(nw)
-							for (filename, network) in self.n.iteritems():
+							for (filename, network) in self.n.items():
 								if network.conflict(n):
 									raise Exception("Network already defined %s (%s)-(%s) by file %s." % (network.code, network.start, network.end, filename))
 					try:
 						sl = Sl(Content)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating sl from '%s': %s" % (Content, e))
 					# Fill in attributes
 					try:
 						for sa in self.sas: sl.Sa(sa) # Defaults
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading (default) %s into %s: %s" % (sa, sl, e))
 					try:
 						for sa in sas: sl.Sa(sa) # Collected
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading %s into %s: %s" % (str(sa), str(sl), e))
 					# Digest by Station
 					try:
 						n.Sl(sl)
 					except DontFit:
 						raise Exception("%s does not fit in %s" % (sl, n))
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading %s into %s: %s" % (sl, n, e))
 
 				elif Type == "Sr":
@@ -249,23 +249,23 @@ class Tab(object):
 							raise Exception("No station group defined, Sg line should come before station reference line.")
 						else:
 							g = StationGroup(sg)
-							for (filename, stationGroup) in self.g.iteritems():
+							for (filename, stationGroup) in self.g.items():
 								if stationGroup.conflict(g):
 									raise Exception("Station group already defined %s (%s)-(%s) by file %s." % (stationGroup.code, stationGroup.start, stationGroup.end, filename))
-							for (filename, network) in self.n.iteritems():
+							for (filename, network) in self.n.items():
 								if network.conflict(g):
 									raise Exception("Station group conflict network already defined %s (%s)-(%s) by file %s." % (network.code, network.start, network.end, filename))
 
 					try:
 						sr = Sr(Content)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while creating sr from '%s': %s" % (Content, e))
 					# Digest by Station Reference
 					try:
 						g.Sr(sr)
 					except DontFit:
 						raise Exception("%s does not fit in %s" % (sr, n))
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading %s into %s: %s" % (sr, n, e))
 
 				elif Type == "Ia":
@@ -289,21 +289,21 @@ class Tab(object):
 				elif Type == "Pz":
 					obj = Pz(Content,'A')
 				else:
-					print >> sys.stderr," Ignored line", line
+					print(" Ignored line", line, file=sys.stderr)
 	
 				## Process Instrument
 				if obj:
 					try:
 						for ia in self.ias: obj.Ia(ia) # Defaults
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading (defaults) %s into %s: %s" % (ia, obj, e)) 
 					try:
 						for ia in ias: obj.Ia(ia) # Collected
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading %s into %s: %s" % (ia, obj, e)) 
 					try:
 						self.i.add(obj)
-					except Exception,e:
+					except Exception as e:
 						raise Exception("Error while loading %s into Instruments db: %s" % (obj, e))
 					obj = None
 	
@@ -315,7 +315,7 @@ class Tab(object):
 			if g:
 				self.g[tabFilename] = g
 
-		except Exception,e:
+		except Exception as e:
 			raise e
 
 		finally:
@@ -325,29 +325,29 @@ class Tab(object):
 	def check(self):
 		# Instrument alone check
 		if self.i.keys:
-			print >> sys.stderr,"\nCheking Instruments Loaded:\n"
+			print("\nCheking Instruments Loaded:\n", file=sys.stderr)
 			error = self.i.check(self.n)
 			if error:
-				for e in error: print >>sys.stderr,e
+				for e in error: print(e, file=sys.stderr)
 		else:
-			print >> sys.stderr,"\nNo instruments loaded"
+			print("\nNo instruments loaded", file=sys.stderr)
 
 		# Cross Check
 		error = []
 		if self.n:
-			print >> sys.stderr,"\nChecking Networks Loaded:\n"
-			for network in self.n.itervalues():
+			print("\nChecking Networks Loaded:\n", file=sys.stderr)
+			for network in self.n.values():
 				error.extend(network.check(self.i))
 			if error:
-				for e in error: print >> sys.stderr,e
+				for e in error: print(e, file=sys.stderr)
 		else:
-			print >> sys.stderr,"\nNo network/stations loaded."
+			print("\nNo network/stations loaded.", file=sys.stderr)
 	
 	def sc3Obj(self, sc3i = None):
 		if not sc3i:
 			sc3i = DataModel.Inventory()
 			
-		for network in self.n.values():
+		for network in list(self.n.values()):
 			sc3n = network.sc3Obj(self.i)
 			sc3i.add(sc3n)
 		
@@ -356,7 +356,7 @@ class Tab(object):
 		
 		self.stationResolver.collectStations(sc3i)
 
-		for stationGroup in self.g.values():
+		for stationGroup in list(self.g.values()):
 			sc3g = stationGroup.sc3Obj(self.stationResolver)
 			sc3i.add(sc3g)
 		

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 ############################################################################
@@ -30,7 +30,6 @@
 # dist-in-km option: Print distances in kilometer instead of degree
 
 import sys
-import traceback
 import seiscomp3.Client
 import seiscomp3.Seismology
 
@@ -68,7 +67,7 @@ def lon2str(lon, enhanced=False):
 
 def stationCount(org, minArrivalWeight):
     count = 0
-    for i in xrange(org.arrivalCount()):
+    for i in range(org.arrivalCount()):
         arr = org.arrival(i)
         #   if arr.weight()> 0.5:
         if arr.weight() >= minArrivalWeight:
@@ -93,7 +92,7 @@ class Bulletin(object):
 
     def __init__(self, dbq, long=True):
         self._dbq = dbq
-        self._long = long
+        self._long = int
         self._evt = None
         self.format = "autoloc1"
         self.enhanced = False
@@ -109,36 +108,31 @@ class Bulletin(object):
         dist_arr = []
         if self.distInKM:
             from seiscomp3 import Math
-            for i in xrange(org.arrivalCount()):
+            for i in range(org.arrivalCount()):
                 arr = org.arrival(i)
                 dist_arr.append((Math.deg2km(arr.distance()), arr))
         else:
-            for i in xrange(org.arrivalCount()):
+            for i in range(org.arrivalCount()):
                 arr = org.arrival(i)
                 dist_arr.append((arr.distance(), arr))
-        dist_arr.sort()
-        return dist_arr
+        return sorted(dist_arr, key=lambda a:a[0])
 
     def _getPicks(self, org):
-        if self._dbq is None:
-            return {}
-        orid = org.publicID()
-        pick = {}
-        for obj in self._dbq.getPicks(orid):
-            p = seiscomp3.DataModel.Pick.Cast(obj)
-            key = p.publicID()
-            pick[key] = p
-        return pick
+        picks = dict()
+        if self._dbq is not None:
+            orid = org.publicID()
+            for obj in self._dbq.getPicks(orid):
+                p = seiscomp3.DataModel.Pick.Cast(obj)
+                picks[ p.publicID() ] = p
+        return picks
 
     def _getAmplitudes(self, org):
-        if self._dbq is None:
-            return {}
-        orid = org.publicID()
-        ampl = {}
-        for obj in self._dbq.getAmplitudesForOrigin(orid):
-            amp = seiscomp3.DataModel.Amplitude.Cast(obj)
-            key = amp.publicID()
-            ampl[key] = amp
+        ampl = dict()
+        if self._dbq is not None:
+            orid = org.publicID()
+            for obj in self._dbq.getAmplitudesForOrigin(orid):
+                a = seiscomp3.DataModel.Amplitude.Cast(obj)
+                ampl[ a.publicID() ] = a
         return ampl
 
     def _printOriginAutoloc3(self, org, extra=False):
@@ -178,7 +172,7 @@ class Bulletin(object):
             except:
                 pass
             txt += "    Description\n"
-            for i in xrange(evt.eventDescriptionCount()):
+            for i in range(evt.eventDescriptionCount()):
                 evtd = evt.eventDescription(i)
                 evtdtype = seiscomp3.DataModel.EEventDescriptionTypeNames.name(
                     evtd.type())
@@ -341,13 +335,13 @@ class Bulletin(object):
         tmptxt = txt
         txt = ""
         foundPrefMag = False
-        for i in xrange(networkMagnitudeCount):
+        for i in range(networkMagnitudeCount):
             mag = org.magnitude(i)
             val = mag.magnitude().value()
             typ = mag.type()
             networkMagnitudes[typ] = mag
 
-            for k in xrange(mag.stationMagnitudeContributionCount()):
+            for k in range(mag.stationMagnitudeContributionCount()):
                 smc = mag.stationMagnitudeContribution(k)
                 smid = smc.stationMagnitudeID()
                 stationMagnitudeContributions[smid] = smc
@@ -501,7 +495,7 @@ class Bulletin(object):
         activeStationMagnitudeCount = 0
         stationMagnitudes = {}
 
-        for i in xrange(stationMagnitudeCount):
+        for i in range(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
             if typ not in networkMagnitudes:
@@ -643,7 +637,7 @@ class Bulletin(object):
 
         foundMag = False
         networkMagnitudeCount = org.magnitudeCount()
-        for i in xrange(networkMagnitudeCount):
+        for i in range(networkMagnitudeCount):
             mag = org.magnitude(i)
             if mag.publicID() == prefMagID:
                 tmp["mtyp"] = mag.type()
@@ -697,7 +691,7 @@ class Bulletin(object):
 
         stationMagnitudeCount = org.stationMagnitudeCount()
         stationMagnitudes = {}
-        for i in xrange(stationMagnitudeCount):
+        for i in range(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
             if typ == "MLv" or typ == "MLh":
@@ -812,7 +806,7 @@ class Bulletin(object):
                 seiscomp3.Logging.error("origin '%s' not loaded" % origin)
                 return
         else:
-            raise TypeError, "illegal type for origin"
+            raise TypeError("illegal type for origin")
 
         if self.format == "autoloc1":
             return self._printOriginAutoloc1(org)
@@ -825,7 +819,6 @@ class Bulletin(object):
 
     def printEvent(self, event):
         try:
-            evt = None
             if isinstance(event, seiscomp3.DataModel.Event):
                 self._evt = event
                 org = seiscomp3.DataModel.Origin.Find(
@@ -840,10 +833,10 @@ class Bulletin(object):
                     evt = seiscomp3.DataModel.Event.Cast(evt)
                     self._evt = evt
                 if evt is None:
-                    raise TypeError, "unknown event '" + event + "'"
+                    raise TypeError("unknown event '" + event + "'")
                 return self.printOrigin(evt.preferredOriginID())
             else:
-                raise TypeError, "illegal type for event"
+                raise TypeError("illegal type for event")
         finally:
             self._evt = None
 
@@ -852,7 +845,7 @@ def usage(exitcode=0):
     usagetext = """
  scbulletin [ -E event-id | -O origin-os | --db-type database-type | --db-parameters database-connection]
     """
-    sys.stderr.write("%s\n" % usagetext)
+    print(usagetext, file=sys.stderr)
     sys.exit(exitcode)
 
 
@@ -869,190 +862,175 @@ class BulletinApp(seiscomp3.Client.Application):
 
     def createCommandLineDescription(self):
         try:
-            try:
-                self.commandline().addGroup("Dump")
-                self.commandline().addStringOption("Dump", "event,E", "ID of event to dump")
-                self.commandline().addStringOption("Dump", "origin,O", "ID of origin to dump")
-                self.commandline().addStringOption("Dump", "weight,w",
-                                                   "weight threshold for printed and counted picks")
-                self.commandline().addOption("Dump", "autoloc1,1", "autoloc1 format")
-                self.commandline().addOption("Dump", "autoloc3,3", "autoloc3 format")
-                self.commandline().addOption("Dump", "extra,x", "extra detailed autoloc3 format")
-                self.commandline().addOption("Dump", "enhanced,e",
-                                             "enhanced output precision for local earthquakes")
-                self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
-                self.commandline().addOption("Dump", "first-only",
-                                             "dump only the first event/origin")
-                self.commandline().addOption("Dump", "event-agency-id",
-                                             "use agency ID information from event instead of preferred origin")
-                self.commandline().addOption("Dump", "dist-in-km,k",
-                                             "plot distances in km instead of degree")
+            self.commandline().addGroup("Dump")
+            self.commandline().addStringOption("Dump", "event,E", "ID of event to dump")
+            self.commandline().addStringOption("Dump", "origin,O", "ID of origin to dump")
+            self.commandline().addStringOption("Dump", "weight,w",
+                                               "weight threshold for printed and counted picks")
+            self.commandline().addOption("Dump", "autoloc1,1", "autoloc1 format")
+            self.commandline().addOption("Dump", "autoloc3,3", "autoloc3 format")
+            self.commandline().addOption("Dump", "extra,x", "extra detailed autoloc3 format")
+            self.commandline().addOption("Dump", "enhanced,e",
+                                         "enhanced output precision for local earthquakes")
+            self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
+            self.commandline().addOption("Dump", "first-only",
+                                         "dump only the first event/origin")
+            self.commandline().addOption("Dump", "event-agency-id",
+                                         "use agency ID information from event instead of preferred origin")
+            self.commandline().addOption("Dump", "dist-in-km,k",
+                                         "plot distances in km instead of degree")
 
-                self.commandline().addGroup("Input")
-                self.commandline().addStringOption("Input", "format,f",
-                                                   "input format to use (xml [default], zxml (zipped xml), binary)")
-                self.commandline().addStringOption(
-                    "Input", "input,i", "input file, default: stdin")
-            except:
-                seiscomp3.Logging.warning(
-                    "caught unexpected error %s" % sys.exc_info())
-
-            return True
+            self.commandline().addGroup("Input")
+            self.commandline().addStringOption("Input", "format,f",
+                                               "input format to use (xml [default], zxml (zipped xml), binary)")
+            self.commandline().addStringOption(
+                "Input", "input,i", "input file, default: stdin")
         except:
-            info = traceback.format_exception(*sys.exc_info())
-            for i in info:
-                sys.stderr.write(i)
-            sys.exit(-1)
+            seiscomp3.Logging.warning(
+                "caught unexpected error %s" % sys.exc_info())
+
+        return True
 
     def validateParameters(self):
-        try:
-            if seiscomp3.Client.Application.validateParameters(self) == False:
-                return False
+        if seiscomp3.Client.Application.validateParameters(self) == False:
+            return False
 
-            if not self.commandline().hasOption("event") and not self.commandline().hasOption("origin"):
-                self.setDatabaseEnabled(False, False)
+        if not self.commandline().hasOption("event") and not self.commandline().hasOption("origin"):
+            self.setDatabaseEnabled(False, False)
 
-            return True
-        except:
-            info = traceback.format_exception(*sys.exc_info())
-            for i in info:
-                sys.stderr.write(i)
-            sys.exit(-1)
+        return True
 
     def run(self):
+        evid = None
+        orid = None
+        mw = None
+
         try:
-            evid = None
-            orid = None
-            mw = None
+            evid = self.commandline().optionString("event")
+        except:
+            pass
 
-            try:
-                evid = self.commandline().optionString("event")
-            except:
-                pass
+        try:
+            orid = self.commandline().optionString("origin")
+        except:
+            pass
 
-            try:
-                orid = self.commandline().optionString("origin")
-            except:
-                pass
+        if evid != "" or orid != "":
+            dbq = seiscomp3.DataModel.DatabaseQuery(self.database())
+        else:
+            dbq = None
 
-            if evid != "" or orid != "":
-                dbq = seiscomp3.DataModel.DatabaseQuery(self.database())
-            else:
-                dbq = None
+        bulletin = Bulletin(dbq)
+        bulletin.format = "autoloc1"
 
-            bulletin = Bulletin(dbq)
+        try:
+            mw = self.commandline().optionString("weight")
+        except:
+            pass
+
+        if mw != "" and mw is not None:
+            bulletin.minArrivalWeight = float(mw)
+
+        if self.commandline().hasOption("autoloc1"):
             bulletin.format = "autoloc1"
+        elif self.commandline().hasOption("autoloc3"):
+            if self.commandline().hasOption("extra"):
+                bulletin.format = "autoloc3extra"
+            else:
+                bulletin.format = "autoloc3"
 
-            try:
-                mw = self.commandline().optionString("weight")
-            except:
-                pass
+        if self.commandline().hasOption("enhanced"):
+            bulletin.enhanced = True
 
-            if mw != "" and mw is not None:
-                bulletin.minArrivalWeight = float(mw)
+        if self.commandline().hasOption("polarities"):
+            bulletin.polarities = True
 
-            if self.commandline().hasOption("autoloc1"):
-                bulletin.format = "autoloc1"
-            elif self.commandline().hasOption("autoloc3"):
-                if self.commandline().hasOption("extra"):
-                    bulletin.format = "autoloc3extra"
+        if self.commandline().hasOption("event-agency-id"):
+            bulletin.useEventAgencyID = True
+
+        if self.commandline().hasOption("dist-in-km"):
+            bulletin.distInKM = True
+
+        try:
+            if evid:
+                txt = bulletin.printEvent(evid)
+            elif orid:
+                txt = bulletin.printOrigin(orid)
+            else:
+                inputFormat = "xml"
+                inputFile = "-"
+
+                try:
+                    inputFile = self.commandline().optionString("input")
+                except:
+                    pass
+
+                try:
+                    inputFormat = self.commandline().optionString("format")
+                except:
+                    pass
+
+                if inputFormat == "xml":
+                    ar = seiscomp3.IO.XMLArchive()
+                elif inputFormat == "zxml":
+                    ar = seiscomp3.IO.XMLArchive()
+                    ar.setCompression(True)
+                elif inputFormat == "binary":
+                    ar = seiscomp3.IO.BinaryArchive()
                 else:
-                    bulletin.format = "autoloc3"
+                    raise TypeError("unknown input format '" + inputFormat + "'")
 
-            if self.commandline().hasOption("enhanced"):
-                bulletin.enhanced = True
+                if ar.open(inputFile) == False:
+                    raise IOError(inputFile + ": unable to open")
 
-            if self.commandline().hasOption("polarities"):
-                bulletin.polarities = True
+                obj = ar.readObject()
+                if obj is None:
+                    raise TypeError(inputFile + ": invalid format")
 
-            if self.commandline().hasOption("event-agency-id"):
-                bulletin.useEventAgencyID = True
+                ep = seiscomp3.DataModel.EventParameters.Cast(obj)
+                if ep is None:
+                    raise TypeError(inputFile + ": no eventparameters found")
 
-            if self.commandline().hasOption("dist-in-km"):
-                bulletin.distInKM = True
-
-            try:
-                if evid:
-                    txt = bulletin.printEvent(evid)
-                elif orid:
-                    txt = bulletin.printOrigin(orid)
-                else:
-                    inputFormat = "xml"
-                    inputFile = "-"
-
-                    try:
-                        inputFile = self.commandline().optionString("input")
-                    except:
-                        pass
-
-                    try:
-                        inputFormat = self.commandline().optionString("format")
-                    except:
-                        pass
-
-                    if inputFormat == "xml":
-                        ar = seiscomp3.IO.XMLArchive()
-                    elif inputFormat == "zxml":
-                        ar = seiscomp3.IO.XMLArchive()
-                        ar.setCompression(True)
-                    elif inputFormat == "binary":
-                        ar = seiscomp3.IO.BinaryArchive()
-                    else:
-                        raise TypeError, "unknown input format '" + inputFormat + "'"
-
-                    if ar.open(inputFile) == False:
-                        raise IOError, inputFile + ": unable to open"
-
-                    obj = ar.readObject()
-                    if obj is None:
-                        raise TypeError, inputFile + ": invalid format"
-
-                    ep = seiscomp3.DataModel.EventParameters.Cast(obj)
-                    if ep is None:
-                        raise TypeError, inputFile + ": no eventparameters found"
-
-                    if ep.eventCount() <= 0:
-                        if ep.originCount() <= 0:
-                            raise TypeError, inputFile + ": no origin and no event in eventparameters found"
-                        else:
-                            if self.commandline().hasOption("first-only"):
-                                org = ep.origin(0)
-                                txt = bulletin.printOrigin(org)
-                            else:
-                                txt = ""
-                                for i in xrange(ep.originCount()):
-                                    org = ep.origin(i)
-                                    txt += bulletin.printOrigin(org)
+                if ep.eventCount() <= 0:
+                    if ep.originCount() <= 0:
+                        raise TypeError(inputFile + ": no origin and no event in eventparameters found")
                     else:
                         if self.commandline().hasOption("first-only"):
-                            ev = ep.event(0)
-                            if ev is None:
-                                raise TypeError, inputFile + ": invalid event"
-
-                            txt = bulletin.printEvent(ev)
+                            org = ep.origin(0)
+                            txt = bulletin.printOrigin(org)
                         else:
                             txt = ""
-                            for i in xrange(ep.eventCount()):
-                                ev = ep.event(i)
-                                txt += bulletin.printEvent(ev)
+                            for i in range(ep.originCount()):
+                                org = ep.origin(i)
+                                txt += bulletin.printOrigin(org)
+                else:
+                    if self.commandline().hasOption("first-only"):
+                        ev = ep.event(0)
+                        if ev is None:
+                            raise TypeError(inputFile + ": invalid event")
 
-            except Exception, exc:
-                sys.stderr.write("ERROR: " + str(exc) + "\n")
-                return False
+                        txt = bulletin.printEvent(ev)
+                    else:
+                        txt = ""
+                        for i in range(ep.eventCount()):
+                            ev = ep.event(i)
+                            txt += bulletin.printEvent(ev)
 
-            if txt:
-                sys.stdout.write("%s\n" % txt)
+        except Exception as exc:
+            if self.commandline().hasOption("debug"):
+                raise
+            print("ERROR: " + str(exc), file=sys.stderr)
+            return False
 
-            return True
-        except:
-            info = traceback.format_exception(*sys.exc_info())
-            for i in info:
-                sys.stderr.write(i)
-            sys.exit(-1)
+        if txt:
+            print(txt)
+
+        return True
 
 
 def main():
-    app = BulletinApp(len(sys.argv), sys.argv)
+    argv = [ bytes(a.encode()) for a in sys.argv ]
+    app = BulletinApp(len(argv), argv)
     return app()
 
 

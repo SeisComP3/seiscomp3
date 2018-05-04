@@ -170,7 +170,7 @@ import seiscomp3.Logging
 import seiscomp3.Config
 import seiscomp3.Communication
 import seiscomp3.Core
-import DataModel
+import seiscomp3.DataModel
 import seiscomp3.IO
 import seiscomp3.Math
 import seiscomp3.Utils

@@ -104,7 +104,7 @@ except __builtin__.Exception:
 
 import seiscomp3.Communication
 import seiscomp3.Core
-import DataModel
+import seiscomp3.DataModel
 import seiscomp3.IO
 import seiscomp3.Math
 
@@ -115,15 +115,15 @@ def _readobj(obj, file):
 def _writeobj(obj, file):
     """_writeobj(BaseObject obj, char const * file) -> bool"""
     return _helpers._writeobj(obj, file)
-class _DatabaseQuery(DataModel.DatabaseQuery):
+class _DatabaseQuery(seiscomp3.DataModel.DatabaseQuery):
     """Proxy of C++ Seiscomp::Sc3py::_private::_DatabaseQuery class."""
 
     __swig_setmethods__ = {}
-    for _s in [DataModel.DatabaseQuery]:
+    for _s in [seiscomp3.DataModel.DatabaseQuery]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, _DatabaseQuery, name, value)
     __swig_getmethods__ = {}
-    for _s in [DataModel.DatabaseQuery]:
+    for _s in [seiscomp3.DataModel.DatabaseQuery]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, _DatabaseQuery, name)
     __repr__ = _swig_repr

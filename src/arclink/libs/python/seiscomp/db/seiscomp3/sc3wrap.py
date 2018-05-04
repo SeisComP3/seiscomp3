@@ -6,6 +6,18 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import (absolute_import, division, print_function)
+
+try:
+    unicode()
+    py2str = lambda s: s.encode("utf-8")
+    py2unicode = lambda s: s.decode("utf-8", "replace")
+
+except NameError:
+    py2str = str
+    py2unicode = str
+
 import re
 import time
 import datetime
@@ -74,16 +86,13 @@ class base_comment(object):
 
     def __get_text(self):
         try: # @return: const std::string&
-            return self.obj.text()
+            return py2unicode(self.obj.text())
         except ValueError:
             return None
     def __set_text(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_text() != value:
@@ -93,16 +102,13 @@ class base_comment(object):
 
     def __get_id(self):
         try: # @return: const std::string&
-            return self.obj.id()
+            return py2unicode(self.obj.id())
         except ValueError:
             return None
     def __set_id(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_id() != value:
@@ -125,9 +131,9 @@ class base_comment(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -147,9 +153,9 @@ class base_comment(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -243,16 +249,13 @@ class base_qclog(object):
 
     def __get_creatorID(self):
         try: # @return: const std::string&
-            return self.obj.creatorID()
+            return py2unicode(self.obj.creatorID())
         except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_creatorID() != value:
@@ -274,9 +277,9 @@ class base_qclog(object):
     def __set_created(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_created()) != str(arg):
+        if py2str(self.__get_created()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setCreated(value)
     created = property(__get_created, __set_created)
@@ -295,9 +298,9 @@ class base_qclog(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -316,25 +319,22 @@ class base_qclog(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_message(self):
         try: # @return: const std::string&
-            return self.obj.message()
+            return py2unicode(self.obj.message())
         except ValueError:
             return None
     def __set_message(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_message() != value:
@@ -410,16 +410,13 @@ class base_waveformquality(object):
 
     def __get_creatorID(self):
         try: # @return: const std::string&
-            return self.obj.creatorID()
+            return py2unicode(self.obj.creatorID())
         except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_creatorID() != value:
@@ -441,9 +438,9 @@ class base_waveformquality(object):
     def __set_created(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_created()) != str(arg):
+        if py2str(self.__get_created()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setCreated(value)
     created = property(__get_created, __set_created)
@@ -462,9 +459,9 @@ class base_waveformquality(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -484,25 +481,22 @@ class base_waveformquality(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -512,16 +506,13 @@ class base_waveformquality(object):
 
     def __get_parameter(self):
         try: # @return: const std::string&
-            return self.obj.parameter()
+            return py2unicode(self.obj.parameter())
         except ValueError:
             return None
     def __set_parameter(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_parameter() != value:
@@ -652,16 +643,13 @@ class base_outage(object):
 
     def __get_creatorID(self):
         try: # @return: const std::string&
-            return self.obj.creatorID()
+            return py2unicode(self.obj.creatorID())
         except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_creatorID() != value:
@@ -683,9 +671,9 @@ class base_outage(object):
     def __set_created(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_created()) != str(arg):
+        if py2str(self.__get_created()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setCreated(value)
     created = property(__get_created, __set_created)
@@ -704,9 +692,9 @@ class base_outage(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -726,9 +714,9 @@ class base_outage(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -793,13 +781,13 @@ class base_qualitycontrol(object):
         try: obj.setMessage(args["message"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding QCLog"
+            print("seiscomp3.DataModel.QualityControl: error adding QCLog")
         return obj
     def __get_qclog(self):
         list = []
         if dbQuery is None:
             if (self.obj.qCLogCount()):
-                for i in xrange(self.obj.qCLogCount()):
+                for i in range(self.obj.qCLogCount()):
                     obj = self.obj.qCLog(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_qclog(obj))
@@ -811,8 +799,8 @@ class base_qualitycontrol(object):
                     obj = DataModel.QCLog.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_qclog(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _qCLog = property(__get_qclog)
@@ -851,13 +839,13 @@ class base_qualitycontrol(object):
         try: obj.setWindowLength(args["windowLength"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding WaveformQuality"
+            print("seiscomp3.DataModel.QualityControl: error adding WaveformQuality")
         return obj
     def __get_waveformquality(self):
         list = []
         if dbQuery is None:
             if (self.obj.waveformQualityCount()):
-                for i in xrange(self.obj.waveformQualityCount()):
+                for i in range(self.obj.waveformQualityCount()):
                     obj = self.obj.waveformQuality(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_waveformquality(obj))
@@ -880,8 +868,8 @@ class base_qualitycontrol(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_waveformquality(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _waveformQuality = property(__get_waveformquality)
 
@@ -907,13 +895,13 @@ class base_qualitycontrol(object):
                 obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding Outage"
+            print("seiscomp3.DataModel.QualityControl: error adding Outage")
         return obj
     def __get_outage(self):
         list = []
         if dbQuery is None:
             if (self.obj.outageCount()):
-                for i in xrange(self.obj.outageCount()):
+                for i in range(self.obj.outageCount()):
                     obj = self.obj.outage(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_outage(obj))
@@ -936,8 +924,8 @@ class base_qualitycontrol(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_outage(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _outage = property(__get_outage)
 
@@ -968,16 +956,13 @@ class base_stationreference(object):
 
     def __get_stationID(self):
         try: # @return: const std::string&
-            return self.obj.stationID()
+            return py2unicode(self.obj.stationID())
         except ValueError:
             return None
     def __set_stationID(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_stationID() != value:
@@ -1033,16 +1018,13 @@ class base_stationgroup(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -1065,9 +1047,9 @@ class base_stationgroup(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -1087,25 +1069,22 @@ class base_stationgroup(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -1162,13 +1141,13 @@ class base_stationgroup(object):
         try: obj.setStationID(args["stationID"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.StationGroup: error adding StationReference"
+            print("seiscomp3.DataModel.StationGroup: error adding StationReference")
         return obj
     def __get_stationreference(self):
         list = []
         if dbQuery is None:
             if (self.obj.stationReferenceCount()):
-                for i in xrange(self.obj.stationReferenceCount()):
+                for i in range(self.obj.stationReferenceCount()):
                     obj = self.obj.stationReference(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_stationreference(obj))
@@ -1191,8 +1170,8 @@ class base_stationgroup(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_stationreference(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _stationReference = property(__get_stationreference)
 
@@ -1223,16 +1202,13 @@ class base_auxsource(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -1242,16 +1218,13 @@ class base_auxsource(object):
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -1261,16 +1234,13 @@ class base_auxsource(object):
 
     def __get_unit(self):
         try: # @return: const std::string&
-            return self.obj.unit()
+            return py2unicode(self.obj.unit())
         except ValueError:
             return None
     def __set_unit(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_unit() != value:
@@ -1280,16 +1250,13 @@ class base_auxsource(object):
 
     def __get_conversion(self):
         try: # @return: const std::string&
-            return self.obj.conversion()
+            return py2unicode(self.obj.conversion())
         except ValueError:
             return None
     def __set_conversion(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_conversion() != value:
@@ -1325,19 +1292,16 @@ class base_auxsource(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -1381,16 +1345,13 @@ class base_auxdevice(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -1400,16 +1361,13 @@ class base_auxdevice(object):
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -1419,16 +1377,13 @@ class base_auxdevice(object):
 
     def __get_model(self):
         try: # @return: const std::string&
-            return self.obj.model()
+            return py2unicode(self.obj.model())
         except ValueError:
             return None
     def __set_model(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_model() != value:
@@ -1438,16 +1393,13 @@ class base_auxdevice(object):
 
     def __get_manufacturer(self):
         try: # @return: const std::string&
-            return self.obj.manufacturer()
+            return py2unicode(self.obj.manufacturer())
         except ValueError:
             return None
     def __set_manufacturer(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_manufacturer() != value:
@@ -1459,19 +1411,16 @@ class base_auxdevice(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -1498,13 +1447,13 @@ class base_auxdevice(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.AuxDevice: error adding AuxSource"
+            print("seiscomp3.DataModel.AuxDevice: error adding AuxSource")
         return obj
     def __get_auxsource(self):
         list = []
         if dbQuery is None:
             if (self.obj.auxSourceCount()):
-                for i in xrange(self.obj.auxSourceCount()):
+                for i in range(self.obj.auxSourceCount()):
                     obj = self.obj.auxSource(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_auxsource(obj))
@@ -1527,8 +1476,8 @@ class base_auxdevice(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_auxsource(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _auxSource = property(__get_auxsource)
 
@@ -1559,16 +1508,13 @@ class base_sensorcalibration(object):
 
     def __get_serialNumber(self):
         try: # @return: const std::string&
-            return self.obj.serialNumber()
+            return py2unicode(self.obj.serialNumber())
         except ValueError:
             return None
     def __set_serialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_serialNumber() != value:
@@ -1601,9 +1547,9 @@ class base_sensorcalibration(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -1623,9 +1569,9 @@ class base_sensorcalibration(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -1662,19 +1608,16 @@ class base_sensorcalibration(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -1718,16 +1661,13 @@ class base_sensor(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -1737,16 +1677,13 @@ class base_sensor(object):
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -1756,16 +1693,13 @@ class base_sensor(object):
 
     def __get_model(self):
         try: # @return: const std::string&
-            return self.obj.model()
+            return py2unicode(self.obj.model())
         except ValueError:
             return None
     def __set_model(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_model() != value:
@@ -1775,16 +1709,13 @@ class base_sensor(object):
 
     def __get_manufacturer(self):
         try: # @return: const std::string&
-            return self.obj.manufacturer()
+            return py2unicode(self.obj.manufacturer())
         except ValueError:
             return None
     def __set_manufacturer(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_manufacturer() != value:
@@ -1794,16 +1725,13 @@ class base_sensor(object):
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -1813,16 +1741,13 @@ class base_sensor(object):
 
     def __get_unit(self):
         try: # @return: const std::string&
-            return self.obj.unit()
+            return py2unicode(self.obj.unit())
         except ValueError:
             return None
     def __set_unit(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_unit() != value:
@@ -1860,16 +1785,13 @@ class base_sensor(object):
 
     def __get_response(self):
         try: # @return: const std::string&
-            return self.obj.response()
+            return py2unicode(self.obj.response())
         except ValueError:
             return None
     def __set_response(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_response() != value:
@@ -1881,19 +1803,16 @@ class base_sensor(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -1924,13 +1843,13 @@ class base_sensor(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Sensor: error adding SensorCalibration"
+            print("seiscomp3.DataModel.Sensor: error adding SensorCalibration")
         return obj
     def __get_sensorcalibration(self):
         list = []
         if dbQuery is None:
             if (self.obj.sensorCalibrationCount()):
-                for i in xrange(self.obj.sensorCalibrationCount()):
+                for i in range(self.obj.sensorCalibrationCount()):
                     obj = self.obj.sensorCalibration(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_sensorcalibration(obj))
@@ -1953,8 +1872,8 @@ class base_sensor(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_sensorcalibration(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _sensorCalibration = property(__get_sensorcalibration)
 
@@ -1994,16 +1913,13 @@ class base_responsepaz(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -2013,16 +1929,13 @@ class base_responsepaz(object):
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -2144,19 +2057,16 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -2240,16 +2150,13 @@ class base_responsepolynomial(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -2287,16 +2194,13 @@ class base_responsepolynomial(object):
 
     def __get_frequencyUnit(self):
         try: # @return: const std::string&
-            return self.obj.frequencyUnit()
+            return py2unicode(self.obj.frequencyUnit())
         except ValueError:
             return None
     def __set_frequencyUnit(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_frequencyUnit() != value:
@@ -2306,16 +2210,13 @@ class base_responsepolynomial(object):
 
     def __get_approximationType(self):
         try: # @return: const std::string&
-            return self.obj.approximationType()
+            return py2unicode(self.obj.approximationType())
         except ValueError:
             return None
     def __set_approximationType(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_approximationType() != value:
@@ -2396,19 +2297,16 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -2452,16 +2350,13 @@ class base_responsefap(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -2528,19 +2423,16 @@ class base_responsefap(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -2584,16 +2476,13 @@ class base_responsefir(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -2683,16 +2572,13 @@ class base_responsefir(object):
 
     def __get_symmetry(self):
         try: # @return: const std::string&
-            return self.obj.symmetry()
+            return py2unicode(self.obj.symmetry())
         except ValueError:
             return None
     def __set_symmetry(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_symmetry() != value:
@@ -2719,19 +2605,16 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -2775,16 +2658,13 @@ class base_responseiir(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -2794,16 +2674,13 @@ class base_responseiir(object):
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -2937,19 +2814,16 @@ class base_responseiir(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -2984,16 +2858,13 @@ class base_dataloggercalibration(object):
 
     def __get_serialNumber(self):
         try: # @return: const std::string&
-            return self.obj.serialNumber()
+            return py2unicode(self.obj.serialNumber())
         except ValueError:
             return None
     def __set_serialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_serialNumber() != value:
@@ -3026,9 +2897,9 @@ class base_dataloggercalibration(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -3048,9 +2919,9 @@ class base_dataloggercalibration(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -3087,19 +2958,16 @@ class base_dataloggercalibration(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -3158,19 +3026,16 @@ class base_decimation(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.analogueFilterChain()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_analogueFilterChain(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_analogueFilterChain() != value:
@@ -3182,19 +3047,16 @@ class base_decimation(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.digitalFilterChain()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_digitalFilterChain(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_digitalFilterChain() != value:
@@ -3238,16 +3100,13 @@ class base_datalogger(object):
 
     def __get_name(self):
         try: # @return: const std::string&
-            return self.obj.name()
+            return py2unicode(self.obj.name())
         except ValueError:
             return None
     def __set_name(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_name() != value:
@@ -3257,16 +3116,13 @@ class base_datalogger(object):
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -3276,16 +3132,13 @@ class base_datalogger(object):
 
     def __get_digitizerModel(self):
         try: # @return: const std::string&
-            return self.obj.digitizerModel()
+            return py2unicode(self.obj.digitizerModel())
         except ValueError:
             return None
     def __set_digitizerModel(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_digitizerModel() != value:
@@ -3295,16 +3148,13 @@ class base_datalogger(object):
 
     def __get_digitizerManufacturer(self):
         try: # @return: const std::string&
-            return self.obj.digitizerManufacturer()
+            return py2unicode(self.obj.digitizerManufacturer())
         except ValueError:
             return None
     def __set_digitizerManufacturer(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_digitizerManufacturer() != value:
@@ -3314,16 +3164,13 @@ class base_datalogger(object):
 
     def __get_recorderModel(self):
         try: # @return: const std::string&
-            return self.obj.recorderModel()
+            return py2unicode(self.obj.recorderModel())
         except ValueError:
             return None
     def __set_recorderModel(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_recorderModel() != value:
@@ -3333,16 +3180,13 @@ class base_datalogger(object):
 
     def __get_recorderManufacturer(self):
         try: # @return: const std::string&
-            return self.obj.recorderManufacturer()
+            return py2unicode(self.obj.recorderManufacturer())
         except ValueError:
             return None
     def __set_recorderManufacturer(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_recorderManufacturer() != value:
@@ -3352,16 +3196,13 @@ class base_datalogger(object):
 
     def __get_clockModel(self):
         try: # @return: const std::string&
-            return self.obj.clockModel()
+            return py2unicode(self.obj.clockModel())
         except ValueError:
             return None
     def __set_clockModel(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_clockModel() != value:
@@ -3371,16 +3212,13 @@ class base_datalogger(object):
 
     def __get_clockManufacturer(self):
         try: # @return: const std::string&
-            return self.obj.clockManufacturer()
+            return py2unicode(self.obj.clockManufacturer())
         except ValueError:
             return None
     def __set_clockManufacturer(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_clockManufacturer() != value:
@@ -3390,16 +3228,13 @@ class base_datalogger(object):
 
     def __get_clockType(self):
         try: # @return: const std::string&
-            return self.obj.clockType()
+            return py2unicode(self.obj.clockType())
         except ValueError:
             return None
     def __set_clockType(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_clockType() != value:
@@ -3439,19 +3274,16 @@ class base_datalogger(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -3482,13 +3314,13 @@ class base_datalogger(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Datalogger: error adding DataloggerCalibration"
+            print("seiscomp3.DataModel.Datalogger: error adding DataloggerCalibration")
         return obj
     def __get_dataloggercalibration(self):
         list = []
         if dbQuery is None:
             if (self.obj.dataloggerCalibrationCount()):
-                for i in xrange(self.obj.dataloggerCalibrationCount()):
+                for i in range(self.obj.dataloggerCalibrationCount()):
                     obj = self.obj.dataloggerCalibration(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_dataloggercalibration(obj))
@@ -3511,8 +3343,8 @@ class base_datalogger(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_dataloggercalibration(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _dataloggerCalibration = property(__get_dataloggercalibration)
 
@@ -3528,13 +3360,13 @@ class base_datalogger(object):
         try: obj.setDigitalFilterChain(args["digitalFilterChain"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Datalogger: error adding Decimation"
+            print("seiscomp3.DataModel.Datalogger: error adding Decimation")
         return obj
     def __get_decimation(self):
         list = []
         if dbQuery is None:
             if (self.obj.decimationCount()):
-                for i in xrange(self.obj.decimationCount()):
+                for i in range(self.obj.decimationCount()):
                     obj = self.obj.decimation(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_decimation(obj))
@@ -3557,8 +3389,8 @@ class base_datalogger(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_decimation(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _decimation = property(__get_decimation)
 
@@ -3589,16 +3421,13 @@ class base_auxstream(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -3620,9 +3449,9 @@ class base_auxstream(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -3642,25 +3471,22 @@ class base_auxstream(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_device(self):
         try: # @return: const std::string&
-            return self.obj.device()
+            return py2unicode(self.obj.device())
         except ValueError:
             return None
     def __set_device(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_device() != value:
@@ -3670,16 +3496,13 @@ class base_auxstream(object):
 
     def __get_deviceSerialNumber(self):
         try: # @return: const std::string&
-            return self.obj.deviceSerialNumber()
+            return py2unicode(self.obj.deviceSerialNumber())
         except ValueError:
             return None
     def __set_deviceSerialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_deviceSerialNumber() != value:
@@ -3689,16 +3512,13 @@ class base_auxstream(object):
 
     def __get_source(self):
         try: # @return: const std::string&
-            return self.obj.source()
+            return py2unicode(self.obj.source())
         except ValueError:
             return None
     def __set_source(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_source() != value:
@@ -3708,16 +3528,13 @@ class base_auxstream(object):
 
     def __get_format(self):
         try: # @return: const std::string&
-            return self.obj.format()
+            return py2unicode(self.obj.format())
         except ValueError:
             return None
     def __set_format(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_format() != value:
@@ -3727,16 +3544,13 @@ class base_auxstream(object):
 
     def __get_flags(self):
         try: # @return: const std::string&
-            return self.obj.flags()
+            return py2unicode(self.obj.flags())
         except ValueError:
             return None
     def __set_flags(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_flags() != value:
@@ -3808,16 +3622,13 @@ class base_stream(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -3839,9 +3650,9 @@ class base_stream(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -3861,25 +3672,22 @@ class base_stream(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_datalogger(self):
         try: # @return: const std::string&
-            return self.obj.datalogger()
+            return py2unicode(self.obj.datalogger())
         except ValueError:
             return None
     def __set_datalogger(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_datalogger() != value:
@@ -3889,16 +3697,13 @@ class base_stream(object):
 
     def __get_dataloggerSerialNumber(self):
         try: # @return: const std::string&
-            return self.obj.dataloggerSerialNumber()
+            return py2unicode(self.obj.dataloggerSerialNumber())
         except ValueError:
             return None
     def __set_dataloggerSerialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_dataloggerSerialNumber() != value:
@@ -3920,16 +3725,13 @@ class base_stream(object):
 
     def __get_sensor(self):
         try: # @return: const std::string&
-            return self.obj.sensor()
+            return py2unicode(self.obj.sensor())
         except ValueError:
             return None
     def __set_sensor(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_sensor() != value:
@@ -3939,16 +3741,13 @@ class base_stream(object):
 
     def __get_sensorSerialNumber(self):
         try: # @return: const std::string&
-            return self.obj.sensorSerialNumber()
+            return py2unicode(self.obj.sensorSerialNumber())
         except ValueError:
             return None
     def __set_sensorSerialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_sensorSerialNumber() != value:
@@ -3970,16 +3769,13 @@ class base_stream(object):
 
     def __get_clockSerialNumber(self):
         try: # @return: const std::string&
-            return self.obj.clockSerialNumber()
+            return py2unicode(self.obj.clockSerialNumber())
         except ValueError:
             return None
     def __set_clockSerialNumber(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_clockSerialNumber() != value:
@@ -4083,16 +3879,13 @@ class base_stream(object):
 
     def __get_gainUnit(self):
         try: # @return: const std::string&
-            return self.obj.gainUnit()
+            return py2unicode(self.obj.gainUnit())
         except ValueError:
             return None
     def __set_gainUnit(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_gainUnit() != value:
@@ -4102,16 +3895,13 @@ class base_stream(object):
 
     def __get_format(self):
         try: # @return: const std::string&
-            return self.obj.format()
+            return py2unicode(self.obj.format())
         except ValueError:
             return None
     def __set_format(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_format() != value:
@@ -4121,16 +3911,13 @@ class base_stream(object):
 
     def __get_flags(self):
         try: # @return: const std::string&
-            return self.obj.flags()
+            return py2unicode(self.obj.flags())
         except ValueError:
             return None
     def __set_flags(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_flags() != value:
@@ -4189,13 +3976,13 @@ class base_stream(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Stream: error adding Comment"
+            print("seiscomp3.DataModel.Stream: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
         if dbQuery is None:
             if (self.obj.commentCount()):
-                for i in xrange(self.obj.commentCount()):
+                for i in range(self.obj.commentCount()):
                     obj = self.obj.comment(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_comment(obj))
@@ -4218,8 +4005,8 @@ class base_stream(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4259,16 +4046,13 @@ class base_sensorlocation(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -4290,9 +4074,9 @@ class base_sensorlocation(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -4312,9 +4096,9 @@ class base_sensorlocation(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -4384,13 +4168,13 @@ class base_sensorlocation(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding Comment"
+            print("seiscomp3.DataModel.SensorLocation: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
         if dbQuery is None:
             if (self.obj.commentCount()):
-                for i in xrange(self.obj.commentCount()):
+                for i in range(self.obj.commentCount()):
                     obj = self.obj.comment(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_comment(obj))
@@ -4413,8 +4197,8 @@ class base_sensorlocation(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4446,13 +4230,13 @@ class base_sensorlocation(object):
         try: obj.setShared(args["shared"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding AuxStream"
+            print("seiscomp3.DataModel.SensorLocation: error adding AuxStream")
         return obj
     def __get_auxstream(self):
         list = []
         if dbQuery is None:
             if (self.obj.auxStreamCount()):
-                for i in xrange(self.obj.auxStreamCount()):
+                for i in range(self.obj.auxStreamCount()):
                     obj = self.obj.auxStream(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_auxstream(obj))
@@ -4475,8 +4259,8 @@ class base_sensorlocation(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_auxstream(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _auxStream = property(__get_auxstream)
 
@@ -4534,13 +4318,13 @@ class base_sensorlocation(object):
         try: obj.setShared(args["shared"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding Stream"
+            print("seiscomp3.DataModel.SensorLocation: error adding Stream")
         return obj
     def __get_stream(self):
         list = []
         if dbQuery is None:
             if (self.obj.streamCount()):
-                for i in xrange(self.obj.streamCount()):
+                for i in range(self.obj.streamCount()):
                     obj = self.obj.stream(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_stream(obj))
@@ -4552,8 +4336,8 @@ class base_sensorlocation(object):
                     obj = DataModel.Stream.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_stream(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _stream = property(__get_stream)
@@ -4594,16 +4378,13 @@ class base_station(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -4625,9 +4406,9 @@ class base_station(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -4647,25 +4428,22 @@ class base_station(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -4717,16 +4495,13 @@ class base_station(object):
 
     def __get_place(self):
         try: # @return: const std::string&
-            return self.obj.place()
+            return py2unicode(self.obj.place())
         except ValueError:
             return None
     def __set_place(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_place() != value:
@@ -4736,16 +4511,13 @@ class base_station(object):
 
     def __get_country(self):
         try: # @return: const std::string&
-            return self.obj.country()
+            return py2unicode(self.obj.country())
         except ValueError:
             return None
     def __set_country(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_country() != value:
@@ -4755,16 +4527,13 @@ class base_station(object):
 
     def __get_affiliation(self):
         try: # @return: const std::string&
-            return self.obj.affiliation()
+            return py2unicode(self.obj.affiliation())
         except ValueError:
             return None
     def __set_affiliation(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_affiliation() != value:
@@ -4774,16 +4543,13 @@ class base_station(object):
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -4793,16 +4559,13 @@ class base_station(object):
 
     def __get_archive(self):
         try: # @return: const std::string&
-            return self.obj.archive()
+            return py2unicode(self.obj.archive())
         except ValueError:
             return None
     def __set_archive(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_archive() != value:
@@ -4812,16 +4575,13 @@ class base_station(object):
 
     def __get_archiveNetworkCode(self):
         try: # @return: const std::string&
-            return self.obj.archiveNetworkCode()
+            return py2unicode(self.obj.archiveNetworkCode())
         except ValueError:
             return None
     def __set_archiveNetworkCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_archiveNetworkCode() != value:
@@ -4861,19 +4621,16 @@ class base_station(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -4904,13 +4661,13 @@ class base_station(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Station: error adding Comment"
+            print("seiscomp3.DataModel.Station: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
         if dbQuery is None:
             if (self.obj.commentCount()):
-                for i in xrange(self.obj.commentCount()):
+                for i in range(self.obj.commentCount()):
                     obj = self.obj.comment(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_comment(obj))
@@ -4933,8 +4690,8 @@ class base_station(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4960,13 +4717,13 @@ class base_station(object):
         try: obj.setElevation(args["elevation"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Station: error adding SensorLocation"
+            print("seiscomp3.DataModel.Station: error adding SensorLocation")
         return obj
     def __get_sensorlocation(self):
         list = []
         if dbQuery is None:
             if (self.obj.sensorLocationCount()):
-                for i in xrange(self.obj.sensorLocationCount()):
+                for i in range(self.obj.sensorLocationCount()):
                     obj = self.obj.sensorLocation(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_sensorlocation(obj))
@@ -4978,8 +4735,8 @@ class base_station(object):
                     obj = DataModel.SensorLocation.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_sensorlocation(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _sensorLocation = property(__get_sensorlocation)
@@ -5020,16 +4777,13 @@ class base_network(object):
 
     def __get_code(self):
         try: # @return: const std::string&
-            return self.obj.code()
+            return py2unicode(self.obj.code())
         except ValueError:
             return None
     def __set_code(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_code() != value:
@@ -5051,9 +4805,9 @@ class base_network(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -5073,25 +4827,22 @@ class base_network(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
 
     def __get_description(self):
         try: # @return: const std::string&
-            return self.obj.description()
+            return py2unicode(self.obj.description())
         except ValueError:
             return None
     def __set_description(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_description() != value:
@@ -5101,16 +4852,13 @@ class base_network(object):
 
     def __get_institutions(self):
         try: # @return: const std::string&
-            return self.obj.institutions()
+            return py2unicode(self.obj.institutions())
         except ValueError:
             return None
     def __set_institutions(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_institutions() != value:
@@ -5120,16 +4868,13 @@ class base_network(object):
 
     def __get_region(self):
         try: # @return: const std::string&
-            return self.obj.region()
+            return py2unicode(self.obj.region())
         except ValueError:
             return None
     def __set_region(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_region() != value:
@@ -5139,16 +4884,13 @@ class base_network(object):
 
     def __get_type(self):
         try: # @return: const std::string&
-            return self.obj.type()
+            return py2unicode(self.obj.type())
         except ValueError:
             return None
     def __set_type(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_type() != value:
@@ -5158,16 +4900,13 @@ class base_network(object):
 
     def __get_netClass(self):
         try: # @return: const std::string&
-            return self.obj.netClass()
+            return py2unicode(self.obj.netClass())
         except ValueError:
             return None
     def __set_netClass(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_netClass() != value:
@@ -5177,16 +4916,13 @@ class base_network(object):
 
     def __get_archive(self):
         try: # @return: const std::string&
-            return self.obj.archive()
+            return py2unicode(self.obj.archive())
         except ValueError:
             return None
     def __set_archive(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_archive() != value:
@@ -5226,19 +4962,16 @@ class base_network(object):
         # optional Attribute
         try: # @return: Blob
             B = self.obj.remark()
-            return B.content()
+            return py2unicode(B.content())
         except ValueError:
             return None
     def __set_remark(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
+            value = py2str(arg)
             blob = DataModel.Blob()
             if value:
                 blob.setContent(value)
-        except Exception, e:
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_remark() != value:
@@ -5269,13 +5002,13 @@ class base_network(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Network: error adding Comment"
+            print("seiscomp3.DataModel.Network: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
         if dbQuery is None:
             if (self.obj.commentCount()):
-                for i in xrange(self.obj.commentCount()):
+                for i in range(self.obj.commentCount()):
                     obj = self.obj.comment(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_comment(obj))
@@ -5298,8 +5031,8 @@ class base_network(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -5345,13 +5078,13 @@ class base_network(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Network: error adding Station"
+            print("seiscomp3.DataModel.Network: error adding Station")
         return obj
     def __get_station(self):
         list = []
         if dbQuery is None:
             if (self.obj.stationCount()):
-                for i in xrange(self.obj.stationCount()):
+                for i in range(self.obj.stationCount()):
                     obj = self.obj.station(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_station(obj))
@@ -5363,8 +5096,8 @@ class base_network(object):
                     obj = DataModel.Station.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_station(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _station = property(__get_station)
@@ -5433,13 +5166,13 @@ class base_inventory(object):
         try: obj.setElevation(args["elevation"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding StationGroup"
+            print("seiscomp3.DataModel.Inventory: error adding StationGroup")
         return obj
     def __get_stationgroup(self):
         list = []
         if dbQuery is None:
             if (self.obj.stationGroupCount()):
-                for i in xrange(self.obj.stationGroupCount()):
+                for i in range(self.obj.stationGroupCount()):
                     obj = self.obj.stationGroup(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_stationgroup(obj))
@@ -5451,8 +5184,8 @@ class base_inventory(object):
                     obj = DataModel.StationGroup.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_stationgroup(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _stationGroup = property(__get_stationgroup)
@@ -5473,13 +5206,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding AuxDevice"
+            print("seiscomp3.DataModel.Inventory: error adding AuxDevice")
         return obj
     def __get_auxdevice(self):
         list = []
         if dbQuery is None:
             if (self.obj.auxDeviceCount()):
-                for i in xrange(self.obj.auxDeviceCount()):
+                for i in range(self.obj.auxDeviceCount()):
                     obj = self.obj.auxDevice(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_auxdevice(obj))
@@ -5491,8 +5224,8 @@ class base_inventory(object):
                     obj = DataModel.AuxDevice.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_auxdevice(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _auxDevice = property(__get_auxdevice)
@@ -5523,13 +5256,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Sensor"
+            print("seiscomp3.DataModel.Inventory: error adding Sensor")
         return obj
     def __get_sensor(self):
         list = []
         if dbQuery is None:
             if (self.obj.sensorCount()):
-                for i in xrange(self.obj.sensorCount()):
+                for i in range(self.obj.sensorCount()):
                     obj = self.obj.sensor(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_sensor(obj))
@@ -5541,8 +5274,8 @@ class base_inventory(object):
                     obj = DataModel.Sensor.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_sensor(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _sensor = property(__get_sensor)
@@ -5577,13 +5310,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Datalogger"
+            print("seiscomp3.DataModel.Inventory: error adding Datalogger")
         return obj
     def __get_datalogger(self):
         list = []
         if dbQuery is None:
             if (self.obj.dataloggerCount()):
-                for i in xrange(self.obj.dataloggerCount()):
+                for i in range(self.obj.dataloggerCount()):
                     obj = self.obj.datalogger(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_datalogger(obj))
@@ -5595,8 +5328,8 @@ class base_inventory(object):
                     obj = DataModel.Datalogger.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_datalogger(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _datalogger = property(__get_datalogger)
@@ -5635,13 +5368,13 @@ class base_inventory(object):
         try: obj.setCorrection(args["correction"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponsePAZ"
+            print("seiscomp3.DataModel.Inventory: error adding ResponsePAZ")
         return obj
     def __get_responsepaz(self):
         list = []
         if dbQuery is None:
             if (self.obj.responsePAZCount()):
-                for i in xrange(self.obj.responsePAZCount()):
+                for i in range(self.obj.responsePAZCount()):
                     obj = self.obj.responsePAZ(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_responsepaz(obj))
@@ -5653,8 +5386,8 @@ class base_inventory(object):
                     obj = DataModel.ResponsePAZ.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepaz(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _responsePAZ = property(__get_responsepaz)
@@ -5685,13 +5418,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseFIR"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseFIR")
         return obj
     def __get_responsefir(self):
         list = []
         if dbQuery is None:
             if (self.obj.responseFIRCount()):
-                for i in xrange(self.obj.responseFIRCount()):
+                for i in range(self.obj.responseFIRCount()):
                     obj = self.obj.responseFIR(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_responsefir(obj))
@@ -5703,8 +5436,8 @@ class base_inventory(object):
                     obj = DataModel.ResponseFIR.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefir(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _responseFIR = property(__get_responsefir)
@@ -5739,13 +5472,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseIIR"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseIIR")
         return obj
     def __get_responseiir(self):
         list = []
         if dbQuery is None:
             if (self.obj.responseIIRCount()):
-                for i in xrange(self.obj.responseIIRCount()):
+                for i in range(self.obj.responseIIRCount()):
                     obj = self.obj.responseIIR(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_responseiir(obj))
@@ -5757,8 +5490,8 @@ class base_inventory(object):
                     obj = DataModel.ResponseIIR.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responseiir(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _responseIIR = property(__get_responseiir)
@@ -5791,13 +5524,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponsePolynomial"
+            print("seiscomp3.DataModel.Inventory: error adding ResponsePolynomial")
         return obj
     def __get_responsepolynomial(self):
         list = []
         if dbQuery is None:
             if (self.obj.responsePolynomialCount()):
-                for i in xrange(self.obj.responsePolynomialCount()):
+                for i in range(self.obj.responsePolynomialCount()):
                     obj = self.obj.responsePolynomial(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_responsepolynomial(obj))
@@ -5809,8 +5542,8 @@ class base_inventory(object):
                     obj = DataModel.ResponsePolynomial.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepolynomial(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _responsePolynomial = property(__get_responsepolynomial)
@@ -5833,13 +5566,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseFAP"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseFAP")
         return obj
     def __get_responsefap(self):
         list = []
         if dbQuery is None:
             if (self.obj.responseFAPCount()):
-                for i in xrange(self.obj.responseFAPCount()):
+                for i in range(self.obj.responseFAPCount()):
                     obj = self.obj.responseFAP(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_responsefap(obj))
@@ -5851,8 +5584,8 @@ class base_inventory(object):
                     obj = DataModel.ResponseFAP.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefap(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _responseFAP = property(__get_responsefap)
@@ -5891,13 +5624,13 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Network"
+            print("seiscomp3.DataModel.Inventory: error adding Network")
         return obj
     def __get_network(self):
         list = []
         if dbQuery is None:
             if (self.obj.networkCount()):
-                for i in xrange(self.obj.networkCount()):
+                for i in range(self.obj.networkCount()):
                     obj = self.obj.network(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_network(obj))
@@ -5909,8 +5642,8 @@ class base_inventory(object):
                     obj = DataModel.Network.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_network(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _network = property(__get_network)
@@ -5942,16 +5675,13 @@ class base_routearclink(object):
 
     def __get_address(self):
         try: # @return: const std::string&
-            return self.obj.address()
+            return py2unicode(self.obj.address())
         except ValueError:
             return None
     def __set_address(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_address() != value:
@@ -5973,9 +5703,9 @@ class base_routearclink(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -5995,9 +5725,9 @@ class base_routearclink(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -6041,16 +5771,13 @@ class base_routeseedlink(object):
 
     def __get_address(self):
         try: # @return: const std::string&
-            return self.obj.address()
+            return py2unicode(self.obj.address())
         except ValueError:
             return None
     def __set_address(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_address() != value:
@@ -6106,16 +5833,13 @@ class base_route(object):
 
     def __get_networkCode(self):
         try: # @return: const std::string&
-            return self.obj.networkCode()
+            return py2unicode(self.obj.networkCode())
         except ValueError:
             return None
     def __set_networkCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_networkCode() != value:
@@ -6125,16 +5849,13 @@ class base_route(object):
 
     def __get_stationCode(self):
         try: # @return: const std::string&
-            return self.obj.stationCode()
+            return py2unicode(self.obj.stationCode())
         except ValueError:
             return None
     def __set_stationCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_stationCode() != value:
@@ -6144,16 +5865,13 @@ class base_route(object):
 
     def __get_locationCode(self):
         try: # @return: const std::string&
-            return self.obj.locationCode()
+            return py2unicode(self.obj.locationCode())
         except ValueError:
             return None
     def __set_locationCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_locationCode() != value:
@@ -6163,16 +5881,13 @@ class base_route(object):
 
     def __get_streamCode(self):
         try: # @return: const std::string&
-            return self.obj.streamCode()
+            return py2unicode(self.obj.streamCode())
         except ValueError:
             return None
     def __set_streamCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_streamCode() != value:
@@ -6197,13 +5912,13 @@ class base_route(object):
         try: obj.setPriority(args["priority"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Route: error adding RouteArclink"
+            print("seiscomp3.DataModel.Route: error adding RouteArclink")
         return obj
     def __get_routearclink(self):
         list = []
         if dbQuery is None:
             if (self.obj.routeArclinkCount()):
-                for i in xrange(self.obj.routeArclinkCount()):
+                for i in range(self.obj.routeArclinkCount()):
                     obj = self.obj.routeArclink(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_routearclink(obj))
@@ -6226,8 +5941,8 @@ class base_route(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_routearclink(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _routeArclink = property(__get_routearclink)
 
@@ -6239,13 +5954,13 @@ class base_route(object):
         try: obj.setPriority(args["priority"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Route: error adding RouteSeedlink"
+            print("seiscomp3.DataModel.Route: error adding RouteSeedlink")
         return obj
     def __get_routeseedlink(self):
         list = []
         if dbQuery is None:
             if (self.obj.routeSeedlinkCount()):
-                for i in xrange(self.obj.routeSeedlinkCount()):
+                for i in range(self.obj.routeSeedlinkCount()):
                     obj = self.obj.routeSeedlink(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_routeseedlink(obj))
@@ -6268,8 +5983,8 @@ class base_route(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_routeseedlink(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _routeSeedlink = property(__get_routeseedlink)
 
@@ -6300,16 +6015,13 @@ class base_access(object):
 
     def __get_networkCode(self):
         try: # @return: const std::string&
-            return self.obj.networkCode()
+            return py2unicode(self.obj.networkCode())
         except ValueError:
             return None
     def __set_networkCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_networkCode() != value:
@@ -6319,16 +6031,13 @@ class base_access(object):
 
     def __get_stationCode(self):
         try: # @return: const std::string&
-            return self.obj.stationCode()
+            return py2unicode(self.obj.stationCode())
         except ValueError:
             return None
     def __set_stationCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_stationCode() != value:
@@ -6338,16 +6047,13 @@ class base_access(object):
 
     def __get_locationCode(self):
         try: # @return: const std::string&
-            return self.obj.locationCode()
+            return py2unicode(self.obj.locationCode())
         except ValueError:
             return None
     def __set_locationCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_locationCode() != value:
@@ -6357,16 +6063,13 @@ class base_access(object):
 
     def __get_streamCode(self):
         try: # @return: const std::string&
-            return self.obj.streamCode()
+            return py2unicode(self.obj.streamCode())
         except ValueError:
             return None
     def __set_streamCode(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_streamCode() != value:
@@ -6376,16 +6079,13 @@ class base_access(object):
 
     def __get_user(self):
         try: # @return: const std::string&
-            return self.obj.user()
+            return py2unicode(self.obj.user())
         except ValueError:
             return None
     def __set_user(self, arg):
         try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
+            value = py2str(arg)
+        except Exception as e:
             logs.error(str(e))
             return
         if self.__get_user() != value:
@@ -6407,9 +6107,9 @@ class base_access(object):
     def __set_start(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_start()) != str(arg):
+        if py2str(self.__get_start()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setStart(value)
     start = property(__get_start, __set_start)
@@ -6429,9 +6129,9 @@ class base_access(object):
     def __set_end(self, arg):
         value = None
         if arg is not None:
-            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            try: value = Core.Time.FromString(py2str(arg), "%Y-%m-%d %H:%M:%S")
             except: pass
-        if str(self.__get_end()) != str(arg):
+        if py2str(self.__get_end()) != py2str(arg):
             self._needsUpdate = True
         self.obj.setEnd(value)
     end = property(__get_end, __set_end)
@@ -6484,13 +6184,13 @@ class base_routing(object):
         try: obj.setStreamCode(args["streamCode"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Routing: error adding Route"
+            print("seiscomp3.DataModel.Routing: error adding Route")
         return obj
     def __get_route(self):
         list = []
         if dbQuery is None:
             if (self.obj.routeCount()):
-                for i in xrange(self.obj.routeCount()):
+                for i in range(self.obj.routeCount()):
                     obj = self.obj.route(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_route(obj))
@@ -6502,8 +6202,8 @@ class base_routing(object):
                     obj = DataModel.Route.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_route(obj))
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
                 it.step()
         return list
     _route = property(__get_route)
@@ -6530,13 +6230,13 @@ class base_routing(object):
                 obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Routing: error adding Access"
+            print("seiscomp3.DataModel.Routing: error adding Access")
         return obj
     def __get_access(self):
         list = []
         if dbQuery is None:
             if (self.obj.accessCount()):
-                for i in xrange(self.obj.accessCount()):
+                for i in range(self.obj.accessCount()):
                     obj = self.obj.access(i)
                     obj.lastModified = Core.Time.GMT()
                     list.append(base_access(obj))
@@ -6559,8 +6259,8 @@ class base_routing(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_access(), objects_left=" + str(objects_left))
                     i += 1
-                except ValueError, e:
-                    print str(e)
+                except ValueError as e:
+                    print(str(e))
         return list
     _access = property(__get_access)
 

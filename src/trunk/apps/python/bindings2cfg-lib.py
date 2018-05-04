@@ -55,7 +55,7 @@ def sync(paramSet, params):
     for p in obsoleteParams:
         p.detach()
 
-    for key, val in params.items():
+    for key, val in list(params.items()):
         if key in seenParams:
             continue
         p = seiscomp3.DataModel.Parameter.Create()
@@ -167,7 +167,7 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
                 m = "default"
 
             sys.stderr.write("+ %s\n" % m)
-            for staid in mod.bindings.keys():
+            for staid in list(mod.bindings.keys()):
                 binding = mod.getBinding(staid)
                 if not binding:
                     continue
@@ -180,7 +180,7 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
                     self.stationSetups[key] = {}
                 self.stationSetups[key][m] = params
             sys.stderr.write("  + read %d stations\n" %
-                             len(mod.bindings.keys()))
+                             len(list(mod.bindings.keys())))
 
         return True
 
@@ -274,7 +274,7 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
             cs.detach()
         del obsoleteStationConfigs
 
-        for staid, setups in self.stationSetups.items():
+        for staid, setups in list(self.stationSetups.items()):
             try:
                 cs = stationConfigs[staid]
             except:
@@ -314,7 +314,7 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
 
             newParamSets = {}
             globalSet = ""
-            for mod, params in setups.items():
+            for mod, params in list(setups.items()):
                 try:
                     setup = stationSetups[mod]
                 except:

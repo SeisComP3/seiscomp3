@@ -49,7 +49,7 @@ class TabConverter:
         try:
             sm = StationMappings(self.networkCode, self.stationList, filename)
             self.sma = sm
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def loadStationAttribute(self, filename):
@@ -59,7 +59,7 @@ class TabConverter:
         try:
             sa = StationAttributes(self.networkCode, self.stationList, filename)
             self.sat = sa
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def loadNetworkAttribute(self, filename):
@@ -68,7 +68,7 @@ class TabConverter:
         try:
             na = NetworkAttributes(self.networkCode, filename)
             self.nat = na
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def loadInstrumentsFile(self, filename, filterFolder):
@@ -193,7 +193,7 @@ class TabConverter:
         if self.filename is not None:
             raise Exception("Cannot pre-load two different files (current one is %s)" % self.filename)
         
-        print >> sys.stderr, "Analysing ... "
+        print("Analysing ... ", file=sys.stderr)
         fd = open(filename)
         for line in fd:
             line = line.strip()
@@ -201,7 +201,7 @@ class TabConverter:
 
             try:
                 (stationCode, start, end) = self.__analyseLine__(line.split())
-            except Exception, e:
+            except Exception as e:
                 error.append(str(e))
                 continue
             
@@ -219,16 +219,16 @@ class TabConverter:
         if len(error):
             raise Exception("\n".join(error))
         
-        print >> sys.stderr, " Loaded %d different stations" % len(stationList)
+        print(" Loaded %d different stations" % len(stationList), file=sys.stderr)
         if takeSugestions:
-            print >> sys.stderr, " Taking suggestion start date of %s " % formatDate(self.startDate)
+            print(" Taking suggestion start date of %s " % formatDate(self.startDate), file=sys.stderr)
             self.startDate = sugestedStart
-            print >> sys.stderr, " Taking suggestion end date of %s " % formatDate(self.endDate)
+            print(" Taking suggestion end date of %s " % formatDate(self.endDate), file=sys.stderr)
             self.endDate = sugestedEnd
         
         self.filename = filename
         self.stationList = stationList
-        print >> sys.stderr, "Done."
+        print("Done.", file=sys.stderr)
 
     def __convertHeader__(self, line, fdo):
         
@@ -237,10 +237,10 @@ class TabConverter:
         
         if not self.takeSugestions:
             if self.nat.hasStart: 
-                print >> sys.stderr, " Using start from attribute."
+                print(" Using start from attribute.", file=sys.stderr)
                 self.startDate = self.nat.startDate
             if self.nat.hasEnd: 
-                print >> sys.stderr, " Using end from attribute."
+                print(" Using end from attribute.", file=sys.stderr)
                 self.endDate = self.nat.endDate
 
         nCode = items[2].strip()
@@ -259,7 +259,7 @@ class TabConverter:
 
         try:
             code = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Code on %s" % line)
         
         if code not in self.stationList:
@@ -267,17 +267,17 @@ class TabConverter:
         
         try:
             hummanStr(items.pop(0))
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Gain on %s" % line)
 
         try:
             datalogger = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Datalogger on %s" % line)
 
         try:
             sensor = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Sensor on %s" % line)
 
         try:
@@ -287,36 +287,36 @@ class TabConverter:
                     raise Exception("Instrument database needed to convert gain")
                 try:
                     dte = self.inst.dls[str(datalogger).split("%")[0]]
-                except Exception,e:
-                    print >>sys.stderr, e
+                except Exception as e:
+                    print(e, file=sys.stderr)
                     raise Exception("Datalogger %s not found" % str(datalogger).split("%")[0])
                 datalogger += "%%%s" % (float(dte.gain) * float(gaind))
-                print >>sys.stderr, " Converting gain multiplier to real gain using instrument DB on %s" % code
-        except Exception, e:
+                print(" Converting gain multiplier to real gain using instrument DB on %s" % code, file=sys.stderr)
+        except Exception as e:
             raise Exception ("Missing Gain on %s (%s)" % (line,str(e)))
 
         try:
             channel = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Channel on %s" % line)
         
         try:
             latitude = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Latitude on %s" % line)
         
         try:
             longitude = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Longitude on %s" % line)
         try:
             elevation = items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Elevation on %s" % line)
 
         try:
                 depth =  items.pop(0)
-        except Exception, e:
+        except Exception as e:
             raise Exception ("Missing Depth on %s" % line)
         
         #Orientation 
@@ -347,7 +347,7 @@ class TabConverter:
         
         try:
             start = parseDate(start)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalide Start date: %s (%s) on %s" % (start, e, line))
         
         #End 
@@ -358,7 +358,7 @@ class TabConverter:
 
         try:
             end = parseDate(end)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalide End date: %s (%s) on %s" % (end, e, line))
         
         [place, country] = self.sat.parseStationLine(line.split())
@@ -387,7 +387,7 @@ class TabConverter:
             self.sma = StationMappings(self.networkCode, self.stationList, None)
 
         # Parse in again the station lines and network header by the additional classes
-        print >>sys.stderr,"Pre-Parsing Station/Network lines ... "
+        print("Pre-Parsing Station/Network lines ... ", file=sys.stderr)
         fd = open(self.filename)
         for line in fd:
             line = line.strip()
@@ -404,7 +404,7 @@ class TabConverter:
         fd = open(self.filename)
         oldcode="" # Station code of the last printed line
         last="" # Type of the last printed line
-        print >>sys.stderr,"Converting ... "
+        print("Converting ... ", file=sys.stderr)
         for line in fd:
             line = line.strip()
             if not line or line[0] == "#": 
@@ -428,7 +428,7 @@ class TabConverter:
                 last = "l"
                 pass
             else:
-                print >> sys.stderr, "input at %s" % line
+                print("input at %s" % line, file=sys.stderr)
         fd.close()
 
 def main():
@@ -461,23 +461,23 @@ def main():
     error = False
     
     if len(args) != 1:
-        print >> sys.stderr, "need an Output Filename or '-' for stdout"
+        print("need an Output Filename or '-' for stdout", file=sys.stderr)
         error = True
 
     if not options.tabFile:
-        print >> sys.stderr, "tab file name not supplied"
+        print("tab file name not supplied", file=sys.stderr)
         error = True
 
     if options.inst and not options.ffolder:
-        print >> sys.stderr, "Filter folder not supplied."
+        print("Filter folder not supplied.", file=sys.stderr)
         error = True
 
     if options.tabFile and not os.path.isfile(options.tabFile):
-        print >> sys.stderr, "supplied tab file (%s) is not a file" % options.tabFile
+        print("supplied tab file (%s) is not a file" % options.tabFile, file=sys.stderr)
         error = True
 
     if not options.netCode:
-        print >> sys.stderr, "network code not supplied"
+        print("network code not supplied", file=sys.stderr)
         error = True
 
     #if options.autoTime and (options.netStart or options.netEnd):
@@ -485,7 +485,7 @@ def main():
     #    return
 
     if error:
-        print >> sys.stderr, "use -h for getting a help on usage"
+        print("use -h for getting a help on usage", file=sys.stderr)
         return
 
     if  args[0] != "-":
@@ -499,7 +499,7 @@ def main():
         cnv.preload(options.tabFile, options.autoTime)
 
         if options.inst or options.smap or options.nat or options.sat:
-            print >>sys.stderr, "Loading optional files: "
+            print("Loading optional files: ", file=sys.stderr)
 
             if options.inst and os.path.isfile(options.inst):
                 cnv.loadInstrumentsFile(options.inst, options.ffolder)
@@ -512,12 +512,12 @@ def main():
                 
             if options.sat and os.path.isfile(options.sat): 
                 cnv.loadStationAttribute(options.sat)
-            print >>sys.stderr, "Done."
+            print("Done.", file=sys.stderr)
 
         cnv.convert(fdo, not options.cleanFile, options.globalSa)
-    except Exception, e:
-        print >> sys.stderr,""
-        print >> sys.stderr,"Error on processing: %s" % e
+    except Exception as e:
+        print("", file=sys.stderr)
+        print("Error on processing: %s" % e, file=sys.stderr)
 
     fdo.close()
 

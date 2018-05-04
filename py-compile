@@ -128,40 +128,42 @@ else
 fi
 
 $PYTHON -c "
-import sys, os, string, py_compile
+from __future__ import print_function
+import sys, os, py_compile
 
 files = '''$files'''
 
-print 'Byte-compiling python modules...'
-for file in string.split(files):
+print('Byte-compiling python modules...')
+for file in files.split():
     $pathtrans
     $filetrans
     $outputtrans
     if not os.path.exists(filepath) or not (len(filepath) >= 3
                                             and filepath[-3:] == '.py'):
-	continue
-    print file,
+        continue
+    print(file, end=' ')
     sys.stdout.flush()
     py_compile.compile(filepath, outputpath + 'c', path)
-print" || exit $?
+print()" || exit $?
 
 # this will fail for python < 1.5, but that doesn't matter ...
 $PYTHON -O -c "
-import sys, os, string, py_compile
+from __future__ import print_function
+import sys, os, py_compile
 
 files = '''$files'''
-print 'Byte-compiling python modules (optimized versions) ...'
-for file in string.split(files):
+print('Byte-compiling python modules (optimized versions) ...')
+for file in files.split():
     $pathtrans
     $filetrans
     $outputtrans
     if not os.path.exists(filepath) or not (len(filepath) >= 3
                                             and filepath[-3:] == '.py'):
-	continue
-    print file,
+        continue
+    print(file, end=' ')
     sys.stdout.flush()
     py_compile.compile(filepath, outputpath + 'o', path)
-print" 2>/dev/null || :
+print()" 2>/dev/null || :
 
 # Local Variables:
 # mode: shell-script

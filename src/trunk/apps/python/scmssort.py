@@ -53,7 +53,7 @@ def time2str(time):
     return time.toString("%Y-%m-%d %H:%M:%S.%f000000")[:23]
 
 
-def RecordInput(filename=None, datatype=seiscomp3.Core.Array.INT):
+def RecordInput(filename=None):
     """
     Simple Record iterator that reads from a file (to be specified by
     filename) or -- if no filename was specified -- reads from standard input
@@ -61,22 +61,21 @@ def RecordInput(filename=None, datatype=seiscomp3.Core.Array.INT):
 
     stream = seiscomp3.IO.RecordStream.Create("file")
     if not stream:
-        raise IOError, "failed 1"
+        raise IOError("failed to create a RecordStream")
 
     if not filename:
         filename = "-"
 
     if not stream.setSource(filename):
-        raise IOError, "failed 2"
+        raise IOError("failed to assign source file to RecordStream")
 
-    input = seiscomp3.IO.RecordInput(
-        stream, datatype, seiscomp3.Core.Record.SAVE_RAW)
+    inp = seiscomp3.IO.RecordInput(
+        stream, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
 
-    while 1:
-        rec = input.next()
+    while True:
+        rec = next(inp)
         if not rec:
             raise StopIteration
-
         yield rec
 
 
@@ -107,7 +106,7 @@ p.add_option("-v", "--verbose", action="store_true",
 (opt, filenames) = p.parse_args()
 
 if opt.time_window:
-    tmin, tmax = map(str2time, opt.time_window.split("~"))
+    tmin, tmax = list(map(str2time, opt.time_window.split("~")))
 
 if opt.verbose:
     sys.stderr.write("Time window: %s~%s\n" % (time2str(tmin), time2str(tmax)))
@@ -122,11 +121,6 @@ def _time(rec):
 def _in_time_window(rec, tmin, tmax):
     return rec.endTime() >= tmin and rec.startTime() <= tmax
 
-
-def _valid_record(rec):
-    return rec is not None  # may get more complicated ;)
-
-
 if not filenames:
     filenames = ["-"]
 
@@ -136,8 +130,9 @@ if filenames:
     for filename in filenames:
         if opt.verbose:
             sys.stderr.write("reading file '%s'\n" % filename)
-        for rec in RecordInput(filename):
-            if not _valid_record(rec):
+        recordInput = RecordInput(filename)
+        for rec in recordInput:
+            if not rec:
                 continue
             if not _in_time_window(rec, tmin, tmax):
                 continue
@@ -160,7 +155,7 @@ if filenames:
         if opt.uniqueness and item == previous:
             continue
         t, raw = item
-        sys.stdout.write(raw)
+        sys.stdout.buffer.write(raw)
         previous = item
 
     if opt.verbose:

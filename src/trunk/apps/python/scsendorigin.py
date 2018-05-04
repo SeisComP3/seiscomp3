@@ -43,7 +43,7 @@ class SendOrigin(Client.Application):
         ci.setCreationTime(Core.Time.GMT())
         self.origin.setCreationInfo(ci)
 
-        lat, lon, dep = map(float, cstr.split(","))
+        lat, lon, dep = list(map(float, cstr.split(",")))
         self.origin.setLongitude(DataModel.RealQuantity(lon))
         self.origin.setLatitude(DataModel.RealQuantity(lat))
         self.origin.setDepth(DataModel.RealQuantity(dep))

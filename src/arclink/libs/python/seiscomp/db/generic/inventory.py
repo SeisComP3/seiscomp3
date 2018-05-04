@@ -6,6 +6,10 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 #import genwrap as _genwrap
 import datetime
 from seiscomp.db.xmlio import inventory as _xmlio
@@ -37,7 +41,7 @@ class _Comment(object):
 		self.myStream = myStream
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.id = id
@@ -66,7 +70,7 @@ class _StationReference(object):
 		self.myStationGroup = myStationGroup
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.stationID = stationID
@@ -112,7 +116,7 @@ class _StationGroup(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -125,7 +129,7 @@ class _StationGroup(object):
 
 	def insert_stationReference(self, stationID, **args):
 		if stationID in self.stationReference:
-			raise DBError, "StationReference %s already defined" % stationID
+			raise DBError("StationReference %s already defined" % stationID)
 		obj = _StationReference(self, stationID, args)
 		self.stationReference[stationID] = obj
 		return obj
@@ -134,7 +138,7 @@ class _StationGroup(object):
 		try:
 			del self.stationReference[stationID]
 		except KeyError:
-			raise DBError, "StationReference [%s] not found" % (stationID)
+			raise DBError("StationReference [%s] not found" % (stationID))
 # ---------------------------------------------------------------------------------------
 
 
@@ -167,7 +171,7 @@ class _AuxSource(object):
 		self.myAuxDevice = myAuxDevice
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -207,7 +211,7 @@ class _AuxDevice(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -220,7 +224,7 @@ class _AuxDevice(object):
 
 	def insert_source(self, name, **args):
 		if name in self.source:
-			raise DBError, "AuxSource %s already defined" % name
+			raise DBError("AuxSource %s already defined" % name)
 		obj = _AuxSource(self, name, args)
 		self.source[name] = obj
 		return obj
@@ -229,7 +233,7 @@ class _AuxDevice(object):
 		try:
 			del self.source[name]
 		except KeyError:
-			raise DBError, "AuxSource [%s] not found" % (name)
+			raise DBError("AuxSource [%s] not found" % (name))
 # ---------------------------------------------------------------------------------------
 
 
@@ -262,7 +266,7 @@ class _SensorCalibration(object):
 		self.mySensor = mySensor
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.serialNumber = serialNumber
@@ -314,7 +318,7 @@ class _Sensor(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -331,7 +335,7 @@ class _Sensor(object):
 		if channel not in self.calibration[serialNumber]:
 			self.calibration[serialNumber][channel] = {}
 		if start in self.calibration[serialNumber][channel]:
-			raise DBError, "SensorCalibration [%s][%s][%s] already defined" % (serialNumber, channel, start)
+			raise DBError("SensorCalibration [%s][%s][%s] already defined" % (serialNumber, channel, start))
 		obj = _SensorCalibration(self, serialNumber, channel, start, args)
 		self.calibration[serialNumber][channel][start] = obj
 		return obj
@@ -344,7 +348,7 @@ class _Sensor(object):
 			if len(self.calibration[serialNumber]) == 0:
 				del self.calibration[serialNumber]
 		except KeyError:
-			raise DBError, "SensorCalibration [%s][%s][%s] not found" % (serialNumber, channel, start)
+			raise DBError("SensorCalibration [%s][%s][%s] not found" % (serialNumber, channel, start))
 # ---------------------------------------------------------------------------------------
 
 
@@ -393,7 +397,7 @@ class _ResponsePAZ(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -444,7 +448,7 @@ class _ResponsePolynomial(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -485,7 +489,7 @@ class _ResponseFAP(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -534,7 +538,7 @@ class _ResponseFIR(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -587,7 +591,7 @@ class _ResponseIIR(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -628,7 +632,7 @@ class _DataloggerCalibration(object):
 		self.myDatalogger = myDatalogger
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.serialNumber = serialNumber
@@ -665,7 +669,7 @@ class _Decimation(object):
 		self.myDatalogger = myDatalogger
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.sampleRateNumerator = sampleRateNumerator
@@ -721,7 +725,7 @@ class _Datalogger(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.name = name
@@ -739,7 +743,7 @@ class _Datalogger(object):
 		if channel not in self.calibration[serialNumber]:
 			self.calibration[serialNumber][channel] = {}
 		if start in self.calibration[serialNumber][channel]:
-			raise DBError, "DataloggerCalibration [%s][%s][%s] already defined" % (serialNumber, channel, start)
+			raise DBError("DataloggerCalibration [%s][%s][%s] already defined" % (serialNumber, channel, start))
 		obj = _DataloggerCalibration(self, serialNumber, channel, start, args)
 		self.calibration[serialNumber][channel][start] = obj
 		return obj
@@ -752,13 +756,13 @@ class _Datalogger(object):
 			if len(self.calibration[serialNumber]) == 0:
 				del self.calibration[serialNumber]
 		except KeyError:
-			raise DBError, "DataloggerCalibration [%s][%s][%s] not found" % (serialNumber, channel, start)
+			raise DBError("DataloggerCalibration [%s][%s][%s] not found" % (serialNumber, channel, start))
 
 	def insert_decimation(self, sampleRateNumerator, sampleRateDenominator, **args):
 		if sampleRateNumerator not in self.decimation:
 			self.decimation[sampleRateNumerator] = {}
 		if sampleRateDenominator in self.decimation[sampleRateNumerator]:
-			raise DBError, "Decimation [%s][%s] already defined" % (sampleRateNumerator, sampleRateDenominator)
+			raise DBError("Decimation [%s][%s] already defined" % (sampleRateNumerator, sampleRateDenominator))
 		obj = _Decimation(self, sampleRateNumerator, sampleRateDenominator, args)
 		self.decimation[sampleRateNumerator][sampleRateDenominator] = obj
 		return obj
@@ -769,7 +773,7 @@ class _Datalogger(object):
 			if len(self.decimation[sampleRateNumerator]) == 0:
 				del self.decimation[sampleRateNumerator]
 		except KeyError:
-			raise DBError, "Decimation [%s][%s] not found" % (sampleRateNumerator, sampleRateDenominator)
+			raise DBError("Decimation [%s][%s] not found" % (sampleRateNumerator, sampleRateDenominator))
 # ---------------------------------------------------------------------------------------
 
 
@@ -808,7 +812,7 @@ class _AuxStream(object):
 		self.mySensorLocation = mySensorLocation
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -883,7 +887,7 @@ class _Stream(object):
 		self.mySensorLocation = mySensorLocation
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -897,7 +901,7 @@ class _Stream(object):
 
 	def insert_comment(self, id, **args):
 		if id in self.comment:
-			raise DBError, "Comment %s already defined" % id
+			raise DBError("Comment %s already defined" % id)
 		obj = _Comment(self, id, args)
 		self.comment[id] = obj
 		return obj
@@ -906,7 +910,7 @@ class _Stream(object):
 		try:
 			del self.comment[id]
 		except KeyError:
-			raise DBError, "Comment [%s] not found" % (id)
+			raise DBError("Comment [%s] not found" % (id))
 # ---------------------------------------------------------------------------------------
 
 
@@ -942,7 +946,7 @@ class _SensorLocation(object):
 		self.myStation = myStation
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -958,7 +962,7 @@ class _SensorLocation(object):
 
 	def insert_comment(self, id, **args):
 		if id in self.comment:
-			raise DBError, "Comment %s already defined" % id
+			raise DBError("Comment %s already defined" % id)
 		obj = _Comment(self, id, args)
 		self.comment[id] = obj
 		return obj
@@ -967,13 +971,13 @@ class _SensorLocation(object):
 		try:
 			del self.comment[id]
 		except KeyError:
-			raise DBError, "Comment [%s] not found" % (id)
+			raise DBError("Comment [%s] not found" % (id))
 
 	def insert_auxStream(self, code, start, **args):
 		if code not in self.auxStream:
 			self.auxStream[code] = {}
 		if start in self.auxStream[code]:
-			raise DBError, "AuxStream [%s][%s] already defined" % (code, start)
+			raise DBError("AuxStream [%s][%s] already defined" % (code, start))
 		obj = _AuxStream(self, code, start, args)
 		self.auxStream[code][start] = obj
 		return obj
@@ -984,13 +988,13 @@ class _SensorLocation(object):
 			if len(self.auxStream[code]) == 0:
 				del self.auxStream[code]
 		except KeyError:
-			raise DBError, "AuxStream [%s][%s] not found" % (code, start)
+			raise DBError("AuxStream [%s][%s] not found" % (code, start))
 
 	def insert_stream(self, code, start, **args):
 		if code not in self.stream:
 			self.stream[code] = {}
 		if start in self.stream[code]:
-			raise DBError, "Stream [%s][%s] already defined" % (code, start)
+			raise DBError("Stream [%s][%s] already defined" % (code, start))
 		obj = _Stream(self, code, start, args)
 		self.stream[code][start] = obj
 		self.object[obj.publicID] = obj
@@ -1002,7 +1006,7 @@ class _SensorLocation(object):
 			if len(self.stream[code]) == 0:
 				del self.stream[code]
 		except KeyError:
-			raise DBError, "Stream [%s][%s] not found" % (code, start)
+			raise DBError("Stream [%s][%s] not found" % (code, start))
 # ---------------------------------------------------------------------------------------
 
 
@@ -1057,7 +1061,7 @@ class _Station(object):
 		self.myNetwork = myNetwork
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -1072,7 +1076,7 @@ class _Station(object):
 
 	def insert_comment(self, id, **args):
 		if id in self.comment:
-			raise DBError, "Comment %s already defined" % id
+			raise DBError("Comment %s already defined" % id)
 		obj = _Comment(self, id, args)
 		self.comment[id] = obj
 		return obj
@@ -1081,13 +1085,13 @@ class _Station(object):
 		try:
 			del self.comment[id]
 		except KeyError:
-			raise DBError, "Comment [%s] not found" % (id)
+			raise DBError("Comment [%s] not found" % (id))
 
 	def insert_sensorLocation(self, code, start, **args):
 		if code not in self.sensorLocation:
 			self.sensorLocation[code] = {}
 		if start in self.sensorLocation[code]:
-			raise DBError, "SensorLocation [%s][%s] already defined" % (code, start)
+			raise DBError("SensorLocation [%s][%s] already defined" % (code, start))
 		obj = _SensorLocation(self, code, start, args)
 		self.sensorLocation[code][start] = obj
 		self.object[obj.publicID] = obj
@@ -1099,7 +1103,7 @@ class _Station(object):
 			if len(self.sensorLocation[code]) == 0:
 				del self.sensorLocation[code]
 		except KeyError:
-			raise DBError, "SensorLocation [%s][%s] not found" % (code, start)
+			raise DBError("SensorLocation [%s][%s] not found" % (code, start))
 # ---------------------------------------------------------------------------------------
 
 
@@ -1146,7 +1150,7 @@ class _Network(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.code = code
@@ -1161,7 +1165,7 @@ class _Network(object):
 
 	def insert_comment(self, id, **args):
 		if id in self.comment:
-			raise DBError, "Comment %s already defined" % id
+			raise DBError("Comment %s already defined" % id)
 		obj = _Comment(self, id, args)
 		self.comment[id] = obj
 		return obj
@@ -1170,13 +1174,13 @@ class _Network(object):
 		try:
 			del self.comment[id]
 		except KeyError:
-			raise DBError, "Comment [%s] not found" % (id)
+			raise DBError("Comment [%s] not found" % (id))
 
 	def insert_station(self, code, start, **args):
 		if code not in self.station:
 			self.station[code] = {}
 		if start in self.station[code]:
-			raise DBError, "Station [%s][%s] already defined" % (code, start)
+			raise DBError("Station [%s][%s] already defined" % (code, start))
 		obj = _Station(self, code, start, args)
 		self.station[code][start] = obj
 		self.object[obj.publicID] = obj
@@ -1188,7 +1192,7 @@ class _Network(object):
 			if len(self.station[code]) == 0:
 				del self.station[code]
 		except KeyError:
-			raise DBError, "Station [%s][%s] not found" % (code, start)
+			raise DBError("Station [%s][%s] not found" % (code, start))
 # ---------------------------------------------------------------------------------------
 
 
@@ -1235,7 +1239,7 @@ class Inventory(object):
 
 	def insert_stationGroup(self, code, **args):
 		if code in self.stationGroup:
-			raise DBError, "StationGroup %s already defined" % code
+			raise DBError("StationGroup %s already defined" % code)
 		obj = _StationGroup(self, code, args)
 		self.stationGroup[code] = obj
 		self.object[obj.publicID] = obj
@@ -1245,11 +1249,11 @@ class Inventory(object):
 		try:
 			del self.stationGroup[code]
 		except KeyError:
-			raise DBError, "StationGroup [%s] not found" % (code)
+			raise DBError("StationGroup [%s] not found" % (code))
 
 	def insert_auxDevice(self, name, **args):
 		if name in self.auxDevice:
-			raise DBError, "AuxDevice %s already defined" % name
+			raise DBError("AuxDevice %s already defined" % name)
 		obj = _AuxDevice(self, name, args)
 		self.auxDevice[name] = obj
 		self.object[obj.publicID] = obj
@@ -1259,11 +1263,11 @@ class Inventory(object):
 		try:
 			del self.auxDevice[name]
 		except KeyError:
-			raise DBError, "AuxDevice [%s] not found" % (name)
+			raise DBError("AuxDevice [%s] not found" % (name))
 
 	def insert_sensor(self, name, **args):
 		if name in self.sensor:
-			raise DBError, "Sensor %s already defined" % name
+			raise DBError("Sensor %s already defined" % name)
 		obj = _Sensor(self, name, args)
 		self.sensor[name] = obj
 		self.object[obj.publicID] = obj
@@ -1273,11 +1277,11 @@ class Inventory(object):
 		try:
 			del self.sensor[name]
 		except KeyError:
-			raise DBError, "Sensor [%s] not found" % (name)
+			raise DBError("Sensor [%s] not found" % (name))
 
 	def insert_datalogger(self, name, **args):
 		if name in self.datalogger:
-			raise DBError, "Datalogger %s already defined" % name
+			raise DBError("Datalogger %s already defined" % name)
 		obj = _Datalogger(self, name, args)
 		self.datalogger[name] = obj
 		self.object[obj.publicID] = obj
@@ -1287,11 +1291,11 @@ class Inventory(object):
 		try:
 			del self.datalogger[name]
 		except KeyError:
-			raise DBError, "Datalogger [%s] not found" % (name)
+			raise DBError("Datalogger [%s] not found" % (name))
 
 	def insert_responsePAZ(self, name, **args):
 		if name in self.responsePAZ:
-			raise DBError, "ResponsePAZ %s already defined" % name
+			raise DBError("ResponsePAZ %s already defined" % name)
 		obj = _ResponsePAZ(self, name, args)
 		self.responsePAZ[name] = obj
 		self.object[obj.publicID] = obj
@@ -1301,11 +1305,11 @@ class Inventory(object):
 		try:
 			del self.responsePAZ[name]
 		except KeyError:
-			raise DBError, "ResponsePAZ [%s] not found" % (name)
+			raise DBError("ResponsePAZ [%s] not found" % (name))
 
 	def insert_responseFIR(self, name, **args):
 		if name in self.responseFIR:
-			raise DBError, "ResponseFIR %s already defined" % name
+			raise DBError("ResponseFIR %s already defined" % name)
 		obj = _ResponseFIR(self, name, args)
 		self.responseFIR[name] = obj
 		self.object[obj.publicID] = obj
@@ -1315,11 +1319,11 @@ class Inventory(object):
 		try:
 			del self.responseFIR[name]
 		except KeyError:
-			raise DBError, "ResponseFIR [%s] not found" % (name)
+			raise DBError("ResponseFIR [%s] not found" % (name))
 
 	def insert_responseIIR(self, name, **args):
 		if name in self.responseIIR:
-			raise DBError, "ResponseIIR %s already defined" % name
+			raise DBError("ResponseIIR %s already defined" % name)
 		obj = _ResponseIIR(self, name, args)
 		self.responseIIR[name] = obj
 		self.object[obj.publicID] = obj
@@ -1329,11 +1333,11 @@ class Inventory(object):
 		try:
 			del self.responseIIR[name]
 		except KeyError:
-			raise DBError, "ResponseIIR [%s] not found" % (name)
+			raise DBError("ResponseIIR [%s] not found" % (name))
 
 	def insert_responsePolynomial(self, name, **args):
 		if name in self.responsePolynomial:
-			raise DBError, "ResponsePolynomial %s already defined" % name
+			raise DBError("ResponsePolynomial %s already defined" % name)
 		obj = _ResponsePolynomial(self, name, args)
 		self.responsePolynomial[name] = obj
 		self.object[obj.publicID] = obj
@@ -1343,11 +1347,11 @@ class Inventory(object):
 		try:
 			del self.responsePolynomial[name]
 		except KeyError:
-			raise DBError, "ResponsePolynomial [%s] not found" % (name)
+			raise DBError("ResponsePolynomial [%s] not found" % (name))
 
 	def insert_responseFAP(self, name, **args):
 		if name in self.responseFAP:
-			raise DBError, "ResponseFAP %s already defined" % name
+			raise DBError("ResponseFAP %s already defined" % name)
 		obj = _ResponseFAP(self, name, args)
 		self.responseFAP[name] = obj
 		self.object[obj.publicID] = obj
@@ -1357,13 +1361,13 @@ class Inventory(object):
 		try:
 			del self.responseFAP[name]
 		except KeyError:
-			raise DBError, "ResponseFAP [%s] not found" % (name)
+			raise DBError("ResponseFAP [%s] not found" % (name))
 
 	def insert_network(self, code, start, **args):
 		if code not in self.network:
 			self.network[code] = {}
 		if start in self.network[code]:
-			raise DBError, "Network [%s][%s] already defined" % (code, start)
+			raise DBError("Network [%s][%s] already defined" % (code, start))
 		obj = _Network(self, code, start, args)
 		self.network[code][start] = obj
 		self.object[obj.publicID] = obj
@@ -1375,7 +1379,7 @@ class Inventory(object):
 			if len(self.network[code]) == 0:
 				del self.network[code]
 		except KeyError:
-			raise DBError, "Network [%s][%s] not found" % (code, start)
+			raise DBError("Network [%s][%s] not found" % (code, start))
 
 	def clear_instruments(self):
 		self.stationGroup = {}

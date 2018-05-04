@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, string, time, re, glob
 import seiscomp3.Kernel, seiscomp3.Config
 
@@ -85,7 +86,7 @@ class Module(seiscomp3.Kernel.Module):
         rc = seiscomp3.Config.Config()
         rc.readConfig(os.path.join(self.rc_dir, "station_%s_%s" % (self.net, self.sta)))
         description = rc.getString("description")
-    except Exception, e:
+    except Exception as e:
         # Maybe the rc file doesn't exist, maybe there's no readable description.
         pass
 
@@ -115,7 +116,7 @@ class Module(seiscomp3.Kernel.Module):
       fd = open(os.path.join(self.config_dir, "config.ini"), "w")
       fd.write(config_file)
       fd.close()
-      os.chmod(os.path.join(self.config_dir, "config.ini"), 0755)
+      os.chmod(os.path.join(self.config_dir, "config.ini"), 0o755)
     else:
       try: os.remove(os.path.join(self.config_dir, "config.ini"))
       except: pass
@@ -136,10 +137,10 @@ class Module(seiscomp3.Kernel.Module):
       try:
         (path, net, sta) = f.split('_')[-3:]
         if not path.endswith("station"):
-          print "invalid path", f
+          print("invalid path", f)
 
       except ValueError:
-        print "invalid path", f
+        print("invalid path", f)
         continue
 
       self.net = net
@@ -155,7 +156,7 @@ class Module(seiscomp3.Kernel.Module):
 
         m = rx_binding.match(line)
         if not m:
-          print "invalid binding in %s: %s" % (f, line)
+          print("invalid binding in %s: %s" % (f, line))
           line = fd.readline()
           continue
 

@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 import string
+from functools import reduce
 
 class parsers(object):
 
@@ -34,7 +35,7 @@ class parsers(object):
             except ValueError:
                 raise Exception("error parsing PAZ at '" + s[pos:] + "'")
     
-            for i in xrange(0, x):
+            for i in range(0, x):
                 c.append((rv, iv))
                 i = i
             
@@ -81,21 +82,21 @@ class parsers(object):
     def parseGain(val):
         try:
             return parsers._parseFloat(val, 0.0, None)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalid Gain: %s" % e)
     
     @staticmethod
     def parseLongitude(val):
         try:
             return parsers._parseFloat(val, -180.0, 180.0)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalid Longitude: %s" % e)
     
     @staticmethod
     def parseLatitude(val):
         try:
             return parsers._parseFloat(val, -90.0, 90.0)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalid Latitude: %s" % e)
     
     @staticmethod
@@ -103,7 +104,7 @@ class parsers(object):
         # Deepest mine ~ 5000 m
         try:
             return parsers._parseFloat(val, 0.0, 5000)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalid Depth: %s" % e)
     
     @staticmethod
@@ -112,7 +113,7 @@ class parsers(object):
         # Deepest Mariana ~11000 m
         try:
             return parsers._parseFloat(val, -11000, 9000)
-        except Exception,e:
+        except Exception as e:
             raise Exception("Invalid Elevation: %s" % e)
 
     @staticmethod    
@@ -127,8 +128,8 @@ class parsers(object):
                 len("YYYY-MM-DDTHH:MM:SS") : "%Y-%m-%dT%H:%M:%S"}
         try:
             return datetime.strptime(date, formats[len(date)])
-        except Exception, e:
-            raise ValueError, "invalid date: " + date + str(e)
+        except Exception as e:
+            raise ValueError("invalid date: " + date + str(e))
 
     @staticmethod    
     def parseLocationCode(val):

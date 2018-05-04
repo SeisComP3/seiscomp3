@@ -103,8 +103,8 @@ class QualityControl(_sc3wrap.base_qualitycontrol):
                 del self.log[(net_code, sta_code, str_code, loc_code)]
 
         except KeyError:
-            raise DBError, "log entry (%s,%s,%s,%s,%s,%s) not found" % \
-                (net_code, sta_code, str_code, loc_code, start, end)
+            raise DBError("log entry (%s,%s,%s,%s,%s,%s) not found" % \
+                (net_code, sta_code, str_code, loc_code, start, end))
 
     def remove_outage(self, net_code, sta_code, str_code, loc_code, start, **args):
         try:
@@ -113,8 +113,8 @@ class QualityControl(_sc3wrap.base_qualitycontrol):
                 del self.outage[(net_code, sta_code, str_code, loc_code)]
 
         except KeyError:
-            raise DBError, "outage (%s,%s,%s,%s,%s) not found" % \
-                (net_code, sta_code, str_code, loc_code, start)
+            raise DBError("outage (%s,%s,%s,%s,%s) not found" % \
+                (net_code, sta_code, str_code, loc_code, start))
 
     def remove_waveform_quality(self, net_code, sta_code, str_code, loc_code, start,
         type, parameter, **args):
@@ -125,20 +125,20 @@ class QualityControl(_sc3wrap.base_qualitycontrol):
                 del self.waveform_quality[(net_code, sta_code, str_code, loc_code)]
 
         except KeyError:
-            raise DBError, "waveform quality (%s,%s,%s,%s,%s,%s,%s) not found" % \
-                (net_code, sta_code, str_code, loc_code, start, type, parameter)
+            raise DBError("waveform quality (%s,%s,%s,%s,%s,%s,%s) not found" % \
+                (net_code, sta_code, str_code, loc_code, start, type, parameter))
 
     def flush(self):
-        for i in self.log.itervalues():
-            for j in i.itervalues():
+        for i in self.log.values():
+            for j in i.values():
                 j.flush()
 
-        for i in self.outage.itervalues():
-            for j in i.itervalues():
+        for i in self.outage.values():
+            for j in i.values():
                 j.flush()
 
-        for i in self.waveform_quality.itervalues():
-            for j in i.itervalues():
+        for i in self.waveform_quality.values():
+            for j in i.values():
                 j.flush()
 
     def load_logs(self):

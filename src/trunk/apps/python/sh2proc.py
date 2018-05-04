@@ -121,7 +121,7 @@ class SH2Proc(Client.Application):
                 cfg = mod.configStation(i)
                 net = cfg.networkCode()
                 sta = cfg.stationCode()
-                if self.streams.has_key(sta):
+                if sta in self.streams:
                     Logging.warning('ambiguous stream id found for station '
                                     '%s.%s' % (net, sta))
                     continue
@@ -141,7 +141,7 @@ class SH2Proc(Client.Application):
                 detecLocid = ''
                 detecStream = None
 
-                for j in xrange(params.parameterCount()):
+                for j in range(params.parameterCount()):
                     param = params.parameter(j)
                     if param.name() == 'detecStream':
                         detecStream = param.value()
@@ -191,11 +191,11 @@ class SH2Proc(Client.Application):
         Logging.warning('no configuration module available, loading streams '
                         'from inventory and selecting first available stream '
                         'matching epoch')
-        for iNet in xrange(inv.inventory().networkCount()):
+        for iNet in range(inv.inventory().networkCount()):
             net = inv.inventory().network(iNet)
             Logging.debug('network %s: loaded %i stations' % (
                           net.code(), net.stationCount()))
-            for iSta in xrange(net.stationCount()):
+            for iSta in range(net.stationCount()):
                 sta = net.station(iSta)
                 try:
                     start = sta.start()
@@ -211,7 +211,7 @@ class SH2Proc(Client.Application):
                 except:
                     pass
 
-                for iLoc in xrange(sta.sensorLocationCount()):
+                for iLoc in range(sta.sensorLocationCount()):
                     loc = sta.sensorLocation(iLoc)
                     for iCha in range(loc.streamCount()):
                         cha = loc.stream(iCha)
@@ -219,7 +219,7 @@ class SH2Proc(Client.Application):
                         wfsID = DataModel.WaveformStreamID(net.code(),
                                                            sta.code(), loc.code(), cha.code(), '')
                         comp = cha.code()[2]
-                        if not self.streams.has_key(sta.code()):
+                        if sta.code() not in self.streams:
                             components = {}
                             components[comp] = wfsID
                             self.streams[sta.code()] = components
@@ -228,7 +228,7 @@ class SH2Proc(Client.Application):
                             # location and channel code: make sure network and
                             # location codes match first item in station
                             # specific steam list
-                            oldWfsID = self.streams[sta.code()].values()[0]
+                            oldWfsID = list(self.streams[sta.code()].values())[0]
                             if net.code() != oldWfsID.networkCode() or \
                                loc.code() != oldWfsID.locationCode() or \
                                cha.code()[:2] != oldWfsID.channelCode()[:2]:
@@ -325,12 +325,12 @@ class SH2Proc(Client.Application):
                                     'incomplete' % iLine)
                     continue
 
-                if not self.streams.has_key(staCode):
+                if staCode not in self.streams:
                     Logging.warning('Line %i: end of phase, station code %s '
                                     'not found in inventory' % (iLine, staCode))
                     continue
 
-                if not self.streams[staCode].has_key(compCode):
+                if compCode not in self.streams[staCode]:
                     Logging.warning('Line %i: end of phase, component %s of '
                                     'station %s not found in inventory' % (
                                         iLine, compCode, staCode))
@@ -812,7 +812,7 @@ class SH2Proc(Client.Application):
                     Logging.warning('Line %i: ignoring unknown parameter: %s'
                                     % (iLine, key))
 
-            except ValueError, ve:
+            except ValueError as ve:
                 Logging.warning('Line %i: can not parse %s value' % (
                                 iLine, key))
             except Exception:
@@ -850,7 +850,7 @@ class SH2Proc(Client.Application):
                 uncertainty.setConfidenceEllipsoid(originCE)
                 origin.setUncertainty(uncertainty)
 
-            for k, v in originComments.iteritems():
+            for k, v in originComments.items():
                 comment = DataModel.Comment()
                 comment.setId(k)
                 comment.setText(v)
@@ -867,7 +867,7 @@ class SH2Proc(Client.Application):
                 f = sys.stdin
             else:
                 f = open(self.inputFile)
-        except IOError, e:
+        except IOError as e:
             Logging.error(str(e))
             return False
 

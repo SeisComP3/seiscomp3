@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os, sys, signal, subprocess, pipes, glob, shutil, imp, traceback
 
@@ -41,7 +41,7 @@ def system(args):
       return proc.wait()
     except KeyboardInterrupt:
       continue
-    except Exception, e:
+    except Exception as e:
       # Terminate was introduced in Python 2.6
       try: proc.terminate()
       except: pass
@@ -63,7 +63,7 @@ def load_module(path):
   f = open(path, 'r')
   modname = '__seiscomp_modules_' + modname
 
-  if sys.modules.has_key(modname):
+  if modname in sys.modules:
     mod = sys.modules[modname]
   else:
     # create a module
@@ -80,18 +80,16 @@ def load_module(path):
   if not hasattr(mod, 'Module'):
     code = f.read()
     # compile and exec dynamic code in the module
-    exec compile(code, '', 'exec') in namespace
+#   exec compile(code, '', 'exec') in namespace
+    exec(compile(code, '', 'exec'), namespace)
+    
 
   module = namespace.get('Module')
   return module
 
 
-def module_compare(a,b):
-  if a.order < b.order: return -1
-  if a.order > b.order: return 1
-  if a.name < b.name: return -1
-  if a.name > b.name: return 1
-  return 0
+def module_key(m):
+  return (m.order, m.name)
 
 
 def load_init_modules(path):
@@ -100,19 +98,19 @@ def load_init_modules(path):
   files = glob.glob(os.path.join(path, "*.py"))
   for f in files:
     try: pmod = load_module(f)#imp.load_source(mod_name, f)
-    except Exception, exc:
+    except Exception as exc:
       error(("%s: " % f) + str(exc))
       continue
 
     try: mod = pmod(env) #.Module(env)
-    except Exception, exc:
+    except Exception as exc:
       error(("%s: " % f) + str(exc))
       continue
 
     mods.append(mod)
 
   #mods = sorted(mods, key=lambda mod: mod.order)
-  mods = sorted(mods, cmp=module_compare)
+  mods = sorted(mods, key=module_key)
 
   return mods
 
@@ -127,15 +125,15 @@ def has_module(name):
 
 
 def dump_paths():
-  print "--------------------"
-  print "SEISCOMP_ROOT=%s" % SEISCOMP_ROOT
-  print "PATH=%s" % os.environ["PATH"]
-  print "%s=%s" % (SysLibraryPathVar, os.environ[SysLibraryPathVar])
+  print("--------------------")
+  print("SEISCOMP_ROOT=%s" % SEISCOMP_ROOT)
+  print("PATH=%s" % os.environ["PATH"])
+  print("%s=%s" % (SysLibraryPathVar, os.environ[SysLibraryPathVar]))
   if SysFrameworkPathVar:
-     print "%s=%s" % (SysFrameworkPathVar, os.environ[SysFrameworkPathVar])
-  print "PYTHONPATH=%s" % sys.path
-  print "CWD=%s" % os.getcwd()
-  print "--------------------"
+     print("%s=%s" % (SysFrameworkPathVar, os.environ[SysFrameworkPathVar]))
+  print("PYTHONPATH=%s" % sys.path)
+  print("CWD=%s" % os.getcwd())
+  print("--------------------")
 
 
 # Returns whether a module should run or not. It simply returns if its
@@ -146,7 +144,7 @@ def shouldModuleRun(mod_name):
 
 def touch(filename):
   try: open(filename, 'w').close()
-  except Exception, exc:
+  except Exception as exc:
     error(str(exc))
 
 
@@ -198,7 +196,7 @@ def on_setup(args, flags):
   else:
     setup = seiscomp3.Setup.Simple()
     try: cfg = setup.run(env)
-    except Exception, e:
+    except Exception as e:
       error(str(e))
       return 1
 
@@ -212,7 +210,7 @@ def on_setup(args, flags):
         hasSetupHandler = False
 
       if hasSetupHandler:
-        print "* setup %s" % mod.name
+        print("* setup %s" % mod.name)
         if mod.setup(cfg) != 0:
           error("module '%s' failed to setup" % mod.name)
           retCode = 1
@@ -231,11 +229,11 @@ def on_setup(args, flags):
   return retCode
 
 def on_setup_help(args):
-  print "Initializes the configuration of all available modules. Each module implements"
-  print "its own setup handler which is called at this point. The initialization takes"
-  print "the installation directory into account and should be repeated when copying"
-  print "the system to another directory."
-  print "NOTE: Setup might overwrite already made settings with default values."
+  print("Initializes the configuration of all available modules.  Each module implements")
+  print("its own setup handler which is called at this point. The initialization takes")
+  print("the installation directory into account and should be repeated when copying")
+  print("the system to another directory.")
+  print("NOTE: Setup might overwrite already made settings with default values.")
   return 0
 
 
@@ -245,15 +243,15 @@ def on_shell(args, flags):
 
   shell = seiscomp3.Shell.CLI()
   try: shell.run(env)
-  except Exception, e:
+  except Exception as e:
     error(str(e))
     return 1
   return 0
 
 
 def on_shell_help(args):
-  print "Launches the SeisComP shell, a commandline interface which allows"
-  print "to manage modules configurations and bindings."
+  print("Launches the SeisComP shell, a commandline interface which allows")
+  print("to manage modules configurations and bindings.")
   return 0
 
 
@@ -275,11 +273,11 @@ def on_enable(args, flags):
 
 
 def on_enable_help(args):
-  print "Enables all given modules to be started when 'seiscomp start' is invoked"
-  print "without a module list."
-  print
-  print "Examples:"
-  print "seiscomp enable seedlink slarchive"
+  print("Enables all given modules to be started when 'seiscomp start' is invoked")
+  print("without a module list.")
+  print()
+  print("Examples:")
+  print("seiscomp enable seedlink slarchive")
 
 
 def on_disable(args, flags):
@@ -299,10 +297,10 @@ def on_disable(args, flags):
 
 
 def on_disable_help(args):
-  print "Disables all given modules. See 'enable'."
-  print
-  print "Examples:"
-  print "seiscomp disable seedlink slarchive"
+  print("Disables all given modules. See 'enable'.")
+  print()
+  print("Examples:")
+  print("seiscomp disable seedlink slarchive")
 
 
 
@@ -324,11 +322,11 @@ def on_start(args, flags):
 
 
 def on_start_help(args):
-  print "Starts all enabled modules or a list of modules given."
-  print
-  print "Examples:"
-  print "seiscomp start"
-  print "seiscomp start seedlink slarchive"
+  print("Starts all enabled modules or a list of modules given.")
+  print()
+  print("Examples:")
+  print("seiscomp start")
+  print("seiscomp start seedlink slarchive")
 
 
 def on_stop(args, flags):
@@ -349,11 +347,11 @@ def on_stop(args, flags):
 
 
 def on_stop_help(args):
-  print "Stops all enabled modules or a list of modules given."
-  print
-  print "Examples:"
-  print "seiscomp stop"
-  print "seiscomp stop seedlink slarchive"
+  print("Stops all enabled modules or a list of modules given.")
+  print()
+  print("Examples:")
+  print("seiscomp stop")
+  print("seiscomp stop seedlink slarchive")
 
 
 def on_restart(args, flags):
@@ -363,14 +361,14 @@ def on_restart(args, flags):
 
 
 def on_restart_help(args):
-  print "Restarts all enabled modules or a list of modules given."
-  print "This command is equal to:"
-  print "seiscomp stop {args}"
-  print "seiscomp start {args}"
-  print
-  print "Examples:"
-  print "seiscomp restart"
-  print "seiscomp restart seedlink slarchive"
+  print("Restarts all enabled modules or a list of modules given.")
+  print("This command is equal to:")
+  print("seiscomp stop {args}")
+  print("seiscomp start {args}")
+  print()
+  print("Examples:")
+  print("seiscomp restart")
+  print("seiscomp restart seedlink slarchive")
 
 
 def on_check(args, flags):
@@ -382,12 +380,12 @@ def on_check(args, flags):
 
 
 def on_check_help(args):
-  print "Checks if a started module is still running. If not it is started again."
-  print "If no modules are given, all started modules are checked."
-  print
-  print "Examples:"
-  print "$ seiscomp check seedlink"
-  print "seedlink is already running"
+  print("Checks if a started module is still running. If not it is started again.")
+  print("If no modules are given, all started modules are checked.")
+  print()
+  print("Examples:")
+  print("$ seiscomp check seedlink")
+  print("seedlink is already running")
 
 
 def on_exec(args, flags):
@@ -401,11 +399,11 @@ def on_exec(args, flags):
 
 
 def on_exec_help(args):
-  print "Executes a command like calling a command from commandline."
-  print "It will setup all paths and execute the command."
-  print "'seiscomp run' will block until the command terminates."
-  print "Example:"
-  print "seiscomp exec scolv"
+  print("Executes a command like calling a command from commandline.")
+  print("It will setup all paths and execute the command.")
+  print("'seiscomp run' will block until the command terminates.")
+  print("Example:")
+  print("seiscomp exec scolv")
 
 
 def on_list(args, flags):
@@ -419,7 +417,7 @@ def on_list(args, flags):
         state = "enabled"
       else:
         state = "disabled"
-      print "%s is %s" % (mod.name, state)
+      print("%s is %s" % (mod.name, state))
     return 0
   elif args[0] == "aliases":
     f = open(ALIAS_FILE, 'r')
@@ -430,20 +428,20 @@ def on_list(args, flags):
       # Remove invalid lines
       if len(toks) != 2: continue
       if useCSV:
-        print "%s;%s" % (toks[0], toks[1])
+        print("%s;%s" % (toks[0], toks[1]))
       else:
-        print "%s -> %s" % (toks[0], toks[1])
+        print("%s -> %s" % (toks[0], toks[1]))
     f.close()
     return 0
   elif args[0] == "enabled":
     for mod in mods:
       if env.isModuleEnabled(mod.name) or isinstance(mod, seiscomp3.Kernel.CoreModule):
-        print mod.name
+        print(mod.name)
     return 0
   elif args[0] == "disabled":
     for mod in mods:
       if not env.isModuleEnabled(mod.name) and not isinstance(mod, seiscomp3.Kernel.CoreModule):
-        print mod.name
+        print(mod.name)
     return 0
 
   error("wrong argument: {modules|aliases|enabled|disabled} expected")
@@ -451,15 +449,15 @@ def on_list(args, flags):
 
 
 def on_list_help(args):
-  print "Prints the result of a query. 4 queries are currently supported:"
-  print " modules: lists all existing modules"
-  print " aliases: lists all existing aliases"
-  print " enabled: lists all enabled modules"
-  print " disabled: lists all disabled modules"
-  print
-  print "Examples:"
-  print "$ seiscomp list aliases"
-  print "scautopick2 -> scautopick"
+  print("Prints the result of a query. 4 queries are currently supported:")
+  print(" modules: lists all existing modules")
+  print(" aliases: lists all existing aliases")
+  print(" enabled: lists all enabled modules")
+  print(" disabled: lists all disabled modules")
+  print()
+  print("Examples:")
+  print("$ seiscomp list aliases")
+  print("scautopick2 -> scautopick")
 
 
 def on_status(args, flags):
@@ -470,21 +468,21 @@ def on_status(args, flags):
 
 
 def on_status_help(args):
-  print "Prints the status of all or a list of modules and gives a warning if a module"
-  print "should run but doesn't."
-  print "This command supports csv formatted output via '--csv' switch."
-  print
-  print "Examples:"
-  print "$ seiscomp status scautopick"
-  print "scautopick           is not running"
-  print "$ seiscomp --csv status scautopick"
-  print "scautopick;0;0;0"
-  print
-  print "CSV format:"
-  print " column 1: module name"
-  print " column 2: running flag"
-  print " column 3: should run flag"
-  print " column 4: enabled flag"
+  print("Prints the status of all or a list of modules and gives a warning if a module")
+  print("should run but doesn't.")
+  print("This command supports csv formatted output via '--csv' switch.")
+  print()
+  print("Examples:")
+  print("$ seiscomp status scautopick")
+  print("scautopick           is not running")
+  print("$ seiscomp --csv status scautopick")
+  print("scautopick;0;0;0")
+  print()
+  print("CSV format:")
+  print(" column 1: module name")
+  print(" column 2: running flag")
+  print(" column 3: should run flag")
+  print(" column 4: enabled flag")
 
 
 def on_print(args, flags):
@@ -493,20 +491,20 @@ def on_print(args, flags):
     return 1
 
   if args[0] == "crontab":
-    print "*/3 * * * * %s check >/dev/null 2>&1" % os.path.join(env.SEISCOMP_ROOT, "bin", "seiscomp")
+    print("*/3 * * * * %s check >/dev/null 2>&1" % os.path.join(env.SEISCOMP_ROOT, "bin", "seiscomp"))
     for mod in mods:
       mod.printCrontab()
   elif args[0] == "env":
-    print "export SEISCOMP_ROOT=%s" % SEISCOMP_ROOT
-    print "export PATH=%s:$PATH" % BIN_PATH
-    print "export %s=%s:$%s" % (SysLibraryPathVar, get_library_path(), SysLibraryPathVar)
+    print("export SEISCOMP_ROOT=%s" % SEISCOMP_ROOT)
+    print("export PATH=%s:$PATH" % BIN_PATH)
+    print("export %s=%s:$%s" % (SysLibraryPathVar, get_library_path(), SysLibraryPathVar))
     if sys.platform == "darwin":
-      print "export %s=%s:$%s" % (SysFrameworkPathVar, get_framework_path(), SysFrameworkPathVar)
+      print("export %s=%s:$%s" % (SysFrameworkPathVar, get_framework_path(), SysFrameworkPathVar))
 
-    print "export PYTHONPATH=%s:$PYTHONPATH" % PYTHONPATH
-    print "export MANPATH=%s:$MANPATH" % MANPATH
-    print "export LC_ALL=C"
-    print "source %s/share/shell-completion/seiscomp.bash" % SEISCOMP_ROOT
+    print("export PYTHONPATH=%s:$PYTHONPATH" % PYTHONPATH)
+    print("export MANPATH=%s:$MANPATH" % MANPATH)
+    print("export LC_ALL=C")
+    print("source %s/share/shell-completion/seiscomp.bash" % SEISCOMP_ROOT)
   else:
     error("wrong argument: {crontab|env} expected")
     return 1
@@ -515,13 +513,13 @@ def on_print(args, flags):
 
 
 def on_print_help(args):
-  print "seiscomp print {crontab|env}"
-  print " crontab: prints crontab entries of all registered or given modules."
-  print " env: prints environment variables necessary to run SeisComP3 modules."
-  print
-  print "Examples:"
-  print "Source SC3 environment into current bash session"
-  print "$ eval $(seiscomp3/bin/seiscomp print env)"
+  print("seiscomp print {crontab|env}")
+  print(" crontab: prints crontab entries of all registered or given modules.")
+  print(" env: prints environment variables necessary to run SeisComP3 modules.")
+  print()
+  print("Examples:")
+  print("Source SC3 environment into current bash session")
+  print("$ eval $(seiscomp3/bin/seiscomp print env)")
 
 
 def on_install_deps_linux(args, flags):
@@ -535,11 +533,11 @@ def on_install_deps_linux(args, flags):
     out = [l.strip() for l in out]
   except:
     error("lsb_release is not installed")
-    print "*********************************************************************"
-    print "seiscomp was not able to figure out the installed distribution"
-    print "You need to check the documentation for required packages and install"
-    print "them manually."
-    print "*********************************************************************"
+    print("*********************************************************************")
+    print("seiscomp was not able to figure out the installed distribution")
+    print("You need to check the documentation for required packages and install")
+    print("them manually.")
+    print("*********************************************************************")
     return 1
 
   try:
@@ -548,22 +546,22 @@ def on_install_deps_linux(args, flags):
     error("unexpected version result")
     return 1
 
-  print "Distribution: " + release + " " + version
+  print("Distribution: " + release + " " + version)
 
   script_dir = os.path.join(env.SEISCOMP_ROOT, "share", "deps", release.lower(), version.lower())
   if not os.path.exists(script_dir):
-    print "*********************************************************************"
-    print "Sorry, the installed distribution is not supported."
-    print "You need to check the documentation for required packages and install"
-    print "them manually."
-    print "*********************************************************************"
+    print("*********************************************************************")
+    print("Sorry, the installed distribution is not supported.")
+    print("You need to check the documentation for required packages and install")
+    print("them manually.")
+    print("*********************************************************************")
     return 1
 
   if len(args) == 0:
     error("no packages given")
-    print "Give the packages you want to install dependencies for after"
-    print "install-deps."
-    print "Example: seiscomp install-deps base gui mysql-server"
+    print("Give the packages you want to install dependencies for after")
+    print("install-deps.")
+    print("Example: seiscomp install-deps base gui mysql-server")
 
   for pkg in args:
     script = os.path.join(script_dir, "install-" + pkg + ".sh")
@@ -583,19 +581,19 @@ def on_install_deps(args, flags):
     return on_install_deps_linux(args, flags)
   else:
     error("unsupported platform")
-    print "*********************************************************************"
-    print "The platform you are currently running on is not supported to install"
-    print "dependencies automatically."
-    print "You need to check the documentation for required packages and install"
-    print "them manually."
-    print "*********************************************************************"
+    print("*********************************************************************")
+    print("The platform you are currently running on is not supported to install")
+    print("dependencies automatically.")
+    print("You need to check the documentation for required packages and install")
+    print("them manually.")
+    print("*********************************************************************")
     return 1
 
 
 def on_install_deps_help(args):
-  print "Installs OS dependencies to run SeisComP3. This requires either a 'sudo'"
-  print "or root account. Additional packages can be given as arguments."
-  print "Packages: mysql, postgresql"
+  print("Installs OS dependencies to run SeisComP3. This requires either a 'sudo'")
+  print("or root account. Additional packages can be given as arguments.")
+  print("Packages: mysql, postgresql")
   return 0
 
 
@@ -612,10 +610,10 @@ def on_update_config(args, flags):
     for mod in config_mods:
       if mod.name in listOfMods:
         if not kernelModsStarted and mod.requiresKernelModules():
-          print "* starting kernel modules"
+          print("* starting kernel modules")
           start_kernel_modules()
           kernelModsStarted = True
-        print "* configure %s" % mod.name
+        print("* configure %s" % mod.name)
 
         proxy = None
 
@@ -623,7 +621,7 @@ def on_update_config(args, flags):
           proxy = mod.updateConfigProxy()
           if isinstance(proxy, basestring):
             configuredMods.setdefault(proxy, False)
-        except Exception, e:
+        except Exception as e:
           pass
 
         if proxy is None:
@@ -631,7 +629,7 @@ def on_update_config(args, flags):
 
           try:
             error_code = int(result)
-          except Exception, e:
+          except Exception as e:
             error("unexpected return type when updating configuration of %s" % mod.name)
             return 1
 
@@ -650,8 +648,8 @@ def on_update_config(args, flags):
 
 
 def on_update_config_help(args):
-  print "Updates the configuration of all available modules. This command will convert"
-  print "the etc/*.cfg to the modules native configuration including its bindings."
+  print("Updates the configuration of all available modules. This command will convert")
+  print("the etc/*.cfg to the modules native configuration including its bindings.")
   return 0
 
 
@@ -696,7 +694,7 @@ def on_alias(args, flags):
     # create alias line in etc/descriptions/aliases
     if not os.path.exists(DESC_PATH):
       try: os.makedirs(DESC_PATH)
-      except Exception, e:
+      except Exception as e:
         error("failed to create directory: %s" % DESC_PATH)
         return 1
 
@@ -749,14 +747,14 @@ def on_alias(args, flags):
     default_cfg1 = args[1] + ".cfg"
     default_cfg2 = args[2] + ".cfg"
     if os.path.exists(default_cfg2):
-      print "Linking default configuration: %s -> %s" % (default_cfg2, default_cfg1)
+      print("Linking default configuration: %s -> %s" % (default_cfg2, default_cfg1))
       # - first: remove target
       try: os.remove(default_cfg1)
       except: pass
       # create symlink
       os.symlink(os.path.relpath(default_cfg2), default_cfg1)
     else:
-      print "No default configuration to link"
+      print("No default configuration to link")
     # return to initial directory
     os.chdir(cwd)
 
@@ -764,7 +762,7 @@ def on_alias(args, flags):
     # - first: remove target
     try: os.remove(os.path.join(SEISCOMP_ROOT, mod1))
     except: pass
-    print "Create app symlink: %s -> %s" % (mod2, mod1)
+    print("Create app symlink: %s -> %s" % (mod2, mod1))
     os.symlink(mod2, os.path.join(SEISCOMP_ROOT, mod1))
 
     # create symlink from etc/init/mod1.py to etc/init/mod2.py
@@ -772,7 +770,7 @@ def on_alias(args, flags):
     os.chdir(os.path.join(SEISCOMP_ROOT,"etc", "init"))
     init1 = args[1] + ".py"
     init2 = args[2] + ".py"
-    print "Link init script: %s -> %s" % (init2, init1)
+    print("Link init script: %s -> %s" % (init2, init1))
     # - first: remove target
     try: os.remove(init1)
     except: pass
@@ -826,7 +824,7 @@ def on_alias(args, flags):
 
     #  delete defaults etc/defaults/mod1.cfg
     default_cfg = os.path.join("etc", "defaults", args[1] + ".cfg")
-    print "Remove default configuration: %s" % default_cfg
+    print("Remove default configuration: %s" % default_cfg)
     try: os.remove(os.path.join(SEISCOMP_ROOT, default_cfg))
     except: pass
 
@@ -839,13 +837,13 @@ def on_alias(args, flags):
       sym_link = ""
 
     if sym_link:
-      print "Remove app symlink: %s" % sym_link
+      print("Remove app symlink: %s" % sym_link)
       try: os.remove(os.path.join(SEISCOMP_ROOT, sym_link))
       except: pass
 
     # remove symlink from etc/init/mod1.py
     init_scr = os.path.join("etc", "init", args[1] + ".py")
-    print "Remove init script: %s" % init_scr
+    print("Remove init script: %s" % init_scr)
     try: os.remove(os.path.join(SEISCOMP_ROOT, init_scr))
     except: pass
 
@@ -858,19 +856,19 @@ def on_alias(args, flags):
 
 
 def on_alias_help(args):
-  print "seiscomp alias {create|remove} ALIAS_NAME APP_NAME"
-  print "Creates/removes symlinks to applications. Symlinks to symlinks are not allowed."
-  print
-  print "Examples:"
-  print "$ seiscomp alias create scautopick2 scautopick"
-  print "Copy default configuration: etc/defaults/scautopick.cfg -> etc/defaults/scautopick2.cfg"
-  print "Create app symlink: scautopick -> bin/scautopick2"
-  print "Copy init script: etc/init/scautopick.py -> etc/init/scautopick2.py"
-  print
-  print "$ seiscomp alias remove scautopick2"
-  print "Remove default configuration: etc/defaults/scautopick2.cfg"
-  print "Remove app symlink: bin/scautopick2"
-  print "Remove init script: etc/init/scautopick2.py"
+  print("seiscomp alias {create|remove} ALIAS_NAME APP_NAME")
+  print("Creates/removes symlinks to applications. Symlinks to symlinks are not allowed.")
+  print()
+  print("Examples:")
+  print("$ seiscomp alias create scautopick2 scautopick")
+  print("Copy default configuration: etc/defaults/scautopick.cfg -> etc/defaults/scautopick2.cfg")
+  print("Create app symlink: scautopick -> bin/scautopick2")
+  print("Copy init script: etc/init/scautopick.py -> etc/init/scautopick2.py")
+  print()
+  print("$ seiscomp alias remove scautopick2")
+  print("Remove default configuration: etc/defaults/scautopick2.cfg")
+  print("Remove app symlink: bin/scautopick2")
+  print("Remove init script: etc/init/scautopick2.py")
 
 
 allowed_actions = [
@@ -905,17 +903,17 @@ actions_without_lock = [
 
 def on_help(args, flags):
   if len(args) == 0:
-    print "Available commands:"
+    print("Available commands:")
     for action in allowed_actions:
-      print "  %s" % action
-    print
-    print "Use 'help [command]' to get more help about a command"
+      print("  %s" % action)
+    print()
+    print("Use 'help [command]' to get more help about a command")
     return 0
   else:
     cmd = args[0]
     try: func = globals()["on_" + cmd.replace("-", "_") + "_help"]
     except:
-      print "Sorry, no help available for %s" % cmd
+      print("Sorry, no help available for %s" % cmd)
       return 1
     func(args[1:])
     return 0
@@ -925,7 +923,7 @@ def run_action(action, args, flags):
   try:
     func = globals()["on_" + action.replace("-", "_")]
     return func(args, flags)
-  except Exception, exc:
+  except Exception as exc:
     error("command '%s' failed: %s" % (action, str(exc)))
     if "debug" in flags:
       info = traceback.format_exception(*sys.exc_info())
@@ -934,9 +932,9 @@ def run_action(action, args, flags):
 
 
 def on_csv_help(args):
-  print "If --csv is prepended to a usual command the internal output is set to comma separated values."
-  print "The only command that is currently using this output format is 'status'."
-  print "Example: seiscomp --csv status"
+  print("If --csv is prepended to a usual command the internal output is set to comma separated values.")
+  print("The only command that is currently using this output format is 'status'.")
+  print("Example: seiscomp --csv status")
   return 0
 
 
@@ -964,18 +962,18 @@ while len(argv):
     break
 
 if len(argv) < 1:
-  print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
+  print("seiscomp [flags] {%s} [args]" % "|".join(allowed_actions))
   sys.exit(1)
 
 action = argv[0]
 args = argv[1:]
 
 if not action in allowed_actions:
-  print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
+  print("seiscomp [flags] {%s} [args]" % "|".join(allowed_actions))
   sys.exit(1)
 
 if os.getuid() == 0 and not asRoot and action != "install-deps":
-  print "Running seiscomp as root is dangerous. Use --asroot if you know what you are doing"
+  print("Running seiscomp as root is dangerous. Use --asroot if you know what you are doing")
   sys.exit(1)
 
 # ------------------------------------------------------------------------------

@@ -37,7 +37,7 @@ def main(argv):
     # parse command line options
     try:
         opts, args = getopt.getopt(argv[1:], "hf", ["help", "formatted"])
-    except getopt.error, msg:
+    except getopt.error as msg:
         sys.stderr.write("%s\n" % msg)
         sys.stderr.write("for help use --help\n")
         return 1

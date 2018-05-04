@@ -199,7 +199,7 @@ Commands:
                 stas.append(os.path.basename(f)[8:].replace("_", "."))
 
             for s in stas:
-                print s
+                print(s)
 
             return True
 
@@ -213,7 +213,7 @@ Commands:
 
             profs = []
             for f in sorted(glob.glob(os.path.join(self.env.key_dir, module, "profile_*"))):
-                print os.path.basename(f)[8:]
+                print(os.path.basename(f)[8:])
 
             return True
 
@@ -234,7 +234,7 @@ Commands:
                     continue
                 if len(l) == 0:
                     continue
-                print l
+                print(l)
 
             return True
 
