@@ -92,7 +92,7 @@ class Importer(seiscomp3.Client.Application):
         for f in files:
             prog = os.path.basename(f)
             prog = prog[:prog.find("2inv")]
-            sys.stderr.write("%s\n" % prog)
+            sys.stdout.write("%s\n" % prog)
 
         return True
 
