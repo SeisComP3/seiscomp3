@@ -1492,7 +1492,7 @@ void Application::messagesAvailable() {
 
 		if ( isDatabaseEnabled() ) {
 			Communication::DatabaseProvideMessage* dbmsg = Communication::DatabaseProvideMessage::Cast(msg);
-			if ( dbmsg ) {
+			if ( dbmsg && cdlg() ) {
 				cdlg()->setDefaultDatabaseParameters(dbmsg->service(), dbmsg->parameters());
 				if ( database() == NULL ) {
 					cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
