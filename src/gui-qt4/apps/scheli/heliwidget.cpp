@@ -182,7 +182,6 @@ void HeliCanvas::setRowColors(const QVector<QColor> &cols) {
 
 
 void HeliCanvas::setLineWidth(int lw) {
-	std::cout << lw << std::endl;
 	_lineWidth = lw;
 }
 
