@@ -682,6 +682,23 @@ class _Blockette50(object):
         self.__len = 59 + len(self.__site_name) + len(self.__start_date) + \
             len(self.__end_date)
 
+        error = False
+        if not isinstance(self.__stat_code, str):
+            print "blockette 50 - station code not set or not of type string"
+            error = True
+        if not isinstance(self.__latitude, float):
+            print "blockette 50 - latitude not set or not of type float"
+            error = True
+        if not isinstance(self.__longitude, float):
+            print "blockette 50 - longitude not set or not of type float"
+            error = True
+        if not isinstance(self.__elevation, float):
+            print "blockette 50 - elevation not set or not of type float"
+            error = True
+
+        if error:
+            raise SEEDError, "blockette 50 - provide correct values. Adjust your inventory XML!"
+
     def output(self, f):
         blk = "050%4d%s%10.6f%11.6f%7.1f       %s%3d321010%s%sN%s" % \
             (self.__len, self.__stat_code, self.__latitude, self.__longitude,
@@ -734,6 +751,62 @@ class _Blockette52(object):
         self.__raw_start_date = start_date
         self.__raw_end_date = end_date
         self.__len = 0
+
+        error = False
+        if not isinstance(self.__loc_id, str):
+            print "blockette 52 - location ID not set or not of type string"
+            error = True
+        if not isinstance(self.__chan_id, str):
+            print "blockette 52 - channel ID not set or not of type string"
+            error = True
+        if not isinstance(self.__len, int):
+            print "blockette 52 - len not set or not of type int"
+            error = True
+        if not isinstance(self.__instr_id, int):
+            print "blockette 52 - instrument ID not set or not of type integer"
+            error = True
+        if not isinstance(self.__comment, str):
+            print "blockette 52 - comment not set or not of type sting"
+            error = True
+        if not isinstance(self.__signal_units, int):
+            print "blockette 52 - signal_units not set or not of type integer"
+            error = True
+        if not isinstance(self.__calibration_units, int):
+            print "blockette 52 - calibration units not set or not of type integer"
+            error = True
+        if not isinstance(self.__latitude, float):
+            print "blockette 52 - latitude not set or not of type float"
+            error = True
+        if not isinstance(self.__longitude, float):
+            print "blockette 52 - longitude not set or not of type float"
+            error = True
+        if not isinstance(self.__elevation, float):
+            print "blockette 52 - elevation not set or not of type float"
+            error = True
+        if not isinstance(self.__local_depth, float):
+            print "Warning: blockette 52 - sensor depth not set or not of type float"
+            error = True
+        if not isinstance(self.__azimuth, float):
+            print "blockette 52 - sensor azimuth not set or not of type float"
+            error = True
+        if not isinstance(self.__dip, float):
+            print "blockette 52 - sensor dip not set or not of type float"
+            error = True
+        if not isinstance(self.__data_format, int):
+            print "blockette 52 - data format not set or not of type integer"
+            error = True
+        if not isinstance(self.__record_length, int):
+            print "blockette 52 - record length not set or not of type integer"
+            error = True
+        if not isinstance(self.__sample_rate, float):
+            print "blockette 52 - sample rate not set or not of type float"
+            error = True
+        if not isinstance(self.__clock_drift, float):
+            print "Warning: blockette 52 - clock drift not set or not of type float"
+            error = True
+
+        if error:
+            raise SEEDError, "blockette 52 - provide correct values. Adjust your inventory XML!"
 
     def set_vol_span(self, vol_start, vol_end):
         # make verseed happy
@@ -2941,4 +3014,3 @@ class SEEDVolume(object):
 
         if isinstance(dest, basestring):
             fd.close()
-
