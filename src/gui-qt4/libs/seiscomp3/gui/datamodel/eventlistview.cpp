@@ -4644,6 +4644,9 @@ EventListViewRegionFilterDialog::EventListViewRegionFilterDialog(QWidget *parent
 
 	connect(_ui.cbRegions, SIGNAL(currentIndexChanged(const QString &)),
 	        this, SLOT(regionSelectionChanged(const QString &)));
+
+	connect(_ui.okButton, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(_ui.cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 
