@@ -62,6 +62,7 @@ LocSAT::LocSAT() {
 	_name = "LOCSAT";
 	_newOriginID = "";
 	_computeConfidenceEllipsoid = false;
+	_enableDebugOutput = false;
 
 	if ( _allowedParameters.empty() ) {
 		_allowedParameters.push_back("VERBOSE");
@@ -99,9 +100,19 @@ bool LocSAT::init(const Config::Config &config) {
 	catch ( ... ) {}
 
 	try {
+		_enableDebugOutput = config.getBool("LOCSAT.enableDebugOutput");
+		if (_enableDebugOutput)
+			setLocatorParams(LP_VERBOSE, "y");
+	}
+	catch ( ... ) {}
+
+	try {
 		_locator_params->depth_init = config.getDouble("LOCSAT.depthInit");
 	}
 	catch ( ... ) {}
+
+	if (_enableDebugOutput)
+		SEISCOMP_INFO("LOCSAT: enabled locator-specific debug output");
 
 	return true;
 }

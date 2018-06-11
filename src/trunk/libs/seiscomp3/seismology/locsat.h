@@ -159,6 +159,8 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		double                    _minArrivalWeight;
 		bool                      _useArrivalRMSAsTimeError;
 
+		bool                      _enableDebugOutput;
+
 		IDList                    _profiles;
 
 		LocSATErrorEllipsoid      _errorEllipsoid;
