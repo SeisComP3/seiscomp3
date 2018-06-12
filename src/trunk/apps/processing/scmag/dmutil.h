@@ -16,8 +16,6 @@
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/origin.h>
 
-// This is for debugging only
-void countPublicObjectsByType();
 bool dumpOrigin(const Seiscomp::DataModel::Origin *origin);
 
 bool equivalent(const Seiscomp::DataModel::WaveformStreamID&, const Seiscomp::DataModel::WaveformStreamID&);
