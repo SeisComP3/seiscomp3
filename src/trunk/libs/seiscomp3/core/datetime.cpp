@@ -898,7 +898,7 @@ std::string Time::toString(const char* fmt) const {
 			memcpy(tgt, last, f-last);
 			tgt += f-last;
 
-			char number[12];
+			char number[32];
 			size_t numberOfDigits;
 			if ( usecs > 0 ) {
 				numberOfDigits = sprintf(number, "%06ld", usecs);
