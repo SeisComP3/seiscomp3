@@ -1,18 +1,24 @@
 fdsnws is a server that provides
 `FDSN Web Services <http://www.fdsn.org/webservices>`_ from a SeisComP3 database
-and record source. The following services are available:
+and :ref:`global_recordstream` source.
+
+Service Overview
+----------------
+
+The following services are available:
 
 .. csv-table::
-   :header: "Service", "Retrieves this...", "In this format"
+   :header: "Service", "Provides", "Provided format"
 
-   "**fdsnws-dataselect**", "time series data in miniSEED format", "`miniSEED <http://www.iris.edu/data/miniseed.htm>`_"
-   "**fdsnws-station**", "network, station, channel, response metadata", "`FDSN Station XML <http://www.fdsn.org/xml/station/>`_, `StationXML <http://www.data.scec.org/station/xml.html>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
-   "**fdsnws-event**", "contributed earthquake origin and magnitude estimates", "`QuakeML <https://quake.ethz.ch/quakeml>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
+   ":ref:`fdsnws-dataselect <sec-dataSelect>`", "time series data", "`miniSEED <http://www.iris.edu/data/miniseed.htm>`_"
+   ":ref:`fdsnws-station <sec-station>`", "network, station, channel, response metadata", "`FDSN Station XML <http://www.fdsn.org/xml/station/>`_, `StationXML <http://www.data.scec.org/station/xml.html>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
+   ":ref:`fdsnws-event <sec-event>`", "earthquake origin and magnitude estimates", "`QuakeML <https://quake.ethz.ch/quakeml>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
 
 
 The available services can be reached from the fdsnws start page.
 The services also provide an interactive URL builder providing the URL based on
-the selection.
+the selection. The FDSN specifications can be found on
+`FDSN Web Services <http://www.fdsn.org/webservices>`_.
 
 URL
 ^^^
@@ -22,7 +28,7 @@ URL
 If ``fdsnws`` is started, it accepts connections by default on port 8080 which
 can be changed in the configuration. Also please read :ref:`sec-port` for
 running the services on a privileged port, e.g. port 80 as requested by the
-specification.
+FDSN specification.
 
 .. note::
 
@@ -30,13 +36,12 @@ specification.
    you have to change the URL string in the ``*.wadl`` documents located under
    ``$DATADIR/fdsnws``.
 
-
 .. _sec-dataSelect:
 
 DataSelect
------------
+----------
 
-* time series data in miniSEED format
+* provides time series data in miniSEED format
 * request type: HTTP-GET, HTTP-POST
 
 URL
@@ -51,13 +56,19 @@ URL
 Example
 ^^^^^^^
 
-http://localhost:8080/fdsnws/dataselect/1/query?net=GE&sta=BKNI&cha=BH?&start=2013-04-11T00:00:00&end=2013-04-11T12:00:00
+* Request URL for querying waveform data from the GE station BKNI, all BH channels
+  on 11 April 2013 between 00:00:00 and 12:00:00:
 
-To summit POST request the command line tool ``curl`` may be used.
+  ``http://localhost:8080/fdsnws/dataselect/1/query?net=GE&sta=BKNI&cha=BH?&start=2013-04-11T00:00:00&end=2013-04-11T12:00:00``
+
+To submit HTTP-POST requests the command line tool ``curl`` may be used:
 
 .. code-block:: sh
 
    sysop@host:~$ curl -X POST --data-binary @request.txt "http://localhost:8080/fdsnws/dataselect/1/query"
+
+where *request.txt* contains the POST message body. For details read the
+FDSN specifications.
 
 Feature Notes
 ^^^^^^^^^^^^^
@@ -71,13 +82,32 @@ Feature Notes
 The data streams exposed by this service may be restrict by defining an
 inventory filter, see section :ref:`sec-inv-filter`.
 
+Service Configuration
+^^^^^^^^^^^^^^^^^^^^^
+
+* activate :confval:`serveDataSelect` in the module configuration
+* configure the :ref:`global_recordstream` in the module's global configuration.
+  If the data is stored in a local waveform archive the
+  :ref:`rs-sdsarchive` provides fast access to the data. For archives on remote hosts
+  use :ref:`rs-arclink` or :ref:`rs-fdsnws` instead.
+
+.. warning::
+
+   Requesting future or delayed data may block the :ref:`sec-dataSelect` service.
+   Therefore, real-time :ref:`global_recordstream` requests such as :ref:`rs-slink`
+   should be avoided.
+   If :ref:`rs-slink` is inevitable make use of the ``timeout`` and
+   ``retries`` parameters. E.g. set the :confval:`recordstream.source` to
+   ``localhost:18000?timeout=1&retries=0`` or in case of the :ref:`rs-combined`
+   service to
+   ``slink/localhost:18000?timeout=1&retries=0;sdsarchive//home/sysop/seiscomp3/var/lib/archive``.
 
 .. _sec-station:
 
 Station
 -------
 
-* network, station, channel, response metadata
+* provides network, station, channel, response metadata
 * request type: HTTP-GET, HTTP-POST
 * stations may be filtered e.g. by geographic region and time, also the
   information depth level is selectable
@@ -93,7 +123,9 @@ URL
 Example
 ^^^^^^^
 
-* http://localhost:8080/fdsnws/station/1/query?net=GE&level=sta
+* Request URL for querying the information for the GE network on response level:
+
+  http://localhost:8080/fdsnws/station/1/query?net=GE&cha=BH%3F&level=response&nodata=404
 
 Feature Notes
 ^^^^^^^^^^^^^
@@ -116,17 +148,17 @@ Feature Notes
     * additional: ``[fdsnxml (=xml), stationxml, sc3ml]``
     * default: ``xml``
 
-The inventory exposed by this service may be restricted, see section :ref:`sec-inv-filter`.
+The inventory exposed by this service may be restricted, see section
+:ref:`sec-inv-filter`.
 
 .. _sec-event:
 
 Event
 -----
 
-* contributed earthquake origin and magnitude estimates
+* provides earthquake origin and magnitude estimates
 * request type: HTTP-GET
 * events may be filtered e.g. by hypocenter, time and magnitude
-
 
 URL
 ^^^
@@ -141,7 +173,10 @@ URL
 Example
 ^^^^^^^
 
-* http://localhost:8080/fdsnws/event/1/query?start=2013-04-18&lat=55&lon=11&maxradius=10
+* Request URL for fetching the event parameters within 10 degrees around 50°N/11°E
+  starting on 18 April 2013:
+
+  http://localhost:8080/fdsnws/event/1/query?start=2018-06-01&lat=50&lon=11&maxradius=10&nodata=404
 
 Feature Notes
 ^^^^^^^^^^^^^
