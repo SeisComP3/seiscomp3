@@ -438,7 +438,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT_CLI(_config.eventParameterFile, "Generic", "ep",
 	            "EventParameters (XML) to load", false);
 	NEW_OPT_CLI(_config.offline, "Mode", "offline",
-	            "Do not connect to the messaging and to the database",
+	            "Do not connect to the messaging and disable the database in combination with --inventory-db and --ep",
 	            false, true);
 	NEW_OPT_CLI(_config.force, "Mode", "force",
 	            "Force event processing even if a journal entry exists that processing has completed",
@@ -806,6 +806,7 @@ bool WFParam::run() {
 		if ( _config.offline ) {
 			_config.delayTimes.clear();
 			_config.updateDelay = 0;
+			_cronCounter = 0;
 		}
 
 		if ( !addProcess(evt.get()) )
@@ -994,6 +995,9 @@ void WFParam::handleTimeout() {
 					of << "RUNNING            \t" << _currentProcess->event->publicID() << endl;
 			}
 		}
+
+		if ( _config.offline && !isRecordThreadActive() )
+			quit();
 	}
 
 	// Check acquisition timeout
