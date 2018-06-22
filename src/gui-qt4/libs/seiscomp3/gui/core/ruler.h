@@ -38,6 +38,7 @@ class SC_GUI_API Ruler : public QFrame
 		void setScale(double);
 		bool setSelected(double, double);
 		bool setSelectionHandle(int handle, double pos);
+		bool setSelectionHandleEnabled(int handle, bool enable);
 		void setAnnot(double = -1); // -1 is "auto", 0 is none
 		void setTicks(double = -1); // -1 is "auto", 0 is none
 
@@ -148,6 +149,16 @@ class SC_GUI_API Ruler : public QFrame
 		void changeRange(double tmin, double tmax);
 
 	protected:
+		struct Handle {
+			Handle() : enabled(true) {}
+			double pos;
+			bool   enabled;
+
+			bool operator<(const Handle &other) const {
+				return pos < other.pos;
+			}
+		};
+
 		Position _position;
 
 		double  _ofs;
@@ -158,7 +169,7 @@ class SC_GUI_API Ruler : public QFrame
 		        _limitLeft, _limitRight,
 		        _limitMinRange, _limitMaxRange;
 		int     _pos, _tickLong, _tickShort, _lc;
-		QVector<double> _selectionHandles;
+		QVector<Handle> _selectionHandles;
 		int     _currentSelectionHandle;
 
 		double  _drx[2];   // current intervals

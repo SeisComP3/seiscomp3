@@ -81,7 +81,7 @@ int Ruler::selectionHandleCount() const {
 }
 
 double Ruler::selectionHandlePos(int i) const {
-	return _selectionHandles[i];
+	return _selectionHandles[i].pos;
 }
 
 void Ruler::setWheelEnabled(bool scale, bool translate) {
@@ -152,8 +152,10 @@ void Ruler::translate(double tx) {
 bool Ruler::setSelected(double smin, double smax) {
 	if ( _selectionHandles.count() != 2 ) return false;
 
-	_selectionHandles[0] = smin;
-	_selectionHandles[1] = smax;
+	_selectionHandles[0].pos = smin;
+	_selectionHandles[0].enabled = true;
+	_selectionHandles[1].pos = smax;
+	_selectionHandles[1].enabled = true;
 	qSort(_selectionHandles.begin(), _selectionHandles.end());
 	update();
 	return true;
@@ -164,11 +166,30 @@ bool Ruler::setSelectionHandle(int handle, double pos) {
 	if ( handle < 0 || handle >= _selectionHandles.count() )
 		return false;
 
-	_selectionHandles[handle] = pos;
+	_selectionHandles[handle].pos = pos;
 	//qSort(selectionHandles.begin(), selectionHandles.end());
 
 	update();
 	return true;
+}
+
+
+bool Ruler::setSelectionHandleEnabled(int handle, bool enable) {
+	if ( handle < 0 || handle >= _selectionHandles.count() )
+		return false;
+
+	if ( _selectionHandles[handle].enabled == enable )
+		return false;
+
+	_selectionHandles[handle].enabled = enable;
+	//qSort(selectionHandles.begin(), selectionHandles.end());
+
+	if ( handle == _currentSelectionHandle )
+		_currentSelectionHandle = -1;
+
+	update();
+	return true;
+
 }
 
 
@@ -203,11 +224,11 @@ void Ruler::setTicks(double dt) {
 }
 
 double Ruler::minimumSelection() const {
-	return _enableSelection ? _selectionHandles.front() : 0;
+	return _enableSelection ? _selectionHandles.front().pos : 0;
 }
 
 double Ruler::maximumSelection() const {
-	return _enableSelection ? _selectionHandles.back() : 0;
+	return _enableSelection ? _selectionHandles.back().pos : 0;
 }
 
 QSize Ruler::sizeHint() const {
@@ -237,7 +258,8 @@ void Ruler::drawSelection(QPainter &p) {
 	for ( int i = 0; i < _selectionHandles.count(); ++i ) {
 		if ( ( _hover || _dragMode > 0 ) && _enableSelection &&
 		     i == _currentSelectionHandle ) continue;
-		int iPos = int((_selectionHandles[i]-_min)*_scl);
+		int iPos = int((_selectionHandles[i].pos-_min)*_scl);
+		if ( iPos < left-selHalfWidth || iPos > right+selHalfWidth ) continue;
 		marker[0] = r2wPos(iPos-selHalfWidth, selHeight);
 		marker[1] = r2wPos(iPos+selHalfWidth, selHeight);
 		marker[2] = r2wPos(iPos,0);
@@ -247,11 +269,13 @@ void Ruler::drawSelection(QPainter &p) {
 	     _currentSelectionHandle >= 0 &&
 	     _currentSelectionHandle < _selectionHandles.count() ) {
 		p.setBrush(palette().color(QPalette::BrightText));
-		int iPos = int((_selectionHandles[_currentSelectionHandle]-_min)*_scl);
-		marker[0] = r2wPos(iPos-selHalfWidth, selHeight);
-		marker[1] = r2wPos(iPos+selHalfWidth, selHeight);
-		marker[2] = r2wPos(iPos,0);
-		p.drawPolygon(marker, 3);
+		int iPos = int((_selectionHandles[_currentSelectionHandle].pos-_min)*_scl);
+		if ( iPos >= left-selHalfWidth && iPos <= right+selHalfWidth ) {
+			marker[0] = r2wPos(iPos-selHalfWidth, selHeight);
+			marker[1] = r2wPos(iPos+selHalfWidth, selHeight);
+			marker[2] = r2wPos(iPos,0);
+			p.drawPolygon(marker, 3);
+		}
 	}
 	p.restore();
 }
@@ -546,7 +570,8 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 			if ( rx >= 0 && rx <= rulerWidth() && ry >= 0 && ry <= selHeight ) {
 				int minDist = rulerWidth();
 				for ( int i = 0; i < _selectionHandles.count(); ++i ) {
-					int iPos = int((_selectionHandles[i] - _min) * _scl);
+					if ( !_selectionHandles[i].enabled ) continue;
+					int iPos = int((_selectionHandles[i].pos - _min) * _scl);
 					int dist = abs(iPos - rx);
 					if ( dist <= selHalfWidth && dist < minDist ) {
 						minDist = dist;
@@ -589,22 +614,72 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 		if ( _enableSelection ) {
 			int idx = _dragMode - 1;
 
-			// Clip to previous handle
-			if ( (idx > 0) && (p < _selectionHandles[idx-1]) )
-				p = _selectionHandles[idx-1];
+			if ( idx != _currentSelectionHandle ) {
+				// Need to find another item as current
+				QPoint rp = w2rPos(e->x(), e->y());
+				int rx = rp.x();
+				int ry = rp.y();
+				int selHeight = _tickLong * 1.5;
+				int selHalfWidth = selHeight * 0.5;
+				_currentSelectionHandle = -1;
+				if ( rx >= 0 && rx <= rulerWidth() && ry >= 0 && ry <= selHeight ) {
+					int minDist = rulerWidth();
+					for ( int i = 0; i < _selectionHandles.count(); ++i ) {
+						if ( !_selectionHandles[i].enabled ) continue;
+						int iPos = int((_selectionHandles[i].pos - _min) * _scl);
+						int dist = abs(iPos - rx);
+						if ( dist <= selHalfWidth && dist < minDist ) {
+							minDist = dist;
+							_currentSelectionHandle = i;
+						}
+					}
+				}
 
-			// Clip to next handle
-			if ( (idx < _selectionHandles.count() -1 ) &&
-			     (p > _selectionHandles[idx+1]) )
-				p = _selectionHandles[idx+1];
+				if ( _currentSelectionHandle >= 0 ) {
+					_dragMode = _currentSelectionHandle + 1;
+					idx = _currentSelectionHandle;
+				}
+				else {
+					_dragMode = 0;
+					return;
+				}
+			}
 
-			_selectionHandles[idx] = p;
+			// Clip to previous enabled handle
+			int pidx = idx-1;
+			while ( pidx > 0 ) {
+				if ( _selectionHandles[pidx].enabled ) {
+					if ( p < _selectionHandles[pidx].pos ) {
+						p = _selectionHandles[pidx].pos;
+						break;
+					}
+				}
 
-			if ( _selectionHandles.count() == 2 )
-				emit changedSelection(_selectionHandles[0], _selectionHandles[1]);
+				--pidx;
+			}
 
-			emit selectionHandleMoved(idx, _selectionHandles[idx], e->modifiers());
-			update();
+			// Clip to next enabled handle
+			int nidx = idx+1;
+			while ( nidx < _selectionHandles.count() ) {
+				if ( _selectionHandles[nidx].enabled ) {
+					if ( p > _selectionHandles[nidx].pos ) {
+						p = _selectionHandles[nidx].pos;
+						break;
+					}
+				}
+
+				++nidx;
+			}
+
+			if ( _selectionHandles[idx].pos != p ) {
+				_selectionHandles[idx].pos = p;
+
+				if ( _selectionHandles.count() == 2 )
+					emit changedSelection(_selectionHandles[0].pos, _selectionHandles[1].pos);
+
+				emit selectionHandleMoved(idx, _selectionHandles[idx].pos, e->modifiers());
+				update();
+			}
 		}
 	}
 }
