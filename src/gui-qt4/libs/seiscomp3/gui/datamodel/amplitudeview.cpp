@@ -1860,6 +1860,7 @@ void AmplitudeView::init() {
 	//_recordView->setDefaultActions();
 
 	_recordView->timeWidget()->setSelectionHandleCount(4);
+	_recordView->timeWidget()->setSelectionHandleEnabled(2, false);
 
 	_connectionState = new ConnectionStateLabel(this);
 	connect(_connectionState, SIGNAL(customInfoWidgetRequested(const QPoint &)),
@@ -1920,6 +1921,7 @@ void AmplitudeView::init() {
 	_timeScale->setRangeSelectionEnabled(true);
 	_timeScale->setAbsoluteTimeEnabled(true);
 	_timeScale->setSelectionHandleCount(4);
+	_timeScale->setSelectionHandleEnabled(2, false);
 
 	layout->addWidget(_currentRecord);
 	layout->addWidget(_timeScale);
@@ -4160,7 +4162,7 @@ void AmplitudeView::disableAutoScale() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeView::zoomSelectionHandleMoved(int idx, double v, Qt::KeyboardModifiers) {
+void AmplitudeView::zoomSelectionHandleMoved(int idx, double v, Qt::KeyboardModifiers mods) {
 	AmplitudeRecordLabel *label = static_cast<AmplitudeRecordLabel*>(_recordView->currentItem()->label());
 	if ( label->processor ) {
 		double relTime = v - (double)(label->processor->trigger()-_timeScale->alignment());
@@ -4173,10 +4175,25 @@ void AmplitudeView::zoomSelectionHandleMoved(int idx, double v, Qt::KeyboardModi
 			case 1:
 				label->processor->setNoiseEnd(relTime);
 				_recordView->timeWidget()->setSelectionHandle(1, v);
+				if ( !mods.testFlag(Qt::ShiftModifier) ) {
+					label->processor->setSignalStart(relTime);
+					_timeScale->setSelectionHandle(2, _timeScale->selectionHandlePos(1));
+					_timeScale->setSelectionHandleEnabled(2, false);
+					_recordView->timeWidget()->setSelectionHandle(2, _recordView->timeWidget()->selectionHandlePos(1));
+				}
+				else {
+					_timeScale->setSelectionHandleEnabled(2, true);
+				}
 				break;
 			case 2:
 				label->processor->setSignalStart(relTime);
 				_recordView->timeWidget()->setSelectionHandle(2, v);
+				if ( !mods.testFlag(Qt::ShiftModifier) ) {
+					label->processor->setNoiseEnd(relTime);
+					_timeScale->setSelectionHandle(1, _timeScale->selectionHandlePos(2));
+					_recordView->timeWidget()->setSelectionHandle(1, _recordView->timeWidget()->selectionHandlePos(2));
+					_timeScale->setSelectionHandleEnabled(2, false);
+				}
 				break;
 			case 3:
 				label->processor->setSignalEnd(relTime);
@@ -4210,7 +4227,7 @@ void AmplitudeView::zoomSelectionHandleMoveFinished() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeView::selectionHandleMoved(int idx, double v, Qt::KeyboardModifiers) {
+void AmplitudeView::selectionHandleMoved(int idx, double v, Qt::KeyboardModifiers mods) {
 	for ( int r = 0; r < _recordView->rowCount(); ++r ) {
 		RecordViewItem* item = _recordView->itemAt(r);
 		AmplitudeRecordLabel *label = static_cast<AmplitudeRecordLabel*>(item->label());
@@ -4223,9 +4240,20 @@ void AmplitudeView::selectionHandleMoved(int idx, double v, Qt::KeyboardModifier
 					break;
 				case 1:
 					label->processor->setNoiseEnd(relTime);
+					if ( !mods.testFlag(Qt::ShiftModifier) ) {
+						label->processor->setSignalStart(relTime);
+						_recordView->timeWidget()->setSelectionHandleEnabled(2, false);
+						_recordView->timeWidget()->setSelectionHandle(2, _recordView->timeWidget()->selectionHandlePos(1));
+					}
+					else
+						_recordView->timeWidget()->setSelectionHandleEnabled(2, true);
 					break;
 				case 2:
 					label->processor->setSignalStart(relTime);
+					if ( !mods.testFlag(Qt::ShiftModifier) ) {
+						_recordView->timeWidget()->setSelectionHandleEnabled(2, false);
+						label->processor->setNoiseEnd(relTime);
+					}
 					break;
 				case 3:
 					label->processor->setSignalEnd(relTime);
@@ -4469,11 +4497,13 @@ void AmplitudeView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem)
 		_timeScale->setSelectionHandle(1, double(label->processor->trigger()-_timeScale->alignment())+label->processor->config().noiseEnd);
 		_timeScale->setSelectionHandle(2, double(label->processor->trigger()-_timeScale->alignment())+label->processor->config().signalBegin);
 		_timeScale->setSelectionHandle(3, double(label->processor->trigger()-_timeScale->alignment())+label->processor->config().signalEnd);
+		_timeScale->setSelectionHandleEnabled(2, true);
 
 		_recordView->timeWidget()->setSelectionHandle(0, label->processor->config().noiseBegin);
 		_recordView->timeWidget()->setSelectionHandle(1, label->processor->config().noiseEnd);
 		_recordView->timeWidget()->setSelectionHandle(2, label->processor->config().signalBegin);
 		_recordView->timeWidget()->setSelectionHandle(3, label->processor->config().signalEnd);
+		_recordView->timeWidget()->setSelectionHandleEnabled(2, true);
 	}
 	else
 		_timeScale->setSelectionEnabled(false);
