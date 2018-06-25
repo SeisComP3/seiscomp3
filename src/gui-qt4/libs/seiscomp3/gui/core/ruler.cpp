@@ -254,6 +254,9 @@ void Ruler::drawSelection(QPainter &p) {
 	int selHeight = _tickLong * 1.5;
 	int selHalfWidth = selHeight * 0.5;
 
+	int right = p.window().right();
+	int left = p.window().left();
+
 	p.setBrush(palette().color(QPalette::WindowText));
 	for ( int i = 0; i < _selectionHandles.count(); ++i ) {
 		if ( ( _hover || _dragMode > 0 ) && _enableSelection &&
