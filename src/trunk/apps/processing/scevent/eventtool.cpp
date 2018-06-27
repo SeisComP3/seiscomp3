@@ -30,6 +30,8 @@
 
 #include <seiscomp3/io/archive/xmlarchive.h>
 
+#include <seiscomp3/communication/systemmessages.h>
+#include <seiscomp3/core/genericmessage.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/math/geo.h>
 
@@ -113,6 +115,54 @@ struct GlobalRegion : public Client::Config::Region {
 };
 
 
+DEFINE_SMARTPOINTER(ClearCacheRequestMessage);
+
+/**
+ * \brief Message for requesting a clearing of the cache
+ * This message type requests a response from a peer. 
+ */
+class SC_SYSTEM_CLIENT_API ClearCacheRequestMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ClearCacheRequestMessage);
+	DECLARE_SERIALIZATION;
+	
+	public:
+		//! Constructor
+		ClearCacheRequestMessage() {}
+
+		//! Implemented interface from Message
+		virtual bool empty() const  { return false; }
+};
+
+void ClearCacheRequestMessage::serialize(Archive& ar) {}
+
+IMPLEMENT_SC_CLASS_DERIVED(
+	ClearCacheRequestMessage, Message, "clear_cache_request_message"
+);
+
+DEFINE_SMARTPOINTER(ClearCacheResponseMessage);
+
+/**
+ * \brief Message to respond to a clear cache request
+ */
+class SC_SYSTEM_CLIENT_API ClearCacheResponseMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ClearCacheResponseMessage);
+	DECLARE_SERIALIZATION;
+	
+	public:
+		//! Constructor
+		ClearCacheResponseMessage() {}
+
+		//! Implemented interface from Message
+		virtual bool empty() const  { return false; }
+};
+
+void ClearCacheResponseMessage::serialize(Archive& ar) {}
+
+IMPLEMENT_SC_CLASS_DERIVED(
+	ClearCacheResponseMessage, Message, "clear_cache_response_message"
+);
+
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -161,6 +211,7 @@ void EventTool::createCommandLineDescription() {
 	Application::createCommandLineDescription();
 
 	commandline().addOption("Messaging", "test", "Test mode, no messages are sent");
+	commandline().addOption("Messaging", "clear-cache", "Send a clear cache message and quit");
 	commandline().addOption("Database", "db-disable", "Do not use the database at all");
 	commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
 	commandline().addOption("Generic", "origin-id,O", "Origin ID to associate (local only)", &_originID, true);
@@ -177,6 +228,8 @@ void EventTool::createCommandLineDescription() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool EventTool::validateParameters() {
 	_testMode = commandline().hasOption("test");
+
+	_sendClearCache = commandline().hasOption("clear-cache");
 
 	if ( commandline().hasOption("db-disable") )
 		setDatabaseEnabled(false, false);
@@ -401,6 +454,23 @@ bool EventTool::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool EventTool::run() {
+
+	if ( _sendClearCache ) {
+		SEISCOMP_DEBUG("Sending clear cache request");
+		ClearCacheRequestMessage cc_msg;
+		connection()->send(&cc_msg);
+		SEISCOMP_DEBUG("Waiting for clear cache response message...");
+		while ( ! isExitRequested() ) { // sigkill or ctrl+c
+			int error;
+			Message *msg = connection()->readMessage(true, Communication::Connection::READ_ALL, NULL, &error);
+			if ( ClearCacheResponseMessage::Cast(msg) ) {
+				SEISCOMP_DEBUG("Clear cache response message received.");
+				return true;
+			}
+		}
+		return false;
+	}
+
 	if ( !_epFile.empty() ) {
 		IO::XMLArchive ar;
 		if ( !ar.open(_epFile.c_str()) ) {
@@ -507,6 +577,15 @@ void EventTool::handleMessage(Core::Message *msg) {
 	_originBlackList.clear();
 
 	Application::handleMessage(msg);
+
+	ClearCacheRequestMessage *cc_msg = ClearCacheRequestMessage::Cast(msg);
+	if ( cc_msg ) {
+		SEISCOMP_DEBUG("Received clear cache request");
+		_cache.clear();
+		SEISCOMP_DEBUG("Sending clear cache response");
+		ClearCacheResponseMessage cc_resp;
+		connection()->send(&cc_resp);
+	}
 
 	SEISCOMP_DEBUG("Work on TODO list");
 	for ( TodoList::iterator it = _adds.begin(); it != _adds.end(); ++it ) {
