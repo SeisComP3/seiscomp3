@@ -3492,204 +3492,200 @@ namespace Swig {
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[38]
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[39]
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__GFArchive_const_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__GFArchive_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Importer_const_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Importer_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_const_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_const_t__Impl swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_t__Impl swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_const_t__Impl swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_t__Impl swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_const_t__Impl swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_t__Impl swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_const_t__Impl swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_t__Impl swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_const_t__Impl swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_t__Impl swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[95]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[96]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[97]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[98]
-#define SWIGTYPE_p_Seiscomp__IO__AHOutput swig_types[99]
-#define SWIGTYPE_p_Seiscomp__IO__AHRecord swig_types[100]
-#define SWIGTYPE_p_Seiscomp__IO__BinaryArchive swig_types[101]
-#define SWIGTYPE_p_Seiscomp__IO__DatabaseInterface swig_types[102]
-#define SWIGTYPE_p_Seiscomp__IO__ExportSink swig_types[103]
-#define SWIGTYPE_p_Seiscomp__IO__Exporter swig_types[104]
-#define SWIGTYPE_p_Seiscomp__IO__GFArchive swig_types[105]
-#define SWIGTYPE_p_Seiscomp__IO__GFReceiver swig_types[106]
-#define SWIGTYPE_p_Seiscomp__IO__GFSource swig_types[107]
-#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[108]
-#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[109]
-#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[110]
-#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[111]
-#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[112]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[113]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[114]
-#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[115]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[116]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[117]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[118]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[119]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[120]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[121]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[122]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[123]
-#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[124]
-#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[125]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AlignmentError swig_types[126]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[127]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[128]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[129]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[130]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[131]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[132]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[133]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[134]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[135]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[136]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[137]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[138]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[139]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[140]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[141]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[142]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[143]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[144]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[145]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[146]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[147]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[148]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[149]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[150]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[151]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[152]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[153]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[154]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[155]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[156]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[157]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[158]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[159]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[160]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[161]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[162]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[163]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[164]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[165]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[166]
-#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[167]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[168]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[169]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[170]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[171]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[172]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[173]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[174]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[175]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[176]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[177]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[178]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[179]
-#define SWIGTYPE_p_TagType swig_types[180]
-#define SWIGTYPE_p_Type swig_types[181]
-#define SWIGTYPE_p_ValueType swig_types[182]
-#define SWIGTYPE_p_allocator_type swig_types[183]
-#define SWIGTYPE_p_bool swig_types[184]
-#define SWIGTYPE_p_char swig_types[185]
-#define SWIGTYPE_p_char_type swig_types[186]
-#define SWIGTYPE_p_const_iterator swig_types[187]
-#define SWIGTYPE_p_const_reference swig_types[188]
-#define SWIGTYPE_p_difference_type swig_types[189]
-#define SWIGTYPE_p_double swig_types[190]
-#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[191]
-#define SWIGTYPE_p_float swig_types[192]
-#define SWIGTYPE_p_fmtflags swig_types[193]
-#define SWIGTYPE_p_int swig_types[194]
-#define SWIGTYPE_p_int_type swig_types[195]
-#define SWIGTYPE_p_iostate swig_types[196]
-#define SWIGTYPE_p_iterator swig_types[197]
-#define SWIGTYPE_p_long swig_types[198]
-#define SWIGTYPE_p_off_type swig_types[199]
-#define SWIGTYPE_p_openmode swig_types[200]
-#define SWIGTYPE_p_p_void swig_types[201]
-#define SWIGTYPE_p_pos_type swig_types[202]
-#define SWIGTYPE_p_reference swig_types[203]
-#define SWIGTYPE_p_seekdir swig_types[204]
-#define SWIGTYPE_p_size_t swig_types[205]
-#define SWIGTYPE_p_size_type swig_types[206]
-#define SWIGTYPE_p_state_type swig_types[207]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[208]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[209]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[210]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[211]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[212]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[213]
-#define SWIGTYPE_p_std__exception swig_types[214]
-#define SWIGTYPE_p_std__invalid_argument swig_types[215]
-#define SWIGTYPE_p_std__ios_base swig_types[216]
-#define SWIGTYPE_p_std__istream swig_types[217]
-#define SWIGTYPE_p_std__listT_double_t swig_types[218]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[219]
-#define SWIGTYPE_p_std__locale swig_types[220]
-#define SWIGTYPE_p_std__ostream swig_types[221]
-#define SWIGTYPE_p_std__streambuf swig_types[222]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[223]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[224]
-#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[225]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[226]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[227]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[228]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[229]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[230]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[231]
-#define SWIGTYPE_p_time_t swig_types[232]
-#define SWIGTYPE_p_traits_type swig_types[233]
-#define SWIGTYPE_p_uint64_t swig_types[234]
-#define SWIGTYPE_p_value_type swig_types[235]
-#define SWIGTYPE_p_void swig_types[236]
-static swig_type_info *swig_types[238];
-static swig_module_info swig_module = {swig_types, 237, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__GFArchive_const_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__GFArchive_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Importer_const_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Importer_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_const_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_const_t__Impl swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_t__Impl swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_const_t__Impl swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_t__Impl swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_const_t__Impl swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_t__Impl swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_const_t__Impl swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_t__Impl swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_const_t__Impl swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_t__Impl swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[95]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[96]
+#define SWIGTYPE_p_Seiscomp__IO__BinaryArchive swig_types[97]
+#define SWIGTYPE_p_Seiscomp__IO__DatabaseInterface swig_types[98]
+#define SWIGTYPE_p_Seiscomp__IO__ExportSink swig_types[99]
+#define SWIGTYPE_p_Seiscomp__IO__Exporter swig_types[100]
+#define SWIGTYPE_p_Seiscomp__IO__GFArchive swig_types[101]
+#define SWIGTYPE_p_Seiscomp__IO__GFReceiver swig_types[102]
+#define SWIGTYPE_p_Seiscomp__IO__GFSource swig_types[103]
+#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[104]
+#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[105]
+#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[106]
+#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[107]
+#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[108]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[109]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[110]
+#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[111]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[112]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[113]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[114]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[115]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[116]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[117]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[118]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[119]
+#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[120]
+#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[121]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AlignmentError swig_types[122]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[123]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[124]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[125]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[126]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[127]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[128]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[129]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[130]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[131]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[132]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[133]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[134]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[135]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[136]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[137]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[138]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[139]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[140]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[141]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[142]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[143]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[144]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[145]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[146]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[147]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[148]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[149]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[150]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[151]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[152]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[153]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[154]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[155]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[156]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[157]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[158]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[159]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[160]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[161]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[162]
+#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[163]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[164]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[165]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[166]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[167]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[168]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[169]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[170]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[171]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[172]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[173]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[174]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[175]
+#define SWIGTYPE_p_TagType swig_types[176]
+#define SWIGTYPE_p_Type swig_types[177]
+#define SWIGTYPE_p_ValueType swig_types[178]
+#define SWIGTYPE_p_allocator_type swig_types[179]
+#define SWIGTYPE_p_bool swig_types[180]
+#define SWIGTYPE_p_char swig_types[181]
+#define SWIGTYPE_p_char_type swig_types[182]
+#define SWIGTYPE_p_const_iterator swig_types[183]
+#define SWIGTYPE_p_const_reference swig_types[184]
+#define SWIGTYPE_p_difference_type swig_types[185]
+#define SWIGTYPE_p_double swig_types[186]
+#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[187]
+#define SWIGTYPE_p_float swig_types[188]
+#define SWIGTYPE_p_fmtflags swig_types[189]
+#define SWIGTYPE_p_int swig_types[190]
+#define SWIGTYPE_p_int_type swig_types[191]
+#define SWIGTYPE_p_iostate swig_types[192]
+#define SWIGTYPE_p_iterator swig_types[193]
+#define SWIGTYPE_p_long swig_types[194]
+#define SWIGTYPE_p_off_type swig_types[195]
+#define SWIGTYPE_p_openmode swig_types[196]
+#define SWIGTYPE_p_p_void swig_types[197]
+#define SWIGTYPE_p_pos_type swig_types[198]
+#define SWIGTYPE_p_reference swig_types[199]
+#define SWIGTYPE_p_seekdir swig_types[200]
+#define SWIGTYPE_p_size_t swig_types[201]
+#define SWIGTYPE_p_size_type swig_types[202]
+#define SWIGTYPE_p_state_type swig_types[203]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[204]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[205]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[206]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[207]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[208]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[209]
+#define SWIGTYPE_p_std__exception swig_types[210]
+#define SWIGTYPE_p_std__invalid_argument swig_types[211]
+#define SWIGTYPE_p_std__ios_base swig_types[212]
+#define SWIGTYPE_p_std__istream swig_types[213]
+#define SWIGTYPE_p_std__listT_double_t swig_types[214]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[215]
+#define SWIGTYPE_p_std__locale swig_types[216]
+#define SWIGTYPE_p_std__ostream swig_types[217]
+#define SWIGTYPE_p_std__streambuf swig_types[218]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[219]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[220]
+#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[221]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[222]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[223]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[224]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[225]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[226]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[227]
+#define SWIGTYPE_p_time_t swig_types[228]
+#define SWIGTYPE_p_traits_type swig_types[229]
+#define SWIGTYPE_p_uint64_t swig_types[230]
+#define SWIGTYPE_p_value_type swig_types[231]
+#define SWIGTYPE_p_void swig_types[232]
+static swig_type_info *swig_types[234];
+static swig_module_info swig_module = {swig_types, 233, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3826,7 +3822,6 @@ namespace swig {
 #include <seiscomp3/io/gfarchive.h>
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
-#include <seiscomp3/io/records/ahrecord.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/file.h>
 #include <seiscomp3/io/recordstream/slconnection.h>
@@ -5784,147 +5779,6 @@ SWIG_AsVal_float (PyObject * obj, float *val)
   return res;
 }
 
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_float  (float value)
-{    
-  return SWIG_From_double  (value);
-}
-
-
-namespace swig {
-  template <> struct traits< float > {
-    typedef value_category category;
-    static const char* type_name() { return"float"; }
-  };
-  template <>  struct traits_asval< float > {
-    typedef float value_type;
-    static int asval(PyObject *obj, value_type *val) {
-      return SWIG_AsVal_float (obj, val);
-    }
-  };
-  template <>  struct traits_from< float > {
-    typedef float value_type;
-    static PyObject *from(const value_type& val) {
-      return SWIG_From_float  (val);
-    }
-  };
-}
-
-
-namespace swig {
-  template <class SwigPySeq, class Seq>
-  inline void
-  assign(const SwigPySeq& swigpyseq, Seq* seq) {
-    // seq->assign(swigpyseq.begin(), swigpyseq.end()); // not used as not always implemented
-    typedef typename SwigPySeq::value_type value_type;
-    typename SwigPySeq::const_iterator it = swigpyseq.begin();
-    for (;it != swigpyseq.end(); ++it) {
-      seq->insert(seq->end(),(value_type)(*it));
-    }
-  }
-
-  template <class Seq, class T = typename Seq::value_type >
-  struct traits_asptr_stdseq {
-    typedef Seq sequence;
-    typedef T value_type;
-
-    static int asptr(PyObject *obj, sequence **seq) {
-      if (obj == Py_None || SWIG_Python_GetSwigThis(obj)) {
-	sequence *p;
-	swig_type_info *descriptor = swig::type_info<sequence>();
-	if (descriptor && SWIG_IsOK(::SWIG_ConvertPtr(obj, (void **)&p, descriptor, 0))) {
-	  if (seq) *seq = p;
-	  return SWIG_OLDOBJ;
-	}
-      } else if (PySequence_Check(obj)) {
-	try {
-	  SwigPySequence_Cont<value_type> swigpyseq(obj);
-	  if (seq) {
-	    sequence *pseq = new sequence();
-	    assign(swigpyseq, pseq);
-	    *seq = pseq;
-	    return SWIG_NEWOBJ;
-	  } else {
-	    return swigpyseq.check() ? SWIG_OK : SWIG_ERROR;
-	  }
-	} catch (std::exception& e) {
-	  if (seq) {
-	    if (!PyErr_Occurred()) {
-	      PyErr_SetString(PyExc_TypeError, e.what());
-	    }
-	  }
-	  return SWIG_ERROR;
-	}
-      }
-      return SWIG_ERROR;
-    }
-  };
-
-  template <class Seq, class T = typename Seq::value_type >
-  struct traits_from_stdseq {
-    typedef Seq sequence;
-    typedef T value_type;
-    typedef typename Seq::size_type size_type;
-    typedef typename sequence::const_iterator const_iterator;
-
-    static PyObject *from(const sequence& seq) {
-#ifdef SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
-      swig_type_info *desc = swig::type_info<sequence>();
-      if (desc && desc->clientdata) {
-	return SWIG_InternalNewPointerObj(new sequence(seq), desc, SWIG_POINTER_OWN);
-      }
-#endif
-      size_type size = seq.size();
-      if (size <= (size_type)INT_MAX) {
-	PyObject *obj = PyTuple_New((Py_ssize_t)size);
-	Py_ssize_t i = 0;
-	for (const_iterator it = seq.begin(); it != seq.end(); ++it, ++i) {
-	  PyTuple_SetItem(obj,i,swig::from<value_type>(*it));
-	}
-	return obj;
-      } else {
-	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
-	return NULL;
-      }
-    }
-  };
-}
-
-
-  namespace swig {
-    template <class T>
-    struct traits_reserve<std::vector<T> > {
-      static void reserve(std::vector<T> &seq, typename std::vector<T>::size_type n) {
-        seq.reserve(n);
-      }
-    };
-
-    template <class T>
-    struct traits_asptr<std::vector<T> >  {
-      static int asptr(PyObject *obj, std::vector<T> **vec) {
-	return traits_asptr_stdseq<std::vector<T> >::asptr(obj, vec);
-      }
-    };
-    
-    template <class T>
-    struct traits_from<std::vector<T> > {
-      static PyObject *from(const std::vector<T>& vec) {
-	return traits_from_stdseq<std::vector<T> >::from(vec);
-      }
-    };
-  }
-
-
-      namespace swig {
-	template <>  struct traits<std::vector< float, std::allocator< float > > > {
-	  typedef pointer_category category;
-	  static const char* type_name() {
-	    return "std::vector<" "float" "," "std::allocator< float >" " >";
-	  }
-	};
-      }
-    
 
 SWIGINTERNINLINE PyObject *
 SWIG_From_unsigned_SS_short  (unsigned short value)
@@ -22740,3409 +22594,6 @@ SWIGINTERN PyObject *VBinaryArchive_swigregister(PyObject *SWIGUNUSEDPARM(self),
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_AHRecord_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":AHRecord_ClassName")) SWIG_fail;
-  {
-    try {
-      result = (char *)Seiscomp::IO::AHRecord::ClassName();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_TypeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::RTTI *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":AHRecord_TypeInfo")) SWIG_fail;
-  {
-    try {
-      result = (Seiscomp::Core::RTTI *) &Seiscomp::IO::AHRecord::TypeInfo();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_className(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_className",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_className" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (char *)((Seiscomp::IO::AHRecord const *)arg1)->className();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_typeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Core::RTTI *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_typeInfo",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_typeInfo" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::Core::RTTI *) &((Seiscomp::IO::AHRecord const *)arg1)->typeInfo();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_Cast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_Cast",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)Seiscomp::IO::AHRecord::Cast(arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_OWN |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_ConstCast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_ConstCast",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)Seiscomp::IO::AHRecord::ConstCast((Seiscomp::Core::BaseObject const *)arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_Cast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl > arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_Cast",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'");
-    } else {
-      Seiscomp::Core::BaseObjectPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectPtr * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)Seiscomp::IO::AHRecord::Cast(arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_OWN |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_Cast(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[2] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_Cast__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_Cast__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AHRecord_Cast'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHRecord::Cast(Seiscomp::Core::BaseObject *)\n"
-    "    Seiscomp::IO::AHRecord::Cast(Seiscomp::Core::BaseObjectPtr)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_ConstCast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl > arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_ConstCast",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'");
-    } else {
-      Seiscomp::Core::BaseObjectCPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectCPtr * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)Seiscomp::IO::AHRecord::ConstCast(arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_ConstCast(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[2] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_ConstCast__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_ConstCast__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AHRecord_ConstCast'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHRecord::ConstCast(Seiscomp::Core::BaseObject const *)\n"
-    "    Seiscomp::IO::AHRecord::ConstCast(Seiscomp::Core::BaseObjectCPtr)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  Seiscomp::Core::Time arg5 ;
-  double arg6 ;
-  int arg7 ;
-  Seiscomp::Array::DataType arg8 ;
-  Seiscomp::Record::Hint arg9 ;
-  void *argp5 ;
-  int res5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  int val7 ;
-  int ecode7 = 0 ;
-  int val8 ;
-  int ecode8 = 0 ;
-  int val9 ;
-  int ecode9 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  PyObject * obj8 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'");
-    } else {
-      Seiscomp::Core::Time * temp = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_AHRecord" "', argument " "6"" of type '" "double""'");
-  } 
-  arg6 = static_cast< double >(val6);
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_AHRecord" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
-  ecode8 = SWIG_AsVal_int(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_AHRecord" "', argument " "8"" of type '" "Seiscomp::Array::DataType""'");
-  } 
-  arg8 = static_cast< Seiscomp::Array::DataType >(val8);
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_AHRecord" "', argument " "9"" of type '" "Seiscomp::Record::Hint""'");
-  } 
-  arg9 = static_cast< Seiscomp::Record::Hint >(val9);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  Seiscomp::Core::Time arg5 ;
-  double arg6 ;
-  int arg7 ;
-  Seiscomp::Array::DataType arg8 ;
-  void *argp5 ;
-  int res5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  int val7 ;
-  int ecode7 = 0 ;
-  int val8 ;
-  int ecode8 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'");
-    } else {
-      Seiscomp::Core::Time * temp = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_AHRecord" "', argument " "6"" of type '" "double""'");
-  } 
-  arg6 = static_cast< double >(val6);
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_AHRecord" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
-  ecode8 = SWIG_AsVal_int(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_AHRecord" "', argument " "8"" of type '" "Seiscomp::Array::DataType""'");
-  } 
-  arg8 = static_cast< Seiscomp::Array::DataType >(val8);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  Seiscomp::Core::Time arg5 ;
-  double arg6 ;
-  int arg7 ;
-  void *argp5 ;
-  int res5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  int val7 ;
-  int ecode7 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'");
-    } else {
-      Seiscomp::Core::Time * temp = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_AHRecord" "', argument " "6"" of type '" "double""'");
-  } 
-  arg6 = static_cast< double >(val6);
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_AHRecord" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  Seiscomp::Core::Time arg5 ;
-  double arg6 ;
-  void *argp5 ;
-  int res5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'");
-    } else {
-      Seiscomp::Core::Time * temp = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_AHRecord" "', argument " "6"" of type '" "double""'");
-  } 
-  arg6 = static_cast< double >(val6);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4,arg5,arg6);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  Seiscomp::Core::Time arg5 ;
-  void *argp5 ;
-  int res5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "5"" of type '" "Seiscomp::Core::Time""'");
-    } else {
-      Seiscomp::Core::Time * temp = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4,arg5);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  std::string arg4 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_AHRecord",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "4"" of type '" "std::string""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3,arg4);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  std::string arg3 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:new_AHRecord",&obj0,&obj1,&obj2)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "3"" of type '" "std::string""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  std::string arg2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_AHRecord",&obj0,&obj1)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1,arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_8(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string arg1 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_AHRecord",&obj0)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_AHRecord" "', argument " "1"" of type '" "std::string""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord(arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_9(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_AHRecord")) SWIG_fail;
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_10(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_AHRecord",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__IO__AHRecord,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AHRecord" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const &""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord((Seiscomp::IO::AHRecord const &)*arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Record *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_AHRecord",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Record,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AHRecord" "', argument " "1"" of type '" "Seiscomp::Record const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHRecord" "', argument " "1"" of type '" "Seiscomp::Record const &""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)new Seiscomp::IO::AHRecord((Seiscomp::Record const &)*arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHRecord(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[10] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 9) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_AHRecord__SWIG_9(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__IO__AHRecord, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_AHRecord__SWIG_10(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Record, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_AHRecord__SWIG_11(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_AHRecord__SWIG_8(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_new_AHRecord__SWIG_7(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_new_AHRecord__SWIG_6(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_new_AHRecord__SWIG_5(self, args);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              return _wrap_new_AHRecord__SWIG_4(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 6) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                return _wrap_new_AHRecord__SWIG_3(self, args);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 7) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  return _wrap_new_AHRecord__SWIG_2(self, args);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 8) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_int(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    return _wrap_new_AHRecord__SWIG_1(self, args);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 9) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_int(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
-                    if (_v) {
-                      return _wrap_new_AHRecord__SWIG_0(self, args);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_AHRecord'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string,Seiscomp::Core::Time,double,int,Seiscomp::Array::DataType,Seiscomp::Record::Hint)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string,Seiscomp::Core::Time,double,int,Seiscomp::Array::DataType)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string,Seiscomp::Core::Time,double,int)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string,Seiscomp::Core::Time,double)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string,Seiscomp::Core::Time)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string,std::string)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string,std::string)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string,std::string)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(std::string)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord()\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(Seiscomp::IO::AHRecord const &)\n"
-    "    Seiscomp::IO::AHRecord::AHRecord(Seiscomp::Record const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_AHRecord(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_AHRecord",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_AHRecord" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      if (arg1) arg1->decrementReferenceCount();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  {
-    try {
-      (arg1)->setSamplingFrequency(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_data__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Array *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_data",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_data" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::Array *)(arg1)->data();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_data__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Array *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_data",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_data" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::Array *)((Seiscomp::IO::AHRecord const *)arg1)->data();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_data(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[2] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__AHRecord, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_data__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__AHRecord, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_AHRecord_data__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AHRecord_data'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHRecord::data()\n"
-    "    Seiscomp::IO::AHRecord::data() const\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_raw(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Array *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_raw",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_raw" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::Array *)((Seiscomp::IO::AHRecord const *)arg1)->raw();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  Seiscomp::Array *arg2 = (Seiscomp::Array *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_setData",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_setData" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_setData" "', argument " "2"" of type '" "Seiscomp::Array *""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::Array * >(argp2);
-  {
-    try {
-      (arg1)->setData(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  int arg2 ;
-  void *arg3 = (void *) 0 ;
-  Seiscomp::Array::DataType arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int res3 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:AHRecord_setData",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_setData" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_setData" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2,SWIG_as_voidptrptr(&arg3), 0, 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "AHRecord_setData" "', argument " "3"" of type '" "void const *""'"); 
-  }
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "AHRecord_setData" "', argument " "4"" of type '" "Seiscomp::Array::DataType""'");
-  } 
-  arg4 = static_cast< Seiscomp::Array::DataType >(val4);
-  {
-    try {
-      (arg1)->setData(arg2,(void const *)arg3,arg4);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setData(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[5] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__AHRecord, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Array, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_AHRecord_setData__SWIG_0(self, args);
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__AHRecord, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        void *ptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &ptr, 0, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            return _wrap_AHRecord_setData__SWIG_1(self, args);
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'AHRecord_setData'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHRecord::setData(Seiscomp::Array *)\n"
-    "    Seiscomp::IO::AHRecord::setData(int,void const *,Seiscomp::Array::DataType)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_saveSpace(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_saveSpace",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_saveSpace" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      ((Seiscomp::IO::AHRecord const *)arg1)->saveSpace();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_copy",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_copy" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)((Seiscomp::IO::AHRecord const *)arg1)->copy();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_POINTER_OWN |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::istream *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_read",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_read" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__istream,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_read" "', argument " "2"" of type '" "std::istream &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_read" "', argument " "2"" of type '" "std::istream &""'"); 
-  }
-  arg2 = reinterpret_cast< std::istream * >(argp2);
-  {
-    try {
-      (arg1)->read(*arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::ostream *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_write",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_write" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__ostream,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_write" "', argument " "2"" of type '" "std::ostream &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_write" "', argument " "2"" of type '" "std::ostream &""'"); 
-  }
-  arg2 = reinterpret_cast< std::ostream * >(argp2);
-  {
-    try {
-      (arg1)->write(*arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_gain(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_gain",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_gain" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    try {
-      result = (float)((Seiscomp::IO::AHRecord const *)arg1)->gain();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setGain(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_setGain",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_setGain" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_setGain" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  {
-    try {
-      (arg1)->setGain(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_extra(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_extra",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_extra" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_extra" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      result = (float)((Seiscomp::IO::AHRecord const *)arg1)->extra(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_setExtra(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  int arg2 ;
-  float arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  float val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:AHRecord_setExtra",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_setExtra" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_setExtra" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_float(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "AHRecord_setExtra" "', argument " "3"" of type '" "float""'");
-  } 
-  arg3 = static_cast< float >(val3);
-  {
-    try {
-      (arg1)->setExtra(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_elat_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_elat_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_elat_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_elat_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->elat = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_elat_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_elat_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_elat_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->elat);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_elon_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_elon_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_elon_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_elon_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->elon = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_elon_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_elon_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_elon_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->elon);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_edep_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_edep_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_edep_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_edep_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->edep = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_edep_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_edep_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_edep_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->edep);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_etim_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  Seiscomp::Core::Time *arg2 = (Seiscomp::Core::Time *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_etim_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_etim_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__Time, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_etim_set" "', argument " "2"" of type '" "Seiscomp::Core::Time *""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::Core::Time * >(argp2);
-  if (arg1) (arg1)->etim = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_etim_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Core::Time *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_etim_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_etim_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (Seiscomp::Core::Time *)& ((arg1)->etim);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__Time, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_com_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_com_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_com_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_com_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_com_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  if (arg1) (arg1)->com = *arg2;
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_com_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_com_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_com_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (std::string *) & ((arg1)->com);
-  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_ecom_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_ecom_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_ecom_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_ecom_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_ecom_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  if (arg1) (arg1)->ecom = *arg2;
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_ecom_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_ecom_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_ecom_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (std::string *) & ((arg1)->ecom);
-  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_log_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_log_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_log_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_log_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_log_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  if (arg1) (arg1)->log = *arg2;
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_log_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_log_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_log_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (std::string *) & ((arg1)->log);
-  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_slat_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_slat_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_slat_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_slat_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->slat = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_slat_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_slat_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_slat_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->slat);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_slon_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_slon_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_slon_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_slon_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->slon = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_slon_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_slon_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_slon_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->slon);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_salt_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_salt_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_salt_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_salt_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->salt = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_salt_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_salt_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_salt_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->salt);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_sgain_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_sgain_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_sgain_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_sgain_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->sgain = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_sgain_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_sgain_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_sgain_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->sgain);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_snorm_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_snorm_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_snorm_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_snorm_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->snorm = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_snorm_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_snorm_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_snorm_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->snorm);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_rmin_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_rmin_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_rmin_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_rmin_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->rmin = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_rmin_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_rmin_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_rmin_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->rmin);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_maxamp_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_maxamp_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_maxamp_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_maxamp_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->maxamp = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_maxamp_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_maxamp_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_maxamp_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->maxamp);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_delta_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_delta_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_delta_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord_delta_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->delta = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_delta_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_delta_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_delta_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->delta);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_cal_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::vector< float,std::allocator< float > > *arg2 = (std::vector< float,std::allocator< float > > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord_cal_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_cal_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_cal_set" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > *""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
-  if (arg1) (arg1)->cal = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord_cal_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::vector< float,std::allocator< float > > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_cal_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_cal_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (std::vector< float,std::allocator< float > > *)& ((arg1)->cal);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord__delta_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  float arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  float val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHRecord__delta_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord__delta_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  ecode2 = SWIG_AsVal_float(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AHRecord__delta_set" "', argument " "2"" of type '" "float""'");
-  } 
-  arg2 = static_cast< float >(val2);
-  if (arg1) (arg1)->_delta = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHRecord__delta_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  float result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:AHRecord__delta_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord__delta_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result = (float) ((arg1)->_delta);
-  resultobj = SWIG_From_float(static_cast< float >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *AHRecord_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__IO__AHRecord, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *_wrap_new_AHOutput__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHOutput *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_AHOutput")) SWIG_fail;
-  {
-    try {
-      result = (Seiscomp::IO::AHOutput *)new Seiscomp::IO::AHOutput();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHOutput, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHOutput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHOutput *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_AHOutput",&obj0)) SWIG_fail;
-  {
-    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
-    res1 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_AHOutput" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_AHOutput" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::IO::AHOutput *)new Seiscomp::IO::AHOutput((std::string const &)*arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHOutput, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_AHOutput(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[2] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_AHOutput__SWIG_0(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_AHOutput__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_AHOutput'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::AHOutput::AHOutput()\n"
-    "    Seiscomp::IO::AHOutput::AHOutput(std::string const &)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_AHOutput(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHOutput *arg1 = (Seiscomp::IO::AHOutput *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_AHOutput",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHOutput, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_AHOutput" "', argument " "1"" of type '" "Seiscomp::IO::AHOutput *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHOutput * >(argp1);
-  {
-    try {
-      delete arg1;
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AHOutput_put(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHOutput *arg1 = (Seiscomp::IO::AHOutput *) 0 ;
-  Seiscomp::IO::AHRecord *arg2 = (Seiscomp::IO::AHRecord *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:AHOutput_put",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHOutput, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHOutput_put" "', argument " "1"" of type '" "Seiscomp::IO::AHOutput *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHOutput * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHOutput_put" "', argument " "2"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp2);
-  {
-    try {
-      result = (bool)(arg1)->put(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *AHOutput_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__IO__AHOutput, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *_wrap_read_one(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::istream *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::IO::AHRecord *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:read_one",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__istream,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "read_one" "', argument " "1"" of type '" "std::istream &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "read_one" "', argument " "1"" of type '" "std::istream &""'"); 
-  }
-  arg1 = reinterpret_cast< std::istream * >(argp1);
-  {
-    try {
-      result = (Seiscomp::IO::AHRecord *)Seiscomp::IO::read_one(*arg1);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_write_one(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::ostream *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:write_one",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "write_one" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__ostream,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "write_one" "', argument " "2"" of type '" "std::ostream &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "write_one" "', argument " "2"" of type '" "std::ostream &""'"); 
-  }
-  arg2 = reinterpret_cast< std::ostream * >(argp2);
-  {
-    try {
-      result = (bool)Seiscomp::IO::write_one(arg1,*arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_LibmseedException__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::LibmseedException *result = 0 ;
@@ -37263,95 +33714,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VBinaryArchive_errorMsg", _wrap_VBinaryArchive_errorMsg, METH_VARARGS, (char *)"VBinaryArchive_errorMsg(VBinaryArchive self) -> char const *"},
 	 { (char *)"delete_VBinaryArchive", _wrap_delete_VBinaryArchive, METH_VARARGS, (char *)"delete_VBinaryArchive(VBinaryArchive self)"},
 	 { (char *)"VBinaryArchive_swigregister", VBinaryArchive_swigregister, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_ClassName", _wrap_AHRecord_ClassName, METH_VARARGS, (char *)"AHRecord_ClassName() -> char const *"},
-	 { (char *)"AHRecord_TypeInfo", _wrap_AHRecord_TypeInfo, METH_VARARGS, (char *)"AHRecord_TypeInfo() -> RTTI"},
-	 { (char *)"AHRecord_className", _wrap_AHRecord_className, METH_VARARGS, (char *)"AHRecord_className(AHRecord self) -> char const *"},
-	 { (char *)"AHRecord_typeInfo", _wrap_AHRecord_typeInfo, METH_VARARGS, (char *)"AHRecord_typeInfo(AHRecord self) -> RTTI"},
-	 { (char *)"AHRecord_Cast", _wrap_AHRecord_Cast, METH_VARARGS, (char *)"\n"
-		"Cast(BaseObject o) -> AHRecord\n"
-		"AHRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord\n"
-		""},
-	 { (char *)"AHRecord_ConstCast", _wrap_AHRecord_ConstCast, METH_VARARGS, (char *)"\n"
-		"ConstCast(BaseObject o) -> AHRecord\n"
-		"AHRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord\n"
-		""},
-	 { (char *)"new_AHRecord", _wrap_new_AHRecord, METH_VARARGS, (char *)"\n"
-		"AHRecord(string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt, Seiscomp::Record::Hint h)\n"
-		"AHRecord(string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt)\n"
-		"AHRecord(string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1)\n"
-		"AHRecord(string net, string sta, string loc, string cha, Time stime, double fsamp=0.)\n"
-		"AHRecord(string net, string sta, string loc, string cha, Time stime)\n"
-		"AHRecord(string net, string sta, string loc, string cha)\n"
-		"AHRecord(string net, string sta, string loc)\n"
-		"AHRecord(string net, string sta)\n"
-		"AHRecord(string net)\n"
-		"AHRecord()\n"
-		"AHRecord(AHRecord rec)\n"
-		"new_AHRecord(Record rec) -> AHRecord\n"
-		""},
-	 { (char *)"delete_AHRecord", _wrap_delete_AHRecord, METH_VARARGS, (char *)"delete_AHRecord(AHRecord self)"},
-	 { (char *)"AHRecord_setSamplingFrequency", _wrap_AHRecord_setSamplingFrequency, METH_VARARGS, (char *)"AHRecord_setSamplingFrequency(AHRecord self, double freq)"},
-	 { (char *)"AHRecord_data", _wrap_AHRecord_data, METH_VARARGS, (char *)"\n"
-		"data() -> Array\n"
-		"AHRecord_data(AHRecord self) -> Array\n"
-		""},
-	 { (char *)"AHRecord_raw", _wrap_AHRecord_raw, METH_VARARGS, (char *)"AHRecord_raw(AHRecord self) -> Array"},
-	 { (char *)"AHRecord_setData", _wrap_AHRecord_setData, METH_VARARGS, (char *)"\n"
-		"setData(Array data)\n"
-		"AHRecord_setData(AHRecord self, int size, void const * data, Seiscomp::Array::DataType datatype)\n"
-		""},
-	 { (char *)"AHRecord_saveSpace", _wrap_AHRecord_saveSpace, METH_VARARGS, (char *)"AHRecord_saveSpace(AHRecord self)"},
-	 { (char *)"AHRecord_copy", _wrap_AHRecord_copy, METH_VARARGS, (char *)"AHRecord_copy(AHRecord self) -> AHRecord"},
-	 { (char *)"AHRecord_read", _wrap_AHRecord_read, METH_VARARGS, (char *)"AHRecord_read(AHRecord self, std::istream & arg3)"},
-	 { (char *)"AHRecord_write", _wrap_AHRecord_write, METH_VARARGS, (char *)"AHRecord_write(AHRecord self, std::ostream & out)"},
-	 { (char *)"AHRecord_gain", _wrap_AHRecord_gain, METH_VARARGS, (char *)"AHRecord_gain(AHRecord self) -> float"},
-	 { (char *)"AHRecord_setGain", _wrap_AHRecord_setGain, METH_VARARGS, (char *)"AHRecord_setGain(AHRecord self, float value)"},
-	 { (char *)"AHRecord_extra", _wrap_AHRecord_extra, METH_VARARGS, (char *)"AHRecord_extra(AHRecord self, int i) -> float"},
-	 { (char *)"AHRecord_setExtra", _wrap_AHRecord_setExtra, METH_VARARGS, (char *)"AHRecord_setExtra(AHRecord self, int i, float value)"},
-	 { (char *)"AHRecord_elat_set", _wrap_AHRecord_elat_set, METH_VARARGS, (char *)"AHRecord_elat_set(AHRecord self, float elat)"},
-	 { (char *)"AHRecord_elat_get", _wrap_AHRecord_elat_get, METH_VARARGS, (char *)"AHRecord_elat_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_elon_set", _wrap_AHRecord_elon_set, METH_VARARGS, (char *)"AHRecord_elon_set(AHRecord self, float elon)"},
-	 { (char *)"AHRecord_elon_get", _wrap_AHRecord_elon_get, METH_VARARGS, (char *)"AHRecord_elon_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_edep_set", _wrap_AHRecord_edep_set, METH_VARARGS, (char *)"AHRecord_edep_set(AHRecord self, float edep)"},
-	 { (char *)"AHRecord_edep_get", _wrap_AHRecord_edep_get, METH_VARARGS, (char *)"AHRecord_edep_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_etim_set", _wrap_AHRecord_etim_set, METH_VARARGS, (char *)"AHRecord_etim_set(AHRecord self, Time etim)"},
-	 { (char *)"AHRecord_etim_get", _wrap_AHRecord_etim_get, METH_VARARGS, (char *)"AHRecord_etim_get(AHRecord self) -> Time"},
-	 { (char *)"AHRecord_com_set", _wrap_AHRecord_com_set, METH_VARARGS, (char *)"AHRecord_com_set(AHRecord self, string com)"},
-	 { (char *)"AHRecord_com_get", _wrap_AHRecord_com_get, METH_VARARGS, (char *)"AHRecord_com_get(AHRecord self) -> string"},
-	 { (char *)"AHRecord_ecom_set", _wrap_AHRecord_ecom_set, METH_VARARGS, (char *)"AHRecord_ecom_set(AHRecord self, string ecom)"},
-	 { (char *)"AHRecord_ecom_get", _wrap_AHRecord_ecom_get, METH_VARARGS, (char *)"AHRecord_ecom_get(AHRecord self) -> string"},
-	 { (char *)"AHRecord_log_set", _wrap_AHRecord_log_set, METH_VARARGS, (char *)"AHRecord_log_set(AHRecord self, string log)"},
-	 { (char *)"AHRecord_log_get", _wrap_AHRecord_log_get, METH_VARARGS, (char *)"AHRecord_log_get(AHRecord self) -> string"},
-	 { (char *)"AHRecord_slat_set", _wrap_AHRecord_slat_set, METH_VARARGS, (char *)"AHRecord_slat_set(AHRecord self, float slat)"},
-	 { (char *)"AHRecord_slat_get", _wrap_AHRecord_slat_get, METH_VARARGS, (char *)"AHRecord_slat_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_slon_set", _wrap_AHRecord_slon_set, METH_VARARGS, (char *)"AHRecord_slon_set(AHRecord self, float slon)"},
-	 { (char *)"AHRecord_slon_get", _wrap_AHRecord_slon_get, METH_VARARGS, (char *)"AHRecord_slon_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_salt_set", _wrap_AHRecord_salt_set, METH_VARARGS, (char *)"AHRecord_salt_set(AHRecord self, float salt)"},
-	 { (char *)"AHRecord_salt_get", _wrap_AHRecord_salt_get, METH_VARARGS, (char *)"AHRecord_salt_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_sgain_set", _wrap_AHRecord_sgain_set, METH_VARARGS, (char *)"AHRecord_sgain_set(AHRecord self, float sgain)"},
-	 { (char *)"AHRecord_sgain_get", _wrap_AHRecord_sgain_get, METH_VARARGS, (char *)"AHRecord_sgain_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_snorm_set", _wrap_AHRecord_snorm_set, METH_VARARGS, (char *)"AHRecord_snorm_set(AHRecord self, float snorm)"},
-	 { (char *)"AHRecord_snorm_get", _wrap_AHRecord_snorm_get, METH_VARARGS, (char *)"AHRecord_snorm_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_rmin_set", _wrap_AHRecord_rmin_set, METH_VARARGS, (char *)"AHRecord_rmin_set(AHRecord self, float rmin)"},
-	 { (char *)"AHRecord_rmin_get", _wrap_AHRecord_rmin_get, METH_VARARGS, (char *)"AHRecord_rmin_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_maxamp_set", _wrap_AHRecord_maxamp_set, METH_VARARGS, (char *)"AHRecord_maxamp_set(AHRecord self, float maxamp)"},
-	 { (char *)"AHRecord_maxamp_get", _wrap_AHRecord_maxamp_get, METH_VARARGS, (char *)"AHRecord_maxamp_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_delta_set", _wrap_AHRecord_delta_set, METH_VARARGS, (char *)"AHRecord_delta_set(AHRecord self, float delta)"},
-	 { (char *)"AHRecord_delta_get", _wrap_AHRecord_delta_get, METH_VARARGS, (char *)"AHRecord_delta_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_cal_set", _wrap_AHRecord_cal_set, METH_VARARGS, (char *)"AHRecord_cal_set(AHRecord self, vectorf cal)"},
-	 { (char *)"AHRecord_cal_get", _wrap_AHRecord_cal_get, METH_VARARGS, (char *)"AHRecord_cal_get(AHRecord self) -> vectorf"},
-	 { (char *)"AHRecord__delta_set", _wrap_AHRecord__delta_set, METH_VARARGS, (char *)"AHRecord__delta_set(AHRecord self, float _delta)"},
-	 { (char *)"AHRecord__delta_get", _wrap_AHRecord__delta_get, METH_VARARGS, (char *)"AHRecord__delta_get(AHRecord self) -> float"},
-	 { (char *)"AHRecord_swigregister", AHRecord_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_AHOutput", _wrap_new_AHOutput, METH_VARARGS, (char *)"\n"
-		"AHOutput()\n"
-		"new_AHOutput(string filename) -> AHOutput\n"
-		""},
-	 { (char *)"delete_AHOutput", _wrap_delete_AHOutput, METH_VARARGS, (char *)"delete_AHOutput(AHOutput self)"},
-	 { (char *)"AHOutput_put", _wrap_AHOutput_put, METH_VARARGS, (char *)"AHOutput_put(AHOutput self, AHRecord rec) -> bool"},
-	 { (char *)"AHOutput_swigregister", AHOutput_swigregister, METH_VARARGS, NULL},
-	 { (char *)"read_one", _wrap_read_one, METH_VARARGS, (char *)"read_one(std::istream & arg1) -> AHRecord"},
-	 { (char *)"write_one", _wrap_write_one, METH_VARARGS, (char *)"write_one(AHRecord rec, std::ostream & os) -> bool"},
 	 { (char *)"new_LibmseedException", _wrap_new_LibmseedException, METH_VARARGS, (char *)"\n"
 		"LibmseedException()\n"
 		"new_LibmseedException(string what) -> LibmseedException\n"
@@ -37750,227 +34112,224 @@ static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__IO__RecordStream(void
 static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__IO__RecordStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::IO::RecordStream *)  ((Seiscomp::RecordStream::SLConnection *) x));
 }
-static void *_p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< double > *) x));
-}
-static void *_p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *)(Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::Average< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
-}
-static void *_p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::IO::MSeedRecord *) x));
-}
-static void *_p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::IO::AHRecord *) x));
-}
-static void *_p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Record *) x));
-}
-static void *_p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Exporter *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
-}
-static void *_p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< int > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
-}
-static void *_p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::ResponseList *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
-}
-static void *_p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< float > *) x));
-}
-static void *_p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *) ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *)(Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::Average< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::STALTA< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
-}
-static void *_p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Combined::_private::CombinedConnection *) x));
-}
-static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::File *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
-}
-static void *_p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Importer *) x));
-}
-static void *_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *) ((Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) x));
-}
-static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
-}
-static void *_p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordInput *) x));
-}
-static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
-}
-static void *_p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordDemuxFilter *) x));
-}
-static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
-}
-static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
-}
-static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
-}
-static void *_p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordFilterInterface *) x));
-}
-static void *_p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::DatabaseInterface *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
-}
-static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
-}
-static void *_p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Restitution::FFT::TransferFunction *) x));
-}
-static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > *) x));
-}
-static void *_p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFReceiver *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
-}
-static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *) ((Seiscomp::IO::RecordStream *) x));
-}
-static void *_p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFSource *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
-}
-static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
-}
-static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
-}
-static void *_p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordResamplerBase *) x));
+static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
 }
 static void *_p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *)(Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) ((Seiscomp::Core::DataMessage *) x));
 }
-static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
+}
+static void *_p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFReceiver *) x));
+}
+static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< int > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::Average< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *)(Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< double > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
+}
+static void *_p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< double > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
+}
+static void *_p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Importer *) x));
+}
+static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
+}
+static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
+}
+static void *_p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFSource *) x));
+}
+static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::File *) x));
+}
+static void *_p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Combined::_private::CombinedConnection *) x));
+}
+static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
+}
+static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::ResponseList *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordResamplerBase *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
 }
 static void *_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< Seiscomp::Core::Time > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::STALTA< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::Average< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *)(Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *) ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< float > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
+}
+static void *_p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< float > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< float > *) x));
+}
+static void *_p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Exporter *) x));
+}
+static void *_p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Record *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
+}
+static void *_p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::IO::MSeedRecord *) x));
+}
+static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *) ((Seiscomp::IO::RecordStream *) x));
+}
+static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
+}
+static void *_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *) ((Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
+}
+static void *_p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordDemuxFilter *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > *) x));
+}
+static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Restitution::FFT::TransferFunction *) x));
+}
+static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
+}
+static void *_p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordInput *) x));
+}
+static void *_p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::DatabaseInterface *) x));
+}
+static void *_p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordFilterInterface *) x));
 }
 static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core___private__InterruptibleObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::_private::InterruptibleObject *) (Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
@@ -38257,9 +34616,6 @@ static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core___private__Alarmab
 static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core___private__Alarmable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::_private::Alarmable *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
 }
-static void *_p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Record(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Record *)  ((Seiscomp::IO::AHRecord *) x));
-}
 static void *_p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Record(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Record *)  ((Seiscomp::IO::MSeedRecord *) x));
 }
@@ -38292,26 +34648,26 @@ static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandp
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t = {"_p_Seiscomp__Math__Filtering__STALTAT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AverageT_double_t = {"_p_Seiscomp__Math__Filtering__AverageT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_float_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AverageT_float_t = {"_p_Seiscomp__Math__Filtering__AverageT_float_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t = {"_p_Seiscomp__Math__Filtering__STALTAT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t = {"_p_Seiscomp__Math__Filtering__STALTAT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AverageT_float_t = {"_p_Seiscomp__Math__Filtering__AverageT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction = {"_p_Seiscomp__Math__Restitution__FFT__TransferFunction", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros = {"_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t = {"_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Core__DataMessage", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__Message = {"_p_Seiscomp__Core__Message", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Core__DataMessage", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__GeneralException = {"_p_Seiscomp__Core__GeneralException", "Seiscomp::Core::GeneralException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__ClassNotFound = {"_p_Seiscomp__Core__ClassNotFound", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__OverflowException = {"_p_Seiscomp__Core__OverflowException", 0, 0, 0, 0, 0};
@@ -38342,8 +34698,6 @@ static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___p
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::Core::_private::InterruptibleObject >::Impl *|Seiscomp::Core::_private::InterruptibleObjectPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl", "Seiscomp::GenericRecordCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::GenericRecord const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl", "Seiscomp::GenericRecordPtr *|Seiscomp::Core::SmartPointer< Seiscomp::GenericRecord >::Impl *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl", "Seiscomp::IO::AHRecordCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::IO::AHRecord const >::Impl *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::IO::AHRecord >::Impl *|Seiscomp::IO::AHRecordPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl", "Seiscomp::IO::DatabaseInterfaceCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::IO::DatabaseInterface const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl", "Seiscomp::IO::DatabaseInterfacePtr *|Seiscomp::Core::SmartPointer< Seiscomp::IO::DatabaseInterface >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl", "Seiscomp::IO::ExporterCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::IO::Exporter const >::Impl *", 0, 0, (void*)0, 0};
@@ -38394,8 +34748,6 @@ static swig_type_info _swigt__p_Seiscomp__Core___private__Alarmable = {"_p_Seisc
 static swig_type_info _swigt__p_Seiscomp__Core___private__Interruptible = {"_p_Seiscomp__Core___private__Interruptible", "Seiscomp::Core::_private::Interruptible *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core___private__InterruptibleObject = {"_p_Seiscomp__Core___private__InterruptibleObject", "Seiscomp::Core::_private::InterruptibleObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__GenericRecord = {"_p_Seiscomp__GenericRecord", "Seiscomp::GenericRecord *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__IO__AHOutput = {"_p_Seiscomp__IO__AHOutput", "Seiscomp::IO::AHOutput *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__IO__AHRecord = {"_p_Seiscomp__IO__AHRecord", "Seiscomp::IO::AHRecord *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__BinaryArchive = {"_p_Seiscomp__IO__BinaryArchive", "Seiscomp::IO::BinaryArchive *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__DatabaseInterface = {"_p_Seiscomp__IO__DatabaseInterface", "Seiscomp::IO::DatabaseInterface *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__ExportSink = {"_p_Seiscomp__IO__ExportSink", "Seiscomp::IO::ExportSink *", 0, 0, (void*)0, 0};
@@ -38549,8 +34901,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl,
-  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl,
-  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl,
@@ -38607,8 +34957,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core___private__InterruptibleObject,
   &_swigt__p_Seiscomp__Core___private__OperationInterrupted,
   &_swigt__p_Seiscomp__GenericRecord,
-  &_swigt__p_Seiscomp__IO__AHOutput,
-  &_swigt__p_Seiscomp__IO__AHRecord,
   &_swigt__p_Seiscomp__IO__BinaryArchive,
   &_swigt__p_Seiscomp__IO__DatabaseInterface,
   &_swigt__p_Seiscomp__IO__ExportSink,
@@ -38769,27 +35117,27 @@ static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandp
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__TransferFunction[] = {{&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros[] = {{&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t[] = {{&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {{&_swigt__p_Seiscomp__Core__DataMessage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Message[] = {{&_swigt__p_Seiscomp__Core__Message, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {{&_swigt__p_Seiscomp__Core__DataMessage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__AHRecord, _p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Exporter, _p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, _p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Importer, _p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordInput, _p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, _p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordDemuxFilter, _p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_double_t, _p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_double_t, _p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFArchive, _p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordFilterInterface, _p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__DatabaseInterface, _p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_float_t, _p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_float_t, _p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFReceiver, _p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFSource, _p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_int_t, _p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerBase, _p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Exporter, _p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, _p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Importer, _p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordInput, _p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, _p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordDemuxFilter, _p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_double_t, _p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_double_t, _p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFArchive, _p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__DatabaseInterface, _p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordFilterInterface, _p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_float_t, _p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_float_t, _p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFReceiver, _p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFSource, _p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_int_t, _p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerBase, _p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__ClassNotFound[] = {{&_swigt__p_Seiscomp__Core__ClassNotFound, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__OverflowException[] = {{&_swigt__p_Seiscomp__Core__OverflowException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__TypeConversionException[] = {{&_swigt__p_Seiscomp__Core__TypeConversionException, 0, 0, 0},{0, 0, 0, 0}};
@@ -38820,8 +35168,6 @@ static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___p
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -38872,8 +35218,6 @@ static swig_cast_info _swigc__p_Seiscomp__Core___private__Alarmable[] = {  {&_sw
 static swig_cast_info _swigc__p_Seiscomp__Core___private__Interruptible[] = {  {&_swigt__p_Seiscomp__Core___private__Interruptible, 0, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core___private__Interruptible, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core___private__Interruptible, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core___private__Interruptible, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core___private__Interruptible, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core___private__Interruptible, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core___private__Interruptible, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core___private__InterruptibleObject[] = {  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core___private__InterruptibleObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, 0, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core___private__InterruptibleObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core___private__InterruptibleObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core___private__InterruptibleObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core___private__InterruptibleObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__GenericRecord[] = {  {&_swigt__p_Seiscomp__GenericRecord, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__IO__AHOutput[] = {  {&_swigt__p_Seiscomp__IO__AHOutput, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__IO__AHRecord[] = {  {&_swigt__p_Seiscomp__IO__AHRecord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__BinaryArchive[] = {  {&_swigt__p_Seiscomp__IO__BinaryArchive, 0, 0, 0},  {&_swigt__p_Seiscomp__IO__VBinaryArchive, _p_Seiscomp__IO__VBinaryArchiveTo_p_Seiscomp__IO__BinaryArchive, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__DatabaseInterface[] = {  {&_swigt__p_Seiscomp__IO__DatabaseInterface, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__ExportSink[] = {  {&_swigt__p_Seiscomp__IO__ExportSink, 0, 0, 0},{0, 0, 0, 0}};
@@ -38911,7 +35255,7 @@ static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_char_t[] = {  {&_swigt__
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_double_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_float_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_int_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Record[] = {  {&_swigt__p_Seiscomp__IO__AHRecord, _p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Record, 0, 0},  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Record, 0, 0},  {&_swigt__p_Seiscomp__Record, 0, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Record, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Record[] = {  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Record, 0, 0},  {&_swigt__p_Seiscomp__Record, 0, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Record, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException[] = {  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection[] = {  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__Arclink___private__ArclinkException[] = {  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkException, 0, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException, _p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandExceptionTo_p_Seiscomp__RecordStream__Arclink___private__ArclinkException, 0, 0},{0, 0, 0, 0}};
@@ -39027,8 +35371,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl,
-  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_const_t__Impl,
-  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__AHRecord_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__DatabaseInterface_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__Exporter_const_t__Impl,
@@ -39085,8 +35427,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core___private__InterruptibleObject,
   _swigc__p_Seiscomp__Core___private__OperationInterrupted,
   _swigc__p_Seiscomp__GenericRecord,
-  _swigc__p_Seiscomp__IO__AHOutput,
-  _swigc__p_Seiscomp__IO__AHRecord,
   _swigc__p_Seiscomp__IO__BinaryArchive,
   _swigc__p_Seiscomp__IO__DatabaseInterface,
   _swigc__p_Seiscomp__IO__ExportSink,
@@ -39950,13 +36290,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ios_base_copyfmt_event",SWIG_From_int(static_cast< int >(std::ios_base::copyfmt_event)));
   SWIG_Python_SetConstant(d, "XMLArchive_ZIP",SWIG_From_int(static_cast< int >(Seiscomp::IO::XMLArchive::ZIP)));
   SWIG_Python_SetConstant(d, "XMLArchive_GZIP",SWIG_From_int(static_cast< int >(Seiscomp::IO::XMLArchive::GZIP)));
-  SWIG_Python_SetConstant(d, "NEXTRAS",SWIG_From_int(static_cast< int >(21)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_UNDEFINED",SWIG_From_int(static_cast< int >(0)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_FLOAT",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_COMPLEX",SWIG_From_int(static_cast< int >(2)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_VECTOR",SWIG_From_int(static_cast< int >(3)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_TENSOR",SWIG_From_int(static_cast< int >(4)));
-  SWIG_Python_SetConstant(d, "AH_DATATYPE_DOUBLE",SWIG_From_int(static_cast< int >(6)));
   SWIG_Python_SetConstant(d, "FileRecordStream_Begin",SWIG_From_int(static_cast< int >(Seiscomp::RecordStream::File::Begin)));
   SWIG_Python_SetConstant(d, "FileRecordStream_Current",SWIG_From_int(static_cast< int >(Seiscomp::RecordStream::File::Current)));
   SWIG_Python_SetConstant(d, "FileRecordStream_End",SWIG_From_int(static_cast< int >(Seiscomp::RecordStream::File::End)));

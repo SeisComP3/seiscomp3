@@ -41,7 +41,6 @@
 #include <seiscomp3/io/gfarchive.h>
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
-#include <seiscomp3/io/records/ahrecord.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/publicobjectcache.h>
