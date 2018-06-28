@@ -176,7 +176,7 @@ TravelTimeList *LibTau::compute(double delta, double depth) {
 
 TravelTimeList *LibTau::compute(double lat1, double lon1, double dep1,
                                 double lat2, double lon2, double alt2,
-                                int ellc /* by now always 0 */) {
+                                int ellc) {
 	if ( !_initialized ) setModel("iasp91");
 
 	double delta, azi1, azi2;
@@ -189,14 +189,16 @@ TravelTimeList *LibTau::compute(double lat1, double lon1, double dep1,
 	TravelTimeList *ttlist = compute(delta, dep1);
 	ttlist->delta = delta;
 	ttlist->depth = dep1;
-	TravelTimeList::iterator it;
-	for (it = ttlist->begin(); it != ttlist->end(); ++it) {
-		double ecorr = 0.;
-		if (ellipcorr((*it).phase, lat1, lon1, lat2, lon2, dep1, ecorr)) {
-//			fprintf(stderr, " %7.3f %5.1f  TT = %.3f ecorr = %.3f\n", delta, dep1, (*it).time, ecorr);
-			(*it).time += ecorr;
+
+	if ( ellc ) {
+		TravelTimeList::iterator it;
+		for ( it = ttlist->begin(); it != ttlist->end(); ++it ) {
+			double ecorr = 0.;
+			if ( ellipcorr((*it).phase, lat1, lon1, lat2, lon2, dep1, ecorr) )
+				(*it).time += ecorr;
 		}
 	}
+
 	return ttlist;
 }
 
@@ -208,16 +210,16 @@ TravelTime LibTau::computeFirst(double delta, double depth) {
 
 	setDepth(depth);
 
-	for(int i=0; i<100; i++)
+	for ( int i = 0; i < 100; ++i )
 		phase[i] = &ph[10*i];
 
 	trtm(&_handle, delta, &n, time, p, dtdd, dtdh, dddp, phase);
 	emdlv(6371-depth, &vp, &vs);
 
-	if (n) {
+	if ( n ) {
 		float v = (phase[0][0]=='s' || phase[0][0]=='S') ? vs : vp;
 		float takeoff = takeoff_angle(dtdd[0], depth, v);
-		if (dtdh[0] > 0.)
+		if ( dtdh[0] > 0. )
 			takeoff = 180.-takeoff;
 
 		return TravelTime(phase[0], time[0], dtdd[0], dtdh[0], dddp[0], takeoff);
@@ -236,8 +238,15 @@ TravelTime LibTau::computeFirst(double lat1, double lon1, double dep1,
 
 	Math::Geo::delazi(lat1, lon1, lat2, lon2, &delta, &azi1, &azi2);
 
-	/* TODO apply ellipticity correction */
-	return computeFirst(delta, dep1);
+	TravelTime tt = computeFirst(delta, dep1);
+
+	if ( ellc ) {
+		double ecorr = 0.;
+		if ( ellipcorr(tt.phase, lat1, lon1, lat2, lon2, dep1, ecorr) )
+			tt.time += ecorr;
+	}
+
+	return tt;
 }
 
 

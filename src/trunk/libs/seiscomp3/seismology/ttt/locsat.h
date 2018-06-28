@@ -68,8 +68,8 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 		 * XXX implemented! The respective parameters are ignored.
 		 */
 		TravelTimeList *compute(double lat1, double lon1, double dep1,
-		                        double lat2, double lon2, double alt2=0.,
-		                        int ellc = 0 /* for the time being, always */ );
+		                        double lat2, double lon2, double alt2 = 0.,
+		                        int ellc = 1);
 
 
 		/**
@@ -84,8 +84,8 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 		 * XXX implemented! The respective parameters are ignored.
 		 */
 		TravelTime computeFirst(double lat1, double lon1, double dep1,
-		                        double lat2, double lon2, double alt2=0.,
-		                        int ellc = 0 /* for the time being, always */ );
+		                        double lat2, double lon2, double alt2 = 0.,
+		                        int ellc = 1);
 
 
 	private:
