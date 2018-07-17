@@ -52,7 +52,7 @@
 
 #include "schedule.h"
 
-#define MYVERSION "2.0 (2010.256)"
+#define MYVERSION "2.0 (2018.198)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/chain.xml"
@@ -872,6 +872,8 @@ void Station::process_mseed(char *pseed, int packtype, int seq, int size)
         SLMSrecord* msr = sl_msr_new();
         sl_msr_parse(NULL, pseed, &msr, 1, 1);
         
+        if(msr == NULL) return;
+
         int timing_quality = default_timing_quality;
         if(msr->Blkt1001 != NULL)
             timing_quality = msr->Blkt1001->timing_qual;
