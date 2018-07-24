@@ -83,6 +83,11 @@
 					which will be concatenated.
 					</description>
 				</option>
+				<option long-flag="event-agency-id">
+					<description>
+					Use the agency ID of the event instead of the preferred origin.
+					</description>
+				</option>
 			</group>
 
 			<group name="Input">

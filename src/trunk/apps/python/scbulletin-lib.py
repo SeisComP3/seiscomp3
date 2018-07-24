@@ -76,6 +76,7 @@ class Bulletin(object):
         self.format = "autoloc1"
         self.enhanced = False
         self.polarities = False
+        self.useEventAgencyID = False
 
     def _getDistancesArrivalsSorted(self, org):
         # sort arrival list by distance
@@ -242,8 +243,12 @@ class Bulletin(object):
                     txt += "   +/- %4.0f km\n" % deperr
 
         agencyID = ""
-        try: agencyID = org.creationInfo().agencyID()
-        except: pass
+        if self.useEventAgencyID:
+            try: agencyID = evt.creationInfo().agencyID()
+            except: pass
+        else:
+            try: agencyID = org.creationInfo().agencyID()
+            except: pass
         txt += "    Agency                 %s\n" % agencyID
         if extra:
             try:    authorID = org.creationInfo().author()
@@ -769,6 +774,7 @@ class BulletinApp(seiscomp3.Client.Application):
                 self.commandline().addOption("Dump", "enhanced,e", "enhanced output precision for local earthquakes")
                 self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
                 self.commandline().addOption("Dump", "first-only", "dump only the first event/origin")
+                self.commandline().addOption("Dump", "event-agency-id", "use agency ID information from event instead of preferred origin")
 
                 self.commandline().addGroup("Input")
                 self.commandline().addStringOption("Input", "format,f", "input format to use (xml [default], zxml (zipped xml), binary)")
@@ -838,6 +844,8 @@ class BulletinApp(seiscomp3.Client.Application):
 
             if self.commandline().hasOption("polarities"):
                 bulletin.polarities = True
+            if self.commandline().hasOption("event-agency-id"):
+                bulletin.useEventAgencyID = True
 
             try:
                 if evid:
