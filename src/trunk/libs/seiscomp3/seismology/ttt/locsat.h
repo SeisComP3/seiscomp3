@@ -58,14 +58,14 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 
 
 		/**
-		 * Compute the traveltime(s) for the branch selected using setBranch()
+		 * @brief Compute the traveltime(s) for the model selected using
+		 *        setModel().
+		 *
+		 * Note that altitude correction is currently not implemented! The
+		 * respective parameters are ignored.
 		 * @param dep1 The source depth in km
 		 *
 		 * @returns A TravelTimeList of travel times sorted by time.
-		 *
-		 * XXX However:
-		 * XXX NEITHER ellipticity NOR altitude correction is currently
-		 * XXX implemented! The respective parameters are ignored.
 		 */
 		TravelTimeList *compute(double lat1, double lon1, double dep1,
 		                        double lat2, double lon2, double alt2 = 0.,
@@ -73,15 +73,13 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 
 
 		/**
-		 * Compute the traveltime for the branch selected using setBranch()
-		 * and the first (fastest) phase.
+		 * @brief Compute the traveltime for the model selected using setModel()
+		 *        and the first (fastest) phase.
+		 *
+		 * Note that altitude correction is currently not implemented! The
+		 * respective parameters are ignored.
 		 * @param dep1 The source depth in km
-		 *
 		 * @returns A TravelTime
-		 *
-		 * XXX However:
-		 * XXX NEITHER ellipticity NOR altitude correction is currently
-		 * XXX implemented! The respective parameters are ignored.
 		 */
 		TravelTime computeFirst(double lat1, double lon1, double dep1,
 		                        double lat2, double lon2, double alt2 = 0.,
@@ -92,15 +90,13 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 		TravelTimeList *compute(double delta, double depth);
 		TravelTime computeFirst(double delta, double depth);
 
-		void InitPath(const std::string &model);
+		bool initTables();
 
-		static std::string _model;
-		static int _tabinCount;
 
-		//static std::vector<Velocity> _velocities;
-
-		bool _initialized;
-		int  _Pindex;
+	private:
+		std::string _model;
+		std::string _tablePrefix;
+		int         _Pindex;
 };
 
 
