@@ -87,6 +87,10 @@
   }
 }
 
+%newobject Seiscomp::TravelTimeTableInterface::Create;
+%newobject Seiscomp::TravelTimeTableInterface::compute;
+%newobject Seiscomp::TravelTimeTable::compute;
+
 %include "seiscomp3/core.h"
 %include "seiscomp3/seismology/regions.h"
 %include "seiscomp3/seismology/locatorinterface.h"
