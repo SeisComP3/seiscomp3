@@ -14959,7 +14959,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTableInterface_compute__SWIG_0(PyObject *SW
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -15048,7 +15048,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTableInterface_compute__SWIG_1(PyObject *SW
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -15128,7 +15128,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTableInterface_compute__SWIG_2(PyObject *SW
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16382,7 +16382,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTable_compute__SWIG_0(PyObject *SWIGUNUSEDP
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16471,7 +16471,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTable_compute__SWIG_1(PyObject *SWIGUNUSEDP
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16551,7 +16551,7 @@ SWIGINTERN PyObject *_wrap_TravelTimeTable_compute__SWIG_2(PyObject *SWIGUNUSEDP
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__TravelTimeList, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -18082,15 +18082,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TravelTimeTable_setModel", _wrap_TravelTimeTable_setModel, METH_VARARGS, (char *)"TravelTimeTable_setModel(TravelTimeTable self, std::string const & model) -> bool"},
 	 { (char *)"TravelTimeTable_model", _wrap_TravelTimeTable_model, METH_VARARGS, (char *)"TravelTimeTable_model(TravelTimeTable self) -> std::string const &"},
 	 { (char *)"TravelTimeTable_compute", _wrap_TravelTimeTable_compute, METH_VARARGS, (char *)"\n"
-		"compute(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTimeList\n"
+		"compute(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTimeList\n"
 		"compute(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTimeList\n"
 		"compute(double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTimeList\n"
-		"compute(char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTime\n"
+		"compute(char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTime\n"
 		"compute(char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime\n"
 		"TravelTimeTable_compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime\n"
 		""},
 	 { (char *)"TravelTimeTable_computeFirst", _wrap_TravelTimeTable_computeFirst, METH_VARARGS, (char *)"\n"
-		"computeFirst(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTime\n"
+		"computeFirst(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTime\n"
 		"computeFirst(double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime\n"
 		"TravelTimeTable_computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime\n"
 		""},

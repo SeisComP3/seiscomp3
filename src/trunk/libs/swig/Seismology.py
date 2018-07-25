@@ -1200,19 +1200,19 @@ class TravelTimeTable(TravelTimeTableInterface):
 
     def compute(self, *args):
         """
-        compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTimeList
+        compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTimeList
         compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTimeList
         compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTimeList
-        compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTime
+        compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTime
         compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime
         compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
         """
         return _Seismology.TravelTimeTable_compute(self, *args)
 
 
-    def computeFirst(self, lat1, lon1, dep1, lat2, lon2, alt2=0., ellc=0):
+    def computeFirst(self, lat1, lon1, dep1, lat2, lon2, alt2=0., ellc=1):
         """
-        computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=0) -> TravelTime
+        computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., int ellc=1) -> TravelTime
         computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime
         computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
         """
