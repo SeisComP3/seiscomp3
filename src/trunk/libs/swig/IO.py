@@ -1417,6 +1417,9 @@ class Exporter(seiscomp3.Core.BaseObject):
         write(Exporter self, std::streambuf * buf, BaseObject arg3) -> bool
         write(Exporter self, string filename, BaseObject arg3) -> bool
         write(Exporter self, ExportSink sink, BaseObject arg3) -> bool
+        write(Exporter self, std::streambuf * buf, ExportObjectList objects) -> bool
+        write(Exporter self, string filename, ExportObjectList objects) -> bool
+        write(Exporter self, ExportSink sink, ExportObjectList objects) -> bool
         """
         return _IO.Exporter_write(self, *args)
 
@@ -2934,6 +2937,211 @@ class RecordResamplerI(RecordResamplerBase):
 
 RecordResamplerI_swigregister = _IO.RecordResamplerI_swigregister
 RecordResamplerI_swigregister(RecordResamplerI)
+
+class ExportObjectList(_object):
+    """Proxy of C++ std::vector<(p.Seiscomp::Core::BaseObject)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ExportObjectList, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ExportObjectList, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(ExportObjectList self) -> SwigPyIterator"""
+        return _IO.ExportObjectList_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList___bool__(self)
+
+
+    def __len__(self):
+        """__len__(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList___len__(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j) -> ExportObjectList"""
+        return _IO.ExportObjectList___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)
+        __setslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j, ExportObjectList v)
+        """
+        return _IO.ExportObjectList___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)"""
+        return _IO.ExportObjectList___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i)
+        __delitem__(ExportObjectList self, PySliceObject * slice)
+        """
+        return _IO.ExportObjectList___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(ExportObjectList self, PySliceObject * slice) -> ExportObjectList
+        __getitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i) -> BaseObject
+        """
+        return _IO.ExportObjectList___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(ExportObjectList self, PySliceObject * slice, ExportObjectList v)
+        __setitem__(ExportObjectList self, PySliceObject * slice)
+        __setitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, BaseObject x)
+        """
+        return _IO.ExportObjectList___setitem__(self, *args)
+
+
+    def pop(self):
+        """pop(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_pop(self)
+
+
+    def append(self, x):
+        """append(ExportObjectList self, BaseObject x)"""
+        return _IO.ExportObjectList_append(self, x)
+
+
+    def empty(self):
+        """empty(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList_empty(self)
+
+
+    def size(self):
+        """size(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList_size(self)
+
+
+    def swap(self, v):
+        """swap(ExportObjectList self, ExportObjectList v)"""
+        return _IO.ExportObjectList_swap(self, v)
+
+
+    def begin(self):
+        """begin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"""
+        return _IO.ExportObjectList_begin(self)
+
+
+    def end(self):
+        """end(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"""
+        return _IO.ExportObjectList_end(self)
+
+
+    def rbegin(self):
+        """rbegin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"""
+        return _IO.ExportObjectList_rbegin(self)
+
+
+    def rend(self):
+        """rend(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"""
+        return _IO.ExportObjectList_rend(self)
+
+
+    def clear(self):
+        """clear(ExportObjectList self)"""
+        return _IO.ExportObjectList_clear(self)
+
+
+    def get_allocator(self):
+        """get_allocator(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::allocator_type"""
+        return _IO.ExportObjectList_get_allocator(self)
+
+
+    def pop_back(self):
+        """pop_back(ExportObjectList self)"""
+        return _IO.ExportObjectList_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        erase(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator first, std::vector< Seiscomp::Core::BaseObject * >::iterator last) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        """
+        return _IO.ExportObjectList_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, ExportObjectList arg2) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, std::vector< Seiscomp::Core::BaseObject * >::size_type size) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, std::vector< Seiscomp::Core::BaseObject * >::size_type size, BaseObject value) -> ExportObjectList
+        """
+        this = _IO.new_ExportObjectList(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(ExportObjectList self, BaseObject x)"""
+        return _IO.ExportObjectList_push_back(self, x)
+
+
+    def front(self):
+        """front(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_front(self)
+
+
+    def back(self):
+        """back(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_back(self)
+
+
+    def assign(self, n, x):
+        """assign(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)"""
+        return _IO.ExportObjectList_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type new_size)
+        resize(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type new_size, BaseObject x)
+        """
+        return _IO.ExportObjectList_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos, BaseObject x) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        insert(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)
+        """
+        return _IO.ExportObjectList_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n)"""
+        return _IO.ExportObjectList_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList_capacity(self)
+
+    __swig_destroy__ = _IO.delete_ExportObjectList
+    __del__ = lambda self: None
+ExportObjectList_swigregister = _IO.ExportObjectList_swigregister
+ExportObjectList_swigregister(ExportObjectList)
 
 # This file is compatible with both classic and new-style classes.
 

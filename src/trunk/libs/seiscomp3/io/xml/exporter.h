@@ -55,6 +55,7 @@ class SC_SYSTEM_CORE_API Exporter : public IO::Exporter, public OutputHandler {
 
 		//! Interface method that must be implemented by real exporters.
 		virtual bool put(std::streambuf* buf, Core::BaseObject *);
+		virtual bool put(std::streambuf* buf, const ExportObjectList &);
 
 
 	// ------------------------------------------------------------------
