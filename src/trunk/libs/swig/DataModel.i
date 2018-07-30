@@ -17,6 +17,7 @@
 #include "seiscomp3/datamodel/arclinklog_package.h"
 #include "seiscomp3/datamodel/qualitycontrol_package.h"
 #include "seiscomp3/datamodel/inventory_package.h"
+#include "seiscomp3/datamodel/dataavailability_package.h"
 #include "seiscomp3/datamodel/eventparameters_package.h"
 #include "seiscomp3/datamodel/config_package.h"
 #include "seiscomp3/datamodel/routing_package.h"
@@ -53,6 +54,7 @@
 %newobject Seiscomp::DataModel::DatabaseReader::loadArclinkLog;
 %newobject Seiscomp::DataModel::DatabaseReader::loadQualityControl;
 %newobject Seiscomp::DataModel::DatabaseReader::loadInventory;
+%newobject Seiscomp::DataModel::DatabaseReader::loadDataAvailability;
 %newobject Seiscomp::DataModel::DatabaseReader::loadEventParameters;
 %newobject Seiscomp::DataModel::DatabaseReader::loadConfig;
 %newobject Seiscomp::DataModel::DatabaseReader::loadRouting;
@@ -178,6 +180,12 @@ optional_enum(Seiscomp::DataModel::StationGroupType);
 %include "seiscomp3/datamodel/station.h"
 %include "seiscomp3/datamodel/network.h"
 %include "seiscomp3/datamodel/inventory.h"
+
+// package DataAvailability
+%include "seiscomp3/datamodel/datasegment.h"
+%include "seiscomp3/datamodel/dataattributeextent.h"
+%include "seiscomp3/datamodel/dataextent.h"
+%include "seiscomp3/datamodel/dataavailability.h"
 
 // package EventParameters
 %include "seiscomp3/datamodel/eventdescription.h"

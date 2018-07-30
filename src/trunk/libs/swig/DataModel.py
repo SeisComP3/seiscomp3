@@ -960,15 +960,15 @@ class DatabaseObjectWriter(_object):
 DatabaseObjectWriter_swigregister = _DataModel.DatabaseObjectWriter_swigregister
 DatabaseObjectWriter_swigregister(DatabaseObjectWriter)
 
-class DatabaseArchive(Observer):
+class DatabaseArchive(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::DatabaseArchive class."""
 
     __swig_setmethods__ = {}
-    for _s in [Observer]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, DatabaseArchive, name, value)
     __swig_getmethods__ = {}
-    for _s in [Observer]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, DatabaseArchive, name)
     __repr__ = _swig_repr
@@ -1051,6 +1051,11 @@ class DatabaseArchive(Observer):
         return _DataModel.DatabaseArchive_getObjectCount(self, *args)
 
 
+    def getCachedId(self, arg2):
+        """getCachedId(DatabaseArchive self, Object arg2) -> int"""
+        return _DataModel.DatabaseArchive_getCachedId(self, arg2)
+
+
     def parentPublicID(self, object):
         """parentPublicID(DatabaseArchive self, PublicObject object) -> std::string"""
         return _DataModel.DatabaseArchive_parentPublicID(self, object)
@@ -1104,6 +1109,15 @@ class DatabaseArchive(Observer):
         getObjectIterator(DatabaseArchive self, std::string const & query, RTTI classType) -> DatabaseIterator
         """
         return _DataModel.DatabaseArchive_getObjectIterator(self, *args)
+
+
+    def toString(self, *args):
+        """
+        toString(DatabaseArchive self, std::string const & value) -> std::string
+        toString(DatabaseArchive self, char const * value) -> std::string
+        toString(DatabaseArchive self, Time value) -> std::string
+        """
+        return _DataModel.DatabaseArchive_toString(self, *args)
 
 DatabaseArchive_swigregister = _DataModel.DatabaseArchive_swigregister
 DatabaseArchive_swigregister(DatabaseArchive)
@@ -16067,6 +16081,1045 @@ def Inventory_ConstCast(*args):
     """
     return _DataModel.Inventory_ConstCast(*args)
 
+class DataSegmentIndex(_object):
+    """Proxy of C++ Seiscomp::DataModel::DataSegmentIndex class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataSegmentIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DataSegmentIndex, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataSegmentIndex self) -> DataSegmentIndex
+        __init__(Seiscomp::DataModel::DataSegmentIndex self, Time start) -> DataSegmentIndex
+        __init__(Seiscomp::DataModel::DataSegmentIndex self, DataSegmentIndex arg2) -> DataSegmentIndex
+        """
+        this = _DataModel.new_DataSegmentIndex(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        """__eq__(DataSegmentIndex self, DataSegmentIndex arg2) -> bool"""
+        return _DataModel.DataSegmentIndex___eq__(self, arg2)
+
+
+    def __ne__(self, arg2):
+        """__ne__(DataSegmentIndex self, DataSegmentIndex arg2) -> bool"""
+        return _DataModel.DataSegmentIndex___ne__(self, arg2)
+
+    __swig_setmethods__["start"] = _DataModel.DataSegmentIndex_start_set
+    __swig_getmethods__["start"] = _DataModel.DataSegmentIndex_start_get
+    if _newclass:
+        start = _swig_property(_DataModel.DataSegmentIndex_start_get, _DataModel.DataSegmentIndex_start_set)
+    __swig_destroy__ = _DataModel.delete_DataSegmentIndex
+    __del__ = lambda self: None
+DataSegmentIndex_swigregister = _DataModel.DataSegmentIndex_swigregister
+DataSegmentIndex_swigregister(DataSegmentIndex)
+
+class DataSegment(Object):
+    """Proxy of C++ Seiscomp::DataModel::DataSegment class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Object]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataSegment, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Object]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, DataSegment, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.DataSegment_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.DataSegment_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(DataSegment self) -> char const *"""
+        return _DataModel.DataSegment_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(DataSegment self) -> RTTI"""
+        return _DataModel.DataSegment_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> DataSegment
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> DataSegment
+        """
+        return _DataModel.DataSegment_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> DataSegment
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataSegment
+        """
+        return _DataModel.DataSegment_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(DataSegment self, GenericArchive ar)"""
+        return _DataModel.DataSegment_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataSegment self) -> DataSegment
+        __init__(Seiscomp::DataModel::DataSegment self, DataSegment other) -> DataSegment
+        """
+        this = _DataModel.new_DataSegment(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_DataSegment
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(DataSegment self, DataSegment other) -> bool"""
+        return _DataModel.DataSegment___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(DataSegment self, DataSegment other) -> bool"""
+        return _DataModel.DataSegment___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(DataSegment self, DataSegment other) -> bool"""
+        return _DataModel.DataSegment_equal(self, other)
+
+
+    def setStart(self, start):
+        """setStart(DataSegment self, Time start)"""
+        return _DataModel.DataSegment_setStart(self, start)
+
+
+    def start(self):
+        """start(DataSegment self) -> Time"""
+        return _DataModel.DataSegment_start(self)
+
+
+    def setEnd(self, end):
+        """setEnd(DataSegment self, Time end)"""
+        return _DataModel.DataSegment_setEnd(self, end)
+
+
+    def end(self):
+        """end(DataSegment self) -> Time"""
+        return _DataModel.DataSegment_end(self)
+
+
+    def setUpdated(self, updated):
+        """setUpdated(DataSegment self, Time updated)"""
+        return _DataModel.DataSegment_setUpdated(self, updated)
+
+
+    def updated(self):
+        """updated(DataSegment self) -> Time"""
+        return _DataModel.DataSegment_updated(self)
+
+
+    def setSampleRate(self, sampleRate):
+        """setSampleRate(DataSegment self, double sampleRate)"""
+        return _DataModel.DataSegment_setSampleRate(self, sampleRate)
+
+
+    def sampleRate(self):
+        """sampleRate(DataSegment self) -> double"""
+        return _DataModel.DataSegment_sampleRate(self)
+
+
+    def setQuality(self, quality):
+        """setQuality(DataSegment self, std::string const & quality)"""
+        return _DataModel.DataSegment_setQuality(self, quality)
+
+
+    def quality(self):
+        """quality(DataSegment self) -> std::string const &"""
+        return _DataModel.DataSegment_quality(self)
+
+
+    def setOutOfOrder(self, outOfOrder):
+        """setOutOfOrder(DataSegment self, bool outOfOrder)"""
+        return _DataModel.DataSegment_setOutOfOrder(self, outOfOrder)
+
+
+    def outOfOrder(self):
+        """outOfOrder(DataSegment self) -> bool"""
+        return _DataModel.DataSegment_outOfOrder(self)
+
+
+    def index(self):
+        """index(DataSegment self) -> DataSegmentIndex"""
+        return _DataModel.DataSegment_index(self)
+
+
+    def equalIndex(self, lhs):
+        """equalIndex(DataSegment self, DataSegment lhs) -> bool"""
+        return _DataModel.DataSegment_equalIndex(self, lhs)
+
+
+    def dataExtent(self):
+        """dataExtent(DataSegment self) -> DataExtent"""
+        return _DataModel.DataSegment_dataExtent(self)
+
+
+    def assign(self, other):
+        """assign(DataSegment self, Object other) -> bool"""
+        return _DataModel.DataSegment_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(DataSegment self, PublicObject parent) -> bool"""
+        return _DataModel.DataSegment_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(DataSegment self, PublicObject parent) -> bool"""
+        return _DataModel.DataSegment_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(DataSegment self) -> bool"""
+        return _DataModel.DataSegment_detach(self)
+
+
+    def clone(self):
+        """clone(DataSegment self) -> Object"""
+        return _DataModel.DataSegment_clone(self)
+
+
+    def accept(self, arg2):
+        """accept(DataSegment self, Visitor arg2)"""
+        return _DataModel.DataSegment_accept(self, arg2)
+
+DataSegment_swigregister = _DataModel.DataSegment_swigregister
+DataSegment_swigregister(DataSegment)
+
+def DataSegment_ClassName():
+    """DataSegment_ClassName() -> char const *"""
+    return _DataModel.DataSegment_ClassName()
+
+def DataSegment_TypeInfo():
+    """DataSegment_TypeInfo() -> RTTI"""
+    return _DataModel.DataSegment_TypeInfo()
+
+def DataSegment_Cast(*args):
+    """
+    Cast(BaseObject o) -> DataSegment
+    DataSegment_Cast(Seiscomp::Core::BaseObjectPtr o) -> DataSegment
+    """
+    return _DataModel.DataSegment_Cast(*args)
+
+def DataSegment_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> DataSegment
+    DataSegment_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataSegment
+    """
+    return _DataModel.DataSegment_ConstCast(*args)
+
+class DataAttributeExtentIndex(_object):
+    """Proxy of C++ Seiscomp::DataModel::DataAttributeExtentIndex class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataAttributeExtentIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DataAttributeExtentIndex, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataAttributeExtentIndex self) -> DataAttributeExtentIndex
+        __init__(Seiscomp::DataModel::DataAttributeExtentIndex self, double sampleRate, std::string const & quality) -> DataAttributeExtentIndex
+        __init__(Seiscomp::DataModel::DataAttributeExtentIndex self, DataAttributeExtentIndex arg2) -> DataAttributeExtentIndex
+        """
+        this = _DataModel.new_DataAttributeExtentIndex(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        """__eq__(DataAttributeExtentIndex self, DataAttributeExtentIndex arg2) -> bool"""
+        return _DataModel.DataAttributeExtentIndex___eq__(self, arg2)
+
+
+    def __ne__(self, arg2):
+        """__ne__(DataAttributeExtentIndex self, DataAttributeExtentIndex arg2) -> bool"""
+        return _DataModel.DataAttributeExtentIndex___ne__(self, arg2)
+
+    __swig_setmethods__["sampleRate"] = _DataModel.DataAttributeExtentIndex_sampleRate_set
+    __swig_getmethods__["sampleRate"] = _DataModel.DataAttributeExtentIndex_sampleRate_get
+    if _newclass:
+        sampleRate = _swig_property(_DataModel.DataAttributeExtentIndex_sampleRate_get, _DataModel.DataAttributeExtentIndex_sampleRate_set)
+    __swig_setmethods__["quality"] = _DataModel.DataAttributeExtentIndex_quality_set
+    __swig_getmethods__["quality"] = _DataModel.DataAttributeExtentIndex_quality_get
+    if _newclass:
+        quality = _swig_property(_DataModel.DataAttributeExtentIndex_quality_get, _DataModel.DataAttributeExtentIndex_quality_set)
+    __swig_destroy__ = _DataModel.delete_DataAttributeExtentIndex
+    __del__ = lambda self: None
+DataAttributeExtentIndex_swigregister = _DataModel.DataAttributeExtentIndex_swigregister
+DataAttributeExtentIndex_swigregister(DataAttributeExtentIndex)
+
+class DataAttributeExtent(Object):
+    """Proxy of C++ Seiscomp::DataModel::DataAttributeExtent class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Object]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataAttributeExtent, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Object]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, DataAttributeExtent, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.DataAttributeExtent_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.DataAttributeExtent_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(DataAttributeExtent self) -> char const *"""
+        return _DataModel.DataAttributeExtent_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(DataAttributeExtent self) -> RTTI"""
+        return _DataModel.DataAttributeExtent_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> DataAttributeExtent
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> DataAttributeExtent
+        """
+        return _DataModel.DataAttributeExtent_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> DataAttributeExtent
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataAttributeExtent
+        """
+        return _DataModel.DataAttributeExtent_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(DataAttributeExtent self, GenericArchive ar)"""
+        return _DataModel.DataAttributeExtent_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataAttributeExtent self) -> DataAttributeExtent
+        __init__(Seiscomp::DataModel::DataAttributeExtent self, DataAttributeExtent other) -> DataAttributeExtent
+        """
+        this = _DataModel.new_DataAttributeExtent(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_DataAttributeExtent
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(DataAttributeExtent self, DataAttributeExtent other) -> bool"""
+        return _DataModel.DataAttributeExtent___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(DataAttributeExtent self, DataAttributeExtent other) -> bool"""
+        return _DataModel.DataAttributeExtent___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(DataAttributeExtent self, DataAttributeExtent other) -> bool"""
+        return _DataModel.DataAttributeExtent_equal(self, other)
+
+
+    def setStart(self, start):
+        """setStart(DataAttributeExtent self, Time start)"""
+        return _DataModel.DataAttributeExtent_setStart(self, start)
+
+
+    def start(self):
+        """start(DataAttributeExtent self) -> Time"""
+        return _DataModel.DataAttributeExtent_start(self)
+
+
+    def setEnd(self, end):
+        """setEnd(DataAttributeExtent self, Time end)"""
+        return _DataModel.DataAttributeExtent_setEnd(self, end)
+
+
+    def end(self):
+        """end(DataAttributeExtent self) -> Time"""
+        return _DataModel.DataAttributeExtent_end(self)
+
+
+    def setSampleRate(self, sampleRate):
+        """setSampleRate(DataAttributeExtent self, double sampleRate)"""
+        return _DataModel.DataAttributeExtent_setSampleRate(self, sampleRate)
+
+
+    def sampleRate(self):
+        """sampleRate(DataAttributeExtent self) -> double"""
+        return _DataModel.DataAttributeExtent_sampleRate(self)
+
+
+    def setQuality(self, quality):
+        """setQuality(DataAttributeExtent self, std::string const & quality)"""
+        return _DataModel.DataAttributeExtent_setQuality(self, quality)
+
+
+    def quality(self):
+        """quality(DataAttributeExtent self) -> std::string const &"""
+        return _DataModel.DataAttributeExtent_quality(self)
+
+
+    def setUpdated(self, updated):
+        """setUpdated(DataAttributeExtent self, Time updated)"""
+        return _DataModel.DataAttributeExtent_setUpdated(self, updated)
+
+
+    def updated(self):
+        """updated(DataAttributeExtent self) -> Time"""
+        return _DataModel.DataAttributeExtent_updated(self)
+
+
+    def setSegmentCount(self, segmentCount):
+        """setSegmentCount(DataAttributeExtent self, int segmentCount)"""
+        return _DataModel.DataAttributeExtent_setSegmentCount(self, segmentCount)
+
+
+    def segmentCount(self):
+        """segmentCount(DataAttributeExtent self) -> int"""
+        return _DataModel.DataAttributeExtent_segmentCount(self)
+
+
+    def index(self):
+        """index(DataAttributeExtent self) -> DataAttributeExtentIndex"""
+        return _DataModel.DataAttributeExtent_index(self)
+
+
+    def equalIndex(self, lhs):
+        """equalIndex(DataAttributeExtent self, DataAttributeExtent lhs) -> bool"""
+        return _DataModel.DataAttributeExtent_equalIndex(self, lhs)
+
+
+    def dataExtent(self):
+        """dataExtent(DataAttributeExtent self) -> DataExtent"""
+        return _DataModel.DataAttributeExtent_dataExtent(self)
+
+
+    def assign(self, other):
+        """assign(DataAttributeExtent self, Object other) -> bool"""
+        return _DataModel.DataAttributeExtent_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(DataAttributeExtent self, PublicObject parent) -> bool"""
+        return _DataModel.DataAttributeExtent_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(DataAttributeExtent self, PublicObject parent) -> bool"""
+        return _DataModel.DataAttributeExtent_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(DataAttributeExtent self) -> bool"""
+        return _DataModel.DataAttributeExtent_detach(self)
+
+
+    def clone(self):
+        """clone(DataAttributeExtent self) -> Object"""
+        return _DataModel.DataAttributeExtent_clone(self)
+
+
+    def accept(self, arg2):
+        """accept(DataAttributeExtent self, Visitor arg2)"""
+        return _DataModel.DataAttributeExtent_accept(self, arg2)
+
+DataAttributeExtent_swigregister = _DataModel.DataAttributeExtent_swigregister
+DataAttributeExtent_swigregister(DataAttributeExtent)
+
+def DataAttributeExtent_ClassName():
+    """DataAttributeExtent_ClassName() -> char const *"""
+    return _DataModel.DataAttributeExtent_ClassName()
+
+def DataAttributeExtent_TypeInfo():
+    """DataAttributeExtent_TypeInfo() -> RTTI"""
+    return _DataModel.DataAttributeExtent_TypeInfo()
+
+def DataAttributeExtent_Cast(*args):
+    """
+    Cast(BaseObject o) -> DataAttributeExtent
+    DataAttributeExtent_Cast(Seiscomp::Core::BaseObjectPtr o) -> DataAttributeExtent
+    """
+    return _DataModel.DataAttributeExtent_Cast(*args)
+
+def DataAttributeExtent_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> DataAttributeExtent
+    DataAttributeExtent_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataAttributeExtent
+    """
+    return _DataModel.DataAttributeExtent_ConstCast(*args)
+
+class DataExtentIndex(_object):
+    """Proxy of C++ Seiscomp::DataModel::DataExtentIndex class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataExtentIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, DataExtentIndex, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataExtentIndex self) -> DataExtentIndex
+        __init__(Seiscomp::DataModel::DataExtentIndex self, WaveformStreamID waveformID) -> DataExtentIndex
+        __init__(Seiscomp::DataModel::DataExtentIndex self, DataExtentIndex arg2) -> DataExtentIndex
+        """
+        this = _DataModel.new_DataExtentIndex(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        """__eq__(DataExtentIndex self, DataExtentIndex arg2) -> bool"""
+        return _DataModel.DataExtentIndex___eq__(self, arg2)
+
+
+    def __ne__(self, arg2):
+        """__ne__(DataExtentIndex self, DataExtentIndex arg2) -> bool"""
+        return _DataModel.DataExtentIndex___ne__(self, arg2)
+
+    __swig_setmethods__["waveformID"] = _DataModel.DataExtentIndex_waveformID_set
+    __swig_getmethods__["waveformID"] = _DataModel.DataExtentIndex_waveformID_get
+    if _newclass:
+        waveformID = _swig_property(_DataModel.DataExtentIndex_waveformID_get, _DataModel.DataExtentIndex_waveformID_set)
+    __swig_destroy__ = _DataModel.delete_DataExtentIndex
+    __del__ = lambda self: None
+DataExtentIndex_swigregister = _DataModel.DataExtentIndex_swigregister
+DataExtentIndex_swigregister(DataExtentIndex)
+
+class DataExtent(PublicObject):
+    """Proxy of C++ Seiscomp::DataModel::DataExtent class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataExtent, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, DataExtent, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.DataExtent_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.DataExtent_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(DataExtent self) -> char const *"""
+        return _DataModel.DataExtent_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(DataExtent self) -> RTTI"""
+        return _DataModel.DataExtent_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> DataExtent
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> DataExtent
+        """
+        return _DataModel.DataExtent_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> DataExtent
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataExtent
+        """
+        return _DataModel.DataExtent_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(DataExtent self, GenericArchive ar)"""
+        return _DataModel.DataExtent_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataExtent self, DataExtent other) -> DataExtent
+        __init__(Seiscomp::DataModel::DataExtent self, std::string const & publicID) -> DataExtent
+        """
+        this = _DataModel.new_DataExtent(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_DataExtent
+    __del__ = lambda self: None
+
+    def Create(*args):
+        """
+        Create() -> DataExtent
+        Create(std::string const & publicID) -> DataExtent
+        """
+        return _DataModel.DataExtent_Create(*args)
+
+    Create = staticmethod(Create)
+
+    def Find(publicID):
+        """Find(std::string const & publicID) -> DataExtent"""
+        return _DataModel.DataExtent_Find(publicID)
+
+    Find = staticmethod(Find)
+
+    def __eq__(self, other):
+        """__eq__(DataExtent self, DataExtent other) -> bool"""
+        return _DataModel.DataExtent___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(DataExtent self, DataExtent other) -> bool"""
+        return _DataModel.DataExtent___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(DataExtent self, DataExtent other) -> bool"""
+        return _DataModel.DataExtent_equal(self, other)
+
+
+    def setWaveformID(self, waveformID):
+        """setWaveformID(DataExtent self, WaveformStreamID waveformID)"""
+        return _DataModel.DataExtent_setWaveformID(self, waveformID)
+
+
+    def waveformID(self, *args):
+        """
+        waveformID(DataExtent self) -> WaveformStreamID
+        waveformID(DataExtent self) -> WaveformStreamID
+        """
+        return _DataModel.DataExtent_waveformID(self, *args)
+
+
+    def setStart(self, start):
+        """setStart(DataExtent self, Time start)"""
+        return _DataModel.DataExtent_setStart(self, start)
+
+
+    def start(self):
+        """start(DataExtent self) -> Time"""
+        return _DataModel.DataExtent_start(self)
+
+
+    def setEnd(self, end):
+        """setEnd(DataExtent self, Time end)"""
+        return _DataModel.DataExtent_setEnd(self, end)
+
+
+    def end(self):
+        """end(DataExtent self) -> Time"""
+        return _DataModel.DataExtent_end(self)
+
+
+    def setUpdated(self, updated):
+        """setUpdated(DataExtent self, Time updated)"""
+        return _DataModel.DataExtent_setUpdated(self, updated)
+
+
+    def updated(self):
+        """updated(DataExtent self) -> Time"""
+        return _DataModel.DataExtent_updated(self)
+
+
+    def setLastScan(self, lastScan):
+        """setLastScan(DataExtent self, Time lastScan)"""
+        return _DataModel.DataExtent_setLastScan(self, lastScan)
+
+
+    def lastScan(self):
+        """lastScan(DataExtent self) -> Time"""
+        return _DataModel.DataExtent_lastScan(self)
+
+
+    def setSegmentOverflow(self, segmentOverflow):
+        """setSegmentOverflow(DataExtent self, bool segmentOverflow)"""
+        return _DataModel.DataExtent_setSegmentOverflow(self, segmentOverflow)
+
+
+    def segmentOverflow(self):
+        """segmentOverflow(DataExtent self) -> bool"""
+        return _DataModel.DataExtent_segmentOverflow(self)
+
+
+    def index(self):
+        """index(DataExtent self) -> DataExtentIndex"""
+        return _DataModel.DataExtent_index(self)
+
+
+    def equalIndex(self, lhs):
+        """equalIndex(DataExtent self, DataExtent lhs) -> bool"""
+        return _DataModel.DataExtent_equalIndex(self, lhs)
+
+
+    def add(self, *args):
+        """
+        add(DataExtent self, DataSegment obj) -> bool
+        add(DataExtent self, DataAttributeExtent obj) -> bool
+        """
+        return _DataModel.DataExtent_add(self, *args)
+
+
+    def remove(self, *args):
+        """
+        remove(DataExtent self, DataSegment obj) -> bool
+        remove(DataExtent self, DataAttributeExtent obj) -> bool
+        """
+        return _DataModel.DataExtent_remove(self, *args)
+
+
+    def removeDataSegment(self, *args):
+        """
+        removeDataSegment(DataExtent self, size_t i) -> bool
+        removeDataSegment(DataExtent self, DataSegmentIndex i) -> bool
+        """
+        return _DataModel.DataExtent_removeDataSegment(self, *args)
+
+
+    def removeDataAttributeExtent(self, *args):
+        """
+        removeDataAttributeExtent(DataExtent self, size_t i) -> bool
+        removeDataAttributeExtent(DataExtent self, DataAttributeExtentIndex i) -> bool
+        """
+        return _DataModel.DataExtent_removeDataAttributeExtent(self, *args)
+
+
+    def dataSegmentCount(self):
+        """dataSegmentCount(DataExtent self) -> size_t"""
+        return _DataModel.DataExtent_dataSegmentCount(self)
+
+
+    def dataAttributeExtentCount(self):
+        """dataAttributeExtentCount(DataExtent self) -> size_t"""
+        return _DataModel.DataExtent_dataAttributeExtentCount(self)
+
+
+    def dataSegment(self, *args):
+        """
+        dataSegment(DataExtent self, size_t i) -> DataSegment
+        dataSegment(DataExtent self, DataSegmentIndex i) -> DataSegment
+        """
+        return _DataModel.DataExtent_dataSegment(self, *args)
+
+
+    def dataAttributeExtent(self, *args):
+        """
+        dataAttributeExtent(DataExtent self, size_t i) -> DataAttributeExtent
+        dataAttributeExtent(DataExtent self, DataAttributeExtentIndex i) -> DataAttributeExtent
+        """
+        return _DataModel.DataExtent_dataAttributeExtent(self, *args)
+
+
+    def dataAvailability(self):
+        """dataAvailability(DataExtent self) -> DataAvailability"""
+        return _DataModel.DataExtent_dataAvailability(self)
+
+
+    def assign(self, other):
+        """assign(DataExtent self, Object other) -> bool"""
+        return _DataModel.DataExtent_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(DataExtent self, PublicObject parent) -> bool"""
+        return _DataModel.DataExtent_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(DataExtent self, PublicObject parent) -> bool"""
+        return _DataModel.DataExtent_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(DataExtent self) -> bool"""
+        return _DataModel.DataExtent_detach(self)
+
+
+    def clone(self):
+        """clone(DataExtent self) -> Object"""
+        return _DataModel.DataExtent_clone(self)
+
+
+    def updateChild(self, child):
+        """updateChild(DataExtent self, Object child) -> bool"""
+        return _DataModel.DataExtent_updateChild(self, child)
+
+
+    def accept(self, arg2):
+        """accept(DataExtent self, Visitor arg2)"""
+        return _DataModel.DataExtent_accept(self, arg2)
+
+DataExtent_swigregister = _DataModel.DataExtent_swigregister
+DataExtent_swigregister(DataExtent)
+
+def DataExtent_ClassName():
+    """DataExtent_ClassName() -> char const *"""
+    return _DataModel.DataExtent_ClassName()
+
+def DataExtent_TypeInfo():
+    """DataExtent_TypeInfo() -> RTTI"""
+    return _DataModel.DataExtent_TypeInfo()
+
+def DataExtent_Cast(*args):
+    """
+    Cast(BaseObject o) -> DataExtent
+    DataExtent_Cast(Seiscomp::Core::BaseObjectPtr o) -> DataExtent
+    """
+    return _DataModel.DataExtent_Cast(*args)
+
+def DataExtent_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> DataExtent
+    DataExtent_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataExtent
+    """
+    return _DataModel.DataExtent_ConstCast(*args)
+
+def DataExtent_Create(*args):
+    """
+    Create() -> DataExtent
+    DataExtent_Create(std::string const & publicID) -> DataExtent
+    """
+    return _DataModel.DataExtent_Create(*args)
+
+def DataExtent_Find(publicID):
+    """DataExtent_Find(std::string const & publicID) -> DataExtent"""
+    return _DataModel.DataExtent_Find(publicID)
+
+class DataAvailability(PublicObject):
+    """Proxy of C++ Seiscomp::DataModel::DataAvailability class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DataAvailability, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, DataAvailability, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.DataAvailability_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.DataAvailability_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(DataAvailability self) -> char const *"""
+        return _DataModel.DataAvailability_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(DataAvailability self) -> RTTI"""
+        return _DataModel.DataAvailability_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> DataAvailability
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> DataAvailability
+        """
+        return _DataModel.DataAvailability_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> DataAvailability
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataAvailability
+        """
+        return _DataModel.DataAvailability_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(DataAvailability self, GenericArchive ar)"""
+        return _DataModel.DataAvailability_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::DataAvailability self) -> DataAvailability
+        __init__(Seiscomp::DataModel::DataAvailability self, DataAvailability other) -> DataAvailability
+        """
+        this = _DataModel.new_DataAvailability(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_DataAvailability
+    __del__ = lambda self: None
+
+    def __eq__(self, other):
+        """__eq__(DataAvailability self, DataAvailability other) -> bool"""
+        return _DataModel.DataAvailability___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(DataAvailability self, DataAvailability other) -> bool"""
+        return _DataModel.DataAvailability___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(DataAvailability self, DataAvailability other) -> bool"""
+        return _DataModel.DataAvailability_equal(self, other)
+
+
+    def add(self, obj):
+        """add(DataAvailability self, DataExtent obj) -> bool"""
+        return _DataModel.DataAvailability_add(self, obj)
+
+
+    def remove(self, obj):
+        """remove(DataAvailability self, DataExtent obj) -> bool"""
+        return _DataModel.DataAvailability_remove(self, obj)
+
+
+    def removeDataExtent(self, *args):
+        """
+        removeDataExtent(DataAvailability self, size_t i) -> bool
+        removeDataExtent(DataAvailability self, DataExtentIndex i) -> bool
+        """
+        return _DataModel.DataAvailability_removeDataExtent(self, *args)
+
+
+    def dataExtentCount(self):
+        """dataExtentCount(DataAvailability self) -> size_t"""
+        return _DataModel.DataAvailability_dataExtentCount(self)
+
+
+    def dataExtent(self, *args):
+        """
+        dataExtent(DataAvailability self, size_t i) -> DataExtent
+        dataExtent(DataAvailability self, DataExtentIndex i) -> DataExtent
+        """
+        return _DataModel.DataAvailability_dataExtent(self, *args)
+
+
+    def findDataExtent(self, publicID):
+        """findDataExtent(DataAvailability self, std::string const & publicID) -> DataExtent"""
+        return _DataModel.DataAvailability_findDataExtent(self, publicID)
+
+
+    def assign(self, other):
+        """assign(DataAvailability self, Object other) -> bool"""
+        return _DataModel.DataAvailability_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(DataAvailability self, PublicObject parent) -> bool"""
+        return _DataModel.DataAvailability_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(DataAvailability self, PublicObject parent) -> bool"""
+        return _DataModel.DataAvailability_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(DataAvailability self) -> bool"""
+        return _DataModel.DataAvailability_detach(self)
+
+
+    def clone(self):
+        """clone(DataAvailability self) -> Object"""
+        return _DataModel.DataAvailability_clone(self)
+
+
+    def updateChild(self, child):
+        """updateChild(DataAvailability self, Object child) -> bool"""
+        return _DataModel.DataAvailability_updateChild(self, child)
+
+
+    def accept(self, arg2):
+        """accept(DataAvailability self, Visitor arg2)"""
+        return _DataModel.DataAvailability_accept(self, arg2)
+
+DataAvailability_swigregister = _DataModel.DataAvailability_swigregister
+DataAvailability_swigregister(DataAvailability)
+
+def DataAvailability_ClassName():
+    """DataAvailability_ClassName() -> char const *"""
+    return _DataModel.DataAvailability_ClassName()
+
+def DataAvailability_TypeInfo():
+    """DataAvailability_TypeInfo() -> RTTI"""
+    return _DataModel.DataAvailability_TypeInfo()
+
+def DataAvailability_Cast(*args):
+    """
+    Cast(BaseObject o) -> DataAvailability
+    DataAvailability_Cast(Seiscomp::Core::BaseObjectPtr o) -> DataAvailability
+    """
+    return _DataModel.DataAvailability_Cast(*args)
+
+def DataAvailability_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> DataAvailability
+    DataAvailability_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DataAvailability
+    """
+    return _DataModel.DataAvailability_ConstCast(*args)
+
 class EventDescriptionIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::EventDescriptionIndex class."""
 
@@ -25473,6 +26526,26 @@ class DatabaseReader(DatabaseArchive):
         return _DataModel.DatabaseReader_loadArclinkUsers(self, arg2)
 
 
+    def loadArclinkStatusLines(self, arg2):
+        """loadArclinkStatusLines(DatabaseReader self, ArclinkRequest arg2) -> int"""
+        return _DataModel.DatabaseReader_loadArclinkStatusLines(self, arg2)
+
+
+    def loadArclinkRequestLines(self, arg2):
+        """loadArclinkRequestLines(DatabaseReader self, ArclinkRequest arg2) -> int"""
+        return _DataModel.DatabaseReader_loadArclinkRequestLines(self, arg2)
+
+
+    def loadDataAvailability(self):
+        """loadDataAvailability(DatabaseReader self) -> DataAvailability"""
+        return _DataModel.DatabaseReader_loadDataAvailability(self)
+
+
+    def loadDataExtents(self, arg2):
+        """loadDataExtents(DatabaseReader self, DataAvailability arg2) -> int"""
+        return _DataModel.DatabaseReader_loadDataExtents(self, arg2)
+
+
     def load(self, *args):
         """
         load(DatabaseReader self, EventParameters arg2) -> int
@@ -25506,18 +26579,20 @@ class DatabaseReader(DatabaseArchive):
         load(DatabaseReader self, Journaling arg2) -> int
         load(DatabaseReader self, ArclinkLog arg2) -> int
         load(DatabaseReader self, ArclinkRequest arg2) -> int
+        load(DatabaseReader self, DataAvailability arg2) -> int
+        load(DatabaseReader self, DataExtent arg2) -> int
         """
         return _DataModel.DatabaseReader_load(self, *args)
 
 
-    def loadArclinkStatusLines(self, arg2):
-        """loadArclinkStatusLines(DatabaseReader self, ArclinkRequest arg2) -> int"""
-        return _DataModel.DatabaseReader_loadArclinkStatusLines(self, arg2)
+    def loadDataSegments(self, arg2):
+        """loadDataSegments(DatabaseReader self, DataExtent arg2) -> int"""
+        return _DataModel.DatabaseReader_loadDataSegments(self, arg2)
 
 
-    def loadArclinkRequestLines(self, arg2):
-        """loadArclinkRequestLines(DatabaseReader self, ArclinkRequest arg2) -> int"""
-        return _DataModel.DatabaseReader_loadArclinkRequestLines(self, arg2)
+    def loadDataAttributeExtents(self, arg2):
+        """loadDataAttributeExtents(DatabaseReader self, DataExtent arg2) -> int"""
+        return _DataModel.DatabaseReader_loadDataAttributeExtents(self, arg2)
 
 DatabaseReader_swigregister = _DataModel.DatabaseReader_swigregister
 DatabaseReader_swigregister(DatabaseReader)
