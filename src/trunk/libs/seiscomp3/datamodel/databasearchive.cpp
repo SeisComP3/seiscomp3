@@ -506,7 +506,6 @@ void DatabaseArchive::setDriver(Seiscomp::IO::DatabaseInterface *db) {
 DatabaseArchive::DatabaseArchive(Seiscomp::IO::DatabaseInterface *i)
   : _db(i), _objectAttributes(NULL) {
 	setHint(IGNORE_CHILDS);
-	Object::RegisterObserver(this);
 	_allowDbClose = false;
 	_checkForCached = true;
 
@@ -1003,7 +1002,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(const std::string &query,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const Core::Time &value) {
+std::string DatabaseArchive::toString(const Core::Time &value) const {
 	return _db->timeToString(value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1012,7 +1011,7 @@ std::string DatabaseArchive::toString(const Core::Time &value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const std::string &value) {
+std::string DatabaseArchive::toString(const std::string &value) const {
 	return toSQL(value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1021,7 +1020,7 @@ std::string DatabaseArchive::toString(const std::string &value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const char *value) {
+std::string DatabaseArchive::toString(const char *value) const {
 	return toSQL(std::string(value));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

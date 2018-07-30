@@ -56,6 +56,9 @@ DROP TABLE IF EXISTS ArclinkUser;
 DROP TABLE IF EXISTS ArclinkStatusLine;
 DROP TABLE IF EXISTS ArclinkRequestLine;
 DROP TABLE IF EXISTS ArclinkRequest;
+DROP TABLE IF EXISTS DataSegment;
+DROP TABLE IF EXISTS DataAttributeExtent;
+DROP TABLE IF EXISTS DataExtent;
 DROP TABLE IF EXISTS PublicObject;
 DROP TABLE IF EXISTS Object;
 DROP TABLE IF EXISTS Meta;
@@ -82,7 +85,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.11');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -99,6 +102,8 @@ INSERT INTO Object(_oid) VALUES (NULL);
 INSERT INTO PublicObject(_oid,publicID) VALUES ((SELECT MAX(_oid) FROM Object),'Journaling');
 INSERT INTO Object(_oid) VALUES (NULL);
 INSERT INTO PublicObject(_oid,publicID) VALUES ((SELECT MAX(_oid) FROM Object),'ArclinkLog');
+INSERT INTO Object(_oid) VALUES (NULL);
+INSERT INTO PublicObject(_oid,publicID) VALUES ((SELECT MAX(_oid) FROM Object),'DataAvailability');
 
 CREATE TABLE EventDescription (
 	_oid INTEGER NOT NULL,
@@ -2099,4 +2104,101 @@ CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 CREATE TRIGGER ArclinkRequestUpdate UPDATE ON ArclinkRequest
 BEGIN
   UPDATE ArclinkRequest SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE DataSegment (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
+	end DATETIME NOT NULL,
+	end_ms INTEGER NOT NULL,
+	updated DATETIME NOT NULL,
+	updated_ms INTEGER NOT NULL,
+	sampleRate DOUBLE NOT NULL,
+	quality VARCHAR NOT NULL,
+	outOfOrder INTEGER(1) NOT NULL,
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,start,start_ms)
+);
+
+CREATE INDEX DataSegment__parent_oid ON DataSegment(_parent_oid);
+CREATE INDEX DataSegment_start_start_ms ON DataSegment(start,start_ms);
+CREATE INDEX DataSegment_end_end_ms ON DataSegment(end,end_ms);
+CREATE INDEX DataSegment_updated_updated_ms ON DataSegment(updated,updated_ms);
+
+CREATE TRIGGER DataSegmentUpdate UPDATE ON DataSegment
+BEGIN
+  UPDATE DataSegment SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE DataAttributeExtent (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
+	end DATETIME NOT NULL,
+	end_ms INTEGER NOT NULL,
+	sampleRate DOUBLE NOT NULL,
+	quality VARCHAR NOT NULL,
+	updated DATETIME NOT NULL,
+	updated_ms INTEGER NOT NULL,
+	segmentCount INT UNSIGNED NOT NULL,
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,sampleRate,quality)
+);
+
+CREATE INDEX DataAttributeExtent__parent_oid ON DataAttributeExtent(_parent_oid);
+CREATE INDEX DataAttributeExtent_start_start_ms ON DataAttributeExtent(start,start_ms);
+CREATE INDEX DataAttributeExtent_end_end_ms ON DataAttributeExtent(end,end_ms);
+CREATE INDEX DataAttributeExtent_updated_updated_ms ON DataAttributeExtent(updated,updated_ms);
+
+CREATE TRIGGER DataAttributeExtentUpdate UPDATE ON DataAttributeExtent
+BEGIN
+  UPDATE DataAttributeExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE DataExtent (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	waveformID_networkCode CHAR NOT NULL,
+	waveformID_stationCode CHAR NOT NULL,
+	waveformID_locationCode CHAR,
+	waveformID_channelCode CHAR,
+	waveformID_resourceURI VARCHAR,
+	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
+	end DATETIME NOT NULL,
+	end_ms INTEGER NOT NULL,
+	updated DATETIME NOT NULL,
+	updated_ms INTEGER NOT NULL,
+	lastScan DATETIME NOT NULL,
+	lastScan_ms INTEGER NOT NULL,
+	segmentOverflow INTEGER(1) NOT NULL,
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
+);
+
+CREATE INDEX DataExtent__parent_oid ON DataExtent(_parent_oid);
+CREATE INDEX DataExtent_waveformID_resourceURI ON DataExtent(waveformID_resourceURI);
+CREATE INDEX DataExtent_start_start_ms ON DataExtent(start,start_ms);
+CREATE INDEX DataExtent_end_end_ms ON DataExtent(end,end_ms);
+CREATE INDEX DataExtent_updated_updated_ms ON DataExtent(updated,updated_ms);
+CREATE INDEX DataExtent_lastScan_lastScan_ms ON DataExtent(lastScan,lastScan_ms);
+
+CREATE TRIGGER DataExtentUpdate UPDATE ON DataExtent
+BEGIN
+  UPDATE DataExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;

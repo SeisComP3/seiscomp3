@@ -87,6 +87,10 @@ class ArclinkRequest;
 class ArclinkStatusLine;
 class ArclinkRequestLine;
 class ArclinkUser;
+class DataAvailability;
+class DataExtent;
+class DataSegment;
+class DataAttributeExtent;
 
 DEFINE_SMARTPOINTER(DatabaseReader);
 
@@ -239,6 +243,13 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int load(ArclinkRequest*);
 		int loadArclinkStatusLines(ArclinkRequest*);
 		int loadArclinkRequestLines(ArclinkRequest*);
+		
+		DataAvailability* loadDataAvailability();
+		int load(DataAvailability*);
+		int loadDataExtents(DataAvailability*);
+		int load(DataExtent*);
+		int loadDataSegments(DataExtent*);
+		int loadDataAttributeExtents(DataExtent*);
 
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -354,7 +354,7 @@ void RouteArclink::accept(Visitor* visitor) {
 void RouteArclink::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,10>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: RouteArclink skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

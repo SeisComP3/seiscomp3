@@ -188,8 +188,8 @@ class SC_SYSTEM_CORE_API DatabaseObjectWriter : protected Visitor {
  * \brief A class containing basic functionality to read and write
  * \brief schema objects from and to a database.
  */
-class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
-                                           public Observer {
+class SC_SYSTEM_CORE_API DatabaseArchive : protected Core::Archive,
+                                           public Core::BaseObject {
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------
@@ -310,6 +310,11 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		size_t getObjectCount(const PublicObject* parent,
 		                      const Seiscomp::Core::RTTI &classType);
 
+
+		//! Returns the database id for an object
+		//! @return The id or -1 of no id was cached for this object
+		int getCachedId(const Object*) const;
+
 		/**
 		 * Returns the publicID of the parent object if any.
 		 * @param object The PublicObject whose parent is queried.
@@ -375,6 +380,13 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		DatabaseIterator getObjectIterator(const std::string &query,
 		                                   const Seiscomp::Core::RTTI *classType);
+
+		template <typename T>
+		std::string toString(const T& value) const { return Core::toString(value); }
+
+		std::string toString(const std::string &value) const;
+		std::string toString(const char *value) const;
+		std::string toString(const Core::Time& value) const;
 
 
 	// ----------------------------------------------------------------------
@@ -495,10 +507,6 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		bool validInterface() const;
 
-		//! Returns the database id for an object
-		//! @return The id or -1 of no id was cached for this object
-		int getCachedId(const Object*) const;
-
 		//! Associates an objects with an id and caches
 		//! this information
 		void registerId(const Object*, int id);
@@ -508,13 +516,6 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		//! Serializes an objects and registeres its id in the cache
 		void serializeObject(Object*);
-
-		template <typename T>
-		std::string toString(const T& value) { return Core::toString(value); }
-
-		std::string toString(const std::string &value);
-		std::string toString(const char *value);
-		std::string toString(const Core::Time& value);
 
 		Object* queryObject(const Seiscomp::Core::RTTI& classType,
 		                    const std::string& query);
