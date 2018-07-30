@@ -10,6 +10,7 @@
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/basenode.h>
 #include <fdsnxml/comment.h>
+#include <fdsnxml/dataavailability.h>
 #include <algorithm>
 #include <seiscomp3/logging/log.h>
 
@@ -34,6 +35,7 @@ BaseNode::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject 
 	addProperty(Core::simpleProperty("alternateCode", "string", false, false, false, false, false, false, NULL, &BaseNode::setAlternateCode, &BaseNode::alternateCode));
 	addProperty(Core::simpleProperty("historicCode", "string", false, false, false, false, false, false, NULL, &BaseNode::setHistoricCode, &BaseNode::historicCode));
 	addProperty(arrayClassProperty<Comment>("comment", "FDSNXML::Comment", &BaseNode::commentCount, &BaseNode::comment, static_cast<bool (BaseNode::*)(Comment*)>(&BaseNode::addComment), &BaseNode::removeComment, static_cast<bool (BaseNode::*)(Comment*)>(&BaseNode::removeComment)));
+	addProperty(arrayClassProperty<DataAvailability>("dataAvailability", "FDSNXML::DataAvailability", &BaseNode::dataAvailabilityCount, &BaseNode::dataAvailability, static_cast<bool (BaseNode::*)(DataAvailability*)>(&BaseNode::addDataAvailability), &BaseNode::removeDataAvailability, static_cast<bool (BaseNode::*)(DataAvailability*)>(&BaseNode::removeDataAvailability)));
 }
 
 
@@ -297,6 +299,74 @@ bool BaseNode::removeComment(size_t i) {
 		return false;
 
 	_comments.erase(_comments.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t BaseNode::dataAvailabilityCount() const {
+	return _dataAvailabilitys.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataAvailability* BaseNode::dataAvailability(size_t i) const {
+	return _dataAvailabilitys[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::addDataAvailability(DataAvailability *obj) {
+	if ( obj == NULL )
+		return false;
+
+	// Add the element
+	_dataAvailabilitys.push_back(obj);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::removeDataAvailability(DataAvailability *obj) {
+	if ( obj == NULL )
+		return false;
+
+	std::vector<DataAvailabilityPtr>::iterator it;
+	it = std::find(_dataAvailabilitys.begin(), _dataAvailabilitys.end(), obj);
+	// Element has not been found
+	if ( it == _dataAvailabilitys.end() ) {
+		SEISCOMP_ERROR("BaseNode::removeDataAvailability(DataAvailability*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::removeDataAvailability(size_t i) {
+	// index out of bounds
+	if ( i >= _dataAvailabilitys.size() )
+		return false;
+
+	_dataAvailabilitys.erase(_dataAvailabilitys.begin() + i);
 
 	return true;
 }

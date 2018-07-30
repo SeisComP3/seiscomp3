@@ -45,6 +45,9 @@ SET(
 		fdsnxml/responsestage.h
 		fdsnxml/response.h
 		fdsnxml/comment.h
+		fdsnxml/dataavailabilityextent.h
+		fdsnxml/dataavailabilityspan.h
+		fdsnxml/dataavailability.h
 		fdsnxml/basenode.h
 		fdsnxml/channel.h
 		fdsnxml/station.h
@@ -100,6 +103,9 @@ SET(
 		fdsnxml/responsestage.cpp
 		fdsnxml/response.cpp
 		fdsnxml/comment.cpp
+		fdsnxml/dataavailabilityextent.cpp
+		fdsnxml/dataavailabilityspan.cpp
+		fdsnxml/dataavailability.cpp
 		fdsnxml/basenode.cpp
 		fdsnxml/channel.cpp
 		fdsnxml/station.cpp
