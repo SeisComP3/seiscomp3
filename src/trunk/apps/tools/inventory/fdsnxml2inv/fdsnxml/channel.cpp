@@ -25,6 +25,7 @@ Channel::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(objectProperty<DistanceType>("depth", "FDSNXML::DistanceType", false, false, &Channel::setDepth, &Channel::depth));
 	addProperty(objectProperty<AzimuthType>("azimuth", "FDSNXML::AzimuthType", false, true, &Channel::setAzimuth, &Channel::azimuth));
 	addProperty(objectProperty<DipType>("dip", "FDSNXML::DipType", false, true, &Channel::setDip, &Channel::dip));
+	addProperty(arrayClassProperty<Output>("type", "FDSNXML::Output", &Channel::typeCount, &Channel::type, static_cast<bool (Channel::*)(Output*)>(&Channel::addType), &Channel::removeType, static_cast<bool (Channel::*)(Output*)>(&Channel::removeType)));
 	addProperty(objectProperty<SampleRateType>("SampleRate", "FDSNXML::SampleRateType", false, true, &Channel::setSampleRate, &Channel::sampleRate));
 	addProperty(objectProperty<SampleRateRatioType>("SampleRateRatio", "FDSNXML::SampleRateRatioType", false, true, &Channel::setSampleRateRatio, &Channel::sampleRateRatio));
 	addProperty(Core::simpleProperty("StorageFormat", "string", false, false, false, false, false, false, NULL, &Channel::setStorageFormat, &Channel::storageFormat));
@@ -36,7 +37,6 @@ Channel::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(objectProperty<Equipment>("Equipment", "FDSNXML::Equipment", false, true, &Channel::setEquipment, &Channel::equipment));
 	addProperty(objectProperty<Response>("Response", "FDSNXML::Response", false, true, &Channel::setResponse, &Channel::response));
 	addProperty(Core::simpleProperty("locationCode", "string", false, false, false, false, false, false, NULL, &Channel::setLocationCode, &Channel::locationCode));
-	addProperty(arrayClassProperty<Output>("type", "FDSNXML::Output", &Channel::typeCount, &Channel::type, static_cast<bool (Channel::*)(Output*)>(&Channel::addType), &Channel::removeType, static_cast<bool (Channel::*)(Output*)>(&Channel::removeType)));
 }
 
 

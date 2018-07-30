@@ -51,6 +51,9 @@
 #include <fdsnxml/responsestage.h>
 #include <fdsnxml/response.h>
 #include <fdsnxml/comment.h>
+#include <fdsnxml/dataavailabilityextent.h>
+#include <fdsnxml/dataavailabilityspan.h>
+#include <fdsnxml/dataavailability.h>
 #include <fdsnxml/basenode.h>
 #include <fdsnxml/channel.h>
 #include <fdsnxml/station.h>
@@ -538,6 +541,33 @@ struct CommentHandler : public IO::XML::TypedClassHandler<Comment> {
 };
 
 
+struct DataAvailabilityExtentHandler : public IO::XML::TypedClassHandler<DataAvailabilityExtent> {
+	DataAvailabilityExtentHandler() {
+		addProperty("start", "", Mandatory, Attribute, "start");
+		addProperty("end", "", Mandatory, Attribute, "end");
+	}
+};
+
+
+struct DataAvailabilitySpanHandler : public IO::XML::TypedClassHandler<DataAvailabilitySpan> {
+	DataAvailabilitySpanHandler() {
+		addProperty("start", "", Mandatory, Attribute, "start");
+		addProperty("end", "", Mandatory, Attribute, "end");
+		addProperty("numberSegments", "", Mandatory, Attribute, "numberSegments");
+		addProperty("maximumTimeTear", "", Optional, Attribute, "maximumTimeTear");
+	}
+};
+
+
+struct DataAvailabilityHandler : public IO::XML::TypedClassHandler<DataAvailability> {
+	DataAvailabilityHandler() {
+		// Element
+		addProperty("Extent", "http://www.fdsn.org/xml/station/1", Optional, Element, "extent");
+		addChildProperty("Span", "http://www.fdsn.org/xml/station/1", "span");
+	}
+};
+
+
 struct BaseNodeHandler : public IO::XML::TypedClassHandler<BaseNode> {
 	BaseNodeHandler() {
 		addProperty("Description", "http://www.fdsn.org/xml/station/1", Optional, Element, "description");
@@ -548,6 +578,7 @@ struct BaseNodeHandler : public IO::XML::TypedClassHandler<BaseNode> {
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
+		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 	}
 };
 
@@ -562,6 +593,7 @@ struct ChannelHandler : public IO::XML::TypedClassHandler<Channel> {
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
+		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
 		addProperty("Latitude", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "latitude");
 		// Element
@@ -609,6 +641,7 @@ struct StationHandler : public IO::XML::TypedClassHandler<Station> {
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
+		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
 		addProperty("Latitude", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "latitude");
 		// Element
@@ -643,6 +676,7 @@ struct NetworkHandler : public IO::XML::TypedClassHandler<Network> {
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
+		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
 		addProperty("TotalNumberStations", "http://www.fdsn.org/xml/station/1", Optional, Element, "totalNumberOfStations");
 		// Element
@@ -717,6 +751,9 @@ TypeMap::TypeMap() {
 	static ResponseStageHandler _ResponseStageHandler;
 	static ResponseHandler _ResponseHandler;
 	static CommentHandler _CommentHandler;
+	static DataAvailabilityExtentHandler _DataAvailabilityExtentHandler;
+	static DataAvailabilitySpanHandler _DataAvailabilitySpanHandler;
+	static DataAvailabilityHandler _DataAvailabilityHandler;
 	static BaseNodeHandler _BaseNodeHandler;
 	static ChannelHandler _ChannelHandler;
 	static StationHandler _StationHandler;
@@ -766,6 +803,9 @@ TypeMap::TypeMap() {
 	registerMapping<ResponseStage>("ResponseStage", "http://www.fdsn.org/xml/station/1", &_ResponseStageHandler);
 	registerMapping<Response>("Response", "http://www.fdsn.org/xml/station/1", &_ResponseHandler);
 	registerMapping<Comment>("Comment", "http://www.fdsn.org/xml/station/1", &_CommentHandler);
+	registerMapping<DataAvailabilityExtent>("DataAvailabilityExtent", "http://www.fdsn.org/xml/station/1", &_DataAvailabilityExtentHandler);
+	registerMapping<DataAvailabilitySpan>("DataAvailabilitySpan", "http://www.fdsn.org/xml/station/1", &_DataAvailabilitySpanHandler);
+	registerMapping<DataAvailability>("DataAvailability", "http://www.fdsn.org/xml/station/1", &_DataAvailabilityHandler);
 	registerMapping<BaseNode>("BaseNode", "http://www.fdsn.org/xml/station/1", &_BaseNodeHandler);
 	registerMapping<Channel>("Channel", "http://www.fdsn.org/xml/station/1", &_ChannelHandler);
 	registerMapping<Station>("Station", "http://www.fdsn.org/xml/station/1", &_StationHandler);

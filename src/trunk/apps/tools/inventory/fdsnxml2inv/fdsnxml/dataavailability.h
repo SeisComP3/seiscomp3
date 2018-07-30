@@ -7,15 +7,13 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_FDSNXML_BASENODE_H__
-#define __SEISCOMP_FDSNXML_BASENODE_H__
+#ifndef __SEISCOMP_FDSNXML_DATAAVAILABILITY_H__
+#define __SEISCOMP_FDSNXML_DATAAVAILABILITY_H__
 
 
 #include <fdsnxml/metadata.h>
+#include <fdsnxml/dataavailabilityextent.h>
 #include <vector>
-#include <fdsnxml/types.h>
-#include <string>
-#include <fdsnxml/date.h>
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/exceptions.h>
 
@@ -23,20 +21,25 @@
 namespace Seiscomp {
 namespace FDSNXML {
 
-DEFINE_SMARTPOINTER(Comment);
+DEFINE_SMARTPOINTER(DataAvailabilitySpan);
+
+
+
 DEFINE_SMARTPOINTER(DataAvailability);
 
 
-
-DEFINE_SMARTPOINTER(BaseNode);
-
-
 /**
- * \brief A base node type for derivation from: Network, Station and Channel
- * \brief types.
+ * \brief A description of time series data availability. This information
+ * \brief should be considered transient and is primarily useful as a guide
+ * \brief for generating time series data requests. The information for a
+ * \brief DataAvailability:Span may be specific to the time range used in a
+ * \brief request that resulted in the document or limited to the
+ * \brief availability of data withing the request range. These details may
+ * \brief or may not be retained when synchronizing metadata between data
+ * \brief centers.
  */
-class BaseNode : public Core::BaseObject {
-	DECLARE_CASTS(BaseNode);
+class DataAvailability : public Core::BaseObject {
+	DECLARE_CASTS(DataAvailability);
 	DECLARE_RTTI;
 	DECLARE_METAOBJECT_DERIVED;
 
@@ -45,13 +48,13 @@ class BaseNode : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Constructor
-		BaseNode();
+		DataAvailability();
 
 		//! Copy constructor
-		BaseNode(const BaseNode &other);
+		DataAvailability(const DataAvailability &other);
 
 		//! Destructor
-		~BaseNode();
+		~DataAvailability();
 
 
 	// ------------------------------------------------------------------
@@ -59,44 +62,18 @@ class BaseNode : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Copies the metadata of other to this
-		BaseNode& operator=(const BaseNode &other);
-		bool operator==(const BaseNode &other) const;
+		DataAvailability& operator=(const DataAvailability &other);
+		bool operator==(const DataAvailability &other) const;
 
 
 	// ------------------------------------------------------------------
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! XML tag: Description
-		void setDescription(const std::string& description);
-		const std::string& description() const;
-
-		//! XML tag: code
-		void setCode(const std::string& code);
-		const std::string& code() const;
-
-		//! XML tag: startDate
-		void setStartDate(const OPT(DateTime)& startDate);
-		DateTime startDate() const;
-
-		//! XML tag: endDate
-		void setEndDate(const OPT(DateTime)& endDate);
-		DateTime endDate() const;
-
-		//! XML tag: restrictedStatus
-		void setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedStatus);
-		RestrictedStatusType restrictedStatus() const;
-
-		//! A code used for display or association, alternate to the
-		//! SEED-compliant code.
-		//! XML tag: alternateCode
-		void setAlternateCode(const std::string& alternateCode);
-		const std::string& alternateCode() const;
-
-		//! A previously used code if different from the current code.
-		//! XML tag: historicCode
-		void setHistoricCode(const std::string& historicCode);
-		const std::string& historicCode() const;
+		//! XML tag: Extent
+		void setExtent(const OPT(DataAvailabilityExtent)& extent);
+		DataAvailabilityExtent& extent();
+		const DataAvailabilityExtent& extent() const;
 
 	
 	// ------------------------------------------------------------------
@@ -111,8 +88,7 @@ class BaseNode : public Core::BaseObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
-		bool addComment(Comment *obj);
-		bool addDataAvailability(DataAvailability *obj);
+		bool addSpan(DataAvailabilitySpan *obj);
 
 		/**
 		 * Removes an object.
@@ -121,8 +97,7 @@ class BaseNode : public Core::BaseObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
-		bool removeComment(Comment *obj);
-		bool removeDataAvailability(DataAvailability *obj);
+		bool removeSpan(DataAvailabilitySpan *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -130,17 +105,14 @@ class BaseNode : public Core::BaseObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
-		bool removeComment(size_t i);
-		bool removeDataAvailability(size_t i);
+		bool removeSpan(size_t i);
 
 		//! Retrieve the number of objects of a particular class
-		size_t commentCount() const;
-		size_t dataAvailabilityCount() const;
+		size_t spanCount() const;
 
 		//! Index access
 		//! @return The object at index i
-		Comment* comment(size_t i) const;
-		DataAvailability* dataAvailability(size_t i) const;
+		DataAvailabilitySpan* span(size_t i) const;
 
 
 	// ------------------------------------------------------------------
@@ -148,17 +120,10 @@ class BaseNode : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	private:
 		// Attributes
-		std::string _description;
-		std::string _code;
-		OPT(DateTime) _startDate;
-		OPT(DateTime) _endDate;
-		OPT(RestrictedStatusType) _restrictedStatus;
-		std::string _alternateCode;
-		std::string _historicCode;
+		OPT(DataAvailabilityExtent) _extent;
 
 		// Aggregations
-		std::vector<CommentPtr> _comments;
-		std::vector<DataAvailabilityPtr> _dataAvailabilitys;
+		std::vector<DataAvailabilitySpanPtr> _spans;
 };
 
 
