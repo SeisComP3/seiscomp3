@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scardac" category="Acquisition" standalone="true">
+		<description>Waveform archive data availability collector</description>
+		<configuration>
+			<parameter name="archive" type="string" default="@SEISCOMP_ROOT@/var/lib/archive">
+				<description>
+				Path to MiniSeed waveform archive where all data is stored. The SDS archive
+				structure is defined as
+				YEAR/NET/STA/CHA/NET.STA.LOC.CHA.YEAR.DATEOFYEAR, e.g.
+				2018/GE/APE/BHZ.D/GE.APE..BHZ.D.2018.125
+				</description>
+			</parameter>
+			<parameter name="threads" type="int" default="1">
+				<description>
+				Number of threads scanning the archive in parallel
+				</description>
+			</parameter>
+			<parameter name="batchSize" type="int" default="100">
+				<description>
+				Batch size of database transactions used when updating data
+				availability segments. Allowed range: [1,1000]
+				</description>
+			</parameter>
+			<parameter name="jitter" type="float" default="0.5">
+				<description>
+				Acceptable derivation of end time and start time of successive
+				records in multiples of sample time.
+				</description>
+			</parameter>
+<!-- Not yet implemented
+			<parameter name="deepScan" type="boolean" default="false">
+				<description>
+				By default the last scan time of the extent is compared with
+				the record file modification time to read only files modified
+				since the list run. If deepscan is set to true all data files
+				are processed independ of their mtime.
+				</description>
+			</parameter>
+-->
+			<parameter name="maxSegments" type="int" default="1000000">
+				<description>
+				Maximum number of segments per stream. If the limit is reached
+				no more segments are added to the database and the corresponding
+				extent is flagged as to fragmented. Use a negative value to
+				disable any limit.
+				</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<synopsis>
+				scardac [OPTION]...
+			</synopsis>
+			<description>
+			</description>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+			</group>
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#print-component</optionReference>
+				<optionReference>verbosity#print-context</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#trace</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			<group name="Collector">
+				<option flag="a" long-flag="archive" argument="arg" publicID="collector#archive" param-ref="archive"/>
+				<option long-flag="threads" argument="arg" publicID="collector#threads" param-ref="threads"/>
+				<option flag="b" long-flag="batch-size" argument="arg" publicID="collector#batchsize" param-ref="batchsize"/>
+				<option flag="j" long-flag="jitter" argument="arg" publicID="collector#jitter" param-ref="jitter"/>
+<!-- Not yet implemented
+				<option long-flag="deep-scan" argument="" publicID="collector#deepscan" param-ref="deepScan"/>
+-->
+				<option long-flag="generate-test-data" argument="arg" publicID="collector#generate-test-data">
+					<description>
+					Do not scan the archive but generate test data for each
+					stream in the inventory. Format:
+					days,gaps,gapslen,overlaps,overlaplen. E.g. the following
+					parameter list would generate test data for 100 days
+					(starting from now()-100) which includes 150 gaps with a
+					length of 2.5s followed by 50 overlaps with an overlap of
+					5s: --generate-test-data=100,150,2.5,50,5
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>
