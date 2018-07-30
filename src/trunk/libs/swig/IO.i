@@ -130,3 +130,5 @@
 %template(RecordResamplerF) Seiscomp::IO::RecordResampler<float>;
 %template(RecordResamplerD) Seiscomp::IO::RecordResampler<double>;
 %template(RecordResamplerI) Seiscomp::IO::RecordResampler<int>;
+
+%template(ExportObjectList) std::vector<Seiscomp::Core::BaseObject*>;

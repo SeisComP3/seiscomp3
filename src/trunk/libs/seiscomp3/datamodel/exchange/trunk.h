@@ -54,6 +54,7 @@ class ExporterTrunk : public IO::Exporter {
 	// ------------------------------------------------------------------
 	protected:
 		bool put(std::streambuf* buf, Core::BaseObject *);
+		bool put(std::streambuf* buf, const IO::ExportObjectList &objects);
 };
 
 

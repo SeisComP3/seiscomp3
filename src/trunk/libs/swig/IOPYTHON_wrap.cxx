@@ -3648,44 +3648,47 @@ namespace Swig {
 #define SWIGTYPE_p_long swig_types[194]
 #define SWIGTYPE_p_off_type swig_types[195]
 #define SWIGTYPE_p_openmode swig_types[196]
-#define SWIGTYPE_p_p_void swig_types[197]
-#define SWIGTYPE_p_pos_type swig_types[198]
-#define SWIGTYPE_p_reference swig_types[199]
-#define SWIGTYPE_p_seekdir swig_types[200]
-#define SWIGTYPE_p_size_t swig_types[201]
-#define SWIGTYPE_p_size_type swig_types[202]
-#define SWIGTYPE_p_state_type swig_types[203]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[204]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[205]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[206]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[207]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[208]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[209]
-#define SWIGTYPE_p_std__exception swig_types[210]
-#define SWIGTYPE_p_std__invalid_argument swig_types[211]
-#define SWIGTYPE_p_std__ios_base swig_types[212]
-#define SWIGTYPE_p_std__istream swig_types[213]
-#define SWIGTYPE_p_std__listT_double_t swig_types[214]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[215]
-#define SWIGTYPE_p_std__locale swig_types[216]
-#define SWIGTYPE_p_std__ostream swig_types[217]
-#define SWIGTYPE_p_std__streambuf swig_types[218]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[219]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[220]
-#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[221]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[222]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[223]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[224]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[225]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[226]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[227]
-#define SWIGTYPE_p_time_t swig_types[228]
-#define SWIGTYPE_p_traits_type swig_types[229]
-#define SWIGTYPE_p_uint64_t swig_types[230]
-#define SWIGTYPE_p_value_type swig_types[231]
-#define SWIGTYPE_p_void swig_types[232]
-static swig_type_info *swig_types[234];
-static swig_module_info swig_module = {swig_types, 233, 0, 0, 0, 0};
+#define SWIGTYPE_p_p_PyObject swig_types[197]
+#define SWIGTYPE_p_p_void swig_types[198]
+#define SWIGTYPE_p_pos_type swig_types[199]
+#define SWIGTYPE_p_reference swig_types[200]
+#define SWIGTYPE_p_seekdir swig_types[201]
+#define SWIGTYPE_p_size_t swig_types[202]
+#define SWIGTYPE_p_size_type swig_types[203]
+#define SWIGTYPE_p_state_type swig_types[204]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t swig_types[205]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[206]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[207]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[208]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[209]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[210]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[211]
+#define SWIGTYPE_p_std__exception swig_types[212]
+#define SWIGTYPE_p_std__invalid_argument swig_types[213]
+#define SWIGTYPE_p_std__ios_base swig_types[214]
+#define SWIGTYPE_p_std__istream swig_types[215]
+#define SWIGTYPE_p_std__listT_double_t swig_types[216]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[217]
+#define SWIGTYPE_p_std__locale swig_types[218]
+#define SWIGTYPE_p_std__ostream swig_types[219]
+#define SWIGTYPE_p_std__streambuf swig_types[220]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t swig_types[221]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[222]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[223]
+#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[224]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[225]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[226]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[227]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[228]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[229]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[230]
+#define SWIGTYPE_p_time_t swig_types[231]
+#define SWIGTYPE_p_traits_type swig_types[232]
+#define SWIGTYPE_p_uint64_t swig_types[233]
+#define SWIGTYPE_p_value_type swig_types[234]
+#define SWIGTYPE_p_void swig_types[235]
+static swig_type_info *swig_types[237];
+static swig_module_info swig_module = {swig_types, 236, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5786,6 +5789,219 @@ SWIG_From_unsigned_SS_short  (unsigned short value)
   return SWIG_From_unsigned_SS_long  (value);
 }
 
+
+  namespace swig {
+    template <>  struct traits< Seiscomp::Core::BaseObject > {
+      typedef pointer_category category;
+      static const char* type_name() { return"Seiscomp::Core::BaseObject"; }
+    };
+  }
+
+
+namespace swig {
+  template <class SwigPySeq, class Seq>
+  inline void
+  assign(const SwigPySeq& swigpyseq, Seq* seq) {
+    // seq->assign(swigpyseq.begin(), swigpyseq.end()); // not used as not always implemented
+    typedef typename SwigPySeq::value_type value_type;
+    typename SwigPySeq::const_iterator it = swigpyseq.begin();
+    for (;it != swigpyseq.end(); ++it) {
+      seq->insert(seq->end(),(value_type)(*it));
+    }
+  }
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_asptr_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+
+    static int asptr(PyObject *obj, sequence **seq) {
+      if (obj == Py_None || SWIG_Python_GetSwigThis(obj)) {
+	sequence *p;
+	swig_type_info *descriptor = swig::type_info<sequence>();
+	if (descriptor && SWIG_IsOK(::SWIG_ConvertPtr(obj, (void **)&p, descriptor, 0))) {
+	  if (seq) *seq = p;
+	  return SWIG_OLDOBJ;
+	}
+      } else if (PySequence_Check(obj)) {
+	try {
+	  SwigPySequence_Cont<value_type> swigpyseq(obj);
+	  if (seq) {
+	    sequence *pseq = new sequence();
+	    assign(swigpyseq, pseq);
+	    *seq = pseq;
+	    return SWIG_NEWOBJ;
+	  } else {
+	    return swigpyseq.check() ? SWIG_OK : SWIG_ERROR;
+	  }
+	} catch (std::exception& e) {
+	  if (seq) {
+	    if (!PyErr_Occurred()) {
+	      PyErr_SetString(PyExc_TypeError, e.what());
+	    }
+	  }
+	  return SWIG_ERROR;
+	}
+      }
+      return SWIG_ERROR;
+    }
+  };
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_from_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+    typedef typename Seq::size_type size_type;
+    typedef typename sequence::const_iterator const_iterator;
+
+    static PyObject *from(const sequence& seq) {
+#ifdef SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
+      swig_type_info *desc = swig::type_info<sequence>();
+      if (desc && desc->clientdata) {
+	return SWIG_InternalNewPointerObj(new sequence(seq), desc, SWIG_POINTER_OWN);
+      }
+#endif
+      size_type size = seq.size();
+      if (size <= (size_type)INT_MAX) {
+	PyObject *obj = PyTuple_New((Py_ssize_t)size);
+	Py_ssize_t i = 0;
+	for (const_iterator it = seq.begin(); it != seq.end(); ++it, ++i) {
+	  PyTuple_SetItem(obj,i,swig::from<value_type>(*it));
+	}
+	return obj;
+      } else {
+	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
+	return NULL;
+      }
+    }
+  };
+}
+
+
+  namespace swig {
+    template <class T>
+    struct traits_reserve<std::vector<T> > {
+      static void reserve(std::vector<T> &seq, typename std::vector<T>::size_type n) {
+        seq.reserve(n);
+      }
+    };
+
+    template <class T>
+    struct traits_asptr<std::vector<T> >  {
+      static int asptr(PyObject *obj, std::vector<T> **vec) {
+	return traits_asptr_stdseq<std::vector<T> >::asptr(obj, vec);
+      }
+    };
+    
+    template <class T>
+    struct traits_from<std::vector<T> > {
+      static PyObject *from(const std::vector<T>& vec) {
+	return traits_from_stdseq<std::vector<T> >::from(vec);
+      }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector< Seiscomp::Core::BaseObject*, std::allocator< Seiscomp::Core::BaseObject * > > > {
+	  typedef value_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "Seiscomp::Core::BaseObject" " *," "std::allocator< Seiscomp::Core::BaseObject * >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__iterator(std::vector< Seiscomp::Core::BaseObject * > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____nonzero__(std::vector< Seiscomp::Core::BaseObject * > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____bool__(std::vector< Seiscomp::Core::BaseObject * > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::size_type std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____len__(std::vector< Seiscomp::Core::BaseObject * > const *self){
+      return self->size();
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getslice__(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i,std::vector< Seiscomp::Core::BaseObject * >::difference_type j){
+      return swig::getslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setslice____SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i,std::vector< Seiscomp::Core::BaseObject * >::difference_type j){
+      swig::setslice(self, i, j, 1, std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >());
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setslice____SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i,std::vector< Seiscomp::Core::BaseObject * >::difference_type j,std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &v){
+      swig::setslice(self, i, j, 1, v);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delslice__(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i,std::vector< Seiscomp::Core::BaseObject * >::difference_type j){
+      swig::delslice(self, i, j, 1);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delitem____SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i){
+      swig::erase(self, swig::getpos(self, i));
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getitem____SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return NULL;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type id = i;
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type jd = j;
+      return swig::getslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,PySliceObject *slice,std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &v){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type id = i;
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type jd = j;
+      swig::setslice(self, id, jd, step, v);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type id = i;
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delitem____SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,PySliceObject *slice){
+      Py_ssize_t i, j, step;
+      if( !PySlice_Check(slice) ) {
+        SWIG_Error(SWIG_TypeError, "Slice object expected.");
+        return;
+      }
+      PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type id = i;
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::difference_type jd = j;
+      swig::delslice(self, id, jd, step);
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::value_type std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getitem____SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i){
+      return *(swig::cgetpos(self, i));
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_2(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::difference_type i,std::vector< Seiscomp::Core::BaseObject * >::value_type x){
+      *(swig::getpos(self,i)) = x;
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::value_type std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__pop(std::vector< Seiscomp::Core::BaseObject * > *self){
+      if (self->size() == 0)
+	throw std::out_of_range("pop from empty container");
+      std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >::value_type x = self->back();
+      self->pop_back();
+      return x;
+    }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__append(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::value_type x){
+      self->push_back(x);
+    }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::iterator std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__erase__SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::iterator std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__erase__SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::iterator first,std::vector< Seiscomp::Core::BaseObject * >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< Seiscomp::Core::BaseObject * >::iterator std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__insert__SWIG_0(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::iterator pos,std::vector< Seiscomp::Core::BaseObject * >::value_type x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__insert__SWIG_1(std::vector< Seiscomp::Core::BaseObject * > *self,std::vector< Seiscomp::Core::BaseObject * >::iterator pos,std::vector< Seiscomp::Core::BaseObject * >::size_type n,std::vector< Seiscomp::Core::BaseObject * >::value_type x){ self->insert(pos, n, x); }
 
 
 /* ---------------------------------------------------
@@ -16083,6 +16299,176 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Exporter_write__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::Exporter *arg1 = (Seiscomp::IO::Exporter *) 0 ;
+  std::streambuf *arg2 = (std::streambuf *) 0 ;
+  Seiscomp::IO::ExportObjectList *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Exporter_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__Exporter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Exporter_write" "', argument " "1"" of type '" "Seiscomp::IO::Exporter *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::Exporter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__streambuf, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Exporter_write" "', argument " "2"" of type '" "std::streambuf *""'"); 
+  }
+  arg2 = reinterpret_cast< std::streambuf * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::IO::ExportObjectList * >(argp3);
+  {
+    try {
+      result = (bool)(arg1)->write(arg2,(Seiscomp::IO::ExportObjectList const &)*arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Exporter_write__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::Exporter *arg1 = (Seiscomp::IO::Exporter *) 0 ;
+  std::string arg2 ;
+  Seiscomp::IO::ExportObjectList *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Exporter_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__Exporter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Exporter_write" "', argument " "1"" of type '" "Seiscomp::IO::Exporter *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::Exporter * >(argp1);
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Exporter_write" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::IO::ExportObjectList * >(argp3);
+  {
+    try {
+      result = (bool)(arg1)->write(arg2,(Seiscomp::IO::ExportObjectList const &)*arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Exporter_write__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::Exporter *arg1 = (Seiscomp::IO::Exporter *) 0 ;
+  Seiscomp::IO::ExportSink *arg2 = (Seiscomp::IO::ExportSink *) 0 ;
+  Seiscomp::IO::ExportObjectList *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Exporter_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__Exporter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Exporter_write" "', argument " "1"" of type '" "Seiscomp::IO::Exporter *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::Exporter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__IO__ExportSink, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Exporter_write" "', argument " "2"" of type '" "Seiscomp::IO::ExportSink *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::IO::ExportSink * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Exporter_write" "', argument " "3"" of type '" "Seiscomp::IO::ExportObjectList const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::IO::ExportObjectList * >(argp3);
+  {
+    try {
+      result = (bool)(arg1)->write(arg2,(Seiscomp::IO::ExportObjectList const &)*arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Exporter_write(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[4] = {
@@ -16139,6 +16525,59 @@ SWIGINTERN PyObject *_wrap_Exporter_write(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__Exporter, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__streambuf, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Exporter_write__SWIG_3(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__Exporter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__IO__ExportSink, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Exporter_write__SWIG_5(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__Exporter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Exporter_write__SWIG_4(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__IO__Exporter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
       int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
@@ -16157,7 +16596,10 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    Seiscomp::IO::Exporter::write(std::streambuf *,Seiscomp::Core::BaseObject *)\n"
     "    Seiscomp::IO::Exporter::write(std::string,Seiscomp::Core::BaseObject *)\n"
-    "    Seiscomp::IO::Exporter::write(Seiscomp::IO::ExportSink *,Seiscomp::Core::BaseObject *)\n");
+    "    Seiscomp::IO::Exporter::write(Seiscomp::IO::ExportSink *,Seiscomp::Core::BaseObject *)\n"
+    "    Seiscomp::IO::Exporter::write(std::streambuf *,Seiscomp::IO::ExportObjectList const &)\n"
+    "    Seiscomp::IO::Exporter::write(std::string,Seiscomp::IO::ExportObjectList const &)\n"
+    "    Seiscomp::IO::Exporter::write(Seiscomp::IO::ExportSink *,Seiscomp::IO::ExportObjectList const &)\n");
   return 0;
 }
 
@@ -32952,6 +33394,2475 @@ SWIGINTERN PyObject *RecordResamplerI_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_ExportObjectList_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_iterator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_iterator" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__iterator(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList___nonzero__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___nonzero__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (bool)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____nonzero__((std::vector< Seiscomp::Core::BaseObject * > const *)arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList___bool__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___bool__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (bool)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____bool__((std::vector< Seiscomp::Core::BaseObject * > const *)arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList___len__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___len__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____len__((std::vector< Seiscomp::Core::BaseObject * > const *)arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList___getslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___getslice__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___getslice__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ExportObjectList___getslice__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val3);
+  {
+    try {
+      try {
+        result = (std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList___setslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___setslice__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___setslice__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ExportObjectList___setslice__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val3);
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setslice____SWIG_0(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg3 ;
+  std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:ExportObjectList___setslice__",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___setslice__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___setslice__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ExportObjectList___setslice__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val3);
+  {
+    std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *ptr = (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ExportObjectList___setslice__" "', argument " "4"" of type '" "std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ExportObjectList___setslice__" "', argument " "4"" of type '" "std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setslice____SWIG_1(arg1,arg2,arg3,(std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &)*arg4);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setslice__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_ExportObjectList___setslice____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_ptrdiff_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = swig::asptr(argv[3], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_ExportObjectList___setslice____SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList___setslice__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__setslice__(std::vector< Seiscomp::Core::BaseObject * >::difference_type,std::vector< Seiscomp::Core::BaseObject * >::difference_type)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__setslice__(std::vector< Seiscomp::Core::BaseObject * >::difference_type,std::vector< Seiscomp::Core::BaseObject * >::difference_type,std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  ptrdiff_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList___delslice__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___delslice__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___delslice__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ExportObjectList___delslice__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg3 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val3);
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delslice__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___delitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___delitem__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___getitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try {
+      try {
+        result = (std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getitem____SWIG_0(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___setitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *ptr = (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ExportObjectList___setitem__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ExportObjectList___setitem__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList___setitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___setitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  PySliceObject *arg2 = (PySliceObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList___delitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___delitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    if (!PySlice_Check(obj1)) {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
+    }
+    arg2 = (PySliceObject *) obj1;
+  }
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____delitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      catch(std::invalid_argument &_e) {
+        SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___delitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList___delitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList___delitem____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList___delitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__delitem__(std::vector< Seiscomp::Core::BaseObject * >::difference_type)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__delitem__(PySliceObject *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___getitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___getitem__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  {
+    try {
+      try {
+        result = (std::vector< Seiscomp::Core::BaseObject * >::value_type)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____getitem____SWIG_1(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___getitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList___getitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList___getitem____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList___getitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__getitem__(PySliceObject *)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__getitem__(std::vector< Seiscomp::Core::BaseObject * >::difference_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::difference_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg3 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ptrdiff_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList___setitem__" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList___setitem__" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::difference_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ExportObjectList___setitem__" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp3);
+  {
+    try {
+      try {
+        std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg____setitem____SWIG_2(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList___setitem__(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList___setitem____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        _v = PySlice_Check(argv[1]);
+      }
+      if (_v) {
+        int res = swig::asptr(argv[2], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_ExportObjectList___setitem____SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_ptrdiff_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_ExportObjectList___setitem____SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__setitem__(PySliceObject *,std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > const &)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__setitem__(PySliceObject *)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::__setitem__(std::vector< Seiscomp::Core::BaseObject * >::difference_type,std::vector< Seiscomp::Core::BaseObject * >::value_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_pop",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_pop" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      try {
+        result = (std::vector< Seiscomp::Core::BaseObject * >::value_type)std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg2 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_append" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ExportObjectList_append" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp2);
+  {
+    try {
+      std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__append(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ExportObjectList__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ExportObjectList")) SWIG_fail;
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * > *)new std::vector< Seiscomp::Core::BaseObject * >();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ExportObjectList__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ExportObjectList",&obj0)) SWIG_fail;
+  {
+    std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *ptr = (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ExportObjectList" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ExportObjectList" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * > *)new std::vector< Seiscomp::Core::BaseObject * >((std::vector< Seiscomp::Core::BaseObject * > const &)*arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_empty" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (bool)((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->empty();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_size" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = ((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->size();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_swap",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_swap" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ExportObjectList_swap" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ExportObjectList_swap" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp2);
+  {
+    try {
+      (arg1)->swap(*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_begin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_begin" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (arg1)->begin();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_end",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_end" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (arg1)->end();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_rbegin",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_rbegin" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (arg1)->rbegin();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_rend",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_rend" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (arg1)->rend();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_clear" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      (arg1)->clear();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< Seiscomp::Core::BaseObject * > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_get_allocator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_get_allocator" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = ((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->get_allocator();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::vector< Seiscomp::Core::BaseObject * >::allocator_type(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ExportObjectList__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ExportObjectList",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ExportObjectList" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val1);
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * > *)new std::vector< Seiscomp::Core::BaseObject * >(arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_pop_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_pop_back" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      (arg1)->pop_back();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_resize" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList_resize" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val2);
+  {
+    try {
+      (arg1)->resize(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_erase",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_erase" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+    }
+  }
+  {
+    try {
+      result = std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__erase__SWIG_0(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList_erase",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_erase" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_erase" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+    }
+  }
+  {
+    try {
+      result = std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__erase__SWIG_1(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_erase(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_ExportObjectList_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_ExportObjectList_erase__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::erase(std::vector< Seiscomp::Core::BaseObject * >::iterator)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::erase(std::vector< Seiscomp::Core::BaseObject * >::iterator,std::vector< Seiscomp::Core::BaseObject * >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ExportObjectList__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg1 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg2 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_ExportObjectList",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ExportObjectList" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg1 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ExportObjectList" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp2);
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * > *)new std::vector< Seiscomp::Core::BaseObject * >(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ExportObjectList(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ExportObjectList__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ExportObjectList__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_ExportObjectList__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_ExportObjectList__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ExportObjectList'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::vector()\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::vector(std::vector< Seiscomp::Core::BaseObject * > const &)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::vector(std::vector< Seiscomp::Core::BaseObject * >::size_type)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::vector(std::vector< Seiscomp::Core::BaseObject * >::size_type,std::vector< Seiscomp::Core::BaseObject * >::value_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg2 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_push_back",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_push_back" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ExportObjectList_push_back" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp2);
+  {
+    try {
+      (arg1)->push_back(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_front",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_front" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * >::value_type)((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->front();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_back",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_back" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = (std::vector< Seiscomp::Core::BaseObject * >::value_type)((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->back();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg3 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList_assign",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_assign" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList_assign" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ExportObjectList_assign" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp3);
+  {
+    try {
+      (arg1)->assign(arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg3 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_resize" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList_resize" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ExportObjectList_resize" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp3);
+  {
+    try {
+      (arg1)->resize(arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_resize(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_ExportObjectList_resize__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_ExportObjectList_resize__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::resize(std::vector< Seiscomp::Core::BaseObject * >::size_type)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::resize(std::vector< Seiscomp::Core::BaseObject * >::size_type,std::vector< Seiscomp::Core::BaseObject * >::value_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg3 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ExportObjectList_insert",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_insert" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_insert" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_insert" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ExportObjectList_insert" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp3);
+  {
+    try {
+      result = std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__insert__SWIG_0(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< Seiscomp::Core::BaseObject * >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::iterator arg2 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg3 ;
+  std::vector< Seiscomp::Core::BaseObject * >::value_type arg4 = (std::vector< Seiscomp::Core::BaseObject * >::value_type) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:ExportObjectList_insert",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_insert" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_insert" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ExportObjectList_insert" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::iterator""'");
+    }
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ExportObjectList_insert" "', argument " "3"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg3 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ExportObjectList_insert" "', argument " "4"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::value_type""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * >::value_type >(argp4);
+  {
+    try {
+      std_vector_Sl_Seiscomp_Core_BaseObject_Sm__Sg__insert__SWIG_1(arg1,arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_insert(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter) != 0));
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_ExportObjectList_insert__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector< Seiscomp::Core::BaseObject*,std::allocator< Seiscomp::Core::BaseObject * > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< Seiscomp::Core::BaseObject * >::iterator > *>(iter) != 0));
+      if (_v) {
+        {
+          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_ExportObjectList_insert__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ExportObjectList_insert'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::insert(std::vector< Seiscomp::Core::BaseObject * >::iterator,std::vector< Seiscomp::Core::BaseObject * >::value_type)\n"
+    "    std::vector< Seiscomp::Core::BaseObject * >::insert(std::vector< Seiscomp::Core::BaseObject * >::iterator,std::vector< Seiscomp::Core::BaseObject * >::size_type,std::vector< Seiscomp::Core::BaseObject * >::value_type)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ExportObjectList_reserve",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_reserve" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ExportObjectList_reserve" "', argument " "2"" of type '" "std::vector< Seiscomp::Core::BaseObject * >::size_type""'");
+  } 
+  arg2 = static_cast< std::vector< Seiscomp::Core::BaseObject * >::size_type >(val2);
+  {
+    try {
+      (arg1)->reserve(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ExportObjectList_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< Seiscomp::Core::BaseObject * >::size_type result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ExportObjectList_capacity",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ExportObjectList_capacity" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      result = ((std::vector< Seiscomp::Core::BaseObject * > const *)arg1)->capacity();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ExportObjectList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< Seiscomp::Core::BaseObject * > *arg1 = (std::vector< Seiscomp::Core::BaseObject * > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ExportObjectList",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ExportObjectList" "', argument " "1"" of type '" "std::vector< Seiscomp::Core::BaseObject * > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< Seiscomp::Core::BaseObject * > * >(argp1);
+  {
+    try {
+      delete arg1;
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ExportObjectList_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"delete_SwigPyIterator", _wrap_delete_SwigPyIterator, METH_VARARGS, NULL},
@@ -33217,7 +36128,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Exporter_write", _wrap_Exporter_write, METH_VARARGS, (char *)"\n"
 		"write(std::streambuf * buf, BaseObject arg3) -> bool\n"
 		"write(string filename, BaseObject arg3) -> bool\n"
-		"Exporter_write(Exporter self, ExportSink sink, BaseObject arg4) -> bool\n"
+		"write(ExportSink sink, BaseObject arg3) -> bool\n"
+		"write(std::streambuf * buf, ExportObjectList objects) -> bool\n"
+		"write(string filename, ExportObjectList objects) -> bool\n"
+		"Exporter_write(Exporter self, ExportSink sink, ExportObjectList objects) -> bool\n"
 		""},
 	 { (char *)"Exporter_swigregister", Exporter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_XMLArchive", _wrap_new_XMLArchive, METH_VARARGS, (char *)"\n"
@@ -33631,6 +36545,67 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RecordResamplerI_reset", _wrap_RecordResamplerI_reset, METH_VARARGS, (char *)"RecordResamplerI_reset(RecordResamplerI self)"},
 	 { (char *)"RecordResamplerI_clone", _wrap_RecordResamplerI_clone, METH_VARARGS, (char *)"RecordResamplerI_clone(RecordResamplerI self) -> RecordFilterInterface"},
 	 { (char *)"RecordResamplerI_swigregister", RecordResamplerI_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ExportObjectList_iterator", _wrap_ExportObjectList_iterator, METH_VARARGS, (char *)"ExportObjectList_iterator(ExportObjectList self) -> SwigPyIterator"},
+	 { (char *)"ExportObjectList___nonzero__", _wrap_ExportObjectList___nonzero__, METH_VARARGS, (char *)"ExportObjectList___nonzero__(ExportObjectList self) -> bool"},
+	 { (char *)"ExportObjectList___bool__", _wrap_ExportObjectList___bool__, METH_VARARGS, (char *)"ExportObjectList___bool__(ExportObjectList self) -> bool"},
+	 { (char *)"ExportObjectList___len__", _wrap_ExportObjectList___len__, METH_VARARGS, (char *)"ExportObjectList___len__(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"},
+	 { (char *)"ExportObjectList___getslice__", _wrap_ExportObjectList___getslice__, METH_VARARGS, (char *)"ExportObjectList___getslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j) -> ExportObjectList"},
+	 { (char *)"ExportObjectList___setslice__", _wrap_ExportObjectList___setslice__, METH_VARARGS, (char *)"\n"
+		"__setslice__(std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)\n"
+		"ExportObjectList___setslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j, ExportObjectList v)\n"
+		""},
+	 { (char *)"ExportObjectList___delslice__", _wrap_ExportObjectList___delslice__, METH_VARARGS, (char *)"ExportObjectList___delslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)"},
+	 { (char *)"ExportObjectList___delitem__", _wrap_ExportObjectList___delitem__, METH_VARARGS, (char *)"\n"
+		"__delitem__(std::vector< Seiscomp::Core::BaseObject * >::difference_type i)\n"
+		"ExportObjectList___delitem__(ExportObjectList self, PySliceObject * slice)\n"
+		""},
+	 { (char *)"ExportObjectList___getitem__", _wrap_ExportObjectList___getitem__, METH_VARARGS, (char *)"\n"
+		"__getitem__(PySliceObject * slice) -> ExportObjectList\n"
+		"ExportObjectList___getitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i) -> BaseObject\n"
+		""},
+	 { (char *)"ExportObjectList___setitem__", _wrap_ExportObjectList___setitem__, METH_VARARGS, (char *)"\n"
+		"__setitem__(PySliceObject * slice, ExportObjectList v)\n"
+		"__setitem__(PySliceObject * slice)\n"
+		"ExportObjectList___setitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, BaseObject x)\n"
+		""},
+	 { (char *)"ExportObjectList_pop", _wrap_ExportObjectList_pop, METH_VARARGS, (char *)"ExportObjectList_pop(ExportObjectList self) -> BaseObject"},
+	 { (char *)"ExportObjectList_append", _wrap_ExportObjectList_append, METH_VARARGS, (char *)"ExportObjectList_append(ExportObjectList self, BaseObject x)"},
+	 { (char *)"ExportObjectList_empty", _wrap_ExportObjectList_empty, METH_VARARGS, (char *)"ExportObjectList_empty(ExportObjectList self) -> bool"},
+	 { (char *)"ExportObjectList_size", _wrap_ExportObjectList_size, METH_VARARGS, (char *)"ExportObjectList_size(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"},
+	 { (char *)"ExportObjectList_swap", _wrap_ExportObjectList_swap, METH_VARARGS, (char *)"ExportObjectList_swap(ExportObjectList self, ExportObjectList v)"},
+	 { (char *)"ExportObjectList_begin", _wrap_ExportObjectList_begin, METH_VARARGS, (char *)"ExportObjectList_begin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"},
+	 { (char *)"ExportObjectList_end", _wrap_ExportObjectList_end, METH_VARARGS, (char *)"ExportObjectList_end(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"},
+	 { (char *)"ExportObjectList_rbegin", _wrap_ExportObjectList_rbegin, METH_VARARGS, (char *)"ExportObjectList_rbegin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"},
+	 { (char *)"ExportObjectList_rend", _wrap_ExportObjectList_rend, METH_VARARGS, (char *)"ExportObjectList_rend(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"},
+	 { (char *)"ExportObjectList_clear", _wrap_ExportObjectList_clear, METH_VARARGS, (char *)"ExportObjectList_clear(ExportObjectList self)"},
+	 { (char *)"ExportObjectList_get_allocator", _wrap_ExportObjectList_get_allocator, METH_VARARGS, (char *)"ExportObjectList_get_allocator(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::allocator_type"},
+	 { (char *)"ExportObjectList_pop_back", _wrap_ExportObjectList_pop_back, METH_VARARGS, (char *)"ExportObjectList_pop_back(ExportObjectList self)"},
+	 { (char *)"ExportObjectList_erase", _wrap_ExportObjectList_erase, METH_VARARGS, (char *)"\n"
+		"erase(std::vector< Seiscomp::Core::BaseObject * >::iterator pos) -> std::vector< Seiscomp::Core::BaseObject * >::iterator\n"
+		"ExportObjectList_erase(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator first, std::vector< Seiscomp::Core::BaseObject * >::iterator last) -> std::vector< Seiscomp::Core::BaseObject * >::iterator\n"
+		""},
+	 { (char *)"new_ExportObjectList", _wrap_new_ExportObjectList, METH_VARARGS, (char *)"\n"
+		"ExportObjectList()\n"
+		"ExportObjectList(ExportObjectList arg2)\n"
+		"ExportObjectList(std::vector< Seiscomp::Core::BaseObject * >::size_type size)\n"
+		"new_ExportObjectList(std::vector< Seiscomp::Core::BaseObject * >::size_type size, BaseObject value) -> ExportObjectList\n"
+		""},
+	 { (char *)"ExportObjectList_push_back", _wrap_ExportObjectList_push_back, METH_VARARGS, (char *)"ExportObjectList_push_back(ExportObjectList self, BaseObject x)"},
+	 { (char *)"ExportObjectList_front", _wrap_ExportObjectList_front, METH_VARARGS, (char *)"ExportObjectList_front(ExportObjectList self) -> BaseObject"},
+	 { (char *)"ExportObjectList_back", _wrap_ExportObjectList_back, METH_VARARGS, (char *)"ExportObjectList_back(ExportObjectList self) -> BaseObject"},
+	 { (char *)"ExportObjectList_assign", _wrap_ExportObjectList_assign, METH_VARARGS, (char *)"ExportObjectList_assign(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)"},
+	 { (char *)"ExportObjectList_resize", _wrap_ExportObjectList_resize, METH_VARARGS, (char *)"\n"
+		"resize(std::vector< Seiscomp::Core::BaseObject * >::size_type new_size)\n"
+		"ExportObjectList_resize(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type new_size, BaseObject x)\n"
+		""},
+	 { (char *)"ExportObjectList_insert", _wrap_ExportObjectList_insert, METH_VARARGS, (char *)"\n"
+		"insert(std::vector< Seiscomp::Core::BaseObject * >::iterator pos, BaseObject x) -> std::vector< Seiscomp::Core::BaseObject * >::iterator\n"
+		"ExportObjectList_insert(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)\n"
+		""},
+	 { (char *)"ExportObjectList_reserve", _wrap_ExportObjectList_reserve, METH_VARARGS, (char *)"ExportObjectList_reserve(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n)"},
+	 { (char *)"ExportObjectList_capacity", _wrap_ExportObjectList_capacity, METH_VARARGS, (char *)"ExportObjectList_capacity(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"},
+	 { (char *)"delete_ExportObjectList", _wrap_delete_ExportObjectList, METH_VARARGS, (char *)"delete_ExportObjectList(ExportObjectList self)"},
+	 { (char *)"ExportObjectList_swigregister", ExportObjectList_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -34270,7 +37245,7 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_double_t = {"_p_Seiscomp__
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_char_t = {"_p_Seiscomp__TypedArrayT_char_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_int_t = {"_p_Seiscomp__TypedArrayT_int_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_float_t = {"_p_Seiscomp__TypedArrayT_float_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__BaseObject = {"_p_Seiscomp__Core__BaseObject", "Seiscomp::Core::BaseObject *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__BaseObject = {"_p_Seiscomp__Core__BaseObject", "std::vector< Seiscomp::Core::BaseObject * >::value_type|Seiscomp::Core::BaseObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList = {"_p_Seiscomp__Math__Restitution__FFT__ResponseList", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__BitSet = {"_p_Seiscomp__BitSet", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t", 0, 0, 0, 0, 0};
@@ -34450,6 +37425,7 @@ static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (
 static swig_type_info _swigt__p_long = {"_p_long", "long *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_type = {"_p_off_type", "off_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_openmode = {"_p_openmode", "openmode *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "void **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pos_type = {"_p_pos_type", "pos_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_reference = {"_p_reference", "reference *", 0, 0, (void*)0, 0};
@@ -34457,6 +37433,7 @@ static swig_type_info _swigt__p_seekdir = {"_p_seekdir", "seekdir *", 0, 0, (voi
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "std::streamsize *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_state_type = {"_p_state_type", "state_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_Seiscomp__Core__BaseObject_p_t = {"_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t", "std::allocator< Seiscomp::Core::BaseObject * > *|std::vector< Seiscomp::Core::BaseObject * >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t = {"_p_std__basic_iosT_char_std__char_traitsT_char_t_t", "std::basic_ios< char > *|std::basic_ios< char,std::char_traits< char > > *|std::ios *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t = {"_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t", "std::basic_ostream< char,std::char_traits< char > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__basic_streambufT_char_std__char_traitsT_char_t_t = {"_p_std__basic_streambufT_char_std__char_traitsT_char_t_t", "std::basic_streambuf< char,std::char_traits< char > > *", 0, 0, (void*)0, 0};
@@ -34474,6 +37451,7 @@ static swig_type_info _swigt__p_std__listT_std__basic_stringT_char_std__char_tra
 static swig_type_info _swigt__p_std__locale = {"_p_std__locale", "std::locale *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__streambuf = {"_p_std__streambuf", "std::streambuf *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t = {"_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t", "Seiscomp::IO::ExportObjectList *|std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *|std::vector< Seiscomp::Core::BaseObject * > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t = {"_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t", "std::vector< Seiscomp::Core::Time,std::allocator< Seiscomp::Core::Time > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t = {"_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t", "std::vector< Seiscomp::Math::SeismometerResponse::FAP,std::allocator< Seiscomp::Math::SeismometerResponse::FAP > > *|Seiscomp::Math::SeismometerResponse::FAPs *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_char_std__allocatorT_char_t_t = {"_p_std__vectorT_char_std__allocatorT_char_t_t", "std::vector< char,std::allocator< char > > *", 0, 0, (void*)0, 0};
@@ -34687,6 +37665,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_long,
   &_swigt__p_off_type,
   &_swigt__p_openmode,
+  &_swigt__p_p_PyObject,
   &_swigt__p_p_void,
   &_swigt__p_pos_type,
   &_swigt__p_reference,
@@ -34694,6 +37673,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_state_type,
+  &_swigt__p_std__allocatorT_Seiscomp__Core__BaseObject_p_t,
   &_swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t,
   &_swigt__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t,
   &_swigt__p_std__basic_streambufT_char_std__char_traitsT_char_t_t,
@@ -34709,6 +37689,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__locale,
   &_swigt__p_std__ostream,
   &_swigt__p_std__streambuf,
+  &_swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   &_swigt__p_std__vectorT_char_std__allocatorT_char_t_t,
@@ -34920,6 +37901,7 @@ static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_type[] = {  {&_swigt__p_off_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_openmode[] = {  {&_swigt__p_openmode, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_void[] = {  {&_swigt__p_p_void, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_pos_type[] = {  {&_swigt__p_pos_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_reference[] = {  {&_swigt__p_reference, 0, 0, 0},{0, 0, 0, 0}};
@@ -34927,6 +37909,7 @@ static swig_cast_info _swigc__p_seekdir[] = {  {&_swigt__p_seekdir, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_state_type[] = {  {&_swigt__p_state_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_Seiscomp__Core__BaseObject_p_t[] = {  {&_swigt__p_std__allocatorT_Seiscomp__Core__BaseObject_p_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__basic_iosT_char_std__char_traitsT_char_t_t[] = {  {&_swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t[] = {  {&_swigt__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__basic_streambufT_char_std__char_traitsT_char_t_t[] = {  {&_swigt__p_std__basic_streambufT_char_std__char_traitsT_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -34944,6 +37927,7 @@ static swig_cast_info _swigc__p_std__listT_std__basic_stringT_char_std__char_tra
 static swig_cast_info _swigc__p_std__locale[] = {  {&_swigt__p_std__locale, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__streambuf[] = {  {&_swigt__p_std__streambuf, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_char_std__allocatorT_char_t_t[] = {  {&_swigt__p_std__vectorT_char_std__allocatorT_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -35157,6 +38141,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_long,
   _swigc__p_off_type,
   _swigc__p_openmode,
+  _swigc__p_p_PyObject,
   _swigc__p_p_void,
   _swigc__p_pos_type,
   _swigc__p_reference,
@@ -35164,6 +38149,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_state_type,
+  _swigc__p_std__allocatorT_Seiscomp__Core__BaseObject_p_t,
   _swigc__p_std__basic_iosT_char_std__char_traitsT_char_t_t,
   _swigc__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t,
   _swigc__p_std__basic_streambufT_char_std__char_traitsT_char_t_t,
@@ -35179,6 +38165,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__locale,
   _swigc__p_std__ostream,
   _swigc__p_std__streambuf,
+  _swigc__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,
   _swigc__p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   _swigc__p_std__vectorT_char_std__allocatorT_char_t_t,
