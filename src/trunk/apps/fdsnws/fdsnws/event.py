@@ -225,7 +225,8 @@ class FDSNEvent(resource.Resource):
 	def render_OPTIONS(self, req):
 		req.setHeader('Access-Control-Allow-Origin', '*')
 		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Access-Control-Allow-Headers',
+                      'Accept, Content-Type, X-Requested-With, Origin')
 		req.setHeader('Content-Type', 'text/plain')
 		return ""
 
@@ -248,11 +249,11 @@ class FDSNEvent(resource.Resource):
 		# updateafter not implemented
 		if ro.updatedAfter:
 			msg = "filtering based on update time not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if self._formatList is not None and ro.format not in self._formatList:
 			msg = "output format '%s' not available" % ro.format
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
@@ -264,7 +265,7 @@ class FDSNEvent(resource.Resource):
 			else:
 				msg = "output format '%s' not available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
-				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Create database query
 		db = DatabaseInterface.Open(Application.Instance().databaseURI())
@@ -826,3 +827,6 @@ class FDSNEvent(resource.Resource):
 
 		for e in dbq.getObjectIterator(q, DataModel.Event.TypeInfo()):
 			ep.add(DataModel.Event.Cast(e))
+
+
+# vim: ts=4 noet

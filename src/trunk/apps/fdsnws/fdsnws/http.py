@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.1.2"
+VERSION = "1.2.0"
 
 ################################################################################
 class HTTP:
@@ -253,3 +253,5 @@ class Site(server.Site):
 		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)
 
+
+# vim: ts=4 noet

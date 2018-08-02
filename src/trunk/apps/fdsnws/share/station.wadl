@@ -29,6 +29,8 @@
 						<option value="response"/>
 					</param>
 					<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
+					<param name="includeavailability" style="query" type="xsd:boolean" default="false"/>
+					<param name="matchtimeseries" style="query" type="xsd:boolean" default="false"/>
 					<param name="nodata" style="query" type="xsd:int" default="204">
 						<option value="204"/>
 						<option value="404"/>

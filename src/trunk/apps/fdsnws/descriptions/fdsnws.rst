@@ -1,6 +1,8 @@
 fdsnws is a server that provides
 `FDSN Web Services <http://www.fdsn.org/webservices>`_ from a SeisComP3 database
-and :ref:`global_recordstream` source.
+and :ref:`global_recordstream` source. Also it may be configured to serve data
+availability information similar to the `IRIS DMC IRISWS availability Web
+Service <https://service.iris.edu/irisws/availability/1/>`_ 
 
 Service Overview
 ----------------
@@ -13,11 +15,12 @@ The following services are available:
    ":ref:`fdsnws-dataselect <sec-dataSelect>`", "time series data", "`miniSEED <http://www.iris.edu/data/miniseed.htm>`_"
    ":ref:`fdsnws-station <sec-station>`", "network, station, channel, response metadata", "`FDSN Station XML <http://www.fdsn.org/xml/station/>`_, `StationXML <http://www.data.scec.org/station/xml.html>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
    ":ref:`fdsnws-event <sec-event>`", "earthquake origin and magnitude estimates", "`QuakeML <https://quake.ethz.ch/quakeml>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
+   ":ref:`ext-availabilty <sec-avail>`", "waveform data availability information", "text, geocsv, json, sync, request (`fdsnws-dataselect <https://service.iris.edu/fdsnws/dataselect/1>`_)"
 
 
-The available services can be reached from the fdsnws start page.
-The services also provide an interactive URL builder providing the URL based on
-the selection. The FDSN specifications can be found on
+The available services can be reached from the fdsnws start page.  The services
+also provide an interactive URL builder constructing the request URL based on
+user inputs. The FDSN specifications can be found on
 `FDSN Web Services <http://www.fdsn.org/webservices>`_.
 
 URL
@@ -28,7 +31,7 @@ URL
 If ``fdsnws`` is started, it accepts connections by default on port 8080 which
 can be changed in the configuration. Also please read :ref:`sec-port` for
 running the services on a privileged port, e.g. port 80 as requested by the
-FDSN specification.
+FDSNWS specification.
 
 .. note::
 
@@ -79,7 +82,7 @@ Feature Notes
 * access to restricted networks and stations is only granted through the
   ``queryauth`` method
 
-The data streams exposed by this service may be restrict by defining an
+The data channels exposed by this service may be restrict by defining an
 inventory filter, see section :ref:`sec-inv-filter`.
 
 Service Configuration
@@ -137,8 +140,6 @@ Feature Notes
   the update time is not propagated to all parents. In order to check if a
   station was updated all children must be evaluated recursively. This operation
   would be much too expensive.
-* ``includeavailability`` request parameter not implemented
-* ``matchtimeseries`` request parameter not implemented
 * ``formatted``: boolean, default: ``false``
 * additional values of request parameters:
 
@@ -208,13 +209,85 @@ Feature Notes
     * additional: ``[qml (=xml), qml-rt, sc3ml, csv]``
     * default: ``xml``
 
+.. _sec-avail:
+
+Data Availability
+-----------------
+
+The data availability web service returns detailed time span information of
+what timeseries data is available at the DMC archive.
+
+The availability service is no official standard yet. This implementation aims
+to be compatible with the `IRIS DMC IRISWS availability Web Service
+<https://service.iris.edu/irisws/availability/1/>`_ implementation.
+
+* request type: HTTP-GET, HTTP-POST
+* results may be filtered e.g. by channel code, time and quality
+
+URL
+^^^
+
+* http://localhost:8080/ext/availability/1/extent - Produces list of available
+  time extents (earliest to latest) for selected channels (network, station,
+  location and quality) and time ranges.
+* http://localhost:8080/ext/availability/1/builder-extent - URL builder helping
+  you to form your data extent requests
+* http://localhost:8080/ext/availability/1/query - Produces list of contiguous
+  time spans for selected channels (network, station, location, channel and
+  quality) and time ranges.
+* http://localhost:8080/ext/availability/1/builder - URL builder helping you to
+  form your data time span requests
+* http://localhost:8080/ext/availability/1/version
+
+Example
+^^^^^^^
+
+* Request URL for data extents of seismic network ``IU``:
+
+  http://localhost:8080/fdsnws/ext/availability/1/extent?net=IU
+
+* Further limit the extents to those providing data for August 1st 2018:
+
+  http://localhost:8080/fdsnws/ext/availability/1/extent?net=IU&start=2018-08-01
+
+* Request URL for continues timespans of station ``ANMO`` in July 2018:
+
+  http://localhost:8080/fdsnws/ext/availability/1/query?sta=ANMO&start=2018-07-01&end=2018-08-01
+
+Feature Notes
+^^^^^^^^^^^^^
+
+* The IRISWS availability implementation truncates the timespans of the returned
+  data extents and segments to the requested start and end times (if any). This
+  implementation truncates the start and end time only for the formats: ``sync``
+  and ``request``. The ``text``, ``geocsv`` and ``json`` format will return the
+  exact time windows extracted from the waveform archive.
+
+  The reasons for this derivation are:
+
+  * Performance: With the ``/extent`` query the ``text``, ``geocsv`` and
+    ``json`` offer the display of the number of included timespans
+    (``show=timespancount``). The datamodel offers no efficient way to
+    recalculate the number of timespans represented by an extent if the extents
+    time window is altered by the requested start and end times. The ``sync``
+    and ``request`` formats do not provided this counter and it is convenient to
+    use their outputs for subsequent data requests.
+  * By truncating the time windows information is lost. There would be no
+    efficient way for a client to retrieve the exact time windows falling into a
+    specific
+    timespan.
+  * Network and station epochs returned by the :ref:`sec-station` service are also
+    not truncated to the requested start and end times.
+  * Truncation can easily be done on client side. No additional network traffic is
+    generated.
+
 
 .. _sec-inv-filter:
 
 Filtering the inventory
 -----------------------
 
-The streams served by the :ref:`sec-station` and :ref:`sec-dataSelect` service
+The channels served by the :ref:`sec-station` and :ref:`sec-dataSelect` service
 may be filtered by specified an INI file in the ``stationFilter`` and
 ``dataSelectFilter`` configuration parameter. You may use the same file for both
 services or define a separate configuration set. **Note:** If distinct file
@@ -246,7 +319,7 @@ application but is plotted when debugging the rule set, see configuration
 parameter ``debugFilter``.
 
 Each rule consists of a set of attributes. The first and mandatory attribute is
-``code`` which defines a regular expression for the stream code (network,
+``code`` which defines a regular expression for the channel code (network,
 station, location, channel). In addition the following optional attributes
 exist:
 
@@ -266,7 +339,7 @@ attribute is found in the hierarchy, the rule will not match even if the value
 was set to ``false``.
 
 The individual rules are evaluated in order of their definition. The processing
-stops once a matching rule is found and the stream is included or excluded
+stops once a matching rule is found and the channel is included or excluded
 immediately. So the order of the rules is important.
 
 One may decided to specify a pure whitelist, a pure blacklist, or to mix include
