@@ -213,11 +213,13 @@ class _MyRecordStream(object):
 
 				if size == 0:
 					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
-					    restricted, net_class, True, [], "fdsnws", "NODATA", 0, "")
+					                           restricted, net_class, True, [],
+					                           "fdsnws", "NODATA", 0, "")
 
 				else:
 					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
-					    restricted, net_class, True, [], "fdsnws", "OK", size, "")
+					                           restricted, net_class, True, [],
+					                           "fdsnws", "OK", size, "")
 
 
 ################################################################################
@@ -248,7 +250,7 @@ class _WaveformProducer(object):
 		if self.written == 0:
 			self.req.setHeader('Content-Type', 'application/vnd.fdsn.mseed')
 			self.req.setHeader('Content-Disposition', "attachment; " \
-					   "filename=%s" % self.fileName)
+			                   "filename=%s" % self.fileName)
 
 		self.req.write(data)
 		self.written += len(data)
@@ -319,9 +321,9 @@ class FDSNDataSelectRealm(object):
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
 			return (resource.IResource,
-				FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
-					{"mail": avatarId, "blacklisted": False}),
-				lambda: None)
+			        FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
+			                       {"mail": avatarId, "blacklisted": False}),
+			        lambda: None)
 
 		raise NotImplementedError()
 
@@ -342,9 +344,9 @@ class FDSNDataSelectAuthRealm(object):
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
 			return (resource.IResource,
-				FDSNDataSelect(self.__inv, self.__bufferSize,
-					self.__access, self.__userdb.getAttributes(avatarId)),
-				lambda: None)
+			        FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
+			                       self.__userdb.getAttributes(avatarId)),
+			        lambda: None)
 
 		raise NotImplementedError()
 
@@ -369,7 +371,8 @@ class FDSNDataSelect(resource.Resource):
 	def render_OPTIONS(self, req):
 		req.setHeader('Access-Control-Allow-Origin', '*')
 		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Access-Control-Allow-Headers',
+		              'Accept, Content-Type, X-Requested-With, Origin')
 		req.setHeader('Content-Type', 'text/plain')
 		return ""
 
@@ -486,15 +489,15 @@ class FDSNDataSelect(resource.Resource):
 
 		if ro.quality != 'B' and ro.quality != 'M':
 			msg = "quality other than 'B' or 'M' not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.minimumLength:
 			msg = "enforcing of minimum record length not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.longestOnly:
 			msg = "limitation to longest segment not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		app = Application.Instance()
 		ro._checkTimes(app._realtimeGap)
@@ -514,7 +517,10 @@ class FDSNDataSelect(resource.Resource):
 			else:
 				userIP = req.getClientIP()
 
-			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", userid, "REQUEST WAVEFORM " + reqid, "fdsnws", userIP, req.getClientIP())
+			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid,
+			                           "WAVEFORM", userid,
+			                           "REQUEST WAVEFORM " + reqid,
+			                           "fdsnws", userIP, req.getClientIP())
 
 		else:
 			tracker = None
@@ -578,10 +584,12 @@ class FDSNDataSelect(resource.Resource):
 							                 end_time.iso()))
 							rs.addStream(net.code(), sta.code(), loc.code(),
 							             cha.code(), start_time, end_time,
-							             utils.isRestricted(cha), sta.archiveNetworkCode())
+							             utils.isRestricted(cha),
+							             sta.archiveNetworkCode())
 
 		# Build output filename
-		fileName = Application.Instance()._fileNamePrefix.replace("%time", time.strftime('%Y-%m-%dT%H:%M:%S'))+'.mseed'
+		fileName = Application.Instance()._fileNamePrefix.replace("%time",
+		           time.strftime('%Y-%m-%dT%H:%M:%S')) + '.mseed'
 
 		# Create producer for async IO
 		prod = _WaveformProducer(req, ro, rs, fileName, tracker)
@@ -590,3 +598,6 @@ class FDSNDataSelect(resource.Resource):
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
+
+
+# vim: ts=4 noet

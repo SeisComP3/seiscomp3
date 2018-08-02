@@ -584,3 +584,4 @@ class RequestOptions:
 			raise ValueError, "at least one stream line is required"
 
 
+# vim: ts=4 noet

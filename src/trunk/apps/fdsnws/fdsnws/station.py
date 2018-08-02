@@ -10,8 +10,6 @@
 #     is updated the update time is not propagated to all parents. In order to
 #     check if a station was updated all children must be evaluated recursively.
 #     This operation would be much to expensive.
-#   - 'includeavailability' request parameter not implemented
-#   - 'matchtimeseries' request parameter not implemented
 #   - additional request parameters:
 #     - formatted:       boolean, default: false
 #   - additional values of request parameters:
@@ -30,7 +28,7 @@ from twisted.web import http, resource, server
 from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
 from seiscomp3.Core import Time
-from seiscomp3.IO import Exporter
+from seiscomp3.IO import Exporter, ExportObjectList
 
 from http import HTTP
 from request import RequestOptions
@@ -105,13 +103,13 @@ class _StationRequestOptions(RequestOptions):
 		# includeRestricted (optional)
 		self.restricted = self.parseBool(self.PIncludeRestricted)
 
-		# includeAvailability (optional), currently not supported
+		# includeAvailability (optional)
 		self.availability = self.parseBool(self.PIncludeAvailability)
 
 		# updatedAfter (optional), currently not supported
 		self.updatedAfter = self.parseTimeStr(self.PUpdateAfter)
 
-		# includeAvailability (optional), currently not supported
+		# includeAvailability (optional)
 		self.matchTimeSeries = self.parseBool(self.PMatchTimeSeries)
 
 		# format XML
@@ -178,8 +176,8 @@ class _StationRequestOptions(RequestOptions):
 			for ro in self.streams:
 				# location code
 				if ro.channel and (not ro.channel.matchLoc(loc.code()) or \
-						   not ro.channel.matchSta(sta.code()) or \
-						   not ro.channel.matchNet(net.code())):
+				                   not ro.channel.matchSta(sta.code()) or \
+				                   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -194,16 +192,16 @@ class _StationRequestOptions(RequestOptions):
 
 
 	#---------------------------------------------------------------------------
-	def streamIter(self, net, sta, loc, matchTime=False):
+	def streamIter(self, net, sta, loc, matchTime, dac):
 		for i in xrange(loc.streamCount()):
 			stream = loc.stream(i)
 
 			for ro in self.streams:
 				# stream code
 				if ro.channel and (not ro.channel.matchCha(stream.code()) or \
-						   not ro.channel.matchLoc(loc.code()) or \
-						   not ro.channel.matchSta(sta.code()) or \
-						   not ro.channel.matchNet(net.code())):
+				                   not ro.channel.matchLoc(loc.code()) or \
+				                   not ro.channel.matchSta(sta.code()) or \
+				                   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -211,6 +209,14 @@ class _StationRequestOptions(RequestOptions):
 					try: end = stream.end()
 					except ValueError: end = None
 					if not ro.time.match(stream.start(), end):
+						continue
+
+				# match data availability extent
+				if dac is not None and ro.matchTimeSeries:
+					extent = dac.extent(net.code(), sta.code(), loc.code(),
+					                    stream.code())
+					if extent is None or ( ro.time and \
+					   not ro.time.match(extent.start(), extent.end()) ):
 						continue
 
 				yield stream
@@ -222,11 +228,12 @@ class FDSNStation(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, restricted, maxObj):
+	def __init__(self, inv, restricted, maxObj, daEnabled):
 		resource.Resource.__init__(self)
 		self._inv = inv
 		self._allowRestricted = restricted
 		self._maxObj = maxObj
+		self._daEnabled = daEnabled
 
 		# additional object count dependent on detail level
 		self._resLevelCount = inv.responsePAZCount() + inv.responseFIRCount() \
@@ -276,38 +283,44 @@ class FDSNStation(resource.Resource):
 
 	#---------------------------------------------------------------------------
 	def _prepareRequest(self, req, ro):
-		if ro.availability:
+		if ro.availability and not self._daEnabled:
 			msg = "including of availability information not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.updatedAfter:
 			msg = "filtering based on update time not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
-		if ro.matchTimeSeries:
+		if ro.matchTimeSeries and not self._daEnabled:
 			msg = "filtering based on available time series not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+
+		# load data availability if requested
+		dac = None
+		if ro.availability or ro.matchTimeSeries:
+			dac = Application.Instance().getDACache()
+			if dac is None or len(dac.extents()) == 0:
+				msg = "no data availabiltiy extent information found"
+				return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
 			if ro.includeRes:
 				msg = "response level output not available in text format"
-				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE,
-				       msg, ro)
+				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 			req.setHeader('Content-Type', 'text/plain')
-			d = deferToThread(self._processRequestText, req, ro)
+			d = deferToThread(self._processRequestText, req, ro, dac)
 		else:
 			exp = Exporter.Create(ro.Exporters[ro.format])
 			if exp is None:
 				msg = "output format '%s' no available, export module '%s' " \
 				      "could not be loaded." % (
 				      ro.format, ro.Exporters[ro.format])
-				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE,
-				                            msg, ro)
+				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 			req.setHeader('Content-Type', 'application/xml')
 			exp.setFormattedOutput(bool(ro.formatted))
-			d = deferToThread(self._processRequestExp, req, ro, exp)
+			d = deferToThread(self._processRequestExp, req, ro, exp, dac)
 
 		req.notifyFinish().addErrback(utils.onCancel, d)
 		d.addBoth(utils.onFinish, req)
@@ -317,14 +330,14 @@ class FDSNStation(resource.Resource):
 
 
 	#---------------------------------------------------------------------------
-	def _processRequestExp(self, req, ro, exp):
+	def _processRequestExp(self, req, ro, exp, dac):
 		if req._disconnected: return False
 
-		staCount, locCount, chaCount, objCount = 0, 0, 0, 0
+		staCount, locCount, chaCount, extCount, objCount = 0, 0, 0, 0, 0
 
 		DataModel.PublicObject.SetRegistrationEnabled(False)
 		newInv = DataModel.Inventory()
-		dataloggers, sensors = set(), set()
+		dataloggers, sensors, extents = set(), set(), set()
 
 		skipRestricted = not self._allowRestricted or \
 		                 (ro.restricted is not None and not ro.restricted)
@@ -343,21 +356,28 @@ class FDSNStation(resource.Resource):
 
 			# iterate over inventory stations of current network
 			for sta in ro.stationIter(net, levelSta):
-				if req._disconnected: return False
-				if skipRestricted and utils.isRestricted(sta): continue
-				if not HTTP.checkObjects(req, objCount, self._maxObj): return False
+				if req._disconnected:
+					return False
+				if skipRestricted and utils.isRestricted(sta):
+					continue
+				if not HTTP.checkObjects(req, objCount, self._maxObj):
+					return False
+
 				if ro.includeCha:
-					numCha, numLoc, d, s = \
-						self._processStation(newNet, net, sta, ro, skipRestricted)
+					numCha, numLoc, d, s, e = \
+						self._processStation(newNet, net, sta, ro, dac,
+						                     skipRestricted)
 					if numCha > 0:
 						locCount += numLoc
 						chaCount += numCha
-						objCount += numLoc + numCha
+						extCount += len(e)
+						objCount += numLoc + numCha + extCount
 						if not HTTP.checkObjects(req, objCount, self._maxObj):
 							return False
 						dataloggers |= d
 						sensors |= s
-				elif self._matchStation(net, sta, ro):
+						extents |= e
+				elif self._matchStation(net, sta, ro, dac):
 					if ro.includeSta:
 						newSta = DataModel.Station(sta)
 						# Copy comments
@@ -400,15 +420,27 @@ class FDSNStation(resource.Resource):
 				objCount += resCount + decCount + newInv.dataloggerCount() + \
 				            newInv.sensorCount()
 
+		# Copy data extents
+		objOut = newInv
+		if len(extents) > 0:
+			objCount += 1
+			da = DataModel.DataAvailability()
+			for e in extents:
+				da.add(DataModel.DataExtent(e))
+			objOut = ExportObjectList()
+			objOut.append(newInv)
+			objOut.append(da)
+
 		sink = utils.Sink(req)
-		if not exp.write(sink, newInv):
+		if not exp.write(sink, objOut):
 			return False
 
 		Logging.debug("%s: returned %iNet, %iSta, %iLoc, %iCha, " \
-		               "%iDL, %iDec, %iSen, %iRes (total objects/bytes: " \
-		               "%i/%i) " % (ro.service, newInv.networkCount(), staCount,
-		               locCount, chaCount, newInv.dataloggerCount(), decCount,
-		               newInv.sensorCount(), resCount, objCount, sink.written))
+		               "%iDL, %iDec, %iSen, %iRes, %iDAExt (total objects/" \
+		               "bytes: %i/%i) " % (ro.service, newInv.networkCount(),
+		               staCount, locCount, chaCount, newInv.dataloggerCount(),
+		               decCount, newInv.sensorCount(), resCount, extCount,
+		               objCount, sink.written))
 		utils.accessLog(req, ro, http.OK, sink.written, None)
 		return True
 
@@ -435,7 +467,7 @@ class FDSNStation(resource.Resource):
 
 
 	#---------------------------------------------------------------------------
-	def _processRequestText(self, req, ro):
+	def _processRequestText(self, req, ro, dac):
 		if req._disconnected: return False
 
 		skipRestricted = not self._allowRestricted or \
@@ -456,7 +488,7 @@ class FDSNStation(resource.Resource):
 				# at least one matching station is required
 				stationFound = False
 				for sta in ro.stationIter(net, False):
-					if self._matchStation(net, sta, ro):
+					if self._matchStation(net, sta, ro, dac):
 						stationFound = True
 						break
 				if not stationFound: continue
@@ -478,7 +510,7 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations
 				for sta in ro.stationIter(net, True):
-					if not self._matchStation(net, sta, ro): continue
+					if not self._matchStation(net, sta, ro, dac): continue
 
 					try: lat = str(sta.latitude())
 					except ValueError: lat = ''
@@ -508,7 +540,7 @@ class FDSNStation(resource.Resource):
 				# iterate over inventory stations, locations, streams
 				for sta in ro.stationIter(net, False):
 					for loc in ro.locationIter(net, sta, True):
-						for stream in ro.streamIter(net, sta, loc, True):
+						for stream in ro.streamIter(net, sta, loc, True, dac):
 							if skipRestricted and utils.isRestricted(stream): continue
 
 							try: lat = str(loc.latitude())
@@ -579,16 +611,17 @@ class FDSNStation(resource.Resource):
 	# Checks if at least one location and channel combination matches the
 	# request options
 	@staticmethod
-	def _matchStation(net, sta, ro):
+	def _matchStation(net, sta, ro, dac):
 		# No filter: return true immediately
-		if not ro.channel or (not ro.channel.loc and not ro.channel.cha):
+		if dac is None and \
+		   ( not ro.channel or ( not ro.channel.loc and not ro.channel.cha ) ):
 			return True
 
 		for loc in ro.locationIter(net, sta, False):
-			if not ro.channel.cha and not ro.time:
+			if dac is None and not ro.channel.cha and not ro.time:
 				return True
 
-			for stream in ro.streamIter(net, sta, loc, False):
+			for stream in ro.streamIter(net, sta, loc, False, dac):
 				return True
 
 		return False
@@ -598,10 +631,11 @@ class FDSNStation(resource.Resource):
 	# Adds a deep copy of the specified station to the new network if the
 	# location and channel combination matches the request options (if any)
 	@staticmethod
-	def _processStation(newNet, net, sta, ro, skipRestricted):
+	def _processStation(newNet, net, sta, ro, dac, skipRestricted):
 		chaCount = 0
-		dataloggers, sensors = set(), set()
+		dataloggers, sensors, extents = set(), set(), set()
 		newSta = DataModel.Station(sta)
+		includeAvailability = dac is not None and ro.availability
 
 		# Copy comments
 		for i in xrange(sta.commentCount()):
@@ -613,7 +647,7 @@ class FDSNStation(resource.Resource):
 			for i in xrange(loc.commentCount()):
 				newLoc.add(DataModel.Comment(loc.comment(i)))
 
-			for stream in ro.streamIter(net, sta, loc, True):
+			for stream in ro.streamIter(net, sta, loc, True, dac):
 				if skipRestricted and utils.isRestricted(stream): continue
 				newCha = DataModel.Stream(stream)
 				# Copy comments
@@ -622,6 +656,11 @@ class FDSNStation(resource.Resource):
 				newLoc.add(newCha)
 				dataloggers.add(stream.datalogger())
 				sensors.add(stream.sensor())
+				if includeAvailability:
+					ext = dac.extent(net.code(), sta.code(), loc.code(),
+					                 stream.code())
+					if ext is not None:
+						extents.add(ext)
 
 			if newLoc.streamCount() > 0:
 				newSta.add(newLoc)
@@ -629,9 +668,10 @@ class FDSNStation(resource.Resource):
 
 		if newSta.sensorLocationCount() > 0:
 			newNet.add(newSta)
-			return chaCount, newSta.sensorLocationCount(), dataloggers, sensors
+			return chaCount, newSta.sensorLocationCount(), dataloggers, \
+			       sensors, extents
 
-		return 0, 0, [], []
+		return 0, 0, [], [], []
 
 
 	#---------------------------------------------------------------------------
@@ -724,3 +764,6 @@ class FDSNStation(resource.Resource):
 					newInv.add(DataModel.ResponseIIR(resp))
 
 		return decCount
+
+
+# vim: ts=4 noet

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 - Data Availability</title>
+</head>
+<body>
+  <h1>SeisComP3 Data Availability Web Service</h1>
+  <p>The data availability web service returns detailed time span information of
+  what timeseries data is available at the DMC archive.</p>
+
+  <h2>Available URLs</h2>
+  <ul>
+    <li>
+      <a href="extent">extent</a> - Produces list of available time extents
+      (earliest to latest) for selected channels (network, station, location and
+      quality) and time ranges.
+    </li>
+    <li>
+      <a href="builder-extent">builder-extent</a> - URL builder helping you to form your
+      data extent requests
+    </li>
+    <li>
+      <a href="query">query</a> - Produces list of contiguous time spans for
+      selected channels (network, station, location, channel and quality) and
+      time ranges.
+    </li>
+    <li>
+      <a href="builder">builder</a> - URL builder helping you to form your
+      data time span requests
+    </li>
+    <li><a href="version">version</a></li>
+  </ul>
+
+  <h2>Interface Documentation</h2>
+  <p>The availability service is no official standard yet. This implementation
+  aims to be compatible with the <a
+  href="https://service.iris.edu/irisws/availability/1/">IRIS DMC IRISWS
+  availability Web Service</a> implementation.
+
+  <h2>Feature Notes</h2>
+  <ul>
+    <li>back-end software: <a href="http://www.seiscomp3.org">SeisComP3</a></li>
+    <li>The IRISWS availability implementation truncates the timespans of the
+    returned data extents and segments to the requested start and end times (if
+    any). This implementation truncates the start and end time only for the
+    formats: <em>sync</em> and <em>request</em>. The <em>text</em>,
+    <em>geocsv</em> and <em>json</em> format will return the exact time windows
+    extracted from the waveform archive.
+    </li>
+  </ul>
+</body>
+</html>

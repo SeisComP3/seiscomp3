@@ -90,3 +90,5 @@ class Log:
 		except Exception, e:
 			print >> sys.stderr, "access log: %s\n" % str(e)
 
+
+# vim: ts=4 noet
