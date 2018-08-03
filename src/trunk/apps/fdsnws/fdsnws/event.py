@@ -240,10 +240,10 @@ class FDSNEvent(resource.Resource):
 			Logging.warning(str(e))
 			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
-		# Catalog filter is not supported, any filter value will result in 204
+		# Catalog filter is not supported
 		if ro.catalogs:
-			msg = "no matching events found"
-			return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			msg = "catalog filter not supported"
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# updateafter not implemented
 		if ro.updatedAfter:
