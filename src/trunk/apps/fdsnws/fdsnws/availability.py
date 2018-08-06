@@ -516,7 +516,7 @@ class _AvailabilityExtentRequestOptions(_AvailabilityRequestOptions):
 				self.raiseValueError(key)
 
 		# rowlimit
-		self.rowlimit = self.parseInt(self.PRowLimit, None, DBMaxUInt)
+		self.rowLimit = self.parseInt(self.PRowLimit, 1, DBMaxUInt)
 
 		# show
 		for vList in self.getValues(self.PShow):
