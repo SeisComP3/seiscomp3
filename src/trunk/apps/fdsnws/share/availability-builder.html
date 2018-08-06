@@ -90,7 +90,6 @@
               <option value="geocsv">GEO CSV</option>
               <option value="json">JSON</option>
               <option value="sync">Sync</option>
-              <option value="request">Request</option>
             </select>
           </td>
         </tr>
@@ -99,30 +98,12 @@
           <td><input type="checkbox" name="nodata" value="404" checked="checked" /></td>
         </tr>
         <tr>
-          <td>Order by</td>
-          <td>
-            <select name="orderby">
-              <option value="">Stream ID (default)</option>
-              <option value="timespancount">Number of timespans (ascending)</option>
-              <option value="timespancount_desc">Number of timespans (descending)</option>
-              <option value="latestupdate">Update date (ascending)</option>
-              <option value="latestupdate_desc">Update date (descending)</option>
-            </select>
-          </td>
+          <td>Show last update</td>
+          <td><input type="checkbox" name="showlastupdate" value="true" /></td>
         </tr>
         <tr>
-          <td>Row limit</td>
-          <td><input type="number" name="rowlimit" min="0" step="10" value="" placeholder="100" /></td>
-        </tr>
-        <tr>
-          <td>Show</td>
-          <td>
-            <select name="orderby" type="select-multiple">
-              <option value="latestupdate">Lastest update</option>
-              <option value="timespancount">Number of timespans</option>
-              <option value="restriction">Restriction status</option>
-            </select>
-          </td>
+          <td>Exclude too large</td>
+          <td><input type="checkbox" name="excludetoolarge" value="true" /></td>
         </tr>
       </tbody>
     </table>
