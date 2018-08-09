@@ -154,7 +154,7 @@ class _StationRequestOptions(RequestOptions):
 			for ro in self.streams:
 				# station code
 				if ro.channel and (not ro.channel.matchSta(sta.code()) or \
-						   not ro.channel.matchNet(net.code())):
+				                   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -488,7 +488,9 @@ class FDSNStation(resource.Resource):
 				# at least one matching station is required
 				stationFound = False
 				for sta in ro.stationIter(net, False):
-					if self._matchStation(net, sta, ro, dac):
+					if req._disconnected: return False
+					if self._matchStation(net, sta, ro, dac) and \
+					   not (skipRestricted and utils.isRestricted(sta)):
 						stationFound = True
 						break
 				if not stationFound: continue
@@ -510,7 +512,9 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations
 				for sta in ro.stationIter(net, True):
-					if not self._matchStation(net, sta, ro, dac): continue
+					if req._disconnected: return False
+					if not self._matchStation(net, sta, ro, dac) or \
+					   (skipRestricted and utils.isRestricted(sta)): continue
 
 					try: lat = str(sta.latitude())
 					except ValueError: lat = ''
@@ -527,7 +531,7 @@ class FDSNStation(resource.Resource):
 					                  net.code(), sta.code(), lat, lon, elev,
 					                  desc, start, end)))
 
-		# level = channel|response
+		# level = channel (resonse level not supported in text format)
 		else:
 			data = "#Network|Station|Location|Channel|Latitude|Longitude|" \
 			       "Elevation|Depth|Azimuth|Dip|SensorDescription|Scale|" \
@@ -539,6 +543,8 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations, locations, streams
 				for sta in ro.stationIter(net, False):
+					if req._disconnected: return False
+					if skipRestricted and utils.isRestricted(sta): continue
 					for loc in ro.locationIter(net, sta, True):
 						for stream in ro.streamIter(net, sta, loc, True, dac):
 							if skipRestricted and utils.isRestricted(stream): continue
