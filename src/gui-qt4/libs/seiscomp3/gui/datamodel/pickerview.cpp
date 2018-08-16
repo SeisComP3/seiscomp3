@@ -44,6 +44,7 @@
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
+#include <algorithm>
 #include <numeric>
 #include <fstream>
 #include <limits>
@@ -1291,7 +1292,9 @@ Stream* findStream(Station *station, const Seiscomp::Core::Time &time,
 
 			// Unable to retrieve the unit enumeration from string
 			//if ( !unit.fromString(sensor->unit().c_str()) ) continue;
-			if ( !unit.fromString(stream->gainUnit().c_str()) ) continue;
+			std::string gainUnit = stream->gainUnit();
+			std::transform(gainUnit.begin(), gainUnit.end(), gainUnit.begin(), ::toupper);
+			if ( !unit.fromString(gainUnit.c_str()) ) continue;
 			if ( unit != requestedUnit ) continue;
 
 			return stream;
