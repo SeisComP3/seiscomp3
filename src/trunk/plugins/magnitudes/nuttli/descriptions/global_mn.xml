@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="MN">
+		<extends>global</extends>
+		<description>
+		The MN plugin is designed to compute the Canadian Nuttli magnitude
+		according to the Geological Survey of Canada.
+		</description>
+		<configuration>
+			<group name="amplitudes">
+				<group name="MN">
+					<parameter name="velocityModel" type="string" default="iasp91">
+						<description>
+						The travel time table set compiled for LocSAT. The tables
+						are located in &quot;share/locsat/tables/[vmodel].*&quot;.
+						</description>
+					</parameter>
+					<parameter name="rms" type="boolean" default="false">
+						<description>
+						Whether to use RMS ratio of signal and noise window for
+						SNR computation or the ration of the peak-trough
+						amplitudes of either window.
+						</description>
+					</parameter>
+					<parameter name="filter" type="string">
+						<description>
+						A filter to be applied prio to amplitude measuring. By
+						default no filter is being used.
+						</description>
+					</parameter>
+					<parameter name="Vmin" type="double" default="3.2" unit="km/s">
+						<description>
+						The minimum phase velocity used to determine the signal
+						window end.
+						</description>
+					</parameter>
+					<parameter name="Vmax" type="double" default="3.6" unit="km/s">
+						<description>
+						The maximum phase velocity used to determine the signal
+						window start.
+						</description>
+					</parameter>
+					<parameter name="snrWindowSeconds" type="double" default="10" unit="s">
+						<description>
+						The length of the SNR window.
+						</description>
+					</parameter>
+					<parameter name="noiseWindowPreSeconds" type="double" default="0" unit="s">
+						<description>
+						The offset of the noise window. A positive value will move
+						the computed noise window to the left on the time axis,
+						a negative value will move it to the right on the time axis.
+						</description>
+					</parameter>
+					<parameter name="signalStartPriorities" type="list:string" default="Lg,Sg,Sn,S,Vmax">
+						<description>
+						The priority list of phase onsets to compute the signal
+						start window. Except for Vmin and Vmax, associated phases
+						(arrivals) must be present in the origin for this
+						particular phase. Picked phases are only considered if
+						the origin is a manual origin or the pick is a
+						manual pick. The first value in the list which can be
+						retrieved or computed, is selected.
+
+						Allowed tokens: Pg, Pn, P, Sg, Sn, S, Lg, Rg, Vmin, Vmax
+						</description>
+					</parameter>
+					<parameter name="signalEndPriorities" type="list:string" default="Rg,Vmin">
+						<description>
+						The priority list of phase onsets to compute the signal
+						end window. Except for Vmin and Vmax, associated phases
+						(arrivals) must be present in the origin for this
+						particular phase. Picked phases are only considered if
+						the origin is a manual origin or the pick is a
+						manual pick. The first value in the list which can be
+						retrieved or computed, is selected.
+
+						Allowed tokens: Pg, Pn, P, Sg, Sn, S, Lg, Rg, Vmin, Vmax
+						</description>
+					</parameter>
+				</group>
+			</group>
+			<group name="magnitudes">
+				<group name="MN">
+					<parameter name="region" type="path">
+						<description>
+						The path to the BNA file which defines the valid region
+						for the MN magnitude. Note that the entire path from
+						source to receiver must lie entirely within the polygon(s).
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+	<binding name="MN" module="global">
+		<description>
+		</description>
+		<configuration>
+			<group name="amplitudes">
+				<group name="MN">
+					<parameter name="filter" type="string">
+						<description>
+						The configurable filter such that the V measurement is
+						made on a filtered trace. By default, filtering is not
+						enabled.
+
+						See https://docs.gempa.de/seiscomp3/current/base/filter-grammar.html
+						for how to specify the filter.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

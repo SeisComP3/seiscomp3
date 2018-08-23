@@ -1,0 +1,20 @@
+SUBDIRS(test)
+
+SET(PLUGIN_TARGET nuttli)
+
+SET(
+	PLUGIN_SOURCES
+		amplitude.cpp
+		magnitude.cpp
+		plugin.cpp
+		regions.cpp
+)
+
+SC_ADD_PLUGIN_LIBRARY(PLUGIN ${PLUGIN_TARGET} "")
+SC_LINK_LIBRARIES_INTERNAL(${PLUGIN_TARGET} client)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})
+
+SET(PLUGIN_MN_DATA data/MN.bna)
+SC_INSTALL_DATA(PLUGIN_MN "magnitudes/MN")
