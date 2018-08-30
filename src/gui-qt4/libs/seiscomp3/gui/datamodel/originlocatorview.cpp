@@ -6280,9 +6280,12 @@ void OriginLocatorView::renameArrivals() {
 
 	if ( _currentOrigin == NULL ) return;
 
-
 	OriginPtr origin = Origin::Create();
 	*origin = *_currentOrigin;
+
+	phases.clear();
+	foreach ( QListWidgetItem *item, sourceItems )
+		phases.insert(item->text());
 
 	for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
 		Arrival *arr = _currentOrigin->arrival(i);

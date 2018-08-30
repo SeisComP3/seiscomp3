@@ -49,6 +49,7 @@
 
   * Fix arrival used flags evaluation. This resulted in activated arrivals in
     the various plots event if they were not used.
+  * Fix rename phases command when only a subset of source phases is selected
 
 * scautoloc
 
