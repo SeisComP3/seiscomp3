@@ -721,23 +721,6 @@ def arrivalToFlags(arrival):
 def flagsToArrival(arrival, flags):
     """flagsToArrival(Arrival arrival, int flags)"""
     return _Seismology.flagsToArrival(arrival, flags)
-LP_NUM_DEG_FREEDOM = _Seismology.LP_NUM_DEG_FREEDOM
-LP_EST_STD_ERROR = _Seismology.LP_EST_STD_ERROR
-LP_CONF_LEVEL = _Seismology.LP_CONF_LEVEL
-LP_DAMPING = _Seismology.LP_DAMPING
-LP_MAX_ITERATIONS = _Seismology.LP_MAX_ITERATIONS
-LP_FIX_DEPTH = _Seismology.LP_FIX_DEPTH
-LP_FIXING_DEPTH = _Seismology.LP_FIXING_DEPTH
-LP_LAT_INIT = _Seismology.LP_LAT_INIT
-LP_LONG_INIT = _Seismology.LP_LONG_INIT
-LP_DEPTH_INIT = _Seismology.LP_DEPTH_INIT
-LP_USE_LOCATION = _Seismology.LP_USE_LOCATION
-LP_VERBOSE = _Seismology.LP_VERBOSE
-LP_COR_LEVEL = _Seismology.LP_COR_LEVEL
-LP_OUT_FILENAME = _Seismology.LP_OUT_FILENAME
-LP_PREFIX = _Seismology.LP_PREFIX
-LP_MIN_ARRIVAL_WEIGHT = _Seismology.LP_MIN_ARRIVAL_WEIGHT
-LP_RMS_AS_TIME_ERROR = _Seismology.LP_RMS_AS_TIME_ERROR
 class LocSATErrorEllipsoid(_object):
     """Proxy of C++ Seiscomp::LocSATErrorEllipsoid class."""
 
