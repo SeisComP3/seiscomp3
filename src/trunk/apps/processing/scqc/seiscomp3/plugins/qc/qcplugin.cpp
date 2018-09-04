@@ -296,29 +296,30 @@ void QcPlugin::update() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcPlugin::sendMessages(Core::Time &rectime) {
-_timer.restart();
+	_timer.restart();
 
-	if (_firstRecord) {
+	if ( _firstRecord ) {
 		_lastArchiveTime = rectime;
 		_lastReportTime = rectime;
 		_lastAlertTime = rectime;
 		_firstRecord = false;
 	}
 
-	if (_qcBuffer->empty()) 
+	if ( _qcBuffer->empty() )
 		return;
 
 	//! DEBUG
-	if (rectime == Core::Time()) {
+	if ( rectime == Core::Time() ) {
 		try {
 			SEISCOMP_DEBUG("%s: %d sec timeout reached for stream: %s.", _name.c_str(),  _qcConfig->reportTimeout(), _streamID.c_str());
-		} catch (QcConfigException) {}
+		}
+		catch ( QcConfigException ) {}
 	}
 
 	Core::TimeSpan diff;
 
 	//! A R C H I V E
-	if (_qcConfig->archiveInterval() >= 0 && rectime != Core::Time()) {
+	if ( _qcConfig->archiveInterval() >= 0 && rectime != Core::Time() ) {
 		diff = rectime - _lastArchiveTime;
 		if ( diff > Core::TimeSpan(_qcConfig->archiveInterval()) || _app->exitRequested() ) {
 			QcBufferCPtr archiveBuffer = _qcBuffer->qcParameter(_qcConfig->archiveBuffer());
@@ -329,7 +330,7 @@ _timer.restart();
 	}
 
 	//! R E P O R T
-	if (_qcConfig->reportInterval() >= 0) {
+	if ( _qcConfig->reportInterval() >= 0 ) {
 		diff = rectime - _lastReportTime;
 		if ( diff > Core::TimeSpan(_qcConfig->reportInterval()) || rectime == Core::Time()) {
 			QcBufferCPtr reportBuffer = _qcBuffer->qcParameter(_qcConfig->reportBuffer());
@@ -341,7 +342,7 @@ _timer.restart();
 	
 	//! A L E R T
 	// in archive mode we don't want alert msg
-	if (!_app->archiveMode() && _qcConfig->alertInterval() >= 0) {
+	if ( !_app->archiveMode() && _qcConfig->alertInterval() >= 0 ) {
 		diff = rectime - _lastAlertTime;
 		if ( ( diff > Core::TimeSpan(_qcConfig->alertInterval()) && (int)_qcBuffer->length() >= _qcConfig->alertBuffer() ) || rectime == Core::Time()) {
 			QcBufferCPtr alertBuffer = _qcBuffer->qcParameter(_qcConfig->alertBuffer());
@@ -351,7 +352,6 @@ _timer.restart();
 			_lastAlertTime = rectime;
 		}
 	}
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

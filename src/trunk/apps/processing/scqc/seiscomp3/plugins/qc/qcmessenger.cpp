@@ -106,11 +106,11 @@ bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation 
 		if ( operation == OP_UNDEFINED ) {
 			QcIndex idx = toIndex(obj);
 			if ( _qcIndex.find(idx) ) {
-				cerr << _qcIndex.size() << "   found QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
+				//cerr << _qcIndex.size() << "   found QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
 				operation = OP_UPDATE;
 			}
 			else {
-				cerr << _qcIndex.size() << "   did not find QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
+				//cerr << _qcIndex.size() << "   did not find QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
 				operation = OP_ADD;
 				_qcIndex.insert(idx);
 			}
