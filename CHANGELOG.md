@@ -7,6 +7,11 @@
   * Fixed duplicate object bug which caused many error log messages in
     scmaster.log with respect to database insertions
 
+* scart
+
+  * Change default archive path from $SEISCOMP_ROOT/acquisition/archive to
+    $SEISCOMP_ROOT/var/lib/archive. Thanks to Sergio Tardioli.
+
 ## Release 2017.334 patch5
 
 * scart

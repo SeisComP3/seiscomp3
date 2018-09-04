@@ -522,7 +522,7 @@ if files:
   archiveDirectory = files[0]
 else:
   try:
-    archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/acquisition/archive"
+    archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/var/lib/archive"
   except: pass
 
 try:
