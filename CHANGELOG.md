@@ -2,6 +2,23 @@
 
 ## Release YYYY.ddd
 
+* trunk
+
+  * Removed LocSAT unused configuration option to use the location rms as
+    time error
+  * Added LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
+    which can be configured via the configuration files or during runtime in
+    the scolv locator setup dialog. The latter defaults to false to preserve
+    the old behaviour
+  * Add ConfigSyncMessage which wraps a database configuration synchronization
+
+* scwfparam
+
+  * Fix wrong handling of data acquisition timeouts when no data is received
+    within one second
+  * Compare inventory gain.unit ignoring the case to detect velocity and
+    acceleration channels correctly
+
 * scqc
 
   * Fixed duplicate object bug which caused many error log messages in
@@ -16,6 +33,12 @@
 
   * Allow to configure preferred event types which will be displayed first
     in the event type drop-down list
+  * Fix rename phases command when only a subset of source phases is selected
+
+* fdsnws
+
+  * Add FocalMechanism support in event query
+  * Add support for cross-referenced preferred magnitude in event query
 
 ## Release 2017.334 patch5
 
@@ -31,8 +54,6 @@
     than a relative time
   * Add sh2proc script which converts Seismic Handler event files to
     EventParameters
-  * Add FocalMechanism support in FDSNWS event query
-  * Add support for cross-referenced preferred magnitude in FDSNWS event query
 
 * Seedlink
 
@@ -42,6 +63,7 @@
   * Enable modbus support in serial plugin
 
 * Arclink
+
   * Fix crash of Python components when inventory comments are used
   * Fix re-generation of empty or conflicting publicIDs
 
@@ -66,7 +88,6 @@
 
   * Fix arrival used flags evaluation. This resulted in activated arrivals in
     the various plots event if they were not used.
-  * Fix rename phases command when only a subset of source phases is selected
 
 * scautoloc
 
