@@ -44,28 +44,6 @@ class Loc;
 }
 
 
-enum LocSATParams {
-	LP_NUM_DEG_FREEDOM,     /* 9999    - number of degrees of freedom    */
-	LP_EST_STD_ERROR,       /* 1.0     - estimate of data std error      */
-	LP_CONF_LEVEL,          /* 0.9     - confidence level    		     */
-	LP_DAMPING,             /* -1.0    - damping (-1.0 means no damping) */
-	LP_MAX_ITERATIONS,      /* 20      - limit iterations to convergence */
-	LP_FIX_DEPTH,           /* true    - use fixed depth ?               */
-	LP_FIXING_DEPTH,        /* 0.0     - fixing depth value              */
-	LP_LAT_INIT,            /* modifiable - initial latitude             */
-	LP_LONG_INIT,           /* modifiable - initial longitude            */
-	LP_DEPTH_INIT,          /* modifiable - initial depth                */
-	LP_USE_LOCATION,        /* true    - use current origin data ?       */
-	LP_VERBOSE,             /* true    - verbose output of data ?        */
-	LP_COR_LEVEL,           /* 0       - correction table level          */
-	LP_OUT_FILENAME,        /* NULL    - name of file to print data      */
-	LP_PREFIX,              /* NULL    - dir name & prefix of tt tables  */
-	LP_MIN_ARRIVAL_WEIGHT,  /*  0.5    - if arr-weight = less than this, locsat will ignore this arrival */
-	LP_RMS_AS_TIME_ERROR    /* true    - locate in two passes and use the arrival RMS
-	                                     as time error in the second pass */
-};
-
-
 struct SC_SYSTEM_CORE_API LocSATErrorEllipsoid {
 	LocSATErrorEllipsoid() {
 		sxx=syy=szz=stt=sxy=sxz=syz=stx=sty=stz=sdobs=smajax=sminax=strike=sdepth=stime=conf=0.;
@@ -134,7 +112,6 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		std::string getLocatorParams(int param) const;
 		void setDefaultLocatorParams();
 
-		DataModel::Origin* relocate(const DataModel::Origin* origin, double timeError);
 		bool loadArrivals(const DataModel::Origin* origin, double timeError);
 		DataModel::Origin* fromPicks(PickList& pickList);
 		DataModel::Origin* loc2Origin(Internal::Loc* loc);
@@ -157,7 +134,8 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		Internal::LocSAT         *_locateEvent;
 		Internal::Locator_params *_locator_params;
 		double                    _minArrivalWeight;
-		bool                      _useArrivalRMSAsTimeError;
+		double                    _defaultPickUncertainty;
+		bool                      _usePickUncertainties;
 
 		bool                      _enableDebugOutput;
 

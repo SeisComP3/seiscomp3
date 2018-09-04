@@ -91,12 +91,12 @@ Loc* LocSAT::doLocation() {
 	// libloc/rdcor.h:14
 	// libloc/solve_via_svd_.c:122
 	//! -------------------------------------------------------
-	if( (_num_sta > 9999) || (_num_obs > 9999))
+	if( (_num_sta > 9999) || (_num_obs > 9999) )
 		throw LocatorException("error: Too many picks/stations [9999] - Please raise limits within pre-f2c locsat code!");
 
-	int ierr = locate_event (NULL, _sites, _num_sta, _arrival, _assoc,
-		 _origin, _origerr, _locator_params, _locator_errors,
-		 _num_obs);
+	int ierr = locate_event(NULL, _sites, _num_sta, _arrival, _assoc,
+	                        _origin, _origerr, _locator_params,
+	                        _locator_errors, _num_obs);
 
 	//std::cerr << "ierr = locate_event: " <<  ierr << std::endl;
 
