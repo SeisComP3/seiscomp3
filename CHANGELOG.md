@@ -2,6 +2,13 @@
 
 ## Release YYYY.ddd
 
+* scqc
+
+  * Fixed duplicate object bug which caused many error log messages in
+    scmaster.log with respect to database insertions
+
+## Release 2017.334 patch5
+
 * scart
 
   * Support loading of plugins via scart.cfg

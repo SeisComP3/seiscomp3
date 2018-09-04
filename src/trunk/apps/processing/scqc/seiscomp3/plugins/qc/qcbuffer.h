@@ -38,7 +38,7 @@ class SC_QCPLUGIN_API QcBuffer : public Core::BaseObject, public BufferBase {
 		
 		mutable Core::Time lastEvalTime;
 
- 		void push_back(const QcParameter* qcp);
+		void push_back(const QcParameter* qcp);
 
 		const QcParameter* qcParameter(const Core::Time& time) const;
 		const QcBuffer* qcParameter(const Core::Time& startTime, const Core::Time& endTime) const;

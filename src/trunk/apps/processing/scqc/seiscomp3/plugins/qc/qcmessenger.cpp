@@ -45,38 +45,41 @@ const char *const myGroup = "Qc";
 const char *const myPackage = "QualityControl";
 
 
-//! converts Object's Index to String
-// poorly conceived, this ... looking for a more general solution.
-std::string i2s (DataModel::Object* obj) {
-	std::string index = "";
-	if (!obj) return index;
+namespace {
 
-	DataModel::WaveformQuality* wfq = DataModel::WaveformQuality::Cast(obj);
-	if (wfq) {
-		const WaveformQualityIndex& ix = wfq->index();
-		index = ix.start.iso()+
-				ix.waveformID.networkCode()+
-				ix.waveformID.stationCode()+
-				ix.waveformID.locationCode()+
-				ix.waveformID.channelCode()+
-				ix.type+
-				ix.parameter;
+//! converts object to QcIndex
+// poorly conceived, this ... looking for a more general solution.
+QcIndex toIndex(const DataModel::Object *obj) {
+	QcIndex index;
+	if ( obj == NULL ) return index;
+
+	const DataModel::WaveformQuality *wfq = DataModel::WaveformQuality::ConstCast(obj);
+	if ( wfq ) {
+		const WaveformQualityIndex &idx = wfq->index();
+		return QcIndex(idx.waveformID.networkCode() + "." +
+		               idx.waveformID.stationCode() + "." +
+		               idx.waveformID.locationCode() +"." +
+		               idx.waveformID.channelCode() + "-" +
+		               idx.type + "-" +
+		               idx.parameter,
+		               wfq->start());
 	}
 
-	DataModel::Outage* outage = DataModel::Outage::Cast(obj);
+	const DataModel::Outage *outage = DataModel::Outage::ConstCast(obj);
 	if (outage) {
-		const OutageIndex& ix = outage->index();
-		index = ix.start.iso()+
-				ix.waveformID.networkCode()+
-				ix.waveformID.stationCode()+
-				ix.waveformID.locationCode()+
-				ix.waveformID.channelCode();
+		const OutageIndex& idx = outage->index();
+		return QcIndex(idx.waveformID.networkCode() + "." +
+		               idx.waveformID.stationCode() + "." +
+		               idx.waveformID.locationCode() + "." +
+		               idx.waveformID.channelCode(),
+		               outage->start());
 	}
 
 	return index;
 }
 
 
+}
 
 
 IMPLEMENT_SC_CLASS(QcMessenger, "QcMessenger");
@@ -99,15 +102,17 @@ QcMessenger::QcMessenger(const QcApp* app)
 //! attach object to message and schedule sending
 bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation operation) {
 	//! send notifier msg
-	if (notifier) {
-		if (operation == OP_UNDEFINED) {
-			if (_qcIndex.find(i2s(obj))) {
-				cerr << _qcIndex.size() << "   found QcIndex: " << i2s(obj) << endl; //! DEBUG
+	if ( notifier ) {
+		if ( operation == OP_UNDEFINED ) {
+			QcIndex idx = toIndex(obj);
+			if ( _qcIndex.find(idx) ) {
+				cerr << _qcIndex.size() << "   found QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
 				operation = OP_UPDATE;
 			}
 			else {
+				cerr << _qcIndex.size() << "   did not find QcIndex: " << idx.key << "-" << idx.startTime.iso() << endl; //! DEBUG
 				operation = OP_ADD;
-				_qcIndex.insert(i2s(obj));
+				_qcIndex.insert(idx);
 			}
 		}
 
