@@ -734,6 +734,8 @@ bool WFParam::init() {
 	if ( !Application::init() )
 		return false;
 
+	closeStream();
+
 	// Construct stream firewall
 	for ( size_t i = 0; i < _config.streamsWhiteList.size(); ++i ) {
 		Core::trim(_config.streamsWhiteList[i]);
@@ -1001,12 +1003,14 @@ void WFParam::handleTimeout() {
 	}
 
 	// Check acquisition timeout
-	if ( recordStream() && _acquisitionTimeout > 0 && !_receivedRecords ) {
-		if ( _acquisitionTimer.elapsed().seconds() >= _acquisitionTimeout )
+	if ( recordStream() && _acquisitionTimeout > 0 ) {
+		if ( _noDataTimer.elapsed().seconds() >= _acquisitionTimeout ) {
+			SEISCOMP_INFO("Data acquisition timeout: %d >= %d",
+			              (int)_noDataTimer.elapsed().seconds(),
+			              (int)_acquisitionTimeout);
 			recordStream()->close();
+		}
 	}
-
-	_receivedRecords = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1564,7 +1568,6 @@ void WFParam::process(Origin *origin) {
 	}
 
 	//_currentProcess->results.clear();
-	_acquisitionTimer.restart();
 
 	if ( _processors.empty() ) {
 		_report << " + No processors added" << endl;
@@ -1591,8 +1594,8 @@ void WFParam::process(Origin *origin) {
 	}
 
 	_firstRecord = true;
+	_acquisitionTimer.restart();
 	_noDataTimer.restart();
-	_receivedRecords = false;
 	_acquisitionTimeout = _config.initialAcquisitionTimeout;
 	if ( _acquisitionTimeout > 0 )
 		SEISCOMP_INFO("set stream timeout to %d seconds", _acquisitionTimeout);
@@ -1959,7 +1962,6 @@ bool WFParam::storeRecord(Record *rec) {
 			              _config.runningAcquisitionTimeout);
 
 			_acquisitionTimeout = _config.runningAcquisitionTimeout;
-			_noDataTimer.restart();
 		}
 
 		_firstRecord = false;
@@ -1974,9 +1976,9 @@ bool WFParam::storeRecord(Record *rec) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void WFParam::handleRecord(Record *rec) {
-	_receivedRecords = true;
-
 	RecordPtr tmp(rec);
+
+	_noDataTimer.restart();
 
 	if ( _config.dumpRecords ) {
 		if ( rec->raw() ) {
