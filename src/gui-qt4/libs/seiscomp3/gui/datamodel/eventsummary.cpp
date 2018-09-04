@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #include <seiscomp3/gui/datamodel/eventsummary.h>
 
 #include <seiscomp3/core/system.h>

@@ -12,6 +12,11 @@
   * Change default archive path from $SEISCOMP_ROOT/acquisition/archive to
     $SEISCOMP_ROOT/var/lib/archive. Thanks to Sergio Tardioli.
 
+* scolv
+
+  * Allow to configure preferred event types which will be displayed first
+    in the event type drop-down list
+
 ## Release 2017.334 patch5
 
 * scart

@@ -11,8 +11,9 @@
  ***************************************************************************/
 
 
+#define SEISCOMP_COMPONENT EventEdit
 
-
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/gui/datamodel/eventedit.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 #include <seiscomp3/gui/datamodel/publicobjectevaluator.h>
@@ -908,12 +909,50 @@ void EventEdit::init() {
 			_fmTableHeader << EFMListColumnsNames::name(i);
 	}
 
+	// Custom event types
+	try {
+		vector<string> eventTypes = SCApp->configGetStrings("olv.eventTypes");
+		for (  size_t i = 0; i < eventTypes.size(); ++i ) {
+			DataModel::EventType type;
+			if ( !type.fromString(eventTypes[i].c_str()) ) {
+				SEISCOMP_WARNING("olv.eventTypes: invalid type, ignoring: %s",
+				                 eventTypes[i].c_str());
+			}
+			else
+				_eventTypesWhitelist.append(type);
+		}
+	}
+	catch ( ... ) {}
+
 	_ui.comboTypes->addItem("- unset -");
-	for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
-		if ( (EventType::Type)i == NOT_EXISTING )
-			_ui.comboTypes->insertItem(1, EventType::NameDispatcher::name(i));
-		else
+
+	if ( _eventTypesWhitelist.isEmpty() ) {
+		for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
+			if ( (EventType::Type)i == NOT_EXISTING )
+				_ui.comboTypes->insertItem(1, EventType::NameDispatcher::name(i));
+			else
+				_ui.comboTypes->addItem(EventType::NameDispatcher::name(i));
+		}
+	}
+	else {
+		bool usedFlags[DataModel::EventType::Quantity];
+		for ( int i = 0; i < DataModel::EventType::Quantity; ++i )
+			usedFlags[i] = false;
+
+		for ( int i = 0; i < _eventTypesWhitelist.count(); ++i ) {
+			if ( usedFlags[i] ) continue;
+			_ui.comboTypes->addItem(_eventTypesWhitelist[i].toString());
+			usedFlags[i] = true;
+		}
+
+		QColor reducedColor;
+		reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 50);
+
+		for ( int i = 0; i < DataModel::EventType::Quantity; ++i ) {
+			if ( usedFlags[i] ) continue;
 			_ui.comboTypes->addItem(EventType::NameDispatcher::name(i));
+			_ui.comboTypes->setItemData(_ui.comboTypes->count()-1, reducedColor, Qt::ForegroundRole);
+		}
 	}
 
 	_ui.comboTypeCertainties->addItem("- unset -");

@@ -303,13 +303,52 @@ class CommitOptions : public QDialog {
 		: QDialog(parent, f) {
 			ui.setupUi(this);
 
+			QList<DataModel::EventType> eventTypesWhitelist;
+
+			try {
+				vector<string> eventTypes = SCApp->configGetStrings("olv.eventTypes");
+				for (  size_t i = 0; i < eventTypes.size(); ++i ) {
+					DataModel::EventType type;
+					if ( !type.fromString(eventTypes[i].c_str()) ) {
+						SEISCOMP_WARNING("olv.eventTypes: invalid type, ignoring: %s",
+						                 eventTypes[i].c_str());
+					}
+					else
+						eventTypesWhitelist.append(type);
+				}
+			}
+			catch ( ... ) {}
+
 			// Fill event types
 			ui.comboEventTypes->addItem("- unset -");
-			for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
-				if ( (EventType::Type)i == NOT_EXISTING )
-					ui.comboEventTypes->insertItem(1, EventType::NameDispatcher::name(i));
-				else
+
+			if ( eventTypesWhitelist.isEmpty() ) {
+				for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
+					if ( (EventType::Type)i == NOT_EXISTING )
+						ui.comboEventTypes->insertItem(1, EventType::NameDispatcher::name(i));
+					else
+						ui.comboEventTypes->addItem(EventType::NameDispatcher::name(i));
+				}
+			}
+			else {
+				bool usedFlags[DataModel::EventType::Quantity];
+				for ( int i = 0; i < DataModel::EventType::Quantity; ++i )
+					usedFlags[i] = false;
+
+				for ( int i = 0; i < eventTypesWhitelist.count(); ++i ) {
+					if ( usedFlags[i] ) continue;
+					ui.comboEventTypes->addItem(eventTypesWhitelist[i].toString());
+					usedFlags[i] = true;
+				}
+
+				QColor reducedColor;
+				reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 50);
+
+				for ( int i = 0; i < DataModel::EventType::Quantity; ++i ) {
+					if ( usedFlags[i] ) continue;
 					ui.comboEventTypes->addItem(EventType::NameDispatcher::name(i));
+					ui.comboEventTypes->setItemData(ui.comboEventTypes->count()-1, reducedColor, Qt::ForegroundRole);
+				}
 			}
 
 			EventType defaultType = EARTHQUAKE;

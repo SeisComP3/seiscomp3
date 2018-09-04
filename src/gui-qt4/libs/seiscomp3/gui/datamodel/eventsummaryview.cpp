@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #define SEISCOMP_COMPONENT EventSummaryView
 
 #include "eventsummaryview.h"

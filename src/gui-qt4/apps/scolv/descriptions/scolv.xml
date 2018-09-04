@@ -53,6 +53,13 @@
 					is used. The origin or its source must be associated with an event already.
 					</description>
 				</parameter>
+				<parameter name="eventTypes" type="list:string">
+					<description>
+					A list of event types which are allowed to be assigned to an event.
+					The order is preserved in the event editor as well as in the drop-down
+					list of the &quot;Commit with additional options&quot; dialog.
+					</description>
+				</parameter>
 				<parameter name="defaultMagnitudeAggregation" type="string">
 					<description>
 					Sets the default magnitude aggregation method. It can be either &quot;mean&quot;,
