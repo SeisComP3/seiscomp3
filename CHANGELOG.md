@@ -12,6 +12,11 @@
     the old behaviour
   * Add ConfigSyncMessage which wraps a database configuration synchronization
 
+* GUI
+
+  * Fixed event list "Hide events outside region" edit dialog: OK and Cancel
+    did not work
+
 * scwfparam
 
   * Fix wrong handling of data acquisition timeouts when no data is received
