@@ -18134,6 +18134,41 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SchemaDefinitions_reload(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::SchemaDefinitions *arg1 = (Seiscomp::System::SchemaDefinitions *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaDefinitions_reload",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaDefinitions, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaDefinitions_reload" "', argument " "1"" of type '" "Seiscomp::System::SchemaDefinitions *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::SchemaDefinitions * >(argp1);
+  {
+    try {
+      result = (bool)(arg1)->reload();
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_SchemaDefinitions(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::SchemaDefinitions *arg1 = (Seiscomp::System::SchemaDefinitions *) 0 ;
@@ -29018,6 +29053,41 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model_recreate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Model_recreate",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_recreate" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
+  {
+    try {
+      result = (bool)(arg1)->recreate();
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model_readConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
@@ -29220,38 +29290,47 @@ fail:
 SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
-  int arg2 ;
-  Seiscomp::System::ConfigDelegate *arg3 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  bool arg2 ;
+  int arg3 ;
+  Seiscomp::System::ConfigDelegate *arg4 = (Seiscomp::System::ConfigDelegate *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  bool val2 ;
   int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:Model_writeConfig",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Model_writeConfig",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "bool""'");
   } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  arg2 = static_cast< bool >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Model_writeConfig" "', argument " "4"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
   }
-  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp3);
+  arg4 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp4);
   {
     try {
-      result = (bool)(arg1)->writeConfig(arg2,arg3);
+      result = (bool)(arg1)->writeConfig(arg2,arg3,arg4);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -29273,29 +29352,38 @@ fail:
 SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
-  int arg2 ;
+  bool arg2 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  bool val2 ;
   int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Model_writeConfig",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Model_writeConfig",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "bool""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< bool >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
   {
     try {
-      result = (bool)(arg1)->writeConfig(arg2);
+      result = (bool)(arg1)->writeConfig(arg2,arg3);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -29317,20 +29405,29 @@ fail:
 SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
+  bool arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
   bool result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Model_writeConfig",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Model_writeConfig",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
   {
     try {
-      result = (bool)(arg1)->writeConfig();
+      result = (bool)(arg1)->writeConfig(arg2);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -29355,7 +29452,8 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(se
   Seiscomp::System::Module *arg2 = (Seiscomp::System::Module *) 0 ;
   std::string *arg3 = 0 ;
   int arg4 ;
-  Seiscomp::System::ConfigDelegate *arg5 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  bool arg5 ;
+  Seiscomp::System::ConfigDelegate *arg6 = (Seiscomp::System::ConfigDelegate *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -29363,8 +29461,94 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(se
   int res3 = SWIG_OLDOBJ ;
   int val4 ;
   int ecode4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:Model_writeConfig",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__Module, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "Seiscomp::System::Module *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::System::Module * >(argp2);
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Model_writeConfig" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Model_writeConfig" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "Model_writeConfig" "', argument " "6"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg6 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp6);
+  {
+    try {
+      result = (bool)(arg1)->writeConfig(arg2,(std::string const &)*arg3,arg4,arg5,arg6);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
+  Seiscomp::System::Module *arg2 = (Seiscomp::System::Module *) 0 ;
+  std::string *arg3 = 0 ;
+  int arg4 ;
+  bool arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  int val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -29399,11 +29583,11 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Model_writeConfig" "', argument " "4"" of type '" "int""'");
   } 
   arg4 = static_cast< int >(val4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Model_writeConfig" "', argument " "5"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
-  }
-  arg5 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp5);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Model_writeConfig" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
   {
     try {
       result = (bool)(arg1)->writeConfig(arg2,(std::string const &)*arg3,arg4,arg5);
@@ -29427,95 +29611,17 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
-  Seiscomp::System::Module *arg2 = (Seiscomp::System::Module *) 0 ;
-  std::string *arg3 = 0 ;
-  int arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 = SWIG_OLDOBJ ;
-  int val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:Model_writeConfig",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__Module, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "Seiscomp::System::Module *""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::System::Module * >(argp2);
-  {
-    std::string *ptr = (std::string *)0;
-    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Model_writeConfig" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  {
-    try {
-      result = (bool)(arg1)->writeConfig(arg2,(std::string const &)*arg3,arg4);
-    }
-    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[6] = {
+  PyObject *argv[7] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 6) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Model_writeConfig__SWIG_2(self, args);
-    }
   }
   if (argc == 2) {
     int _v;
@@ -29524,11 +29630,11 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_bool(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_Model_writeConfig__SWIG_1(self, args);
+        return _wrap_Model_writeConfig__SWIG_2(self, args);
       }
     }
   }
@@ -29539,15 +29645,16 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_int(argv[1], NULL);
+        int res = SWIG_AsVal_bool(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        void *vptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
-        _v = SWIG_CheckState(res);
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
         if (_v) {
-          return _wrap_Model_writeConfig__SWIG_0(self, args);
+          return _wrap_Model_writeConfig__SWIG_1(self, args);
         }
       }
     }
@@ -29558,19 +29665,21 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__System__Module, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
         _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
         if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+          _v = SWIG_CheckState(res);
           if (_v) {
-            return _wrap_Model_writeConfig__SWIG_4(self, args);
+            return _wrap_Model_writeConfig__SWIG_0(self, args);
           }
         }
       }
@@ -29594,11 +29703,47 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            void *vptr = 0;
-            int res = SWIG_ConvertPtr(argv[4], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
-            _v = SWIG_CheckState(res);
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
             if (_v) {
-              return _wrap_Model_writeConfig__SWIG_3(self, args);
+              return _wrap_Model_writeConfig__SWIG_4(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 6) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__System__Module, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              void *vptr = 0;
+              int res = SWIG_ConvertPtr(argv[5], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+              _v = SWIG_CheckState(res);
+              if (_v) {
+                return _wrap_Model_writeConfig__SWIG_3(self, args);
+              }
             }
           }
         }
@@ -29609,11 +29754,11 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model_writeConfig'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::System::Model::writeConfig(int,Seiscomp::System::ConfigDelegate *)\n"
-    "    Seiscomp::System::Model::writeConfig(int)\n"
-    "    Seiscomp::System::Model::writeConfig()\n"
-    "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int,Seiscomp::System::ConfigDelegate *)\n"
-    "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int)\n");
+    "    Seiscomp::System::Model::writeConfig(bool,int,Seiscomp::System::ConfigDelegate *)\n"
+    "    Seiscomp::System::Model::writeConfig(bool,int)\n"
+    "    Seiscomp::System::Model::writeConfig(bool)\n"
+    "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int,bool,Seiscomp::System::ConfigDelegate *)\n"
+    "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int,bool)\n");
   return 0;
 }
 
@@ -40089,6 +40234,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SchemaDefinitions_bindingsForModule", _wrap_SchemaDefinitions_bindingsForModule, METH_VARARGS, NULL},
 	 { (char *)"SchemaDefinitions_serialize", _wrap_SchemaDefinitions_serialize, METH_VARARGS, NULL},
 	 { (char *)"SchemaDefinitions_load", _wrap_SchemaDefinitions_load, METH_VARARGS, NULL},
+	 { (char *)"SchemaDefinitions_reload", _wrap_SchemaDefinitions_reload, METH_VARARGS, NULL},
 	 { (char *)"delete_SchemaDefinitions", _wrap_delete_SchemaDefinitions, METH_VARARGS, NULL},
 	 { (char *)"SchemaDefinitions_swigregister", SchemaDefinitions_swigregister, METH_VARARGS, NULL},
 	 { (char *)"SchemaVisitor_swigregister", SchemaVisitor_swigregister, METH_VARARGS, NULL},
@@ -40347,6 +40493,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model_typeInfo", _wrap_Model_typeInfo, METH_VARARGS, NULL},
 	 { (char *)"new_Model", _wrap_new_Model, METH_VARARGS, NULL},
 	 { (char *)"Model_create", _wrap_Model_create, METH_VARARGS, NULL},
+	 { (char *)"Model_recreate", _wrap_Model_recreate, METH_VARARGS, NULL},
 	 { (char *)"Model_readConfig", _wrap_Model_readConfig, METH_VARARGS, NULL},
 	 { (char *)"Model_writeConfig", _wrap_Model_writeConfig, METH_VARARGS, NULL},
 	 { (char *)"Model_module", _wrap_Model_module, METH_VARARGS, NULL},

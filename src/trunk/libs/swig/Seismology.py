@@ -173,7 +173,7 @@ import IO
 import Math
 import Core
 import DataModel
-import Config
+import seiscomp3.Config
 class TravelTimeList_internal(_object):
     """Proxy of C++ std::list<(Seiscomp::TravelTime)> class."""
 

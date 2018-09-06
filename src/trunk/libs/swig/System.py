@@ -167,7 +167,7 @@ SwigPyIterator_swigregister = _System.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 import Core
-import Config
+import seiscomp3.Config
 class Environment(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Environment, name, value)
@@ -1180,6 +1180,9 @@ class SchemaDefinitions(Core.BaseObject):
 
     def load(self, path):
         return _System.SchemaDefinitions_load(self, path)
+
+    def reload(self):
+        return _System.SchemaDefinitions_reload(self)
     __swig_destroy__ = _System.delete_SchemaDefinitions
     __del__ = lambda self: None
 SchemaDefinitions_swigregister = _System.SchemaDefinitions_swigregister
@@ -1197,13 +1200,13 @@ class SchemaVisitor(_object):
 SchemaVisitor_swigregister = _System.SchemaVisitor_swigregister
 SchemaVisitor_swigregister(SchemaVisitor)
 
-class ConfigDelegate(Config.Logger):
+class ConfigDelegate(seiscomp3.Config.Logger):
     __swig_setmethods__ = {}
-    for _s in [Config.Logger]:
+    for _s in [seiscomp3.Config.Logger]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ConfigDelegate, name, value)
     __swig_getmethods__ = {}
-    for _s in [Config.Logger]:
+    for _s in [seiscomp3.Config.Logger]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ConfigDelegate, name)
     __repr__ = _swig_repr
@@ -2133,6 +2136,9 @@ class Model(Core.BaseObject):
 
     def create(self, arg2):
         return _System.Model_create(self, arg2)
+
+    def recreate(self):
+        return _System.Model_recreate(self)
 
     def readConfig(self, *args):
         return _System.Model_readConfig(self, *args)

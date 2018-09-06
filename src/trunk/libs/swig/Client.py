@@ -167,7 +167,7 @@ SwigPyIterator_swigregister = _Client.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 import Logging
-import Config
+import seiscomp3.Config
 import Communication
 import Core
 import DataModel
