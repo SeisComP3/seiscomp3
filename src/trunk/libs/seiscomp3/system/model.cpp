@@ -516,7 +516,7 @@ void updateContainer(Container *c, int updateMaxStage) {
 
 bool write(const Parameter *param, const Section *sec, int stage,
            set<string> &symbols, ofstream &ofs, const std::string &filename,
-           bool withComment) {
+           bool withComment, bool multilineLists = false) {
 	if ( !param->symbols[stage] ) return true;
 
 	// Do nothing
@@ -546,11 +546,7 @@ bool write(const Parameter *param, const Section *sec, int stage,
 	}
 
 	ofs << param->variableName << " = ";
-	if ( param->symbols[stage]->symbol.content.empty() )
-		ofs << "\"\"";
-	else
-		ofs << param->symbols[stage]->symbol.content;
-	//Config::Config::writeValues(ofs, &param->symbols[stage]->symbol);
+	Config::Config::writeContent(ofs, &param->symbols[stage]->symbol, multilineLists);
 	ofs << endl;
 
 	symbols.insert(param->variableName);
@@ -561,22 +557,22 @@ bool write(const Parameter *param, const Section *sec, int stage,
 
 bool write(const Container *cont, const Section *sec, int stage,
            set<string> &symbols, ofstream &ofs, const std::string &filename,
-           bool withComment) {
+           bool withComment, bool multilineLists = false) {
 	for ( size_t p = 0; p < cont->parameters.size(); ++p ) {
 		if ( !write(cont->parameters[p].get(), sec, stage,
-		            symbols, ofs, filename, withComment) )
+		            symbols, ofs, filename, withComment, multilineLists) )
 			return false;
 	}
 
 	for ( size_t g = 0; g < cont->groups.size(); ++g ) {
 		if ( !write(cont->groups[g].get(), sec, stage,
-		            symbols, ofs, filename, withComment) )
+		            symbols, ofs, filename, withComment, multilineLists) )
 			return false;
 	}
 
 	for ( size_t s = 0; s < cont->structures.size(); ++s ) {
 		if ( !write(cont->structures[s].get(), sec, stage,
-		            symbols, ofs, filename, withComment) )
+		            symbols, ofs, filename, withComment, multilineLists) )
 			return false;
 	}
 
@@ -1829,6 +1825,14 @@ bool Model::create(SchemaDefinitions *schema) {
 }
 
 
+bool Model::recreate() {
+	if ( schema == NULL )
+		return false;
+
+	return create(schema);
+}
+
+
 Module *Model::create(SchemaDefinitions *schema, SchemaModule *def) {
 	if ( def == NULL ) return NULL;
 
@@ -2270,7 +2274,7 @@ bool Model::readConfig(int updateMaxStage, ConfigDelegate *delegate) {
 }
 
 
-bool Model::writeConfig(int stage, ConfigDelegate *delegate) {
+bool Model::writeConfig(bool multilineLists, int stage, ConfigDelegate *delegate) {
 	//---------------------------------------------------
 	// Save station key files
 	//---------------------------------------------------
@@ -2346,7 +2350,7 @@ bool Model::writeConfig(int stage, ConfigDelegate *delegate) {
 	for ( size_t i = 0; i < modules.size(); ++i ) {
 		Module *mod = modules[i].get();
 		string filename = configFileLocation(false, mod->definition->name, stage);
-		if ( !writeConfig(mod, filename, stage, delegate) )
+		if ( !writeConfig(mod, filename, stage, multilineLists, delegate) )
 			cerr << "[ERROR] writing " << filename << " failed" << endl;
 	}
 
@@ -2410,7 +2414,8 @@ bool Model::writeConfig(int stage, ConfigDelegate *delegate) {
 }
 
 
-bool Model::writeConfig(Module *mod, const std::string &filename, int stage, ConfigDelegate *delegate) {
+bool Model::writeConfig(Module *mod, const std::string &filename, int stage,
+                        bool multilineLists, ConfigDelegate *delegate) {
 	if ( delegate )
 		delegate->aboutToWrite(filename.c_str());
 
@@ -2531,7 +2536,7 @@ bool Model::writeConfig(Module *mod, const std::string &filename, int stage, Con
 		Section *sec = mod->sections[s].get();
 		Section *paramSection = sec;
 
-		if ( !write(sec, paramSection, stage, processedSymbols, ofs, filename, true) ) {
+		if ( !write(sec, paramSection, stage, processedSymbols, ofs, filename, true, multilineLists) ) {
 			if ( delegate )
 				delegate->hasWriteError(filename.c_str());
 			return false;
@@ -2540,7 +2545,7 @@ bool Model::writeConfig(Module *mod, const std::string &filename, int stage, Con
 
 	for ( size_t p = 0; p < mod->unknowns.size(); ++ p ) {
 		Parameter *param = mod->unknowns[p].get();
-		if ( !write(param, NULL, stage, processedSymbols, ofs, filename, true) ) {
+		if ( !write(param, NULL, stage, processedSymbols, ofs, filename, true, multilineLists) ) {
 			if ( delegate )
 				delegate->hasWriteError(filename.c_str());
 			return false;

@@ -441,6 +441,7 @@ class SC_SYSTEM_CORE_API SchemaDefinitions : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		bool load(const char *path);
+		bool reload();
 
 
 	// ------------------------------------------------------------------
@@ -450,6 +451,7 @@ class SC_SYSTEM_CORE_API SchemaDefinitions : public Core::BaseObject {
 		std::vector<SchemaModulePtr>  _modules;
 		std::vector<SchemaPluginPtr>  _plugins;
 		std::vector<SchemaBindingPtr> _bindings;
+		std::string                   _path;
 };
 
 

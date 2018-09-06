@@ -459,7 +459,7 @@ void ConfigConflictWidget::fixConflicts() {
 
 	for ( it = updateFiles.begin(); it != updateFiles.end(); ++it ) {
 		const UpdateFileItem &file = *it;
-		file.module->model->writeConfig(file.module, file.filename, file.stage);
+		file.module->model->writeConfig(file.module, file.filename, file.stage, true);
 	}
 }
 

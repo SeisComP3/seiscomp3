@@ -1663,6 +1663,9 @@ void Configurator::reload() {
 	bool errors = false;
 
 	if ( _model->model() ) {
+		_model->model()->schema->reload();
+		_model->model()->recreate();
+
 		QtConfigDelegate cd(&_settings);
 		_model->model()->readConfig(Environment::CS_USER_APP, &cd);
 		_model->setModel(_model->model(), _configurationStage);
@@ -1683,7 +1686,7 @@ void Configurator::reload() {
 
 void Configurator::save() {
 	QtConfigDelegate cd(&_settings);
-	_model->model()->writeConfig(_configurationStage, &cd);
+	_model->model()->writeConfig(true, _configurationStage, &cd);
 	_model->setModified(false);
 
 	if ( cd.hasErrors )
