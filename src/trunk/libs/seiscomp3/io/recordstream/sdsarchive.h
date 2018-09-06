@@ -41,9 +41,10 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	public:
 		SDSArchive();
 		SDSArchive(const std::string arcroot);
-		SDSArchive(const SDSArchive &arc);
 		virtual ~SDSArchive();
 
+	protected:
+		SDSArchive(const SDSArchive &arc);
 
 	// ----------------------------------------------------------------------
 	//  Operators
@@ -77,8 +78,6 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 
 		virtual Record *next();
 
-		std::string archiveRoot() const;
-
 
 	// ----------------------------------------------------------------------
 	//  Protected interface
@@ -97,14 +96,17 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
-		std::string                          _arcroot;
+		std::vector<std::string>             _arcroots;
+		std::vector<std::string>::const_iterator _rootiter;
 		Seiscomp::Core::Time                 _stime;
 		Seiscomp::Core::Time                 _etime;
 		std::set<StreamIdx>                  _streams;
 		std::set<StreamIdx>::const_iterator  _curiter;
 		StreamIdx const                     *_curidx;
-		std::queue<std::string>              _fnames;
+		std::deque<std::string>              _fnames;
 		std::fstream                         _recstream;
+		Record                              *_last;
+		std::string                          _currentfname;
 
 	friend class IsoFile;
 };
