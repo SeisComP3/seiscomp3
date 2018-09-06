@@ -79,7 +79,7 @@ C++ code is (or should be) written with the following code style:
 
    void foo(int a, int b) {
        for ( int i = 0; i < a; ++i ) {
-           if (i < b)
+           if (  i < b )
                bar(i);
            else {
                bar(i);
@@ -181,3 +181,18 @@ While designing methods or functions these rules about return values should be k
   This is not obligatory and should be used with care.
 
   **Example**: std::string myMethod();
+
+Exception specifications
+========================
+
+According to http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3051.html
+dynamic exception specificiations are considered or proposed as deprecated
+feature. Don't use them in declaring a function prototype.
+
+.. code-block:: c++
+
+   // Don't use that
+   int foo() throw(ValueException);
+
+   // Just declare it without an exception specification
+   int foo();
