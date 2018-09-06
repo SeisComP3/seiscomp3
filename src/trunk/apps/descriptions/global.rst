@@ -62,7 +62,7 @@ Values can be either scalar values or lists. List items are separated by commas.
 
 If a value needs to include a comma, white space or any other interpretable
 character it can either be escaped with backslash (\\) or quoted using double
-quotes ("). White space is removed in unquoted and un-escaped values.
+quotes ("). Whitespaces are removed in unquoted and un-escaped values.
 
 .. code-block:: sh
 
@@ -102,6 +102,50 @@ Environment or preceding configuration variables can be used with ``${var}``.
    Values are not type-checked. Type checking is part of the application logic
    and will be handled there. The configuration file parser will not raise an
    error if a string is assigned to a parameter that is expected to be an integer.
+
+
+Namespaces
+----------
+
+A basic usage of variable names is to organize them in namespaces. A common
+habit is to separate namespaces and variable names with a period character:
+
+.. code-block:: sh
+
+   colors.sky = blue
+   colors.grass = green
+
+Here a namespace called ``colors`` is used. The configuration file parser does
+not care about namespaces at all. The final name (including the periods) is what
+counts. But to avoid repeating namespaces again and again, declarations can
+be wrapped in a namespace block. See the following example:
+
+.. code-block:: sh
+
+   colors {
+     sky = blue
+     grass = green
+   }
+
+Application code will still access ``colors.sky`` and ``colors.grass``.
+Namespaces can be arbitrarily nested and even survive includes.
+
+.. code-block:: sh
+
+   A {
+     B1 {
+       var1 = 123
+     }
+
+     B2 {
+       var1 = 456
+     }
+   }
+
+The final list of parameter names is:
+
+* A.B1.var1
+* A.B2.var1
 
 
 .. _global-stations:

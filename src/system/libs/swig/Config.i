@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(directors="1") Config
+%module(package="seiscomp3", directors="1") Config
 
 //
 // includes

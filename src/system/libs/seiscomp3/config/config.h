@@ -21,6 +21,7 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <deque>
 
 #include <seiscomp3/config/log.h>
 #include <seiscomp3/config/exceptions.h>
@@ -75,7 +76,8 @@ class SC_CONFIG_API Config {
 		 *                  new entries
 		 * @return true on success
 		 */
-		bool writeConfig(const std::string& file, bool localOny = true);
+		bool writeConfig(const std::string& file, bool localOny = true,
+		                 bool multilineLists = false);
 
 		/** Writes the configuration to the file which was given to
 		 * readConfing
@@ -168,12 +170,6 @@ class SC_CONFIG_API Config {
 
 		SymbolTable *symbolTable() const;
 
-		/** Returns a ready to use config object for the given filename.
-		 * The Instance must not be deleted!
-		 * @return Config Instance or NULL if an error occured
-		 */
-		static Config* Instance(const std::string& fileName);
-
 		/** Evaluates a rvalue string and writes the output in result.
 		 * The symbol table is taken from this instance.
 		 * @param rvalue The value string to be parsed
@@ -205,12 +201,20 @@ class SC_CONFIG_API Config {
 		/** Writes the values of a symbol to an output stream. No new line
 		 * is appended.
 		 */
-		static void writeValues(std::ostream &os, const Symbol *symbol);
+		static void writeValues(std::ostream &os, const Symbol *symbol,
+		                        bool multilineLists = false);
+
+		/** Writes the content of the symbol to an output stream. No new line
+		 * is appended.
+		 */
+		static void writeContent(std::ostream &os, const Symbol *symbol,
+		                         bool multilineLists = false);
 
 		/** Writes a symbol to an output stream including the symbol
 		 * name and a equal sign. A new line is appended.
 		 */
-		static void writeSymbol(std::ostream &os, const Symbol *symbol);
+		static void writeSymbol(std::ostream &os, const Symbol *symbol,
+		                        bool multilineLists = false);
 
 		/** Enables/disables tracking of configuration variables.
 		 */
@@ -220,6 +224,13 @@ class SC_CONFIG_API Config {
 		 * to a type
 		 */
 		const Variables& getVariables() const;
+
+		/**
+		 * @brief Escapes a string value that it can be stored in the
+		 *        configuration file without further modifications.
+		 * @return The escaped string inside double quotes if necessary
+		 */
+		std::string escape(const std::string &) const;
 
 
 		// ----------------------------------------------------------------------
@@ -250,10 +261,12 @@ class SC_CONFIG_API Config {
 		                        std::vector<std::string>& parsedValues,
 		                        const SymbolTable *symtab,
 		                        bool resolveReferences,
+		                        bool rawMode,
 		                        std::string *errmsg);
 
-		bool readInternalConfig(const std::string& file, SymbolTable* symbolTable,
-		                        int stage=-1, bool raw=false);
+		bool readInternalConfig(const std::string &file, SymbolTable *symbolTable,
+		                        const std::string &namespacePrefix,
+		                        int stage = -1, bool raw = false);
 
 		template <typename T>
 		T get(const std::string& name) const;
@@ -292,17 +305,19 @@ class SC_CONFIG_API Config {
 		// Private data members
 		// ------------------------------------------------------------------------
 	private:
+		typedef std::deque<std::string> Namespaces;
 		int          _stage;
 		int          _line;
-		bool         _isReadable;
 		bool         _resolveReferences;
 		std::string  _fileName;
+		Namespaces   _namespaces;
+		std::string  _namespacePrefix;
+		std::string  _defaultNamespacePrefix;
 		Logger      *_logger;
 
 		SymbolTable *_symbolTable;
 		bool         _trackVariables;
 		Variables    _variables;
-
 };
 
 

@@ -323,8 +323,8 @@ class Symbol(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def set(self, name, values, uri, comment, stage=-1):
-        return _Config.Symbol_set(self, name, values, uri, comment, stage)
+    def set(self, name, ns, values, uri, comment, stage=-1):
+        return _Config.Symbol_set(self, name, ns, values, uri, comment, stage)
 
     def __eq__(self, symbol):
         return _Config.Symbol___eq__(self, symbol)
@@ -335,6 +335,10 @@ class Symbol(_object):
     __swig_getmethods__["name"] = _Config.Symbol_name_get
     if _newclass:
         name = _swig_property(_Config.Symbol_name_get, _Config.Symbol_name_set)
+    __swig_setmethods__["ns"] = _Config.Symbol_ns_set
+    __swig_getmethods__["ns"] = _Config.Symbol_ns_get
+    if _newclass:
+        ns = _swig_property(_Config.Symbol_ns_get, _Config.Symbol_ns_set)
     __swig_setmethods__["content"] = _Config.Symbol_content_set
     __swig_getmethods__["content"] = _Config.Symbol_content_get
     if _newclass:
@@ -517,10 +521,6 @@ class Config(_object):
 
     def symbolTable(self):
         return _Config.Config_symbolTable(self)
-    if _newclass:
-        Instance = staticmethod(_Config.Config_Instance)
-    else:
-        Instance = _Config.Config_Instance
 
     def eval(self, rvalue, result, resolveReferences=True, errmsg=None):
         return _Config.Config_eval(self, rvalue, result, resolveReferences, errmsg)
@@ -533,6 +533,10 @@ class Config(_object):
     else:
         writeValues = _Config.Config_writeValues
     if _newclass:
+        writeContent = staticmethod(_Config.Config_writeContent)
+    else:
+        writeContent = _Config.Config_writeContent
+    if _newclass:
         writeSymbol = staticmethod(_Config.Config_writeSymbol)
     else:
         writeSymbol = _Config.Config_writeSymbol
@@ -542,23 +546,26 @@ class Config(_object):
 
     def getVariables(self):
         return _Config.Config_getVariables(self)
+
+    def escape(self, arg2):
+        return _Config.Config_escape(self, arg2)
 Config_swigregister = _Config.Config_swigregister
 Config_swigregister(Config)
-
-def Config_Instance(fileName):
-    return _Config.Config_Instance(fileName)
-Config_Instance = _Config.Config_Instance
 
 def Config_Eval(rvalue, result, resolveReferences=True, symtab=None, errmsg=None):
     return _Config.Config_Eval(rvalue, result, resolveReferences, symtab, errmsg)
 Config_Eval = _Config.Config_Eval
 
-def Config_writeValues(os, symbol):
-    return _Config.Config_writeValues(os, symbol)
+def Config_writeValues(os, symbol, multilineLists=False):
+    return _Config.Config_writeValues(os, symbol, multilineLists)
 Config_writeValues = _Config.Config_writeValues
 
-def Config_writeSymbol(os, symbol):
-    return _Config.Config_writeSymbol(os, symbol)
+def Config_writeContent(os, symbol, multilineLists=False):
+    return _Config.Config_writeContent(os, symbol, multilineLists)
+Config_writeContent = _Config.Config_writeContent
+
+def Config_writeSymbol(os, symbol, multilineLists=False):
+    return _Config.Config_writeSymbol(os, symbol, multilineLists)
 Config_writeSymbol = _Config.Config_writeSymbol
 
 class vectorStr(_object):

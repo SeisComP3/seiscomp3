@@ -26,17 +26,16 @@ namespace Config {
 
 
 struct SC_CONFIG_API Symbol {
-
 	typedef std::vector<std::string> Values;
 
-	Symbol(const std::string& name,
+	Symbol(const std::string& name, const std::string& ns,
 	       const std::vector<std::string>& values,
 	       const std::string& uri,
 	       const std::string& comment,
 	       int stage = -1);
 	Symbol();
 
-	void set(const std::string& name,
+	void set(const std::string& name, const std::string& ns,
 	         const std::vector<std::string>& values,
 	         const std::string& uri,
 	         const std::string& comment,
@@ -47,6 +46,7 @@ struct SC_CONFIG_API Symbol {
 	std::string toString() const;
 
 	std::string name;
+	std::string ns;
 	std::string content;
 	Values      values;
 	std::string uri;
@@ -77,7 +77,7 @@ class SC_CONFIG_API SymbolTable {
 		void setCaseSensitivityCheck(bool);
 		void setLogger(Logger *);
 
-		void add(const std::string& name,
+		void add(const std::string& name, const std::string &ns,
 		         const std::string& content,
 		         const std::vector<std::string>& values,
 		         const std::string& uri,

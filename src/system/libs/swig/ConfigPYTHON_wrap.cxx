@@ -7776,17 +7776,127 @@ SWIGINTERN PyObject *CaseSensitivityException_swigregister(PyObject *SWIGUNUSEDP
 SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
-  std::string *arg3 = 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
   std::string *arg4 = 0 ;
-  int arg5 ;
+  std::string *arg5 = 0 ;
+  int arg6 ;
   int res1 = SWIG_OLDOBJ ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
   int res4 = SWIG_OLDOBJ ;
-  int val5 ;
-  int ecode5 = 0 ;
+  int res5 = SWIG_OLDOBJ ;
+  int val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  Seiscomp::Config::Symbol *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_Symbol",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Symbol" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Symbol" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Symbol" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
+  {
+    std::string *ptr = (std::string *)0;
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_Symbol" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_Symbol" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    arg5 = ptr;
+  }
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Symbol" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  {
+    try {
+      result = (Seiscomp::Config::Symbol *)new Seiscomp::Config::Symbol((std::string const &)*arg1,(std::string const &)*arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,arg6);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Config__Symbol, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  std::string *arg5 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  int res5 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -7806,25 +7916,25 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     }
     arg1 = ptr;
   }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Symbol" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   {
     std::string *ptr = (std::string *)0;
-    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Symbol" "', argument " "3"" of type '" "std::string const &""'"); 
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Symbol" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    arg3 = ptr;
+    arg2 = ptr;
   }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Symbol" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   {
     std::string *ptr = (std::string *)0;
     res4 = SWIG_AsPtr_std_string(obj3, &ptr);
@@ -7836,14 +7946,20 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     }
     arg4 = ptr;
   }
-  ecode5 = SWIG_AsVal_int(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Symbol" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
+  {
+    std::string *ptr = (std::string *)0;
+    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_Symbol" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    arg5 = ptr;
+  }
   {
     try {
-      result = (Seiscomp::Config::Symbol *)new Seiscomp::Config::Symbol((std::string const &)*arg1,(std::vector< std::string,std::allocator< std::string > > const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,arg5);
+      result = (Seiscomp::Config::Symbol *)new Seiscomp::Config::Symbol((std::string const &)*arg1,(std::string const &)*arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -7857,99 +7973,15 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Config__Symbol, SWIG_POINTER_NEW |  0 );
   if (SWIG_IsNewObj(res1)) delete arg1;
-  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res4)) delete arg4;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
-  std::string *arg3 = 0 ;
-  std::string *arg4 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 = SWIG_OLDOBJ ;
-  int res4 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  Seiscomp::Config::Symbol *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_Symbol",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Symbol" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Symbol" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
-  {
-    std::string *ptr = (std::string *)0;
-    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Symbol" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  {
-    std::string *ptr = (std::string *)0;
-    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_Symbol" "', argument " "4"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Symbol" "', argument " "4"" of type '" "std::string const &""'"); 
-    }
-    arg4 = ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::Config::Symbol *)new Seiscomp::Config::Symbol((std::string const &)*arg1,(std::vector< std::string,std::allocator< std::string > > const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4);
-    }
-    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Config__Symbol, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res4)) delete arg4;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res5)) delete arg5;
   return NULL;
 }
 
@@ -7982,59 +8014,67 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_Symbol(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[6] = {
+  PyObject *argv[7] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 6) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
     return _wrap_new_Symbol__SWIG_2(self, args);
-  }
-  if (argc == 4) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_new_Symbol__SWIG_1(self, args);
-          }
-        }
-      }
-    }
   }
   if (argc == 5) {
     int _v;
     int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
+            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            _v = SWIG_CheckState(res);
             if (_v) {
-              return _wrap_new_Symbol__SWIG_0(self, args);
+              return _wrap_new_Symbol__SWIG_1(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 6) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              {
+                int res = SWIG_AsVal_int(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                return _wrap_new_Symbol__SWIG_0(self, args);
+              }
             }
           }
         }
@@ -8045,8 +8085,8 @@ SWIGINTERN PyObject *_wrap_new_Symbol(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Symbol'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Config::Symbol::Symbol(std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
-    "    Seiscomp::Config::Symbol::Symbol(std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n"
+    "    Seiscomp::Config::Symbol::Symbol(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
+    "    Seiscomp::Config::Symbol::Symbol(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n"
     "    Seiscomp::Config::Symbol::Symbol()\n");
   return 0;
 }
@@ -8056,19 +8096,137 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *resultobj = 0;
   Seiscomp::Config::Symbol *arg1 = (Seiscomp::Config::Symbol *) 0 ;
   std::string *arg2 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
-  std::string *arg4 = 0 ;
+  std::string *arg3 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
   std::string *arg5 = 0 ;
-  int arg6 ;
+  std::string *arg6 = 0 ;
+  int arg7 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int res4 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
   int res5 = SWIG_OLDOBJ ;
-  int val6 ;
-  int ecode6 = 0 ;
+  int res6 = SWIG_OLDOBJ ;
+  int val7 ;
+  int ecode7 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:Symbol_set",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Symbol_set" "', argument " "1"" of type '" "Seiscomp::Config::Symbol *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Symbol_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Symbol_set" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Symbol_set" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
+  {
+    std::string *ptr = (std::string *)0;
+    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Symbol_set" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "5"" of type '" "std::string const &""'"); 
+    }
+    arg5 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res6 = SWIG_AsPtr_std_string(obj5, &ptr);
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "Symbol_set" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    arg6 = ptr;
+  }
+  ecode7 = SWIG_AsVal_int(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "Symbol_set" "', argument " "7"" of type '" "int""'");
+  } 
+  arg7 = static_cast< int >(val7);
+  {
+    try {
+      (arg1)->set((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,arg7);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res6)) delete arg6;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res6)) delete arg6;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Symbol *arg1 = (Seiscomp::Config::Symbol *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
+  std::string *arg5 = 0 ;
+  std::string *arg6 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  int res5 = SWIG_OLDOBJ ;
+  int res6 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -8093,25 +8251,25 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     }
     arg2 = ptr;
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Symbol_set" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
   {
     std::string *ptr = (std::string *)0;
-    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Symbol_set" "', argument " "4"" of type '" "std::string const &""'"); 
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Symbol_set" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "4"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "3"" of type '" "std::string const &""'"); 
     }
-    arg4 = ptr;
+    arg3 = ptr;
   }
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Symbol_set" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   {
     std::string *ptr = (std::string *)0;
     res5 = SWIG_AsPtr_std_string(obj4, &ptr);
@@ -8123,14 +8281,20 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     }
     arg5 = ptr;
   }
-  ecode6 = SWIG_AsVal_int(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "Symbol_set" "', argument " "6"" of type '" "int""'");
-  } 
-  arg6 = static_cast< int >(val6);
+  {
+    std::string *ptr = (std::string *)0;
+    res6 = SWIG_AsPtr_std_string(obj5, &ptr);
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "Symbol_set" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    arg6 = ptr;
+  }
   {
     try {
-      (arg1)->set((std::string const &)*arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,arg6);
+      (arg1)->set((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -8144,147 +8308,30 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   }
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res6)) delete arg6;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   if (SWIG_IsNewObj(res5)) delete arg5;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Config::Symbol *arg1 = (Seiscomp::Config::Symbol *) 0 ;
-  std::string *arg2 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
-  std::string *arg4 = 0 ;
-  std::string *arg5 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int res4 = SWIG_OLDOBJ ;
-  int res5 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:Symbol_set",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Symbol_set" "', argument " "1"" of type '" "Seiscomp::Config::Symbol *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Symbol_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Symbol_set" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
-  {
-    std::string *ptr = (std::string *)0;
-    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Symbol_set" "', argument " "4"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "4"" of type '" "std::string const &""'"); 
-    }
-    arg4 = ptr;
-  }
-  {
-    std::string *ptr = (std::string *)0;
-    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Symbol_set" "', argument " "5"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_set" "', argument " "5"" of type '" "std::string const &""'"); 
-    }
-    arg5 = ptr;
-  }
-  {
-    try {
-      (arg1)->set((std::string const &)*arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5);
-    }
-    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res4)) delete arg4;
-  if (SWIG_IsNewObj(res5)) delete arg5;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res4)) delete arg4;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res6)) delete arg6;
   return NULL;
 }
 
 
 SWIGINTERN PyObject *_wrap_Symbol_set(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[7] = {
+  PyObject *argv[8] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 6) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 7) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 5) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              return _wrap_Symbol_set__SWIG_1(self, args);
-            }
-          }
-        }
-      }
-    }
   }
   if (argc == 6) {
     int _v;
@@ -8295,21 +8342,54 @@ SWIGINTERN PyObject *_wrap_Symbol_set(PyObject *self, PyObject *args) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
           _v = SWIG_CheckState(res);
           if (_v) {
             int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
             _v = SWIG_CheckState(res);
             if (_v) {
-              {
-                int res = SWIG_AsVal_int(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
+              int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
+              _v = SWIG_CheckState(res);
               if (_v) {
-                return _wrap_Symbol_set__SWIG_0(self, args);
+                return _wrap_Symbol_set__SWIG_1(self, args);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 7) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
+              _v = SWIG_CheckState(res);
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_int(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  return _wrap_Symbol_set__SWIG_0(self, args);
+                }
               }
             }
           }
@@ -8321,8 +8401,8 @@ SWIGINTERN PyObject *_wrap_Symbol_set(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Symbol_set'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Config::Symbol::set(std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
-    "    Seiscomp::Config::Symbol::set(std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n");
+    "    Seiscomp::Config::Symbol::set(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
+    "    Seiscomp::Config::Symbol::set(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n");
   return 0;
 }
 
@@ -8461,6 +8541,65 @@ SWIGINTERN PyObject *_wrap_Symbol_name_get(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp1);
   result = (std::string *) & ((arg1)->name);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Symbol_ns_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Symbol *arg1 = (Seiscomp::Config::Symbol *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Symbol_ns_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Symbol_ns_set" "', argument " "1"" of type '" "Seiscomp::Config::Symbol *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Symbol_ns_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Symbol_ns_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->ns = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Symbol_ns_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Symbol *arg1 = (Seiscomp::Config::Symbol *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Symbol_ns_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Symbol_ns_get" "', argument " "1"" of type '" "Seiscomp::Config::Symbol *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp1);
+  result = (std::string *) & ((arg1)->ns);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
@@ -8959,21 +9098,164 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   Seiscomp::Config::SymbolTable *arg1 = (Seiscomp::Config::SymbolTable *) 0 ;
   std::string *arg2 = 0 ;
   std::string *arg3 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
-  std::string *arg5 = 0 ;
+  std::string *arg4 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg5 = 0 ;
   std::string *arg6 = 0 ;
-  int arg7 ;
+  std::string *arg7 = 0 ;
+  int arg8 ;
+  int arg9 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  int res6 = SWIG_OLDOBJ ;
+  int res7 = SWIG_OLDOBJ ;
+  int val8 ;
+  int ecode8 = 0 ;
+  int val9 ;
+  int ecode9 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:SymbolTable_add",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__SymbolTable, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SymbolTable_add" "', argument " "1"" of type '" "Seiscomp::Config::SymbolTable *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::SymbolTable * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SymbolTable_add" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SymbolTable_add" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg5 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp5);
+  {
+    std::string *ptr = (std::string *)0;
+    res6 = SWIG_AsPtr_std_string(obj5, &ptr);
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "SymbolTable_add" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "6"" of type '" "std::string const &""'"); 
+    }
+    arg6 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res7 = SWIG_AsPtr_std_string(obj6, &ptr);
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    arg7 = ptr;
+  }
+  ecode8 = SWIG_AsVal_int(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "SymbolTable_add" "', argument " "8"" of type '" "int""'");
+  } 
+  arg8 = static_cast< int >(val8);
+  ecode9 = SWIG_AsVal_int(obj8, &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "SymbolTable_add" "', argument " "9"" of type '" "int""'");
+  } 
+  arg9 = static_cast< int >(val9);
+  {
+    try {
+      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::vector< std::string,std::allocator< std::string > > const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,arg8,arg9);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::SymbolTable *arg1 = (Seiscomp::Config::SymbolTable *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg5 = 0 ;
+  std::string *arg6 = 0 ;
+  std::string *arg7 = 0 ;
   int arg8 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
   int res3 = SWIG_OLDOBJ ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  int res5 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   int res6 = SWIG_OLDOBJ ;
-  int val7 ;
-  int ecode7 = 0 ;
+  int res7 = SWIG_OLDOBJ ;
   int val8 ;
   int ecode8 = 0 ;
   PyObject * obj0 = 0 ;
@@ -9013,25 +9295,25 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     arg3 = ptr;
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   {
     std::string *ptr = (std::string *)0;
-    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
-    arg5 = ptr;
+    arg4 = ptr;
   }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg5 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp5);
   {
     std::string *ptr = (std::string *)0;
     res6 = SWIG_AsPtr_std_string(obj5, &ptr);
@@ -9043,11 +9325,17 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     arg6 = ptr;
   }
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SymbolTable_add" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
+  {
+    std::string *ptr = (std::string *)0;
+    res7 = SWIG_AsPtr_std_string(obj6, &ptr);
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    arg7 = ptr;
+  }
   ecode8 = SWIG_AsVal_int(obj7, &val8);
   if (!SWIG_IsOK(ecode8)) {
     SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "SymbolTable_add" "', argument " "8"" of type '" "int""'");
@@ -9055,7 +9343,7 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   arg8 = static_cast< int >(val8);
   {
     try {
-      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,arg7,arg8);
+      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::vector< std::string,std::allocator< std::string > > const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,arg8);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -9070,37 +9358,38 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::SymbolTable *arg1 = (Seiscomp::Config::SymbolTable *) 0 ;
   std::string *arg2 = 0 ;
   std::string *arg3 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
-  std::string *arg5 = 0 ;
+  std::string *arg4 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg5 = 0 ;
   std::string *arg6 = 0 ;
-  int arg7 ;
+  std::string *arg7 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
   int res3 = SWIG_OLDOBJ ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  int res5 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   int res6 = SWIG_OLDOBJ ;
-  int val7 ;
-  int ecode7 = 0 ;
+  int res7 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -9137,25 +9426,25 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     arg3 = ptr;
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   {
     std::string *ptr = (std::string *)0;
-    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
-    arg5 = ptr;
+    arg4 = ptr;
   }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg5 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp5);
   {
     std::string *ptr = (std::string *)0;
     res6 = SWIG_AsPtr_std_string(obj5, &ptr);
@@ -9167,14 +9456,20 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     arg6 = ptr;
   }
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "SymbolTable_add" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
+  {
+    std::string *ptr = (std::string *)0;
+    res7 = SWIG_AsPtr_std_string(obj6, &ptr);
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "7"" of type '" "std::string const &""'"); 
+    }
+    arg7 = ptr;
+  }
   {
     try {
-      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,arg7);
+      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::vector< std::string,std::allocator< std::string > > const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -9189,33 +9484,35 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
+  if (SWIG_IsNewObj(res7)) delete arg7;
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::SymbolTable *arg1 = (Seiscomp::Config::SymbolTable *) 0 ;
   std::string *arg2 = 0 ;
   std::string *arg3 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
-  std::string *arg5 = 0 ;
+  std::string *arg4 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg5 = 0 ;
   std::string *arg6 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
   int res3 = SWIG_OLDOBJ ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  int res5 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   int res6 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9252,25 +9549,25 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self
     }
     arg3 = ptr;
   }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
   {
     std::string *ptr = (std::string *)0;
-    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+    res4 = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::string const &""'"); 
     }
-    arg5 = ptr;
+    arg4 = ptr;
   }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+  }
+  arg5 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp5);
   {
     std::string *ptr = (std::string *)0;
     res6 = SWIG_AsPtr_std_string(obj5, &ptr);
@@ -9284,7 +9581,7 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   }
   {
     try {
-      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6);
+      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::vector< std::string,std::allocator< std::string > > const &)*arg5,(std::string const &)*arg6);
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -9299,108 +9596,14 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   if (SWIG_IsNewObj(res6)) delete arg6;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Config::SymbolTable *arg1 = (Seiscomp::Config::SymbolTable *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string *arg3 = 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg4 = 0 ;
-  std::string *arg5 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  int res3 = SWIG_OLDOBJ ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  int res5 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:SymbolTable_add",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__SymbolTable, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SymbolTable_add" "', argument " "1"" of type '" "Seiscomp::Config::SymbolTable *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Config::SymbolTable * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SymbolTable_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    std::string *ptr = (std::string *)0;
-    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "SymbolTable_add" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "3"" of type '" "std::string const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0  | 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "4"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-  }
-  arg4 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp4);
-  {
-    std::string *ptr = (std::string *)0;
-    res5 = SWIG_AsPtr_std_string(obj4, &ptr);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SymbolTable_add" "', argument " "5"" of type '" "std::string const &""'"); 
-    }
-    arg5 = ptr;
-  }
-  {
-    try {
-      (arg1)->add((std::string const &)*arg2,(std::string const &)*arg3,(std::vector< std::string,std::allocator< std::string > > const &)*arg4,(std::string const &)*arg5);
-    }
-    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  if (SWIG_IsNewObj(res5)) delete arg5;
   return NULL;
 }
 
@@ -9453,14 +9656,14 @@ fail:
 
 SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[9] = {
+  PyObject *argv[10] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 8) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 9) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 2) {
@@ -9476,31 +9679,6 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
       }
     }
   }
-  if (argc == 5) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__SymbolTable, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
-            _v = SWIG_CheckState(res);
-            if (_v) {
-              return _wrap_SymbolTable_add__SWIG_3(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
   if (argc == 6) {
     int _v;
     void *vptr = 0;
@@ -9513,16 +9691,16 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
             _v = SWIG_CheckState(res);
             if (_v) {
               int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
               _v = SWIG_CheckState(res);
               if (_v) {
-                return _wrap_SymbolTable_add__SWIG_2(self, args);
+                return _wrap_SymbolTable_add__SWIG_3(self, args);
               }
             }
           }
@@ -9542,21 +9720,19 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
             _v = SWIG_CheckState(res);
             if (_v) {
               int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
               _v = SWIG_CheckState(res);
               if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
+                int res = SWIG_AsPtr_std_string(argv[6], (std::string**)(0));
+                _v = SWIG_CheckState(res);
                 if (_v) {
-                  return _wrap_SymbolTable_add__SWIG_1(self, args);
+                  return _wrap_SymbolTable_add__SWIG_2(self, args);
                 }
               }
             }
@@ -9577,26 +9753,69 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            int res = SWIG_AsPtr_std_string(argv[4], (std::string**)(0));
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
             _v = SWIG_CheckState(res);
             if (_v) {
               int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
               _v = SWIG_CheckState(res);
               if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
+                int res = SWIG_AsPtr_std_string(argv[6], (std::string**)(0));
+                _v = SWIG_CheckState(res);
                 if (_v) {
                   {
                     int res = SWIG_AsVal_int(argv[7], NULL);
                     _v = SWIG_CheckState(res);
                   }
                   if (_v) {
-                    return _wrap_SymbolTable_add__SWIG_0(self, args);
+                    return _wrap_SymbolTable_add__SWIG_1(self, args);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 9) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__SymbolTable, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              int res = SWIG_AsPtr_std_string(argv[5], (std::string**)(0));
+              _v = SWIG_CheckState(res);
+              if (_v) {
+                int res = SWIG_AsPtr_std_string(argv[6], (std::string**)(0));
+                _v = SWIG_CheckState(res);
+                if (_v) {
+                  {
+                    int res = SWIG_AsVal_int(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    {
+                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      _v = SWIG_CheckState(res);
+                    }
+                    if (_v) {
+                      return _wrap_SymbolTable_add__SWIG_0(self, args);
+                    }
                   }
                 }
               }
@@ -9610,10 +9829,10 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SymbolTable_add'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int,int)\n"
-    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
-    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n"
-    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &)\n"
+    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int,int)\n"
+    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &,int)\n"
+    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &,std::string const &)\n"
+    "    Seiscomp::Config::SymbolTable::add(std::string const &,std::string const &,std::string const &,std::vector< std::string,std::allocator< std::string > > const &,std::string const &)\n"
     "    Seiscomp::Config::SymbolTable::add(Seiscomp::Config::Symbol const &)\n");
   return 0;
 }
@@ -10610,6 +10829,75 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
   std::string *arg2 = 0 ;
   bool arg3 ;
+  bool arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Config_writeConfig",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Config, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_writeConfig" "', argument " "1"" of type '" "Seiscomp::Config::Config *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Config * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_writeConfig" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_writeConfig" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Config_writeConfig" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Config_writeConfig" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  {
+    try {
+      result = (bool)(arg1)->writeConfig((std::string const &)*arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -10665,7 +10953,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
   std::string *arg2 = 0 ;
@@ -10716,7 +11004,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
   bool arg2 ;
@@ -10760,7 +11048,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
   void *argp1 = 0 ;
@@ -10797,14 +11085,14 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[4] = {
+  PyObject *argv[5] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 1) {
@@ -10813,7 +11101,7 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__Config, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_Config_writeConfig__SWIG_3(self, args);
+      return _wrap_Config_writeConfig__SWIG_4(self, args);
     }
   }
   if (argc == 2) {
@@ -10827,7 +11115,7 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_Config_writeConfig__SWIG_2(self, args);
+        return _wrap_Config_writeConfig__SWIG_3(self, args);
       }
     }
   }
@@ -10840,7 +11128,7 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
       int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Config_writeConfig__SWIG_1(self, args);
+        return _wrap_Config_writeConfig__SWIG_2(self, args);
       }
     }
   }
@@ -10858,7 +11146,32 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_Config_writeConfig__SWIG_0(self, args);
+          return _wrap_Config_writeConfig__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Config__Config, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_Config_writeConfig__SWIG_0(self, args);
+          }
         }
       }
     }
@@ -10867,6 +11180,7 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Config_writeConfig'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Config::Config::writeConfig(std::string const &,bool,bool)\n"
     "    Seiscomp::Config::Config::writeConfig(std::string const &,bool)\n"
     "    Seiscomp::Config::Config::writeConfig(std::string const &)\n"
     "    Seiscomp::Config::Config::writeConfig(bool)\n"
@@ -13248,48 +13562,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_Instance(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Config::Config *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Config_Instance",&obj0)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_Instance" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_Instance" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  {
-    try {
-      result = (Seiscomp::Config::Config *)Seiscomp::Config::Config::Instance((std::string const &)*arg1);
-    }
-    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Config__Config, 0 |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Config_eval__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
@@ -13977,7 +14249,62 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_writeValues(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Config_writeValues__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Config_writeValues",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_writeValues" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_writeValues" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_writeValues" "', argument " "2"" of type '" "Seiscomp::Config::Symbol const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Config_writeValues" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  {
+    try {
+      Seiscomp::Config::Config::writeValues(*arg1,(Seiscomp::Config::Symbol const *)arg2,arg3);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeValues__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::ostream *arg1 = 0 ;
   Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
@@ -14023,7 +14350,275 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Config_writeSymbol(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Config_writeValues(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Config_writeValues__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_Config_writeValues__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Config_writeValues'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Config::Config::writeValues(std::ostream &,Seiscomp::Config::Symbol const *,bool)\n"
+    "    Seiscomp::Config::Config::writeValues(std::ostream &,Seiscomp::Config::Symbol const *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeContent__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Config_writeContent",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_writeContent" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_writeContent" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_writeContent" "', argument " "2"" of type '" "Seiscomp::Config::Symbol const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Config_writeContent" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  {
+    try {
+      Seiscomp::Config::Config::writeContent(*arg1,(Seiscomp::Config::Symbol const *)arg2,arg3);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeContent__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Config_writeContent",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_writeContent" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_writeContent" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_writeContent" "', argument " "2"" of type '" "Seiscomp::Config::Symbol const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp2);
+  {
+    try {
+      Seiscomp::Config::Config::writeContent(*arg1,(Seiscomp::Config::Symbol const *)arg2);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeContent(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Config_writeContent__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_Config_writeContent__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Config_writeContent'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Config::Config::writeContent(std::ostream &,Seiscomp::Config::Symbol const *,bool)\n"
+    "    Seiscomp::Config::Config::writeContent(std::ostream &,Seiscomp::Config::Symbol const *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeSymbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Config_writeSymbol",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_writeSymbol" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_writeSymbol" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Config__Symbol, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_writeSymbol" "', argument " "2"" of type '" "Seiscomp::Config::Symbol const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Config::Symbol * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Config_writeSymbol" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  {
+    try {
+      Seiscomp::Config::Config::writeSymbol(*arg1,(Seiscomp::Config::Symbol const *)arg2,arg3);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeSymbol__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::ostream *arg1 = 0 ;
   Seiscomp::Config::Symbol *arg2 = (Seiscomp::Config::Symbol *) 0 ;
@@ -14066,6 +14661,62 @@ SWIGINTERN PyObject *_wrap_Config_writeSymbol(PyObject *SWIGUNUSEDPARM(self), Py
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_writeSymbol(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Config_writeSymbol__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__ostream, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Config__Symbol, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_Config_writeSymbol__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Config_writeSymbol'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Config::Config::writeSymbol(std::ostream &,Seiscomp::Config::Symbol const *,bool)\n"
+    "    Seiscomp::Config::Config::writeSymbol(std::ostream &,Seiscomp::Config::Symbol const *)\n");
+  return 0;
 }
 
 
@@ -14143,6 +14794,57 @@ SWIGINTERN PyObject *_wrap_Config_getVariables(PyObject *SWIGUNUSEDPARM(self), P
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_std__string_t, 0 |  0 );
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_escape(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Config_escape",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Config, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_escape" "', argument " "1"" of type '" "Seiscomp::Config::Config const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Config * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Config_escape" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Config_escape" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = ((Seiscomp::Config::Config const *)arg1)->escape((std::string const &)*arg2);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -24175,6 +24877,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Symbol_toString", _wrap_Symbol_toString, METH_VARARGS, NULL},
 	 { (char *)"Symbol_name_set", _wrap_Symbol_name_set, METH_VARARGS, NULL},
 	 { (char *)"Symbol_name_get", _wrap_Symbol_name_get, METH_VARARGS, NULL},
+	 { (char *)"Symbol_ns_set", _wrap_Symbol_ns_set, METH_VARARGS, NULL},
+	 { (char *)"Symbol_ns_get", _wrap_Symbol_ns_get, METH_VARARGS, NULL},
 	 { (char *)"Symbol_content_set", _wrap_Symbol_content_set, METH_VARARGS, NULL},
 	 { (char *)"Symbol_content_get", _wrap_Symbol_content_get, METH_VARARGS, NULL},
 	 { (char *)"Symbol_values_set", _wrap_Symbol_values_set, METH_VARARGS, NULL},
@@ -24234,13 +24938,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Config_getStrings", _wrap_Config_getStrings, METH_VARARGS, NULL},
 	 { (char *)"Config_setStrings", _wrap_Config_setStrings, METH_VARARGS, NULL},
 	 { (char *)"Config_symbolTable", _wrap_Config_symbolTable, METH_VARARGS, NULL},
-	 { (char *)"Config_Instance", _wrap_Config_Instance, METH_VARARGS, NULL},
 	 { (char *)"Config_eval", _wrap_Config_eval, METH_VARARGS, NULL},
 	 { (char *)"Config_Eval", _wrap_Config_Eval, METH_VARARGS, NULL},
 	 { (char *)"Config_writeValues", _wrap_Config_writeValues, METH_VARARGS, NULL},
+	 { (char *)"Config_writeContent", _wrap_Config_writeContent, METH_VARARGS, NULL},
 	 { (char *)"Config_writeSymbol", _wrap_Config_writeSymbol, METH_VARARGS, NULL},
 	 { (char *)"Config_trackVariables", _wrap_Config_trackVariables, METH_VARARGS, NULL},
 	 { (char *)"Config_getVariables", _wrap_Config_getVariables, METH_VARARGS, NULL},
+	 { (char *)"Config_escape", _wrap_Config_escape, METH_VARARGS, NULL},
 	 { (char *)"Config_swigregister", Config_swigregister, METH_VARARGS, NULL},
 	 { (char *)"vectorStr_iterator", _wrap_vectorStr_iterator, METH_VARARGS, NULL},
 	 { (char *)"vectorStr___nonzero__", _wrap_vectorStr___nonzero__, METH_VARARGS, NULL},
