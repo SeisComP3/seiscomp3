@@ -103,13 +103,24 @@ Examples
 SDSArchive
 ----------
 
-This RecordStream reads data from an SeisComP (SDS) archive using the
-:ref:`rs-file` RecordStream. The source is interpreted as a directory path.
+This RecordStream reads data from one or more SeisComP (SDS) archives using the
+:ref:`rs-file` RecordStream. The source is interpreted as a directory path list
+separated using commas.
 
 Example
 ^^^^^^^
 
 - ``sdsarchive:///home/sysop/seiscomp3/var/lib/archive``
+
+- ``sdsarchive:///SDSA,/SDSB,/SDSC``
+
+Different SDS are not merged, but are read sequentially depending on data existence.
+If a requested file is missing in the current SDS it is searched on the next archive
+in the list. On success it will deliver all the rest of files for the current channel
+from this SDS archive. On failure the next SDS archive is searched.
+
+This process is repeated for each requested channel individually. It always starts to
+search data from the first given SDS to the last one, for each data channel.
 
 .. _rs-odcarchive:
 

@@ -78,8 +78,6 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 
 		virtual Record *next();
 
-		std::string archiveRoot() const;
-
 
 	// ----------------------------------------------------------------------
 	//  Protected interface
@@ -98,7 +96,8 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
-		std::string                          _arcroot;
+		std::vector<std::string>             _arcroots;
+		std::vector<std::string>::iterator   _currentArchive;
 		Seiscomp::Core::Time                 _stime;
 		Seiscomp::Core::Time                 _etime;
 		std::set<StreamIdx>                  _streamset;
