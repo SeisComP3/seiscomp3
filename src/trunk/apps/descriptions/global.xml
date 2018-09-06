@@ -602,6 +602,17 @@
 						</description>
 					</parameter>
 				</group>
+				<group name="ML">
+					<parameter name="absMax" type="boolean" default="true">
+						<description>
+						Whether to use the absolute maximum of the filtered trace
+						for ML amplitudes, such as MLv, MLh and ML or the
+						difference of the maximum and minimum value of the
+						signal window. Basically this parameter is valid for all
+						amplitudes that use the MLv processing component.
+						</description>
+					</parameter>
+				</group>
 				<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
 					<description>
 					Defines the saturation threshold for the optional saturation check.
