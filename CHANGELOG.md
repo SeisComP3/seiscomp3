@@ -12,6 +12,12 @@
     the old behaviour
   * Add ConfigSyncMessage which wraps a database configuration synchronization
 
+
+* fdsnxml2inv
+
+  * Fix wrong datalogger conversion if commandline option ```--log-stages```
+    is not set
+
 * GUI
 
   * Fixed event list "Hide events outside region" edit dialog: OK and Cancel

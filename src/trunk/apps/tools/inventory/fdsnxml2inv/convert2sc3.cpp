@@ -2184,20 +2184,18 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 
 			// Ignore dummy stages without a defining gain
 			if ( stageGain == 1.0 ) {
-				if ( _logStages ) {
+				if ( _logStages )
 					cerr << " (dummy)";
-					ignoreStage = true;
-				}
+				ignoreStage = true;
 			}
 
 			// Potential preamplifier gain
 			if ( !hasDigitizerGain && isADCStage(inputUnit, outputUnit) ) {
 				hasDigitizerGain = true;
 				sc_dl->setGain(stageGain);
-				if ( _logStages ) {
+				if ( _logStages )
 					cerr << " (digitizer gain)";
-					ignoreStage = true;
-				}
+				ignoreStage = true;
 			}
 
 			if ( ignoreStage ) {
