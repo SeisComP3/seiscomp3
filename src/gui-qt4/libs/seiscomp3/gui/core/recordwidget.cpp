@@ -2809,9 +2809,11 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					if ( _drawOffset ) {
 						QString str;
 						if ( _showScaledValues )
-							str.setNum(stream->traces[frontIndex].absMax*stream->scale);
+							str = tr("amax: %1")
+							      .arg(stream->traces[frontIndex].absMax*stream->scale);
 						else
-							str.setNum(stream->traces[frontIndex].absMax, 'f', _valuePrecision);
+							str = tr("amax: %1")
+							      .arg(stream->traces[frontIndex].absMax, 0, 'f', _valuePrecision);
 
 						int rh = 2*painter.fontMetrics().ascent()+4;
 						int y = stream->height - rh;
@@ -2821,9 +2823,11 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 						if ( stream->height >= y+rh ) {
 							if ( _showScaledValues )
-								str.setNum(stream->traces[frontIndex].offset*stream->scale);
+								str = tr("mean: %1")
+								      .arg(stream->traces[frontIndex].offset*stream->scale);
 							else
-								str.setNum(stream->traces[frontIndex].offset, 'f', _valuePrecision);
+								str = tr("mean: %1")
+								      .arg(stream->traces[frontIndex].offset, 0, 'f', _valuePrecision);
 
 							painter.drawText(0,y, w,rh, Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignBottom, str);
 						}

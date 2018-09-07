@@ -22,6 +22,8 @@
 
   * Fixed event list "Hide events outside region" edit dialog: OK and Cancel
     did not work
+  * Prepend "amax" and "mean" to the statistic values printed in the lower
+    left corner in the trace widgets
 
 * scwfparam
 
