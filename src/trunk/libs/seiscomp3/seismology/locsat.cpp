@@ -390,7 +390,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 	}
 
 	_locateEvent->setLocatorParams(_locator_params);
-	Internal::Loc* newLoc = _locateEvent->doLocation();
+	Internal::Loc *newLoc = _locateEvent->doLocation();
 
 	DataModel::Origin *origin = loc2Origin(newLoc);
 
@@ -441,7 +441,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
+DataModel::Origin *LocSAT::relocate(const DataModel::Origin *origin) {
 	if ( origin == NULL ) return NULL;
 
 	if ( isInitialLocationIgnored() )
@@ -461,7 +461,7 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
 
 	_locateEvent->setOriginTime((double)origin->time().value());
 
-	if ( !loadArrivals(origin, _defaultPickUncertainty)) {
+	if ( !loadArrivals(origin)) {
 		delete _locateEvent;
 		_locateEvent = NULL;
 		return NULL;
@@ -475,9 +475,9 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
 		_locator_params->fix_depth = 'n';
 
 	_locateEvent->setLocatorParams(_locator_params);
-	Internal::Loc* newLoc = _locateEvent->doLocation();
+	Internal::Loc *newLoc = _locateEvent->doLocation();
 
-	DataModel::Origin* result = loc2Origin(newLoc);
+	DataModel::Origin *result = loc2Origin(newLoc);
 
 	if ( result ) {
 		std::set<std::string> stationsUsed;
@@ -489,7 +489,7 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
 
 			if ( (size_t)i < result->arrivalCount() ) {
 				result->arrival(i)->setPickID(origin->arrival(arid)->pickID());
-				DataModel::Pick* p = Pick::Find(result->arrival(i)->pickID());
+				DataModel::Pick *p = Pick::Find(result->arrival(i)->pickID());
 
 				if ( p != NULL )
 					stationsAssociated.insert(p->waveformID().networkCode() + "." + p->waveformID().stationCode());
@@ -602,7 +602,7 @@ double LocSAT::stationCorrection(const std::string &staid,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
+bool LocSAT::loadArrivals(const DataModel::Origin *origin) {
 	if ( !origin )
 		return false;
 
@@ -610,8 +610,8 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 	SEISCOMP_DEBUG("Load arrivals:");
 #endif
 	for (unsigned int i = 0; i < origin->arrivalCount(); i++){
-		DataModel::Arrival* arrival = origin->arrival(i);
-		DataModel::Pick* pick = getPick(arrival);
+		DataModel::Arrival *arrival = origin->arrival(i);
+		DataModel::Pick *pick = getPick(arrival);
 		if (!pick){
 			throw PickNotFoundException("pick '" + arrival->pickID() + "' not found");
 		}
@@ -689,7 +689,8 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 
 		_locateEvent->addArrival(i, stationID.c_str(), phaseCode.c_str(),
 		                         (double)pick->time().value()-cor,
-		                         timeError, timeUsed ? 1 : 0);
+		                         getTimeError(pick, _defaultPickUncertainty, _usePickUncertainties),
+		                         timeUsed ? 1 : 0);
 
 		// Set backazimuth
 		bool backazimuthUsed = true;

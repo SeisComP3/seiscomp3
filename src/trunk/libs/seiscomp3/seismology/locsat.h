@@ -112,9 +112,9 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		std::string getLocatorParams(int param) const;
 		void setDefaultLocatorParams();
 
-		bool loadArrivals(const DataModel::Origin* origin, double timeError);
-		DataModel::Origin* fromPicks(PickList& pickList);
-		DataModel::Origin* loc2Origin(Internal::Loc* loc);
+		bool loadArrivals(const DataModel::Origin* origin);
+		DataModel::Origin *fromPicks(PickList& pickList);
+		DataModel::Origin *loc2Origin(Internal::Loc* loc);
 
 		double stationCorrection(const std::string &staid, const std::string &stacode,
 		                         const std::string &phase) const;
