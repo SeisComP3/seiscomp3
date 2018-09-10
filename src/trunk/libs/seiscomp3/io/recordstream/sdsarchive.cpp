@@ -19,6 +19,7 @@
 #include <seiscomp3/system/environment.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/sdsarchive.h>
+#include <seiscomp3/core/strings.h>
 #include <seiscomp3/logging/log.h>
 #include <libmseed.h>
 
@@ -56,7 +57,9 @@ SDSArchive::SDSArchive() : RecordStream() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::SDSArchive(const string arcroot)
-: RecordStream(), _arcroot(arcroot) {}
+: RecordStream() {
+	setSource(arcroot);
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -64,7 +67,7 @@ SDSArchive::SDSArchive(const string arcroot)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::SDSArchive(const SDSArchive &mem) : RecordStream() {
-	setSource(mem.archiveRoot());
+	_arcroots = mem._arcroots;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -80,8 +83,9 @@ SDSArchive::~SDSArchive() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive& SDSArchive::operator=(const SDSArchive &mem) {
-	if (this != &mem)
-		_arcroot = mem.archiveRoot();
+	if (this != &mem) {
+		_arcroots = mem._arcroots;
+	}
 
 	return *this;
 }
@@ -92,9 +96,16 @@ SDSArchive& SDSArchive::operator=(const SDSArchive &mem) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::setSource(const string &src) {
-	_arcroot = src;
-	if ( _arcroot.empty() )
-		_arcroot = Seiscomp::Environment::Instance()->installDir() + "/var/lib/archive";
+	if ( src.empty() ) {
+		_arcroots.push_back(Seiscomp::Environment::Instance()->installDir() + "/var/lib/archive");
+	} else {
+		Core::split(_arcroots, src.c_str(), ",");
+	}
+
+	for(_rootiter = _arcroots.begin(); _rootiter != _arcroots.end(); _rootiter++) {
+		SEISCOMP_DEBUG("+ Add to archive root list: %s", _rootiter->c_str());
+	}
+	SEISCOMP_DEBUG("Total of %ld archive roots are in use.", _arcroots.size());
 
 	return true;
 }
@@ -180,15 +191,6 @@ void SDSArchive::close() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-string SDSArchive::archiveRoot() const {
-	return _arcroot;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time SDSArchive::getStartTime(const string &file) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
@@ -231,7 +233,7 @@ string SDSArchive::filename(int doy, int year) {
 	stringstream ss;
 
 	ss << year;
-	string path = _arcroot + "/" + ss.str() + "/" + net + "/" + sta + "/" + cha + ".D/" +
+	string path = "/" + ss.str() + "/" + net + "/" + sta + "/" + cha + ".D/" +
 	net + "." + sta + "." + loc + "." + cha + ".D." + ss.str() + ".";
 	ss.str("");
 	ss << setfill ('0') << setw(3) << doy;
@@ -265,11 +267,11 @@ void SDSArchive::setFilenames() {
 					Time tmptime = stime - TimeSpan(86400,0);
 					int tmpdoy2;
 					tmptime.get2(&tmpyear, &tmpdoy2);
-					_fnames.push(filename(tmpdoy2+1, tmpyear));
+					_fnames.push_back(filename(tmpdoy2+1, tmpyear));
 				}
 			}
 
-			_fnames.push(file);
+			_fnames.push_back(file);
 			first = false;
 		}
 		sdoy = 1;
@@ -286,7 +288,7 @@ bool SDSArchive::setStart(const string &fname) {
 	MSFileParam *pfp = NULL;
 	double samprate = 0.0;
 	Time recstime, recetime;
-	Time stime = (_curidx->startTime() == Time())?_stime:_curidx->startTime();
+	Time stime = (_last != NULL) ? _last->endTime() : ((_curidx->endTime() == Time()) ? _stime : _curidx->startTime());
 	off_t fpos;
 	int retcode;
 	long int offset = 0;
@@ -452,12 +454,24 @@ bool SDSArchive::stepStream() {
 
 		_recstream.close();
 	}
-	else
+	else {
 		_curiter = _streams.begin();
+		_rootiter = _arcroots.begin();
+		_last = NULL;
+	}
+
+	if (_last != NULL) {
+		Time e = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
+		if (_last->endTime() > e) {
+			_rootiter = _arcroots.end();
+			_fnames.clear();
+			_currentfname.clear();
+		}
+	}
 
 	bool first = false;
-	while ( !_fnames.empty() || _curiter != _streams.end() ) {
-		while ( _fnames.empty() && _curiter != _streams.end() ) {
+	while ( !_fnames.empty() || _curiter != _streams.end() || _rootiter != _arcroots.end() ) {
+		while ( _fnames.empty() && _currentfname.empty() && _curiter != _streams.end() ) {
 			SEISCOMP_DEBUG("SDS request: %s", _curiter->str(_stime, _etime).c_str());
 			if ( _etime == Time() ) _etime = Time::GMT();
 			if ( (_curiter->startTime() == Time() && _stime == Time()) ) {
@@ -468,35 +482,57 @@ bool SDSArchive::stepStream() {
 				_curidx = &*_curiter;
 				++_curiter;
 				setFilenames();
+				_rootiter = _arcroots.begin();
+				_currentfname.clear();
+				_last = NULL;
 				first = true;
 				break;
 			}
 		}
 
-		while ( !_fnames.empty() ) {
-			string fname = _fnames.front();
-			_fnames.pop();
-			_recstream.close();
-			_recstream.clear();
-			_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
-			if ( !_recstream.is_open() ) {
-				SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
+		while ( _rootiter != _arcroots.end() ) {
+			std::deque<std::string> clist;
+			if (!_currentfname.empty()) {
+				clist.push_back(_currentfname);
+				_currentfname.clear();
 			}
-			else {
-				SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
-				if ( first ) {
-					if ( !setStart(fname) ) {
-						SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
-						continue;
+
+			while ( !_fnames.empty() ) {
+				std::string fname = _fnames.front();
+				_fnames.pop_front();
+
+				string fullnane = (*_rootiter) + fname;
+				_recstream.close();
+				_recstream.clear();
+				_recstream.open(fullnane.c_str(), ios_base::in | ios_base::binary);
+
+				if ( _recstream.is_open() ) {
+					SEISCOMP_DEBUG("+ %s (init:%s)", fullnane.c_str(), first?((_last != NULL) ? _last->endTime() : ((_curidx->endTime() == Time()) ? _stime : _curidx->startTime())).iso().c_str():"-");
+					
+					if ( first ) {
+						if ( !setStart(fullnane) ) {
+							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fullnane.c_str());
+							continue;
+						}
 					}
+					
+					if ( !_recstream.eof() && !isEnd() ) {
+						_currentfname = fname;
+						return true;
+					}
+				} else {
+					SEISCOMP_DEBUG("+ %s (not found)", fullnane.c_str());
 				}
 
-				if ( !_recstream.eof() && !isEnd() )
-					return true;
+				clist.push_back(fname);
 			}
 
-			first = false;
+			_rootiter++;
+			first = true;
+			if (_rootiter != _arcroots.end()) _fnames = clist;
 		}
+
+		first = false;
 	}
 
 	return false;
@@ -534,9 +570,11 @@ Seiscomp::Record *SDSArchive::next() {
 			continue;
 		}
 
+		_last = rec;
 		return rec;
 	}
-
+	
+	_last = NULL;
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
