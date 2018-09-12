@@ -11,6 +11,8 @@
     the scolv locator setup dialog. The latter defaults to false to preserve
     the old behaviour
   * Add ConfigSyncMessage which wraps a database configuration synchronization
+  * Fixed ML amplitude calculation which had a factor of 2 applied and effectively
+    picked a peak-to-peak amplitude instead of zero-to-peak.
 
 
 * fdsnxml2inv
