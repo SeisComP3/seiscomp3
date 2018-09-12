@@ -21,7 +21,7 @@
 #include "ml.h"
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
-#include <seiscomp3/processing/amplitudes/MLv.h>
+#include <seiscomp3/processing/amplitudes/ML.h>
 #include <seiscomp3/processing/magnitudeprocessor.h>
 #include <seiscomp3/seismology/magnitudes.h>
 #include <seiscomp3/math/filter/seismometers.h>
@@ -42,19 +42,18 @@
 #define MAG_TYPE "MLh"
 
 using namespace std;
-
-using namespace std;
-
 using namespace Seiscomp;
-using namespace Seiscomp::Processing;
 
+
+// To not polute the global namespace, everything is put into a private
+// namespace.
 namespace {
 
-AmplitudeProcessor::AmplitudeValue average(
-	const AmplitudeProcessor::AmplitudeValue &v0,
-	const AmplitudeProcessor::AmplitudeValue &v1)
+Processing::AmplitudeProcessor::AmplitudeValue average(
+	const Processing::AmplitudeProcessor::AmplitudeValue &v0,
+	const Processing::AmplitudeProcessor::AmplitudeValue &v1)
 {
-	AmplitudeProcessor::AmplitudeValue v;
+	Processing::AmplitudeProcessor::AmplitudeValue v;
 	// Average both values
 	v.value = (v0.value + v1.value) * 0.5;
 
@@ -88,11 +87,11 @@ AmplitudeProcessor::AmplitudeValue average(
 }
 
 
-AmplitudeProcessor::AmplitudeTime average(
-	const AmplitudeProcessor::AmplitudeTime &t0,
-	const AmplitudeProcessor::AmplitudeTime &t1)
+Processing::AmplitudeProcessor::AmplitudeTime average(
+	const Processing::AmplitudeProcessor::AmplitudeTime &t0,
+	const Processing::AmplitudeProcessor::AmplitudeTime &t1)
 {
-	AmplitudeProcessor::AmplitudeTime t;
+	Processing::AmplitudeProcessor::AmplitudeTime t;
 	t.reference = Core::Time((double(t0.reference) + double(t1.reference)) * 0.5);
 
 	// Compute lower and upper uncertainty
@@ -120,8 +119,6 @@ AmplitudeProcessor::AmplitudeTime average(
 	return t;
 }
 
-}
-
 
 ADD_SC_PLUGIN(
 	"MLh magnitude method (max of both horizontal compontents)",
@@ -130,12 +127,12 @@ ADD_SC_PLUGIN(
 )
 
 
-class AmplitudeProcessor_MLh : public AmplitudeProcessor_MLv {
+class AmplitudeProcessor_MLh : public Processing::AbstractAmplitudeProcessor_ML {
 	public:
 		double ClippingThreshold; // will be set by the setup method in AmplitudeProcessor_ML
 
-		AmplitudeProcessor_MLh() : AmplitudeProcessor_MLv() {
-			_type = MAG_TYPE;
+		AmplitudeProcessor_MLh()
+		: Processing::AbstractAmplitudeProcessor_ML(MAG_TYPE) {
 			setMinSNR(0);
 			setMinDist(DELTA_MIN);
 			setMaxDist(DELTA_MAX);
@@ -154,14 +151,14 @@ class AmplitudeProcessor_MLh : public AmplitudeProcessor_MLv {
 					break;
 				}
 			}
-			AmplitudeProcessor_MLv::fill(n, samples); // this will apply a filter
+			AbstractAmplitudeProcessor_ML::fill(n, samples); // this will apply a filter
 		}
 
-		friend class AmplitudeProcessor_ML;
+		friend class AmplitudeProcessor_ML2h;
 };
 
 
-class AmplitudeProcessor_ML : public AmplitudeProcessor {
+class AmplitudeProcessor_ML2h : public Processing::AmplitudeProcessor {
 	private:
 		MAKEENUM(
 			CombinerProc,
@@ -182,7 +179,8 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 		);
 
 	public:
-		AmplitudeProcessor_ML() : AmplitudeProcessor(MAG_TYPE) {
+		AmplitudeProcessor_ML2h()
+		: Processing::AmplitudeProcessor(MAG_TYPE) {
 			setMinSNR(0);
 			setMinDist(DELTA_MIN);
 			setMaxDist(DELTA_MAX);
@@ -193,8 +191,8 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 			_ampN.setUsedComponent(FirstHorizontal);
 			_ampE.setUsedComponent(SecondHorizontal);
 
-			_ampN.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
-			_ampE.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
+			_ampN.setPublishFunction(boost::bind(&AmplitudeProcessor_ML2h::newAmplitude, this, _1, _2));
+			_ampE.setPublishFunction(boost::bind(&AmplitudeProcessor_ML2h::newAmplitude, this, _1, _2));
 
 			_combiner = Maximum;
 		}
@@ -244,13 +242,13 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 
 		// Method called by the application to setup the processor.
 		// StreamConfigs are expected to be setup already.
-		bool setup(const Settings &settings) {
+		bool setup(const Processing::Settings &settings) {
 			// Copy the stream configurations (gain, orientation, responses, ...) to
 			// the horizontal processors
 			_ampN.streamConfig(FirstHorizontalComponent) = streamConfig(FirstHorizontalComponent);
 			_ampE.streamConfig(SecondHorizontalComponent) = streamConfig(SecondHorizontalComponent);
 
-			if ( !AmplitudeProcessor::setup(settings) ) return false;
+			if ( !Processing::AmplitudeProcessor::setup(settings) ) return false;
 
 			// Setup each component
 			if ( !_ampN.setup(settings) || !_ampE.setup(settings) ) return false;
@@ -485,8 +483,6 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 						return;
 				}
 
-				// zero to peak amplitude
-				newRes.amplitude.value *= 0.5;
 				newRes.period = -1;
 				newRes.snr = -1;
 				emitAmplitude(newRes);
@@ -507,7 +503,7 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 
 
 
-class MagnitudeProcessor_ML : public MagnitudeProcessor {
+class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 	public:
 		struct param_struct {
 			double dist;
@@ -521,10 +517,11 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 
 
 	public:
-		MagnitudeProcessor_ML() : MagnitudeProcessor(MAG_TYPE) {}
+		MagnitudeProcessor_ML()
+		: Processing::MagnitudeProcessor(MAG_TYPE) {}
 
 
-		bool setup(const Settings &settings) {
+		bool setup(const Processing::Settings &settings) {
 			list_of_parametersets.clear();
 
 			try {
@@ -636,7 +633,7 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 		}
 
 
-		MagnitudeProcessor::Status compute_ML_sed(
+		Processing::MagnitudeProcessor::Status compute_ML_sed(
 			double amplitude, // in micrometers
 			double delta,     // in degrees
 			double depth,     // in kilometers
@@ -683,5 +680,8 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 };
 
 
-REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_ML, MAG_TYPE);
+REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_ML2h, MAG_TYPE);
 REGISTER_MAGNITUDEPROCESSOR(MagnitudeProcessor_ML, MAG_TYPE);
+
+
+}

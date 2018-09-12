@@ -15,7 +15,7 @@
 #ifndef __SEISCOMP_PROCESSING_AMPLITUDEPROCESSOR_ML_H__
 #define __SEISCOMP_PROCESSING_AMPLITUDEPROCESSOR_ML_H__
 
-#include <seiscomp3/processing/amplitudes/MLv.h>
+#include <seiscomp3/processing/amplitudeprocessor.h>
 
 
 namespace Seiscomp {
@@ -23,43 +23,30 @@ namespace Seiscomp {
 namespace Processing {
 
 
-//! Wrapper class that allows access to protected methods for
-//! the proxy (see below).
-class SC_SYSTEM_CLIENT_API AmplitudeProcessor_MLh : public AmplitudeProcessor_MLv {
-	public:
-		AmplitudeProcessor_MLh();
-
-	friend class AmplitudeProcessor_ML;
-};
-
-
-//! Proxy amplitude processor that holds to MLv processors to calculate
-//! the amplitudes on both horizontals and then averages the result.
-//! This class does not handle waveforms itself. It directs them to the
-//! corresponding amplitude processors instead.
-class SC_SYSTEM_CLIENT_API AmplitudeProcessor_ML : public AmplitudeProcessor {
-	DECLARE_SC_CLASS(AmplitudeProcessor_ML);
+class SC_SYSTEM_CLIENT_API AbstractAmplitudeProcessor_ML : public AmplitudeProcessor {
+	DECLARE_SC_CLASS(AbstractAmplitudeProcessor_ML);
 
 	public:
-		AmplitudeProcessor_ML();
-		AmplitudeProcessor_ML(const Core::Time& trigger);
+		AbstractAmplitudeProcessor_ML(const std::string& type);
+		AbstractAmplitudeProcessor_ML(const Core::Time &trigger, const std::string& type);
 
 	public:
-		int capabilities() const;
-		IDList capabilityParameters(Capability cap) const;
-		bool setParameter(Capability cap, const std::string &value);
+		virtual void initFilter(double fsamp);
 
-		bool setup(const Settings &settings);
+		virtual int capabilities() const;
+		virtual IDList capabilityParameters(Capability cap) const;
+		virtual bool setParameter(Capability cap, const std::string &value);
 
-		void setTrigger(const Core::Time& trigger);
+		virtual bool setup(const Settings &settings);
 
-		void computeTimeWindow();
 
-		void reset();
-		void close();
+	protected:
+		bool deconvolveData(Response *resp, DoubleArray &data, int numberOfIntegrations);
 
-		bool feed(const Record *record);
-
+		/**
+		 * Computes the zero-to-peak amplitude on the simulated Wood-Anderson
+		 * trace.
+		 */
 		bool computeAmplitude(const DoubleArray &data,
 		                      size_t i1, size_t i2,
 		                      size_t si1, size_t si2,
@@ -67,37 +54,10 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_ML : public AmplitudeProcessor {
 		                      AmplitudeIndex *dt, AmplitudeValue *amplitude,
 		                      double *period, double *snr);
 
-		const AmplitudeProcessor *componentProcessor(Component comp) const;
-		const DoubleArray *processedData(Component comp) const;
-
-		void reprocess(OPT(double) searchBegin, OPT(double) searchEnd);
-
-
-	protected:
 		double timeWindowLength(double distance) const;
 
-
 	private:
-		void newAmplitude(const AmplitudeProcessor *proc,
-		                  const AmplitudeProcessor::Result &res);
-
-
-	private:
-		struct ComponentResult {
-			AmplitudeValue value;
-			AmplitudeTime  time;
-		};
-
-		enum CombinerProc {
-			TakeMin,
-			TakeMax,
-			TakeAverage
-		};
-
-		mutable
-		AmplitudeProcessor_MLh _ampE, _ampN;
-		CombinerProc           _combiner;
-		OPT(ComponentResult)   _results[2];
+		bool _computeAbsMax;
 };
 
 
