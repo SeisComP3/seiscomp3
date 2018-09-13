@@ -262,7 +262,7 @@ mysql> source /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
 and in psql with
 
 ```
-seiscomp3=> \i /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
+seiscomp3=> \i /home/sysop/seiscomp3/share/db/migrations/postgresql/0_9_to_0_10.sql;
 ```
 
 **Rationale**
