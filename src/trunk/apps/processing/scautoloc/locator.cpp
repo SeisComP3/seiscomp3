@@ -45,28 +45,16 @@ Locator::~Locator()
 	SEISCOMP_INFO("Locator instance called %d times", _count);
 }
 
-void Locator::setStations(const Autoloc::StationDB *stations)
-{
-	_sensorsLocSAT.clear();
+void Locator::setStation(const Autoloc::Station *station) {
+	string key = station->net + "." + station->code;
 
-	// convert station list to LocSAT::StationList
-	if ( stations ) {
-		for (Autoloc::StationDB::const_iterator
-		     it=stations->begin(); it!=stations->end(); ++it) {
+	Seiscomp::DataModel::SensorLocationPtr
+		sloc = Seiscomp::DataModel::SensorLocation::Create();
 
-			const Autoloc::Station *s = (*it).second.get();
-			string key = s->net + "." + s->code;
-
-			Seiscomp::DataModel::SensorLocationPtr
-				sloc = Seiscomp::DataModel::SensorLocation::Create();
-
-			sloc->setLatitude(  s->lat  );
-			sloc->setLongitude( s->lon  );
-			sloc->setElevation( s->alt  );
-
-			_sensorsLocSAT.insert(pair<string,Seiscomp::DataModel::SensorLocationPtr>(key, sloc));
-		}
-	}
+	sloc->setLatitude(  station->lat  );
+	sloc->setLongitude( station->lon  );
+	sloc->setElevation( station->alt  );
+	_sensorsLocSAT.insert(pair<string,Seiscomp::DataModel::SensorLocationPtr>(key, sloc));
 }
 
 

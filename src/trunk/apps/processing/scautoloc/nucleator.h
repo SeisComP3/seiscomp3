@@ -33,18 +33,10 @@ namespace Autoloc {
 class Nucleator
 {
 	public:
-		Nucleator() {
-			_stations = 0;
-		}
-
-		virtual ~Nucleator() {
-			delete _stations;
-		}
-
+		virtual void setStation(const Station *station);
 	public:
-		void setStations(const StationDB *stations);
 		virtual bool feed(const Pick *pick) = 0;
-		const OriginDB &newOrigins() {
+		const OriginVector &newOrigins() {
 			return _newOrigins;
 		}
 
@@ -57,13 +49,13 @@ class Nucleator
 		virtual void setup() = 0;
 
 	protected:
-		const StationDB *_stations;
+		StationMap _stations;
 //		double _config_maxDistanceXXL;
 
 		std::set<std::string> _configuredStations;
 
 	public:
-		OriginDB _newOrigins;
+		OriginVector _newOrigins;
 };
 
 
@@ -110,9 +102,9 @@ class GridSearch : public Nucleator
 		};
 
 	public:
+		void setStation(const Station *station);
 		const Config &config() const { return _config; }
 		void setConfig(const Config &config) { _config = config; }
-	//	void addStation(const DataModel::StationCPtr* station);
 		bool setGridFile(const std::string &gridfile);
 
 		void setLocatorProfile(const std::string &profile);
@@ -231,7 +223,7 @@ class GridPoint : public Hypocenter
 		int cleanup(const Time& minTime);
 
 	public:
-		void setStations(const StationDB *stations);
+//		void setStations(const StationMap *stations);
 
 		bool setupStation(const Station *station);
 

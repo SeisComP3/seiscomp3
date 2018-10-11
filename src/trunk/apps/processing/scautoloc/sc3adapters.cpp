@@ -235,6 +235,7 @@ Autoloc::Origin *Seiscomp::Applications::Autoloc::App::convertFromSC3(const Seis
 */
 		const ::Autoloc::Pick *pick = ::Autoloc::Autoloc3::pick(pickID);
 		if ( ! pick ) {
+// TODO: Use Cache here!
 			// XXX FIXME: This may also happen after Autoloc cleaned up older picks, so the pick isn't available any more!
 			SEISCOMP_ERROR_S("Pick " + pickID + " not found in internal pick pool - SKIPPING this pick");
 			if (Seiscomp::DataModel::PublicObject::Find(pickID))

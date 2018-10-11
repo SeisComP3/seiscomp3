@@ -342,12 +342,12 @@ void Origin::geoProperties(double &min, double &max, double &gap) const
 	}
 }
 
-int OriginDB::mergeEquivalentOrigins(const Origin *start)
+int OriginVector::mergeEquivalentOrigins(const Origin *start)
 {
 	return 0;
 }
 
-bool OriginDB::find(const Origin *origin) const
+bool OriginVector::find(const Origin *origin) const
 {
 	for (const_iterator it=begin(); it!=end(); ++it) {
 		if (origin == (*it).get())
@@ -356,7 +356,7 @@ bool OriginDB::find(const Origin *origin) const
 	return false;
 }
 
-Origin* OriginDB::find(const OriginID &id)
+Origin* OriginVector::find(const OriginID &id)
 {
 	for (iterator it=begin(); it!=end(); ++it) {
 		if (id == (*it)->id)
@@ -382,7 +382,7 @@ static int countCommonPicks(const Origin *origin1, const Origin *origin2)
 }
 
 
-const Origin *OriginDB::bestEquivalentOrigin(const Origin *origin) const
+const Origin *OriginVector::bestEquivalentOrigin(const Origin *origin) const
 {
 	const Origin *best = 0;
 	int maxCommonPickCount = 0;

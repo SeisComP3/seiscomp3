@@ -28,8 +28,7 @@ class Locator : public Seiscomp::LocSAT {
 		Locator();
 		~Locator();
 
-		void setStations(const Autoloc::StationDB *stations);
-
+		void setStation(const Station *station);
 		void setMinimumDepth(double);
 
 	public:

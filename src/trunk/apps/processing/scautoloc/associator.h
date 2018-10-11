@@ -59,8 +59,8 @@ class Associator
 	~Associator();
 
   public:
-	void setStations(const StationDB *stations);
-	void setOrigins(const OriginDB *origins);
+	void setStations(const StationMap *stations);
+	void setOrigins(const OriginVector *origins);
 
   public:
 	// Feed a pick and try to associate it with known origins, under the
@@ -80,8 +80,8 @@ class Associator
 
   protected:
 	// these are not owned:
-	const StationDB *_stations;
-	const OriginDB  *_origins;
+	const StationMap *_stations;
+	const OriginVector  *_origins;
 
   private:
 	AssociationVector _associations;

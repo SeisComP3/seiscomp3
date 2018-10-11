@@ -238,7 +238,7 @@ class Autoloc3 {
 		bool setGridFile(const std::string &);
 		void setPickLogFilePrefix(const std::string &);
 		void setPickLogFileName(const std::string &);
-		bool setStations(StationDB *);
+		bool setStation(Station *);
 		void setLocatorProfile(const std::string &);
 
 		bool init();
@@ -489,7 +489,7 @@ class Autoloc3 {
 	private:
 		// origins that were created/modified during the last
 		// feed() call
-		OriginDB _newOrigins;
+		OriginVector _newOrigins;
 
 		// origins waiting for a _flush()
 		std::map<int, Time>      _nextDue;
@@ -507,14 +507,15 @@ class Autoloc3 {
 		std::ofstream _pickLogFile;
 
 	private:
-		StationDB *_stations;
+		StationMap _stations;
 
 		// a list of NET.STA strings for missing stations
 		std::set<std::string> _missingStations;
 		std::set<PickCPtr> _blacklist;
 
-		OriginDB _origins;
+		OriginVector _origins;
 		Config   _config;
+		StationConfig _stationConfig;
 };
 
 

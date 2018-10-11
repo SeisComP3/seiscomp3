@@ -21,6 +21,7 @@
 #include <seiscomp3/datamodel/amplitude.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/eventparameters.h>
+#include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/client/application.h>
 #include "autoloc.h"
 
@@ -49,7 +50,9 @@ class App : public Client::Application,
 		void createCommandLineDescription();
 		bool validateParameters();
 		bool initConfiguration();
-		bool initStations();
+		bool initInventory();
+		// initialize one station at runtime
+		bool initOneStation(const DataModel::WaveformStreamID&, const Core::Time&);
 
 		void readHistoricEvents();
 
@@ -90,12 +93,11 @@ class App : public Client::Application,
 		unsigned int objectCount;
 
 		DataModel::EventParametersPtr _ep;
+		DataModel::InventoryPtr inventory;
 
 		::Autoloc::Autoloc3::Config _config;
 		int _keepEventsTimeSpan;
 		int _wakeUpTimout;
-
-		std::map<std::string, DataModel::AmplitudePtr> ampmap;
 
 		ObjectLog   *_inputPicks;
 		ObjectLog   *_inputAmps;

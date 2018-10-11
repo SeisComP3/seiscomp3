@@ -17,6 +17,7 @@
 #include <vector>
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/datamodel/pick.h>
+#include <seiscomp3/datamodel/inventory.h>
 #include <seiscomp3/seismology/ttt.h>
 
 #include "datamodel.h"
@@ -56,10 +57,12 @@ std::string time2str(const Time &t);
 
 namespace Utils {
 
-StationDB *readStationLocations(const std::string &fname);
-//bool readStationConfig(StationDB *stations, const std::string &fname);
-PickDB readPickFile();
-Pick*  readPickLine();
+StationMap *readStationLocations(const std::string &fname);
+Seiscomp::DataModel::Inventory* inventoryFromStationLocationFile(const std::string &_stationLocationFile);
+
+//bool readStationConfig(StationMap *stations, const std::string &fname);
+PickVector readPickFile();
+Pick*      readPickLine();
 Pick::Status status(const Seiscomp::DataModel::Pick *pick);
 
 }

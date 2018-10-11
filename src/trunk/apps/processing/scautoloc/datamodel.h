@@ -52,7 +52,7 @@ class Station : public Seiscomp::Core::BaseObject {
 	bool used;
 };
 
-typedef std::map<std::string, StationCPtr> StationDB;
+typedef std::map<std::string, StationCPtr> StationMap;
 
 
 DEFINE_SMARTPOINTER(Origin);
@@ -271,7 +271,7 @@ class Origin : public Hypocenter {
 };
 
 
-class OriginDB : public std::vector<OriginPtr> {
+class OriginVector : public std::vector<OriginPtr> {
 
   public:
 	bool find(const Origin *) const;
@@ -292,11 +292,11 @@ class Event : public Seiscomp::Core::BaseObject {
 
   public:
 
-    OriginDB origin;
+    OriginVector origin;
 };
 
 
-typedef std::vector<PickPtr> PickDB;
+typedef std::vector<PickPtr> PickVector;
 typedef std::vector<Pick*>   PickGroup;
 
 }  // namespace Autoloc

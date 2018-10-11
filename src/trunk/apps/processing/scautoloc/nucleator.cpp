@@ -42,23 +42,23 @@ static std::string station_key (const Station *station)
 
 typedef std::set<PickCPtr> PickSet;
 
-void Nucleator::setStations(const StationDB *stations)
+void Nucleator::setStation(const Station *station)
 {
-	if (_stations == stations) return;
+	std::string key = station->net + "." + station->code;
+	if (_stations.find(key) != _stations.end())
+		return; // nothing to insert
+	_stations.insert(StationMap::value_type(key, station));
+}
 
-// Natuerlich nicht delete. Aber dem Nucleator irgendwie mitteilen, was
-// genau sich an den Stationen geaendert hat
-//	if (_stations) delete _stations;
-
-	_stations = stations;
-
-	if (_stations)
-		setup();
+void GridSearch::setStation(const Station *station)
+{
+	Nucleator::setStation(station);
+	_relocator.setStation(station);
 }
 
 GridSearch::GridSearch()
 {
-	_stations = 0;
+//	_stations = 0;
 	_abort = false;
 }
 
@@ -357,21 +357,21 @@ int GridPoint::cleanup(const Time& minTime)
 	return count;
 }
 
-
-void GridPoint::setStations(const StationDB *stations)
+/*
+void GridPoint::setStations(const StationMap *stations)
 {
 	_wrappers.clear();
 
 	if ( stations == NULL ) return;
 
-	for (StationDB::const_iterator
+	for (StationMap::const_iterator
 	     it = stations->begin(); it != stations->end(); ++it) {
 
 		const Station *station = (*it).second.get();
 		setupStation(station);
 	}
 }
-
+*/
 
 bool GridPoint::setupStation(const Station *station)
 {
@@ -583,12 +583,12 @@ double originScore(const Origin *origin, double maxRMS, double networkSizeKm)
 
 
 
-static Origin* bestOrigin(OriginDB &origins)
+static Origin* bestOrigin(OriginVector &origins)
 {
 	double maxScore = 0;
 	Origin* best = 0;
 
-	for (OriginDB::iterator it=origins.begin();
+	for (OriginVector::iterator it=origins.begin();
 	     it != origins.end(); ++it) {
 
 		Origin* origin = (*it).get();
@@ -617,7 +617,7 @@ bool GridSearch::feed(const Pick *pick)
 //
 //	_pa[ pick->id ] = pa;
 
-	if (_stations == 0) {
+	if (_stations.size() == 0) {
 		SEISCOMP_ERROR("\nGridSearch::feed() NO STATIONS SET\n");
 		exit(1);
 	}
@@ -627,8 +627,8 @@ bool GridSearch::feed(const Pick *pick)
 	// link pick to station through pointer
 
 	if (pick->station() == 0) {
-		StationDB::const_iterator it = _stations->find(net_sta);
-		if (it == _stations->end()) {
+		StationMap::const_iterator it = _stations.find(net_sta);
+		if (it == _stations.end()) {
 			SEISCOMP_ERROR_S("\nGridSearch::feed() NO STATION " + net_sta + "\n");
 			return false;
 		}
@@ -713,7 +713,7 @@ SEISCOMP_DEBUG("RELOCATE nucleator.cpp 692");
 		pickSetOriginMap[pickSet] = newOrigin;
 	}
 
-	OriginDB tempOrigins;
+	OriginVector tempOrigins;
 	for (std::map<PickSet, OriginPtr>::iterator
 	     it = pickSetOriginMap.begin(); it != pickSetOriginMap.end(); ++it) {
 
@@ -803,7 +803,7 @@ bool GridSearch::_readGrid(const std::string &gridfile)
 
 void GridSearch::setup()
 {
-	_relocator.setStations(_stations);
+//	_relocator.setStations(_stations);
 }
 
 }
