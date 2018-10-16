@@ -43,6 +43,8 @@ Stream::Stream() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Stream::init(const DataModel::Stream *stream) {
 	gain = 0.0;
+	gainFrequency = Core::None;
+	gainUnit = std::string();
 	setCode(stream->code());
 	epoch = Core::TimeWindow();
 	_sensor = NULL;
@@ -58,6 +60,10 @@ void Stream::init(const DataModel::Stream *stream) {
 
 	gainUnit = stream->gainUnit();
 	std::transform(gainUnit.begin(), gainUnit.end(), gainUnit.begin(), ::toupper);
+	try {
+		gainFrequency = stream->gainFrequency();
+	}
+	catch ( ... ) {}
 
 	try {
 		azimuth = stream->azimuth();
