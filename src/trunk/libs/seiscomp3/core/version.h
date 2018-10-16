@@ -39,6 +39,7 @@ namespace Core {
  API Changelog
  ******************************************************************************
  "12.0.0"   0x0C0000
+   - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration InvalidAmplitudeUnit
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration ReceiverOutOfRegions
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration RayPathOutOfRegions

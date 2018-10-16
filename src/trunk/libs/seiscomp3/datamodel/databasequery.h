@@ -114,6 +114,17 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		                        const std::string& type);
 
 		/**
+		 * Returns all Amplitudes in a given timewindow. As reference
+		 * time
+		 * for the Amplitude is timeWindow.reference used.
+		 * @param startTime The starttime of the timewindow
+		 * @param endTime The endtime of the timewindow
+		 * @return An iterator to iterate over the amplitudes.
+		 */
+		DatabaseIterator getAmplitudes(Seiscomp::Core::Time startTime,
+		                               Seiscomp::Core::Time endTime);
+
+		/**
 		 * Returns all Amplitudes referencing a certain Pick.
 		 * @param pickID The referenced publicID of a Pick
 		 * @return An iterator to iterate over the result set

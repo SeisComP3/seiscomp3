@@ -81,7 +81,7 @@ Event* DatabaseQuery::getEvent(const std::string& originID) {
 	if ( !validInterface() ) return NULL;
 
 	std::string query;
-	query += "select PEvent." + _T("publicID") + ",Event.* from OriginReference,Event,PublicObject as PEvent where OriginReference._parent_oid=Event._oid and Event._oid=PEvent._oid and OriginReference." + _T("originID") + "='";
+	query += "select PEvent." + _T("publicID") + ",Event.* from Event,PublicObject as PEvent,OriginReference where OriginReference._parent_oid=Event._oid and Event._oid=PEvent._oid and OriginReference." + _T("originID") + "='";
 	query += toString(originID);
 	query += "'";
 
@@ -153,6 +153,25 @@ Amplitude* DatabaseQuery::getAmplitude(const std::string& pickID,
 	query += "'";
 
 	return Amplitude::Cast(queryObject(Amplitude::TypeInfo(), query));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DatabaseIterator DatabaseQuery::getAmplitudes(Seiscomp::Core::Time startTime,
+                                              Seiscomp::Core::Time endTime) {
+	if ( !validInterface() ) return DatabaseIterator();
+
+	std::string query;
+	query += "select PAmplitude." + _T("publicID") + ",Amplitude.* from Amplitude,PublicObject as PAmplitude where Amplitude._oid=PAmplitude._oid and Amplitude." + _T("timeWindow_reference") + ">='";
+	query += toString(startTime);
+	query += "' and Amplitude." + _T("timeWindow_reference") + "<='";
+	query += toString(endTime);
+	query += "'";
+
+	return getObjectIterator(query, Amplitude::TypeInfo());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
