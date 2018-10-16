@@ -110,6 +110,7 @@ class SC_GUI_API CalculateAmplitudes : public QDialog {
 
 		void addProcessor(const std::string &type,
 		                  const DataModel::Pick *pick,
+		                  const DataModel::SensorLocation *loc,
 		                  double dist);
 
 		void addProcessor(Processing::AmplitudeProcessor *,

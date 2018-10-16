@@ -38,14 +38,12 @@ MagnitudeProcessor_Mwp::MagnitudeProcessor_Mwp()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_Mwp::computeMagnitude(
-	double amplitude, // in micrometers per second // XXX ???
-	double,           // period is unused
-	double delta,     // in degrees
-	double depth,     // in kilometers
+	double amplitude, const std::string &unit,
+	double, double, double delta, double depth,
 	const DataModel::Origin *hypocenter,
 	const DataModel::SensorLocation *receiver,
-	double &value)
-{
+	const DataModel::Amplitude *,
+	double &value) {
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
 

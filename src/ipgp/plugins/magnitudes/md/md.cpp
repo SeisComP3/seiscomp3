@@ -855,10 +855,11 @@ bool MagnitudeProcessor_Md::setup(const Settings& settings) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status
-MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
-                                        double delta, double depth,
+MagnitudeProcessor_Md::computeMagnitude(double amplitude, const std::string &unit,
+                                        double period, double, double delta, double depth,
                                         const DataModel::Origin *hypocenter,
                                         const DataModel::SensorLocation *receiver,
+                                        const DataModel::Amplitude *,
                                         double& value) {
 
 	double epdistkm;
@@ -888,13 +889,13 @@ MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
 	if ( amplitude <= 0. ) {
 		value = 0;
 		SEISCOMP_ERROR("%s calculated amplitude is wrong, "
-			"no magnitude will be calculated", MAGTAG);
+		               "no magnitude will be calculated", MAGTAG);
 		return Error;
 	}
 
 	if ( (mFile.DELTA_MAX) < epdistkm ) {
 		SEISCOMP_ERROR("%s epicenter distance is out of configured range, "
-			"no magnitude will be calculated", MAGTAG);
+		               "no magnitude will be calculated", MAGTAG);
 		return DistanceOutOfRange;
 	}
 
@@ -903,7 +904,7 @@ MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
 
 	if ( value > mFile.MD_MAX )
 		SEISCOMP_WARNING("%s Calculated magnitude is beyond max Md value [value= %.2f]",
-		    MAGTAG, value);
+		                 MAGTAG, value);
 
 	return OK;
 }

@@ -459,6 +459,9 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 	double period = 0;
 	try { period = ampl->period().value(); } catch ( ... ) {}
 
+	double snr = 0;
+	try { snr = ampl->snr(); } catch ( ... ) {}
+
 	Util::KeyValues *params = NULL;
 	std::string stationID = ampl->waveformID().networkCode() + "." +
 	                        ampl->waveformID().stationCode();
@@ -524,14 +527,14 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 		}
 
 		MagnitudeProcessor::Status status =
-			it->second->computeMagnitude(ampl->amplitude().value(),
-			                             period, distance, depth,
-			                             origin, loc, mag);
+			it->second->computeMagnitude(ampValue, ampl->unit(),
+			                             period, snr, distance, depth,
+			                             origin, loc, ampl, mag);
 
 		if ( status != MagnitudeProcessor::OK )
 			continue;
 
-		mags.push_back(MagnitudeEntry(it->second->type(), mag));
+		mags.push_back(MagnitudeEntry(it->second.get(), mag));
 
 		const string &net = ampl->waveformID().networkCode();
 		const string &sta = ampl->waveformID().stationCode();
@@ -1047,10 +1050,11 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 				continue;
 
 			for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
-				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->first, it->second, false);
+				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->first->type(), it->second, false);
 				if ( stationMagnitude ) {
+					it->first->finalizeMagnitude(stationMagnitude.get());
 					stationMagnitude->setAmplitudeID(aid);
-					magTypes.insert(it->first);
+					magTypes.insert(it->first->type());
 				}
 			}
 		}
@@ -1281,8 +1285,9 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 
 		for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
 
-			StaMagPtr stationMagnitude = getStationMagnitude(origin, wfid, it->first, it->second, update);
+			StaMagPtr stationMagnitude = getStationMagnitude(origin, wfid, it->first->type(), it->second, update);
 			if ( stationMagnitude ) {
+				it->first->finalizeMagnitude(stationMagnitude.get());
 				stationMagnitude->setAmplitudeID(ampl->publicID());
 
 				const string &mtype = stationMagnitude->type();

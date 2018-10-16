@@ -233,11 +233,11 @@ class AmplitudeViewMarker : public RecordMarker {
 
 		AmplitudeViewMarker(RecordWidget *parent,
 		                    const AmplitudeViewMarker& m)
-		: RecordMarker(parent, m),
-		  _referencedAmplitude(m._referencedAmplitude),
-		  _type(m._type),
-		  _slot(m._slot),
-		  _newResult(m._newResult)
+		: RecordMarker(parent, m)
+		, _referencedAmplitude(m._referencedAmplitude)
+		, _manualAmplitude(m._manualAmplitude)
+		, _type(m._type)
+		, _slot(m._slot)
 		{
 			init();
 			_time = m._time;
@@ -249,7 +249,7 @@ class AmplitudeViewMarker : public RecordMarker {
 	private:
 		void init() {
 			_twBegin = _twEnd = 0;
-			_newResult = false;
+			_manualAmplitude = NULL;
 			setMoveCopy(false);
 			updateVisual();
 		}
@@ -304,6 +304,7 @@ class AmplitudeViewMarker : public RecordMarker {
 		void setAmplitude(DataModel::Amplitude *a) {
 			_referencedAmplitude = a;
 			_time = a->timeWindow().reference();
+
 			try {
 				setTimeWindow(a->timeWindow().begin(), a->timeWindow().end());
 			}
@@ -312,15 +313,13 @@ class AmplitudeViewMarker : public RecordMarker {
 			}
 
 			if ( _referencedAmplitude )
-				_newResult = false;
+				_manualAmplitude = NULL;
 
 			updateVisual();
 		}
 
-		void setAmplitudeResult(const Processing::AmplitudeProcessor::Result &res) {
-			_newResult = true;
-			_newAmplitude = res;
-			_newAmplitude.record = NULL;
+		void setAmplitudeResult(DataModel::Amplitude *a) {
+			_manualAmplitude = a;
 		}
 
 		void setFilterID(const std::string &filterID) {
@@ -331,8 +330,8 @@ class AmplitudeViewMarker : public RecordMarker {
 			return _filterID;
 		}
 
-		const Processing::AmplitudeProcessor::Result &amplitudeResult() const {
-			return _newAmplitude;
+		DataModel::Amplitude *amplitudeResult() const {
+			return _manualAmplitude.get();
 		}
 
 		void setPick(DataModel::Pick *p) {
@@ -351,13 +350,17 @@ class AmplitudeViewMarker : public RecordMarker {
 			return _referencedAmplitude.get();
 		}
 
+		DataModel::Amplitude *manualAmplitude() const {
+			return _manualAmplitude.get();
+		}
+
 		bool equalsAmplitude(DataModel::Amplitude *amp) const {
 			if ( amp == NULL ) return false;
 
 			// Time + uncertainties do not match: not equal
 			if ( correctedTime() != amp->timeWindow().reference() ) return false;
 			try {
-				if ( _newAmplitude.amplitude.value != amp->amplitude().value() ) return false;
+				if ( _manualAmplitude->amplitude().value() != amp->amplitude().value() ) return false;
 			}
 			catch ( ... ) {
 				return false;
@@ -371,7 +374,7 @@ class AmplitudeViewMarker : public RecordMarker {
 		}
 
 		bool isNewAmplitude() const {
-			return _type == Amplitude && _newResult;
+			return _type == Amplitude && _manualAmplitude;
 		}
 
 		bool isReference() const {
@@ -498,15 +501,21 @@ class AmplitudeViewMarker : public RecordMarker {
 				if ( !_referencedAmplitude->methodID().empty() )
 					text += QString("\nmethod: %1").arg(_referencedAmplitude->methodID().c_str());
 			}
-			else {
+			else if ( _manualAmplitude ){
 				text += "amplitude\n";
-				text += QString("value: %1").arg(_newAmplitude.amplitude.value);
+				text += QString("value: %1").arg(_manualAmplitude->amplitude().value());
 
-				if ( _newAmplitude.period > 0 )
-					text += QString("\nperiod: %1").arg(_newAmplitude.period);
+				try {
+					if ( _manualAmplitude->period() > 0 )
+						text += QString("\nperiod: %1").arg(_manualAmplitude->period());
+				}
+				catch ( ... ) {}
 
-				if ( _newAmplitude.snr >= 0 )
-					text += QString("\nsnr: %1").arg(_newAmplitude.snr);
+				try {
+					if ( _manualAmplitude->snr() >= 0 )
+						text += QString("\nsnr: %1").arg(_manualAmplitude->snr());
+				}
+				catch ( ... ) {}
 
 				if ( !_filterID.empty() )
 					text += QString("\nfilter: %1").arg(_filterID.c_str());
@@ -563,18 +572,17 @@ class AmplitudeViewMarker : public RecordMarker {
 
 
 	private:
-		Processing::AmplitudeProcessor::Result _newAmplitude;
-		AmplitudePtr                           _referencedAmplitude;
-		PickPtr                                _pick;
-		TimeQuantity                           _time;
-		Type                                   _type;
-		int                                    _slot;
-		float                                  _twBegin;
-		float                                  _twEnd;
-		bool                                   _newResult;
-		OPT(double)                            _magnitude;
-		QString                                _magnitudeError;
-		std::string                            _filterID;
+		AmplitudePtr _referencedAmplitude;
+		AmplitudePtr _manualAmplitude;
+		PickPtr      _pick;
+		TimeQuantity _time;
+		Type         _type;
+		int          _slot;
+		float        _twBegin;
+		float        _twEnd;
+		OPT(double)  _magnitude;
+		QString      _magnitudeError;
+		std::string  _filterID;
 };
 
 
@@ -2567,31 +2575,77 @@ void AmplitudeView::setPhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordMarker* AmplitudeView::updatePhaseMarker(Seiscomp::Gui::RecordViewItem *item,
-                                               const Processing::AmplitudeProcessor::Result &res,
-                                               const QString &text) {
+                                               const Processing::AmplitudeProcessor *proc,
+                                               const Processing::AmplitudeProcessor::Result &res) {
 	RecordWidget *widget = item->widget();
 	AmplitudeRecordLabel *label = static_cast<AmplitudeRecordLabel*>(item->label());
 
 	OPT(double) mag;
 	QString magError;
 
+	int slot = -1;
+	if ( res.component < Processing::WaveformProcessor::Horizontal )
+		slot = _componentMap[res.component];
+
+	// Create amplitude
+	WaveformStreamID s = item->streamID();
+	AmplitudePtr a = Amplitude::Create();
+
+	if ( res.component <= Processing::WaveformProcessor::SecondHorizontal )
+		a->setWaveformID(
+			WaveformStreamID(
+				s.networkCode(), s.stationCode(),
+				s.locationCode(), label->data.traces[res.component].channelCode, ""
+			)
+		);
+	else
+		a->setWaveformID(
+			WaveformStreamID(
+				s.networkCode(), s.stationCode(),
+				s.locationCode(), s.channelCode().substr(0,2), ""
+			)
+		);
+
+	a->setAmplitude(
+		RealQuantity(res.amplitude.value, Core::None,
+		             res.amplitude.lowerUncertainty,
+		             res.amplitude.upperUncertainty, Core::None)
+	);
+
+	if ( res.period > 0 ) a->setPeriod(RealQuantity(res.period));
+	if ( res.snr >= 0 ) a->setSnr(res.snr);
+	a->setType(label->processor->type());
+	a->setUnit(label->processor->unit());
+	a->setTimeWindow(
+		TimeWindow(res.time.reference, res.time.begin, res.time.end)
+	);
+	a->setPickID(label->processor->referencingPickID());
+	a->setFilterID(label->data.filterID);
+
+	a->setEvaluationMode(EvaluationMode(MANUAL));
+
+	CreationInfo ci;
+	ci.setAgencyID(SCApp->agencyID());
+	ci.setAuthor(SCApp->author());
+	ci.setCreationTime(Core::Time::GMT());
+	a->setCreationInfo(ci);
+
+	proc->finalizeAmplitude(a.get());
+
 	if ( label->magnitudeProcessor ) {
 		double m;
 		Processing::MagnitudeProcessor::Status status;
 		status = label->magnitudeProcessor->computeMagnitude(
-		         res.amplitude.value, res.period, item->value(ITEM_DISTANCE_INDEX),
-		         _origin->depth(), _origin.get(), label->location, m);
+			res.amplitude.value, label->processor->unit(),
+			res.period, res.snr, item->value(ITEM_DISTANCE_INDEX),
+			_origin->depth(), _origin.get(), label->location, a.get(), m);
 		if ( status == Processing::MagnitudeProcessor::OK )
 			mag = m;
 		else
 			magError = status.toString();
 	}
 
-	int slot = -1;
-	if ( res.component < Processing::WaveformProcessor::Horizontal )
-		slot = _componentMap[res.component];
-
-	AmplitudeViewMarker *marker = (AmplitudeViewMarker*)widget->marker(text, true);
+	AmplitudeViewMarker *marker = (AmplitudeViewMarker*)widget->marker(proc->type().c_str(), true);
 	// Marker found?
 	if ( marker ) {
 		// Set the marker time to the new picked time
@@ -2601,23 +2655,23 @@ RecordMarker* AmplitudeView::updatePhaseMarker(Seiscomp::Gui::RecordViewItem *it
 		//marker->setWidth(res.amplitudeLeftWidth, res.amplitudeRightWidth);
 		marker->setTimeWindow(res.time.begin, res.time.end);
 		marker->setMagnitude(mag, magError);
-		marker->setAmplitudeResult(res);
+		marker->setAmplitudeResult(a.get());
 		marker->setFilterID(label->data.filterID);
 
 		widget->update();
 	}
 	else {
 		// Valid phase code?
-		if ( !text.isEmpty() ) {
+		if ( !proc->type().empty() ) {
 
 			// Create a new marker for the phase
-			marker = new AmplitudeViewMarker(widget, res.time.reference, text,
-			                          AmplitudeViewMarker::Amplitude, true);
+			marker = new AmplitudeViewMarker(widget, res.time.reference, proc->type().c_str(),
+			                                 AmplitudeViewMarker::Amplitude, true);
 			marker->setSlot(slot);
 			//marker->setWidth(res.amplitudeLeftWidth, res.amplitudeRightWidth);
 			marker->setTimeWindow(res.time.begin, res.time.end);
 			marker->setMagnitude(mag, magError);
-			marker->setAmplitudeResult(res);
+			marker->setAmplitudeResult(a.get());
 			marker->setFilterID(label->data.filterID);
 			marker->setEnabled(true);
 	
@@ -2978,7 +3032,7 @@ void AmplitudeView::newAmplitudeAvailable(const Processing::AmplitudeProcessor *
 	if ( label->processor.get() != proc ) return;
 	if ( proc->type() != _amplitudeType ) return;
 
-	updatePhaseMarker(item, res, proc->type().c_str());
+	updatePhaseMarker(item, proc, res);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3147,8 +3201,10 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 	AmplitudeRecordLabel *label = static_cast<AmplitudeRecordLabel*>(item->label());
 
 	// Store referencing pickID
-	if ( label->processor && pick )
+	if ( label->processor && pick ) {
 		label->processor->setReferencingPickID(pick->publicID());
+		label->processor->setPick(pick);
+	}
 
 	if ( amp ) {
 		AmplitudeViewMarker *marker;
@@ -3161,15 +3217,16 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 			marker->setSlot(item->mapComponentToSlot(*amp->waveformID().channelCode().rbegin()));
 
 		if ( label->magnitudeProcessor ) {
-			double m, per = -1;
+			double m, per = 0, snr = 0;
 
-			try { per = amp->period().value(); }
-			catch ( ... ) {}
+			try { per = amp->period().value(); } catch ( ... ) {}
+			try { snr = amp->snr(); } catch ( ... ) {}
 
 			Processing::MagnitudeProcessor::Status stat;
 			stat = label->magnitudeProcessor->computeMagnitude(
-			         amp->amplitude().value(), per, item->value(ITEM_DISTANCE_INDEX),
-			         _origin->depth(), _origin.get(), label->location, m);
+				amp->amplitude().value(), label->processor->unit(),
+				per, snr, item->value(ITEM_DISTANCE_INDEX),
+				_origin->depth(), _origin.get(), label->location, amp, m);
 			if ( stat == Processing::MagnitudeProcessor::OK )
 				marker->setMagnitude(m, QString());
 			else
@@ -3738,9 +3795,32 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 	}
 
 	Processing::MagnitudeProcessorPtr magProc = Processing::MagnitudeProcessorFactory::Create(_magnitudeType.c_str());
-	if ( proc == NULL ) {
+	if ( magProc == NULL ) {
 		cerr << sid.networkCode() << "." << sid.stationCode() << ": unable to create magnitude processor "
 		     << _magnitudeType << ": ignoring station" << endl;
+		return NULL;
+	}
+
+	proc->setTrigger(referenceTime);
+
+	try {
+		proc->setHint(Processing::WaveformProcessor::Depth, _origin->depth());
+	}
+	catch ( ... ) {}
+
+	proc->setHint(Processing::WaveformProcessor::Distance, delta);
+
+	try {
+		proc->setHint(Processing::WaveformProcessor::Time, (double) _origin->time().value());
+	}
+	catch ( ... ) {}
+
+	proc->setEnvironment(_origin.get(), loc, proc->pick());
+	proc->computeTimeWindow();
+
+	if ( proc->isFinished() ) {
+		cerr << sid.networkCode() << "." << sid.stationCode() << ": setup amplitude processor failed"
+		     << ": " << proc->status().toString() << " (" << proc->statusValue() << "): ignoring station" << endl;
 		return NULL;
 	}
 
@@ -3772,7 +3852,6 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 
 	label->setText(QString("%1").arg(sid.networkCode().c_str()), 1);
 	label->processor = proc;
-	label->processor->setTrigger(referenceTime);
 	label->magnitudeProcessor = magProc;
 
 	label->location = loc;
@@ -3791,20 +3870,6 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 
 	label->setAlignment(Qt::AlignRight, 2);
 	label->setColor(palette().color(QPalette::Disabled, QPalette::WindowText), 2);
-
-	try {
-		label->processor->setHint(Processing::WaveformProcessor::Depth, _origin->depth());
-	}
-	catch ( ... ) {}
-
-	label->processor->setHint(Processing::WaveformProcessor::Distance, delta);
-
-	try {
-		label->processor->setHint(Processing::WaveformProcessor::Time, (double) _origin->time().value());
-	}
-	catch ( ... ) {}
-
-	label->processor->computeTimeWindow();
 
 	label->timeWindow.set(referenceTime+Core::TimeSpan(label->processor->config().noiseBegin-_config.preOffset),
 	                      referenceTime+Core::TimeSpan(label->processor->config().signalEnd+_config.postOffset));
@@ -5230,49 +5295,8 @@ void AmplitudeView::fetchManualAmplitudes(std::vector<RecordMarker*>* markers) c
 			if ( a && !marker->equalsAmplitude(a.get()) ) a = NULL;
 
 			if ( !a ) {
-				const Processing::AmplitudeProcessor::Result &res = marker->amplitudeResult();
-				WaveformStreamID s = _recordView->streamID(r);
-				a = Amplitude::Create();
-
-				if ( res.component <= Processing::WaveformProcessor::SecondHorizontal )
-					a->setWaveformID(
-						WaveformStreamID(
-							s.networkCode(), s.stationCode(),
-							s.locationCode(), label->data.traces[res.component].channelCode, ""
-						)
-					);
-				else
-					a->setWaveformID(
-						WaveformStreamID(
-							s.networkCode(), s.stationCode(),
-							s.locationCode(), s.channelCode().substr(0,2), ""
-						)
-					);
-
-				a->setAmplitude(
-					RealQuantity(res.amplitude.value, Core::None,
-					             res.amplitude.lowerUncertainty,
-					             res.amplitude.upperUncertainty, Core::None)
-				);
-
-				if ( res.period > 0 ) a->setPeriod(RealQuantity(res.period));
-				if ( res.snr >= 0 ) a->setSnr(res.snr);
-				a->setType(label->processor->type());
-				a->setUnit(label->processor->unit());
-				a->setTimeWindow(
-					TimeWindow(res.time.reference, res.time.begin, res.time.end)
-				);
-				a->setPickID(label->processor->referencingPickID());
-				a->setFilterID(marker->filterID());
-
-				a->setEvaluationMode(EvaluationMode(MANUAL));
-
-				CreationInfo ci;
-				ci.setAgencyID(SCApp->agencyID());
-				ci.setAuthor(SCApp->author());
-				ci.setCreationTime(Core::Time::GMT());
-				a->setCreationInfo(ci);
-
+				a = marker->manualAmplitude();
+				if ( !a ) continue;
 				_changedAmplitudes.push_back(ObjectChangeList<DataModel::Amplitude>::value_type(a,true));
 				SEISCOMP_DEBUG("   - created new amplitude");
 			}
@@ -5391,15 +5415,16 @@ void AmplitudeView::commit() {
 		}
 
 		double magValue;
-		double period;
+		double period = 0, snr = 0;
 
-		try { period = amp->period().value(); } catch ( ... ) { period = 0; }
+		try { period = amp->period().value(); } catch ( ... ) {}
+		try { snr = amp->snr(); } catch ( ... ) {}
 
 		Processing::MagnitudeProcessor::Status stat =
 			label->magnitudeProcessor->computeMagnitude(
-				amp->amplitude().value(), period,
+				amp->amplitude().value(), label->processor->unit(), period, snr,
 				item->value(ITEM_DISTANCE_INDEX), _origin->depth(),
-				_origin.get(), label->location, magValue
+				_origin.get(), label->location, amp.get(), magValue
 			);
 
 		if ( stat != Processing::MagnitudeProcessor::OK ) {
@@ -5422,6 +5447,8 @@ void AmplitudeView::commit() {
 		staMag->setWaveformID(amp->waveformID());
 		staMag->setMagnitude(magValue);
 		staMag->setAmplitudeID(amp->publicID());
+
+		label->magnitudeProcessor->finalizeMagnitude(staMag.get());
 
 		_origin->add(staMag.get());
 

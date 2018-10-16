@@ -100,13 +100,11 @@ double MagnitudeProcessor_ML::logA0(double dist_km) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
-	double amplitude,   // in micrometers per second
-	double,             // in seconds
-	double delta,       // in degrees
-	double depth,       // in kilometers
+	double amplitude, const std::string &unit,
+	double, double, double delta, double depth,
 	const DataModel::Origin *, const DataModel::SensorLocation *,
-	double &value)
-{
+	const DataModel::Amplitude *,
+	double &value) {
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
 

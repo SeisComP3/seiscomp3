@@ -82,6 +82,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		void feed(Seiscomp::DataModel::Amplitude *amp);
 
 		int addProcessor(Seiscomp::Processing::AmplitudeProcessor *,
+		                 const Seiscomp::DataModel::Origin *origin,
 		                 const Seiscomp::DataModel::Pick *pick,
 		                 OPT(double) distance, OPT(double) depth, OPT(double) originTime);
 

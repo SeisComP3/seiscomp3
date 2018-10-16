@@ -217,6 +217,17 @@ void CalculateAmplitudes::checkPriority(const AmplitudeEntry &newAmp) {
 }
 
 
+namespace {
+
+struct PickStreamEntry {
+	PickCPtr        pick;
+	double          dist;
+	SensorLocation *loc;
+};
+
+}
+
+
 bool CalculateAmplitudes::process() {
 	//_ui.btnOK->setEnabled(false);
 
@@ -252,8 +263,6 @@ bool CalculateAmplitudes::process() {
 	if ( _thread )
 		_thread->connect();
 
-	typedef pair<PickCPtr, double> PickStreamEntry;
-
 	// Typedef a pickmap that maps a streamcode to a pick
 	typedef map<string, PickStreamEntry> PickStreamMap;
 
@@ -273,22 +282,25 @@ bool CalculateAmplitudes::process() {
 
 		Pick *pick = Pick::Find(ar->pickID());
 		if ( !pick ) {
-// 			cerr << " - Skipping arrival " << i << " -> no pick found" << endl;
+			//cerr << " - Skipping arrival " << i << " -> no pick found" << endl;
 			continue;
 		}
 
 		double dist = -1;
+		DataModel::SensorLocation *loc = NULL;
+		loc = Client::Inventory::Instance()->getSensorLocation(pick);
 	
 		try {
 			dist = ar->distance();
 		}
 		catch ( Core::ValueError &e ) {
 			try {
-				Client::StationLocation loc;
 				double azi1, azi2;
 
-				loc = Client::Inventory::Instance()->stationLocation(pick->waveformID().networkCode(), pick->waveformID().stationCode(), pick->time().value());
-				Math::Geo::delazi(loc.latitude, loc.longitude, _origin->latitude(), _origin->longitude(), &dist, &azi1, &azi2);
+				if ( loc != NULL )
+					Math::Geo::delazi_wgs84(loc->latitude(), loc->longitude(),
+					                        _origin->latitude(), _origin->longitude(),
+					                        &dist, &azi1, &azi2);
 			}
 			catch ( Core::GeneralException &e ) {}
 		}
@@ -304,16 +316,18 @@ bool CalculateAmplitudes::process() {
 
 		// When there is already a pick registered for this stream which has
 		// been picked earlier, ignore the current pick
-		if ( e.first && e.first->time().value() < pick->time().value() )
+		if ( e.pick && e.pick->time().value() < pick->time().value() )
 			continue;
 
-		e.first = pick;
-		e.second = dist;
+		e.pick = pick;
+		e.dist = dist;
+		e.loc = loc;
 	}
 
 	for ( PickStreamMap::iterator it = pickStreamMap.begin(); it != pickStreamMap.end(); ++it ) {
-		PickCPtr pick = it->second.first;
-		double dist = it->second.second;
+		PickCPtr pick = it->second.pick;
+		SensorLocation *loc = it->second.loc;
+		double dist = it->second.dist;
 
 		_ui.comboFilterType->clear();
 		_ui.comboFilterType->addItem("- Any -");
@@ -322,7 +336,7 @@ bool CalculateAmplitudes::process() {
 
 		if ( _recomputeAmplitudes ) {
 			for ( TypeSet::iterator ita = _amplitudeTypes.begin(); ita != _amplitudeTypes.end(); ++ita )
-				addProcessor(*ita, pick.get(), dist);
+				addProcessor(*ita, pick.get(), loc, dist);
 		}
 		else {
 			string streamID = waveformIDToStdString(pick->waveformID());
@@ -445,7 +459,7 @@ bool CalculateAmplitudes::process() {
 
 			for ( TypeSet::iterator ita = remainingTypes.begin(); ita != remainingTypes.end(); ++ita ) {
 				if ( _thread )
-					addProcessor(*ita, pick.get(), dist);
+					addProcessor(*ita, pick.get(), loc, dist);
 				else {
 					int row = addProcessingRow(streamID, *ita);
 					setError(row, "missing");
@@ -457,9 +471,14 @@ bool CalculateAmplitudes::process() {
 	_ui.table->resizeColumnsToContents();
 	_ui.table->resizeRowsToContents();
 
-	if ( _thread && _timeWindow ) {
-		_thread->setTimeWindow(_timeWindow);
-		_thread->start();
+	if ( _thread ) {
+		if ( _timeWindow ) {
+			_thread->setTimeWindow(_timeWindow);
+			_thread->start();
+		}
+		else {
+
+		}
 	}
 
 	QApplication::restoreOverrideCursor();
@@ -471,6 +490,7 @@ bool CalculateAmplitudes::process() {
 void CalculateAmplitudes::addProcessor(
 	const string &type,
 	const DataModel::Pick *pick,
+	const DataModel::SensorLocation *loc,
 	double dist) {
 
 	AmplitudeProcessorPtr proc = NULL;
@@ -586,29 +606,44 @@ void CalculateAmplitudes::addProcessor(
 	}
 	catch ( ... ) {}
 
+	proc->setEnvironment(_origin, loc, pick);
 	proc->computeTimeWindow();
 
-	switch ( proc->usedComponent() ) {
-		case AmplitudeProcessor::Vertical:
-			subscribeData(proc.get(), pick, WaveformProcessor::VerticalComponent);
-			break;
-		case AmplitudeProcessor::FirstHorizontal:
-			subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
-			break;
-		case AmplitudeProcessor::SecondHorizontal:
-			subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
-			break;
-		case AmplitudeProcessor::Horizontal:
-			subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
-			subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
-			break;
-		case AmplitudeProcessor::Any:
-			subscribeData(proc.get(), pick, WaveformProcessor::VerticalComponent);
-			subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
-			subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
-			break;
-		default:
-			return;
+	if ( proc->isFinished() ) {
+		pair<TableRowMap::iterator, TableRowMap::iterator> itp = _rows.equal_range(proc.get());
+		for ( TableRowMap::iterator row_it = itp.first; row_it != itp.second; ++row_it )
+			setError(row_it->second, QString("%1 (%2)").arg(proc->status().toString()).arg(proc->statusValue(), 0, 'f', 2));
+		return;
+	}
+
+	if ( !proc->safetyTimeWindow() ) {
+		pair<TableRowMap::iterator, TableRowMap::iterator> itp = _rows.equal_range(proc.get());
+		for ( TableRowMap::iterator row_it = itp.first; row_it != itp.second; ++row_it )
+			setError(row_it->second, tr("invalid time window"));
+	}
+	else {
+		switch ( proc->usedComponent() ) {
+			case AmplitudeProcessor::Vertical:
+				subscribeData(proc.get(), pick, WaveformProcessor::VerticalComponent);
+				break;
+			case AmplitudeProcessor::FirstHorizontal:
+				subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
+				break;
+			case AmplitudeProcessor::SecondHorizontal:
+				subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
+				break;
+			case AmplitudeProcessor::Horizontal:
+				subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
+				subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
+				break;
+			case AmplitudeProcessor::Any:
+				subscribeData(proc.get(), pick, WaveformProcessor::VerticalComponent);
+				subscribeData(proc.get(), pick, WaveformProcessor::FirstHorizontalComponent);
+				subscribeData(proc.get(), pick, WaveformProcessor::SecondHorizontalComponent);
+				break;
+			default:
+				return;
+		}
 	}
 }
 
@@ -807,6 +842,7 @@ void CalculateAmplitudes::emitAmplitude(const AmplitudeProcessor *proc,
 		);
 
 	amp->setPickID(proc->referencingPickID());
+	proc->finalizeAmplitude(amp.get());
 
 	TableRowMap::const_iterator it = _rows.find(proc);
 	if ( it != _rows.end() )

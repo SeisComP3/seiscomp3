@@ -112,7 +112,7 @@ class MagTool {
 
 
 	protected:
-		typedef std::pair<std::string, double> MagnitudeEntry;
+		typedef std::pair<Processing::MagnitudeProcessor*, double> MagnitudeEntry;
 		typedef std::vector<MagnitudeEntry> MagnitudeList;
 
 		void publicObjectRemoved(DataModel::PublicObject*);
