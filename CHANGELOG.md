@@ -3,6 +3,7 @@
 ## Release YYYY.ddd
 
 ```SC_API_VERSION 12.0.0```
+```Schema version 0.11```
 
 * scautoloc
 
@@ -61,11 +62,15 @@
     # Add log10(2) to ML magnitudes for SC3 compatibility with <= 2017.334
     mag.ML.offset = 0.301029995664
     ```
+  * Add scardac module, see below
 
 * fdsnws
 
   * Add FocalMechanism support in event query
   * Add support for cross-referenced preferred magnitude in event query
+  * Add data availability support according to the IRIS webservice
+    availability http://service.iris.edu/irisws/availability/1/ under
+    path ```ext/availability```
 
 * fdsnxml2inv
 
@@ -135,6 +140,12 @@
 * scmm
 
   * Fix crash when connection cannot be established at startup
+
+* scardac
+
+  * Initial version of the module which collect availability information
+    from an SDS archive by scanning its content repeatedly and populating
+    the new availability database tables (read by fdsnws)
 
 
 ## Release 2017.334 patch5
