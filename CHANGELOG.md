@@ -108,6 +108,8 @@
 
   * Fix bug with respect to latest data model changes and taking Arrival.timeUsed()
     into account.
+  * Make playbacks work with station epochs that ended in the past. This is important
+    for playbacks of historical events.
 
 * scimport
 
