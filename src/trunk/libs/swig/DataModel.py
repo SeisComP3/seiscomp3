@@ -25575,6 +25575,11 @@ class DatabaseQuery(DatabaseReader):
         return _DataModel.DatabaseQuery_getAmplitude(self, pickID, type)
 
 
+    def getAmplitudes(self, startTime, endTime):
+        """getAmplitudes(DatabaseQuery self, Time startTime, Time endTime) -> DatabaseIterator"""
+        return _DataModel.DatabaseQuery_getAmplitudes(self, startTime, endTime)
+
+
     def getAmplitudesForPick(self, pickID):
         """getAmplitudesForPick(DatabaseQuery self, std::string const & pickID) -> DatabaseIterator"""
         return _DataModel.DatabaseQuery_getAmplitudesForPick(self, pickID)
