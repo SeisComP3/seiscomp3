@@ -55,6 +55,11 @@
   * Add FocalMechanism support in event query
   * Add support for cross-referenced preferred magnitude in event query
 
+* scautoloc
+
+  * Fix bug that caused autoloc.useManualOrigins to always be treated
+    as true
+
 ## Release 2017.334 patch5
 
 * scart

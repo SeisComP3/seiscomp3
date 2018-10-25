@@ -992,14 +992,23 @@ bool App::feed(DataModel::Origin *sc3origin) {
 	SEISCOMP_INFO_S("got origin " + sc3origin->publicID() +
 			"   agency: " + objectAgencyID(sc3origin));
 
-	// if its an internal origin which is not manual -> ignore
-	if ( objectAgencyID(sc3origin) == agencyID() && ! manual(sc3origin) ) {
-		SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because not a manual origin");
-		return false;
-	}
+	const bool ownOrigin = objectAgencyID(sc3origin) == agencyID();
 
-	// if it's an imported origin
-	if (objectAgencyID(sc3origin) != agencyID()) {
+	if ( ownOrigin ) {
+		if ( manual(sc3origin) ) {
+			if ( ! _config.useImportedOrigins ) {
+				SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because autoloc.useManualOrigins = false");
+				return false;
+			}
+		}
+		else {
+			// own origin which is not manual -> ignore
+			SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because not a manual origin");
+			return false;
+		}
+	}
+	else {
+		// imported origin
 
 		if ( ! _config.useImportedOrigins ) {
 			SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because autoloc.useImportedOrigins = false");
