@@ -641,8 +641,6 @@ bool Autoloc3::_tooManyRecentPicks(const Pick *newPick) const
 
 
 
-//#define NEW_MERGE
-
 Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 {
 	// The second origin is merged into the first. A new instance
@@ -650,8 +648,8 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 	OriginID id = origin1->id;
 
 	// make origin1 the better origin
-//	if (_score(origin2) > _score(origin1)) {
-	if (origin2->definingPhaseCount() > origin1->definingPhaseCount()) {
+	if (_score(origin2) > _score(origin1)) {
+//	if (origin2->definingPhaseCount() > origin1->definingPhaseCount()) {
 		const Origin *tmp = origin1;
 		origin1 = origin2;
 		origin2 = tmp;
@@ -662,8 +660,6 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 
 	SEISCOMP_DEBUG_S(" MRG1 " + printOneliner(origin1));
 	SEISCOMP_DEBUG_S(" MRG2 " + printOneliner(origin2));
-
-#ifdef NEW_MERGE
 
 	// This is a brute-force merge! Put everything into one origin.
 	int arrivalCount2 = origin2->arrivals.size();
@@ -715,8 +711,6 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 	}
 		
 	_trimResiduals(combined);
-
-#endif
 
 	return combined;
 }
@@ -1224,15 +1218,10 @@ bool Autoloc3::_process(const Pick *pick)
 		const_cast<Pick*>(pick)->xxl = true;
 	}
 
-	// This has turned out to be too fuzzy a criterion:
-	// If it has a bigger SNR, the threshold is lowered accordingly, because 
-	// it is justified to treat a large-SNR pick as XXL pick even if its amplitude
-	// is somewhat below the threshold.
-	//if ( pick->amp*pick->snr > _config.xxlMinSNR*_config.xxlMinAmplitude && pick->snr > _config.xxlMinSNR )
-	//	((Pick*)pick)->xxl = true;
-
-	// experimental:
-	const_cast<Pick*>(pick)->normamp = pick->amp/_config.xxlMinAmplitude;
+	double normalizationAmplitude = 2000.; // rather arbitrary choice
+	if ( _config.xxlEnabled )
+		normalizationAmplitude = _config.xxlMinAmplitude;
+	const_cast<Pick*>(pick)->normamp = pick->amp/normalizationAmplitude;
 
 	if ( automatic(pick) && _tooManyRecentPicks(pick) ) {
 		const_cast<Pick*>(pick)->status = Pick::IgnoredAutomatic;
