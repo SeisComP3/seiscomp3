@@ -2653,8 +2653,6 @@ bool Autoloc3::_trimResiduals(Origin *origin)
 			Arrival &arr = origin->arrivals[i];
 			if (arr.excluded)
 				continue;
-			if (arr.ascore*arr.dscore > 2.) // HACK!
-				continue;
 
 			double normalizedResidual = arr.residual/_config.maxResidualUse;
 			// add penalty for positive residuals  // TODO: make it configurable?
