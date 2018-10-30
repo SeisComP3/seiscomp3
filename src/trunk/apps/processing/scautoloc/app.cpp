@@ -702,6 +702,37 @@ bool App::runFromEPFile(const char *fname) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::sync(const Seiscomp::Core::Time &t) {
+	syncTime = t;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const Seiscomp::Core::Time& App::now() const {
+
+	if (_inputFileXML.size() || _inputEPFile.size())
+		return syncTime;
+
+	return Core::Time::GMT();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::timeStamp() const {
+	SEISCOMP_DEBUG_S("Timestamp: "+now().toString("%F %T"));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::run() {
 	if ( !_inputEPFile.empty() )
 		return runFromEPFile(_inputEPFile.c_str());
@@ -898,6 +929,16 @@ bool App::feed(DataModel::Pick *sc3pick) {
 
 	const std::string &pickID = sc3pick->publicID();
 
+	if (_inputFileXML.size() || _inputEPFile.size()) {
+		try {
+			const Core::Time &creationTime = sc3pick->creationInfo().creationTime();
+			sync(creationTime);
+		}
+		catch(...) {
+			SEISCOMP_WARNING_S("Pick "+pickID+" without creation time!");
+		}
+	}
+
 	if (objectAgencyID(sc3pick) != agencyID()) {
 		if ( isAgencyIDBlocked(objectAgencyID(sc3pick)) ) {
 			SEISCOMP_INFO_S("Blocked pick from agency '" + objectAgencyID(sc3pick) + "'");
@@ -924,6 +965,8 @@ bool App::feed(DataModel::Pick *sc3pick) {
 	if ( ! pick )
 		return false;
 
+	timeStamp();
+
 	if ( ! ::Autoloc::Autoloc3::feed(pick.get()))
 		return false;
 
@@ -940,6 +983,16 @@ bool App::feed(DataModel::Pick *sc3pick) {
 bool App::feed(DataModel::Amplitude *sc3ampl) {
 
 	const std::string &amplID = sc3ampl->publicID();
+
+	if (_inputFileXML.size() || _inputEPFile.size()) {
+		try {
+			const Core::Time &creationTime = sc3ampl->creationInfo().creationTime();
+			sync(creationTime);
+		}
+		catch(...) {
+			SEISCOMP_WARNING_S("Pick "+amplID+" without creation time!");
+		}
+	}
 
 	if (objectAgencyID(sc3ampl) != agencyID()) {
 		if ( isAgencyIDBlocked(objectAgencyID(sc3ampl)) ) {
@@ -1056,10 +1109,9 @@ bool App::feed(DataModel::Origin *sc3origin) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::_report(const ::Autoloc::Origin *origin) {
-	Core::Time now = Core::Time::GMT();
 
 	// Log object flow
-	logObject(_outputOrgs, now);
+	logObject(_outputOrgs, now());
 
 	if ( _config.offline || _config.test ) {
 		std::string reportStr = ::Autoloc::printDetailed(origin);
@@ -1071,7 +1123,7 @@ bool App::_report(const ::Autoloc::Origin *origin) {
 			DataModel::CreationInfo ci;
 			ci.setAgencyID(agencyID());
 			ci.setAuthor(author());
-			ci.setCreationTime(now);
+			ci.setCreationTime(now());
 			sc3origin->setCreationInfo(ci);
 
 			_ep->add(sc3origin.get());
@@ -1088,7 +1140,7 @@ bool App::_report(const ::Autoloc::Origin *origin) {
 	DataModel::CreationInfo ci;
 	ci.setAgencyID(agencyID());
 	ci.setAuthor(author());
-	ci.setCreationTime(now);
+	ci.setCreationTime(now());
 	sc3origin->setCreationInfo(ci);
 
 	DataModel::EventParameters ep;

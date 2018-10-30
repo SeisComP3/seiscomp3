@@ -73,6 +73,9 @@ class App : public Client::Application,
 		bool runFromXMLFile(const char *fname);
 		bool runFromEPFile(const char *fname);
 
+		void sync(const Core::Time &time);
+		const Core::Time &now() const;
+		void timeStamp() const;
 
 	protected:
 //		DataModel::Origin *convertToSC3  (const ::Autoloc::Origin* origin, bool allPhases=true);
@@ -89,7 +92,8 @@ class App : public Client::Application,
 		std::queue<DataModel::PublicObjectPtr> _objects; // for XML playback
 		double _playbackSpeed;
 		Core::Time playbackStartTime;
-		Core::Time  objectsStartTime;
+		Core::Time objectsStartTime;
+		Core::Time syncTime;
 		unsigned int objectCount;
 
 		DataModel::EventParametersPtr _ep;

@@ -57,6 +57,13 @@
 
 * scautoloc
 
+  * Changes affecting behaviour in playback mode:
+    * A time stamp is now logged whenever an new object arrives.
+    * The creationTime of new origins is set to the creation
+      time of the most recently received object.
+
+    Both changes help to more realistically simulate and assess the real-time behaviour.
+
   * Fix bug that caused autoloc.useManualOrigins to always be treated
     as true
 
