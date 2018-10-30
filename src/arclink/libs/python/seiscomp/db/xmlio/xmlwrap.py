@@ -106,9 +106,9 @@ def _datetime_fromxml(val = ""):
 		return None
 		
 	m = _rx_datetime.match(val)
-	if m == None:
+	if m is None:
 		m = _rx_date.match(val)
-		if m == None:
+		if m is None:
 			raise ValueError, "invalid datetime: " + val
 
 		(year, month, mday, tz, plusminus, tzhours, tzminutes) = m.groups()

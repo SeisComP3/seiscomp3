@@ -154,7 +154,7 @@ def xml_collect_cmdline(mod_node, publicids_only):
   synopsis = cmd_node.find("synopsis")
   desc = xml_desc_lines(cmd_node)
 
-  if len(group_nodes) == 0 and synopsis == None and len(desc) == 0: return ""
+  if len(group_nodes) == 0 and synopsis is None and len(desc) == 0: return ""
 
   options = '''
 

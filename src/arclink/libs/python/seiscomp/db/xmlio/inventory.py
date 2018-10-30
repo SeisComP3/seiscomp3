@@ -1020,7 +1020,7 @@ def xml_out(inventory, dest, instr=0, modified_after=None, stylesheet=None, inde
 
     fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
 
-    if stylesheet != None:
+    if stylesheet is not None:
         fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     

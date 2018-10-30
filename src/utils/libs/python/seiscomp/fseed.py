@@ -39,7 +39,7 @@ def _mkseedcoeff_fir(nblk, nfld, ncoeff, s):
 
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
-        if m == None:
+        if m is None:
             raise SEEDError, "blockette %d, field %d: error parsing FIR coefficients at '%s'" % (nblk, nfld, s[pos:])
 
         try:
@@ -63,7 +63,7 @@ def _mkseedcoeff_iir(nblk, nfld, ncoeff, s):
 
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
-        if m == None:
+        if m is None:
             raise SEEDError, "blockette %d, field %d: error parsing IIR coefficients at '%s'" % (nblk, nfld, s[pos:])
 
         try:
@@ -87,7 +87,7 @@ def _mkseedcoeff_polynomial(nblk, nfld, ncoeff, s, gain=1.0):
 
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
-        if m == None:
+        if m is None:
             raise SEEDError, "blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:])
 
         try:
@@ -116,7 +116,7 @@ def _mkseedpaz(nblk, nfld, npaz, s):
 
     while pos < l:
         m = _rx_paz.match(s, pos)
-        if m == None:
+        if m is None:
             raise SEEDError, "blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:])
 
         try:
@@ -223,7 +223,7 @@ def _mkseedstring(nblk, nfld, s, min_length, max_length, flags):
     rx = "|".join(rx_list)
     sn = "".join(re.findall(rx, sn))
 
-    if re.match("(" + rx + ")*$", sn) == None:
+    if re.match("(" + rx + ")*$", sn) is None:
         raise SEEDError, "blockette %d, field %d: cannot convert string \"%s\" with flags %s" % \
           (nblk, nfld, s, flags)
 
@@ -240,7 +240,7 @@ def _mkseedstring(nblk, nfld, s, min_length, max_length, flags):
     return sn
 
 def _mkseedtime(nblk, nfld, t):
-    if t == None:
+    if t is None:
         return "~"
 
     if isinstance(t, datetime.datetime):
@@ -2816,7 +2816,7 @@ class _RecordBuilder(object):
         self.__buf = None
 
     def flush(self):
-        if self.__buf != None:
+        if self.__buf is not None:
             self.__buf += ((1 << _RECLEN_EXP) - len(self.__buf)) * " "
             self.__fd.write(self.__buf)
             self.__buf = None
@@ -2832,7 +2832,7 @@ class _RecordBuilder(object):
         return self.__recno
 
     def write_blk(self, s):
-        if self.__buf == None:
+        if self.__buf is None:
             self.__buf = "%06d%c " % (self.__recno, self.__type)
             self.__recno += 1
 

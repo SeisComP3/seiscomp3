@@ -124,47 +124,47 @@ def process_options():
         parser.error("incorrect number of arguments")
 
     m = re.compile(r'([^:]+):([0-9]{1,5})').match(args[0])
-    if m == None:
+    if m is None:
         parser.error("address not in form of host:port")
 
     (host, port) = m.groups()
     
-    if options.user == None:
+    if options.user is None:
         parser.error("username required")
     
     action = None
     action_arg = None
 
-    if options.request_file != None:
+    if options.request_file is not None:
         action = submit
         action_arg = options.request_file
 
-    if options.status_id != None:
-        if action != None:
+    if options.status_id is not None:
+        if action is not None:
             parser.error("conflicting options");
             
         action = show_status
         action_arg = options.status_id
 
-    if options.download_id != None:
-        if action != None:
+    if options.download_id is not None:
+        if action is not None:
             parser.error("conflicting options");
 
-        if options.outf == None:
+        if options.outf is None:
             parser.error("output file required")
         
         block = options.block
         action = download
         action_arg = options.download_id
 
-    if options.purge_id != None:
-        if action != None:
+    if options.purge_id is not None:
+        if action is not None:
             parser.error("conflicting options");
 
         action = purge
         action_arg = options.purge_id
 
-    if action == None:
+    if action is None:
         parser.error("one of -r/-s/-l/-d/-p must be given")
 
     return (options.SSLpassword, options.user, options.inst, options.outf,

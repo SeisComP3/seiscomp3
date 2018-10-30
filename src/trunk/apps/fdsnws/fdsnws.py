@@ -918,10 +918,10 @@ class FDSNWS(Application):
 									if cha.restricted() != rule.restricted:
 										continue
 								except ValueError:
-									if staRestricted != None:
+									if staRestricted is not None:
 										if sta.Restricted != rule.Restricted:
 											continue
-									elif netRestricted == None or \
+									elif netRestricted is None or \
 									        netRestricted != rule.Restricted:
 										continue
 
@@ -931,10 +931,10 @@ class FDSNWS(Application):
 									if cha.shared() != rule.shared:
 										continue
 								except ValueError:
-									if staShared != None:
+									if staShared is not None:
 										if sta.Shared != rule.Shared:
 											continue
-									elif netShared == None or \
+									elif netShared is None or \
 									     netShared != rule.Shared:
 										continue
 

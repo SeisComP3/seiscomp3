@@ -16,7 +16,7 @@ class parsers(object):
         c = []
         while pos < len(s):
             m = _rx_paz.match(s, pos)
-            if m == None:
+            if m is None:
                 raise Exception("error parsing PAZ at '" + s[pos:] + "'")
     
             try:

@@ -40,7 +40,7 @@ class _BadValue(Exception):
 
 class XAttribute(object):
     def toxml(cls, val):
-        if val == None:
+        if val is None:
             return ""
 
         return unicode(val)
@@ -322,7 +322,7 @@ class DateTimeAttr(XAttribute):
         elif isinstance(val, datetime.date):
             return "%04d-%02d-%02d" % (val.year, val.month, val.day)
 
-        elif val == None:
+        elif val is None:
             return ""
 
         raise ValueError, "invalid date or datetime object"
@@ -334,9 +334,9 @@ class DateTimeAttr(XAttribute):
             return self._default
             
         m = _rx_datetime.match(val)
-        if m == None:
+        if m is None:
             m = _rx_date.match(val)
-            if m == None:
+            if m is None:
                 raise ValueError, "invalid datetime: " + val
 
             (year, month, mday, tz, plusminus, tzhours, tzminutes) = m.groups()

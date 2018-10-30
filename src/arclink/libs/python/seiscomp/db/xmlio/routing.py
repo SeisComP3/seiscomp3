@@ -256,7 +256,7 @@ def xml_out(routing, dest, use_access=False, modified_after=None, stylesheet=Non
 
     fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
 
-    if stylesheet != None:
+    if stylesheet is not None:
         fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     

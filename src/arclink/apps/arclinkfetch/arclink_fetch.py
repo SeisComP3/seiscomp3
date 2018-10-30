@@ -365,10 +365,10 @@ http://www.iris.edu/manuals/breq_fast.htm
 
     errors = []
     warnings = []
-    if options.user == None:
+    if options.user is None:
         errors.append("Username required")
     
-    if options.output_file == None:
+    if options.output_file is None:
         errors.append("Output file required")
     
     if options.data_format.upper() != "FSEED" and options.rebuild_volume:
