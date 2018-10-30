@@ -273,11 +273,11 @@ def main():
     parser.add_option("-i", "--isodir", type="string", dest="isodir", help="iso archive directory")
     (options, args) = parser.parse_args()
     
-    if options.nrtdir == None:
+    if options.nrtdir is None:
         parser.error("Error: nrt directory not specified!")
-    if options.archdir == None:
+    if options.archdir is None:
         parser.error("Error: sds archive directory not specified!")
-    if options.isodir == None:
+    if options.isodir is None:
         parser.error("Error: iso archive directory not specified!")
                 
     sdsobj = SDS(options.nrtdir,options.archdir,options.isodir)
@@ -287,7 +287,7 @@ def main():
         count += 1
         print count,". request"
         data = sdsobj.getwin(*req)
-        if data != None:
+        if data is not None:
             print "data_%d" % count
             fh = file("data_%d" % count,"w")
             fh.write(data)

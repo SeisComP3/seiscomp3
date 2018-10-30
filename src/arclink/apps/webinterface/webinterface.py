@@ -270,14 +270,14 @@ def select(obj, args):
         sensortype = None
     
     begin = None
-    if start_date != None:
+    if start_date is not None:
         try:
             begin = datetime.datetime(*time.strptime(start_date, "%Y-%m-%d")[0:3])
         except ValueError:
             raise ArclinkError, "invalid start date: " + start_date
     
     end = None
-    if end_date != None:
+    if end_date is not None:
         try:
             end = datetime.datetime(*time.strptime(end_date, "%Y-%m-%d")[0:3])
         except ValueError:
@@ -396,7 +396,7 @@ def submit(obj, args):
     compression = args.get("compression")
     resp_dict = args.get("resp_dict")
 
-    if myaddr == None or len(myaddr) == 0:
+    if myaddr is None or len(myaddr) == 0:
         raise ArclinkError, "missing arclink address"
     
     try:
@@ -405,16 +405,16 @@ def submit(obj, args):
     except (AttributeError, ValueError):
         raise ArclinkError, "invalid ArcLink address"
 
-    if name == None or len(name) == 0:
+    if name is None or len(name) == 0:
         raise ArclinkError, "missing full name"
         
-    if inst == None or len(inst) == 0:
+    if inst is None or len(inst) == 0:
         raise ArclinkError, "missing institution"
     
-    if request == None or len(request) == 0:
+    if request is None or len(request) == 0:
         raise ArclinkError, "empty request"
     
-    if start_date == None or len(start_date) == 0:
+    if start_date is None or len(start_date) == 0:
         raise ArclinkError, "missing start date"
     else:
         try:
@@ -422,7 +422,7 @@ def submit(obj, args):
         except ValueError:
             raise ArclinkError, "invalid start date: " + start_date
     
-    if start_time == None or len(start_time) == 0:
+    if start_time is None or len(start_time) == 0:
         raise ArclinkError, "missing start time"
     else:
         try:
@@ -432,7 +432,7 @@ def submit(obj, args):
     
     begin = datetime.datetime.combine(bdate, btime)
     
-    if end_date == None or len(end_date) == 0:
+    if end_date is None or len(end_date) == 0:
         raise ArclinkError, "missing end date"
     else:
         try:
@@ -440,7 +440,7 @@ def submit(obj, args):
         except ValueError:
             raise ArclinkError, "invalid end date: " + end_date
     
-    if end_time == None or len(end_time) == 0:
+    if end_time is None or len(end_time) == 0:
         raise ArclinkError, "missing end time"
     else:
         try:
@@ -450,7 +450,7 @@ def submit(obj, args):
     
     end = datetime.datetime.combine(edate, etime)
     
-    if format == None or len(format) == 0:
+    if format is None or len(format) == 0:
         raise ArclinkError, "missing format"
     
     req_args = {}
@@ -634,7 +634,7 @@ def download(obj, args):
     except (AttributeError, ValueError):
         raise ArclinkError, "invalid ArcLink address"
 
-    if req_id == None or len(req_id) == 0:
+    if req_id is None or len(req_id) == 0:
         raise ArclinkError, "missing request ID "
 
     (sesskey, user, passwd) = init_session(obj, args)
@@ -676,7 +676,7 @@ def purge(obj, args):
     except (AttributeError, ValueError):
         raise ArclinkError, "invalid ArcLink address"
 
-    if req_id == None or len(req_id) == 0:
+    if req_id is None or len(req_id) == 0:
         raise ArclinkError, "missing request ID "
 
     (sesskey, user, passwd) = init_session(obj, args)
@@ -725,13 +725,13 @@ def handler(obj):
     try:
         fname = obj.filename.split("/")[-1]
         item = action_table.get(fname)
-        if item == None:
+        if item is None:
             return apache.HTTP_NOT_FOUND
 
         (action, multipar) = item
 
         args = {}
-        if obj.args != None:
+        if obj.args is not None:
             for arg in obj.args.split('&'):
                 pv = arg.split('=', 1)
                 if pv[0] in multipar:

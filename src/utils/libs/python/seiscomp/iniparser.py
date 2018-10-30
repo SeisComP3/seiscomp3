@@ -99,12 +99,12 @@ def read_ini(source):
                 break
             
             m = _rx_ini_space.match(line, pos)
-            if m != None:
+            if m is not None:
                 pos = m.end()
                 continue
 
             m = _rx_ini_section.match(line, pos)
-            if m != None:
+            if m is not None:
                 skip = None
 
                 if in_definition:
@@ -129,8 +129,8 @@ def read_ini(source):
                 continue
 
             m = _rx_ini_definition.match(line, pos)
-            if m != None:
-                if skip == None or skip >= skip_definition:
+            if m is not None:
+                if skip is None or skip >= skip_definition:
                     skip = None
                     if not in_section:
                         warning("parse error")
@@ -141,7 +141,7 @@ def read_ini(source):
                         in_definition = False
                         
                     d = dict_stack[-1].get(m.group(1))
-                    if d == None:
+                    if d is None:
                         d = _ci_dict()
                         dict_stack[-1][m.group(1)] = d
                     
@@ -163,8 +163,8 @@ def read_ini(source):
                 continue
 
             m = _rx_ini_qassignment.match(line, pos)
-            if m != None:
-                if skip == None:
+            if m is not None:
+                if skip is None:
                     if not in_section:
                         warning("parse error")
                         break
@@ -179,8 +179,8 @@ def read_ini(source):
                 continue
 
             m = _rx_ini_assignment.match(line, pos)
-            if m != None:
-                if skip == None:
+            if m is not None:
+                if skip is None:
                     if not in_section:
                         warning("parse error")
                         break

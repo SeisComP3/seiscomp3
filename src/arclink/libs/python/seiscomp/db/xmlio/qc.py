@@ -201,7 +201,7 @@ def xml_out(qc, dest, stylesheet=None, indent=True):
 
     fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
 
-    if stylesheet != None:
+    if stylesheet is not None:
         fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     
