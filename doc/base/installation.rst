@@ -187,39 +187,6 @@ If your distribution is not supported by :command:`install-deps`
    user@host:~$ cd seiscomp3/share/deps/ubuntu/[version]
    ...
 
-.. note::
-
-    With **Ubuntu 16.04** MariaDB has become the standard flavour of MySQL in Ubuntu
-    and either MariaDB or MySQL can be installed. The implementation of MariaDB
-    in Ubuntu requires additional steps. They must be taken in order to allow
-    SeisComP3 to make use of MariaDB. The full procedure including database
-    optimization is:
-
-    .. code-block:: sh
-
-        user@host:~$ sudo systemctl enable mysql
-        user@host:~$ sudo mysql_secure_installation
-            provide new root password
-            answer all questions with yes [Enter]
-
-        user@host:~$ sudo mysql -u root -p
-            CREATE DATABASE seiscomp3 CHARACTER SET utf8 COLLATE utf8_bin;
-            grant usage on seiscomp3.* to sysop@localhost identified by 'sysop';
-            grant all privileges on seiscomp3.* to sysop@localhost;
-            grant usage on seiscomp3.* to sysop@'%' identified by 'sysop';
-            grant all privileges on seiscomp3.* to sysop@'%';
-            flush privileges;
-
-        user@host:~$ sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf
-            [mysqld]
-            innodb_buffer_pool_size = 64M
-            innodb_flush_log_at_trx_commit = 2
-
-        user@host:~$ sudo systemctl restart mysql
-        user@host:~$ mysql -u sysop -p seiscomp3 < ~/seiscomp3/share/db/mysql.sql
-
-    Currently, the :ref:`scconfig` wizard cannot be used to set up the MariaDB database.
-
 :program:`OpenSUSE` `version`
 
 .. code-block:: sh
@@ -242,6 +209,7 @@ If your distribution is not supported by :command:`install-deps`
    bash install-postgresql-server.sh
    bash install-base.sh
    bash install-gui.sh
+   bash install-fdsnws.sh
    ...
 
 or contact the SeisComP3 developpers to add support for your distribution.
