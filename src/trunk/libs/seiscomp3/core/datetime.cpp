@@ -799,6 +799,15 @@ Time Time::FromYearDay(int year, int year_day) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+TimeSpan Time::localTimeZoneOffset() const {
+	return *this - toGMT();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time& Time::localtime() {
 	gettimeofday(&_timeval, NULL);
 	time_t secs = (time_t)_timeval.tv_sec;

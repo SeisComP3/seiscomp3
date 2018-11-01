@@ -50,6 +50,7 @@ namespace Core {
    - Added Seiscomp::Processing::AmplitudeProcessor::finalizeAmplitude
    - Added unit to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
    - Added amplitude to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added Seiscomp::Core::Time::localTimeZoneOffset()
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
