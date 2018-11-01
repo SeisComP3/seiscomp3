@@ -49,6 +49,10 @@ using namespace Seiscomp;
 // namespace.
 namespace {
 
+
+std::string ExpectedAmplitudeUnit = "mm";
+
+
 Processing::AmplitudeProcessor::AmplitudeValue average(
 	const Processing::AmplitudeProcessor::AmplitudeValue &v0,
 	const Processing::AmplitudeProcessor::AmplitudeValue &v1)
@@ -123,7 +127,7 @@ Processing::AmplitudeProcessor::AmplitudeTime average(
 ADD_SC_PLUGIN(
 	"MLh magnitude method (max of both horizontal compontents)",
 	"gempa GmbH, modified by Stefan Heimers at the SED",
-	0, 0, 7
+	0, 0, 8
 )
 
 
@@ -544,7 +548,7 @@ class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 		}
 
 
-		MagnitudeProcessor::Status computeMagnitude(
+		Processing::MagnitudeProcessor::Status computeMagnitude(
 			double amplitude,        // in milimeters (default)
 			const std::string &unit,
 			double period,           // in seconds
@@ -560,6 +564,9 @@ class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 
 			if ( depth > DEPTH_MAX )
 				return DepthOutOfRange;
+
+			if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+				return InvalidAmplitudeUnit;
 
 			return compute_ML_sed(amplitude, delta, depth, &value);
 		}
@@ -583,7 +590,7 @@ class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 				param_struct new_paramset;
 				if ( !Core::fromString(new_paramset.dist, range_str) ) {
 					SEISCOMP_ERROR("MLh: %s: range is not a numeric value",
-								   params.c_str());
+					               params.c_str());
 					return false;
 				}
 
@@ -595,13 +602,13 @@ class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 				else {
 					if ( !Core::fromString(new_paramset.A, A_str) ) {
 						SEISCOMP_ERROR("MLh: %s: not a numeric value",
-									   A_str.c_str());
+						               A_str.c_str());
 						return false;
 					}
 					iss_paramset >> B_str;
 					if ( !Core::fromString(new_paramset.B, B_str) ) {
 						SEISCOMP_ERROR("MLh: %s: not a numeric value",
-									   B_str.c_str());
+						               B_str.c_str());
 						return false;
 					}
 					new_paramset.nomag = false;
@@ -645,7 +652,13 @@ class MagnitudeProcessor_ML : public Processing::MagnitudeProcessor {
 
 			float epdistkm,hypdistkm;
 
-			if (amplitude <= 0. ) {
+			if ( list_of_parametersets.size() == 0 ) {
+				SEISCOMP_ERROR("MLh: no calibrations configured: see bindings: MLh.params");
+				return IncompleteConfiguration;
+			}
+
+
+			if ( amplitude <= 0. ) {
 				*mag = 0;
 				return Error;
 			}
