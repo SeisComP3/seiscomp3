@@ -76,15 +76,15 @@ class BaseNode : public Core::BaseObject {
 
 		//! XML tag: startDate
 		void setStartDate(const OPT(DateTime)& startDate);
-		DateTime startDate() const throw(Seiscomp::Core::ValueException);
+		DateTime startDate() const;
 
 		//! XML tag: endDate
 		void setEndDate(const OPT(DateTime)& endDate);
-		DateTime endDate() const throw(Seiscomp::Core::ValueException);
+		DateTime endDate() const;
 
 		//! XML tag: restrictedStatus
 		void setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedStatus);
-		RestrictedStatusType restrictedStatus() const throw(Seiscomp::Core::ValueException);
+		RestrictedStatusType restrictedStatus() const;
 
 		//! A code used for display or association, alternate to the
 		//! SEED-compliant code.

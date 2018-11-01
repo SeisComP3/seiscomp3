@@ -15,13 +15,13 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/processing/magnitudeprocessor.h>
+#include <seiscomp3/utils/units.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 #include <string.h>
 
 IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Processing::MagnitudeProcessor, SC_SYSTEM_CLIENT_API);
 
 namespace Seiscomp {
-
 namespace Processing {
 
 IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(MagnitudeProcessor, Core::BaseObject, "MagnitudeProcessor");
@@ -140,6 +140,48 @@ void MagnitudeProcessor::setCorrectionCoefficients(double a, double b) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double MagnitudeProcessor::correctMagnitude(double val) const {
 	return _linearCorrection * val + _constantCorrection;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool MagnitudeProcessor::convertAmplitude(double &amplitude,
+                                          const std::string &amplitudeUnit,
+                                          const std::string &desiredAmplitudeUnit) const {
+	if ( amplitudeUnit.empty() || (amplitudeUnit == desiredAmplitudeUnit) ) {
+		// No changes required
+		return true;
+	}
+
+	const Util::UnitConversion *uc = Util::UnitConverter::get(amplitudeUnit);
+	if ( uc == NULL ) {
+		// No conversion known, invalid amplitude unit
+		return false;
+	}
+
+	// Convert to SI
+	double amplitudeSI = uc->convert(amplitude);
+
+	uc = Util::UnitConverter::get(desiredAmplitudeUnit);
+	if ( uc == NULL ) {
+		SEISCOMP_ERROR("This must not happen: no converter for amplitude target unit '%s'",
+		               desiredAmplitudeUnit.c_str());
+		// This must not happen. The desired amplitude unit should always
+		// have a mapping.
+		return false;
+	}
+
+	double desiredAmplitude = uc->revert(amplitudeSI);
+
+	SEISCOMP_DEBUG("Converted amplitude from %f %s to %f %s",
+	               amplitude, amplitudeUnit.c_str(),
+	               desiredAmplitude, desiredAmplitudeUnit.c_str());
+
+	amplitude = desiredAmplitude;
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

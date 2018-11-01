@@ -92,7 +92,10 @@ void DataY::unproject(QPolygonF &poly, const Axis *keyAxis,
 	// Find first "visible" data sample
 	while ( i < y.count() ) {
 		if ( px >= keyAxis->range().lower ) {
-			if ( i ) --i;
+			if ( i ) {
+				--i;
+				px -= dx;
+			}
 			break;
 		}
 

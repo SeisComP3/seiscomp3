@@ -34,7 +34,6 @@ namespace Core {
 
 namespace {
 
-const char *timeFormat = "%FT%T.0000Z";
 const char *timeFormatPrecise = "%FT%T.%fZ";
 const char *timeFormat2 = "%FT%TZ";
 
@@ -49,11 +48,6 @@ std::string toString(const std::string& value) {
 
 std::string toString(bool v) {
 	return std::string(v?"true":"false");
-}
-
-
-std::string toString(time_t v) {
-	return Seiscomp::Core::Time(v).toString(timeFormat);
 }
 
 
@@ -282,18 +276,6 @@ SC_SYSTEM_CORE_API bool fromString(bool& value, const std::string& str) {
 	}
 
 	value = (bool)retval;
-	return true;
-}
-
-
-bool fromString(time_t& value, const std::string& str) {
-	Seiscomp::Core::Time t;
-	if ( !t.fromString(str.c_str(), timeFormat) ) {
-		if ( !t.fromString(str.c_str(), timeFormat2) )
-			return false;
-	}
-
-	value = t.seconds();
 	return true;
 }
 

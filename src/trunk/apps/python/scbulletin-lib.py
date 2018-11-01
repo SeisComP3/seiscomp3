@@ -22,6 +22,12 @@
 # 2017/11/02 Dirk Roessler
 # enhanced option: High-precision output for bulletins with precisions given in
 # meter or milliseconds. Considered useful for bulletins of local earthquakes.
+#
+# 2018/07/24 Enrico Ellguth
+# event-agency-id option: Read the agency ID from event instead of preferred origin.
+#
+# 2018/08/29 Stephan Herrnkind
+# dist-in-km option: Print distances in kilometer instead of degree
 
 import sys, traceback
 import seiscomp3.Client, seiscomp3.Seismology
@@ -38,7 +44,7 @@ def time2str(time):
 
 def lat2str(lat, enhanced = False):
     if enhanced:
-        s = "%.4f " % abs(lat)
+        s = "%.5f " % abs(lat)
     else:
         s = "%.2f " % abs(lat)
     if lat>=0: s+="N"
@@ -48,7 +54,7 @@ def lat2str(lat, enhanced = False):
 
 def lon2str(lon, enhanced = False):
     if enhanced:
-        s = "%.4f " % abs(lon)
+        s = "%.5f " % abs(lon)
     else:
         s = "%.2f " % abs(lon)
     if lon>=0: s+="E"
@@ -77,13 +83,20 @@ class Bulletin(object):
         self.enhanced = False
         self.polarities = False
         self.useEventAgencyID = False
+        self.distInKM = False
 
     def _getDistancesArrivalsSorted(self, org):
         # sort arrival list by distance
         dist_arr = []
-        for i in xrange(org.arrivalCount()):
-            arr = org.arrival(i)
-            dist_arr.append((arr.distance(), arr))
+        if self.distInKM:
+            from seiscomp3 import Math
+            for i in xrange(org.arrivalCount()):
+                arr = org.arrival(i)
+                dist_arr.append((Math.deg2km(arr.distance()), arr))
+        else:
+            for i in xrange(org.arrivalCount()):
+                arr = org.arrival(i)
+                dist_arr.append((arr.distance(), arr))
         dist_arr.sort()
         return dist_arr
 
@@ -116,8 +129,6 @@ class Bulletin(object):
         dist_arr = self._getDistancesArrivalsSorted(org)
         pick = self._getPicks(org)
         ampl = self._getAmplitudes(org)
-        enhanced = self.enhanced
-
 
         try:
             depthPhaseCount = org.quality().depthPhaseCount()
@@ -192,38 +203,38 @@ class Bulletin(object):
             txt += "    Public ID              %s\n" % org.publicID()
         txt += "    Date                   %s\n" % tstr[:10]
         if timerr:
-            if enhanced:
-                txt += "    Time                   %s  +/- %6.3f s\n" % (tstr[11:], timerr)
+            if self.enhanced:
+                txt += "    Time                   %s   +/- %8.3f s\n" % (tstr[11:], timerr)
             else:
                 txt += "    Time                   %s  +/- %6.1f s\n" % (tstr[11:-2], timerr)
         else:
-            if enhanced:
+            if self.enhanced:
                 txt += "    Time                   %s\n" % tstr[11:]
             else:
                 txt += "    Time                   %s\n" % tstr[11:-2]
 
         if laterr:
-            if enhanced:
-                txt += "    Latitude              %11.6f deg  +/- %7.3f km\n" % (lat, laterr)
+            if self.enhanced:
+                txt += "    Latitude              %10.5f deg  +/- %8.3f km\n" % (lat, laterr)
             else:
-                txt += "    Latitude              %7.2f deg  +/- %4.0f km\n" % (lat, laterr)
+                txt += "    Latitude              %7.2f deg  +/- %6.0f km\n" % (lat, laterr)
         else:
-            if enhanced:
-                txt += "    Latitude              %11.6f deg\n" % lat
+            if self.enhanced:
+                txt += "    Latitude              %10.5f deg\n" % lat
             else:
                 txt += "    Latitude              %7.2f deg\n" % lat
         if lonerr:
-            if enhanced:
-                txt += "    Longitude             %11.6f deg  +/- %7.3f km\n" % (lon, lonerr)
+            if self.enhanced:
+                txt += "    Longitude             %10.5f deg  +/- %8.3f km\n" % (lon, lonerr)
             else:
-                txt += "    Longitude             %7.2f deg  +/- %4.0f km\n" % (lon, lonerr)
+                txt += "    Longitude             %7.2f deg  +/- %6.0f km\n" % (lon, lonerr)
         else:
-            if enhanced:
-                txt += "    Longitude             %11.6f deg\n" % lon
+            if self.enhanced:
+                txt += "    Longitude             %10.5f deg\n" % lon
             else:
                 txt += "    Longitude             %7.2f deg\n" % lon
-        if enhanced:
-            txt += "    Depth                 %11.3f km" % dep
+        if self.enhanced:
+            txt += "    Depth                %11.3f km" % dep
         else:
             txt += "    Depth                 %7.0f km" % dep
         if not deperr:
@@ -232,13 +243,13 @@ class Bulletin(object):
             txt +="   (fixed)\n"
         else:
             if depthPhaseCount >= minDepthPhaseCount:
-                if enhanced:
-                    txt += "   +/- %7.3f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
+                if self.enhanced:
+                    txt += "   +/- %8.3f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
                 else:
                     txt += "   +/- %4.0f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
             else:
-                if enhanced:
-                    txt += "   +/- %7.3f km\n" % deperr
+                if self.enhanced:
+                    txt += "   +/- %8.3f km\n" % deperr
                 else:
                     txt += "   +/- %4.0f km\n" % deperr
 
@@ -267,15 +278,15 @@ class Bulletin(object):
             except: txt += "NOT SET\n"
 
         try:
-            if enhanced:
-                txt += "    Residual RMS            %7.3f s\n" % org.quality().standardError()
+            if self.enhanced:
+                txt += "    Residual RMS           %9.3f s\n" % org.quality().standardError()
             else:
-                txt += "    Residual RMS            %6.2f s\n" % org.quality().standardError()
+                txt += "    Residual RMS           %6.2f s\n" % org.quality().standardError()
         except: pass
 
         try:
-            if enhanced:
-                txt += "    Azimuthal gap           %6.1f deg\n" % org.quality().azimuthalGap()
+            if self.enhanced:
+                txt += "    Azimuthal gap           %8.1f deg\n" % org.quality().azimuthalGap()
             else:
                 txt += "    Azimuthal gap           %5.0f deg\n" % org.quality().azimuthalGap()
         except: pass
@@ -357,6 +368,16 @@ class Bulletin(object):
         if not self._long:
             return txt
 
+        lineFMT = "    %-5s %-2s  "
+        if self.enhanced:
+            lineFMT += "%9.3f" if self.distInKM else "%9.5f"
+        else:
+            lineFMT += "%5.0f" if self.distInKM else "%5.1f"
+        lineFMT += " %s  %-7s %s %s %1s%1s %3.1f  "
+        if self.polarities:
+            lineFMT += "%s "
+        lineFMT += "%-5s\n"
+
         dist_azi = {}
         lines = []
 
@@ -369,24 +390,20 @@ class Bulletin(object):
             wfid = p.waveformID()
             net = wfid.networkCode()
             sta = wfid.stationCode()
-            try:
-                if enhanced:
-                    azi = "%5.1f" % arr.azimuth()
-                else:
-                    azi = "%3.0f" % arr.azimuth()
-            except: azi = "N/A"
+            if self.enhanced:
+                try: azi = "%5.1f" % arr.azimuth()
+                except: azi = "  N/A"
+                tstr = time2str(p.time().value())[11:]
+                try: res = "%7.3f" % arr.timeResidual()
+                except: res = "    N/A"
+            else:
+                try: azi = "%3.0f" % arr.azimuth()
+                except: azi = "N/A"
+                tstr = time2str(p.time().value())[11:-2]
+                try: res = "%5.1f" % arr.timeResidual()
+                except: res = "  N/A"
             dist_azi[net+"_"+sta] = (dist, azi)
             wt  = arr.weight()
-            if enhanced:
-                tstr = time2str(p.time().value())[11:]
-            else:
-                tstr = time2str(p.time().value())[11:-2]
-            try:
-                if enhanced:
-                    res = "%7.3f" % arr.timeResidual()
-                else:
-                    res = "%5.1f" % arr.timeResidual()
-            except: res = "  N/A"
             pha = arr.phase().code()
             flag = "X "[wt>0.1]
             try:
@@ -404,28 +421,21 @@ class Bulletin(object):
                     elif pol=="undecidable": pol="x"
                     else: pol="."
                 else: pol="."
-                if enhanced:
-                    line = "    %-5s %-2s  %10.6f %s  %-7s %s %s %1s%1s %5.3f  %s %-5s\n" \
-                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
-                else:
-                    line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %s %-5s\n" \
-                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
+                line = lineFMT % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
             else:
-                if enhanced:
-                    line = "    %-5s %-2s  %10.6f %s  %-7s %s %s %1s%1s %3.1f  %-5s\n" \
-                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
-                else:
-                    line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %-5s\n" \
-                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
+                line = lineFMT % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
             lines.append( (dist, line) )
 
         lines.sort()
 
         txt += "\n"
         txt += "%d Phase arrivals:\n" % org.arrivalCount()
-        txt += "    sta  net   dist azi  phase   time         res     wt  "
+        if self.enhanced:
+            txt += "    sta   net      dist   azi  phase   time             res     wt  "
+        else:
+            txt += "    sta   net  dist azi  phase   time         res     wt  "
         if self.polarities: txt += "  "
-        txt += "sta\n"
+        txt += "sta  \n"
         for dist,line in lines:
             txt += line
         txt += "\n"
@@ -441,6 +451,15 @@ class Bulletin(object):
                 mags[typ] = []
 
             mags[typ].append(mag)
+
+
+
+        lineFMT = "    %-5s %-2s  "
+        if self.enhanced:
+            lineFMT += "%9.3f" if self.distInKM else "%9.5f"
+        else:
+            lineFMT += "%5.0f" if self.distInKM else "%5.1f"
+        lineFMT += " %s  %-6s %5.2f %5.2f   %8s %4s\n"
 
         lines = []
 
@@ -480,20 +499,21 @@ class Bulletin(object):
                 sta = wfid.stationCode()
 
                 try:    dist, azi = dist_azi[net+"_"+sta]
-                except: dist, azi = 0, "N/A"
+                except: dist, azi = 0, "  N/A" if self.enhanced else "N/A"
 
                 val = mag.magnitude().value()
                 res = val - netmag[typ].magnitude().value()
 
-
-                line = "    %-5s %-2s  %5.1f %s  %-6s %5.2f %5.2f   %8s %4s \n" % \
-                        (sta, net, dist, azi, typ, val, res, a, p)
-                lines.append( (dist, line) )
+                line = lineFMT % (sta, net, dist, azi, typ, val, res, a, p)
+                lines.append( (dist, line ) )
 
         lines.sort()
 
         txt += "%d Station magnitudes:\n" % nmag
-        txt += "    sta  net   dist azi  type   value   res        amp per\n"
+        if self.enhanced:
+            txt += "    sta   net      dist   azi  type   value   res        amp  per\n"
+        else:
+            txt += "    sta   net  dist azi  type   value   res        amp  per\n"
         for dist,line in lines:
             txt += line
 
@@ -502,7 +522,6 @@ class Bulletin(object):
 
     def _printOriginAutoloc1(self, org):
         evt = self._evt
-        enhanced = self.enhanced
 
         if not evt and self._dbq:
             evt = self._dbq.getEvent(org.publicID())
@@ -519,9 +538,9 @@ class Bulletin(object):
         txt = ""
 
         reg = seiscomp3.Seismology.Regions()
-        if enhanced:
+        if self.enhanced:
             depth = org.depth().value()
-            sTime = org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f")[:24]
+            sTime = org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f00")[:24]
         else:
             depth = int(org.depth().value()+0.5)
             sTime = org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f")[:22]
@@ -530,8 +549,8 @@ class Bulletin(object):
             "evid":evid,
             "nsta":stationCount(org),
             "time":sTime,
-            "lat":lat2str(org.latitude().value(),enhanced),
-            "lon":lon2str(org.longitude().value(),enhanced),
+            "lat":lat2str(org.latitude().value(), self.enhanced),
+            "lon":lon2str(org.longitude().value(), self.enhanced),
             "dep":depth,
             "reg":reg.getRegionName(org.latitude().value(), org.longitude().value()),
             # changed to properly report location method. (Marco Olivieri 21/06/2010)
@@ -581,26 +600,23 @@ class Bulletin(object):
 #
 #  Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
 #""" % tmp
-        if enhanced:
-            txt += """
+        txtFMT = """
   Alert %(evid)s: determined by %(nsta)d stations, type %(stat)s
 
  %(method)s solution with earthmodel %(model)s (with start solution, %(nsta)d stations used, weight %(nsta)d):
 
-  %(reg)s  %(mtyp)s=%(mval).1f  %(time)s  %(lat)s  %(lon)s   %(dep).3f km
+  %(reg)s  %(mtyp)s=%(mval).1f  %(time)s  %(lat)s  %(lon)s   %(dep)"""
+        if self.enhanced:
+            txtFMT += """.3f km
 
-  Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
-""" % tmp
+  Stat  Net Date      Time                 Amp  Per     Res      Dist    Az  mb  ML  mB
+"""
         else:
-            txt += """
-  Alert %(evid)s: determined by %(nsta)d stations, type %(stat)s
+            txtFMT += """d km
 
- %(method)s solution with earthmodel %(model)s (with start solution, %(nsta)d stations used, weight %(nsta)d):
-
-  %(reg)s  %(mtyp)s=%(mval).1f  %(time)s  %(lat)s  %(lon)s   %(dep)d km
-
-  Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
-""" % tmp
+  Stat  Net Date      Time               Amp  Per   Res  Dist  Az  mb  ML  mB
+"""
+        txt += txtFMT % tmp
 
 # end (MO)
         dist_arr = self._getDistancesArrivalsSorted(org)
@@ -619,6 +635,13 @@ class Bulletin(object):
             sta = mag.waveformID().stationCode()
             mags[typ][sta] = mag
 
+        lineFMT = "  %-5s %-2s  %s  %10.1f %4.1f %s "
+        if self.enhanced:
+            lineFMT += "%9.3f" if self.distInKM else "%9.5f"
+        else:
+            lineFMT += "%5.0f" if self.distInKM else "%5.1f"
+        lineFMT += " %s%s\n"
+
         for dist, arr in dist_arr:
             if arr.weight() < minweight :
                 continue
@@ -631,22 +654,18 @@ class Bulletin(object):
             wfid = p.waveformID()
             net = wfid.networkCode()
             sta = wfid.stationCode()
-            if enhanced:
-                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f")[:22]
+            if self.enhanced:
+                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f00")[:22]
+                try: res = "%7.3f" % arr.timeResidual()
+                except: res = "    N/A"
+                try: azi = "%5.1f" % arr.azimuth()
+                except: azi = "  N/A"
             else:
-                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f00")[:20]
-            try:
-                if enhance:
-                    res = "%7.3f" % arr.timeResidual()
-                else:
-                    res = "%5.1f" % arr.timeResidual()
-            except: res = "  N/A"
-            try:
-                if enhance:
-                    azi = "%5.1f" % arr.azimuth()
-                else:
-                    azi = "%3.0f" % arr.azimuth()
-            except: azi = "N/A"
+                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f")[:20]
+                try: res = "%5.1f" % arr.timeResidual()
+                except: res = "  N/A"
+                try: azi = "%3.0f" % arr.azimuth()
+                except: azi = "N/A"
             pha = arr.phase().code()
             mstr = ""
             amp = per = 0.
@@ -668,16 +687,15 @@ class Bulletin(object):
                 except KeyError:
                     pass
                 mstr += " %3.1f" % mag
-            txt += "  %-5s %-2s  %s  %10.1f %4.1f %s %5.1f %s%s\n" \
-                % (sta, net, tstr, amp, per, res, dist, azi, mstr)
+            txt += lineFMT % (sta, net, tstr, amp, per, res, dist, azi, mstr)
 
-        if enhanced:
+        if self.enhanced:
             txt += "\n RMS-ERR:         %.3f\n\n" % org.quality().standardError()
         else:
             txt += "\n RMS-ERR:         %.2f\n\n" % org.quality().standardError()
 
         try:
-            if enhanced:
+            if self.enhanced:
                 tm = evt.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S.%f")
             else:
                 tm = evt.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
@@ -685,7 +703,7 @@ class Bulletin(object):
         except: pass
 
         try:
-            if enhanced:
+            if self.enhanced:
                 tm = org.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S.%f")
             else:
                 tm = org.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
@@ -775,6 +793,7 @@ class BulletinApp(seiscomp3.Client.Application):
                 self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
                 self.commandline().addOption("Dump", "first-only", "dump only the first event/origin")
                 self.commandline().addOption("Dump", "event-agency-id", "use agency ID information from event instead of preferred origin")
+                self.commandline().addOption("Dump", "dist-in-km,k", "plot distances in km instead of degree")
 
                 self.commandline().addGroup("Input")
                 self.commandline().addStringOption("Input", "format,f", "input format to use (xml [default], zxml (zipped xml), binary)")
@@ -840,12 +859,16 @@ class BulletinApp(seiscomp3.Client.Application):
                     bulletin.format = "autoloc3"
 
             if self.commandline().hasOption("enhanced"):
-                    bulletin.enhanced = True
+                bulletin.enhanced = True
 
             if self.commandline().hasOption("polarities"):
                 bulletin.polarities = True
+
             if self.commandline().hasOption("event-agency-id"):
                 bulletin.useEventAgencyID = True
+
+            if self.commandline().hasOption("dist-in-km"):
+                bulletin.distInKM = True
 
             try:
                 if evid:

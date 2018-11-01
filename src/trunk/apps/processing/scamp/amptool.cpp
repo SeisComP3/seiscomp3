@@ -1190,6 +1190,8 @@ AmpTool::createAmplitude(const Seiscomp::Processing::AmplitudeProcessor *proc,
 	ci.setCreationTime(now);
 	amp->setCreationInfo(ci);
 
+	proc->finalizeAmplitude(amp.get());
+
 	logObject(_outputAmps, now);
 
 	return amp;

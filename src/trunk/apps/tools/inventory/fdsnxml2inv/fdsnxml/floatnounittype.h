@@ -73,11 +73,11 @@ class FloatNoUnitType : public Core::BaseObject {
 
 		//! XML tag: plusError
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		//! XML tag: minusError
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 
 	// ------------------------------------------------------------------

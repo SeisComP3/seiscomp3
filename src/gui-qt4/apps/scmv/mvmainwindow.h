@@ -176,6 +176,9 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 
 		bool isInDisplayMode() const;
 
+		void updateEventFilter();
+		bool getEventVisibility(const Seiscomp::DataModel::Event *event);
+
 
 	// ----------------------------------------------------------------------
 	//  slots
@@ -210,38 +213,46 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 
 		void resetStationData();
 
+		void eventsMenuTriggered(QAction *action);
+
 	// ----------------------------------------------------------------------
 	// Private data members
 	// ----------------------------------------------------------------------
 	private:
-		Ui::MvMainWindow _ui;
+		Ui::MvMainWindow                 _ui;
 
-		MvMapWidget*      _mapWidget;
-		EventTableWidget* _eventTableWidgetRef;
-		SearchWidget*     _searchWidgetRef;
+		bool                             _eventModeFilter[Seiscomp::DataModel::EvaluationMode::Quantity+1];
+		bool                             _eventStatusFilter[Seiscomp::DataModel::EvaluationStatus::Quantity+1];
 
-		DisplayMode       _displayMode;
+		QAction                         *_eventModeControls[Seiscomp::DataModel::EvaluationMode::Quantity+1];
+		QAction                         *_eventStatusControls[Seiscomp::DataModel::EvaluationStatus::Quantity+1];
 
-		int    _mapUpdateInterval;
-		QTimer _mapUpdateTimer;
-		int    _expiredEventsInterval;
-		QTimer _expiredEventsTimer;
+		MvMapWidget                     *_mapWidget;
+		EventTableWidget                *_eventTableWidgetRef;
+		SearchWidget*                    _searchWidgetRef;
 
-		StationDataCollection _stationDataCollection;
-		EventDataRepository   _eventDataRepository;
+		DisplayMode                      _displayMode;
 
-		RecordStreamThreadPtr _recordStreamThread;
+		int                              _mapUpdateInterval;
+		QTimer                           _mapUpdateTimer;
+		int                              _expiredEventsInterval;
+		QTimer                           _expiredEventsTimer;
 
-		RecordHandler  _recordHandler;
-		TriggerHandler _triggerHandler;
-		QCHandler      _qcHandler;
+		StationDataCollection            _stationDataCollection;
+		EventDataRepository              _eventDataRepository;
 
-		Seiscomp::Core::TimeSpan _configStationPickCacheLifeSpan;
-		Seiscomp::Core::TimeSpan _configEventActivityLifeSpan;
-		Seiscomp::Core::TimeSpan _configRemoveEventDataOlderThanTimeSpan;
-		Seiscomp::Core::TimeSpan _configReadEventsNotOlderThanTimeSpan;
+		RecordStreamThreadPtr            _recordStreamThread;
 
-		std::string              _configStationRecordFilterStr;
+		RecordHandler                    _recordHandler;
+		TriggerHandler                   _triggerHandler;
+		QCHandler                        _qcHandler;
+
+		Seiscomp::Core::TimeSpan         _configStationPickCacheLifeSpan;
+		Seiscomp::Core::TimeSpan         _configEventActivityLifeSpan;
+		Seiscomp::Core::TimeSpan         _configRemoveEventDataOlderThanTimeSpan;
+		Seiscomp::Core::TimeSpan         _configReadEventsNotOlderThanTimeSpan;
+
+		std::string                      _configStationRecordFilterStr;
 
 		QualitiyControlParameterSelector _qualityControlStatusSelector;
 };

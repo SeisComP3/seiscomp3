@@ -191,8 +191,7 @@ class RecordWidgetDecorator : public QObject {
 //! This class is only responsible for drawing, it gets records assigned as
 //! pointers and is (optional) responsible for their (de)allocation. Only filtered
 //! recordstreams are owned by the RecordWidget.
-class SC_GUI_API RecordWidget : public QWidget
-{
+class SC_GUI_API RecordWidget : public QWidget {
 	Q_OBJECT
 
 	public:
@@ -208,6 +207,11 @@ class SC_GUI_API RecordWidget : public QWidget
 			Filtered = 0x02
 		};
 
+		enum AxisPosition {
+			Left,
+			Right
+		};
+
 		typedef Math::Filtering::InPlaceFilter<float> Filter;
 
 		struct Trace {
@@ -215,25 +219,29 @@ class SC_GUI_API RecordWidget : public QWidget
 				reset();
 			}
 
-			float          amplMin;
-			float          amplMax;
-			float          offset;
-			float          absMax;
-			int            yMin;
-			int            yMax;
-			float          fyMin;
-			float          fyMax;
-			float          timingQuality;
-			int            timingQualityCount;
-			bool           dirty;
-			bool           visible;
-			RecordPolyline poly;
+			float                     amplMin;
+			float                     amplMax;
+			float                     offset;
+			float                     absMax;
+			int                       yMin;
+			int                       yMax;
+			float                     fyMin;
+			float                     fyMax;
+			float                     timingQuality;
+			int                       timingQualityCount;
+			bool                      dirty;
+			bool                      visible;
+			AbstractRecordPolylinePtr poly;
 
 			void reset() {
 				amplMin = amplMax = offset  = absMax = 0;
 				yMin = yMax = 0;
 				visible = false;
-				poly = RecordPolyline();
+				poly = NULL;
+			}
+
+			bool validTrace() {
+				return poly && !poly->isEmpty();
 			}
 		};
 
@@ -243,6 +251,7 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		~RecordWidget();
 
+	public:
 		void enableRecordFiltering(int slot, bool enable);
 		bool isRecordFilteringEnabled(int slot);
 
@@ -254,6 +263,7 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		bool setRecords(int slot, RecordSequence*, bool owner = true);
 		bool setRecordID(int slot, const QString &id);
+		bool setRecordLabel(int slot, const QString &label);
 		bool setRecordColor(int slot, QColor c);
 		bool setRecordPen(int slot, const QPen &pen);
 		bool setRecordAntialiasing(int slot, bool antialiasing);
@@ -283,6 +293,9 @@ class SC_GUI_API RecordWidget : public QWidget
 		int setCurrentRecords(int slot);
 		int currentRecords() const;
 
+	public:
+		const QRect &canvasRect() const;
+
 		void setDrawMode(DrawMode mode);
 		DrawMode drawMode() const;
 
@@ -291,6 +304,21 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		void setDrawRecordID(bool f);
 		bool drawRecordID() const { return _drawRecordID; }
+
+		void setRowSpacing(int);
+		int rowSpacing() const;
+
+		void setAxisSpacing(int);
+		int axisSpacing() const;
+
+		void setDrawAxis(bool f);
+		bool drawAxis() const { return _drawAxis; }
+
+		void setAxisWidth(int width);
+		int axisWidth() const;
+
+		void setAxisPosition(AxisPosition position);
+		AxisPosition axisPosition() const;
 
 		void setValuePrecision(int p);
 		int valuePrecision() const { return _valuePrecision; }
@@ -451,6 +479,9 @@ class SC_GUI_API RecordWidget : public QWidget
 		//! Maps a time to a position relative to the widget
 		int mapTime(const Core::Time&) const;
 
+		//! Maps a time to a position relative to the trace canvas
+		int mapCanvasTime(const Core::Time&) const;
+
 		//! Maps a widget position to a time
 		Core::Time unmapTime(int x) const;
 
@@ -572,6 +603,8 @@ class SC_GUI_API RecordWidget : public QWidget
 		//! and the drawingMode is InRows then a layoutRequest is made.
 		void layoutRequest();
 
+		void axisSettingsChanged(Seiscomp::Gui::RecordWidget*);
+
 
 	protected:
 		void init();
@@ -600,10 +633,10 @@ class SC_GUI_API RecordWidget : public QWidget
 		virtual void customPaintTracesBegin(QPainter &painter);
 		virtual void customPaintTracesEnd(QPainter &painter);
 
-		virtual void createPolyline(int slot, RecordPolyline &polyline,
+		virtual void createPolyline(int slot, AbstractRecordPolylinePtr &polyline,
 		                            RecordSequence const *, double pixelPerSecond,
 		                            float amplMin, float amplMax, float amplOffset,
-		                            int height, bool optimization);
+		                            int height, bool optimization, bool highPrecision);
 		virtual const double *value(int slot, const Seiscomp::Core::Time&) const;
 
 
@@ -636,6 +669,11 @@ class SC_GUI_API RecordWidget : public QWidget
 			bool            optimize;
 			double          scale;
 
+			// The value range axis, if enabled
+			QString         axisLabel;
+			double          axisSpacing[2];
+			bool            axisDirty;
+
 			// Internal variables to track the current trace position
 			// in widget coordinated
 			int             posY;
@@ -662,6 +700,11 @@ class SC_GUI_API RecordWidget : public QWidget
 		void drawRecords(Stream *s, int slot, int h);
 		void centerLine(int l, int h);
 
+		void drawAxis(QPainter &painter, const QPen &p);
+
+		int canvasWidth() const;
+		int canvasHeight() const;
+
 
 	private:
 		typedef QVector<Stream*> StreamMap;
@@ -671,36 +714,41 @@ class SC_GUI_API RecordWidget : public QWidget
 		Seiscomp::Core::Time _alignment;
 		bool                 _clipRows;
 	
-		double  _tmin;            // time range min
-		double  _tmax;            // time range max
-		double  _smin, _smax;     // selection
-		double  _pixelPerSecond;
-		float   _amplScale;       // pixel per amplitude unit (0=normalize)
-		double  _gridHSpacing[2];
-		double  _gridHOffset;
+		double    _tmin;            // time range min
+		double    _tmax;            // time range max
+		double    _smin, _smax;     // selection
+		double    _pixelPerSecond;
+		float     _amplScale;       // pixel per amplitude unit (0=normalize)
+		double    _gridHSpacing[2];
+		double    _gridHOffset;
 
-		double  _gridVRange[2];
-		double  _gridVSpacing[2];
-		double  _gridVOffset;
-		double  _gridVScale;
+		double    _gridVRange[2];
+		double    _gridVSpacing[2];
+		double    _gridVOffset;
+		double    _gridVScale;
 
-		float   _amplitudeRange[2];
-		bool    _useFixedAmplitudeRange;
-		bool    _useMinAmplitudeRange;
+		float     _amplitudeRange[2];
+		bool      _useFixedAmplitudeRange;
+		bool      _useMinAmplitudeRange;
 
-		bool    _active;
-		bool    _filtering;
-		bool    _showScaledValues;
+		bool      _active;
+		bool      _filtering;
+		bool      _showScaledValues;
 	
-		bool    _drawRecords;
-		bool    _drawRecordID;
-		bool    _drawOffset;
-		bool    _showAllRecords;
-		bool    _autoMaxScale;
-		bool    _enabled;
-		bool    _useGlobalOffset;
+		bool      _drawRecords;
+		bool      _drawRecordID;
+		bool      _drawOffset;
+		bool      _showAllRecords;
+		bool      _autoMaxScale;
+		bool      _enabled;
+		bool      _useGlobalOffset;
+		bool      _drawAxis;
 
-		int     _tracePaintOffset;
+		int          _tracePaintOffset;
+		int          _axisWidth;
+		AxisPosition _axisPosition;
+		int          _axisSpacing;
+		int          _rowSpacing;
 
 		StreamMap _streams;
 		int       _currentSlot;
@@ -720,6 +768,8 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		QScrollBar *_scrollBar;
 
+		QRect _canvasRect;
+		int _margins[4];
 		QString _cursorText;
 		Seiscomp::Core::Time _cursorPos;
 		Seiscomp::Core::Time _startDragPos;
@@ -734,6 +784,36 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		int                    _shadowWidgetFlags;
 };
+
+
+inline const QRect &RecordWidget::canvasRect() const {
+	return _canvasRect;
+}
+
+inline int RecordWidget::rowSpacing() const {
+	return _rowSpacing;
+}
+
+inline int RecordWidget::axisSpacing() const {
+	return _axisSpacing;
+}
+
+inline int RecordWidget::axisWidth() const {
+	return _axisWidth;
+}
+
+inline RecordWidget::AxisPosition RecordWidget::axisPosition() const {
+	return _axisPosition;
+}
+
+inline int RecordWidget::canvasWidth() const {
+	return _canvasRect.width();
+}
+
+inline int RecordWidget::canvasHeight() const {
+	return _canvasRect.height();
+}
+
 
 
 }

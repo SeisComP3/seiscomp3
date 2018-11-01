@@ -2,66 +2,14 @@
 
 ## Release YYYY.ddd
 
-* trunk
-
-  * Removed LocSAT unused configuration option to use the location rms as
-    time error
-  * Added LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
-    which can be configured via the configuration files or during runtime in
-    the scolv locator setup dialog. The latter defaults to false to preserve
-    the old behaviour
-  * Add ConfigSyncMessage which wraps a database configuration synchronization
-  * Fixed amplitude computation for ML (on horizontals, not MLv) which applied
-    a wrong correction factor of 2. Therefore ML magnitudes will be 0.3 magnitudes
-    lower than before. To preserve the old (wrong) behaviour, apply a constant
-    correction in the bindings:
-    ```
-    # Add log10(2) to ML magnitudes for SC3 compatibility with <= 2017.334
-    mag.ML.offset = 0.301029995664
-    ```
-
-* fdsnxml2inv
-
-  * Fix wrong datalogger conversion if commandline option ```--log-stages```
-    is not set
-
-* GUI
-
-  * Fixed event list "Hide events outside region" edit dialog: OK and Cancel
-    did not work
-  * Prepend "amax" and "mean" to the statistic values printed in the lower
-    left corner in the trace widgets
-
-* scwfparam
-
-  * Fix wrong handling of data acquisition timeouts when no data is received
-    within one second
-  * Compare inventory gain.unit ignoring the case to detect velocity and
-    acceleration channels correctly
-
-* scqc
-
-  * Fixed duplicate object bug which caused many error log messages in
-    scmaster.log with respect to database insertions
-
-* scart
-
-  * Change default archive path from $SEISCOMP_ROOT/acquisition/archive to
-    $SEISCOMP_ROOT/var/lib/archive. Thanks to Sergio Tardioli.
-
-* scolv
-
-  * Allow to configure preferred event types which will be displayed first
-    in the event type drop-down list
-  * Fix rename phases command when only a subset of source phases is selected
-
-* fdsnws
-
-  * Add FocalMechanism support in event query
-  * Add support for cross-referenced preferred magnitude in event query
+```SC_API_VERSION 12.0.0```
 
 * scautoloc
 
+  * Check the depth of the origin before sending to discard solutions with
+    too great depth
+  * Add configuration parameter maxDepth
+  * Remove depth check from previous origin filter where it was not effective
   * Changes affecting behaviour in playback mode:
     * A time stamp is now logged whenever an new object arrives.
     * The creationTime of new origins is set to the creation
@@ -71,6 +19,123 @@
 
   * Fix bug that caused autoloc.useManualOrigins to always be treated
     as true
+
+* scdumpcfg
+
+  * Add the documentation
+
+* bindings2cfg
+
+  * Add the documentation
+
+* trunk
+
+  * Add namespace support in configuration files. Example:
+    ```
+    recordstream {
+      service = slink
+      source = localhost:18000
+    }
+    ```
+    Namespaces can be nested.
+  * Remov LocSAT unused configuration option to use the location rms as
+    time error
+  * Add LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
+    which can be configured via the configuration files or during runtime in
+    the scolv locator setup dialog. The latter defaults to false to preserve
+    the old behaviour
+  * Add ConfigSyncMessage which wraps a database configuration synchronization
+  * All applications are now encouraged to use ```recordstream = service://params```
+    in their configuration rather than the two parameters ```recordstream.service```
+    and ```recordstream.source```. They are now declared deprecated and will be
+    removed in future versions.
+  * All applications are now encouraged to use ```database = type://params```
+    in their configuration rather than the two parameters ```database.type```
+    and ```database.parameters```. They are now declared deprecated and will be
+    removed in future versions.
+  * Fix amplitude computation for ML (on horizontals, not MLv) which applied
+    a wrong correction factor of 2. Therefore ML magnitudes will be 0.3 magnitudes
+    lower than before. To preserve the old (wrong) behaviour, apply a constant
+    correction in the bindings:
+    ```
+    # Add log10(2) to ML magnitudes for SC3 compatibility with <= 2017.334
+    mag.ML.offset = 0.301029995664
+    ```
+
+* fdsnws
+
+  * Add FocalMechanism support in event query
+  * Add support for cross-referenced preferred magnitude in event query
+
+* fdsnxml2inv
+
+  * Fix wrong datalogger conversion if commandline option ```--log-stages```
+    is not set
+
+* GUI
+
+  * Add event layer legend which will show if legends are visible in scolv
+  * scmv uses now the map legend interface rather than rendering the legends
+    as map symbols
+  * Add support for BNA point rendering. New configuration options have
+    been added: ```[{prefix}.]symbol.size``` and ```[{prefix}.]symbol.shape```.
+  * Show in scconfig header of module configuration if bindings are required
+  * Fix event list "Hide events outside region" edit dialog: OK and Cancel
+    did not work
+  * Prepend "amax" and "mean" to the statistic values printed in the lower
+    left corner in the trace widgets
+  * Improve rendering of traces significantly when anti-aliasing is enabled
+    which is default now
+  * Improved optimizing traces for rendering with respect to correctness and
+    memory consumption
+
+* scheli
+
+  * Add documentation and descriptions
+
+* scmv
+
+  * Add filter of origin mode and status for showing events on map
+  * Add configuration for map/event legend position
+  * Improve documentation
+
+* scwfparam
+
+  * Fix wrong handling of data acquisition timeouts when no data is received
+    within one second
+  * Compare inventory gain.unit ignoring the case to detect velocity and
+    acceleration channels correctly
+
+* scbulletin
+
+  * In enhanced mode all coordinates and distances have precisions 
+    of e-05 degree
+
+* scart
+
+  * Change default archive path from $SEISCOMP_ROOT/acquisition/archive to
+    $SEISCOMP_ROOT/var/lib/archive. Thanks to Sergio Tardioli.
+
+* scqc
+
+  * Fix duplicate object bug which caused many error log messages in
+    scmaster.log with respect to database insertions
+
+* scolv
+
+  * Allow to configure preferred event types which will be displayed first
+    in the event type drop-down list
+  * Fix rename phases command when only a subset of source phases is selected
+  * Show vertical scale in picker zoom trace
+  * Set default for hiding disabled stations to ```false```
+  * Add configuration option to either ignore disabled stations or not
+  * Allow to show all traces in the same unit, either acceleration, velocity
+    or displacement
+
+* scmm
+
+  * Fix crash when connection cannot be established at startup
+
 
 ## Release 2017.334 patch5
 
@@ -120,6 +185,7 @@
 
   * Fix arrival used flags evaluation. This resulted in activated arrivals in
     the various plots event if they were not used.
+  * Fix rename phases command when only a subset of source phases is selected
 
 * scautoloc
 
@@ -238,7 +304,6 @@
 
   * Event list shows only the full summary tooltip if the mouse hovers
     the ID column (last column)
-
 
 * scmapcut
 

@@ -1642,7 +1642,8 @@ void Application::configUnset(const std::string& query) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::saveConfiguration() {
-	return _configuration.writeConfig(Environment::Instance()->configFileName(name()), true);
+	return _configuration.writeConfig(Environment::Instance()->configFileName(name()),
+	                                  true, true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2528,13 +2529,18 @@ bool Application::initConfiguration() {
 	try { _shutdownMasterModule = configGetString("client.shutdownMasterModule"); } catch ( ... ) {}
 	try { _shutdownMasterUsername = configGetString("client.shutdownMasterUsername"); } catch ( ... ) {}
 
-	std::string dbType, dbParams;
-	try { dbType = configGetString("database.type"); } catch ( ... ) {}
-	try { dbParams = configGetString("database.parameters"); } catch ( ... ) {}
-	try { _configModuleName = configGetString("configModule"); } catch ( ... ) {}
+	try {
+		_db = configGetString("database");
+	}
+	catch ( ... ) {
+		std::string dbType, dbParams;
+		try { dbType = configGetString("database.type"); } catch ( ... ) {}
+		try { dbParams = configGetString("database.parameters"); } catch ( ... ) {}
+		if ( !dbType.empty() && !dbParams.empty() )
+			_db = dbType + "://" + dbParams;
+	}
 
-	if ( !dbType.empty() && !dbParams.empty() )
-		_db = dbType + "://" + dbParams;
+	try { _configModuleName = configGetString("configModule"); } catch ( ... ) {}
 
 	std::vector<string> groups;
 	bool hasGroups = false;
@@ -2548,10 +2554,15 @@ bool Application::initConfiguration() {
 		_messagingSubscriptionRequests = groups;
 
 	try {
-		_recordStream = configGetString("recordstream.service") + "://" +
-		                configGetString("recordstream.source");
+		_recordStream = configGetString("recordstream");
 	}
-	catch (...) {}
+	catch (...) {
+		try {
+			_recordStream = configGetString("recordstream.service") + "://" +
+			                configGetString("recordstream.source");
+		}
+		catch (...) {}
+	}
 
 	try { _inventoryDB = configGetPath("database.inventory"); }
 	catch ( ... ) {}

@@ -66,7 +66,7 @@ class NumeratorCoefficient : public Core::BaseObject {
 
 		//! XML tag: i
 		void setI(const OPT(int)& i);
-		int i() const throw(Seiscomp::Core::ValueException);
+		int i() const;
 
 
 	// ------------------------------------------------------------------

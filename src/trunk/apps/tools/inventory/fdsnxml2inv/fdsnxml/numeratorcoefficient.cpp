@@ -113,7 +113,7 @@ void NumeratorCoefficient::setI(const OPT(int)& i) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int NumeratorCoefficient::i() const throw(Seiscomp::Core::ValueException) {
+int NumeratorCoefficient::i() const {
 	if ( _i )
 		return *_i;
 	throw Seiscomp::Core::ValueException("NumeratorCoefficient.i is not set");

@@ -116,20 +116,20 @@ class Station : public BaseNode {
 		//! is still active.
 		//! XML tag: TerminationDate
 		void setTerminationDate(const OPT(DateTime)& terminationDate);
-		DateTime terminationDate() const throw(Seiscomp::Core::ValueException);
+		DateTime terminationDate() const;
 
 		//! Total number of channels recorded at this station.
 		//! XML tag: TotalNumberChannels
 		void setTotalNumberChannels(const OPT(CounterType)& totalNumberChannels);
-		CounterType& totalNumberChannels() throw(Seiscomp::Core::ValueException);
-		const CounterType& totalNumberChannels() const throw(Seiscomp::Core::ValueException);
+		CounterType& totalNumberChannels();
+		const CounterType& totalNumberChannels() const;
 
 		//! Number of channels recorded at this station and selected by the query
 		//! that produced this document.
 		//! XML tag: SelectedNumberChannels
 		void setSelectedNumberChannels(const OPT(CounterType)& selectedNumberChannels);
-		CounterType& selectedNumberChannels() throw(Seiscomp::Core::ValueException);
-		const CounterType& selectedNumberChannels() const throw(Seiscomp::Core::ValueException);
+		CounterType& selectedNumberChannels();
+		const CounterType& selectedNumberChannels() const;
 
 	
 	// ------------------------------------------------------------------

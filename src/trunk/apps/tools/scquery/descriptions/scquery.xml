@@ -10,10 +10,6 @@
 				<optionReference>generic#version</optionReference>
 				<optionReference>generic#config-file</optionReference>
 				<optionReference>generic#plugins</optionReference>
-				<optionReference>generic#daemon</optionReference>
-				<optionReference>generic#auto-shutdown</optionReference>
-				<optionReference>generic#shutdown-master-module</optionReference>
-				<optionReference>generic#shutdown-master-username</optionReference>
 			</group>
 
 			<group name="Verbosity">
@@ -31,10 +27,15 @@
 			<group name="Database">
 				<optionReference>database#db-driver-list</optionReference>
 				<optionReference>database#database</optionReference>
-				<optionReference>database#config-module</optionReference>
-				<optionReference>database#inventory-db</optionReference>
-				<optionReference>database#config-db</optionReference>
+			</group>
+
+			<group name="Commands">
+				<option flag="" long-flag="showqueries">
+					<description>
+						Show the stored queries in queries.cfg
+					</description>
+				</option>
 			</group>
 		</command-line>
-    </module>
+	</module>
 </seiscomp>

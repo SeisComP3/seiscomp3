@@ -72,16 +72,16 @@ class Response : public Core::BaseObject {
 		//! gain with (blockette 58) with the ability to specify a frequency range.
 		//! XML tag: InstrumentSensitivity
 		void setInstrumentSensitivity(const OPT(Sensitivity)& instrumentSensitivity);
-		Sensitivity& instrumentSensitivity() throw(Seiscomp::Core::ValueException);
-		const Sensitivity& instrumentSensitivity() const throw(Seiscomp::Core::ValueException);
+		Sensitivity& instrumentSensitivity();
+		const Sensitivity& instrumentSensitivity() const;
 
 		//! The total sensitivity for a channel, representing the complete
 		//! acquisition system expressed as a polynomial. Equivalent to SEED stage
 		//! 0 polynomial (blockette 62).
 		//! XML tag: InstrumentPolynomial
 		void setInstrumentPolynomial(const OPT(Polynomial)& instrumentPolynomial);
-		Polynomial& instrumentPolynomial() throw(Seiscomp::Core::ValueException);
-		const Polynomial& instrumentPolynomial() const throw(Seiscomp::Core::ValueException);
+		Polynomial& instrumentPolynomial();
+		const Polynomial& instrumentPolynomial() const;
 
 	
 	// ------------------------------------------------------------------

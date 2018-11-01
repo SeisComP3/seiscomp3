@@ -58,7 +58,7 @@ class Phone : public Core::BaseObject {
 	public:
 		//! XML tag: CountryCode
 		void setCountryCode(const OPT(int)& countryCode);
-		int countryCode() const throw(Seiscomp::Core::ValueException);
+		int countryCode() const;
 
 		//! XML tag: AreaCode
 		void setAreaCode(int areaCode);

@@ -55,13 +55,17 @@
 				</option>
 				<option flag="O" long-flag="operation" argument="flag" default="merge">
 					<description>
-					Operation to use: add, update, remove or merge. Merge is special
-					operation and requires a database connection. It will read a
-					corresponding object from the database and calculates the
-					differences which are sent to the messaging. If add, update
-					or remove is specified then all objects in XML are sent with
-					the given operation regardless of their existence in the
-					database or not.
+					Operation to use: add, update, remove, merge or merge-without-remove.
+					Merge and merge-without-remove are special operations and require
+					a database connection. Both will read a corresponding object
+					from the database and calculate the differences which will be
+					sent to the messaging. Merge-no-remove behaves like merge
+					with the exception that remove operations will be filtered
+					out that no objects in the database will be removed.
+
+					If add, update or remove is specified then all objects in
+					XML are sent with the given operation regardless of their
+					existence in the database or not.
 					</description>
 				</option>
 				<option long-flag="routingtable" argument="flag">

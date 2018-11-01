@@ -10,9 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
 
 #ifndef __SEISCOMP_DATAMODEL_DATABASE_QUERY_H__
 #define __SEISCOMP_DATAMODEL_DATABASE_QUERY_H__

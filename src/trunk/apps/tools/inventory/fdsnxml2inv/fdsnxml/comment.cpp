@@ -101,7 +101,7 @@ void Comment::setBeginEffectiveTime(const OPT(DateTime)& beginEffectiveTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Comment::beginEffectiveTime() const throw(Seiscomp::Core::ValueException) {
+DateTime Comment::beginEffectiveTime() const {
 	if ( _beginEffectiveTime )
 		return *_beginEffectiveTime;
 	throw Seiscomp::Core::ValueException("Comment.beginEffectiveTime is not set");
@@ -121,7 +121,7 @@ void Comment::setEndEffectiveTime(const OPT(DateTime)& endEffectiveTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Comment::endEffectiveTime() const throw(Seiscomp::Core::ValueException) {
+DateTime Comment::endEffectiveTime() const {
 	if ( _endEffectiveTime )
 		return *_endEffectiveTime;
 	throw Seiscomp::Core::ValueException("Comment.endEffectiveTime is not set");
@@ -141,7 +141,7 @@ void Comment::setId(const OPT(int)& id) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Comment::id() const throw(Seiscomp::Core::ValueException) {
+int Comment::id() const {
 	if ( _id )
 		return *_id;
 	throw Seiscomp::Core::ValueException("Comment.id is not set");

@@ -375,10 +375,10 @@
            <item row="13" column="0" colspan="4" >
             <widget class="QPushButton" name="buttonReleaseOrigin" >
              <property name="toolTip" >
-              <string>Release a previously fixed preferred origin and let scevent decide what origin to use.</string>
+              <string>Unfixes a previously fixed preferred origin and lets scevent decide which origin to set preferred.</string>
              </property>
              <property name="text" >
-              <string>Release origin</string>
+              <string>Unfix origin</string>
              </property>
             </widget>
            </item>
@@ -581,10 +581,10 @@
            <item row="5" column="2" >
             <widget class="QPushButton" name="buttonReleaseMagnitudeType" >
              <property name="toolTip" >
-              <string>Release a previouly fixed magnitude type and let scevent decide what magnitude to use.</string>
+              <string>Unfixes a previouly fixed magnitude type and lets scevent decide which magnitude to set preferred.</string>
              </property>
              <property name="text" >
-              <string>Release</string>
+              <string>Unfix</string>
              </property>
             </widget>
            </item>
@@ -1476,10 +1476,10 @@
             <item row="5" column="2" >
              <widget class="QPushButton" name="buttonReleaseMw" >
               <property name="toolTip" >
-               <string>Release a previously fixed moment magnitude as preferred magnitude and let scevent decide what magnitude (part of the preferred origin) to use.</string>
+               <string>Unfixes a previously fixed moment magnitude as preferred magnitude and lets scevent decide which magnitude (part of the preferred origin) to set preferred.</string>
               </property>
               <property name="text" >
-               <string>Release</string>
+               <string>Unfix</string>
               </property>
              </widget>
             </item>

@@ -10,10 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
-
 
 #define SEISCOMP_COMPONENT DataModel
 #include <seiscomp3/datamodel/eventparameters.h>

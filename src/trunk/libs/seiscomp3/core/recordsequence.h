@@ -74,12 +74,20 @@ class SC_SYSTEM_CORE_API RecordSequence : public std::deque<RecordCPtr> {
 		//! Set the time tolerance in samples
 		void setTolerance(double);
 
-		//! Return Record's as one continuous record. Compiled in is support for
+		//! Return Record's as one contiguous record. Compiled in is support for
 		//! float, double and int. If interpolation is enabled gaps will be linearly
 		//! interpolated between the last and the next sample.
 		template <typename T>
+		GenericRecord *contiguousRecord(const Seiscomp::Core::TimeWindow *tw = NULL,
+		                                bool interpolate = false) const;
+
+		//! DECPRECATED: For backward compatibility, does exactly the same as
+		//!              contiguousRecord. Please use contiguousRecord in your
+		//!              code. This method will be removed in future releases.
+		template <typename T>
 		GenericRecord *continuousRecord(const Seiscomp::Core::TimeWindow *tw = NULL,
 		                                bool interpolate = false) const;
+
 
 		//! Time window currently in buffer, irrespective of gaps
 		Core::TimeWindow timeWindow() const;

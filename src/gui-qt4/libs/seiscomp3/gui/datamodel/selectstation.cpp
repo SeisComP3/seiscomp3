@@ -47,6 +47,7 @@ class StationsModel : public QAbstractTableModel {
 	public:
 		StationsModel(Core::Time time,
 		              const QSet<QString> *blackList,
+		              bool ignoreDisabledStations,
 		              QObject *parent = 0) : QAbstractTableModel(parent) {
 			DataModel::Inventory* inv = Client::Inventory::Instance()->inventory();
 			if ( inv != NULL ) {
@@ -68,7 +69,9 @@ class StationsModel : public QAbstractTableModel {
 						}
 						catch ( Core::ValueException& ) {}
 		
-						if ( !SCApp->isStationEnabled(n->code(), s->code()) ) continue;
+						if ( ignoreDisabledStations
+						  && !SCApp->isStationEnabled(n->code(), s->code()) )
+							continue;
 		
 						QString code = (n->code() + "." + s->code()).c_str();
 		
@@ -167,8 +170,8 @@ class StationsSortFilterProxyModel : public QSortFilterProxyModel {
 
 	protected:
 		bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
-			if ( (left.column() == 1 && right.column() == 1) ||
-                 (left.column() == 2 && right.column() == 2) )
+			if ( (left.column() == 1 && right.column() == 1)
+			  || (left.column() == 2 && right.column() == 2) )
 				return sourceModel()->data(left, Qt::UserRole).toDouble() < sourceModel()->data(right, Qt::UserRole).toDouble();
 			else
 				return QSortFilterProxyModel::lessThan(left, right);
@@ -181,9 +184,10 @@ class StationsSortFilterProxyModel : public QSortFilterProxyModel {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SelectStation::SelectStation(Core::Time time, QWidget* parent, Qt::WFlags f)
+SelectStation::SelectStation(Core::Time time, bool ignoreDisabledStations,
+                             QWidget* parent, Qt::WFlags f)
  : QDialog(parent, f) {
-	init(time, NULL);
+	init(time, ignoreDisabledStations, NULL);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -191,10 +195,11 @@ SelectStation::SelectStation(Core::Time time, QWidget* parent, Qt::WFlags f)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SelectStation::SelectStation(Core::Time time, const QSet<QString> &blackList,
+SelectStation::SelectStation(Core::Time time, bool ignoreDisabledStations,
+                             const QSet<QString> &blackList,
                              QWidget* parent, Qt::WFlags f)
  : QDialog(parent, f) {
-	init(time, &blackList);
+	init(time, ignoreDisabledStations, &blackList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -211,12 +216,14 @@ SelectStation::~SelectStation()
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SelectStation::init(Core::Time time, const QSet<QString> *blackList) {
+void SelectStation::init(Core::Time time, bool ignoreDisabledStations,
+                         const QSet<QString> *blackList) {
 	_ui.setupUi(this);
 
 	_ui.stationLineEdit->setFocus(Qt::TabFocusReason);
 
-	StationsModel *model = new StationsModel(time, blackList, this);
+	StationsModel *model = new StationsModel(time, blackList,
+	                                         ignoreDisabledStations, this);
 	QSortFilterProxyModel *filterModel = new StationsSortFilterProxyModel(this);
 	filterModel->setSourceModel(model);
 	_ui.table->setModel(filterModel);

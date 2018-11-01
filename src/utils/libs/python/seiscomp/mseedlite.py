@@ -363,7 +363,7 @@ class Record(object):
     def write(self, fd, rec_len_exp):
         """Write the record to an already opened file."""
         if self.size > (1 << rec_len_exp):
-            raise MSeedError("record is larger than requested write size")
+            raise MSeedError, "record is larger than requested write size: %d > %d" % (self.size, 1 << rec_len_exp)
 
         recno_str = bytes(("%06d" % (self.recno,)).encode('utf-8'))
         sta = bytes(("%-5.5s" % (self.sta,)).encode('utf-8'))

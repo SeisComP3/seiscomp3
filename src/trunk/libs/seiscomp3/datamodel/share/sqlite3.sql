@@ -697,8 +697,7 @@ CREATE TABLE Amplitude (
 );
 
 CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
-CREATE INDEX Amplitude_timeWindow_reference ON Amplitude(timeWindow_reference);
-CREATE INDEX Amplitude_timeWindow_reference_ms ON Amplitude(timeWindow_reference_ms);
+CREATE INDEX Amplitude_timeWindow_reference ON Amplitude(timeWindow_reference,timeWindow_reference_ms);
 CREATE INDEX Amplitude_pickID ON Amplitude(pickID);
 
 CREATE TRIGGER AmplitudeUpdate UPDATE ON Amplitude
@@ -877,8 +876,7 @@ CREATE TABLE Pick (
 );
 
 CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
-CREATE INDEX Pick_time_value ON Pick(time_value);
-CREATE INDEX Pick_time_value_ms ON Pick(time_value_ms);
+CREATE INDEX Pick_time_value_time_value_ms ON Pick(time_value,time_value_ms);
 
 CREATE TRIGGER PickUpdate UPDATE ON Pick
 BEGIN
@@ -1094,8 +1092,7 @@ CREATE TABLE Origin (
 );
 
 CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
-CREATE INDEX Origin_time_value ON Origin(time_value);
-CREATE INDEX Origin_time_value_ms ON Origin(time_value_ms);
+CREATE INDEX Origin_time_value_time_value_ms ON Origin(time_value,time_value_ms);
 
 CREATE TRIGGER OriginUpdate UPDATE ON Origin
 BEGIN
@@ -1278,10 +1275,8 @@ CREATE TABLE WaveformQuality (
 );
 
 CREATE INDEX WaveformQuality__parent_oid ON WaveformQuality(_parent_oid);
-CREATE INDEX WaveformQuality_start ON WaveformQuality(start);
-CREATE INDEX WaveformQuality_start_ms ON WaveformQuality(start_ms);
-CREATE INDEX WaveformQuality_end ON WaveformQuality(end);
-CREATE INDEX WaveformQuality_end_ms ON WaveformQuality(end_ms);
+CREATE INDEX WaveformQuality_start_start_ms ON WaveformQuality(start,start_ms);
+CREATE INDEX WaveformQuality_end_end_ms ON WaveformQuality(end,end_ms);
 
 CREATE TRIGGER WaveformQualityUpdate UPDATE ON WaveformQuality
 BEGIN

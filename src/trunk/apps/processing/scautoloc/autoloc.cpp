@@ -1757,10 +1757,13 @@ bool Autoloc3::_excludeDistantStations(Origin *origin)
 
 bool Autoloc3::_passedFinalCheck(const Origin *origin)
 {
-	if (origin->dep > _config.maxDepth) {
-		SEISCOMP_DEBUG("Too deep origin: %ld - depth=%.0f -> ignored", origin->id, origin->dep);
-		return false;
-	}
+// Do not execute the check here. It may result in missing origins which are
+// correct after relocation, move the check to: Autoloc3::_publishable
+//	if (origin->dep > _config.maxDepth) {
+//		SEISCOMP_DEBUG("Ignore origin %ld: depth %.3f km > maxDepth %.3f km",
+//		               origin->id, origin->dep, _config.maxDepth);
+//		return false;
+//	}
 
 	if ( ! origin->preliminary &&
 	     origin->definingPhaseCount() < _config.minPhaseCount)
@@ -1849,6 +1852,13 @@ bool Autoloc3::_publishable(const Origin *origin) const
 	if (origin->rms() > _config.maxRMS) {
 		SEISCOMP_INFO("Origin %ld not sent (too large RMS of %.1f > %.1f)",
 			      origin->id, origin->rms(), _config.maxRMS);
+		return false;
+	}
+
+
+	if (origin->dep > _config.maxDepth) {
+		SEISCOMP_INFO("Origin %ld too deep: %.1f km > %.1f km (maxDepth)",
+			      origin->id, origin->dep, _config.maxDepth);
 		return false;
 	}
 

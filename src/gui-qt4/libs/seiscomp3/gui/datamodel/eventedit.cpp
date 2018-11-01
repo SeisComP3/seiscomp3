@@ -638,7 +638,7 @@ void FMMap::setCurrentFM(const string &id) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void FMMap::setEvent(const DataModel::Event *event) {
-	Map::SymbolCollection *col = canvas().symbolCollection();
+	Map::SymbolLayer *col = canvas().symbolCollection();
 	if ( _originSymbol ) {
 		col->remove(_originSymbol);
 		_originSymbol = NULL;
@@ -911,11 +911,11 @@ void EventEdit::init() {
 
 	// Custom event types
 	try {
-		vector<string> eventTypes = SCApp->configGetStrings("olv.eventTypes");
+		vector<string> eventTypes = SCApp->configGetStrings("olv.commonEventTypes");
 		for (  size_t i = 0; i < eventTypes.size(); ++i ) {
 			DataModel::EventType type;
 			if ( !type.fromString(eventTypes[i].c_str()) ) {
-				SEISCOMP_WARNING("olv.eventTypes: invalid type, ignoring: %s",
+				SEISCOMP_WARNING("olv.commonEventTypes: invalid type, ignoring: %s",
 				                 eventTypes[i].c_str());
 			}
 			else
@@ -2149,9 +2149,9 @@ void EventEdit::resetOrigin() {
 
 	resetMagnitude();
 
-	Map::SymbolCollection::iterator begin = _originMap->canvas().symbolCollection()->begin();
-	Map::SymbolCollection::iterator end = _originMap->canvas().symbolCollection()->end();
-	Map::SymbolCollection::iterator it = begin;
+	Map::SymbolLayer::iterator begin = _originMap->canvas().symbolCollection()->begin();
+	Map::SymbolLayer::iterator end = _originMap->canvas().symbolCollection()->end();
+	Map::SymbolLayer::iterator it = begin;
 
 	_originMap->canvas().symbolCollection()->setTop(NULL);
 	for ( ; it != end; ++it )
@@ -2548,9 +2548,9 @@ void EventEdit::updateOrigin() {
 	}
 
 	// Update map symbol (fill the current origin)
-	Map::SymbolCollection::iterator begin = _originMap->canvas().symbolCollection()->begin();
-	Map::SymbolCollection::iterator end = _originMap->canvas().symbolCollection()->end();
-	Map::SymbolCollection::iterator it = begin;
+	Map::SymbolLayer::iterator begin = _originMap->canvas().symbolCollection()->begin();
+	Map::SymbolLayer::iterator end = _originMap->canvas().symbolCollection()->end();
+	Map::SymbolLayer::iterator it = begin;
 
 	for ( ; it != end; ++it )
 		static_cast<OriginSymbol*>(*it)->setFilled(false);

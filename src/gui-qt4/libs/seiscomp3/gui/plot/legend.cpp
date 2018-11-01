@@ -34,7 +34,6 @@ Legend::Legend(Qt::Alignment align, QObject *parent)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Legend::draw(QPainter &p, const QRect &plotRect,
                   const QList<Graph*> &graphs) {
-
 	int width = 0;
 	int height = 0;
 

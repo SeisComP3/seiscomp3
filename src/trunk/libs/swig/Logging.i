@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module Logging
+%module(package="seiscomp3") Logging
 %{
 #include "seiscomp3/logging/output.h"
 #include "seiscomp3/logging/log.h"

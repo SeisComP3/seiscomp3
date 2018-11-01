@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module helpers
+%module(package="seiscomp3") helpers
 
 %{
 #include <seiscomp3/core/array.h>

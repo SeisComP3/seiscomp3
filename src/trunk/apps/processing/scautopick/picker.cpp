@@ -778,7 +778,7 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::initDetector(const string &streamID,
-		       const DataModel::WaveformStreamID &waveformID,
+                       const DataModel::WaveformStreamID &waveformID,
                        const Core::Time &time) {
 	double trigOn = _config.defaultTriggerOnThreshold;
 	double trigOff = _config.defaultTriggerOffThreshold;
@@ -1547,6 +1547,8 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 			Core::None
 		)
 	);
+
+	ampProc->finalizeAmplitude(amp.get());
 
 #ifdef LOG_PICKS
 	if ( !isMessagingEnabled() && !_ep ) {

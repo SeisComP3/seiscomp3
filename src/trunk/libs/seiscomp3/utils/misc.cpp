@@ -13,8 +13,12 @@
 
 #include <seiscomp3/utils/misc.h>
 
+
 namespace Seiscomp {
 namespace Util {
+
+
+char HEXCHARS[] = "0123456789abcdef";
 
 
 char getShortPhaseName(const std::string &phase) {
@@ -27,19 +31,6 @@ char getShortPhaseName(const std::string &phase) {
 	return '\0';
 }
 
-template <class T, class A>
-T join(const A &begin, const A &end, const T &glue) {
-	T result;
-	bool first = true;
-	for ( A it = begin; it != end; ++it ) {
-		if ( first )
-			first = false;
-		else
-			result += glue;
-		result += *it;
-	}
-	return result;
-}
 
 }
 }

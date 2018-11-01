@@ -67,10 +67,22 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 		 *
 		 * @returns A TravelTimeList of travel times sorted by time.
 		 */
-		TravelTimeList *compute(double lat1, double lon1, double dep1,
-		                        double lat2, double lon2, double alt2 = 0.,
-		                        int ellc = 1);
+		virtual TravelTimeList *compute(double lat1, double lon1, double dep1,
+		                                double lat2, double lon2, double alt2 = 0.,
+		                                int ellc = 1);
 
+		/**
+		 * Compute the traveltime and a given phase. The default implementation
+		 * computes the complete travel time list and searches for them
+		 * requested phase.
+		 * @param dep1 The source depth in km
+		 *
+		 * @returns A TravelTime
+		 */
+		virtual TravelTime compute(const char *phase,
+		                           double lat1, double lon1, double dep1,
+		                           double lat2, double lon2, double alt2=0.,
+		                           int ellc = 1);
 
 		/**
 		 * @brief Compute the traveltime for the model selected using setModel()
@@ -88,6 +100,7 @@ class SC_SYSTEM_CORE_API Locsat : public TravelTimeTableInterface {
 
 	private:
 		TravelTimeList *compute(double delta, double depth);
+		TravelTime compute(const char *phase, double delta, double depth);
 		TravelTime computeFirst(double delta, double depth);
 
 		bool initTables();

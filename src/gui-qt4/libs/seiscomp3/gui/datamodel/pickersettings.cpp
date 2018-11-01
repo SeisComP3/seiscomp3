@@ -235,6 +235,7 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.spinAddStationsDistance->setValue(_pickerConfig.defaultAddStationsDistance);
 	_ui.cbHideStationsWithoutData->setChecked(_pickerConfig.hideStationsWithoutData);
 	_ui.cbHideDisabledStations->setChecked(_pickerConfig.hideDisabledStations);
+	_ui.cbIgnoreDisabledStations->setChecked(_pickerConfig.ignoreDisabledStations);
 
 	_ui.cbShowCrossHair->setChecked(_pickerConfig.showCrossHair);
 	_ui.cbIgnoreUnconfiguredStations->setChecked(_pickerConfig.ignoreUnconfiguredStations);
@@ -257,6 +258,9 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 
 	_ui.slWaveformAlignment->setValue(_pickerConfig.alignmentPosition*100);
 	_ui.waveformAlignmentEdit->setValue(_pickerConfig.alignmentPosition*100);
+
+	_ui.editIntegrationPreFilter->setText(_pickerConfig.integrationFilter);
+	_ui.checkIntegrationPreFilterOnce->setChecked(_pickerConfig.onlyApplyIntegrationFilterOnce);
 
 	_ui.editRecordSource->setText(_pickerConfig.recordURL);
 
@@ -518,6 +522,8 @@ PickerView::Config PickerSettings::pickerConfig() const {
 	_pickerConfig.defaultAddStationsDistance = _ui.spinAddStationsDistance->value();
 	_pickerConfig.hideStationsWithoutData = _ui.cbHideStationsWithoutData->isChecked();
 	_pickerConfig.hideDisabledStations = _ui.cbHideDisabledStations->isChecked();
+	_pickerConfig.ignoreDisabledStations =
+	_amplitudeConfig.ignoreDisabledStations = _ui.cbIgnoreDisabledStations->isChecked();
 
 	_pickerConfig.uncertaintyProfile = _ui.listPickUncertainties->currentText();
 
@@ -530,6 +536,9 @@ PickerView::Config PickerSettings::pickerConfig() const {
 		_pickerConfig.repickerSignalEnd = _ui.editRepickerEnd->value();
 	else
 		_pickerConfig.repickerSignalEnd = Core::None;
+
+	_pickerConfig.integrationFilter = _ui.editIntegrationPreFilter->text();
+	_pickerConfig.onlyApplyIntegrationFilterOnce = _ui.checkIntegrationPreFilterOnce->isChecked();
 
 	return _pickerConfig;
 }

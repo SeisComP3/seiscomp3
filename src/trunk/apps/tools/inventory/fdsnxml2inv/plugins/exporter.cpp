@@ -23,6 +23,9 @@ using namespace Seiscomp;
 using namespace Seiscomp::IO;
 
 
+namespace {
+
+
 class ExporterFDSNStaXML : public Exporter {
 	public:
 		ExporterFDSNStaXML() {}
@@ -51,3 +54,6 @@ class ExporterFDSNStaXML : public Exporter {
 
 
 REGISTER_EXPORTER_INTERFACE(ExporterFDSNStaXML, "fdsnxml");
+
+
+}

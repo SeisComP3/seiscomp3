@@ -53,6 +53,15 @@ ADD_SC_PLUGIN(
 );
 
 
+namespace {
+
+
+std::string ExpectedAmplitudeUnit = "mm";
+
+
+}
+
+
 class Magnitude_MLR : public Processing::MagnitudeProcessor {
 	public:
 		struct param_struct {
@@ -107,6 +116,9 @@ class Magnitude_MLR : public Processing::MagnitudeProcessor {
 
 			if ( depth > DEPTH_MAX )
 				return DepthOutOfRange;
+
+			if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+				return InvalidAmplitudeUnit;
 
 			return compute_ML(amplitude, delta, depth, &value);
 		}

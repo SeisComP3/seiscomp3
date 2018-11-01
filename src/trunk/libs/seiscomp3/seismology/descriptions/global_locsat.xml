@@ -15,9 +15,26 @@
 					Compute the confidence ellipsoid.
 					</description>
 				</parameter>
-				<parameter name="depthInit" type="double" default="20.0">
+				<parameter name="depthInit" type="double" default="20.0" unit="km">
 					<description>
 					The initial depth estimate for LocSAT.
+					</description>
+				</parameter>
+				<parameter name="defaultTimeError" type="double" default="1.0" unit="s">
+					<description>
+					The default pick time uncertainty assigned to LocSATs arrival deltim
+					attribute if pick uncertainties are not going to be used or
+					if they are absent. A time uncertainty of 0 s may result in
+					errors of the SVD decomposition in LocSAT.
+					</description>
+				</parameter>
+				<parameter name="usePickUncertainties" type="boolean" default="false">
+					<description>
+					Whether to use pick time untertainties for arrival deltim rather
+					than a fixed time error. If true then the uncertainties are
+					retrieved from each individual pick object. If they are not
+					defined then the default pick time uncertainty will be used
+					as fallback.
 					</description>
 				</parameter>
 			</group>

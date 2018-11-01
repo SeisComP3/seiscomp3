@@ -108,7 +108,7 @@ void MagnitudeMap::drawLines(QPainter& p) {
 		QPoint originLocation;
 		int cutOff = 0;
 		if ( canvas().projection()->project(originLocation, originLocationF) ) {
-			if ( canvas().symbolCollection()->size() > 0 )
+			if ( canvas().symbolCollection()->count() > 0 )
 			cutOff = (*canvas().symbolCollection()->begin())->size().width();
 			if ( cutOff ) {
 				p.setClipping(true);
@@ -123,7 +123,7 @@ void MagnitudeMap::drawLines(QPainter& p) {
 			if ( !(*it).validLocation ) continue;
 			if ( !(*it).isActive ) continue;
 			if ( !(*it).isMagnitude ) continue;
-			canvas().drawGeoLine(p, originLocationF, (*it).location);
+			canvas().drawLine(p, originLocationF, (*it).location);
 		}
 
 		if ( cutOff )
@@ -142,7 +142,7 @@ void MagnitudeMap::drawCustomLayer(QPainter *painter) {
 	if ( _origin ) {
 		int currentSymbolSize = 0;
 
-		if ( canvas().symbolCollection()->size() > 0 )
+		if ( canvas().symbolCollection()->count() > 0 )
 			currentSymbolSize = (*canvas().symbolCollection()->begin())->size().width();
 
 		if ( currentSymbolSize != _lastSymbolSize ) {
@@ -164,8 +164,8 @@ void MagnitudeMap::drawCustomLayer(QPainter *painter) {
 			fill.setAlpha(64);
 			p.setBrush(fill);
 
+			lenMin = Math::Geo::km2deg(lenMin);
 			lenMax = Math::Geo::km2deg(lenMax);
-			lenMin = Math::Geo::km2deg(lenMin)/cos(deg2rad(std::max(-89.0, std::min(89.0, double(originLocationF.y())))));
 
 			QPoint min, max;
 			if ( canvas().projection()->project(min, QPointF(originLocationF.x()-lenMin, originLocationF.y()+lenMax)) &&

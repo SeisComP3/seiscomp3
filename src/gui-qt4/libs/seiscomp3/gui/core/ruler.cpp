@@ -27,11 +27,17 @@
 
 #include <seiscomp3/math/math.h>
 
-#define CHCK255(x)                      ((x)>255?255:((x)<0?0:(x)))
+#define CHCK255(x) ((x)>255?255:((x)<0?0:(x)))
+
 
 namespace Seiscomp {
 namespace Gui {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Ruler::Ruler(QWidget *parent, Qt::WindowFlags f, Position pos)
  : QFrame(parent, f) {
 	setFrameStyle(QFrame::Panel | QFrame::Plain);
@@ -60,40 +66,75 @@ Ruler::Ruler(QWidget *parent, Qt::WindowFlags f, Position pos)
 	setSelectionHandleCount(2);
 	setSelectionEnabled(false);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void Ruler::setLineCount(int lc) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Ruler::setLineCount(int lc, int spacing) {
 	_lc = lc < 1 ? 1 : lc;
 	int fontHeight = fontMetrics().height();
 
 	_tickLong  = fontHeight/2+1;
 	_tickShort = fontHeight/4+1;
+	_lineSpacing = spacing;
 
-	int h = _lc*fontHeight + 4*(_lc-1) + (4+_tickLong);
+	int h = _lc*(fontHeight + _lineSpacing) + _tickLong + 1;
 	isHorizontal() ? setFixedHeight(h) : setFixedWidth(h);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setSelectionHandleCount(int cnt) {
 	_selectionHandles.resize(cnt);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Ruler::selectionHandleCount() const {
 	return _selectionHandles.count();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Ruler::selectionHandlePos(int i) const {
 	return _selectionHandles[i].pos;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setWheelEnabled(bool scale, bool translate) {
 	_wheelScale = scale;
 	_wheelTranslate = translate;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setPosition(Position pos) {
 	_position = pos;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setScale(double scl) {
 	_scl = scl;
 
@@ -111,7 +152,12 @@ void Ruler::setScale(double scl) {
 	updateIntervals();
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setRange(double min, double max) {
 	_min = min;
 	_max = max;
@@ -129,8 +175,12 @@ void Ruler::setRange(double min, double max) {
 		update();
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::showRange(double min, double max) {
 	_min = min;
 	_max = max;
@@ -140,15 +190,24 @@ void Ruler::showRange(double min, double max) {
 	else
 		update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::translate(double tx) {
 	_min += tx;
 	_max += tx;
 	updateIntervals();
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::setSelected(double smin, double smax) {
 	if ( _selectionHandles.count() != 2 ) return false;
 
@@ -160,8 +219,12 @@ bool Ruler::setSelected(double smin, double smax) {
 	update();
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::setSelectionHandle(int handle, double pos) {
 	if ( handle < 0 || handle >= _selectionHandles.count() )
 		return false;
@@ -172,8 +235,12 @@ bool Ruler::setSelectionHandle(int handle, double pos) {
 	update();
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::setSelectionHandleEnabled(int handle, bool enable) {
 	if ( handle < 0 || handle >= _selectionHandles.count() )
 		return false;
@@ -191,46 +258,85 @@ bool Ruler::setSelectionHandleEnabled(int handle, bool enable) {
 	return true;
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setSelectionEnabled(bool enable) {
 	_enableSelection = enable;
 	setMouseTracking(enable);
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setRangeSelectionEnabled(bool enable,
                                      bool emitRangeChangeWhileDragging) {
 	_enableRangeSelection = enable;
 	_emitRangeChangeWhileDragging = emitRangeChangeWhileDragging;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setAutoScaleEnabled(bool e) {
 	_autoScale = e;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setAnnot(double da) {
 	if ( _da == da) return;
 
 	_da = _drx[0] = da;
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setTicks(double dt) {
 	if ( _dt == dt) return;
 
 	_dt = _drx[1] = dt;
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Ruler::minimumSelection() const {
 	return _enableSelection ? _selectionHandles.front().pos : 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Ruler::maximumSelection() const {
 	return _enableSelection ? _selectionHandles.back().pos : 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QSize Ruler::sizeHint() const {
 	if ( _position == Bottom || _position == Top )
 		return QFrame::sizeHint();
@@ -238,13 +344,22 @@ QSize Ruler::sizeHint() const {
 	QSize size = QFrame::sizeHint();
 	return QSize(size.height(), size.width());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::changed(int pos) {
 	_pos = pos;
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::drawSelection(QPainter &p) {
 	static QPoint marker[3] = { QPoint(0, 0), QPoint(0, 0), QPoint(0, 0) };
 	if ( !_enableSelection ) return;
@@ -253,16 +368,14 @@ void Ruler::drawSelection(QPainter &p) {
 	p.setRenderHints(QPainter::Antialiasing, true);
 	int selHeight = _tickLong * 1.5;
 	int selHalfWidth = selHeight * 0.5;
-
-	int right = p.window().right();
-	int left = p.window().left();
+	int maxPaintWidth = rulerWidth() + selHalfWidth;
 
 	p.setBrush(palette().color(QPalette::WindowText));
 	for ( int i = 0; i < _selectionHandles.count(); ++i ) {
 		if ( ( _hover || _dragMode > 0 ) && _enableSelection &&
 		     i == _currentSelectionHandle ) continue;
 		int iPos = int((_selectionHandles[i].pos-_min)*_scl);
-		if ( iPos < left-selHalfWidth || iPos > right+selHalfWidth ) continue;
+		if ( iPos < -selHalfWidth || iPos > maxPaintWidth ) continue;
 		marker[0] = r2wPos(iPos-selHalfWidth, selHeight);
 		marker[1] = r2wPos(iPos+selHalfWidth, selHeight);
 		marker[2] = r2wPos(iPos,0);
@@ -273,7 +386,7 @@ void Ruler::drawSelection(QPainter &p) {
 	     _currentSelectionHandle < _selectionHandles.count() ) {
 		p.setBrush(palette().color(QPalette::BrightText));
 		int iPos = int((_selectionHandles[_currentSelectionHandle].pos-_min)*_scl);
-		if ( iPos >= left-selHalfWidth && iPos <= right+selHalfWidth ) {
+		if ( iPos >= -selHalfWidth && iPos <= maxPaintWidth ) {
 			marker[0] = r2wPos(iPos-selHalfWidth, selHeight);
 			marker[1] = r2wPos(iPos+selHalfWidth, selHeight);
 			marker[2] = r2wPos(iPos,0);
@@ -282,7 +395,12 @@ void Ruler::drawSelection(QPainter &p) {
 	}
 	p.restore();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::drawRangeSelection(QPainter &p) {
 	if ( _rangemin != _rangemax ) {
 		QRect rect;
@@ -315,28 +433,48 @@ void Ruler::drawRangeSelection(QPainter &p) {
 		p.setBrush(Qt::NoBrush);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPoint Ruler::r2wPos(int rx, int ry) const {
 	return QPoint(isHorizontal() ? rx : isRight() ? ry : width()-ry-1,
 	              isVertical() ? height()-rx-1 : isBottom() ? ry : height()-ry-1);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPoint Ruler::w2rPos(int x, int y) const {
 	return QPoint(isHorizontal() ? x : height()-y-1,
 		      isBottom() ? y : isTop() ? height()-y-1 : isRight() ? x : width()-x-1);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QRect Ruler::r2wRect(int rx, int ry, int w, int h) const {
 	return QRect(isHorizontal() ? rx : isRight() ? ry : width()-ry-h-1,
 	             isVertical() ? height()-rx-w-1 : isBottom() ? ry : height()-ry-h-1,
 		     isHorizontal() ? w : h,
 		     isHorizontal() ? h : w);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::rulerDrawText(QPainter &p, int rx, int ry, const QString &text,
                           bool allowClip, bool allowRotate) const {
 	// Text width and height
-	int tw = p.fontMetrics().width(text);
+	int tw = p.fontMetrics().boundingRect(text).width();
 	int th = p.fontMetrics().height();
 
 	// Top/left position of text box in widget coordinates
@@ -345,7 +483,6 @@ bool Ruler::rulerDrawText(QPainter &p, int rx, int ry, const QString &text,
 		pos = r2wPos(rx-tw/2, isTop() || isLeft() ? ry+th : ry);
 	else
 		pos = r2wPos(rx+th/2, isRight() ? ry : ry+tw);
-
 
 	bool rotate = isVertical() && allowRotate;
 	// Is text clipped?
@@ -372,13 +509,18 @@ bool Ruler::rulerDrawText(QPainter &p, int rx, int ry, const QString &text,
 	}
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::rulerDrawTextAtLine(QPainter &p, int rx, int line, const QString &text,
                                 bool allowClip, bool allowRotate) const {
 	if ( line >= _lc ) return false;
 
-	int tickOffset = 2 + _tickLong;
-	int lineHeight = fontMetrics().height();
+	int tickOffset = _lineSpacing + _tickLong;
+	int lineHeight = fontMetrics().height() + _lineSpacing;
 	if ( isHorizontal() || allowRotate )
 		return rulerDrawText(p, rx, tickOffset + line*lineHeight, text, allowClip, allowRotate);
 	else {
@@ -386,7 +528,12 @@ bool Ruler::rulerDrawTextAtLine(QPainter &p, int rx, int line, const QString &te
 		return rulerDrawText(p, rx + rxOffset, tickOffset, text, allowClip, allowRotate);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::paintEvent(QPaintEvent *e) {
 	QFrame::paintEvent(e);
 
@@ -399,12 +546,17 @@ void Ruler::paintEvent(QPaintEvent *e) {
 	drawRangeSelection(painter);
 
 	if ( _scl > 0 ) {
-		double pos = _min + _ofs;
-
 		for ( int k = 0; k < 2; ++k ) {
 			if ( _drx[k] <= 0 ) continue; // no ticks/annotations
 
-			double cpos = pos - fmod(pos, (double)_drx[k]);
+			double pos = _min + _ofs;
+			double cpos = floor((pos+_drx[k]*1E-2) / _drx[k])*_drx[k];
+			if ( fabs(cpos) < _drx[k]*1E-2 )
+				cpos = 0.0;
+
+			double offset = cpos;
+			pos -= offset;
+			cpos = 0;
 
 			int tick = k == 0 ? _tickLong : _tickShort;
 
@@ -420,13 +572,16 @@ void Ruler::paintEvent(QPaintEvent *e) {
 				painter.drawLine(r2wPos(rx, 0), r2wPos(rx, tick));
 				if ( k == 0 ) {
 					for ( int l = 0; l < _lc; ++l ) {
-						if ( getTickText(cpos, lastPos[l], l, str) &&
+						if ( getTickText(cpos+offset, lastPos[l], l, str) &&
 							 rulerDrawTextAtLine(painter, rx, l, str))
-							lastPos[l] = cpos;
+							lastPos[l] = cpos+offset;
 					}
 				}
 
 				cpos += _drx[k];
+				if ( fabs(cpos) < _drx[k]*1E-2 )
+					cpos = 0.0;
+
 				rx = (int)((cpos-pos)*_scl);
 			}
 		}
@@ -436,8 +591,12 @@ void Ruler::paintEvent(QPaintEvent *e) {
 
 	painter.end();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Ruler::getTickText(double pos, double lastPos, int line, QString &str) const {
 	if ( line != 0 )
 		return false;
@@ -445,17 +604,32 @@ bool Ruler::getTickText(double pos, double lastPos, int line, QString &str) cons
 	str.setNum(pos);
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::enterEvent(QEvent *e) {
 	_hover = true;
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::leaveEvent(QEvent *e) {
 	_hover = false;
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::mousePressEvent(QMouseEvent *e) {
 	// Already in a drag mode?
 	if ( _dragMode != 0 ) return;
@@ -488,7 +662,12 @@ void Ruler::mousePressEvent(QMouseEvent *e) {
 
 	QFrame::mousePressEvent(e);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::mouseReleaseEvent(QMouseEvent *e) {
 	if ( e->button() == Qt::LeftButton ) {
 		if ( _dragMode == -1 )
@@ -519,8 +698,12 @@ void Ruler::mouseReleaseEvent(QMouseEvent *e) {
 		_dragMode = 0;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::checkLimit(double &tmin, double &tmax) {
 	tmin += _ofs;
 	tmax += _ofs;
@@ -529,12 +712,12 @@ void Ruler::checkLimit(double &tmin, double &tmax) {
 	double tcen = tmin + trange*0.5;
 
 	// Clip to allowed ranges
-	if ( trange < _limitMinRange ) {
+	if ( _limitMinRange > 0 && trange < _limitMinRange ) {
 		trange = _limitMinRange;
 		tmin = tcen - trange*0.5;
 		tmax = tcen + trange*0.5;
 	}
-	else if ( trange > _limitMaxRange ) {
+	else if ( _limitMaxRange > 0 && trange > _limitMaxRange ) {
 		trange = _limitMaxRange;
 		tmin = tcen - trange*0.5;
 		tmax = tcen + trange*0.5;
@@ -552,13 +735,22 @@ void Ruler::checkLimit(double &tmin, double &tmax) {
 	tmin -= _ofs;
 	tmax -= _ofs;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::changeRange(double tmin, double tmax) {
 	checkLimit(tmin, tmax);
 	emit rangeChangeRequested(tmin, tmax);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::mouseMoveEvent(QMouseEvent *e) {
 	if ( _dragMode == 0 ) {
 		if ( _enableSelection ) {
@@ -595,6 +787,9 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 	int rx = rPoint.x();
 	double p = (_pos+rx) / _scl + _min;
 	double dragOffset = _iDragStart - rx;
+
+	if ( p < _limitLeft ) p = _limitLeft;
+	else if ( p > _limitRight ) p = _limitRight;
 
 	if ( _dragMode == -1 ) {
 		double fDragOffset = double(dragOffset) / _scl;
@@ -650,7 +845,7 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 
 			// Clip to previous enabled handle
 			int pidx = idx-1;
-			while ( pidx > 0 ) {
+			while ( pidx >= 0 ) {
 				if ( _selectionHandles[pidx].enabled ) {
 					if ( p < _selectionHandles[pidx].pos ) {
 						p = _selectionHandles[pidx].pos;
@@ -686,7 +881,12 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::wheelEvent(QWheelEvent *event) {
 	if ( !event || (!_wheelScale && !_wheelTranslate) )
 		return;
@@ -710,7 +910,12 @@ void Ruler::wheelEvent(QWheelEvent *event) {
 
 	event->accept();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::resizeEvent(QResizeEvent *e) {
 	if ( _autoScale ) {
 		if ( _max-_min > 0 ) {
@@ -723,7 +928,12 @@ void Ruler::resizeEvent(QResizeEvent *e) {
 	else
 		updateIntervals();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::updateIntervals() {
 	bool changed = false;
 	double max = _min + rulerWidth() / _scl;
@@ -757,13 +967,23 @@ void Ruler::updateIntervals() {
 	if ( changed )
 		emit changedInterval(_drx[0], _drx[1], _ofs);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Ruler::setLimits(double leftValue, double rightValue, double minRange, double maxRange) {
 	_limitLeft = leftValue;
 	_limitRight = rightValue;
 	_limitMinRange = minRange;
 	_limitMaxRange = maxRange;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // ns Gui
 } // ns Seiscomp

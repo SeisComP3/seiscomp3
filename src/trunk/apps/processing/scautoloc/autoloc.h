@@ -105,8 +105,7 @@ class Autoloc3 {
 			// Minimum depth in case there is depth resolution
 			double minimumDepth;          // default 5 km
 
-			// Max. focal depth. Origins deeper than that are not
-			// going to be sent. Default is 700
+			// maximum depth of origin, checked before sending, default is 1000
 			double maxDepth;
 
 			// Max. secondary azimuthal gap

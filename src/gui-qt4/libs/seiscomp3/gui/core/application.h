@@ -171,6 +171,8 @@ class SC_GUI_API Application : public QApplication,
 		QPen configGetPen(const std::string& query, const QPen& base) const;
 		QBrush configGetBrush(const std::string& query, const QBrush& base) const;
 
+		void configSetColorGradient(const std::string& query, const Gradient &gradient);
+
 		void setFilterCommandsEnabled(bool);
 
 		const std::string &commandTarget() const;

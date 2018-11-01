@@ -225,6 +225,7 @@ bool App::initConfiguration() {
 
 	try { _config.maxAziGapSecondary = configGetDouble("autoloc.maxSGAP"); } catch (...) {}
 	try { _config.maxRMS = configGetDouble("autoloc.maxRMS"); } catch (...) {}
+	try { _config.maxDepth = configGetDouble("autoloc.maxDepth"); } catch (...) {}
 	try { _config.maxResidualUse = configGetDouble("autoloc.maxResidual"); } catch (...) {}
 	try { _config.maxStaDist = configGetDouble("autoloc.maxStationDistance"); } catch (...) {}
 	try { _config.defaultMaxNucDist = configGetDouble("autoloc.defaultMaxNucleationDistance"); } catch (...) {}

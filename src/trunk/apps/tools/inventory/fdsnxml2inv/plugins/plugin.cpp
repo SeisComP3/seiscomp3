@@ -14,4 +14,4 @@
 #include <seiscomp3/core/plugin.h>
 
 
-ADD_SC_PLUGIN("FDSN StationXML import/export plugin", "gempa GmbH <info@gempa.de>", 2, 0, 0)
+ADD_SC_PLUGIN("FDSN StationXML import/export plugin", "gempa GmbH <info@gempa.de>", 3, 0, 0)

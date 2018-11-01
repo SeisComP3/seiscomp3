@@ -50,8 +50,12 @@
 #include "debug.h"
 
 using namespace Seiscomp;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace {
 
 
@@ -485,10 +489,6 @@ StationRenderParameter* selectRenderParameterInstance(bool isStationEnabled) {
 		static GMStationRenderParameter gmParameter;
 		parameter = &gmParameter;
 	}
-	else if ( ApplicationStatus::Instance()->mode() == ApplicationStatus::EVENT ) {
-		static GMStationRenderParameter eventParameter;
-		return &eventParameter;
-	}
 	else if ( ApplicationStatus::Instance()->mode() == ApplicationStatus::QC ) {
 		static QCStationRenderParameter qcParameter;
 		parameter = &qcParameter;
@@ -510,8 +510,12 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 
 
 } // namespace
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
 : Gui::MainWindow(parent, flags)
 , _mapWidget(NULL)
@@ -523,13 +527,14 @@ MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
 , _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600))
 , _configReadEventsNotOlderThanTimeSpan(0.0)
 , _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
-
 	setupStandardUi();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::init() {
 	if ( !SCApp->query() ) {
 		SEISCOMP_ERROR("No database is configured, abort");
@@ -537,6 +542,8 @@ bool MvMainWindow::init() {
 	}
 
 	_qcHandler.init(SCApp->configuration());
+
+	SCScheme.map.showLegends = true;
 
 	// Overwrite default menu settings
 	try {
@@ -576,6 +583,8 @@ bool MvMainWindow::init() {
 
 	if ( isInDisplayMode() )
 		modifyUiSetupForDisplayMode();
+	else
+		_mapWidget->showMapLegend(_ui.showMapLegendAction->isChecked());
 
 	try {
 		int recordLifeSpan = SCApp->configGetInt("groundMotionRecordLifeSpan");
@@ -640,10 +649,12 @@ bool MvMainWindow::init() {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::eventFilter(QObject* object, QEvent* event) {
 	if ( object == _mapWidget ) {
 		if ( event->type() == QEvent::MouseButtonPress ) {
@@ -668,15 +679,22 @@ bool MvMainWindow::eventFilter(QObject* object, QEvent* event) {
 
 	return Seiscomp::Gui::MainWindow::eventFilter(object, event);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::closeEvent(QCloseEvent *e) {
 	if ( _recordStreamThread.get() )
 		_recordStreamThread->stop(true);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::setupStandardUi() {
 	_ui.setupUi(this);
 
@@ -706,13 +724,6 @@ void MvMainWindow::setupStandardUi() {
 	_ui.gmTab->setLayout(new QGridLayout);
 	_ui.gmTab->layout()->setMargin(0);
 	_ui.gmTab->layout()->setSpacing(0);
-
-	_ui.eventTab->setLayout(new QGridLayout);
-	_ui.eventTab->layout()->setMargin(0);
-	_ui.eventTab->layout()->setSpacing(0);
-
-	int index = _ui.tabWidget->indexOf(_ui.eventTab);
-	_ui.tabWidget->removeTab(index);
 
 	_ui.qcTab->setLayout(new QGridLayout);
 	_ui.qcTab->layout()->setMargin(0);
@@ -759,6 +770,8 @@ void MvMainWindow::setupStandardUi() {
 	connect(_ui.qcOffsetAction, SIGNAL(triggered()), &_qualityControlStatusSelector, SLOT(selectOffset()));
 	connect(_ui.qcRmsAction, SIGNAL(triggered()), &_qualityControlStatusSelector, SLOT(selectRms()));
 
+	connect(_ui.menuEvents, SIGNAL(triggered(QAction*)), this, SLOT(eventsMenuTriggered(QAction*)));
+
 	connect(_eventTableWidgetRef, SIGNAL(eventSelected(const QString&)), this, SLOT(selectStationsForEvent(const QString&)));
 	connect(_eventTableWidgetRef, SIGNAL(eventSelected(const QString&)), this, SLOT(selectEvent(const QString&)));
 
@@ -783,11 +796,27 @@ void MvMainWindow::setupStandardUi() {
 	connect(&_mapUpdateTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
 
 	_mapUpdateTimer.start(_mapUpdateInterval);
+
+	_eventModeControls[DataModel::EEvaluationModeQuantity] = _ui.actionEventsModeUnset;
+	_eventModeControls[DataModel::AUTOMATIC] = _ui.actionEventsAutomatic;
+	_eventModeControls[DataModel::MANUAL] = _ui.actionEventsManual;
+
+	_eventStatusControls[DataModel::EEvaluationStatusQuantity] = _ui.actionEventsStatusUnset;
+	_eventStatusControls[DataModel::PRELIMINARY] = _ui.actionEventsPreliminary;
+	_eventStatusControls[DataModel::CONFIRMED] = _ui.actionEventsConfirmed;
+	_eventStatusControls[DataModel::REVIEWED] = _ui.actionEventsReviewed;
+	_eventStatusControls[DataModel::FINAL] = _ui.actionEventsFinal;
+	_eventStatusControls[DataModel::REJECTED] = _ui.actionEventsRejected;
+	_eventStatusControls[DataModel::REPORTED] = _ui.actionEventsReported;
+
+	updateEventFilter();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::modifyUiSetupForDisplayMode() {
 	// Overwrite default menu settings
 	bool showLegend = SCScheme.map.showLegends;
@@ -811,11 +840,15 @@ void MvMainWindow::modifyUiSetupForDisplayMode() {
 		ApplicationStatus::Instance()->setMode(ApplicationStatus::GROUND_MOTION);
 	else if ( _displayMode == QUALITY_CONTROL )
 		ApplicationStatus::Instance()->setMode(ApplicationStatus::QC);
+
+	_mapWidget->showMapLegend(_ui.showMapLegendAction->isChecked());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::initRecordStream() {
 	if ( !SCApp->isRecordStreamEnabled() ) {
 		SEISCOMP_DEBUG("No record stream source specified");
@@ -849,26 +882,30 @@ bool MvMainWindow::initRecordStream() {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::showMapCoordinates(const QPoint& pos) {
 	QPointF mapPos;
 	if ( !_mapWidget->canvas().projection()->unproject(mapPos, pos) ) return;
 
 	statusBar()->showMessage(QString("Latitude: %1 Longitude: %2") .arg(mapPos.y()).arg(mapPos.x()), int(2E3));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 	typedef std::vector<QAction*> ActionCollection;
 	ActionCollection stationActionCollection;
 	ActionCollection originActionCollection;
 
-	Gui::Map::SymbolCollection::const_iterator it = _mapWidget->canvas().symbolCollection()->begin();
+	Gui::Map::SymbolLayer::const_iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
@@ -906,10 +943,12 @@ bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 	}
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString &title, Gui::Map::Symbol *mapSymbol) {
 	QAction* action = new QAction(title, NULL);
 
@@ -920,10 +959,12 @@ QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString &title,
 
 	return action;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::addStationsToContextMenu(QMenu& menu, std::vector<QAction*>& collection) {
 	bool hasActiveArrival = false;
 	std::vector<QAction*>::iterator it = collection.begin();
@@ -945,10 +986,12 @@ void MvMainWindow::addStationsToContextMenu(QMenu& menu, std::vector<QAction*>& 
 			menu.addAction(*it);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::addOriginsToContextMenu(QMenu& menu, std::vector<QAction*>& collection) {
 	std::vector<QAction*>::iterator it = collection.begin();
 	for ( ; it != collection.end(); it++ ) {
@@ -958,10 +1001,12 @@ void MvMainWindow::addOriginsToContextMenu(QMenu& menu, std::vector<QAction*>& c
 	if ( !collection.empty() )
 		menu.addSeparator();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::sendArtificialOrigin(const QPoint& pos) {
 	QPointF mapPos;
 	if ( !_mapWidget->canvas().projection()->unproject(mapPos, pos) ) return;
@@ -985,10 +1030,12 @@ void MvMainWindow::sendArtificialOrigin(const QPoint& pos) {
 
 	SCApp->sendCommand(Gui::CM_OBSERVE_LOCATION, "", origin);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateMap() {
 	ApplicationStatus::Instance()->setTriggering(!ApplicationStatus::Instance()->isTriggering());
 
@@ -1020,10 +1067,12 @@ void MvMainWindow::updateMap() {
 	// update didn't suffice
 	_mapWidget->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::changeView(int index) {
 	QWidget* precedingTab = _ui.tabWidget->currentWidget();
 	precedingTab->layout()->removeWidget(_mapWidget);
@@ -1049,17 +1098,17 @@ void MvMainWindow::changeView(int index) {
 
 	if ( _ui.tabWidget->currentWidget() == _ui.gmTab )
 		ApplicationStatus::Instance()->setMode(ApplicationStatus::GROUND_MOTION);
-	else if ( _ui.tabWidget->currentWidget() == _ui.eventTab )
-		ApplicationStatus::Instance()->setMode(ApplicationStatus::EVENT);
 	else if ( _ui.tabWidget->currentWidget() == _ui.qcTab )
 		ApplicationStatus::Instance()->setMode(ApplicationStatus::QC);
 
 	_mapWidget->setMode(ApplicationStatus::Instance()->mode());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::readStationsFromDataBase() {
 	// Read configured streams
 	DataModel::ConfigModule *module = SCApp->configModule();
@@ -1114,7 +1163,7 @@ bool MvMainWindow::readStationsFromDataBase() {
 	}
 
 	// Read configured stations
-	DataModel::Inventory* inventory = Client::Inventory::Instance()->inventory();
+	DataModel::Inventory *inventory = Client::Inventory::Instance()->inventory();
 	if ( !inventory ) return false;
 
 	Core::Time now = Core::Time::GMT();
@@ -1141,24 +1190,23 @@ bool MvMainWindow::readStationsFromDataBase() {
 				SEISCOMP_DEBUG("No coordinates set for station: %s", key.data());
 				continue;
 			}
-			if ( _mapWidget->canvas().isInside(lon, lat) ) {
-				std::map<std::string, StationData>::iterator it = stations.find(key);
-				if ( it == stations.end() ) continue;
 
-				it->second.stationRef = station;
-				it->second.stationSymbolRef = new MvStationSymbol(lat, lon);
-				it->second.stationSymbolRef->setType(StationSymbolType);
-				it->second.stationSymbolRef->setID(it->second.id);
-				it->second.stationSymbolRef->setNetworkCode(station->network()->code());
-				it->second.stationSymbolRef->setStationCode(station->code());
-				it->second.stationSymbolRef->setIdDrawingColor(SCScheme.colors.map.stationAnnotations);
-				it->second.stationSymbolRef->setIdDrawingEnabled(_ui.showStationIdAction->isChecked());
-				it->second.stationSymbolRef->setDrawFullID(_ui.actionShowStationChannelCodes->isChecked());
+			std::map<std::string, StationData>::iterator it = stations.find(key);
+			if ( it == stations.end() ) continue;
 
-				_stationDataCollection.add(it->second);
-				_mapWidget->canvas().symbolCollection()->add(it->second.stationSymbolRef);
-				SEISCOMP_DEBUG("Adding station symbol: %s", key.data());
-			}
+			it->second.stationRef = station;
+			it->second.stationSymbolRef = new MvStationSymbol(lat, lon);
+			it->second.stationSymbolRef->setType(StationSymbolType);
+			it->second.stationSymbolRef->setID(it->second.id);
+			it->second.stationSymbolRef->setNetworkCode(station->network()->code());
+			it->second.stationSymbolRef->setStationCode(station->code());
+			it->second.stationSymbolRef->setIdDrawingColor(SCScheme.colors.map.stationAnnotations);
+			it->second.stationSymbolRef->setIdDrawingEnabled(_ui.showStationIdAction->isChecked());
+			it->second.stationSymbolRef->setDrawFullID(_ui.actionShowStationChannelCodes->isChecked());
+
+			_stationDataCollection.add(it->second);
+			_mapWidget->canvas().symbolCollection()->add(it->second.stationSymbolRef);
+			SEISCOMP_DEBUG("Adding station symbol: %s (%s)", key.data(), station->publicID().c_str());
 		}
 	}
 
@@ -1166,10 +1214,12 @@ bool MvMainWindow::readStationsFromDataBase() {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::readPicksFromDataBaseNotOlderThan(const Core::TimeSpan& timeSpan) {
 	Core::Time begin = Core::Time::GMT() - timeSpan;
 	Core::Time end = Core::Time::GMT();
@@ -1206,12 +1256,13 @@ void MvMainWindow::readPicksFromDataBaseNotOlderThan(const Core::TimeSpan& timeS
 	}
 	std::cerr << "A total of " << count << " could not be retrieved from database" << std::endl;
 #endif
-
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::readEventsFromDataBaseNotOlderThan(const Seiscomp::Core::TimeSpan& timeSpan) {
 	Core::Time begin = Core::Time::GMT() - timeSpan;
 	Core::Time end = Core::Time::GMT();
@@ -1261,10 +1312,12 @@ void MvMainWindow::readEventsFromDataBaseNotOlderThan(const Seiscomp::Core::Time
 		handleNewEvent((*eventIt).get());
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewConfigStation(const DataModel::ConfigStation* configStation) {
 	StationDataCollection::iterator it = _stationDataCollection.begin();
 	for ( ; it != _stationDataCollection.end(); it++ ) {
@@ -1277,10 +1330,12 @@ void MvMainWindow::handleNewConfigStation(const DataModel::ConfigStation* config
 			it->isEnabled = configStation->enabled();
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleWaveformQuality(DataModel::WaveformQuality* waveformQuality) {
 	std::string stationId = getStationId(waveformQuality);
 	StationData* stationData = _stationDataCollection.find(stationId);
@@ -1288,17 +1343,21 @@ void MvMainWindow::handleWaveformQuality(DataModel::WaveformQuality* waveformQua
 
 	_qcHandler.handle(stationData, waveformQuality);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewArrival(DataModel::Arrival* arrival) {
 	_eventDataRepository.addArrival(arrival);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewPick(DataModel::Pick* pick) {
 	std::string stationId = getStationId(pick);
 	StationData* stationData = _stationDataCollection.find(stationId);
@@ -1307,10 +1366,12 @@ void MvMainWindow::handleNewPick(DataModel::Pick* pick) {
 		_eventDataRepository.addPick(pick);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewAmplitude(DataModel::Amplitude* amplitude) {
 	if ( amplitude->type() != "snr" )
 		return;
@@ -1326,31 +1387,39 @@ void MvMainWindow::handleNewAmplitude(DataModel::Amplitude* amplitude) {
 		updateInfoWidget(amplitude);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewOrigin(Seiscomp::DataModel::Origin* origin) {
 	_eventDataRepository.addOrigin(origin);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewFocalMechanism(Seiscomp::DataModel::FocalMechanism* fm) {
 	_eventDataRepository.addFocalMechanism(fm);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewMagnitude(Seiscomp::DataModel::Magnitude* magnitude) {
 	_eventDataRepository.addMagnitude(magnitude);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewEvent(DataModel::Event* event) {
 	Gui::OriginSymbol* originSymbol = createOriginSymbolFromEvent(event);
 
@@ -1358,7 +1427,8 @@ void MvMainWindow::handleNewEvent(DataModel::Event* event) {
 
 	Gui::TensorSymbol* tensorSymbol = createTensorSymbolFromEvent(event);
 
-	if ( !_eventDataRepository.addEvent(event, originSymbol, tensorSymbol) ) {
+	if ( !_eventDataRepository.addEvent(event, originSymbol, tensorSymbol,
+	                                    getEventVisibility(event)) ) {
 		delete originSymbol;
 		if ( tensorSymbol ) delete tensorSymbol;
 		return;
@@ -1368,10 +1438,12 @@ void MvMainWindow::handleNewEvent(DataModel::Event* event) {
 	if ( tensorSymbol )
 		_mapWidget->canvas().symbolCollection()->add(tensorSymbol);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleEventUpdate(DataModel::Event* event, EventData* eventData) {
 	//std::string eventId = event->publicID();
 	//_eventDataRepository.removeEvent(eventId);
@@ -1381,10 +1453,12 @@ void MvMainWindow::handleEventUpdate(DataModel::Event* event, EventData* eventDa
 	removeEventData(eventData);
 	handleNewEvent(event);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::checkIfEventIsActive(const EventData& eventData) {
 	std::string originId = eventData.preferredOriginId();
 	DataModel::Origin* origin = _eventDataRepository.findOrigin(originId);
@@ -1394,10 +1468,12 @@ bool MvMainWindow::checkIfEventIsActive(const EventData& eventData) {
 		return false;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::vector<StationData*> MvMainWindow::getAssociatedStationsForEvents(std::vector<EventData*>::const_iterator it,
                                                                        std::vector<EventData*>::const_iterator end) {
 	std::vector<StationData*> associatedStations;
@@ -1409,10 +1485,12 @@ std::vector<StationData*> MvMainWindow::getAssociatedStationsForEvents(std::vect
 
 	return associatedStations;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::vector<StationData*> MvMainWindow::getAssociatedStationsForEvent(const EventData* eventData) {
 	std::string preferredOriginId = eventData->preferredOriginId();
 	DataModel::Origin* origin = _eventDataRepository.findOrigin(preferredOriginId);
@@ -1446,10 +1524,12 @@ std::vector<StationData*> MvMainWindow::getAssociatedStationsForEvent(const Even
 
 	return associatedStations;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::vector<EventData*> MvMainWindow::getActiveEvents() {
 	std::vector<EventData*> activeEvents;
 	EventDataRepository::event_iterator it = _eventDataRepository.eventsBegin();
@@ -1460,10 +1540,12 @@ std::vector<EventData*> MvMainWindow::getActiveEvents() {
 
 	return activeEvents;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::updateEventActivityStatus() {
 	bool hasEventStatusChanged = false;
 
@@ -1479,10 +1561,12 @@ bool MvMainWindow::updateEventActivityStatus() {
 
 	return hasEventStatusChanged;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateStationsAssociatedStatus() {
 	std::vector<StationData*> associatedStations;
 	StationDataCollection::iterator stationDataIt = _stationDataCollection.begin();
@@ -1514,20 +1598,24 @@ void MvMainWindow::updateStationsAssociatedStatus() {
 		(*it)->isAssociated = true;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::selectStations(const EventData* eventData, bool isSelected) {
 	std::vector<StationData*> associatedStations = getAssociatedStationsForEvent(eventData);
 	std::vector<StationData*>::iterator it = associatedStations.begin();
 	for ( ; it != associatedStations.end(); it++ )
 		(*it)->isSelected = isSelected;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::showOriginSymbols(bool val) {
 	EventDataRepository::event_iterator it = _eventDataRepository.eventsBegin();
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
@@ -1537,10 +1625,12 @@ void MvMainWindow::showOriginSymbols(bool val) {
 			it->tensorSymbol()->setVisible(val);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::removeExpiredEvents() {
 	SEISCOMP_DEBUG("Check for expired events");
 	while ( true ) {
@@ -1549,10 +1639,12 @@ void MvMainWindow::removeExpiredEvents() {
 		removeEventData(expiredEvent);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::removeEventData(const EventData* eventData) {
     Gui::OriginSymbol* originSymbol = eventData->originSymbol();
 	Gui::TensorSymbol* tensorSymbol = eventData->tensorSymbol();
@@ -1564,17 +1656,77 @@ void MvMainWindow::removeEventData(const EventData* eventData) {
 	std::string eventId = eventData->id();
 	_eventDataRepository.removeEvent(eventId);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MvMainWindow::isInDisplayMode() const {
 	return _displayMode != NONE && _displayMode != DisplayModeCount;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MvMainWindow::updateEventFilter() {
+	for ( size_t i = 0; i <= DataModel::EvaluationMode::Quantity; ++i )
+		_eventModeFilter[i] = _eventModeControls[i]->isChecked();
+
+	for ( size_t i = 0; i <= DataModel::EvaluationStatus::Quantity; ++i )
+		_eventStatusFilter[i] = _eventStatusControls[i]->isChecked();
+
+	EventDataRepository::event_iterator it;
+	for ( it = _eventDataRepository.eventsBegin();
+	      it != _eventDataRepository.eventsEnd(); ++it ) {
+		EventData &eventData = *it;
+		eventData.setVisible(getEventVisibility(eventData.object()));
+	}
+
+	updateOriginSymbolDisplay();
+
+	_mapWidget->update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool MvMainWindow::getEventVisibility(const Seiscomp::DataModel::Event *event) {
+	DataModel::Origin *origin = _eventDataRepository.findOrigin(event->preferredOriginID());
+	if ( !origin ) return false;
+
+	try {
+		DataModel::EvaluationMode mode = origin->evaluationMode();
+		if ( !_eventModeFilter[mode] )
+			return false;
+	}
+	catch ( ... ) {
+		if ( !_eventModeFilter[DataModel::EEvaluationModeQuantity] )
+			return false;
+	}
+
+	try {
+		DataModel::EvaluationStatus status = origin->evaluationStatus();
+		if ( !_eventStatusFilter[status] )
+			return false;
+	}
+	catch ( ... ) {
+		if ( !_eventStatusFilter[DataModel::EEvaluationStatusQuantity] )
+			return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateEventData() {
 	bool updateNeeded = hasEventCountChanged(_eventDataRepository) ||
 	                    updateEventActivityStatus();
@@ -1587,10 +1739,12 @@ void MvMainWindow::updateEventData() {
 	if ( areOriginSymbolsVisible() )
 		updateOriginSymbolDisplay();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateEventWidget() {
 	if ( !_eventTableWidgetRef ) return;
 
@@ -1620,10 +1774,12 @@ void MvMainWindow::updateEventWidget() {
 		_eventTableWidgetRef->addRow(rowData);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateInfoWidget(StationData* stationData) {
 	if ( StationInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
@@ -1634,10 +1790,12 @@ void MvMainWindow::updateInfoWidget(StationData* stationData) {
 	setInfoWidgetContent(infoWidget, stationData);
 	infoWidget->updateContent();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateInfoWidget(const DataModel::Pick* pick) {
 	if ( StationInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
@@ -1650,10 +1808,12 @@ void MvMainWindow::updateInfoWidget(const DataModel::Pick* pick) {
 	infoWidget->addRecordMarker(time, phaseHint);
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateInfoWidget(const DataModel::Amplitude* amplitude) {
 	if ( StationInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
@@ -1664,10 +1824,12 @@ void MvMainWindow::updateInfoWidget(const DataModel::Amplitude* amplitude) {
 	setInfoWidgetContent(infoWidget, amplitude);
 	infoWidget->updateContent();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateInfoWidget(const DataModel::Event* event) {
 	if ( EventInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
@@ -1681,10 +1843,12 @@ void MvMainWindow::updateInfoWidget(const DataModel::Event* event) {
 	setInfoWidgetContent(infoWidget, eventId, origin, event->preferredMagnitudeID());
 	infoWidget->updateContent();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* event) {
 	DataModel::Origin *origin = _eventDataRepository.findOrigin(event->preferredOriginID());
 	if ( !origin ) {
@@ -1719,8 +1883,12 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 
 	return originSymbol;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::Gui::TensorSymbol* MvMainWindow::createTensorSymbolFromEvent(Seiscomp::DataModel::Event* event) {
 	if ( event->preferredFocalMechanismID().empty() )
 		return NULL;
@@ -1792,9 +1960,12 @@ Seiscomp::Gui::TensorSymbol* MvMainWindow::createTensorSymbolFromEvent(Seiscomp:
 
 	return tensorSymbol;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::showSearchWidget() {
 	SearchWidget* tmp = SearchWidget::Create();
 	if ( !tmp ) return;
@@ -1812,17 +1983,19 @@ void MvMainWindow::showSearchWidget() {
 	_searchWidgetRef->move(pos().x() + offset, pos().y() + offset);
 	_searchWidgetRef->show();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::markSearchWidgetResults() {
 	if ( _searchWidgetRef->matches().empty() )
 		return;
 
 	std::string idOfFirstMatch = _searchWidgetRef->matches().front();
 
-	Gui::Map::SymbolCollection::iterator it = _mapWidget->canvas().symbolCollection()->begin();
+	Gui::Map::SymbolLayer::iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
@@ -1844,12 +2017,14 @@ void MvMainWindow::markSearchWidgetResults() {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::searchWidgetClosed() {
-	Gui::Map::SymbolCollection::iterator it = _mapWidget->canvas().symbolCollection()->begin();
+	Gui::Map::SymbolLayer::iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
@@ -1860,10 +2035,12 @@ void MvMainWindow::searchWidgetClosed() {
 	if ( areOriginSymbolsVisible() )
 		updateOriginSymbolDisplay();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewRecord(Seiscomp::Record* record) {
 	Seiscomp::RecordPtr recordPtr(record);
 
@@ -1873,10 +2050,12 @@ void MvMainWindow::handleNewRecord(Seiscomp::Record* record) {
 	if ( stationData )
 		_recordHandler.handle(stationData, record);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::handleNewMessage(Core::Message* message) {
 	Core::DataMessage* dataMessage = Core::DataMessage::Cast(message);
 	if ( dataMessage ) {
@@ -1984,10 +2163,12 @@ void MvMainWindow::handleNewMessage(Core::Message* message) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::showInfoWidget() {
 	QAction* contextMenuAction = static_cast<QAction*>(sender());
 
@@ -2036,22 +2217,25 @@ void MvMainWindow::showInfoWidget() {
 		::showInfoWidget(infoWidget);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::updateOriginSymbolDisplay() {
 	bool areHistoricOriginsVisible = _ui.showHistoricOriginsAction->isChecked();
 	EventData* latestEventData = _eventDataRepository.findLatestEvent();
 
 	EventDataRepository::event_iterator it = _eventDataRepository.eventsBegin();
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
-		EventData& eventData = *it;
+		EventData &eventData = *it;
 		Gui::OriginSymbol* originSymbol = eventData.originSymbol();
 		Gui::TensorSymbol* tensorSymbol = eventData.tensorSymbol();
 
 		bool eventIsActive = eventData.isActive();
 		bool eventIsSelected = eventData.isSelected();
+		bool eventIsVisible = eventData.isVisible();
 
 		bool isLatestEventAndHistoricOriginsAreVisible = areHistoricOriginsVisible &&
 		                                                 eventData.id() == latestEventData->id();
@@ -2059,30 +2243,32 @@ void MvMainWindow::updateOriginSymbolDisplay() {
 		                                                    eventData.id() == latestEventData->id();
 
 		if ( eventIsActive || isLatestEventAndHistoricOriginsAreVisible ) {
-			originSymbol->setVisible(true);
-			if ( tensorSymbol ) tensorSymbol->setVisible(true);
+			originSymbol->setVisible(eventIsVisible);
+			if ( tensorSymbol ) tensorSymbol->setVisible(eventIsVisible);
 			originSymbol->setFilled(false);
 			if ( ApplicationStatus::Instance()->isTriggering() )
 				originSymbol->setFilled(true);
 		}
 		else if ( eventIsSelected || isLatestEventAndHistoricOriginsAreNotVisible ) {
-			originSymbol->setVisible(true);
-			if ( tensorSymbol ) tensorSymbol->setVisible(true);
+			originSymbol->setVisible(eventIsSelected || eventIsVisible);
+			if ( tensorSymbol ) tensorSymbol->setVisible(eventIsSelected || eventIsVisible);
 			originSymbol->setFilled(false);
 		}
 		else {
-			originSymbol->setVisible(areHistoricOriginsVisible);
-			if ( tensorSymbol ) tensorSymbol->setVisible(areHistoricOriginsVisible);
+			originSymbol->setVisible(areHistoricOriginsVisible && eventIsVisible);
+			if ( tensorSymbol ) tensorSymbol->setVisible(areHistoricOriginsVisible && eventIsVisible);
 			originSymbol->setFilled(false);
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::setWaveformPropagationVisible(bool val) {
-	Gui::Map::SymbolCollection::iterator it = _mapWidget->canvas().symbolCollection()->begin();
+	Gui::Map::SymbolLayer::iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol *mapSymbol = *it;
 		if ( mapSymbol->type() == OriginSymbolType ) {
@@ -2092,10 +2278,12 @@ void MvMainWindow::setWaveformPropagationVisible(bool val) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::centerOriginForLatestEvent() {
 	EventData* eventData = _eventDataRepository.findLatestEvent();
 	if ( !eventData ) return;
@@ -2103,10 +2291,12 @@ void MvMainWindow::centerOriginForLatestEvent() {
 	std::string eventId = eventData->id();
 	centerOriginForEvent(eventId.c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::centerOriginForEvent(const QString& id) {
 	EventData* eventData = _eventDataRepository.findEvent(id.toStdString());
 
@@ -2115,56 +2305,78 @@ void MvMainWindow::centerOriginForEvent(const QString& id) {
 
 	_mapWidget->canvas().setMapCenter(QPointF(origin->longitude(), origin->latitude()));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::resetStationData() {
 	StationDataCollection::iterator it = _stationDataCollection.begin();
 	for ( ; it != _stationDataCollection.end(); it++ )
 		it->reset();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MvMainWindow::eventsMenuTriggered(QAction *action) {
+	updateEventFilter();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::selectStationsForEvent(const QString& eventId) {
 	deselectStations();
 
 	EventData* eventData = _eventDataRepository.findEvent(eventId.toStdString());
 	selectStations(eventData);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::deselectStations() {
 	StationDataCollection::iterator it = _stationDataCollection.begin();
 	for ( ; it != _stationDataCollection.end(); it++ )
 		it->isSelected = false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::selectEvent(const QString& eventId) {
 	deselectEvents();
 
 	EventData* eventData = _eventDataRepository.findEvent(eventId.toStdString());
 	eventData->setSelected(true);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::deselectEvents() {
 	EventDataRepository::event_iterator eventDataIt = _eventDataRepository.eventsBegin();
 	for ( ; eventDataIt != _eventDataRepository.eventsEnd(); eventDataIt++ )
 		eventDataIt->setSelected(false);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::setStationIdVisible(bool val) {
 	for ( StationDataCollection::iterator it = _stationDataCollection.begin();
 			it	!= _stationDataCollection.end(); it++ ) {
@@ -2173,10 +2385,12 @@ void MvMainWindow::setStationIdVisible(bool val) {
 
 	_mapWidget->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MvMainWindow::setStationChannelCodesVisible(bool val) {
 	for ( StationDataCollection::iterator it = _stationDataCollection.begin();
 			it	!= _stationDataCollection.end(); it++ ) {
@@ -2185,3 +2399,9 @@ void MvMainWindow::setStationChannelCodesVisible(bool val) {
 
 	_mapWidget->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

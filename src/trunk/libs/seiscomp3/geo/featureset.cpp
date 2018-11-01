@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -10,7 +10,8 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-#include <seiscomp3/geo/geofeatureset.h>
+
+#include <seiscomp3/geo/featureset.h>
 
 #define SEISCOMP_COMPONENT GeoPolygonSet
 #define CONFIG_BASE "geo.feature"
@@ -31,29 +32,110 @@
 
 using namespace Seiscomp::Geo;
 namespace fs = boost::filesystem;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-const GeoFeatureSet &GeoFeatureSetSingleton::getInstance() {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeatureSet &GeoFeatureSetSingleton::getInstance() {
 	static GeoFeatureSetSingleton instance;
 	return instance._geoFeatureSet;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GeoFeatureSetSingleton::GeoFeatureSetSingleton() {
-	Seiscomp::Environment* env = Seiscomp::Environment::Instance();
-	if ( !_geoFeatureSet.readBNADir(env->configDir() + "/bna") )
-		_geoFeatureSet.readBNADir(env->shareDir() + "/bna");
+	_geoFeatureSet.load();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-GeoFeatureSet::GeoFeatureSet() {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeatureSetObserver::GeoFeatureSetObserver() : _observedSet(NULL) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeatureSetObserver::~GeoFeatureSetObserver() {
+	if ( _observedSet )
+		_observedSet->unregisterObserver(this);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeatureSet::GeoFeatureSet() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GeoFeatureSet::GeoFeatureSet(const GeoFeatureSet &) {
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GeoFeatureSet::~GeoFeatureSet() {
 	clear();
-}
 
+	ObserverList::iterator it;
+	for ( it = _observers.begin(); it != _observers.end(); ++it )
+		(*it)->_observedSet = NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool GeoFeatureSet::registerObserver(GeoFeatureSetObserver *observer) {
+	ObserverList::iterator it = std::find(_observers.begin(),
+	                                      _observers.end(),
+	                                      observer);
+	if ( it != _observers.end() )
+		return false;
+
+	observer->_observedSet = this;
+	_observers.push_back(observer);
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool GeoFeatureSet::unregisterObserver(GeoFeatureSetObserver *observer) {
+	ObserverList::iterator it = std::find(_observers.begin(),
+	                                      _observers.end(),
+	                                      observer);
+	if ( it == _observers.end() )
+		return false;
+
+	observer->_observedSet = NULL;
+	_observers.erase(it);
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void GeoFeatureSet::clear() {
 	// Delete all GeoFeatures
 	for ( size_t i = 0; i < _features.size(); ++i ) {
@@ -67,7 +149,29 @@ void GeoFeatureSet::clear() {
 	}
 	_categories.clear();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void GeoFeatureSet::load() {
+	clear();
+
+	Seiscomp::Environment* env = Seiscomp::Environment::Instance();
+	if ( !readBNADir(env->configDir() + "/bna") )
+		readBNADir(env->shareDir() + "/bna");
+
+	ObserverList::iterator it;
+	for ( it = _observers.begin(); it != _observers.end(); ++it )
+		(*it)->geoFeatureSetUpdated();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 	// Clear the current GeoFeatureSet
 	clear();
@@ -93,8 +197,12 @@ size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 
 	return fileCount;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
                                           Category *category) {
 	// store directory path the data was read from
@@ -128,16 +236,27 @@ size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
 
 	return fileCount;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Category* GeoFeatureSet::addNewCategory(const std::string name,
                                         const Category* parent) {
 	Category* category = new Category(_categories.size(),
 		parent == NULL || parent->name == "" ? name :
 		parent->name + "." + name, parent);
+	category->localName = name;
 	_categories.push_back(category);
 	return category;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const std::string GeoFeatureSet::initStatus(const std::string &directory,
                                             unsigned int fileCount) const {
 	unsigned int vertexCount = 0;
@@ -156,7 +275,12 @@ const std::string GeoFeatureSet::initStatus(const std::string &directory,
 
 	return buffer.str();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /** Reads the BNA-header, e.g. "segment name","rank 3",123 */
 bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
                                   unsigned int& points, bool& isClosed,
@@ -249,8 +373,8 @@ bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
  *   7,7 --end of island #2
  *   2,2 --end of main area
  */
-bool GeoFeatureSet::readBNAFile(const std::string& filename,
-                                const Category* category) {
+bool GeoFeatureSet::readBNAFile(const std::string &filename,
+                                const Category *category) {
 	SEISCOMP_DEBUG("Reading segments from file: %s", filename.c_str());
 
 	std::ifstream infile(filename.c_str());
@@ -268,7 +392,7 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 	const char *nptr;
 	char *endptr;
 	bool isClosed;
-	Vertex v;
+	GeoCoordinate v;
 	bool startSubFeature;
 
 	bool fileValid = true;
@@ -394,6 +518,14 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 			feature->addVertex(v, startSubFeature);
 			startSubFeature = false;
 		}
+
+		if ( fileValid ) {
+			feature->updateBoundingBox();
+			if ( feature->area() < 0 ) {
+				SEISCOMP_WARNING("Polygon %s is defined counter-clockwise", feature->name().c_str());
+				feature->invertOrder();
+			}
+		}
 	}
 
 	if ( fileValid ) {
@@ -407,7 +539,22 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool GeoFeatureSet::addFeature(GeoFeature *feature) {
+	_features.push_back(feature);
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const bool GeoFeatureSet::compareByRank(const GeoFeature* gf1,
                                         const GeoFeature* gf2 ) {
   	return gf1->rank() < gf2->rank();

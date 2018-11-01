@@ -96,7 +96,7 @@ void ResponseStage::setPolesZeros(const OPT(PolesAndZeros)& polesZeros) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PolesAndZeros& ResponseStage::polesZeros() throw(Seiscomp::Core::ValueException) {
+PolesAndZeros& ResponseStage::polesZeros() {
 	if ( _polesZeros )
 		return *_polesZeros;
 	throw Seiscomp::Core::ValueException("ResponseStage.PolesZeros is not set");
@@ -107,7 +107,7 @@ PolesAndZeros& ResponseStage::polesZeros() throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const PolesAndZeros& ResponseStage::polesZeros() const throw(Seiscomp::Core::ValueException) {
+const PolesAndZeros& ResponseStage::polesZeros() const {
 	if ( _polesZeros )
 		return *_polesZeros;
 	throw Seiscomp::Core::ValueException("ResponseStage.PolesZeros is not set");
@@ -127,7 +127,7 @@ void ResponseStage::setCoefficients(const OPT(Coefficients)& coefficients) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Coefficients& ResponseStage::coefficients() throw(Seiscomp::Core::ValueException) {
+Coefficients& ResponseStage::coefficients() {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponseStage.Coefficients is not set");
@@ -138,7 +138,7 @@ Coefficients& ResponseStage::coefficients() throw(Seiscomp::Core::ValueException
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Coefficients& ResponseStage::coefficients() const throw(Seiscomp::Core::ValueException) {
+const Coefficients& ResponseStage::coefficients() const {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponseStage.Coefficients is not set");
@@ -158,7 +158,7 @@ void ResponseStage::setResponseList(const OPT(ResponseList)& responseList) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ResponseList& ResponseStage::responseList() throw(Seiscomp::Core::ValueException) {
+ResponseList& ResponseStage::responseList() {
 	if ( _responseList )
 		return *_responseList;
 	throw Seiscomp::Core::ValueException("ResponseStage.ResponseList is not set");
@@ -169,7 +169,7 @@ ResponseList& ResponseStage::responseList() throw(Seiscomp::Core::ValueException
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ResponseList& ResponseStage::responseList() const throw(Seiscomp::Core::ValueException) {
+const ResponseList& ResponseStage::responseList() const {
 	if ( _responseList )
 		return *_responseList;
 	throw Seiscomp::Core::ValueException("ResponseStage.ResponseList is not set");
@@ -189,7 +189,7 @@ void ResponseStage::setFIR(const OPT(FIR)& fIR) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FIR& ResponseStage::fIR() throw(Seiscomp::Core::ValueException) {
+FIR& ResponseStage::fIR() {
 	if ( _fIR )
 		return *_fIR;
 	throw Seiscomp::Core::ValueException("ResponseStage.FIR is not set");
@@ -200,7 +200,7 @@ FIR& ResponseStage::fIR() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const FIR& ResponseStage::fIR() const throw(Seiscomp::Core::ValueException) {
+const FIR& ResponseStage::fIR() const {
 	if ( _fIR )
 		return *_fIR;
 	throw Seiscomp::Core::ValueException("ResponseStage.FIR is not set");
@@ -220,7 +220,7 @@ void ResponseStage::setPolynomial(const OPT(Polynomial)& polynomial) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Polynomial& ResponseStage::polynomial() throw(Seiscomp::Core::ValueException) {
+Polynomial& ResponseStage::polynomial() {
 	if ( _polynomial )
 		return *_polynomial;
 	throw Seiscomp::Core::ValueException("ResponseStage.Polynomial is not set");
@@ -231,7 +231,7 @@ Polynomial& ResponseStage::polynomial() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Polynomial& ResponseStage::polynomial() const throw(Seiscomp::Core::ValueException) {
+const Polynomial& ResponseStage::polynomial() const {
 	if ( _polynomial )
 		return *_polynomial;
 	throw Seiscomp::Core::ValueException("ResponseStage.Polynomial is not set");
@@ -251,7 +251,7 @@ void ResponseStage::setDecimation(const OPT(Decimation)& decimation) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Decimation& ResponseStage::decimation() throw(Seiscomp::Core::ValueException) {
+Decimation& ResponseStage::decimation() {
 	if ( _decimation )
 		return *_decimation;
 	throw Seiscomp::Core::ValueException("ResponseStage.Decimation is not set");
@@ -262,7 +262,7 @@ Decimation& ResponseStage::decimation() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Decimation& ResponseStage::decimation() const throw(Seiscomp::Core::ValueException) {
+const Decimation& ResponseStage::decimation() const {
 	if ( _decimation )
 		return *_decimation;
 	throw Seiscomp::Core::ValueException("ResponseStage.Decimation is not set");
@@ -282,7 +282,7 @@ void ResponseStage::setStageGain(const OPT(Gain)& stageGain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Gain& ResponseStage::stageGain() throw(Seiscomp::Core::ValueException) {
+Gain& ResponseStage::stageGain() {
 	if ( _stageGain )
 		return *_stageGain;
 	throw Seiscomp::Core::ValueException("ResponseStage.StageGain is not set");
@@ -293,7 +293,7 @@ Gain& ResponseStage::stageGain() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Gain& ResponseStage::stageGain() const throw(Seiscomp::Core::ValueException) {
+const Gain& ResponseStage::stageGain() const {
 	if ( _stageGain )
 		return *_stageGain;
 	throw Seiscomp::Core::ValueException("ResponseStage.StageGain is not set");

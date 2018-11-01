@@ -166,7 +166,7 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _System.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import Core
+import seiscomp3.Core
 import seiscomp3.Config
 class Environment(_object):
     __swig_setmethods__ = {}
@@ -245,13 +245,13 @@ def Environment_Instance():
     return _System.Environment_Instance()
 Environment_Instance = _System.Environment_Instance
 
-class SchemaParameter(Core.BaseObject):
+class SchemaParameter(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaParameter, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaParameter, name)
     __repr__ = _swig_repr
@@ -332,13 +332,13 @@ def SchemaParameter_ConstCast(*args):
     return _System.SchemaParameter_ConstCast(*args)
 SchemaParameter_ConstCast = _System.SchemaParameter_ConstCast
 
-class SchemaParameters(Core.BaseObject):
+class SchemaParameters(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaParameters, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaParameters, name)
     __repr__ = _swig_repr
@@ -565,13 +565,13 @@ def SchemaStructure_ConstCast(*args):
     return _System.SchemaStructure_ConstCast(*args)
 SchemaStructure_ConstCast = _System.SchemaStructure_ConstCast
 
-class SchemaSetupInputOption(Core.BaseObject):
+class SchemaSetupInputOption(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaSetupInputOption, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaSetupInputOption, name)
     __repr__ = _swig_repr
@@ -715,13 +715,13 @@ def SchemaSetupInput_ConstCast(*args):
     return _System.SchemaSetupInput_ConstCast(*args)
 SchemaSetupInput_ConstCast = _System.SchemaSetupInput_ConstCast
 
-class SchemaSetupGroup(Core.BaseObject):
+class SchemaSetupGroup(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaSetupGroup, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaSetupGroup, name)
     __repr__ = _swig_repr
@@ -786,13 +786,13 @@ def SchemaSetupGroup_ConstCast(*args):
     return _System.SchemaSetupGroup_ConstCast(*args)
 SchemaSetupGroup_ConstCast = _System.SchemaSetupGroup_ConstCast
 
-class SchemaSetup(Core.BaseObject):
+class SchemaSetup(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaSetup, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaSetup, name)
     __repr__ = _swig_repr
@@ -853,13 +853,13 @@ def SchemaSetup_ConstCast(*args):
     return _System.SchemaSetup_ConstCast(*args)
 SchemaSetup_ConstCast = _System.SchemaSetup_ConstCast
 
-class SchemaModule(Core.BaseObject):
+class SchemaModule(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaModule, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaModule, name)
     __repr__ = _swig_repr
@@ -958,13 +958,13 @@ def SchemaModule_ConstCast(*args):
     return _System.SchemaModule_ConstCast(*args)
 SchemaModule_ConstCast = _System.SchemaModule_ConstCast
 
-class SchemaPlugin(Core.BaseObject):
+class SchemaPlugin(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaPlugin, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaPlugin, name)
     __repr__ = _swig_repr
@@ -1041,13 +1041,13 @@ def SchemaPlugin_ConstCast(*args):
     return _System.SchemaPlugin_ConstCast(*args)
 SchemaPlugin_ConstCast = _System.SchemaPlugin_ConstCast
 
-class SchemaBinding(Core.BaseObject):
+class SchemaBinding(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaBinding, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaBinding, name)
     __repr__ = _swig_repr
@@ -1124,13 +1124,13 @@ def SchemaBinding_ConstCast(*args):
     return _System.SchemaBinding_ConstCast(*args)
 SchemaBinding_ConstCast = _System.SchemaBinding_ConstCast
 
-class SchemaDefinitions(Core.BaseObject):
+class SchemaDefinitions(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaDefinitions, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaDefinitions, name)
     __repr__ = _swig_repr
@@ -1249,13 +1249,13 @@ class ConfigDelegate(seiscomp3.Config.Logger):
 ConfigDelegate_swigregister = _System.ConfigDelegate_swigregister
 ConfigDelegate_swigregister(ConfigDelegate)
 
-class SymbolMapItem(Core.BaseObject):
+class SymbolMapItem(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SymbolMapItem, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SymbolMapItem, name)
     __repr__ = _swig_repr
@@ -1279,13 +1279,13 @@ class SymbolMapItem(Core.BaseObject):
 SymbolMapItem_swigregister = _System.SymbolMapItem_swigregister
 SymbolMapItem_swigregister(SymbolMapItem)
 
-class Container(Core.BaseObject):
+class Container(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Container, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Container, name)
 
@@ -1370,13 +1370,13 @@ class Container(Core.BaseObject):
 Container_swigregister = _System.Container_swigregister
 Container_swigregister(Container)
 
-class Parameter(Core.BaseObject):
+class Parameter(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Parameter, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Parameter, name)
     __repr__ = _swig_repr
@@ -1643,13 +1643,13 @@ def Section_TypeInfo():
     return _System.Section_TypeInfo()
 Section_TypeInfo = _System.Section_TypeInfo
 
-class Binding(Core.BaseObject):
+class Binding(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Binding, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Binding, name)
     __repr__ = _swig_repr
@@ -1728,13 +1728,13 @@ def Binding_TypeInfo():
     return _System.Binding_TypeInfo()
 Binding_TypeInfo = _System.Binding_TypeInfo
 
-class BindingCategory(Core.BaseObject):
+class BindingCategory(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, BindingCategory, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, BindingCategory, name)
     __repr__ = _swig_repr
@@ -1904,13 +1904,13 @@ class StationID(_object):
 StationID_swigregister = _System.StationID_swigregister
 StationID_swigregister(StationID)
 
-class Module(Core.BaseObject):
+class Module(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Module, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Module, name)
     __repr__ = _swig_repr
@@ -2038,13 +2038,13 @@ def Module_TypeInfo():
     return _System.Module_TypeInfo()
 Module_TypeInfo = _System.Module_TypeInfo
 
-class Station(Core.BaseObject):
+class Station(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Station, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Station, name)
     __repr__ = _swig_repr
@@ -2102,13 +2102,13 @@ def Station_TypeInfo():
     return _System.Station_TypeInfo()
 Station_TypeInfo = _System.Station_TypeInfo
 
-class Model(Core.BaseObject):
+class Model(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Model, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Model, name)
     __repr__ = _swig_repr

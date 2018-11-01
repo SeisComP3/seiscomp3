@@ -21,8 +21,74 @@ namespace DataModel {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+IMPLEMENT_SC_CLASS_DERIVED(ConfigSyncMessage, Message, "config_sync_message");
 IMPLEMENT_SC_CLASS_DERIVED(InventorySyncMessage, Message, "inventory_sync_message");
 IMPLEMENT_SC_CLASS_DERIVED(ArtificialOriginMessage, Message, "artificial_origin_message");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ConfigSyncMessage::ConfigSyncMessage() : isFinished(false) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ConfigSyncMessage::ConfigSyncMessage(bool finished)
+: isFinished(finished) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ConfigSyncMessage::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
+	_creationInfo = creationInfo;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CreationInfo &ConfigSyncMessage::creationInfo() {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigSyncMessage.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const CreationInfo &ConfigSyncMessage::creationInfo() const {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigSyncMessage.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ConfigSyncMessage::empty() const {
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ConfigSyncMessage::serialize(Archive& ar) {
+	ar & NAMED_OBJECT_HINT("isFinished", isFinished, Archive::XML_ELEMENT | Archive::XML_MANDATORY);
+	ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -44,6 +110,37 @@ InventorySyncMessage::InventorySyncMessage(bool finished)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void InventorySyncMessage::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
+	_creationInfo = creationInfo;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CreationInfo &InventorySyncMessage::creationInfo() {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigSyncMessage.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const CreationInfo &InventorySyncMessage::creationInfo() const {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigSyncMessage.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool InventorySyncMessage::empty() const {
 	return false;
 }
@@ -55,7 +152,7 @@ bool InventorySyncMessage::empty() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void InventorySyncMessage::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("isFinished", isFinished, Archive::XML_ELEMENT | Archive::XML_MANDATORY);
-	ar & NAMED_OBJECT_HINT("creationInfo", creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

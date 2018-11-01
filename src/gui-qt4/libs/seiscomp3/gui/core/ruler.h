@@ -112,7 +112,7 @@ class SC_GUI_API Ruler : public QFrame
 		void enterEvent(QEvent *e);
 		void leaveEvent(QEvent *e);
 
-		void setLineCount(int);
+		void setLineCount(int lines, int spacing = 4);
 		virtual void drawSelection(QPainter &p);
 		void drawRangeSelection(QPainter &p);
 
@@ -168,7 +168,7 @@ class SC_GUI_API Ruler : public QFrame
 		        _dt,              // tick mark interval
 		        _limitLeft, _limitRight,
 		        _limitMinRange, _limitMaxRange;
-		int     _pos, _tickLong, _tickShort, _lc;
+		int     _pos, _tickLong, _tickShort, _lc, _lineSpacing;
 		QVector<Handle> _selectionHandles;
 		int     _currentSelectionHandle;
 

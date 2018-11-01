@@ -101,8 +101,8 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 			fill.setAlpha(64);
 			p.setBrush(fill);
 
-			lenMax = Math::Geo::km2deg(lenMax);
 			lenMin = Math::Geo::km2deg(lenMin);
+			lenMax = Math::Geo::km2deg(lenMax);
 
 			QPoint min, max;
 			if ( canvas().projection()->project(min, QPointF(originLocationF.x()-lenMin, originLocationF.y()+lenMax)) &&
@@ -177,7 +177,7 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 
 				QPoint originLocation;
 				if ( canvas().projection()->project(originLocation, originLocationF) ) {
-					if ( canvas().symbolCollection()->size() > 0 )
+					if ( canvas().symbolCollection()->count() > 0 )
 						cutOff = (*canvas().symbolCollection()->begin())->size().width();
 
 					if ( cutOff ) {
@@ -192,7 +192,7 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 				for ( QVector<StationEntry>::iterator it = _stations.begin(); it != _stations.end(); ++it ) {
 					if ( !(*it).validLocation || !(*it).isArrival ) continue;
 					if ( !(*it).isActive ) continue;
-					canvas().drawGeoLine(p, originLocationF, (*it).location);
+					canvas().drawLine(p, originLocationF, (*it).location);
 				}
 
 				if ( cutOff )
@@ -304,11 +304,15 @@ void OriginLocatorMap::mouseMoveEvent(QMouseEvent *event) {
 		if ( _hoverId != -1 ) {
 			int arrivalId = _stations[_hoverId].arrivalId;
 			hoverArrival(arrivalId);
-			if ( toolTip().isEmpty() )
+			if ( toolTip().isEmpty()
+			  && !_stations[_hoverId].net.empty()
+			  && !_stations[_hoverId].code.empty() )
 				setToolTip((_stations[_hoverId].net + "." + _stations[_hoverId].code).c_str());
 		}
-		else
+		else {
 			hoverArrival(-1);
+			setToolTip(QString());
+		}
 	}
 
 	MapWidget::mouseMoveEvent(event);

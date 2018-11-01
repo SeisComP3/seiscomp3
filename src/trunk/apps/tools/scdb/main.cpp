@@ -56,10 +56,10 @@ class ObjectWriter : public DataModel::DatabaseObjectWriter {
 	//  Xstruction
 	// ----------------------------------------------------------------------
 	public:
-		ObjectWriter(DataModel::DatabaseArchive& archive,
+		ObjectWriter(DataModel::DatabaseArchive& archive, bool addToDatabase,
 		             int batchSize, unsigned int total,
 		             unsigned int totalProgress)
-		 : DataModel::DatabaseObjectWriter(archive, batchSize),
+		 : DataModel::DatabaseObjectWriter(archive, addToDatabase, batchSize),
 		   _total(total), _totalProgress(totalProgress),
 		   _lastStep(0), _failure(0) {}
 
@@ -118,13 +118,20 @@ class DBTool : public Seiscomp::Client::Application {
 
 			commandline().addGroup("Import");
 			commandline().addOption("Import", "input,i", "import file", &_importFile, false);
+			commandline().addOption("Import", "remove,r", "remove objects found in import file");
 			commandline().addOption("Import", "batchsize,b", "batch size of database transactions [0..1000]", &_importBatchSize, 1);
 		}
 
 
 		bool validateParameters() {
+			_remove = commandline().hasOption("remove");
+
 			if ( _importBatchSize > 1000 ) {
 				cout << "Error: batchsize '" << _importBatchSize << "' too large" << endl;
+					return false;
+			}
+			else if ( _importBatchSize < 1 ) {
+				cout << "Error: batchsize '" << _importBatchSize << "' too small" << endl;
 					return false;
 			}
 
@@ -296,7 +303,7 @@ class DBTool : public Seiscomp::Client::Application {
 				return false;
 			}
 		
-			ObjectWriter writer(*query(), _importBatchSize, ObjectCounter(doc.get()).count(), 78);
+			ObjectWriter writer(*query(), !_remove, _importBatchSize, ObjectCounter(doc.get()).count(), 78);
 		
 			cout << "Time needed to parse XML: " << Core::Time(timer.elapsed()).toString("%T.%f") << endl;
 			cout << "Document object type: " << doc->className() << endl;
@@ -318,6 +325,7 @@ class DBTool : public Seiscomp::Client::Application {
 
 	private:
 		std::string _importFile;
+		bool _remove;
 		unsigned int _importBatchSize;
 
 		std::string _listenMode;

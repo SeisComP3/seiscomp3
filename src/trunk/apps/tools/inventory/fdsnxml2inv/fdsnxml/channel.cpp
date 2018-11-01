@@ -230,7 +230,7 @@ void Channel::setAzimuth(const OPT(AzimuthType)& azimuth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AzimuthType& Channel::azimuth() throw(Seiscomp::Core::ValueException) {
+AzimuthType& Channel::azimuth() {
 	if ( _azimuth )
 		return *_azimuth;
 	throw Seiscomp::Core::ValueException("Channel.azimuth is not set");
@@ -241,7 +241,7 @@ AzimuthType& Channel::azimuth() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const AzimuthType& Channel::azimuth() const throw(Seiscomp::Core::ValueException) {
+const AzimuthType& Channel::azimuth() const {
 	if ( _azimuth )
 		return *_azimuth;
 	throw Seiscomp::Core::ValueException("Channel.azimuth is not set");
@@ -261,7 +261,7 @@ void Channel::setDip(const OPT(DipType)& dip) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DipType& Channel::dip() throw(Seiscomp::Core::ValueException) {
+DipType& Channel::dip() {
 	if ( _dip )
 		return *_dip;
 	throw Seiscomp::Core::ValueException("Channel.dip is not set");
@@ -272,7 +272,7 @@ DipType& Channel::dip() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const DipType& Channel::dip() const throw(Seiscomp::Core::ValueException) {
+const DipType& Channel::dip() const {
 	if ( _dip )
 		return *_dip;
 	throw Seiscomp::Core::ValueException("Channel.dip is not set");
@@ -292,7 +292,7 @@ void Channel::setSampleRate(const OPT(SampleRateType)& sampleRate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SampleRateType& Channel::sampleRate() throw(Seiscomp::Core::ValueException) {
+SampleRateType& Channel::sampleRate() {
 	if ( _sampleRate )
 		return *_sampleRate;
 	throw Seiscomp::Core::ValueException("Channel.SampleRate is not set");
@@ -303,7 +303,7 @@ SampleRateType& Channel::sampleRate() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const SampleRateType& Channel::sampleRate() const throw(Seiscomp::Core::ValueException) {
+const SampleRateType& Channel::sampleRate() const {
 	if ( _sampleRate )
 		return *_sampleRate;
 	throw Seiscomp::Core::ValueException("Channel.SampleRate is not set");
@@ -323,7 +323,7 @@ void Channel::setSampleRateRatio(const OPT(SampleRateRatioType)& sampleRateRatio
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SampleRateRatioType& Channel::sampleRateRatio() throw(Seiscomp::Core::ValueException) {
+SampleRateRatioType& Channel::sampleRateRatio() {
 	if ( _sampleRateRatio )
 		return *_sampleRateRatio;
 	throw Seiscomp::Core::ValueException("Channel.SampleRateRatio is not set");
@@ -334,7 +334,7 @@ SampleRateRatioType& Channel::sampleRateRatio() throw(Seiscomp::Core::ValueExcep
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const SampleRateRatioType& Channel::sampleRateRatio() const throw(Seiscomp::Core::ValueException) {
+const SampleRateRatioType& Channel::sampleRateRatio() const {
 	if ( _sampleRateRatio )
 		return *_sampleRateRatio;
 	throw Seiscomp::Core::ValueException("Channel.SampleRateRatio is not set");
@@ -372,7 +372,7 @@ void Channel::setClockDrift(const OPT(ClockDriftType)& clockDrift) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ClockDriftType& Channel::clockDrift() throw(Seiscomp::Core::ValueException) {
+ClockDriftType& Channel::clockDrift() {
 	if ( _clockDrift )
 		return *_clockDrift;
 	throw Seiscomp::Core::ValueException("Channel.ClockDrift is not set");
@@ -383,7 +383,7 @@ ClockDriftType& Channel::clockDrift() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ClockDriftType& Channel::clockDrift() const throw(Seiscomp::Core::ValueException) {
+const ClockDriftType& Channel::clockDrift() const {
 	if ( _clockDrift )
 		return *_clockDrift;
 	throw Seiscomp::Core::ValueException("Channel.ClockDrift is not set");
@@ -403,7 +403,7 @@ void Channel::setCalibrationUnits(const OPT(UnitsType)& calibrationUnits) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-UnitsType& Channel::calibrationUnits() throw(Seiscomp::Core::ValueException) {
+UnitsType& Channel::calibrationUnits() {
 	if ( _calibrationUnits )
 		return *_calibrationUnits;
 	throw Seiscomp::Core::ValueException("Channel.CalibrationUnits is not set");
@@ -414,7 +414,7 @@ UnitsType& Channel::calibrationUnits() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const UnitsType& Channel::calibrationUnits() const throw(Seiscomp::Core::ValueException) {
+const UnitsType& Channel::calibrationUnits() const {
 	if ( _calibrationUnits )
 		return *_calibrationUnits;
 	throw Seiscomp::Core::ValueException("Channel.CalibrationUnits is not set");
@@ -434,7 +434,7 @@ void Channel::setSensor(const OPT(Equipment)& sensor) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Equipment& Channel::sensor() throw(Seiscomp::Core::ValueException) {
+Equipment& Channel::sensor() {
 	if ( _sensor )
 		return *_sensor;
 	throw Seiscomp::Core::ValueException("Channel.Sensor is not set");
@@ -445,7 +445,7 @@ Equipment& Channel::sensor() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Equipment& Channel::sensor() const throw(Seiscomp::Core::ValueException) {
+const Equipment& Channel::sensor() const {
 	if ( _sensor )
 		return *_sensor;
 	throw Seiscomp::Core::ValueException("Channel.Sensor is not set");
@@ -465,7 +465,7 @@ void Channel::setPreAmplifier(const OPT(Equipment)& preAmplifier) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Equipment& Channel::preAmplifier() throw(Seiscomp::Core::ValueException) {
+Equipment& Channel::preAmplifier() {
 	if ( _preAmplifier )
 		return *_preAmplifier;
 	throw Seiscomp::Core::ValueException("Channel.PreAmplifier is not set");
@@ -476,7 +476,7 @@ Equipment& Channel::preAmplifier() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Equipment& Channel::preAmplifier() const throw(Seiscomp::Core::ValueException) {
+const Equipment& Channel::preAmplifier() const {
 	if ( _preAmplifier )
 		return *_preAmplifier;
 	throw Seiscomp::Core::ValueException("Channel.PreAmplifier is not set");
@@ -496,7 +496,7 @@ void Channel::setDataLogger(const OPT(Equipment)& dataLogger) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Equipment& Channel::dataLogger() throw(Seiscomp::Core::ValueException) {
+Equipment& Channel::dataLogger() {
 	if ( _dataLogger )
 		return *_dataLogger;
 	throw Seiscomp::Core::ValueException("Channel.DataLogger is not set");
@@ -507,7 +507,7 @@ Equipment& Channel::dataLogger() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Equipment& Channel::dataLogger() const throw(Seiscomp::Core::ValueException) {
+const Equipment& Channel::dataLogger() const {
 	if ( _dataLogger )
 		return *_dataLogger;
 	throw Seiscomp::Core::ValueException("Channel.DataLogger is not set");
@@ -527,7 +527,7 @@ void Channel::setEquipment(const OPT(Equipment)& equipment) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Equipment& Channel::equipment() throw(Seiscomp::Core::ValueException) {
+Equipment& Channel::equipment() {
 	if ( _equipment )
 		return *_equipment;
 	throw Seiscomp::Core::ValueException("Channel.Equipment is not set");
@@ -538,7 +538,7 @@ Equipment& Channel::equipment() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Equipment& Channel::equipment() const throw(Seiscomp::Core::ValueException) {
+const Equipment& Channel::equipment() const {
 	if ( _equipment )
 		return *_equipment;
 	throw Seiscomp::Core::ValueException("Channel.Equipment is not set");
@@ -558,7 +558,7 @@ void Channel::setResponse(const OPT(Response)& response) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Response& Channel::response() throw(Seiscomp::Core::ValueException) {
+Response& Channel::response() {
 	if ( _response )
 		return *_response;
 	throw Seiscomp::Core::ValueException("Channel.Response is not set");
@@ -569,7 +569,7 @@ Response& Channel::response() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Response& Channel::response() const throw(Seiscomp::Core::ValueException) {
+const Response& Channel::response() const {
 	if ( _response )
 		return *_response;
 	throw Seiscomp::Core::ValueException("Channel.Response is not set");

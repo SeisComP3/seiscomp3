@@ -100,18 +100,22 @@
 					</description>
 					<parameter name="lonmin" type="double" unit="deg">
 						<description>
+							Minimum longitude.
 						</description>
 					</parameter>
 					<parameter name="lonmax" type="double" unit="deg">
 						<description>
+							Maximum longitude.
 						</description>
 					</parameter>
 					<parameter name="latmin" type="double" unit="deg">
 						<description>
+							Minimum latitude.
 						</description>
 					</parameter>
 					<parameter name="latmax" type="double" unit="deg">
 						<description>
+							Maximum latitude.
 						</description>
 					</parameter>
 				</group>

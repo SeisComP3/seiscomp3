@@ -10,11 +10,13 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module (docstring="Codes for working with geo features (e.g. polygons)") Geo
+%module(package="seiscomp3", docstring="Codes for working with geo features (e.g. polygons)") Geo
 %{
 /* headers to be included in the wrapper code */
-#include "seiscomp3/geo/geofeature.h"
-#include "seiscomp3/geo/geofeatureset.h"
+#include "seiscomp3/geo/coordinate.h"
+#include "seiscomp3/geo/boundingbox.h"
+#include "seiscomp3/geo/feature.h"
+#include "seiscomp3/geo/featureset.h"
 
 #include "seiscomp3/math/geo.h"
 #include "seiscomp3/math/coord.h"
@@ -62,10 +64,12 @@
   }
 }
 
-%include "seiscomp3/geo/geofeature.h"
-%include "seiscomp3/geo/geofeatureset.h"
+%include "seiscomp3/geo/coordinate.h"
+%include "seiscomp3/geo/boundingbox.h"
+%include "seiscomp3/geo/feature.h"
+%include "seiscomp3/geo/featureset.h"
 
 %template(Categories) std::vector<Seiscomp::Geo::Category*>;
 %template(GeoFeatures) std::vector<Seiscomp::Geo::GeoFeature*>;
-%template(Vertices) std::vector<Seiscomp::Geo::Vertex>;
+%template(Vertices) std::vector<Seiscomp::Geo::GeoCoordinate>;
 %template(Indexes) std::vector<size_t>;

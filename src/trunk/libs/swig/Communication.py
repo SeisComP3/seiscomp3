@@ -95,7 +95,7 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
-import Core
+import seiscomp3.Core
 class Protocol(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Protocol, name, value)
@@ -196,13 +196,13 @@ Protocol.ADMIN_GROUP = _Communication.cvar.Protocol_ADMIN_GROUP
 Protocol.STATUS_GROUP = _Communication.cvar.Protocol_STATUS_GROUP
 Protocol.DEFAULT_ADMIN_CLIENT_NAME = _Communication.cvar.Protocol_DEFAULT_ADMIN_CLIENT_NAME
 
-class SyncRequestMessage(Core.Message):
+class SyncRequestMessage(seiscomp3.Core.Message):
     __swig_setmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SyncRequestMessage, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SyncRequestMessage, name)
     __repr__ = _swig_repr
@@ -265,13 +265,13 @@ def SyncRequestMessage_ConstCast(*args):
     return _Communication.SyncRequestMessage_ConstCast(*args)
 SyncRequestMessage_ConstCast = _Communication.SyncRequestMessage_ConstCast
 
-class SyncResponseMessage(Core.Message):
+class SyncResponseMessage(seiscomp3.Core.Message):
     __swig_setmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SyncResponseMessage, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SyncResponseMessage, name)
     __repr__ = _swig_repr
@@ -334,13 +334,13 @@ def SyncResponseMessage_ConstCast(*args):
     return _Communication.SyncResponseMessage_ConstCast(*args)
 SyncResponseMessage_ConstCast = _Communication.SyncResponseMessage_ConstCast
 
-class ServiceRequestMessage(Core.Message):
+class ServiceRequestMessage(seiscomp3.Core.Message):
     __swig_setmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ServiceRequestMessage, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ServiceRequestMessage, name)
 
@@ -396,13 +396,13 @@ def ServiceRequestMessage_ConstCast(*args):
     return _Communication.ServiceRequestMessage_ConstCast(*args)
 ServiceRequestMessage_ConstCast = _Communication.ServiceRequestMessage_ConstCast
 
-class ServiceProvideMessage(Core.Message):
+class ServiceProvideMessage(seiscomp3.Core.Message):
     __swig_setmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ServiceProvideMessage, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.Message]:
+    for _s in [seiscomp3.Core.Message]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ServiceProvideMessage, name)
 
@@ -587,13 +587,13 @@ def DatabaseProvideMessage_ConstCast(*args):
     return _Communication.DatabaseProvideMessage_ConstCast(*args)
 DatabaseProvideMessage_ConstCast = _Communication.DatabaseProvideMessage_ConstCast
 
-class NetworkMessage(Core.BaseObject):
+class NetworkMessage(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, NetworkMessage, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NetworkMessage, name)
     __repr__ = _swig_repr
@@ -841,13 +841,13 @@ def ServiceMessage_ConstCast(*args):
     return _Communication.ServiceMessage_ConstCast(*args)
 ServiceMessage_ConstCast = _Communication.ServiceMessage_ConstCast
 
-class NetworkInterface(Core.BaseObject):
+class NetworkInterface(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, NetworkInterface, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NetworkInterface, name)
 
@@ -941,13 +941,13 @@ def NetworkInterface_Create(service):
     return _Communication.NetworkInterface_Create(service)
 NetworkInterface_Create = _Communication.NetworkInterface_Create
 
-class SystemConnection(Core.BaseObject):
+class SystemConnection(seiscomp3.Core.BaseObject):
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SystemConnection, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SystemConnection, name)
     __repr__ = _swig_repr

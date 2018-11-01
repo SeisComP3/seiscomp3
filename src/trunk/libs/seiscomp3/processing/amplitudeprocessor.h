@@ -255,6 +255,8 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 		//! Once a trigger has been set all succeeding calls will fail.
 		virtual void setTrigger(const Core::Time& trigger);
 
+		Core::Time trigger() const;
+
 		/**
 		 * @brief Allows to finalize an amplitude object as created by
 		 *        client code.
@@ -266,8 +268,6 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 		 * @param amplitude The amplitude to be finalized
 		 */
 		virtual void finalizeAmplitude(DataModel::Amplitude *amplitude) const;
-
-		Core::Time trigger() const;
 
 		void setPublishFunction(const PublishFunc &func);
 

@@ -269,7 +269,7 @@ void Station::setTerminationDate(const OPT(DateTime)& terminationDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Station::terminationDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Station::terminationDate() const {
 	if ( _terminationDate )
 		return *_terminationDate;
 	throw Seiscomp::Core::ValueException("Station.terminationDate is not set");
@@ -289,7 +289,7 @@ void Station::setTotalNumberChannels(const OPT(CounterType)& totalNumberChannels
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Station::totalNumberChannels() throw(Seiscomp::Core::ValueException) {
+CounterType& Station::totalNumberChannels() {
 	if ( _totalNumberChannels )
 		return *_totalNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.totalNumberChannels is not set");
@@ -300,7 +300,7 @@ CounterType& Station::totalNumberChannels() throw(Seiscomp::Core::ValueException
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Station::totalNumberChannels() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Station::totalNumberChannels() const {
 	if ( _totalNumberChannels )
 		return *_totalNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.totalNumberChannels is not set");
@@ -320,7 +320,7 @@ void Station::setSelectedNumberChannels(const OPT(CounterType)& selectedNumberCh
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Station::selectedNumberChannels() throw(Seiscomp::Core::ValueException) {
+CounterType& Station::selectedNumberChannels() {
 	if ( _selectedNumberChannels )
 		return *_selectedNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.selectedNumberChannels is not set");
@@ -331,7 +331,7 @@ CounterType& Station::selectedNumberChannels() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Station::selectedNumberChannels() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Station::selectedNumberChannels() const {
 	if ( _selectedNumberChannels )
 		return *_selectedNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.selectedNumberChannels is not set");

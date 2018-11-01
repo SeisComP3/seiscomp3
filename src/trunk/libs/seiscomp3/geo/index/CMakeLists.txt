@@ -1,0 +1,4 @@
+SET(GEO_INDEX_SOURCES quadtree.cpp)
+SET(GEO_INDEX_HEADERS quadtree.h quadtree.ipp)
+
+SC_SETUP_LIB_SUBDIR(GEO_INDEX)

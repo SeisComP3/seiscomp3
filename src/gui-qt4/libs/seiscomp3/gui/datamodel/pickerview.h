@@ -150,6 +150,8 @@ class SC_GUI_API PickerRecordLabel : public StandardRecordLabel {
 	private:
 		double               latitude;
 		double               longitude;
+		int                  unit;
+		QString              gainUnit[3];
 		ThreeComponentTrace  data;
 		Math::Matrix3f       orientationZNE;
 		Math::Matrix3f       orientationZRT;
@@ -226,6 +228,9 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 			FilterList filters;
 
+			QString integrationFilter;
+			bool onlyApplyIntegrationFilterOnce;
+
 			GroupList phaseGroups;
 			PhaseList favouritePhases;
 
@@ -237,6 +242,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 			bool showCrossHair;
 
 			bool ignoreUnconfiguredStations;
+			bool ignoreDisabledStations;
 			bool loadAllComponents;
 			bool loadAllPicks;
 			bool loadStrongMotionData;
@@ -342,6 +348,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void applyPicks();
 		void changeFilter(int);
 		void changeRotation(int);
+		void changeUnit(int);
 		void setArrivalState(int arrivalId, bool state);
 		void addPick(Seiscomp::DataModel::Pick* pick);
 
@@ -550,12 +557,13 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 		bool applyFilter(RecordViewItem *item = NULL);
 		bool applyRotation(RecordViewItem *item, int type);
+		void updateRecordAxisLabel(RecordViewItem *item);
 
 
 		//! Makes sure that the time range [tmin, tmax] is visible.
 		//! When the interval is larger than the visible area
 		//! the time range will be left aligned.
-		void ensureVisibility(float& tmin, float& tmax);
+		void ensureVisibility(double &tmin, double &tmax);
 		void ensureVisibility(const Seiscomp::Core::Time &time, int pixelMargin);
 
 		void updatePhaseMarker(Seiscomp::Gui::RecordWidget*, const Seiscomp::Core::Time&);
@@ -616,6 +624,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		QSet<QString> _stations;
 		QComboBox *_comboFilter;
 		QComboBox *_comboRotation;
+		QComboBox *_comboUnit;
 		QDoubleSpinBox *_spinDistance;
 		QComboBox *_comboPicker;
 
@@ -671,6 +680,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		double _tmpUpperUncertainty;
 
 		int _currentRotationMode;
+		int _currentUnitMode;
 		int _lastFoundRow;
 		QColor _searchBase, _searchError;
 

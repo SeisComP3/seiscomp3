@@ -450,27 +450,25 @@ void DatabaseObjectWriter::visit(Object *object) {
 bool DatabaseObjectWriter::write(Object *object) {
 	++_count;
 
-	if ( _batchSize == 1 )
+	if ( _batchSize <= 1 )
 		_archive.driver()->start();
 	bool result = _addObjects?_archive.write(object, _parentID):_archive.remove(object, _parentID);
 
 	if ( !result ) {
 		++_errors;
-		if ( _batchSize == 1 )
+		if ( _batchSize <= 1 )
 			_archive.driver()->rollback();
 		return false;
 	}
 
-	if ( _batchSize == 1 )
+	if ( _batchSize <= 1 )
 		_archive.driver()->commit();
-	_parentID = "";
-
-	if ( _batchSize > 2 ) {
-		if ( (_count % _batchSize) == 0 ) {
-			_archive.driver()->commit();
-			_archive.driver()->start();
-		}
+	else if ( (_count % _batchSize) == 0 ) {
+		_archive.driver()->commit();
+		_archive.driver()->start();
 	}
+
+	_parentID = "";
 
 	return true;
 }
@@ -1849,10 +1847,10 @@ bool DatabaseArchive::remove(Object *object, const std::string &parentID) {
 	if ( objectID == 0 )
 		objectID = objectId(object, parentID);
 
-	if ( objectID == -1 ) {
-		SEISCOMP_ERROR("remove: object '%s' has not been found in database",
-		               object->className());
-		return false;
+	if ( objectID <= 0 ) {
+		SEISCOMP_WARNING("remove: object '%s' has not been found in database",
+		                 object->className());
+		return true;
 	}
 
 	_db->execute((std::string("delete from ") + object->className() +

@@ -60,7 +60,7 @@ bool Config::init() {
 
 	// maximum number of notifiers per message
 	try { batchSize = app->configGetInt("batchSize"); }
-	catch ( ... ) { batchSize = 200; }
+	catch ( ... ) { batchSize = 2000; }
 
 	// host configurations
 	hosts.clear();
@@ -150,12 +150,11 @@ bool Config::init() {
 			cfg.routingTable[DataModel::Pick::TypeInfo().className()] = Communication::Protocol::IMPORT_GROUP;
 			cfg.routingTable[DataModel::Amplitude::TypeInfo().className()] = Communication::Protocol::IMPORT_GROUP;
 			cfg.routingTable[DataModel::Origin::TypeInfo().className()] = "LOCATION";
-			cfg.routingTable[DataModel::StationMagnitude::TypeInfo().className()] = "MAGNITUDE";
-			cfg.routingTable[DataModel::Magnitude::TypeInfo().className()] = "MAGNITUDE";
+			cfg.routingTable[DataModel::FocalMechanism::TypeInfo().className()] = "FOCMECH";
 		}
 
 		// create explicit routing entries for top-level EventParameters
-		// children
+		// children in case a routing entry for EventParameters is found
 		RoutingTable::const_iterator rit = cfg.routingTable.find(DataModel::EventParameters::TypeInfo().className());
 		if ( rit != cfg.routingTable.end() && !rit->second.empty() ) {
 			if ( cfg.routingTable[DataModel::Pick::TypeInfo().className()].empty() )

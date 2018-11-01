@@ -19,6 +19,13 @@ namespace Seiscomp {
 namespace Processing {
 
 
+namespace {
+
+std::string ExpectedAmplitudeUnit = "mm";
+
+}
+
+
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_MLv, MagnitudeProcessor, "MagnitudeProcessor_MLv");
 REGISTER_MAGNITUDEPROCESSOR(MagnitudeProcessor_MLv, "MLv");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -107,6 +114,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_MLv::computeMagnitude(
 	double distanceKm = Math::Geo::deg2km(delta);
 	if ( maxDistanceKm > 0 && distanceKm > maxDistanceKm )
 		return DistanceOutOfRange;
+
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
 
 	try {
 		value = log10(amplitude) - logA0(distanceKm);

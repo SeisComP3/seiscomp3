@@ -11,16 +11,16 @@ SET(SERIALPLUGIN_SOURCES
 	serial_plugin.cc
 	rw2300.c
 	linux2300.c
+	proto_dr24.cc
 	proto_edata.cc
 	proto_edata2.cc
 	proto_guralp2.cc
-	proto_dr24.cc
-	proto_prema.cc
 	proto_hrd24.cc
-	proto_sadc.cc
-	proto_ws2300.cc
 	proto_mws.cc
+	proto_prema.cc
+	proto_sadc.cc
 	proto_solar.cc
+	proto_ws2300.cc
 	proto_modbus.cc
 )
 

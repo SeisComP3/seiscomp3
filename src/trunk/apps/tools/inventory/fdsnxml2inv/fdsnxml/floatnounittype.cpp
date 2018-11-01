@@ -136,7 +136,7 @@ void FloatNoUnitType::setUpperUncertainty(const OPT(double)& upperUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double FloatNoUnitType::upperUncertainty() const throw(Seiscomp::Core::ValueException) {
+double FloatNoUnitType::upperUncertainty() const {
 	if ( _upperUncertainty )
 		return *_upperUncertainty;
 	throw Seiscomp::Core::ValueException("FloatNoUnitType.upperUncertainty is not set");
@@ -156,7 +156,7 @@ void FloatNoUnitType::setLowerUncertainty(const OPT(double)& lowerUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double FloatNoUnitType::lowerUncertainty() const throw(Seiscomp::Core::ValueException) {
+double FloatNoUnitType::lowerUncertainty() const {
 	if ( _lowerUncertainty )
 		return *_lowerUncertainty;
 	throw Seiscomp::Core::ValueException("FloatNoUnitType.lowerUncertainty is not set");

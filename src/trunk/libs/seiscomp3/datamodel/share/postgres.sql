@@ -679,8 +679,7 @@ CREATE TABLE Amplitude (
 );
 
 CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
-CREATE INDEX Amplitude_m_timeWindow_reference ON Amplitude(m_timeWindow_reference);
-CREATE INDEX Amplitude_m_timeWindow_reference_ms ON Amplitude(m_timeWindow_reference_ms);
+CREATE INDEX Amplitude_timeWindow_reference ON Amplitude(m_timeWindow_reference,m_timeWindow_reference_ms);
 CREATE INDEX Amplitude_m_pickID ON Amplitude(m_pickID);
 
 CREATE TRIGGER Amplitude_update BEFORE UPDATE ON Amplitude FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -851,8 +850,7 @@ CREATE TABLE Pick (
 );
 
 CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
-CREATE INDEX Pick_m_time_value ON Pick(m_time_value);
-CREATE INDEX Pick_m_time_value_ms ON Pick(m_time_value_ms);
+CREATE INDEX Pick_m_time_value_m_time_value_ms ON Pick(m_time_value,m_time_value_ms);
 
 CREATE TRIGGER Pick_update BEFORE UPDATE ON Pick FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1058,8 +1056,7 @@ CREATE TABLE Origin (
 );
 
 CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
-CREATE INDEX Origin_m_time_value ON Origin(m_time_value);
-CREATE INDEX Origin_m_time_value_ms ON Origin(m_time_value_ms);
+CREATE INDEX Origin_m_time_value_m_time_value_ms ON Origin(m_time_value,m_time_value_ms);
 
 CREATE TRIGGER Origin_update BEFORE UPDATE ON Origin FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1228,10 +1225,8 @@ CREATE TABLE WaveformQuality (
 );
 
 CREATE INDEX WaveformQuality__parent_oid ON WaveformQuality(_parent_oid);
-CREATE INDEX WaveformQuality_m_start ON WaveformQuality(m_start);
-CREATE INDEX WaveformQuality_m_start_ms ON WaveformQuality(m_start_ms);
-CREATE INDEX WaveformQuality_m_end ON WaveformQuality(m_end);
-CREATE INDEX WaveformQuality_m_end_ms ON WaveformQuality(m_end_ms);
+CREATE INDEX WaveformQuality_m_start_m_start_ms ON WaveformQuality(m_start,m_start_ms);
+CREATE INDEX WaveformQuality_m_end_m_end_ms ON WaveformQuality(m_end,m_end_ms);
 
 CREATE TRIGGER WaveformQuality_update BEFORE UPDATE ON WaveformQuality FOR EACH ROW EXECUTE PROCEDURE update_modified();
 

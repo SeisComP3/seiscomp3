@@ -135,7 +135,7 @@ void BaseNode::setStartDate(const OPT(DateTime)& startDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime BaseNode::startDate() const throw(Seiscomp::Core::ValueException) {
+DateTime BaseNode::startDate() const {
 	if ( _startDate )
 		return *_startDate;
 	throw Seiscomp::Core::ValueException("BaseNode.startDate is not set");
@@ -155,7 +155,7 @@ void BaseNode::setEndDate(const OPT(DateTime)& endDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime BaseNode::endDate() const throw(Seiscomp::Core::ValueException) {
+DateTime BaseNode::endDate() const {
 	if ( _endDate )
 		return *_endDate;
 	throw Seiscomp::Core::ValueException("BaseNode.endDate is not set");
@@ -175,7 +175,7 @@ void BaseNode::setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedSt
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RestrictedStatusType BaseNode::restrictedStatus() const throw(Seiscomp::Core::ValueException) {
+RestrictedStatusType BaseNode::restrictedStatus() const {
 	if ( _restrictedStatus )
 		return *_restrictedStatus;
 	throw Seiscomp::Core::ValueException("BaseNode.restrictedStatus is not set");

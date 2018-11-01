@@ -206,7 +206,7 @@ void Equipment::setInstallationDate(const OPT(DateTime)& installationDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Equipment::installationDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Equipment::installationDate() const {
 	if ( _installationDate )
 		return *_installationDate;
 	throw Seiscomp::Core::ValueException("Equipment.InstallationDate is not set");
@@ -226,7 +226,7 @@ void Equipment::setRemovalDate(const OPT(DateTime)& removalDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Equipment::removalDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Equipment::removalDate() const {
 	if ( _removalDate )
 		return *_removalDate;
 	throw Seiscomp::Core::ValueException("Equipment.RemovalDate is not set");

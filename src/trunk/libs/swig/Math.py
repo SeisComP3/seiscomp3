@@ -162,7 +162,7 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _Math.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import Core
+import seiscomp3.Core
 class vectorf(_object):
     """Proxy of C++ std::vector<(float)> class."""
 
@@ -577,15 +577,15 @@ vectord_swigregister(vectord)
 def round(val):
     """round(double val) -> double"""
     return _Math.round(val)
-class CoordF(Core.BaseObject):
+class CoordF(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Math::Geo::Coord<(float)> class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, CoordF, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, CoordF, name)
     __repr__ = _swig_repr
@@ -643,15 +643,15 @@ class CoordF(Core.BaseObject):
 CoordF_swigregister = _Math.CoordF_swigregister
 CoordF_swigregister(CoordF)
 
-class CoordD(Core.BaseObject):
+class CoordD(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Math::Geo::Coord<(double)> class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, CoordD, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, CoordD, name)
     __repr__ = _swig_repr
@@ -1789,15 +1789,15 @@ AlignmentError_swigregister(AlignmentError)
 def next_power_of_2(arg1):
     """next_power_of_2(long arg1) -> long"""
     return _Math.next_power_of_2(arg1)
-class InPlaceFilterF(Core.BaseObject):
+class InPlaceFilterF(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Math::Filtering::InPlaceFilter<(float)> class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, InPlaceFilterF, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, InPlaceFilterF, name)
 
@@ -1867,15 +1867,15 @@ def InPlaceFilterF_Create(strFilter, strError=None):
     """
     return _Math.InPlaceFilterF_Create(strFilter, strError)
 
-class InPlaceFilterD(Core.BaseObject):
+class InPlaceFilterD(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Math::Filtering::InPlaceFilter<(double)> class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, InPlaceFilterD, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, InPlaceFilterD, name)
 
@@ -3562,15 +3562,15 @@ PositionInterpolator_swigregister(PositionInterpolator)
 def deg2km(deg):
     """deg2km(double deg) -> double"""
     return _Math.deg2km(deg)
-class TransferFunction(Core.BaseObject):
+class TransferFunction(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Math::Restitution::FFT::TransferFunction class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, TransferFunction, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, TransferFunction, name)
 

@@ -23,6 +23,9 @@ using namespace Seiscomp;
 using namespace Seiscomp::IO;
 
 
+namespace {
+
+
 class ImporterFDSNStaXML : public Importer {
 	public:
 		ImporterFDSNStaXML() {}
@@ -52,3 +55,6 @@ class ImporterFDSNStaXML : public Importer {
 
 
 REGISTER_IMPORTER_INTERFACE(ImporterFDSNStaXML, "fdsnxml");
+
+
+}

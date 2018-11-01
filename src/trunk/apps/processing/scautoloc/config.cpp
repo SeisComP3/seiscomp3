@@ -156,6 +156,7 @@ void Autoloc3::Config::dump() const
 	SEISCOMP_INFO("maxResidual                      %.1f s", maxResidualUse);
 	SEISCOMP_INFO("goodRMS                          %.1f s", goodRMS);
 	SEISCOMP_INFO("maxRMS                           %.1f s", maxRMS);
+	SEISCOMP_INFO("maxDepth                         %.1f km", maxDepth);
 	SEISCOMP_INFO("minStaCountIgnorePKP             %d",     minStaCountIgnorePKP);
 	SEISCOMP_INFO("maxAge                           %.0f s", maxAge);
 	SEISCOMP_INFO("publicationIntervalTimeSlope     %.2f",   publicationIntervalTimeSlope);

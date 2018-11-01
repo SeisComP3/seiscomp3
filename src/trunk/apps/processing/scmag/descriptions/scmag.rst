@@ -20,10 +20,19 @@ mb
    Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
 
 mB
-   Broad band body wave magnitude.
+   Broad band body wave magnitude
 
 Mwp
    The body wave magnitude of Tsuboi et al. (1995)
+
+Mjma
+   Mjma is computed on displacement data using body waves of period < 30s
+
+Ms(BB)
+   Broad band surface-wave magnitude
+
+Md
+   Duration magnitude as described in https://earthquake.usgs.gov/research/software/#HYPOINVERSE
 
 Additionally, scmag computes the following derived magnitudes: 
 

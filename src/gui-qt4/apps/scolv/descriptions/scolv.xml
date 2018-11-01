@@ -53,7 +53,7 @@
 					is used. The origin or its source must be associated with an event already.
 					</description>
 				</parameter>
-				<parameter name="eventTypes" type="list:string">
+				<parameter name="commonEventTypes" type="list:string">
 					<description>
 					A list of event types which are allowed to be assigned to an event.
 					The order is preserved in the event editor as well as in the drop-down
@@ -121,7 +121,7 @@
 						If enabled then all traces without data are hidden in the picker.
 					</description>
 				</parameter>
-				<parameter name="hideDisabledStations" type="boolean" default="true">
+				<parameter name="hideDisabledStations" type="boolean" default="false">
 					<description>
 						If enabled then all traces of disabled stations are hidden if
 						they are not picked.
@@ -356,6 +356,29 @@
 						meta data. In case it is not, this list is used.
 					</description>
 				</parameter>
+				<group name="integration">
+					<description>
+					Settings related to waveform integration which may be
+					required if the desired waveform unit is changed and the
+					sensor data must be integrated once or multiple times.
+					</description>
+					<parameter name="preFilter" type="string">
+						<description>
+						An optional pre-filter which is applied prior to the
+						numerical integration to stabilize the result. This
+						filter is applied for each integration step or just
+						once depending on the parameter &quot;applyOnce&quot;.
+						Multiple integrations are necessary if acceleration
+						data should be converted to displacement.
+						</description>
+					</parameter>
+					<parameter name="applyOnce" type="boolean" default="true">
+						<description>
+						Whether to apply the pre-filter only prior the first
+						integration step or prior to each step.
+						</description>
+					</parameter>
+				</group>
 			</group>
 			<group name="amplitudePicker">
 				<parameter name="preOffset" type="int" unit="s" default="300">

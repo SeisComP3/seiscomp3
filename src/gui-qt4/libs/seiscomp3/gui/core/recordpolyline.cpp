@@ -12,125 +12,39 @@
 
 
 
+#include <seiscomp3/gui/core/recordpolyline.h>
 #include <iostream>
+
+
 using namespace std;
 
-#include "recordpolyline.h"
 
-namespace {
-
-/*
-static void optimize1(int &n, int *pt)
-{
-	int *tmp = new int[n+n], *pt2=tmp;
-
-	int i=0, n2=1, xprev;
-	int yin, ymin, ymax, yout;
-
-	*(pt2++) = xprev = pt[i++];
-	*(pt2++) = ymin = ymax = yin = yout = pt[i++];
-
-	while(i<n+n) {
-		int x = pt[i++];
-		int y = pt[i++];
-
-		if(x==xprev) {
-			if(y<ymin)      ymin=y;
-			else if(y>ymax) ymax=y;
-			yout = y;
-		}
-		else {
-			// entering new column
-			*(pt2++) = x;
-			*(pt2++) = yin;
-			n2++;
-
-			if(ymin<yin) {
-				*(pt2++) = xprev;
-				*(pt2++) = ymin;
-				n2++;
-			}
-			if(ymax>yin) {
-				*(pt2++) = xprev;
-				*(pt2++) = ymax;
-				n2++;
-			}
-			if(yout>ymin && yout<ymax) {
-				*(pt2++) = xprev;
-				*(pt2++) = yout;
-				n2++;
-			}
-			xprev = x;
-			yin = ymin = ymax = yout = y;
-		}
-	}
-	// copy back
-	n = n2;
-	pt2 = tmp;
-	for (i=0; i<n2+n2; i++) {
-		pt[i] = pt2[i];
-	}
-
-	delete [] tmp;
-}
-
-static void optimize2(int &n, int *pt)
-{	// eliminate points, where y[i-1]==y[i]==y[i+1]
-return; // FIXME doesn't work very well yet
-	int nn = n+n;
-	int *tmp = new int[nn], *pt2=tmp;
-	int i=0, n2=1, xprev, yprev;
-
-	*(pt2++) = xprev = pt[i++];
-	*(pt2++) = yprev = pt[i++];
-
-	while(i<nn) {
-		*(pt2)   = pt[i++];
-		*(pt2+1) = pt[i++];
-		if(*(pt2+1) == yprev)
-			continue;
-
-		yprev = *(pt2+1);
-		pt2+=2;
-		n2++;
-	}
-	// copy back
-	n = n2;
-	pt2 = tmp;
-	for (i=0; i<n2+n2; i++) {
-		pt[i] = pt2[i];
-	}
-
-	delete [] tmp;
-}
-*/
-
-}
+//#define DEBUG_POINTS
 
 
 namespace Seiscomp {
 namespace Gui {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-RecordPolyline::RecordPolyline()
-{
-	_tx = _ty = 0;
-}
-
-void RecordPolyline::translate(int x, int y) {
-	for ( iterator it = begin(); it != end(); ++it )
-		(*it).translate(x-_tx, y-_ty);
-
-	_tx = x;  _ty = y;
-}
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordPolyline::RecordPolyline() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::create(Record const *rec,
                             double pixelPerSecond,
                             float amplMin, float amplMax, float amplOffset,
                             int height, float *timingQuality,
                             bool optimization) {
-	if (rec == NULL)
+	clear();
+
+	if ( rec == NULL )
 		return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
@@ -142,11 +56,9 @@ void RecordPolyline::create(Record const *rec,
 		yscl = 0;
 	}
 	else {
-		yscl = height/amplHeight;
+		yscl = (height-1)/amplHeight;
 		_baseline = (int)(amplMax*yscl);
 	}
-
-	clear();
 
 	QPolygon *poly = NULL;
 
@@ -163,301 +75,112 @@ void RecordPolyline::create(Record const *rec,
 	const FloatArray *arr = (const FloatArray*)rec->data();
 
 	float *f = (float*)arr->data();
-	int x0 = 0;
 	float dx = pixelPerSecond / rec->samplingFrequency();
 
-	int x_prev = -x0;
-	int y_prev = int(_baseline-yscl*(f[0]-amplOffset));
-	int y_min = y_prev;
-	int y_max = y_prev;
-
-	int x_out = x_prev;
-	int y_out = y_prev;
-
-	poly->append(QPoint(x_prev, y_prev));
+	int x_pos, y_pos;
 
 	if ( optimization ) {
-		for (int i = 1; i<nsamp; i++) {
-			int x_pos = int(i*dx) - x0;
-			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+		x_pos = 0;
+		y_pos = int(_baseline-yscl*(f[0]-amplOffset));
 
-			if ( y_pos != y_out ) {
-				// last output differs from the last sample?
-				if ( x_out != x_prev  ) {
-					x_out = x_prev;
-					poly->append(QPoint(x_out, y_out));
-				}
+		int y_min = y_pos;
+		int y_max = y_pos;
 
-				// last output differs from the current draw position?
-				if ( x_out != x_pos ) {
-					if ( y_min != y_out ) {
-						y_out = y_min;
-						poly->append(QPoint(x_out, y_out));
-					}
-					if ( y_max != y_out ) {
-						y_out = y_max;
-						poly->append(QPoint(x_out, y_out));
-					}
-					if ( y_prev != y_out ) {
-						y_out = y_prev;
-						poly->append(QPoint(x_out, y_out));
-					}
+		int x_out = x_pos;
+		int y_out = y_pos;
 
-					x_out = x_pos;
+		poly->append(QPoint(x_pos, y_pos));
 
-					if ( y_pos != y_out ) {
-						y_out = y_pos;
-						poly->append(QPoint(x_out, y_pos));
-					}
+		int collapsedSamples = 0;
 
-					y_min = y_max = y_out;
-				}
-				else {
-					// update y min/max range
-					if ( y_pos < y_min ) y_min = y_pos;
-					else if ( y_pos > y_max ) y_max = y_pos;
-				}
+		for ( int i = 1; i < nsamp; ++i ) {
+			x_pos = i*dx;
+			y_pos = _baseline-yscl*(f[i]-amplOffset);
+
+			if ( (int)x_out == (int)x_pos ) {
+				// Points share the same pixel, just collect min/max
+				if ( y_pos < y_min ) y_min = y_pos;
+				else if ( y_pos > y_max ) y_max = y_pos;
+				++collapsedSamples;
 			}
 			else {
-				if ( y_min != y_out ) {
-					y_out = y_min;
-					poly->append(QPoint(x_out, y_out));
-					y_min = y_out;
+				if ( collapsedSamples ) {
+					// We want to draw from y_out to y_pos and taking
+					// y_min/y_max into account
+					if ( !(y_out <= y_min && y_pos >= y_max) &&
+					     !(y_out >= y_max && y_pos <= y_min) ) {
+						if ( y_out < y_pos ) {
+							poly->append(QPoint(x_out, y_min));
+							poly->append(QPoint(x_out, y_max));
+						}
+						else {
+							poly->append(QPoint(x_out, y_max));
+							poly->append(QPoint(x_out, y_min));
+						}
+					}
 				}
-				if ( y_max != y_out ) {
-					y_out = y_max;
-					poly->append(QPoint(x_out, y_out));
-					y_max = y_out;
-				}
-				if ( y_prev != y_out ) {
-					y_out = y_min = y_max = y_prev;
-					poly->append(QPoint(x_out, y_out));
-				}
-			}
 
-			x_prev = x_pos;
-			y_prev = y_pos;
+				poly->append(QPoint(x_pos, y_pos));
+				x_out = x_pos;
+				y_out = y_min = y_max = y_pos;
+
+				collapsedSamples = 0;
+			}
 		}
 
-		if ( x_out != x_prev )
-			poly->append(QPoint(x_prev, y_prev));
+		if ( collapsedSamples ) {
+			// We want to draw from y_out to y_pos and taking
+			// y_min/y_max into account
+			if ( !(y_out <= y_min && y_pos >= y_max) &&
+			     !(y_out >= y_max && y_pos <= y_min) ) {
+				if ( y_out < y_pos ) {
+					poly->append(QPoint(x_out, y_min));
+					poly->append(QPoint(x_out, y_max));
+				}
+				else {
+					poly->append(QPoint(x_out, y_max));
+					poly->append(QPoint(x_out, y_min));
+				}
+			}
+		}
+
+		if ( x_pos != x_out || y_pos != y_out )
+			poly->append(QPoint(x_pos, y_pos));
 	}
 	else {
-		for (int i = 1; i<nsamp; i++) {
-			int x_pos = int(i*dx) - x0;
-			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+		for ( int i = 0; i < nsamp; ++i ) {
+			x_pos = i*dx;
+			y_pos = _baseline-yscl*(f[i]-amplOffset);
 			poly->append(QPoint(x_pos, y_pos));
 		}
 	}
 
 	if ( poly->isEmpty() )
 		pop_back();
-
-	_tx = _ty = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::create(RecordSequence const *records,
                             double pixelPerSecond,
                             float amplMin, float amplMax, float amplOffset,
                             int height, float *timingQuality,
                             QVector<QPair<int,int> >* gaps,
                             bool optimization) {
-	if ( records == NULL ) return;
-	if ( records->size() == 0 ) return;
-
-	// normalize peak-to-peak amplitude to height set using setHeight()
-	double yscl;
-	double amplHeight = amplMax - amplMin;
-
-	if ( amplHeight == 0.0 ) {
-		_baseline = height/2;
-		yscl = 0;
-	}
-	else {
-		yscl = height/amplHeight;
-		_baseline = (int)(amplMax*yscl);
-	}
-
-	int skipCount = 0;
-	RecordSequence::const_iterator it = records->begin();
-	RecordSequence::const_iterator lastIt = it;
-
-	/*
-	if ( it != records->end() ) {
-		float dx = pixelPerSecond / (*it)->samplingFrequency();
-		skipCount = int((*it)->sampleCount()*dx);
-	}
-	*/
-
-	clear();
-
-	Seiscomp::Core::Time refTime = (*it)->startTime();
-
-	QPolygon *poly = NULL;
-	int timingQualityRecordCount = 0;
-	if ( timingQuality ) *timingQuality = 0;
-
-	int x_prev;
-	int y_prev;
-	int y_min;
-	int y_max;
-
-	int x_out = 0;
-	int y_out = 0;
-
-	int x_pos;
-	int y_pos;
-
-	int i;
-
-	for ( ; it != records->end(); ++it ) {
-		const Record* rec = it->get();
-		const Record* lastRec = lastIt->get();
-
-		if ( timingQuality && rec->timingQuality() >= 0 ) {
-			*timingQuality += rec->timingQuality();
-			++timingQualityRecordCount;
-		}
-
-		int nsamp = rec->sampleCount();
-		double tolerance = records->tolerance()/rec->samplingFrequency();
-		double diff;
-
-		if ( nsamp == 0 ) continue;
-
-		try {
-			diff = abs(double(rec->startTime() - lastRec->endTime()));
-		}
-		catch ( ... ) {
-			diff = tolerance*2;
-		}
-
-		const FloatArray *arr = (const FloatArray*)rec->data();
-		const float *f = arr->typedData();
-		int x0 = int(pixelPerSecond*double(/*referenceTime*/refTime-rec->startTime()));
-		float dx = pixelPerSecond / rec->samplingFrequency();
-
-		if ( diff > tolerance || poly == NULL ) {
-			push_back(QPolygon());
-			poly = &back();
-
-			x_prev = -x0;
-			y_prev = int(_baseline-yscl*(f[0]-amplOffset));
-			y_min = y_prev;
-			y_max = y_prev;
-
-			x_out = x_prev;
-			y_out = y_prev;
-
-			poly->append(QPoint(x_prev, y_prev));
-			i = 1;
-		}
-		else
-			i = 0;
-
-		if ( optimization ) {
-			for ( ; i < nsamp; ++i ) {
-				x_pos = int(i*dx) - x0;
-				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
-
-				if ( y_pos != y_out ) {
-					// last output differs from the last sample?
-					if ( x_out != x_prev  ) {
-						x_out = x_prev;
-						poly->append(QPoint(x_out, y_out));
-					}
-
-					// last output differs from the current draw position?
-					if ( x_out != x_pos ) {
-						if ( y_min != y_out ) {
-							y_out = y_min;
-							poly->append(QPoint(x_out, y_out));
-						}
-						if ( y_max != y_out ) {
-							y_out = y_max;
-							poly->append(QPoint(x_out, y_out));
-						}
-						if ( y_prev != y_out ) {
-							y_out = y_prev;
-							poly->append(QPoint(x_out, y_out));
-						}
-
-						x_out = x_pos;
-
-						if ( y_pos != y_out ) {
-							y_out = y_pos;
-							poly->append(QPoint(x_out, y_pos));
-						}
-
-						y_min = y_max = y_out;
-					}
-					else {
-						// update y min/max range
-						if ( y_pos < y_min ) y_min = y_pos;
-						else if ( y_pos > y_max ) y_max = y_pos;
-					}
-				}
-				else {
-					if ( y_min != y_out ) {
-						y_out = y_min;
-						poly->append(QPoint(x_out, y_out));
-						y_min = y_out;
-					}
-					if ( y_max != y_out ) {
-						y_out = y_max;
-						poly->append(QPoint(x_out, y_out));
-						y_max = y_out;
-					}
-					if ( y_prev != y_out ) {
-						y_out = y_min = y_max = y_prev;
-						poly->append(QPoint(x_out, y_out));
-					}
-				}
-
-				x_prev = x_pos;
-				y_prev = y_pos;
-			}
-
-			if ( x_out != x_prev )
-				poly->append(QPoint(x_prev, y_prev));
-		}
-		else {
-			for ( ; i < nsamp; ++i ) {
-				x_pos = int(i*dx) - x0;
-				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
-				poly->append(QPoint(x_pos, y_pos));
-			}
-		}
-
-		if ( poly->isEmpty() )
-			pop_back();
-
-		lastIt = it;
-	}
-
-	if ( !empty() ) {
-		if ( skipCount )
-			front().remove(0, skipCount);
-
-		if ( gaps ) {
-			for ( size_t i = 1; i < size(); ++i )
-				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
-		}
-	}
-
-	_tx = _ty = 0;
-
-	if ( timingQuality ) {
-		if ( timingQualityRecordCount )
-			*timingQuality /= timingQualityRecordCount;
-		else
-			*timingQuality = -1;
-	}
+	static Core::Time invalidTime;
+	create(records, invalidTime, invalidTime, pixelPerSecond,
+	       amplMin, amplMax, amplOffset, height, timingQuality,
+	       gaps, optimization);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::create(RecordSequence const *records,
                             const Core::Time &start,
                             const Core::Time &end,
@@ -480,7 +203,7 @@ void RecordPolyline::create(RecordSequence const *records,
 		yscl = 0;
 	}
 	else {
-		yscl = height/amplHeight;
+		yscl = (height-1)/amplHeight;
 		_baseline = (int)(amplMax*yscl);
 	}
 
@@ -492,30 +215,40 @@ void RecordPolyline::create(RecordSequence const *records,
 	int timingQualityRecordCount = 0;
 	if ( timingQuality ) *timingQuality = 0;
 
-	int x_prev;
-	int y_prev;
-	int y_min;
-	int y_max;
+	int y_min = 0;
+	int y_max = 0;
 
 	int x_out = 0;
 	int y_out = 0;
 
-	int x_pos;
-	int y_pos;
+	int x_pos = 0;
+	int y_pos = 0;
 
 	int i;
+	int collapsedSamples = 0;
+	double startOfs = 0;
+	double endOfs = 0;
 
 	for( ; it != records->end(); ++it ) {
-		const Record* rec = it->get();
-		const Record* lastRec = lastIt->get();
+		const Record *rec = it->get();
+		const Record *lastRec = lastIt->get();
 
 		// Skip records that are out of time window [start:end]
-		try {
-			if ( rec->endTime() <= start ) continue;
+		if ( start.valid() ) {
+			try {
+				if ( rec->endTime() <= start ) continue;
+			}
+			catch ( ... ) { continue; }
+			startOfs = double(start-rec->startTime());
 		}
-		catch ( ... ) { continue; }
+		else
+			startOfs = double(records->front()->startTime()-rec->startTime());
 
-		if ( rec->startTime() >= end ) break;
+		double dt = 1.0/rec->samplingFrequency();
+		if ( end.valid() ) {
+			if ( rec->startTime() >= end ) break;
+			endOfs = double(rec->endTime()-end) - dt;
+		}
 
 		if ( timingQuality && rec->timingQuality() >= 0 ) {
 			*timingQuality += rec->timingQuality();
@@ -534,10 +267,6 @@ void RecordPolyline::create(RecordSequence const *records,
 		catch ( ... ) {
 			diff = tolerance*2;
 		}
-
-		double dt = 1.0/rec->samplingFrequency();
-		double startOfs = double(start-rec->startTime());
-		double endOfs = double(rec->endTime()-end) - dt;
 
 		const FloatArray *arr = (const FloatArray*)rec->data();
 		const float *f = arr->typedData();
@@ -564,90 +293,60 @@ void RecordPolyline::create(RecordSequence const *records,
 			push_back(QPolygon());
 			poly = &back();
 
-			x_prev = -x0;
-			y_prev = int(_baseline-yscl*(f[0]-amplOffset));
-			y_min = y_prev;
-			y_max = y_prev;
+			x_pos = -x0;
+			y_pos = _baseline-yscl*(f[0]-amplOffset);
+			y_min = y_pos;
+			y_max = y_pos;
 
-			x_out = x_prev;
-			y_out = y_prev;
+			x_out = x_pos;
+			y_out = y_pos;
 
-			poly->append(QPoint(x_prev, y_prev));
+			poly->append(QPoint(x_pos, y_pos));
 			i = 1;
 		}
 		else
 			i = 0;
 
 		if ( optimization ) {
-			for ( ; i<nsamp; ++i ) {
-				x_pos = int(i*dx) - x0;
-				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+			for ( ; i < nsamp; ++i ) {
+				x_pos = (i*dx) - x0;
+				y_pos = _baseline-yscl*(f[i]-amplOffset);
 
-				if ( y_pos != y_out ) {
-					// last output differs from the last sample?
-					if ( x_out != x_prev  ) {
-						x_out = x_prev;
-						poly->append(QPoint(x_out, y_out));
-					}
-
-					// last output differs from the current draw position?
-					if ( x_out != x_pos ) {
-						if ( y_min != y_out ) {
-							y_out = y_min;
-							poly->append(QPoint(x_out, y_out));
-						}
-						if ( y_max != y_out ) {
-							y_out = y_max;
-							poly->append(QPoint(x_out, y_out));
-						}
-						if ( y_prev != y_out ) {
-							y_out = y_prev;
-							poly->append(QPoint(x_out, y_out));
-						}
-
-						x_out = x_pos;
-
-						if ( y_pos != y_out ) {
-							y_out = y_pos;
-							poly->append(QPoint(x_out, y_pos));
-						}
-
-						y_min = y_max = y_out;
-					}
-					else {
-						// update y min/max range
-						if ( y_pos < y_min ) y_min = y_pos;
-						else if ( y_pos > y_max ) y_max = y_pos;
-					}
+				if ( (int)x_out == (int)x_pos ) {
+					// Points share the same pixel, just collect min/max
+					if ( y_pos < y_min ) y_min = y_pos;
+					else if ( y_pos > y_max ) y_max = y_pos;
+					++collapsedSamples;
 				}
 				else {
-					if ( y_min != y_out ) {
-						y_out = y_min;
-						poly->append(QPoint(x_out, y_out));
-						y_min = y_out;
+					if ( collapsedSamples ) {
+						// We want to draw from y_out to y_pos and taking
+						// y_min/y_max into account
+						if ( !(y_out <= y_min && y_pos >= y_max) &&
+						     !(y_out >= y_max && y_pos <= y_min) ) {
+							if ( y_out < y_pos ) {
+								poly->append(QPoint(x_out, y_min));
+								poly->append(QPoint(x_out, y_max));
+							}
+							else {
+								poly->append(QPoint(x_out, y_max));
+								poly->append(QPoint(x_out, y_min));
+							}
+						}
 					}
-					if ( y_max != y_out ) {
-						y_out = y_max;
-						poly->append(QPoint(x_out, y_out));
-						y_max = y_out;
-					}
-					if ( y_prev != y_out ) {
-						y_out = y_min = y_max = y_prev;
-						poly->append(QPoint(x_out, y_out));
-					}
+
+					poly->append(QPoint(x_pos, y_pos));
+					x_out = x_pos;
+					y_out = y_min = y_max = y_pos;
+
+					collapsedSamples = 0;
 				}
-
-				x_prev = x_pos;
-				y_prev = y_pos;
 			}
-
-			if ( x_out != x_prev )
-				poly->append(QPoint(x_prev, y_prev));
 		}
 		else {
 			for ( ; i < nsamp; ++i ) {
-				int x_pos = int(i*dx) - x0;
-				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+				x_pos = (i*dx) - x0;
+				y_pos = _baseline-yscl*(f[i]-amplOffset);
 				poly->append(QPoint(x_pos, y_pos));
 			}
 		}
@@ -658,17 +357,36 @@ void RecordPolyline::create(RecordSequence const *records,
 		lastIt = it;
 	}
 
+	if ( optimization && poly ) {
+		if ( collapsedSamples ) {
+			// We want to draw from y_out to y_pos and taking
+			// y_min/y_max into account
+			if ( !(y_out <= y_min && y_pos >= y_max) &&
+			     !(y_out >= y_max && y_pos <= y_min) ) {
+				if ( y_out < y_pos ) {
+					poly->append(QPoint(x_out, y_min));
+					poly->append(QPoint(x_out, y_max));
+				}
+				else {
+					poly->append(QPoint(x_out, y_max));
+					poly->append(QPoint(x_out, y_min));
+				}
+			}
+		}
+
+		if ( x_pos != x_out || y_pos != y_out )
+			poly->append(QPoint(x_pos, y_pos));
+	}
+
 	if ( !empty() ) {
 		if ( skipCount )
 			front().remove(0, skipCount);
 
 		if ( gaps ) {
-			for ( size_t i = 1; i < size(); ++i )
+			for ( int i = 1; i < size(); ++i )
 				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
 		}
 	}
-
-	_tx = _ty = 0;
 
 	if ( timingQuality ) {
 		if ( timingQualityRecordCount )
@@ -677,16 +395,19 @@ void RecordPolyline::create(RecordSequence const *records,
 			*timingQuality = -1;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace {
 
 template <typename T>
 inline
 void pushData(QPolygon *poly, const Record *rec, const Core::Time refTime,
               double pixelPerSecond, float multiplier, float amplOffset,
-              int baseline, double yscl)
-{
+              int baseline, double yscl) {
 	const TypedArray<T> *arr = (const TypedArray<T>*)rec->data();
 	T *f = (T*)arr->data();
 	int x0 = int(pixelPerSecond*double(refTime-rec->startTime()));
@@ -715,15 +436,19 @@ void pushData(QPolygon *poly, const Record *rec, const Core::Time refTime,
 }
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::createStepFunction(RecordSequence const *records, double pixelPerSecond,
                                         float amplMin, float amplMax, float amplOffset,
                                         int height, float multiplier) {
 	clear();
 
-	if (records == NULL) return;
-	if (records->size() == 0) return;
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
 	double yscl;
@@ -734,7 +459,7 @@ void RecordPolyline::createStepFunction(RecordSequence const *records, double pi
 		yscl = 0;
 	}
 	else {
-		yscl = height/amplHeight;
+		yscl = (height-1)/amplHeight;
 		_baseline = (int)(amplMax*yscl);
 	}
 
@@ -780,18 +505,20 @@ void RecordPolyline::createStepFunction(RecordSequence const *records, double pi
 		if ( skipCount )
 			front().remove(0, skipCount);
 	}
-
-	_tx = _ty = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::createSteps(RecordSequence const *records, double pixelPerSecond,
                                  float amplMin, float amplMax, float amplOffset,
                                  int height, QVector<QPair<int,int> >* gaps) {
 	clear();
 
-	if (records == NULL) return;
-	if (records->size() == 0) return;
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
 	double yscl;
@@ -802,7 +529,7 @@ void RecordPolyline::createSteps(RecordSequence const *records, double pixelPerS
 		yscl = 0;
 	}
 	else {
-		yscl = height/amplHeight;
+		yscl = (height-1)/amplHeight;
 		_baseline = (int)(amplMax*yscl);
 	}
 
@@ -862,15 +589,17 @@ void RecordPolyline::createSteps(RecordSequence const *records, double pixelPerS
 			front().remove(0, skipCount);
 
 		if ( gaps ) {
-			for ( size_t i = 1; i < size(); ++i )
+			for ( int i = 1; i < size(); ++i )
 				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
 		}
 	}
-
-	_tx = _ty = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::createSteps(RecordSequence const *records,
                                  const Core::Time &start, const Core::Time &end,
                                  double pixelPerSecond,
@@ -878,8 +607,8 @@ void RecordPolyline::createSteps(RecordSequence const *records,
                                  int height, QVector<QPair<int,int> >* gaps) {
 	clear();
 
-	if (records == NULL) return;
-	if (records->size() == 0) return;
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
 	double yscl;
@@ -890,7 +619,7 @@ void RecordPolyline::createSteps(RecordSequence const *records,
 		yscl = 0;
 	}
 	else {
-		yscl = height/amplHeight;
+		yscl = (height-1)/amplHeight;
 		_baseline = (int)(amplMax*yscl);
 	}
 
@@ -958,55 +687,493 @@ void RecordPolyline::createSteps(RecordSequence const *records,
 			front().remove(0, skipCount);
 
 		if ( gaps ) {
-			for ( size_t i = 1; i < size(); ++i )
+			for ( int i = 1; i < size(); ++i )
 				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
 		}
 	}
-
-	_tx = _ty = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordPolyline::draw(QPainter& p) {
+#ifdef DEBUG_POINTS
+	int cnt = 0;
+#endif
 	for ( iterator it = begin(); it != end(); ++it ) {
+#ifdef DEBUG_POINTS
+		cnt += (*it).size();
+#endif
 		p.drawPolyline(*it);
-
-		/*
-		printf("Points\n");
-		for ( int i = 0; i < it->count(); ++i ) {
-			p.drawEllipse((*it)[i].x()-2, (*it)[i].y()-2, 4, 4);
-			printf(" %d / %d\n", (*it)[i].x(), (*it)[i].y());
-		}
-		*/
 	}
+#ifdef DEBUG_POINTS
+	std::cerr << cnt << " pnt" << std::endl;
+#endif
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void RecordPolyline::drawGaps(QPainter& p, int yofs, int height, const QColor& gapColor, const QColor& overlapColor) {
-	for ( size_t i = 1; i < size(); ++i ) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolyline::drawGaps(QPainter& p, int yofs, int height, const QBrush& gapBrush, const QBrush& overlapBrush) {
+	for ( int i = 1; i < size(); ++i ) {
 		int x0 = (*this)[i-1].last().x();
 		int x1 = (*this)[i].first().x();
 		int width = x1 - x0;
 		if ( width < 0 ) {
 			x0 = x1;
 			width = -width;
-			p.fillRect(x0, _ty + yofs, width, height, overlapColor);
+			p.fillRect(x0, yofs, width, height, overlapBrush);
 		}
 		else {
 			if ( width < 1 ) width = 1;
-			p.fillRect(x0, _ty + yofs, width, height, gapColor);
+			p.fillRect(x0, yofs, width, height, gapBrush);
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void RecordPolyline::draw(QPainter& p, int yofs, int height, const QColor& gapColor, const QColor& overlapColor) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolyline::draw(QPainter& p, int yofs, int height, const QBrush& gapBrush, const QBrush& overlapBrush) {
 	draw(p);
-	drawGaps(p, yofs, height, gapColor, overlapColor);
+	drawGaps(p, yofs, height, gapBrush, overlapBrush);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-int RecordPolyline::baseline() const {
-	return _baseline;
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordPolylineF::RecordPolylineF() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::create(Record const *rec, double pixelPerSecond,
+                             float amplMin, float amplMax, float amplOffset,
+                             int height, float *timingQuality, bool optimization) {
+	clear();
+
+	if ( rec == NULL )
+		return;
+
+	// normalize peak-to-peak amplitude to height set using setHeight()
+	double yscl;
+	double amplHeight = amplMax - amplMin;
+
+	if ( amplHeight == 0.0 ) {
+		_baseline = height*0.5+0.5;
+		yscl = 0;
+	}
+	else {
+		yscl = (height-1)/amplHeight;
+		_baseline = amplMax*yscl+0.5;
+	}
+
+	QPolygonF *poly = NULL;
+
+	int nsamp = rec->sampleCount();
+
+	if ( nsamp == 0 ) return;
+
+	if ( timingQuality )
+		*timingQuality = rec->timingQuality();
+
+	push_back(QPolygonF());
+	poly = &back();
+
+	const FloatArray *arr = (const FloatArray*)rec->data();
+
+	float *f = (float*)arr->data();
+	float dx = pixelPerSecond / rec->samplingFrequency();
+
+	qreal x_pos, y_pos;
+
+	if ( optimization ) {
+		x_pos = 0;
+		y_pos = _baseline-yscl*(f[0]-amplOffset);
+
+		qreal y_min = y_pos;
+		qreal y_max = y_pos;
+
+		qreal x_out = x_pos;
+		qreal y_out = y_pos;
+
+		poly->append(QPointF(x_pos, y_pos));
+
+		int collapsedSamples = 0;
+
+		for ( int i = 1; i < nsamp; ++i ) {
+			x_pos = i*dx;
+			y_pos = _baseline-yscl*(f[i]-amplOffset);
+
+			if ( (int)x_out == (int)x_pos ) {
+				// Points share the same pixel, just collect min/max
+				if ( y_pos < y_min ) y_min = y_pos;
+				else if ( y_pos > y_max ) y_max = y_pos;
+				++collapsedSamples;
+			}
+			else {
+				if ( collapsedSamples ) {
+					// We want to draw from y_out to y_pos and taking
+					// y_min/y_max into account
+					if ( !(y_out <= y_min && y_pos >= y_max) &&
+					     !(y_out >= y_max && y_pos <= y_min) ) {
+						if ( y_out < y_pos ) {
+							poly->append(QPointF(x_out, y_min));
+							poly->append(QPointF(x_out, y_max));
+						}
+						else {
+							poly->append(QPointF(x_out, y_max));
+							poly->append(QPointF(x_out, y_min));
+						}
+					}
+				}
+
+				poly->append(QPointF(x_pos, y_pos));
+				x_out = x_pos;
+				y_out = y_min = y_max = y_pos;
+
+				collapsedSamples = 0;
+			}
+		}
+
+		if ( collapsedSamples ) {
+			// We want to draw from y_out to y_pos and taking
+			// y_min/y_max into account
+			if ( !(y_out <= y_min && y_pos >= y_max) &&
+			     !(y_out >= y_max && y_pos <= y_min) ) {
+				if ( y_out < y_pos ) {
+					poly->append(QPointF(x_out, y_min));
+					poly->append(QPointF(x_out, y_max));
+				}
+				else {
+					poly->append(QPointF(x_out, y_max));
+					poly->append(QPointF(x_out, y_min));
+				}
+			}
+		}
+
+		if ( x_pos != x_out || y_pos != y_out )
+			poly->append(QPointF(x_pos, y_pos));
+	}
+	else {
+		for ( int i = 0; i < nsamp; ++i ) {
+			x_pos = i*dx;
+			y_pos = _baseline-yscl*(f[i]-amplOffset);
+			poly->append(QPointF(x_pos, y_pos));
+		}
+	}
+
+	if ( poly->isEmpty() )
+		pop_back();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::create(RecordSequence const *records, double pixelPerSecond,
+                             float amplMin, float amplMax, float amplOffset,
+                             int height, float *timingQuality,
+                             QVector<QPair<qreal,qreal> >* gaps, bool optimization) {
+	static Core::Time invalidTime;
+	create(records, invalidTime, invalidTime, pixelPerSecond,
+	       amplMin, amplMax, amplOffset, height, timingQuality,
+	       gaps, optimization);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::create(RecordSequence const *records,
+                             const Core::Time &start, const Core::Time &end,
+                             double pixelPerSecond,
+                             float amplMin, float amplMax, float amplOffset,
+                             int height, float *timingQuality,
+                             QVector<QPair<qreal,qreal> >* gaps,
+                             bool optimization) {
+	clear();
+
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
+
+	// normalize peak-to-peak amplitude to height set using setHeight()
+	double yscl;
+	double amplHeight = amplMax - amplMin;
+
+	if ( amplHeight == 0.0 ) {
+		_baseline = height*0.5+0.5;
+		yscl = 0;
+	}
+	else {
+		yscl = (height-1)/amplHeight;
+		_baseline = amplMax*yscl+0.5;
+	}
+
+	int skipCount = 0;
+	RecordSequence::const_iterator it = records->begin();
+	RecordSequence::const_iterator lastIt = it;
+
+	QPolygonF *poly = NULL;
+	int timingQualityRecordCount = 0;
+	if ( timingQuality ) *timingQuality = 0;
+
+	qreal y_min = 0;
+	qreal y_max = 0;
+
+	qreal x_out = 0;
+	qreal y_out = 0;
+
+	qreal x_pos = 0;
+	qreal y_pos = 0;
+
+	int i;
+	int collapsedSamples = 0;
+	double startOfs = 0;
+	double endOfs = 0;
+
+	for( ; it != records->end(); ++it ) {
+		const Record *rec = it->get();
+		const Record *lastRec = lastIt->get();
+
+		// Skip records that are out of time window [start:end]
+		if ( start.valid() ) {
+			try {
+				if ( rec->endTime() <= start ) continue;
+			}
+			catch ( ... ) { continue; }
+			startOfs = double(start-rec->startTime());
+		}
+		else
+			startOfs = double(records->front()->startTime()-rec->startTime());
+
+		double dt = 1.0/rec->samplingFrequency();
+		if ( end.valid() ) {
+			if ( rec->startTime() >= end ) break;
+			endOfs = double(rec->endTime()-end) - dt;
+		}
+
+		if ( timingQuality && rec->timingQuality() >= 0 ) {
+			*timingQuality += rec->timingQuality();
+			++timingQualityRecordCount;
+		}
+
+		int nsamp = rec->sampleCount();
+		double tolerance = records->tolerance()/rec->samplingFrequency();
+		double diff;
+
+		if ( nsamp == 0 ) continue;
+
+		try {
+			diff = abs(double(rec->startTime() - lastRec->endTime()));
+		}
+		catch ( ... ) {
+			diff = tolerance*2;
+		}
+
+		const FloatArray *arr = (const FloatArray*)rec->data();
+		const float *f = arr->typedData();
+
+		// Cut front samples
+		if ( startOfs > 0 ) {
+			int sampleOfs = (int)(startOfs * rec->samplingFrequency());
+			if ( sampleOfs >= nsamp ) continue;
+			f += sampleOfs;
+			nsamp -= sampleOfs;
+			startOfs -= (sampleOfs * dt);
+		}
+
+		// Cut back samples
+		if ( endOfs > 0 ) {
+			nsamp -= (int)(endOfs * rec->samplingFrequency());
+			if ( nsamp <= 0 ) continue;
+		}
+
+		qreal x0 = pixelPerSecond*startOfs;
+		float dx = pixelPerSecond * dt;
+
+		if ( diff > tolerance || poly == NULL ) {
+			push_back(QPolygonF());
+			poly = &back();
+
+			x_pos = -x0;
+			y_pos = _baseline-yscl*(f[0]-amplOffset);
+			y_min = y_pos;
+			y_max = y_pos;
+
+			x_out = x_pos;
+			y_out = y_pos;
+
+			poly->append(QPointF(x_pos, y_pos));
+			i = 1;
+		}
+		else
+			i = 0;
+
+		if ( optimization ) {
+			for ( ; i < nsamp; ++i ) {
+				x_pos = (i*dx) - x0;
+				y_pos = _baseline-yscl*(f[i]-amplOffset);
+
+				if ( (int)x_out == (int)x_pos ) {
+					// Points share the same pixel, just collect min/max
+					if ( y_pos < y_min ) y_min = y_pos;
+					else if ( y_pos > y_max ) y_max = y_pos;
+					++collapsedSamples;
+				}
+				else {
+					if ( collapsedSamples ) {
+						qreal dist = x_pos - x_out;
+						// We want to draw from y_out to y_pos and taking
+						// y_min/y_max into account
+						if ( !(y_out <= y_min && y_pos >= y_max) &&
+						     !(y_out >= y_max && y_pos <= y_min) ) {
+							if ( y_out < y_pos ) {
+								poly->append(QPointF(x_out+dist*0.33333, y_min));
+								poly->append(QPointF(x_out+dist*0.66666, y_max));
+							}
+							else {
+								poly->append(QPointF(x_out+dist*0.33333, y_max));
+								poly->append(QPointF(x_out+dist*0.66666, y_min));
+							}
+						}
+					}
+
+					poly->append(QPointF(x_pos, y_pos));
+
+					x_out = x_pos;
+					y_out = y_min = y_max = y_pos;
+
+					collapsedSamples = 0;
+				}
+			}
+		}
+		else {
+			for ( ; i < nsamp; ++i ) {
+				x_pos = (i*dx) - x0;
+				y_pos = _baseline-yscl*(f[i]-amplOffset);
+				poly->append(QPointF(x_pos, y_pos));
+			}
+		}
+
+		if ( poly->isEmpty() )
+			pop_back();
+
+		lastIt = it;
+	}
+
+	if ( optimization && poly ) {
+		if ( collapsedSamples ) {
+			qreal dist = x_pos - x_out;
+			// We want to draw from y_out to y_pos and taking
+			// y_min/y_max into account
+			if ( !(y_out <= y_min && y_pos >= y_max) &&
+			     !(y_out >= y_max && y_pos <= y_min) ) {
+				if ( y_out < y_pos ) {
+					poly->append(QPointF(x_out+dist*0.33333, y_min));
+					poly->append(QPointF(x_out+dist*0.66666, y_max));
+				}
+				else {
+					poly->append(QPointF(x_out+dist*0.33333, y_max));
+					poly->append(QPointF(x_out+dist*0.66666, y_min));
+				}
+			}
+		}
+
+		if ( x_pos != x_out || y_pos != y_out )
+			poly->append(QPointF(x_pos, y_pos));
+	}
+
+	if ( !empty() ) {
+		if ( skipCount )
+			front().remove(0, skipCount);
+
+		if ( gaps ) {
+			for ( int i = 1; i < size(); ++i )
+				gaps->append(QPair<qreal,qreal>((*this)[i-1].last().x(), (*this)[i].first().x()));
+		}
+	}
+
+	if ( timingQuality ) {
+		if ( timingQualityRecordCount )
+			*timingQuality /= timingQualityRecordCount;
+		else
+			*timingQuality = -1;
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::draw(QPainter &p) {
+#ifdef DEBUG_POINTS
+	int cnt = 0;
+#endif
+	for ( iterator it = begin(); it != end(); ++it ) {
+#ifdef DEBUG_POINTS
+		cnt += (*it).size();
+#endif
+		p.drawPolyline(*it);
+	}
+#ifdef DEBUG_POINTS
+	std::cerr << cnt << " pnt" << std::endl;
+#endif
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::drawGaps(QPainter &p, int yofs, int height,
+                               const QBrush &gapBrush,
+                               const QBrush &overlapBrush) {
+	for ( int i = 1; i < size(); ++i ) {
+		qreal x0 = (*this)[i-1].last().x();
+		qreal x1 = (*this)[i].first().x();
+		qreal width = x1 - x0;
+		if ( width < 0 ) {
+			x0 = x1;
+			width = -width;
+			p.fillRect(x0, yofs, width, height, overlapBrush);
+		}
+		else {
+			if ( width < 1 ) width = 1;
+			p.fillRect(x0, yofs, width, height, gapBrush);
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordPolylineF::draw(QPainter &p, int yofs, int height,
+                           const QBrush &gapBrush,
+                           const QBrush &overlapBrush) {
+	draw(p);
+	drawGaps(p, yofs, height, gapBrush, overlapBrush);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

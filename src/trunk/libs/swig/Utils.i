@@ -10,17 +10,19 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module Utils
+%module(package="seiscomp3") Utils
 
 %{
 #include "seiscomp3/utils/files.h"
 #include "seiscomp3/utils/timer.h"
+#include "seiscomp3/utils/units.h"
 %}
 
 %include stl.i
 %include "seiscomp3/core.h"
 %include "seiscomp3/utils/files.h"
 %include "seiscomp3/utils/timer.h"
+%include "seiscomp3/utils/units.h"
 
 %newobject Seiscomp::Util::stringToStreambuf;
 %newobject Seiscomp::Util::file2ostream;

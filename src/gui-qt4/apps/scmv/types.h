@@ -14,7 +14,11 @@
 #ifndef __TYPES_H___
 #define __TYPES_H___
 
+
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/enumeration.h>
+#endif
+#include <QObject>
 
 
 struct StationGlyphs {
@@ -42,19 +46,16 @@ class Singleton : public T {
 
 
 
-
 class ApplicationStatusImpl {
 	public:
 		MAKEENUM(
 			Mode,
 			EVALUES(
 				GROUND_MOTION,
-				EVENT,
 				QC
 			),
 			ENAMES(
 				"GOUND_MOTION",
-				"EVENT",
 				"QC"
 			)
 		);
@@ -103,7 +104,9 @@ struct QCStatus {
 
 
 
-class QCParameterImpl {
+class QCParameterImpl : public QObject {
+	Q_OBJECT
+
 	public:
 		MAKEENUM(
 			Parameter,
@@ -143,6 +146,10 @@ class QCParameterImpl {
 			)
 		);
 
+	signals:
+		void parameterChanged(int p);
+
+
 	public:
 		Parameter parameter() {
 			return _parameter;
@@ -150,6 +157,7 @@ class QCParameterImpl {
 
 		void setParameter(Parameter parameter) {
 			_parameter = parameter;
+			emit parameterChanged((int)_parameter);
 		}
 
 	protected:

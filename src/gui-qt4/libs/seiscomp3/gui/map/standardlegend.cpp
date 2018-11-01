@@ -143,8 +143,7 @@ StandardLegend::StandardLegend(QObject *parent) : Legend(parent) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StandardLegend::~StandardLegend() {
-	for ( int i = 0; i < _items.count(); ++i )
-		delete _items[i];
+	clear();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -155,6 +154,29 @@ StandardLegend::~StandardLegend() {
 void StandardLegend::addItem(StandardLegendItem *item) {
 	_items.append(item);
 	_layoutDirty = true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void StandardLegend::clear() {
+	for ( int i = 0; i < _items.count(); ++i )
+		delete _items[i];
+	_items.clear();
+	_layoutDirty = true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+StandardLegendItem *StandardLegend::takeItem(int index) {
+	StandardLegendItem *item = _items[index];
+	_items.removeAt(index);
+	return item;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -184,6 +206,16 @@ void StandardLegend::setOrientation(Qt::Orientation orientation) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void StandardLegend::update() {
+	if ( layer() )
+		updateLayout(layer()->size());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StandardLegend::updateLayout(const QSize &size) {
 	if ( !size.isValid() ) return;
 
@@ -191,6 +223,7 @@ void StandardLegend::updateLayout(const QSize &size) {
 	int ch = size.height();
 	int fontHeight = fm.height();
 	int rows;
+	int symbolSize = 0;
 
 	_columnWidth = 0;
 
@@ -198,14 +231,20 @@ void StandardLegend::updateLayout(const QSize &size) {
 		int itemWidth = fm.width(_items[i]->label);
 		if ( itemWidth > _columnWidth )
 			_columnWidth = itemWidth;
+
+		if ( _items[i]->size > symbolSize )
+			symbolSize = _items[i]->size;
 	}
+
+	symbolSize = qMax(symbolSize, fontHeight);
+	_symbolSize = QSize(symbolSize, symbolSize);
 
 	switch ( _orientation ) {
 		case Qt::Vertical:
 			_columns = 1;
 
-			_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+			_size.setWidth((_columnWidth + _symbolSize.width() + fontHeight/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*(_symbolSize.height() + fontHeight/2)+fontHeight/2, 0));
 
 			if ( ch <= 0 ) return;
 
@@ -213,8 +252,8 @@ void StandardLegend::updateLayout(const QSize &size) {
 			     && ((_maxColumns <= 0) || (_columns < _maxColumns))
 			     && (_columns < _items.size()) ) {
 				++_columns;
-				_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+				_size.setWidth((_columnWidth + _symbolSize.width() + fontHeight/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*(_symbolSize.height() + fontHeight/2)+fontHeight/2, 0));
 			}
 
 			break;
@@ -222,8 +261,8 @@ void StandardLegend::updateLayout(const QSize &size) {
 		case Qt::Horizontal:
 			_columns = _items.count();
 
-			_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+			_size.setWidth((_columnWidth + _symbolSize.width() + fontHeight/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*(_symbolSize.height() + fontHeight/2)+fontHeight/2, 0));
 
 			if ( ch <= 0 ) return;
 
@@ -234,8 +273,8 @@ void StandardLegend::updateLayout(const QSize &size) {
 			     && (_columns > 1) ) {
 				++rows;
 				_columns = (_items.count()+rows-1) / rows;
-				_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+				_size.setWidth((_columnWidth + _symbolSize.width() + fontHeight/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*(_symbolSize.height() + fontHeight/2)+fontHeight/2, 0));
 			}
 
 			break;
@@ -271,6 +310,8 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 	painter.save();
 	painter.setFont(font());
 
+	int rowHeight = qMax(_symbolSize.height(), fontHeight);
+
 	switch ( _orientation ) {
 		case Qt::Vertical:
 		{
@@ -278,7 +319,7 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 			int textWidth = rect.width() - fontHeight - fontHeight*3/2;
 
 			QRect symbolRect(rect.left() + fontHeight/2, 0, 0, 0);
-			QRect textRect(rect.left() + fontHeight*2, 0, 0, 0);
+			QRect textRect(rect.left() + fontHeight + _symbolSize.width(), 0, 0, 0);
 
 			for ( int c = 0; c < _columns; ++c ) {
 				symbolRect.setTop(rect.top() + fontHeight/2);
@@ -289,17 +330,17 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 				if ( cnt > itemsPerColumn ) cnt = itemsPerColumn;
 
 				for ( int i = 0; i < cnt; ++i, ++idx ) {
-					symbolRect.setWidth(fontHeight); symbolRect.setHeight(fontHeight);
-					textRect.setWidth(textWidth); textRect.setHeight(fontHeight);
+					symbolRect.setSize(_symbolSize);
+					textRect.setWidth(textWidth); textRect.setHeight(_symbolSize.height());
 
 					_items[idx]->draw(&painter, symbolRect, textRect);
 
-					symbolRect.setTop(symbolRect.top() + fontHeight*3/2);
-					textRect.setTop(textRect.top() + fontHeight*3/2);
+					symbolRect.setTop(symbolRect.top() + rowHeight + fontHeight/2);
+					textRect.setTop(textRect.top() + rowHeight + fontHeight/2);
 				}
 
-				symbolRect.setLeft(symbolRect.left() + _columnWidth + fontHeight*4/2);
-				textRect.setLeft(textRect.left() + _columnWidth + fontHeight*4/2);
+				symbolRect.setLeft(symbolRect.left() + _columnWidth + fontHeight + _symbolSize.width());
+				textRect.setLeft(textRect.left() + _columnWidth + fontHeight + _symbolSize.width());
 			}
 			break;
 		}
@@ -307,7 +348,7 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 		case Qt::Horizontal:
 		{
 			QRect symbolRect(rect.left() + fontHeight/2, 0, 0, 0);
-			QRect textRect(rect.left() + fontHeight/2 + fontHeight + fontHeight/2, 0, 0, 0);
+			QRect textRect(rect.left() + fontHeight/2 + _symbolSize.width() + fontHeight/2, 0, 0, 0);
 
 			for ( int c = 0; c < _columns; ++c ) {
 				symbolRect.setTop(rect.top() + fontHeight/2);
@@ -319,17 +360,17 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 
 				for ( int i = 0; i < cnt; ++i ) {
 					int idx = i*_columns+c;
-					symbolRect.setWidth(fontHeight); symbolRect.setHeight(fontHeight);
-					textRect.setWidth(_columnWidth); textRect.setHeight(fontHeight);
+					symbolRect.setSize(_symbolSize);
+					textRect.setWidth(_columnWidth); textRect.setHeight(_symbolSize.height());
 
 					_items[idx]->draw(&painter, symbolRect, textRect);
 
-					symbolRect.setTop(symbolRect.top() + fontHeight*3/2);
-					textRect.setTop(textRect.top() + fontHeight*3/2);
+					symbolRect.setTop(symbolRect.top() + rowHeight + fontHeight/2);
+					textRect.setTop(textRect.top() + rowHeight + fontHeight/2);
 				}
 
-				symbolRect.setLeft(symbolRect.left() + _columnWidth + fontHeight/2 + fontHeight + fontHeight/2);
-				textRect.setLeft(textRect.left() + _columnWidth + fontHeight/2 + fontHeight + fontHeight/2);
+				symbolRect.setLeft(symbolRect.left() + fontHeight/2 + _symbolSize.width() + fontHeight/2 + _columnWidth);
+				textRect.setLeft(textRect.left() + fontHeight/2 + _symbolSize.width() + fontHeight/2 + _columnWidth);
 			}
 			break;
 		}

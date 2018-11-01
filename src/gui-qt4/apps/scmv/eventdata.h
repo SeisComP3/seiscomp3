@@ -66,12 +66,14 @@ class EventData : public Data<Seiscomp::DataModel::Event> {
 	public:
 		EventData(Seiscomp::DataModel::Event* event,
 		          Seiscomp::Gui::OriginSymbol* originSymbol,
-		          Seiscomp::Gui::TensorSymbol* tensorSymbol)
+		          Seiscomp::Gui::TensorSymbol* tensorSymbol,
+		          bool isVisible = true)
 		: Data<Seiscomp::DataModel::Event>(event)
 		, _originSymbolRef(originSymbol)
 		, _tensorSymbolRef(tensorSymbol)
 		, _isActive(false)
 		, _isSelected(false)
+		, _isVisible(isVisible)
 		{}
 
 	public:
@@ -99,6 +101,14 @@ class EventData : public Data<Seiscomp::DataModel::Event> {
 			_isSelected = val;
 		}
 
+		bool isVisible() const {
+			return _isVisible;
+		}
+
+		void setVisible(bool val) {
+			_isVisible = val;
+		}
+
 		Seiscomp::Gui::OriginSymbol* originSymbol() const {
 			return _originSymbolRef;
 		}
@@ -113,6 +123,7 @@ class EventData : public Data<Seiscomp::DataModel::Event> {
 
 		bool _isActive;
 		bool _isSelected;
+		bool _isVisible;
 };
 
 
@@ -163,7 +174,8 @@ class EventDataRepository {
 
 		bool addEvent(Seiscomp::DataModel::Event* event,
 		              Seiscomp::Gui::OriginSymbol* originSymbol,
-		              Seiscomp::Gui::TensorSymbol* tensorSymbol);
+		              Seiscomp::Gui::TensorSymbol* tensorSymbol,
+		              bool passedFilter);
 		void addOrigin(Seiscomp::DataModel::Origin* origin);
 		void addFocalMechanism(Seiscomp::DataModel::FocalMechanism* fm);
 		void addMagnitude(Seiscomp::DataModel::Magnitude* magnitude);

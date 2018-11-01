@@ -71,15 +71,15 @@ class Comment : public Core::BaseObject {
 
 		//! XML tag: BeginEffectiveTime
 		void setBeginEffectiveTime(const OPT(DateTime)& beginEffectiveTime);
-		DateTime beginEffectiveTime() const throw(Seiscomp::Core::ValueException);
+		DateTime beginEffectiveTime() const;
 
 		//! XML tag: EndEffectiveTime
 		void setEndEffectiveTime(const OPT(DateTime)& endEffectiveTime);
-		DateTime endEffectiveTime() const throw(Seiscomp::Core::ValueException);
+		DateTime endEffectiveTime() const;
 
 		//! XML tag: id
 		void setId(const OPT(int)& id);
-		int id() const throw(Seiscomp::Core::ValueException);
+		int id() const;
 
 	
 	// ------------------------------------------------------------------

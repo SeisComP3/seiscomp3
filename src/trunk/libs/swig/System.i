@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module System
+%module(package="seiscomp3") System
 
 //
 // includes

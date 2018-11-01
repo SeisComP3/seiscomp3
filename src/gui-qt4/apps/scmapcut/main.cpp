@@ -326,13 +326,12 @@ bool MapCut::run() {
 		              _margins.width()*2, _margins.height()*2);
 	}
 
+
 	Map::ImageTreePtr mapTree = new Map::ImageTree(mapsDesc());
 
 	_canvas = new Map::Canvas(mapTree.get());
 	_canvas->setParent(this);
 	_canvas->setSize(_dim.width(), _dim.height());
-
-	_image = QImage(_canvas->size(), QImage::Format_ARGB32);
 
 	setupView(_canvas, QRectF(_reg.left(),_reg.top(),_reg.width(),_reg.height()));
 
@@ -362,7 +361,7 @@ bool MapCut::run() {
 		return Application::run();
 	}
 
-	if ( !_image.save(_output.c_str(), NULL, 100) ) {
+	if ( !_canvas->buffer().save(_output.c_str(), NULL, 100) ) {
 		cerr << "Saving the image failed" << endl;
 		return false;
 	}
@@ -372,7 +371,7 @@ bool MapCut::run() {
 
 
 void MapCut::renderCanvas() {
-	QPainter p(&_image);
+	QPainter p(&_canvas->buffer());
 	_canvas->draw(p);
 }
 
@@ -415,7 +414,7 @@ void MapCut::drawArrivals(QPainter *p) {
 			                          _org->latitude(), _org->longitude(),
 			                          &lat, &lon);
 
-			c->drawGeoLine(*p, QPointF(_symbol->longitude(), _symbol->latitude()), QPointF(lon,lat));
+			c->drawLine(*p, QPointF(_symbol->longitude(), _symbol->latitude()), QPointF(lon,lat));
 		}
 		catch ( ... ) {}
 	}

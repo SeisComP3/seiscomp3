@@ -15,6 +15,7 @@
 
 #include <string>
 #include <seiscomp3/core.h>
+#include <iostream>
 
 
 namespace Seiscomp {
@@ -26,8 +27,18 @@ SC_SYSTEM_CORE_API char getShortPhaseName(const std::string &phase);
 template <class T, class A>
 T join(const A &begin, const A &end, const T &glue);
 
+template <typename T>
+void toHex(std::string &out, T v);
+
+
+extern char HEXCHARS[];
+
+
 }
 }
+
+
+#include <seiscomp3/utils/misc.ipp>
 
 
 #endif

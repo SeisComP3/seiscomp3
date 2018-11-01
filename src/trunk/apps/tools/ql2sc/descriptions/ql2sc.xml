@@ -13,10 +13,12 @@
 					Number of public objects to cache.
 				</description>
 			</parameter>
-			<parameter name="batchSize" type="int" default="200">
+			<parameter name="batchSize" type="int" default="2000">
 				<description>
 					Maximum number of notifiers to batch in one message. If set
-					to 0 no size limit is enforced.
+					to 0 no size limit is enforced. Make sure to not hit the
+					overall message size limited of 16MiB which is enforced by
+					the messaging system.
 				</description>
 			</parameter>
 			<parameter name="hosts" type="list:string">
@@ -89,7 +91,7 @@
 							time      := %Y,%m,%d[,%H,%M,%S,%f]
 						</description>
 					</parameter>
-					<parameter name="routingTable" type="list:string" default="Pick:IMPORT_GROUP,Amplitude:IMPORT_GROUP,Origin:LOCATION,StationMagnitude:MAGNITUDE,Magnitude:MAGNITUDE">
+					<parameter name="routingTable" type="list:string" default="Pick:IMPORT_GROUP,Amplitude:IMPORT_GROUP,FocalMechanism:FOCMECH,Origin:LOCATION">
 						<description>
 							Maps datamodel class names to messaging groups. For unmapped objects
 							the mapping of their parent objects is evaluated recursively. Objects

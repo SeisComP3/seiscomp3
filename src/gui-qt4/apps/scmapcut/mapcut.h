@@ -59,7 +59,6 @@ class MapCut : public Seiscomp::Gui::Application {
 		QRectF      _reg;
 		QSizeF      _margins;
 		QSize       _dim;
-		QImage      _image;
 
 		bool        _htmlArea;
 

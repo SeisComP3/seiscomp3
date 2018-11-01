@@ -1,21 +1,21 @@
 import_inv is a wrapper for inventory converters. Inventory converters convert
 an input format such as
 
-+-------------------+-------------------------------------------------------------------+
-| Format            | Description                                                       |
-+===================+===================================================================+
-| sc3               | `SeisComP3 inventory XML <http://geofon.gfz-potsdam.de/schema/>`_ |
-+-------------------+-------------------------------------------------------------------+
-| key               | SeisComP station keys files (key version 2.5)                     |
-+-------------------+-------------------------------------------------------------------+
-| arclink           | Arclink inventory XML                                             |
-+-------------------+-------------------------------------------------------------------+
-| nettab            | GEOFON nettabs                                                    |
-+-------------------+-------------------------------------------------------------------+
-| dlsv              | `dataless SEED <http://www.iris.edu/data/dataless.htm>`_          |
-+-------------------+-------------------------------------------------------------------+
-| fdsnxml           | `FDSN StationXML <http://www.fdsn.org/xml/station/>`_             |
-+-------------------+-------------------------------------------------------------------+
++-------------------+--------------------------------------------------------------------+
+| Format            | Description                                                        |
++===================+====================================================================+
+| sc3               | SeisComP3 inventory XML, schema: :file:`$SEISCOMP_ROOT/share/xml/` |
++-------------------+--------------------------------------------------------------------+
+| key               | SeisComP station keys files (key version 2.5)                      |
++-------------------+--------------------------------------------------------------------+
+| arclink           | Arclink inventory XML                                              |
++-------------------+--------------------------------------------------------------------+
+| nettab            | GEOFON nettabs                                                     |
++-------------------+--------------------------------------------------------------------+
+| dlsv              | `dataless SEED <http://www.iris.edu/data/dataless.htm>`_           |
++-------------------+--------------------------------------------------------------------+
+| fdsnxml           | `FDSN StationXML <http://www.fdsn.org/xml/station/>`_              |
++-------------------+--------------------------------------------------------------------+
 
 to SeisComP3 inventory XML which is the read by the trunk config module to
 synchronize the local inventory file pool with the central inventory database.

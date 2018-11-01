@@ -27,7 +27,7 @@ Pick filtering
 Each incoming pick is filtered, i.e. it is checked if a pick is outdated
 and if the complete set of associated amplitudes is present already. If
 a station produces picks extremely often, these are considered to be more
-likely glitches and result in an increased SNR threshold.
+likely glitches and result in an increased :term:`SNR` threshold.
 
 Association 
 -----------
@@ -63,10 +63,12 @@ actually correspond to "P" arrivals. It may as well be a coincidental match
 caused by the coarseness of the grid or possible contamination by picked noise.
 Therefore, a location program (LocSAT) is run in order to try a location and
 test if the set of picks indeed forms a consistent hypocenter. If the pick
-residual RMS is too large, an improvement is attempted by excluding each of
+residual :term:`RMS` is too large, an improvement is attempted by excluding each of
 the contributing picks once to test if a reduction in RMS can be achieved.
 If the new origin meets all requirements, it is accepted as new seismic event
-location.[[br]]The grid points are specified in a text file "grid.txt".
+location.
+
+The grid points are specified in a text file "grid.txt".
 The default file shipped with scautoloc defines a grid with globally even
 distributed points at the surface, and depth points confined to regions of
 known deep seismicity. It may be modified, but should not comprise too many
@@ -83,7 +85,8 @@ processing step, it is also attempted to associate phases which slipped through
 during the first association attempt, e.g. because the initial location was
 incorrect. If the origin contains a sufficient number of arrivals to assume
 a reasonably well location result, scautoloc additionally tries to associate
-picks as secondary phases such as "pP". Such secondary phases are only "weakly
+picks as secondary phases such as :term:`pP <pP phase>`. Such secondary phases
+are only "weakly
 associated", i.e. these phases are not used for the location. For the analyst,
 however, it is useful to have possible “pP” phases predefined.
 
@@ -99,17 +102,17 @@ the "qualities" of concurring origins. These criteria are combined in an
 internal origin score, which is based on properties of the picks themselves
 in the context of the respective origin (residuals, RMS, azimuthal gaps).
 In addition, the amplitudes provide valuable means of comparing origin
-qualities. Obviously, a pick with a high SNR will less likely be a transient
+qualities. Obviously, a pick with a high :term:`SNR` will less likely be a transient
 burst of noise than a pick merely exceeding the SNR threshold. A high-SNR
 pick thus increases the origin score. Similarly, a pick associated to a large
 absolute amplitude is more likely to correspond to a real seismic onset,
 especially in case of simultaneous, large-amplitude observations at neighboring
 stations. A special case arises, when several nearby stations report amplitudes
 above a certain “XXL threshold”. For details see the section
-"Preliminary origins".
+:ref:`Preliminary origins <sec-scautoloc-prelim-origins>`.
 The amplitudes used by scautoloc are of type "snr" and "mb", corresponding
 to the (relative, unit-less) SNR amplitude and the (absolute) "mb" amplitude,
-respectively. These two amplitudes are provided by [#scautopick scautopick].
+respectively. These two amplitudes are provided by :ref:`scautopick`.
 In case of a setup in which scautopick is replaced by a different automatic
 picker, these two amplitudes must nevertheless be provided to scautoloc.
 Otherwise, the picks are not used. At the moment this is a strict requirement,
@@ -167,23 +170,28 @@ create new events within 90°. The GE stations can create events at any distance
 except for the rather noisy station HLG in the network GE, which is restricted
 to 10°. By setting the 3rd column to 0, TE RGN is ignored by scautoloc.
 
+.. _sec-scautoloc-prelim-origins:
+
 Preliminary origins
 ===================
 
 Usually, scautoloc will not report origins with less than a certain
-number of defining phases (specified by autoloc.minPhaseCount),
+number of defining phases (specified by :confval:`autoloc.minPhaseCount`),
 typically 6-8 phases, with 6 being the absolute minimum.  However,
 in case of potentially dangerous events, it may be desirable to
 receive "heads up" alert prior to reaching the minimum phase count,
 especially in a tsunami warning context. If very large amplitudes
 are registered at a sufficient number of stations, it is possible to
-produce preliminary origins (hereafter called ~@~\XXL events~@~])
-based on less than 6 picks.[[br]]Prerequisite is that all these
-picks have extraordinary large amplitudes and SNR and lie within a
-relatively small region. Such picks are hereafter called “XXL
-picks”. A pick is internally tagged as “XXL pick” if its
+produce preliminary origins (hereafter called :term:`XXL events<XXL event>`)
+based on less than 6 picks.
+
+Prerequisite is that all these picks have extraordinary large amplitudes of type
+:confval:`autoloc.amplTypeAbs` and :term:`SNR` and lie within a
+relatively small region. Such picks are hereafter called :term:`XXL picks<XXL pick>`.
+A pick is internally tagged as “XXL pick” if its
 amplitude exceeds a certain threshold (specified by
-autoloc.thresholdXXL) and has a SNR > 8. For larger SNR picks with
+:confval:`autoloc.xxl.minAmplitude`) and has a SNR > :confval:`autoloc.xxl.minSNR`.
+For larger SNR picks with
 smaller amplitude can reach the XXL tag, because it is justified to
 treat a large-SNR pick as XXL pick even if its amplitude is somewhat
 below the XXL amplitude threshold. The XXL criterion should be
@@ -230,12 +238,14 @@ Setting a = b = 0, then Δt is always zero, meaning there is never a delay in
 sending new solutions. This is not desirable. Setting a = 0.5, each pick will
 increase the time interval until the next solution will be sent by 0.5s. This
 means that scautoloc will wait 10 seconds after an origin with 20 picks is sent.
+The values for a and b can be configured by :confval:`autoloc.publicationIntervalTimeSlope`
+and :confval:`autoloc.publicationIntervalTimeIntercept`, respectively.
 
 Housekeeping
 ============
 
 scautoloc keeps objects in memory only for a certain amount of time. This time
-span is specified in seconds in autoloc.maxAge. The default value is 21600
+span is specified in seconds in :confval:`autoloc.maxAge`. The default value is 21600
 seconds (6 hours). After this time, unassociated picks expire. Newly arriving
 picks older than that (e.g. in the case of high data latencies) are ignored.
 Origins will live slightly longer, including the picks associated to them.
@@ -244,7 +254,7 @@ stations, the expiration time should be chosen long enough to accommodate
 late picks. On the other hand, the memory usage for large networks may be a
 concern as well. scautoloc periodically cleans up its memory from expired
 objects. The time interval between subsequent housekeepings is specified in
-autoloc.cleanupInterval in seconds.
+ref:`autoloc.cleanupInterval` in seconds.
 
 Test mode
 =========
@@ -261,7 +271,7 @@ Offline mode
 scautoloc normally runs as a daemon in the background, continuously reading
 picks and amplitudes and processing them in real time. However, scautoloc
 may also be operated in offline mode. This is useful for debugging. Offline
-mode is activated by setting autoloc.offline to true or by adding the
+mode is activated by setting :confval:`autoloc.offline` to true or by adding the
 parameter --offline to the command line. When operated in offline mode,
 scautoloc will connect neither to the messaging nor to the database. Instead,
 it reads picks in the pick file format from standard input. Example for
@@ -300,7 +310,7 @@ example.
        GE CEU 35.8987 -5.3731 320.0
        GE CISI -7.5557 107.8153 0.0
   
-The location of this file is specified in autoloc.stationLocations or on the
+The location of this file is specified in :confval:`autoloc.stationLocations` or on the
 command line using --station-locations
 
 
@@ -351,7 +361,7 @@ can be overridden in scautoloc.cfg:
    autoloc.amplTypeAbs = mb
 
 If for instance an alternate picker implementation doesn't produce "mb"-type
-absolute amplitude but e.g. "xy", then autoloc.amplTypeAbs needs to be set to
+absolute amplitude but e.g. "xy", then :confval:`autoloc.amplTypeAbs` needs to be set to
 "xy" to have them recognized by scautoloc.
 
 Currently there **must** be an absolute and a relative amplitude for every pick.

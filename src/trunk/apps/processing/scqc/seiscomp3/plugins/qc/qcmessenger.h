@@ -95,14 +95,9 @@ class SC_QCPLUGIN_API QcIndexMap {
 DEFINE_SMARTPOINTER(QcMessenger);
 
 class SC_QCPLUGIN_API QcMessenger : public Core::BaseObject {
-	DECLARE_SC_CLASS(QcMessenger);
-
 	public:
-		//! Default Constructor
-		QcMessenger();
-		
 		//! Initializing Constructor
-		QcMessenger(const QcApp* app);
+		QcMessenger(QcApp* app);
 		
 		//! Attach object to message and schedule sending 
 		//! (if notifier is true send as notifier message; as data message otherwise)
@@ -112,7 +107,7 @@ class SC_QCPLUGIN_API QcMessenger : public Core::BaseObject {
 		void scheduler();
 
 		//! Send Qc Message
-		bool sendMessage(Message* msg) throw (ConnectionException);
+		bool sendMessage(Message* msg);
 
 		void flushMessages();
 
@@ -120,9 +115,10 @@ class SC_QCPLUGIN_API QcMessenger : public Core::BaseObject {
 		QcIndexMap _qcIndex;
 		NotifierMessagePtr _notifierMsg;
 		DataMessagePtr _dataMsg;
-		const QcApp* _app;
+		QcApp* _app;
 		Core::TimeSpan _sendInterval;
 		int _maxSize;
+		int _syncCounter;
 		Util::StopWatch _timer;
 
 };

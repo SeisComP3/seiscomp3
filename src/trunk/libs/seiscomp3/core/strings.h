@@ -35,7 +35,7 @@ const std::string WHITESPACE = "\t\n\v\f\r ";
  * Converts a value into a string. Conversions are supported
  * for following types:
  *   char
- *   int, long, time_t
+ *   int, long
  *   float, double
  *   Core::Time, std::complex
  *   and any other type that is supported by std::ostream
@@ -52,7 +52,6 @@ std::string toString(const std::complex<T>& value);
 
 SC_SYSTEM_CORE_API std::string toString(const std::string& value);
 SC_SYSTEM_CORE_API std::string toString(bool value);
-SC_SYSTEM_CORE_API std::string toString(time_t value);
 SC_SYSTEM_CORE_API std::string toString(const Time& value);
 SC_SYSTEM_CORE_API std::string toString(const Enumeration& value);
 
@@ -70,7 +69,7 @@ std::string toString(const ::boost::optional<T> &v);
  * Converts a string into a value. Conversions are supported
  * for following types:
  *   char
- *   int, long, time_t
+ *   int, long
  *   float, double
  *   std::vector of all above types
  * IMPORTANT: integer types are converted in base 10!
@@ -84,7 +83,6 @@ bool fromString(T &value, const std::string &str);
 template <typename T>
 bool fromString(std::complex<T> &value, const std::string &str);
 
-SC_SYSTEM_CORE_API bool fromString(time_t &value, const std::string &str);
 SC_SYSTEM_CORE_API bool fromString(Time &value, const std::string &str);
 SC_SYSTEM_CORE_API bool fromString(Enumeration &value, const std::string &str);
 SC_SYSTEM_CORE_API bool fromString(std::string &value, const std::string &str);

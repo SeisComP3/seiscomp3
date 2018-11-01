@@ -124,6 +124,8 @@ class TraceDecorator : public RecordWidgetDecorator {
 
 		void drawDecoration(QPainter *painter, RecordWidget *widget) {
 			if ( _itemLabel->processor ) {
+				painter->setClipRect(widget->canvasRect());
+
 				int nbegin = widget->mapTime(_itemLabel->processor->trigger()+Core::TimeSpan(_itemLabel->processor->config().noiseBegin));
 				int nend = widget->mapTime(_itemLabel->processor->trigger()+Core::TimeSpan(_itemLabel->processor->config().noiseEnd));
 				int sbegin = widget->mapTime(_itemLabel->processor->trigger()+Core::TimeSpan(_itemLabel->processor->config().signalBegin));
@@ -161,6 +163,8 @@ class TraceDecorator : public RecordWidgetDecorator {
 
 					painter->drawText(boundingRect, Qt::AlignHCenter|Qt::AlignVCenter, _itemLabel->infoText);
 				}
+
+				painter->setClipping(false);
 			}
 		}
 
@@ -183,8 +187,11 @@ class MyRecordWidget : public RecordWidget {
 		void drawCustomBackground(QPainter &painter) {
 			if ( !_t1 || !_t2 ) return;
 
-			int x1 = mapTime(_t1);
-			int x2 = mapTime(_t2);
+			// The painter transform is set up that the upper left coordinate
+			// lies on the upper left coordinate of the trace canvas
+
+			int x1 = mapCanvasTime(_t1);
+			int x2 = mapCanvasTime(_t2);
 
 			//int y1 = streamYPos(currentRecords());
 			//int h = streamHeight(currentRecords());
@@ -1749,6 +1756,7 @@ AmplitudeView::Config::Config() {
 	timingQualityLow = Qt::darkRed;
 	timingQualityMedium = Qt::yellow;
 	timingQualityHigh = Qt::darkGreen;
+	ignoreDisabledStations = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1815,8 +1823,9 @@ void AmplitudeView::init() {
 
 	_ui.setupUi(this);
 
-	_ui.labelStationCode->setFont(SCScheme.fonts.heading3);
-	_ui.labelCode->setFont(SCScheme.fonts.normal);
+	QFont f(font());
+	f.setBold(true);
+	_ui.labelStationCode->setFont(f);
 
 	_settingsRestored = false;
 	_currentSlot = -1;
@@ -1874,9 +1883,18 @@ void AmplitudeView::init() {
 	connect(_connectionState, SIGNAL(customInfoWidgetRequested(const QPoint &)),
 	        this, SLOT(openConnectionInfo(const QPoint &)));
 
+	QWidget *wrapper = new QWidget;
+	wrapper->setBackgroundRole(QPalette::Base);
+	wrapper->setAutoFillBackground(true);
+
 	QBoxLayout* layout = new QVBoxLayout(_ui.frameTraces);
 	layout->setMargin(2);
 	layout->setSpacing(0);
+	layout->addWidget(wrapper);
+
+	layout = new QVBoxLayout(wrapper);
+	layout->setMargin(_ui.frameZoom->layout()->margin());
+	layout->setSpacing(6);
 	layout->addWidget(_recordView);
 
 	_searchStation = new QLineEdit();
@@ -1904,6 +1922,10 @@ void AmplitudeView::init() {
 	_currentRecord->setClippingEnabled(_ui.actionClipComponentsToViewport->isChecked());
 	_currentRecord->setMouseTracking(true);
 	_currentRecord->setContextMenuPolicy(Qt::CustomContextMenu);
+	_currentRecord->setRowSpacing(6);
+	_currentRecord->setAxisSpacing(6);
+	_currentRecord->setDrawAxis(true);
+	_currentRecord->setAxisPosition(RecordWidget::Left);
 
 	//_currentRecord->setFocusPolicy(Qt::StrongFocus);
 
@@ -1920,9 +1942,10 @@ void AmplitudeView::init() {
 	        this, SLOT(openRecordContextMenu(const QPoint &)));
 	*/
 
-	layout = new QVBoxLayout(_ui.frameCurrentTrace);
+	layout = new QVBoxLayout(_ui.frameCurrentRow);
 	layout->setMargin(0);
 	layout->setSpacing(0);
+	layout->addWidget(_currentRecord);
 
 	_timeScale = new TimeScale();
 	_timeScale->setSelectionEnabled(true);
@@ -1931,7 +1954,9 @@ void AmplitudeView::init() {
 	_timeScale->setSelectionHandleCount(4);
 	_timeScale->setSelectionHandleEnabled(2, false);
 
-	layout->addWidget(_currentRecord);
+	layout = new QVBoxLayout(_ui.frameTimeScale);
+	layout->setMargin(0);
+	layout->setSpacing(0);
 	layout->addWidget(_timeScale);
 
 	connect(_timeScale, SIGNAL(dragged(double)),
@@ -2181,6 +2206,7 @@ void AmplitudeView::init() {
 	connect(_ui.actionShowUsedStations, SIGNAL(triggered(bool)),
 	        this, SLOT(showUsedStations(bool)));
 
+	/*
 	connect(_ui.btnAmplScaleUp, SIGNAL(clicked()),
 	        this, SLOT(scaleAmplUp()));
 	connect(_ui.btnAmplScaleDown, SIGNAL(clicked()),
@@ -2191,6 +2217,7 @@ void AmplitudeView::init() {
 	        this, SLOT(scaleTimeDown()));
 	connect(_ui.btnScaleReset, SIGNAL(clicked()),
 	        this, SLOT(scaleReset()));
+	*/
 
 	connect(_ui.btnRowAccept, SIGNAL(clicked()),
 	        this, SLOT(confirmAmplitude()));
@@ -2266,6 +2293,9 @@ void AmplitudeView::init() {
 	        this, SLOT(firstConnectionEstablished()));
 	connect(&RecordStreamState::Instance(), SIGNAL(lastConnectionClosed()),
 	        this, SLOT(lastConnectionClosed()));
+
+	_ui.frameZoom->setBackgroundRole(QPalette::Base);
+	_ui.frameZoom->setAutoFillBackground(true);
 
 	if ( RecordStreamState::Instance().connectionCount() )
 		firstConnectionEstablished();
@@ -2387,7 +2417,7 @@ void AmplitudeView::setStrongMotionCodes(const std::vector<std::string> &codes) 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void AmplitudeView::showEvent(QShowEvent *e) {
 	// avoid truncated distance labels
-	int w1 = _ui.frameCurrentTraceLabel->width();
+	int w1 = _ui.frameZoomControls->sizeHint().width();
 	int w2 = 0;
 	QFont f(_ui.labelDistance->font()); // hack to get default font size
 	QFontMetrics fm(f);
@@ -2400,8 +2430,8 @@ void AmplitudeView::showEvent(QShowEvent *e) {
 	else
 		w2 = std::max(w2, fm.boundingRect(QString("155.5%1").arg(degrees)).width());
 
-	if (w2>w1)
-		_ui.frameCurrentTraceLabel->setFixedWidth(w2);
+	if ( w2 < w1 )
+		w2 = w1;
 
 	if ( !_settingsRestored ) {
 		QList<int> sizes;
@@ -2439,9 +2469,9 @@ void AmplitudeView::showEvent(QShowEvent *e) {
 		_settingsRestored = true;
 	}
 
-	_recordView->setLabelWidth(_ui.frameCurrentTraceLabel->width() +
-	                           _ui.frameCurrentTrace->frameWidth() +
-	                           _ui.frameCurrentTrace->layout()->margin());
+	_ui.frameZoomControls->setFixedWidth(w2);
+	_recordView->setLabelWidth(w2);
+	_currentRecord->setAxisWidth(w2 + _currentRecord->axisSpacing());
 
 	QWidget::showEvent(e);
 }
@@ -5720,7 +5750,7 @@ void AmplitudeView::receivedRecord(Seiscomp::Record *rec) {
 void AmplitudeView::addStations() {
 	if ( !_origin ) return;
 
-	SelectStation dlg(_origin->time(), _stations, this);
+	SelectStation dlg(_origin->time(), _config.ignoreDisabledStations, _stations, this);
 	dlg.setReferenceLocation(_origin->latitude(), _origin->longitude());
 	if ( dlg.exec() != QDialog::Accepted ) return;
 

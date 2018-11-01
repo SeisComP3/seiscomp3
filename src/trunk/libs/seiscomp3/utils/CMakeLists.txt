@@ -9,6 +9,7 @@ SET(UTILS_SOURCES
 	keyvalues.cpp
 	bindings.cpp
 	stringfirewall.cpp
+	units.cpp
 )
 
 SET(UTILS_HEADERS
@@ -24,6 +25,7 @@ SET(UTILS_HEADERS
 	keyvalues.h
 	bindings.h
 	stringfirewall.h
+	units.h
 )
 
 SC_SETUP_LIB_SUBDIR(UTILS)

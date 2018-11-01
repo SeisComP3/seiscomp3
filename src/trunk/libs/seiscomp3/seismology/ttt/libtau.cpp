@@ -99,21 +99,23 @@ void LibTau::initPath(const std::string &model) {
 	}
 	else if ( _initialized ) return;
 
-	std::string tablePath = Environment::Instance()->shareDir() +
-	                        "/ttt/" + model;
+	if ( !model.empty() ) {
+		std::string tablePath = Environment::Instance()->shareDir() +
+		                        "/ttt/" + model;
 
-	// Fill the handle structure with zeros
-	memset(&_handle, 0, sizeof(_handle));
-	int err = tabin(&_handle, tablePath.c_str());
-	if ( err ) {
-		std::ostringstream errmsg;
-		errmsg  << tablePath << ".hed and "
-			<< tablePath << ".tbl";
-		throw FileNotFoundError(errmsg.str());
+		// Fill the handle structure with zeros
+		memset(&_handle, 0, sizeof(_handle));
+		int err = tabin(&_handle, tablePath.c_str());
+		if ( err ) {
+			std::ostringstream errmsg;
+			errmsg  << tablePath << ".hed and " << tablePath << ".tbl";
+			throw FileNotFoundError(errmsg.str());
+		}
+
+		_initialized = true;
+		brnset(&_handle, "all");
 	}
 
-	_initialized = true;
-	brnset(&_handle, "all");
 	_model = model;
 }
 

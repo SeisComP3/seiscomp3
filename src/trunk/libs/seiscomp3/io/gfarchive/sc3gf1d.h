@@ -95,10 +95,17 @@ class SC_SYSTEM_CORE_API SC3GF1DArchive : public GFArchive {
 
 		typedef std::list<Request> RequestList;
 		typedef std::set<double> DoubleList;
+		typedef std::map<double, double> TTDepth;
+		typedef std::map<double, TTDepth> TTDistance;
+		typedef std::map<std::string, TTDistance> TTPhases;
 
 		struct ModelConfig {
+			ModelConfig() : travelTimesInitialized(false) {}
+
 			DoubleList distances;
 			DoubleList depths;
+			TTPhases   travelTimes;
+			bool       travelTimesInitialized;
 		};
 
 		typedef std::map<std::string, ModelConfig> ModelMap;

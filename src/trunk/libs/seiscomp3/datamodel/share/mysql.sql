@@ -620,13 +620,14 @@ CREATE TABLE Amplitude (
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
-	INDEX(timeWindow_reference),
-	INDEX(timeWindow_reference_ms),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
+
+CREATE INDEX Amplitude_timeWindow_reference ON Amplitude(timeWindow_reference,timeWindow_reference_ms);
+
 
 CREATE TABLE StationMagnitudeContribution (
 	_oid INTEGER(11) NOT NULL,
@@ -776,8 +777,7 @@ CREATE TABLE Pick (
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
-	INDEX(time_value),
-	INDEX(time_value_ms),
+	INDEX(time_value,time_value_ms),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
@@ -963,8 +963,7 @@ CREATE TABLE Origin (
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
-	INDEX(time_value),
-	INDEX(time_value_ms),
+	INDEX(time_value,time_value_ms),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
@@ -1104,10 +1103,8 @@ CREATE TABLE WaveformQuality (
 	windowLength DOUBLE,
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
-	INDEX(start),
-	INDEX(start_ms),
-	INDEX(end),
-	INDEX(end_ms),
+	INDEX(start,start_ms),
+	INDEX(end,end_ms),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,

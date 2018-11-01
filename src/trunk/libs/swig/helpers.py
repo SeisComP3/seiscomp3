@@ -102,11 +102,11 @@ except __builtin__.Exception:
     weakref_proxy = lambda x: x
 
 
-import Communication
-import Core
+import seiscomp3.Communication
+import seiscomp3.Core
 import DataModel
-import IO
-import Math
+import seiscomp3.IO
+import seiscomp3.Math
 
 def _readobj(obj, file):
     """_readobj(BaseObject obj, char const * file) -> bool"""

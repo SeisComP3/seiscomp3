@@ -12,14 +12,14 @@
 
 
 
-#ifndef _RECORDPOLYLINE_H_
-#define _RECORDPOLYLINE_H_
+#ifndef __SEISCOMP_GUI_RECORDPOLYLINE_H__
+#define __SEISCOMP_GUI_RECORDPOLYLINE_H__
 
-#include <vector>
 
 #include <QPen>
 #include <QPolygon>
 #include <QPainter>
+#include <QVector>
 
 #ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
@@ -33,66 +33,122 @@ namespace Seiscomp {
 namespace Gui {
 
 
-#define SPLOT_NORMALIZE  1
-#define SPLOT_WIGGLE     2 // FIXME probably obsolete
+DEFINE_SMARTPOINTER(AbstractRecordPolyline);
+class SC_GUI_API AbstractRecordPolyline : public Seiscomp::Core::BaseObject {
+	public:
+		virtual void draw(QPainter &) = 0;
+		virtual void drawGaps(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush) = 0;
+		virtual void draw(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush) = 0;
+		virtual bool isEmpty() const = 0;
 
-class SC_GUI_API RecordPolyline : public std::vector<QPolygon>
-{
-  public:
-	RecordPolyline();
+		qreal baseline() const;
 
-	//! translate the polyline w.r.t. the *original* coordinates
-	void translate(int x, int y);
-
-	//! creates the record polyline and returns the virtual height
-	//! of that polyline
-	void create(Record const *, double pixelPerSecond,
-	            float amplMin, float amplMax, float amplOffset,
-	            int height, float *timingQuality = NULL,
-	            bool optimization = true);
-
-	//! creates the record polyline and returns the virtual height
-	//! of that polyline
-	void create(RecordSequence const *, double pixelPerSecond,
-	            float amplMin, float amplMax, float amplOffset,
-	            int height, float *timingQuality = NULL,
-	            QVector<QPair<int,int> >* gaps = NULL,
-	            bool optimization = true);
-
-	void create(RecordSequence const *,
-	            const Core::Time &start,
-	            const Core::Time &end,
-	            double pixelPerSecond,
-	            float amplMin, float amplMax, float amplOffset,
-	            int height, float *timingQuality = NULL,
-	            QVector<QPair<int,int> >* gaps = NULL,
-	            bool optimization = true);
-
-	void createStepFunction(RecordSequence const *, double pixelPerSecond,
-	                        float amplMin, float amplMax, float amplOffset,
-	                        int height, float multiplier = 1.0);
-
-	void createSteps(RecordSequence const *, double pixelPerSecond,
-	                 float amplMin, float amplMax, float amplOffset,
-	                 int height, QVector<QPair<int,int> >* gaps = NULL);
-
-	void createSteps(RecordSequence const *,
-	                 const Core::Time &start,
-	                 const Core::Time &end,
-	                 double pixelPerSecond,
-	                 float amplMin, float amplMax, float amplOffset,
-	                 int height, QVector<QPair<int,int> >* gaps = NULL);
-
-	void draw(QPainter&);
-	void drawGaps(QPainter&, int yofs, int height, const QColor& gapColor, const QColor& overlapColor);
-	void draw(QPainter&, int yofs, int height, const QColor& gapColor, const QColor& overlapColor);
-
-	int baseline() const;
-
-  private:
-	int _tx, _ty;
-	int _baseline;
+	protected:
+		qreal _baseline;
 };
+
+
+DEFINE_SMARTPOINTER(RecordPolyline);
+class SC_GUI_API RecordPolyline : public AbstractRecordPolyline,
+                                  public QVector<QPolygon> {
+	public:
+		RecordPolyline();
+
+
+	public:
+		//! creates the record polyline and returns the virtual height
+		//! of that polyline
+		void create(Record const *, double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            bool optimization = true);
+
+		//! creates the record polyline and returns the virtual height
+		//! of that polyline
+		void create(RecordSequence const *, double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            QVector<QPair<int,int> >* gaps = NULL,
+		            bool optimization = true);
+
+		void create(RecordSequence const *,
+		            const Core::Time &start,
+		            const Core::Time &end,
+		            double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            QVector<QPair<int,int> >* gaps = NULL,
+		            bool optimization = true);
+
+		void createStepFunction(RecordSequence const *, double pixelPerSecond,
+		                        float amplMin, float amplMax, float amplOffset,
+		                        int height, float multiplier = 1.0);
+
+		void createSteps(RecordSequence const *, double pixelPerSecond,
+		                 float amplMin, float amplMax, float amplOffset,
+		                 int height, QVector<QPair<int,int> >* gaps = NULL);
+
+		void createSteps(RecordSequence const *,
+		                 const Core::Time &start,
+		                 const Core::Time &end,
+		                 double pixelPerSecond,
+		                 float amplMin, float amplMax, float amplOffset,
+		                 int height, QVector<QPair<int,int> >* gaps = NULL);
+
+
+	public:
+		void draw(QPainter&);
+		void drawGaps(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush);
+		void draw(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush);
+		bool isEmpty() const { return QVector<QPolygon>::isEmpty(); }
+};
+
+
+DEFINE_SMARTPOINTER(RecordPolylineF);
+class SC_GUI_API RecordPolylineF : public AbstractRecordPolyline,
+                                   public QVector<QPolygonF> {
+	public:
+		RecordPolylineF();
+
+
+	public:
+		//! creates the record polyline and returns the virtual height
+		//! of that polyline
+		void create(Record const *, double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            bool optimization = true);
+
+		//! creates the record polyline and returns the virtual height
+		//! of that polyline
+		void create(RecordSequence const *, double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            QVector<QPair<qreal,qreal> >* gaps = NULL,
+		            bool optimization = true);
+
+		void create(RecordSequence const *,
+		            const Core::Time &start,
+		            const Core::Time &end,
+		            double pixelPerSecond,
+		            float amplMin, float amplMax, float amplOffset,
+		            int height, float *timingQuality = NULL,
+		            QVector<QPair<qreal,qreal> >* gaps = NULL,
+		            bool optimization = true);
+
+
+	public:
+		void draw(QPainter &);
+		void drawGaps(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush);
+		void draw(QPainter &, int yofs, int height, const QBrush &gapBrush, const QBrush &overlapBrush);
+		bool isEmpty() const { return QVector<QPolygonF>::isEmpty(); }
+};
+
+
+inline qreal AbstractRecordPolyline::baseline() const {
+	return _baseline;
+}
+
 
 
 }

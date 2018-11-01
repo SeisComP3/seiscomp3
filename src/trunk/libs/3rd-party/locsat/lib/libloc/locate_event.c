@@ -93,16 +93,6 @@
  *		char ** list2;
  *		int     n2;
  *	----------------------------------------------------------------
- *	find_dist_:
- *		Make a crude distance determination from a given travel-time.
-
- *	void
- *	find_dist_ (phase_id, tcalc, delta, iterr)
- *		int	*phase_id;
- *		double	*tcalc;
- *		int	*iterr;
- *		double	*delta;
- *	----------------------------------------------------------------
  *	find_ttime_:
  *		Make a crude travel-time determination from a given distance.
 
@@ -120,15 +110,6 @@
  *	compute_ttime (distance, depth, phase)
  *		double	distance, depth;
  *		char	*phase;
- *	----------------------------------------------------------------
- *	extrap_ttime:
- *		Approximate a travel_time by linear extrapolation.
-
- *	double
- *	extrap_ttime (distance, depth, phase_id)
- *		double	distance;
- *		double	depth;
- *		int	phase_id;
  *	----------------------------------------------------------------
 
  * DIAGNOSTICS
@@ -177,6 +158,8 @@
 
 #include <stdlib.h>
 
+typedef int32_t ftnlen;
+
 #if WIN32
 void bzero(char *s, int n) {
 	memset(s, 0, n);
@@ -204,28 +187,6 @@ static char	SccsId[] = "@(#)locate_event.c	44.3	10/31/91 Copyright 1990 Science 
 #define TTerror3        14
 #define TTerror4	15
 #define SSerror1        16
-
-char * golocate_error_table[] =
-{
-/* 0 */	"NA",
-/* 1 */	"Locsat0:  Exceeded maximum iterations.",
-/* 2 */	"Locsat0:  Solution did not converge.",
-/* 3 */	"Locsat0:  Too few usable data.",
-/* 4 */	"Locsat0:  Too few data to constrain O.T.",
-/* 5 */	"Locsat0:  Insufficient data for a solution.",
-/* 6 */	"Locsat0:  SVD routine cannot decompose matrix.",
-/* 7 */	"Locate:  Warning - no observations to process.",
-/* 8 */	"Locate:  Bad assoc data.",
-/* 9 */	"Locate:  Bad origin data.",
-/*10 */	"Locate:  Bad origerr data.",
-/*11 */	"Locate:  Mismatch between arrival/assoc data.",
-/*12 */	"TT Tables:  Null wave id list.",
-/*13 */	"TT Tables:  Error opening tables.",
-/*14 */	"TT Tables:  Error reading tables, unexpected EOF.",
-/*15 */	"TT Tables:  Unknown error reading tables.",
-/*16 */ "Site Table:  Null station list."
-};
-
 
 #define	NULL_TIME	-9999999999.999
 #define	STRIKE_NULL	-1.0
@@ -258,36 +219,101 @@ static int	first_table_read = TRUE;
 static int	*ntbd;
 static int	*ntbz;
 static int	len_dir;
-int len_n_p_t = 9;
-static int	extrap_distance;
-static int	extrap_depth;
-static int	extrap_in_hole;
+static int len_n_p_t = 9;
 
-static char	*net;
-static char	*sta_id;
-static int	num_sta;
-static char	*cortyp;
-static int	sta_cor_level;
-static int	len_sta_id;
-static float	*sta_lat;
-static float	*sta_lon;
-static float	*sta_elev;
-static float	*sta_cor;
-static int	first_site_list = TRUE;
-
-extern void	*rdtttab();
-extern void	rdcortab_ ();
-extern void	*locsat0_();
+static char  *net;
+static char  *sta_id;
+static int    num_sta;
+static char  *cortyp;
+static int    sta_cor_level;
+static int    len_sta_id;
+static float *sta_lat;
+static float *sta_lon;
+static float *sta_elev;
+static float *sta_cor;
+static int    first_site_list = TRUE;
 
 int brack_(int *n, float *x, float *x0, int *ileft);
+int holint2_(int *phase_id,
+             int *do_extrapolate,
+             int *nd, /* Number of distance samples */
+             int *nz, /* Number of depth samples */
+             float *x, float *y, float *func, int *ldf,
+             float *fbad, float *x0, float *y0, float *f0,
+             float *fx0, float *fy0, float *fxy0,
+             int *idist, int *idepth, int *ihole);
+void rdtttab(char *froot, /* Size [ca. 1024] */
+             char **phase_type_ptr, /* Size [nwav][8] */
+             int nwav,    /* Array lengths */
+             int maxtbd,  /* Array lengths */
+             int maxtbz,  /* Array lengths */
+             int *ntbd,   /* Array lengths */
+             int *ntbz,   /* Array lengths */
+             float *tbd,  /* Size [nwav][maxtbd] */
+             float *tbz,  /* Size [nwav][maxtbz] */
+             float *tbtt, /* Size [nwav][maxtbz][maxtbd] */
+             int *ierr); /* Error flag */
+int rdcortab_(char *froot, char *cortyp,
+              int *ntype, char *staid, char *wavid,
+              int *nsta, int *nwav, int *ierr,
+              ftnlen froot_len,
+              ftnlen cortyp_len,
+              ftnlen staid_len,
+              ftnlen wavid_len);
+int locsat0_(char *dstaid, char *dwavid, char *dtype, char *atype,
+             float *dobs, float *dsd,
+             int *idarid, int *ndata,
+             char *staid, float *stalat, float *stalon, float *stelev, float *stacor,
+             int *nsta, char *wavid, int *nwav, int *maxtbd, int *maxtbz,
+             int *ntbd, int *ntbz, float *tbd, float *tbz, float *tbtt,
+             float *alat0, float *alon0, float *zfoc0, float *sig0,
+             int *ndf0, float *pconf, float *azwt, float *damp,
+             int *maxit, char *prtflg, char *fxdflg, char *outfile,
+             int *luout, float *alat, float *alon, float *zfoc, float *torg,
+             float *sighat, float *snssd, int *ndf,
+             float *epmaj, float *epmin, float *epstr, float *zfint,
+             float *toint, float *sxx, float *syy, float *szz, float *stt, float *sxy,
+             float *sxz, float *syz, float *stx, float *sty, float *stz,
+             float *stadel, float *staazi, float *stabaz, float *epimp,
+             float *zfimp, float *resid,
+             int *ipsta, int *iderr, int *niter, int *ierr,
+             ftnlen dstaid_len, ftnlen dwavid_len, ftnlen dtype_len,
+             ftnlen atype_len, ftnlen staid_len, ftnlen wavid_len,
+             ftnlen prtflg_len, ftnlen fxdflg_len, ftnlen outfile_len);
 
-extern void holint2_ ();
-static int lstcmp();
+static const char *default_phases[] = {
+	"LQ", "LR", "Lg", "P", "PKP", "PP",
+	"PcP", "Pg", "Pn", "Rg", "S", "SKS",
+	"SS", "ScS", "Sn", "Sg", "pP", "sP",
+	"Pb", "Sb"
+};
 
-static	char    *default_phases[] = { "LQ", "LR", "Lg", "P", "PKP", "PP",
-				      "PcP", "Pg", "Pn", "Rg", "S", "SKS",
-				      "SS", "ScS", "Sn", "Sg", "pP", "sP",
-                                      "Pb", "Sb" };
+
+/*       Returns TRUE   if two lists are identical;
+ *               FALSE  if two lists are not the same;
+ *       The first list can be blank padded.
+ */
+static int lstcmp(const char **list1, int n1, const char **list2, int n2) {
+	int found = FALSE, i, j;
+
+	if ( n1 != n2 )
+		return FALSE;
+
+	for ( i = 0; i < n1; ++i ) {
+		found = FALSE;
+		for ( j = 0; j < n2; ++j ) {
+			if ( !strncmp (list1[i], list2[j], strlen(list2[j])) ) {
+				found = TRUE;
+				break;
+			}
+		}
+		if ( !found )
+			break;
+	}
+
+	return found;
+}
+
 
 int setup_sites(char *new_net, Site *new_sites, int new_num_sta) {
 	int  i;
@@ -343,7 +369,7 @@ int setup_sites(char *new_net, Site *new_sites, int new_num_sta) {
 
 
 static int
-setup_tttables(const char *new_dir, char **new_phase_types, int new_num_phase_types) {
+setup_tttables(const char *new_dir, const char **new_phase_types, int new_num_phase_types) {
 	int i, ierr, num_type;
 	char *dummy_ptr;
 	int malloc_err = 0;
@@ -357,7 +383,7 @@ setup_tttables(const char *new_dir, char **new_phase_types, int new_num_phase_ty
 	}
 
 	if ( !first_table_read )  {
-		if ( STREQ(new_dir, dir) && lstcmp(phase_type_ptr, 
+		if ( STREQ(new_dir, dir) && lstcmp((const char**)phase_type_ptr,
 		     num_phase_types, new_phase_types, new_num_phase_types) )
 			return (NOERROR);
 
@@ -478,7 +504,7 @@ setup_tttables(const char *new_dir, char **new_phase_types, int new_num_phase_ty
 
 
 int setup_tttables_dir(const char *new_dir) {
-	return setup_tttables(new_dir, default_phases, (sizeof default_phases) / sizeof(char*));
+	return setup_tttables(new_dir, default_phases, (sizeof default_phases) / sizeof(const char*));
 }
 
 
@@ -1015,667 +1041,6 @@ int find_phase(const char *phase) {
 		return i;
 	else
 		return ERR;
-}
-
-
-int lstcmp(char ** list1, int n1, char **list2, int n2)
-/*       Returns TRUE   if two lists are identical;
- *               FALSE  if two lists are not the same;
- *       The first list can be blank padded.
- */ 
-{
-	int found, i, j;
-
-	if (n1 != n2) 
-		return (FALSE);
-
-	for (i = 0; i < n1; i++)
-	{
-		found = FALSE;
-		for (j = 0; j < n2; j++)
-		{
-			if (! strncmp (list1[i], list2[j], strlen(list2[j])))
-			{
-				found = TRUE;
-				break;
-			}
-		}
-		if (! found) 
-			break;
-	}
-	return found;
-}
-
-
-void ttime_calc_(int *phase_id, double *atx, float *azi, float *delta,
-                 float *radius, float *zfoc, float *dcalx, int *iterr)
-{
-	int    ibad, iext, jext;	/* Errors from Fortran call */
-	int    imin, imax;
-	int    ileft;
-	float  bad_sample = -1.0;
-	float  dcross, dtddel, dtdz;
-	double azir, cosazi, pd12, sinazi;
-
-
-	brack_(&ntbz[*phase_id], &tbz[*phase_id*maxtbz], zfoc, &ileft);
-
-	imin = ((ileft-1) > 1) ? (ileft-1) : 1;
-	imax = (((ileft+2) < ntbz[*phase_id]) ? (ileft+2) : ntbz[*phase_id]) - imin + 1;
-
-	/*
-	 * Indexing into two and three dimensional arrays:
-	 *
-	 * &tbz[phase_id][imin - 1] == &tbz[phase_id *maxtbz + imin - 1]
-	 *
-	 * &tbtt[phase_id][imin - 1][0] ==
-	 * &tbtt[(phase_id * maxtbz * maxtbd) + ((imin -1) * maxtbd)+0]
-	 *
-	 */
-
-	holint2_(&phase_id, &ntbd[*phase_id], &imax, &tbd[*phase_id*maxtbd],
-	         &tbz[*phase_id*maxtbz + imin-1],
-	         &tbtt[(*phase_id*maxtbz*maxtbd) + ((imin-1)*maxtbd) + 0],
-	         &maxtbd, &bad_sample, delta, zfoc, dcalx, &dtddel, &dtdz,
-	         &dcross, &iext, &jext, &ibad);
-
-	/* Fill interpolation error flag, iterr, as necessary:
-	 *
-	 * iterr = 0:	No ploblemo!
-	 * iterr = 11:	Interpolated point in hole of curve -- Value no good
-	 * iterr = 12:  Interpolated point < first distance point of curve
-	 * iterr = 13:	Interpolated point > last distance point of curve
-	 * iterr = 14:	Interpolated point < first depth point of curve
-	 * iterr = 15:	Interpolated point > last depth point of curve
-	 * iterr = 16:	Interpolated point < first distance point of curve
-	 *                             and < first depth point of curve
-	 * iterr = 17:	Interpolated point > last distance point of curve
-	 *                             and < first depth point of curve
-	 * iterr = 18:	Interpolated point < first distance point of curve
-	 *                             and > last depth point of curve
-	 * iterr = 19:	Interpolated point > last distance point of curve
-	 *                             and > last depth point of curve
-	 */
-
-	if (ibad != 0)
-		*iterr = 11;
-
-	else if (iext < 0 && jext == 0)
-		*iterr = 12;
-
-	else if (iext > 0 && jext == 0)
-		*iterr = 13;
-
-	else if (iext == 0 && jext < 0)
-		*iterr = 14;
-
-	else if (iext == 0 && jext > 0)
-		*iterr = 15;
-
-	else if (iext < 0 && jext < 0)
-		*iterr = 16;
-
-	else if (iext > 0 && jext < 0)
-		*iterr = 17;
-
-	else if (iext < 0 && jext > 0)
-		*iterr = 18;
-
-	else if (iext > 0 && jext > 0)
-		*iterr = 19;
-
-	else
-		*iterr = 0;
-
-	/* Compute partial derivatives, provided point is not in a hole of
-	 * the travel-time tables.
-	 */
-
-	if (ibad == 0)
-	{
-		azir	= *azi*DEG_TO_RAD;
-		sinazi	= sin(azir);
-		cosazi	= cos(azir);
-		pd12	= dtddel/(DEG_TO_RAD*(*radius-*zfoc));
-
-		/* The local coordinate system is such that, */
-
-		atx[0] = 1.0;		/* Axis 1		*/
-		atx[1] = -pd12*sinazi;	/* Axis 2 points East	*/
-		atx[2] = -pd12*cosazi;	/* Axis 3 points North	*/
-		atx[3] = -dtdz;		/* Axis 4 points up	*/
-	}
-}
-
-
-void slow_calc_(int *phase_id, double *atx, float *azi, float *delta, float *radius, float *zfoc, float *dcalx /* Calculated slowness */, int *iserr) {
-	int	i, j;
-	int	ibad, iext, jext;	/* Errors from Fortran call */
-	int	imin, imax, jmin, jmax;
-	int	ihole = 0;
-	int	idist = 0;
-	int	idepth = 0;
-	int	ileft, jleft;
-	int	itotd, itotz;
-	int	ldf = 4;
-	float	bad_sample = -1.0;
-	float	slow, ttime;
-	float	dcross, dslddel, dsldz, dtdz;
-	float	*tbds, *tbzs, *tbsls;
-	double	azir, cosazi, sinazi;
-
-	tbds = tbzs = tbsls = (float *)NULL;
-	tbds	= UALLOC(float, ldf);
-	tbzs	= UALLOC(float, ldf);
-	tbsls	= UALLOC(float, ldf*ldf);
-
-	/* Form arrays holding distances and depths around point of interest */
-
-	brack_(&ntbd[*phase_id], &tbd[*phase_id*maxtbd], delta, &jleft);
-
-	jmin = ((jleft-1) > 1) ? (jleft-1) : 1;
-	jmax = (((jleft+2) < ntbd[*phase_id]) ? (jleft+2) : ntbd[*phase_id]);
-
-	itotd = 0;
-	for (j = jmin-1; j < jmax; j++)
-	{
-		tbds[itotd] = tbd[j];
-		itotd = itotd + 1;
-	}
-
-	brack_ (&ntbz[*phase_id], &tbz[*phase_id*maxtbz], zfoc, &ileft);
-
-	imin = ((ileft-1) > 1) ? (ileft-1) : 1;
-	imax = (((ileft+2) < ntbz[*phase_id]) ?
-		 (ileft+2) : ntbz[*phase_id]) - imin + 1;
-
-	itotz = 0;
-	for (i = imin-1; i < imax+imin-1; i++)
-	{
-		tbzs[itotz] = tbz[i];
-		itotz = itotz + 1;
-	}
-
-	/*
-	 * Compute the travel time and horizontal slowness for each point in
-	 * arrays around the point of interest.  Start by finding the relevant
-	 * range of table depths.
-	 */
-
-	for (i = 0; i < itotd; i++)
-	{
-		for (j = 0; j < itotz; j++)
-		{
-			holint2_(&phase_id, &ntbd[*phase_id], &imax,
-			        &tbd[*phase_id*maxtbd],
-			        &tbz[*phase_id*maxtbz + imin-1],
-			        &tbtt[(*phase_id*maxtbz*maxtbd) + ((imin-1)*maxtbd) + 0],
-			        &maxtbd, &bad_sample, &tbds[i], &tbzs[j],
-			        &ttime, &slow, &dtdz, &dcross, &iext, &jext,
-			        &ibad);
-
-			if (ibad != 0)	/* Note: Flip i & j after going to C */
-				tbsls[ldf*j + i] = -1.0;
-			else
-				tbsls[ldf*j + i] = slow;
-		}
-	}
-
-	/* Compute slowness and partials at point of interest from mini-table */
-
-	holint2_(&phase_id, &itotd, &itotz, tbds, tbzs, tbsls, &ldf,
-	         &bad_sample, delta, zfoc, &slow, &dslddel, &dsldz, &dcross,
-	         &iext, &jext, &ibad);
-
-	if (ihole != 0)  ibad = ihole;
-	if (idist != 0)  iext = idist;
-	if (idepth != 0) jext = idepth;
-
-	/* Fill interpolation error flag, iserr, as necessary:
-	 *
-	 * iserr = 0:	No ploblemo!
-	 * iserr = 11:	Interpolated point in hole of curve -- Value no good
-	 * iserr = 12:  Interpolated point < first distance point of curve
-	 * iserr = 13:	Interpolated point > last distance point of curve
-	 * iserr = 14:	Interpolated point < first depth point of curve
-	 * iserr = 15:	Interpolated point > last depth point of curve
-	 * iserr = 16:	Interpolated point < first distance point of curve
-	 *                             and < first depth point of curve
-	 * iserr = 17:	Interpolated point > last distance point of curve
-	 *                             and < first depth point of curve
-	 * iserr = 18:	Interpolated point < first distance point of curve
-	 *                             and > last depth point of curve
-	 * iserr = 19:	Interpolated point > last distance point of curve
-	 *                             and > last depth point of curve
-	 */
-
-	if (ibad != 0)
-		*iserr = 11;
-
-	else if (iext < 0 && jext == 0)
-		*iserr = 12;
-
-	else if (iext > 0 && jext == 0)
-		*iserr = 13;
-
-	else if (iext == 0 && jext < 0)
-		*iserr = 14;
-
-	else if (iext == 0 && jext > 0)
-		*iserr = 15;
-
-	else if (iext < 0 && jext < 0)
-		*iserr = 16;
-
-	else if (iext > 0 && jext < 0)
-		*iserr = 17;
-
-	else if (iext < 0 && jext > 0)
-		*iserr = 18;
-
-	else if (iext > 0 && jext > 0)
-		*iserr = 19;
-
-	else
-		*iserr = 0;
-
-	if (ibad == 0)
-	{
-		azir	= *azi*DEG_TO_RAD;
-		sinazi	= sin(azir);
-		cosazi	= cos(azir);
-		*dcalx	= slow;
-		dslddel	= dslddel/(DEG_TO_RAD*(*radius-*zfoc));
-
-		/* The local coordinate system is such that, */
-
-		atx[0] = 0.0;			/* Axis 1		*/
-		atx[1] = -dslddel*sinazi;	/* Axis 2 points East	*/
-		atx[2] = -dslddel*cosazi;	/* Axis 3 points North	*/
-		atx[3] = -dsldz;		/* Axis 4 points up	*/
-	}
-	UFREE(tbds);
-	UFREE(tbzs);
-	UFREE(tbsls);
-}
-
-
-void
-find_dist_ (phase_id, tcalc, delta, iterr)
-
-int	*phase_id;
-double	*tcalc;
-int	*iterr;
-double	*delta;
-{
-
-	int	i;
-	double	tmp;
-
-	*iterr = NOERROR;
-
-	if (tbtt[*phase_id*maxtbz*maxtbd] > *tcalc)
-	{
-		*iterr = ERROR;
-		return;
-	}
-
-	for (i = 0; i < ntbd[*phase_id]; i++)
-	{
-		if (tbtt[(*phase_id*maxtbz*maxtbd) + i] > *tcalc)
-		{
-			tmp = (*tcalc - tbtt[(*phase_id*maxtbz*maxtbd) + i-1])/
-			      (tbtt[(*phase_id*maxtbz*maxtbd) + i] -
-			       tbtt[(*phase_id*maxtbz*maxtbd) + i-1]);
-			*delta = tbd[*phase_id*maxtbd + i-1] +
-				 tmp*(tbd[*phase_id*maxtbd + i] -
-				      tbd[*phase_id*maxtbd + i-1]);
-			return;
-		}
-	}
-}
-
-
-void find_ttime_(int *phase_id, double *delta, double *tcalc, int *iterr) {
-	int i;
-	double tmp;
-
-	*iterr = NOERROR;
-
-	if (tbd[*phase_id*maxtbd] > *delta)
-	{
-		*iterr = ERROR;
-		return;
-	}
-
-	for (i = 0; i < ntbd[*phase_id]; i++)
-	{
-		if (tbd[*phase_id*maxtbd + i] > *delta)
-		{
-			tmp = (*delta - tbd[*phase_id*maxtbd + i-1]) /
-			      (tbd[*phase_id*maxtbd + i] - 
-			       tbd[*phase_id*maxtbd + i-1]);
-			*tcalc = tbtt[(*phase_id*maxtbz*maxtbd) + i-1] +
-				 tmp * (tbtt[(*phase_id*maxtbz*maxtbd) + i] -
-					tbtt[(*phase_id*maxtbz*maxtbd) + i-1]);
- 			return;
-		}
-	}
-}
-
-
-double extrap_ttime(double distance, double depth, int phase_id) {
-	register int i, j, num_samples, depth_index;
-	register float *depth_table, *ttime, *ztime;
-	float dist_min, dist_max;
-	int ichk, min_idx, max_idx;
-	double depth_ratio, hold, travel_time;
-	double tt_max, tt_min, vel, zt_max, zt_min;
-
-	/*
-	 * Find the depth index that corresponds to the closest specified
-	 * depth in the tables
-	 */
-
-	num_samples = ntbz[phase_id];
-	depth_table = &tbz[phase_id * maxtbz];
-
-	for (i = 0; i < num_samples; i++)
-		if (depth <= *(depth_table + i))
-			break;
-
-	if (i == 0)
-	{
-		depth_index = 0;
-		depth_ratio = 0.0;
-		ztime = &tbtt[(phase_id*maxtbz*maxtbd)];
-	}
-
-	else if (i == num_samples)
-	{
-		depth_index = num_samples - 1;
-		depth_ratio = 2.0;
-		ztime = &tbtt[(phase_id*maxtbz*maxtbd) + (depth_index*maxtbd)];
-		extrap_depth = 1;
-	}
-
-	else
-	{
-		depth_ratio = (depth - *(depth_table + i-1)) / (*(depth_table + i) - *(depth_table + i-1));
-		if (depth_ratio == 1.0)
-		{
-			depth_index = i;
-			ztime = &tbtt[(phase_id*maxtbz*maxtbd)
-					+ (depth_index*maxtbd)];
-		}
-		else if ((*(depth_table+i) - depth) <= (depth - *(depth_table+i-1)))
-		{
-			/* Lower depth node is closer to hypocentral depth */
-			depth_index = i;
-			depth_ratio = depth_ratio - 1.0;
-			ztime = &tbtt[(phase_id*maxtbz*maxtbd)
-					+ ((depth_index-1)*maxtbd)];
-		}
-		else
-		{
-			/* Upper depth node is closer to hypocentral depth */
-			depth_index = i - 1;
-			ztime = &tbtt[(phase_id*maxtbz*maxtbd)
-					+ ((depth_index+1)*maxtbd)];
-		}
-	}
-
-	ttime = &tbtt[(phase_id*maxtbz*maxtbd) + (depth_index*maxtbd)];
-
-	/*
-	 * Now find the min/max usable values on the travel-time curves
-	 * for this phase and depth
-	 */
-
-	num_samples = ntbd[phase_id];
-
-	for (min_idx = 0; min_idx < num_samples; min_idx++)
-		if (*(ttime + min_idx) != -1.0)
-			break;
-
-	dist_min = tbd[phase_id * maxtbd + min_idx];
-
-	ichk = 0;
-	for (max_idx = min_idx; max_idx < num_samples; max_idx++)
-	{
-		if (*(ttime + max_idx) == -1.0)
-		{
-			if (ichk == 0)
-				ichk = max_idx - 1;
-		}
-
-		else if (max_idx == num_samples-1)
-			ichk = max_idx;
-		else
-			ichk = 0;
-	}
-	max_idx  = ichk;
-	dist_max = tbd[phase_id * maxtbd + max_idx];
-
-	/*
-	 * Now determine if we're off the high or low end of the travel-time
-	 * curve.  If we're off the high end, find the travel time for a
-	 * distance at least 5 degrees < dist_max and use the slope of the
-	 * curve approximated by these two points to linearally extrapolate
-	 * the travel time for our distance; if we're off the low end, find
-	 * the travel time for a distance at least 5 degrees > dist_min and
-	 * extrapolate.  If hole in travel-time table is encountered, then
-	 * extrapolate from last valid time.
-	 */
-
-	if (distance > dist_max)		/* Off the high end */
-	{
-	/*
-		for (i = max_idx-5, j = 0, n = 0; j < 6; i++, j++)
-		{
-			if (i < 0)
-				continue;
-			da[n] = tbd[phase_id * maxtbd + i];
-			ta[n] = *(ttime + i);
-			n++;
-		}
-		if (dist_max <= 110.0 && distance > 110.0)
-		{
-			ratint (da, ta, n, 110.0, tt, &dtt);
-			hold = *tt + 238.0;
-			vel  = 0.55;
-			travel_time = ((distance - 110.0) / vel) + hold;
-		}
-		else
-		{
-			ratint (da, ta, n, distance, tt, &dtt);
-			travel_time = *tt;
-		}
-	 */
-
-		for (i = max_idx; i >= 0; i--)
-			if (dist_max - tbd[phase_id * maxtbd + i] >= 5.0)
-				break;
-
-		if (*(ztime+i) != *(ttime+i))
-		{
-			for (j = max_idx; j > 0; j--)
-			{
-				zt_max = *(ztime + max_idx);
-				if (zt_max == -1.0)
-					--max_idx;
-				else
-					break;
-			}
-
-			dist_max = tbd[phase_id*maxtbd + max_idx];
-			tt_max = *(ttime + max_idx) + (depth_ratio *
-			 	 fabs(*(ttime + max_idx) - *(ztime + max_idx)));
-			tt_min = *(ttime + i) + (depth_ratio *
-			 	 fabs(*(ttime + i) - *(ztime + i)));
-			vel = (dist_max - tbd[phase_id*maxtbd + i]) /
-			      (tt_max - tt_min);
-		}
-		else
-		{
-			tt_max = *(ttime + max_idx);
-			vel = (dist_max - tbd[phase_id*maxtbd + i]) /
-			      (tt_max - *(ttime + i));
-		}
-
-		if (dist_max <= 110.0 && distance > 110.0)
-		{
-			hold = ((110.0 - dist_max) / vel) + tt_max + 238.0;
-			vel = 2.4*vel;
-			travel_time = ((distance - 110.0) / vel) + hold;
-		}
-		else
-			travel_time = ((distance - dist_max) / vel) + tt_max;
-
-		extrap_distance = 1;
-
-		if (extrap_depth > 0)
-		{
-			vel = (*(depth_table + depth_index) -
-			       *(depth_table + depth_index-1)) /
-				(tt_max - *(ttime + max_idx - maxtbd));
-			travel_time = (depth - *(depth_table + depth_index)
-				      / vel) + travel_time;
-		}
-	}
-
-	else if (distance < dist_min)		/* Off the low end */
-	{
-		for (i = min_idx; i < num_samples; i++)
-			if (tbd[phase_id * maxtbd + i] - dist_min >= 5.0)
-				break;
-
-		if (*(ztime+i) != *(ttime+i))
-		{
-			for (j = 0; j < max_idx; j++)
-			{
-				zt_min = *(ztime + min_idx);
-				if (zt_min == -1.0)
-					++min_idx;
-				else
-					break;
-			}
-
-			dist_min = tbd[phase_id * maxtbd + min_idx];
-			tt_min = *(ttime + min_idx) + (depth_ratio *
-				 fabs(*(ttime + min_idx) - *(ztime + min_idx)));
-			tt_max = *(ttime + i) + (depth_ratio *
-				 fabs(*(ttime + i) - *(ztime + i)));
-			vel = (tbd[phase_id * maxtbd + i] - dist_min) /
-			      (tt_max - tt_min);
-		}
-		else
-		{
-			tt_min = *(ttime + min_idx);
-			vel = (tbd[phase_id * maxtbd + i] - dist_min) /
-			      (*(ttime + i) - tt_min);
-		}
-	/*
-		if (dist_min >= 110.0 && distance < 110.0)
-		{
-			hold = tt_min - ((dist_min - 110.0) / vel) - 238.0;
-			vel = vel/2.4;
-			travel_time = ((110.0 - distance) / vel) + hold;
-		}
-		else
-			travel_time = tt_min - ((dist_min - distance) / vel);
-	 */
-		travel_time = tt_min - ((dist_min - distance) / vel);
-
-		extrap_distance = -1;
-
-		if (extrap_depth > 0)
-		{
-			vel = (*(depth_table + depth_index) -
-			       *(depth_table + depth_index-1)) /
-				(tt_min - *(ttime + min_idx - maxtbd));
-			travel_time = (depth - *(depth_table + depth_index)
-				      / vel) + travel_time;
-		}
-	}
-
-	else					/* Lookie here -- In a hole */
-	{
-		for (i = max_idx; i >= 0; i--)
-		{
-			if (tbd[phase_id * maxtbd + i] < distance)
-				if (*(ttime + i) != -1.0)
-				{
-					dist_max = tbd[phase_id * maxtbd + i];
-					max_idx = i;
-					break;
-				}
-		}
-		for (i = max_idx; i >= 0; i--)
-			if (dist_max - tbd[phase_id * maxtbd + i] >= 5.0)
-				break;
-
-		if (*(ztime+i) != *(ttime+i))
-		{
-			for (j = max_idx; j > 0; j--)
-			{
-				zt_max = *(ztime + max_idx);
-				if (zt_max == -1.0)
-					--max_idx;
-				else
-					break;
-			}
-
-			dist_max = tbd[phase_id*maxtbd + max_idx];
-			tt_max = *(ttime + max_idx) + (depth_ratio *
-				 fabs(*(ttime + max_idx) - *(ztime + max_idx)));
-			tt_min = *(ttime + i) + (depth_ratio *
-				 fabs(*(ttime + i) - *(ztime + i)));
-			vel = (dist_max - tbd[phase_id*maxtbd + i]) /
-			      (tt_max - tt_min);
-		}
-		else
-		{
-			tt_max = *(ttime + max_idx);
-			vel = (dist_max - tbd[phase_id*maxtbd + i]) /
-			      (tt_max - *(ttime + i));
-		}
-
-		travel_time = ((distance - dist_max) / vel) + tt_max;
-
-		extrap_in_hole = 1;
-
-		if (extrap_depth > 0)
-		{
-			vel = (*(depth_table + depth_index) -
-			       *(depth_table + depth_index-1)) /
-				(tt_max - *(ttime + max_idx - maxtbd));
-			travel_time = (depth - *(depth_table + depth_index)
-				      / vel) + travel_time;
-		}
-	}
-	return (travel_time);
-}
-
-
-void extrapolate_(float *distance, float *depth, int *phase_id,
-                  float *value, int *ihole, int *idist, int *idepth) {
-	int id;
-	double d, v, z;
-
-	d  = *distance;
-	z  = *depth;
-	id = *phase_id;
-	extrap_in_hole	= *ihole;
-	extrap_distance	= *idist;
-	extrap_depth	= *idepth;
-
-	v = extrap_ttime(d, z, id);
-
-	*value	= v;
-	*idepth	= extrap_depth;
-	*idist	= extrap_distance;
-	*ihole	= extrap_in_hole;
 }
 
 

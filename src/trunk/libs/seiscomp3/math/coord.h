@@ -18,14 +18,10 @@
 #include <string>
 
 
-namespace Seiscomp
-{
+namespace Seiscomp {
+namespace Math {
+namespace Geo {
 
-namespace Math
-{
-
-namespace Geo
-{
 
 template<typename T>
 struct Coord : public Core::BaseObject {
@@ -115,9 +111,7 @@ typedef City<double> CityD;
 
 
 } // of ns  Geo
-
 } // of ns  Math
-
 } // of ns Seiscomp
 
 

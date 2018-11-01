@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>948</width>
-    <height>663</height>
+    <width>910</width>
+    <height>692</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -24,7 +24,7 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" >
     <property name="margin" >
-     <number>9</number>
+     <number>6</number>
     </property>
     <property name="spacing" >
      <number>6</number>
@@ -34,606 +34,22 @@
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="Seiscomp::Gui::ZoomRecordFrame" name="frameZoom" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QFrame" name="frameZoomWrapper" >
        <property name="frameShape" >
         <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="frameShadow" >
-        <enum>QFrame::Plain</enum>
+        <enum>QFrame::Sunken</enum>
        </property>
-       <layout class="QHBoxLayout" >
+       <layout class="QVBoxLayout" >
         <property name="margin" >
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="spacing" >
          <number>6</number>
         </property>
         <item>
-         <widget class="QFrame" name="frameCurrentRowLabel" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>4</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>5</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize" >
-           <size>
-            <width>120</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="frameShape" >
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow" >
-           <enum>QFrame::Plain</enum>
-          </property>
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item>
-            <layout class="QVBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="labelStationCode" >
-               <property name="font" >
-                <font>
-                 <family>Verdana</family>
-                 <pointsize>14</pointsize>
-                 <weight>75</weight>
-                 <italic>false</italic>
-                 <bold>true</bold>
-                 <underline>false</underline>
-                 <strikeout>false</strikeout>
-                </font>
-               </property>
-               <property name="text" >
-                <string>ABCD</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelCode" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>4</hsizetype>
-                 <vsizetype>4</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>20</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font" >
-                <font>
-                 <family>Verdana</family>
-                 <pointsize>12</pointsize>
-                 <weight>50</weight>
-                 <italic>false</italic>
-                 <bold>false</bold>
-                 <underline>false</underline>
-                 <strikeout>false</strikeout>
-                </font>
-               </property>
-               <property name="text" >
-                <string>AB  BHZ</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="labelDistanceName" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>4</hsizetype>
-                   <vsizetype>5</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text" >
-                  <string>D:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="labelAzimuthName" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>4</hsizetype>
-                   <vsizetype>5</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text" >
-                  <string>A:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="labelDistance" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>5</hsizetype>
-                   <vsizetype>4</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text" >
-                  <string>12Â°</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="labelAzimuth" >
-                 <property name="text" >
-                  <string>314Â°</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType" >
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>20</width>
-               <height>81</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>10</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <layout class="QGridLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item row="1" column="2" >
-                <widget class="QPushButton" name="btnTimeScaleDown" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize" >
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="toolTip" >
-                  <string>Increase visible timespan</string>
-                 </property>
-                 <property name="text" >
-                  <string/>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="icons.qrc" >:/icons/icons/arrow_right.png</iconset>
-                 </property>
-                 <property name="flat" >
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" >
-                <widget class="QPushButton" name="btnTimeScaleUp" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize" >
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="toolTip" >
-                  <string>Decrease visible timespan</string>
-                 </property>
-                 <property name="text" >
-                  <string/>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="icons.qrc" >:/icons/icons/arrow_left.png</iconset>
-                 </property>
-                 <property name="flat" >
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1" >
-                <widget class="QPushButton" name="btnAmplScaleUp" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize" >
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="toolTip" >
-                  <string>Scale amplitudes up</string>
-                 </property>
-                 <property name="text" >
-                  <string/>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="icons.qrc" >:/icons/icons/arrow_up.png</iconset>
-                 </property>
-                 <property name="default" >
-                  <bool>false</bool>
-                 </property>
-                 <property name="flat" >
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1" >
-                <widget class="QPushButton" name="btnScaleReset" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize" >
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="toolTip" >
-                  <string>Reset timespan and amplitude scale</string>
-                 </property>
-                 <property name="text" >
-                  <string/>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="icons.qrc" >:/icons/icons/reload.png</iconset>
-                 </property>
-                 <property name="flat" >
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1" >
-                <widget class="QPushButton" name="btnAmplScaleDown" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize" >
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="toolTip" >
-                  <string>Scale amplitudes down</string>
-                 </property>
-                 <property name="text" >
-                  <string/>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="icons.qrc" >:/icons/icons/arrow_down.png</iconset>
-                 </property>
-                 <property name="flat" >
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>16</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType" >
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <widget class="QPushButton" name="btnRowAccept" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="toolTip" >
-                <string>Accept picked phase</string>
-               </property>
-               <property name="text" >
-                <string/>
-               </property>
-               <property name="icon" >
-                <iconset resource="icons.qrc" >:/icons/icons/ok.png</iconset>
-               </property>
-               <property name="iconSize" >
-                <size>
-                 <width>24</width>
-                 <height>24</height>
-                </size>
-               </property>
-               <property name="checkable" >
-                <bool>true</bool>
-               </property>
-               <property name="flat" >
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>0</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnRowRemove" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="toolTip" >
-                <string>Deactivate current pick or trace depending on the picking mode</string>
-               </property>
-               <property name="text" >
-                <string/>
-               </property>
-               <property name="icon" >
-                <iconset resource="icons.qrc" >:/icons/icons/remove.png</iconset>
-               </property>
-               <property name="iconSize" >
-                <size>
-                 <width>24</width>
-                 <height>24</height>
-                </size>
-               </property>
-               <property name="shortcut" >
-                <string>X</string>
-               </property>
-               <property name="checkable" >
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>0</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnRowReset" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="toolTip" >
-                <string>Reset manual picks</string>
-               </property>
-               <property name="text" >
-                <string/>
-               </property>
-               <property name="icon" >
-                <iconset resource="icons.qrc" >:/icons/icons/erase.png</iconset>
-               </property>
-               <property name="iconSize" >
-                <size>
-                 <width>24</width>
-                 <height>24</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QFrame" name="frameCurrentRow" >
+         <widget class="Seiscomp::Gui::ZoomRecordFrame" name="frameZoom" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>5</hsizetype>
@@ -646,8 +62,322 @@
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="frameShadow" >
-           <enum>QFrame::Plain</enum>
+           <enum>QFrame::Sunken</enum>
           </property>
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>6</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="frameCurrentRowLabel" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>4</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>5</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape" >
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow" >
+              <enum>QFrame::Plain</enum>
+             </property>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelStationCode" >
+                <property name="sizePolicy" >
+                 <sizepolicy>
+                  <hsizetype>4</hsizetype>
+                  <vsizetype>5</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text" >
+                 <string>ABCD</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="labelCode" >
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>4</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>20</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text" >
+                   <string>AB  BHZ</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="" >
+                  <property name="text" >
+                   <string>, distance: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelDistance" >
+                  <property name="text" >
+                   <string>-1°</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="" >
+                  <property name="text" >
+                   <string>, azimuth: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelAzimuth" >
+                  <property name="text" >
+                   <string>-1°</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="frameCurrentRow" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>3</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape" >
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow" >
+              <enum>QFrame::Raised</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frameZoomControls" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>4</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="frameShape" >
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow" >
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="btnRowAccept" >
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Accept picked phase</string>
+                  </property>
+                  <property name="text" >
+                   <string/>
+                  </property>
+                  <property name="icon" >
+                   <iconset resource="icons.qrc" >:/icons/icons/ok.png</iconset>
+                  </property>
+                  <property name="iconSize" >
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="checkable" >
+                   <bool>true</bool>
+                  </property>
+                  <property name="flat" >
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btnRowRemove" >
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Deactivate current pick or trace depending on the picking mode</string>
+                  </property>
+                  <property name="text" >
+                   <string/>
+                  </property>
+                  <property name="icon" >
+                   <iconset resource="icons.qrc" >:/icons/icons/remove.png</iconset>
+                  </property>
+                  <property name="iconSize" >
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="shortcut" >
+                   <string>X</string>
+                  </property>
+                  <property name="checkable" >
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btnRowReset" >
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize" >
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Reset manual picks</string>
+                  </property>
+                  <property name="text" >
+                   <string/>
+                  </property>
+                  <property name="icon" >
+                   <iconset resource="icons.qrc" >:/icons/icons/erase.png</iconset>
+                  </property>
+                  <property name="iconSize" >
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frameTimeScale" >
+               <property name="frameShape" >
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow" >
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -665,7 +395,7 @@
         <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="frameShadow" >
-        <enum>QFrame::Plain</enum>
+        <enum>QFrame::Sunken</enum>
        </property>
       </widget>
      </widget>
@@ -676,8 +406,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>638</y>
-     <width>948</width>
+     <y>667</y>
+     <width>910</width>
      <height>25</height>
     </rect>
    </property>
@@ -869,10 +599,30 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>948</width>
+     <width>910</width>
      <height>32</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu_Filter" >
+    <property name="title" >
+     <string>&amp;Filter</string>
+    </property>
+    <addaction name="actionToggleFilter" />
+    <addaction name="actionLimitFilterToZoomTrace" />
+   </widget>
+   <widget class="QMenu" name="menu_Locate" >
+    <property name="title" >
+     <string>&amp;Locator</string>
+    </property>
+    <addaction name="actionRelocate" />
+    <addaction name="actionModifyOrigin" />
+   </widget>
+   <widget class="QMenu" name="menu_Tools" >
+    <property name="title" >
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionOpenSpectrum" />
+   </widget>
    <widget class="QMenu" name="menuPicking" >
     <property name="title" >
      <string>&amp;Picking</string>
@@ -888,13 +638,6 @@
     <addaction name="actionScrollRight" />
     <addaction name="actionScrollFineLeft" />
     <addaction name="actionScrollFineRight" />
-   </widget>
-   <widget class="QMenu" name="menu_Filter" >
-    <property name="title" >
-     <string>&amp;Filter</string>
-    </property>
-    <addaction name="actionToggleFilter" />
-    <addaction name="actionLimitFilterToZoomTrace" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -950,6 +693,7 @@
      <addaction name="actionDecreaseAmplitudeScale" />
      <addaction name="actionTimeScaleUp" />
      <addaction name="actionTimeScaleDown" />
+     <addaction name="actionResetScale" />
      <addaction name="separator" />
      <addaction name="actionClipComponentsToViewport" />
     </widget>
@@ -963,19 +707,6 @@
     <addaction name="menu_Zoomtrace" />
     <addaction name="menuTraces" />
     <addaction name="menuComponents" />
-   </widget>
-   <widget class="QMenu" name="menu_Locate" >
-    <property name="title" >
-     <string>&amp;Locator</string>
-    </property>
-    <addaction name="actionRelocate" />
-    <addaction name="actionModifyOrigin" />
-   </widget>
-   <widget class="QMenu" name="menu_Tools" >
-    <property name="title" >
-     <string>&amp;Tools</string>
-    </property>
-    <addaction name="actionOpenSpectrum" />
    </widget>
    <addaction name="menuView" />
    <addaction name="menu_Navigation" />
@@ -1666,7 +1397,7 @@
     <bool>true</bool>
    </property>
    <property name="text" >
-    <string>Show trace values in nm/s</string>
+    <string>Show trace values in nano sensor units</string>
    </property>
   </action>
   <action name="actionClipComponentsToViewport" >
@@ -1806,7 +1537,18 @@
     <string>Spectrum for current component. This can be also achieved by pressing Space while not in picking mode. (SPACE)</string>
    </property>
    <property name="shortcut" >
-    <string>ctrl+s</string>
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionResetScale" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/home.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Reset scale</string>
+   </property>
+   <property name="visible" >
+    <bool>true</bool>
    </property>
   </action>
  </widget>

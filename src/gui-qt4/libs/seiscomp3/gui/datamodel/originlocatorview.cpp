@@ -306,11 +306,11 @@ class CommitOptions : public QDialog {
 			QList<DataModel::EventType> eventTypesWhitelist;
 
 			try {
-				vector<string> eventTypes = SCApp->configGetStrings("olv.eventTypes");
+				vector<string> eventTypes = SCApp->configGetStrings("olv.commonEventTypes");
 				for (  size_t i = 0; i < eventTypes.size(); ++i ) {
 					DataModel::EventType type;
 					if ( !type.fromString(eventTypes[i].c_str()) ) {
-						SEISCOMP_WARNING("olv.eventTypes: invalid type, ignoring: %s",
+						SEISCOMP_WARNING("olv.commonEventTypes: invalid type, ignoring: %s",
 						                 eventTypes[i].c_str());
 					}
 					else
@@ -1310,19 +1310,22 @@ void ArrivalDelegate::paint(QPainter *painter,
 		if ( i == hoverIndex && option.state & QStyle::State_MouseOver ) {
 			QFont font = option.font;
 			font.setBold(true);
-			font.setPointSize(font.pointSize() + 2);
 			painter->setFont(font);
 		}
 
 		bool enabled = mask & _flags[i];
 		bool checked = (flags & _flags[i]) && enabled;
-		if ( !enabled )
-			painter->setPen(option.palette.color(QPalette::Disabled, QPalette::WindowText));
+		if ( !enabled ) {
+			if ( option.state & QStyle::State_Selected )
+				painter->setPen(option.palette.color(QPalette::Disabled, QPalette::HighlightedText));
+			else
+				painter->setPen(option.palette.color(QPalette::Disabled, QPalette::WindowText));
+		}
 		else
 			painter->setPen(pen);
 
 		painter->drawText(rects[i], Qt::AlignVCenter | Qt::AlignHCenter,
-		                  checked?_labels[i]:"-");
+		                  checked ? _labels[i] : (enabled ? "n" : "-"));
 		painter->setFont(option.font);
 	}
 
@@ -2998,15 +3001,15 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName("Residual");
+		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Azimuth / Residual
 	else if ( tab == PT_AZIMUTH ) {
 		_residuals->setMarkerDistance(10, 1);
 		_residuals->setType(DiagramWidget::Rectangular);
 		_residuals->setIndicies(PC_AZIMUTH,PC_RESIDUAL);
-		_residuals->setAbscissaName("Azimuth");
-		_residuals->setOrdinateName("Residual");
+		_residuals->setAbscissaName("Azimuth (deg)");
+		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Distance / TravelTime
 	else if ( tab == PT_TRAVELTIME ) {
@@ -3017,7 +3020,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName("TravelTime");
+		_residuals->setOrdinateName("TravelTime (s)");
 	}
 	else if ( tab == PT_MOVEOUT ) {
 		_residuals->setMarkerDistance(10, 10);
@@ -3027,7 +3030,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName(QString("TTred >x/%1").arg(_config.reductionVelocityP));
+		_residuals->setOrdinateName(QString("Tred = T-d/%1 km/s (s)").arg(_config.reductionVelocityP));
 	}
 	else if ( tab == PT_POLAR ) {
 		_residuals->setType(DiagramWidget::Spherical);

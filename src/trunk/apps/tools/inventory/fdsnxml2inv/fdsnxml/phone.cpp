@@ -81,7 +81,7 @@ void Phone::setCountryCode(const OPT(int)& countryCode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Phone::countryCode() const throw(Seiscomp::Core::ValueException) {
+int Phone::countryCode() const {
 	if ( _countryCode )
 		return *_countryCode;
 	throw Seiscomp::Core::ValueException("Phone.countryCode is not set");

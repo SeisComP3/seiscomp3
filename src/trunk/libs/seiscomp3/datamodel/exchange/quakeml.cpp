@@ -16,8 +16,10 @@
 
 #include <seiscomp3/datamodel/eventparameters_package.h>
 #include <seiscomp3/io/xml/handler.h>
+#include <seiscomp3/utils/units.h>
 #include <seiscomp3/logging/log.h>
 #include <set>
+#include <map>
 
 
 #define NS_QML           "http://quakeml.org/xmlns/quakeml/1.2"
@@ -128,7 +130,7 @@ struct AmplitudeUnitFormatter : Formatter {
 			v = "other";
 	}
 };
-static AmplitudeUnitFormatter __amplitudeUnit;
+static AmplitudeUnitFormatter __amplitudeUnitFormatter;
 
 struct EvaluationStatusFormatter : Formatter {
 	void to(std::string& v) {
@@ -539,16 +541,16 @@ struct OriginDepthHandler : IO::XML::MemberHandler {
 			RealQuantity& depth = o->depth();
 			depth.setValue(depth.value() * 1000);
 			try { depth.setUncertainty(depth.uncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			try { depth.setUpperUncertainty(depth.upperUncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			try { depth.setLowerUncertainty(depth.lowerUncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			output->handle(&depth, tag, ns, &__realQuantityHandler);
 
 			return true;
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 		return false;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }
@@ -574,7 +576,7 @@ struct TakeOffAngleHandler : IO::XML::MemberHandler {
 			output->closeElement(tagTA, ns);
 			return true;
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 		return false;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }
@@ -593,7 +595,7 @@ struct ArrivalWeightHandler : IO::XML::MemberHandler {
 			weight = Core::toString(arrival->weight());
 			weightSet = true;
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 
 		try {
 			const char *twTag = "timeWeight";
@@ -603,7 +605,7 @@ struct ArrivalWeightHandler : IO::XML::MemberHandler {
 				output->closeElement(twTag, "");
 			}
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 
 		try {
 			const char *hzwTag = "horizontalSlownessWeight";
@@ -613,7 +615,7 @@ struct ArrivalWeightHandler : IO::XML::MemberHandler {
 				output->closeElement(hzwTag, "");
 			}
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 
 		try {
 			const char *bawTag = "backazimuthWeight";
@@ -623,7 +625,7 @@ struct ArrivalWeightHandler : IO::XML::MemberHandler {
 				output->closeElement(bawTag, "");
 			}
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 
 		return true;
 	}
@@ -690,23 +692,23 @@ struct OriginUncertaintyHandler : IO::XML::MemberHandler {
 		try {
 			OriginUncertainty &ou = o->uncertainty();
 			try { ou.setHorizontalUncertainty(ou.horizontalUncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			try { ou.setMinHorizontalUncertainty(ou.minHorizontalUncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			try { ou.setMaxHorizontalUncertainty(ou.maxHorizontalUncertainty() * 1000); }
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 			try {
 				ConfidenceEllipsoid &ce = ou.confidenceEllipsoid();
 				ce.setSemiMajorAxisLength(ce.semiMajorAxisLength() * 1000);
 				ce.setSemiMinorAxisLength(ce.semiMinorAxisLength() * 1000);
 				ce.setSemiIntermediateAxisLength(ce.semiIntermediateAxisLength() * 1000);
 			}
-			catch ( Core::ValueException ) {}
+			catch ( Core::ValueException & ) {}
 
 			output->handle(&ou, "originUncertainty", ns, &__originUncertaintySecondaryHandler);
 			return true;
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 		return false;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }
@@ -774,15 +776,111 @@ struct TimeWindowHandler : TypedClassHandler<TimeWindow> {
 	}
 };
 
+
+struct AmplitudeUnitMap : std::map<std::string, std::string> {
+	AmplitudeUnitMap() {
+		insert(value_type("MLv", "mm"));
+		insert(value_type("MLh", "mm"));
+		insert(value_type("ML", "mm"));
+		insert(value_type("mb", "nm"));
+		insert(value_type("mB", "nm/s"));
+		insert(value_type("mBc", "nm/s"));
+		insert(value_type("Mjma", "um"));
+		insert(value_type("Mwp", "nm*s"));
+	}
+};
+
+static AmplitudeUnitMap __amplitudeUnits;
+
+
+struct AmplitudeValueHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Amplitude *amp = Amplitude::Cast(object);
+		if ( amp == NULL ) return false;
+		try {
+			double scale = 1.0;
+
+			if ( amp->unit().empty() ) {
+				AmplitudeUnitMap::iterator it = __amplitudeUnits.find(amp->type());
+				if ( it != __amplitudeUnits.end() ) {
+					const Util::UnitConversion *conv = Util::UnitConverter::get(it->second);
+					if ( conv != NULL )
+						scale = conv->scale;
+				}
+			}
+			else {
+				const Util::UnitConversion *conv = Util::UnitConverter::get(amp->unit());
+				if ( conv != NULL )
+					scale = conv->scale;
+			}
+
+			RealQuantity &amplitude = amp->amplitude();
+			amplitude.setValue(amplitude.value() * scale);
+			try { amplitude.setUncertainty(amplitude.uncertainty() * scale); }
+			catch ( Core::ValueException & ) {}
+			try { amplitude.setUpperUncertainty(amplitude.upperUncertainty() * scale); }
+			catch ( Core::ValueException & ) {}
+			try { amplitude.setLowerUncertainty(amplitude.lowerUncertainty() * scale); }
+			catch ( Core::ValueException & ) {}
+			output->handle(&amplitude, "genericAmplitude", ns, &__realQuantityHandler);
+			return true;
+		}
+		catch ( Core::ValueException & ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
+
+struct AmplitudeUnitHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Amplitude *amp = Amplitude::Cast(object);
+		if ( amp == NULL ) return false;
+
+		const std::string *ustr = NULL;
+
+		if ( amp->unit().empty() ) {
+			AmplitudeUnitMap::iterator it = __amplitudeUnits.find(amp->type());
+			if ( it != __amplitudeUnits.end() ) {
+				const Util::UnitConversion *conv = Util::UnitConverter::get(it->second);
+				if ( conv != NULL )
+					ustr = &conv->toQMLUnit;
+			}
+		}
+		else {
+			const Util::UnitConversion *conv = Util::UnitConverter::get(amp->unit());
+			if ( conv != NULL )
+				ustr = &conv->toQMLUnit;
+		}
+
+		if ( !output->openElement(tag, ns) ) return false;;
+
+		if ( ustr != NULL )
+			output->put(ustr->c_str());
+		else if ( !amp->unit().empty() )
+			output->put("other");
+
+		output->closeElement(tag, ns);
+
+		return true;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
+
 struct AmplitudeHandler : TypedClassHandler<Amplitude> {
 	AmplitudeHandler() {
 		addPID();
 		// NA: category, evaluationStatus
 		addList("comment, period, snr, timeWindow, waveformID, "
 		        "scalingTime, evaluationMode, creationInfo");
-		add("amplitude", "genericAmplitude");
+		addChild("amplitude", "", new AmplitudeValueHandler);
 		add("type", &__maxLen32);
-		add("unit", &__amplitudeUnit);
+		addChild("unit", "", new AmplitudeUnitHandler);
 		add("methodID", &__resRef);
 		add("pickID", &__resRef);
 		add("filterID", &__resRef);
@@ -799,7 +897,7 @@ struct AmplitudeHandler : TypedClassHandler<Amplitude> {
 		try {
 			amplitude->amplitude();
 		}
-		catch ( Core::ValueException ) {
+		catch ( Core::ValueException & ) {
 			SEISCOMP_WARNING("skipping amplitude %s: amplitude value not set",
 			                 amplitude->publicID().c_str());
 			return false;
@@ -876,7 +974,7 @@ struct MomentTensorMethodHandler : IO::XML::MemberHandler {
 				return true;
 			}
 		}
-		catch ( Core::ValueException ) {}
+		catch ( Core::ValueException & ) {}
 		return false;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }

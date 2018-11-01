@@ -16,6 +16,7 @@
 
 
 #include <seiscomp3/gui/map/layer.h>
+#include <seiscomp3/gui/map/legend.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 #include <QMap>
 
@@ -44,7 +45,7 @@ class SC_GUI_API EventLayer : public Map::Layer {
 	public:
 		virtual void draw(const Map::Canvas *, QPainter &);
 		virtual void calculateMapPosition(const Map::Canvas *canvas);
-		virtual bool isInside(int x, int y) const;
+		virtual bool isInside(const QMouseEvent *event, const QPointF &geoPos);
 
 		virtual void handleEnterEvent();
 		virtual void handleLeaveEvent();
@@ -81,6 +82,44 @@ class SC_GUI_API EventLayer : public Map::Layer {
 		mutable bool        _hoverChanged;
 };
 
+
+class EventLegend : public Map::Legend {
+	Q_OBJECT
+
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		//! C'tor
+		EventLegend(QObject* parent = NULL);
+
+		//! D'tor
+		~EventLegend();
+
+
+	// ----------------------------------------------------------------------
+	//  Legend interface
+	// ----------------------------------------------------------------------
+	public:
+		virtual void contextResizeEvent(const QSize &size);
+		virtual void draw(const QRect &rect, QPainter &p);
+
+
+	// ----------------------------------------------------------------------
+	//  Private members
+	// ----------------------------------------------------------------------
+	private:
+		typedef QPair<QString, int> StringWithWidth;
+		typedef QPair<QColor, StringWithWidth> DepthItem;
+		typedef QPair<int, StringWithWidth> MagItem;
+
+		QVector<DepthItem> _depthItems;
+		QVector<MagItem> _magItems;
+
+		int _depthWidth;
+		int _magWidth;
+		int _magHeight;
+};
 
 
 }

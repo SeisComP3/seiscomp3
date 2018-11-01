@@ -125,10 +125,10 @@ class SortClients : public std::binary_function<ClientInfoData, ClientInfoData, 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MNcursesPlugin::MNcursesPlugin()
- : MonitorOutPluginInterface("mncursesplugin"),
-   _currentLine(0),
-   _reverseSortOrder(false) {
-
+: MonitorOutPluginInterface("mncursesplugin")
+, _context(NULL)
+, _currentLine(0)
+, _reverseSortOrder(false) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -205,12 +205,12 @@ bool MNcursesPlugin::printTable(ClientTable& table) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MNcursesPlugin::initOut(const Config::Config&) {
-	initscr();
+	_context = initscr();
 	cbreak();
 	noecho();
-	keypad(stdscr, TRUE);
-	scrollok(stdscr, TRUE);
-	idlok(stdscr, TRUE);
+	keypad((WINDOW*)_context, TRUE);
+	scrollok((WINDOW*)_context, TRUE);
+	idlok((WINDOW*)_context, TRUE);
 	_currentLine = 0;
 	move(_currentLine, 0);
 	curs_set(0); // Hide the cursor
@@ -295,7 +295,7 @@ std::string MNcursesPlugin::formatLine(ClientInfoData& clientInfoData) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MNcursesPlugin::initDataStructures(Communication::ConnectionInfoTag tag,
-										const std::string& description) {
+                                        const std::string& description) {
 	_tagOrder.push_back(tag);
 	_header.insert(make_pair(tag, description));
 	_columnSizes.insert(std::make_pair(tag, description.size()));
@@ -337,7 +337,7 @@ void MNcursesPlugin::updateColumnSizes(const ClientTable& table) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MNcursesPlugin::readUserInput() {
 	while ( true ) {
-		int ch = getch();
+		int ch = wgetch((WINDOW*)_context);
 		if ( ch == '<' ) {
 			int idx = findTag(_activeTag);
 			if ( idx >= 0 ) {

@@ -471,7 +471,7 @@ void MagRow::setReferenceMagnitudeColor(QColor c) {
 
 
 void MagRow::setBold(bool bold) {
-	QFont font(_netMag || !_header ? SCScheme.fonts.large : SCScheme.fonts.normal);
+	QFont font(SCScheme.fonts.normal);
 	if ( bold ) font.setBold(true);
 
 	_magnitude->setFont(font);

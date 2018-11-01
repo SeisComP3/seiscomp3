@@ -11,14 +11,19 @@
  ***************************************************************************/
 
 
-
 #include <seiscomp3/processing/magnitudes/Mwp.h>
 #include <seiscomp3/seismology/magnitudes.h>
 #include <math.h>
 
 namespace Seiscomp {
-
 namespace Processing {
+
+
+namespace {
+
+std::string ExpectedAmplitudeUnit = "nm*s";
+
+}
 
 
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_Mwp, MagnitudeProcessor, "MagnitudeProcessor_Mwp");
@@ -46,6 +51,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mwp::computeMagnitude(
 	double &value) {
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
+
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
 
 	bool status = Magnitudes::compute_Mwp(amplitude*1.E-9, delta, value);
 	value = correctMagnitude(value);
@@ -76,5 +84,4 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mwp::estimateMw(
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

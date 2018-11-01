@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(directors="1") IO
+%module(package="seiscomp3", directors="1") IO
 %{
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core/interruptible.h>

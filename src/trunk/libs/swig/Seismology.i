@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module (docstring="Codes for various seismological computations") Seismology
+%module(package="seiscomp3", docstring="Codes for various seismological computations") Seismology
 %{
 /* headers to be included in the wrapper code */
 #include "seiscomp3/core/typedarray.h"

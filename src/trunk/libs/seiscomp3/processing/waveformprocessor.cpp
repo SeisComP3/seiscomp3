@@ -252,6 +252,8 @@ double WaveformProcessor::samplingFrequency() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool WaveformProcessor::feed(const Record *rec) {
+	if ( rec->sampleCount() == 0 ) return false;
+
 	if ( !_operator ) return store(rec);
 	Status stat = _operator->feed(rec);
 	if ( stat > Terminated ) {

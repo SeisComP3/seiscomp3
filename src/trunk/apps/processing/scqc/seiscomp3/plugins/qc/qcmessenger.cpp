@@ -80,27 +80,38 @@ QcIndex toIndex(const DataModel::Object *obj) {
 
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-IMPLEMENT_SC_CLASS(QcMessenger, "QcMessenger");
 
-QcMessenger::QcMessenger(){}
 
-QcMessenger::QcMessenger(const QcApp* app)
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Synchronize with scmaster every 100 messages
+#define SYNC_COUNT 100
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QcMessenger::QcMessenger(QcApp *app)
 : _notifierMsg(NULL), _dataMsg(NULL), _app(app) {
 
 	_sendInterval = 1.0;
 	_maxSize = 500;
+	_syncCounter = SYNC_COUNT;
 
 	QcApp::TimerSignal::slot_type slot = boost::bind(&QcMessenger::scheduler, this);
 	_app->addTimeout(slot);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //! attach object to message and schedule sending
-bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation operation) {
+bool QcMessenger::attachObject(DataModel::Object *obj, bool notifier, Operation operation) {
 	//! send notifier msg
 	if ( notifier ) {
 		if ( operation == OP_UNDEFINED ) {
@@ -132,96 +143,99 @@ bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation 
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //! scheduler: send Qc messages every '_sendInterval' seconds or
 //! if attachment count reaches limit of '_maxSize'
 //!
 void QcMessenger::scheduler(){
-
 	bool msgSend = false;
 
-	if (_notifierMsg) {
+	if ( _notifierMsg ) {
 		try {
-			if (((_timer.elapsed() > _sendInterval) && (_notifierMsg->size() > 0)) || (_notifierMsg->size() >=_maxSize)) {
+			if ( ((_timer.elapsed() > _sendInterval) && (_notifierMsg->size() > 0))
+			  || (_notifierMsg->size() >=_maxSize) ) {
 // 				SEISCOMP_DEBUG("sending Qc NOTIFIER message with %d attachments", _notifierMsg->size());
 				sendMessage((Message*)_notifierMsg.get());
 				msgSend = true;
 			}
 		}
-		catch(...){ //FIXME error handling
-			if (_notifierMsg->size() > 2000) {
+		catch ( ... ) { //FIXME error handling
+			if ( _notifierMsg->size() > 2000 ) {
 				_notifierMsg->clear();
 				SEISCOMP_ERROR("Notifier message buffer overflow! Buffer cleared!");
 			}
 		}
 	}
 
-	if (_dataMsg) {
+	if ( _dataMsg ) {
 		try {
-			if (((_timer.elapsed() > _sendInterval) && (_dataMsg->size() > 0)) || (_dataMsg->size() >=_maxSize)) {
+			if ( ((_timer.elapsed() > _sendInterval) && (_dataMsg->size() > 0)) || (_dataMsg->size() >=_maxSize) ) {
 // 				SEISCOMP_DEBUG("sending Qc DATA message with %d attachments", _dataMsg->size());
 				sendMessage((Message*)_dataMsg.get());
 				msgSend = true;
 			}
 		}
-		catch(...){ //FIXME error handling
-			if (_dataMsg->size() > 2000) {
+		catch (...){ //FIXME error handling
+			if ( _dataMsg->size() > 2000 ) {
 				_dataMsg->clear();
 				SEISCOMP_ERROR("Data message buffer overflow! Buffer cleared!");
 			}
 		}
 	}
 
-	if (msgSend)
+	if ( msgSend )
 		_timer.restart();
-
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcMessenger::flushMessages(){
-
 	Core::TimeSpan tmp = _sendInterval;
 	_sendInterval = -1.0;
 	scheduler();
 	_sendInterval = tmp;
-
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //! sending the message
-bool QcMessenger::sendMessage(Message* msg) throw (ConnectionException) {
-	Communication::Connection *con;
-
-	try { con = _app->connection(); }
-	catch (...) {
-		throw ConnectionException("Qc msg connection() error");
-		return false;
-	};
-
+bool QcMessenger::sendMessage(Message *msg) {
+	Communication::Connection *con = _app->connection();
 	if ( msg && msg->size() > 0 ) {
-		if ( !con->isConnected() )
-			if ( con->reconnect() != Status::SEISCOMP_SUCCESS )
-				throw ConnectionException("Could not send Qc message -> reconnection failed");
-
 		if ( !con->send(msg) )
 			throw ConnectionException("Could not send Qc message");
 
 		msg->clear();
+
+		--_syncCounter;
+		if ( _syncCounter <= 0 ) {
+			SEISCOMP_INFO("Sync with messaging");
+			_syncCounter = SYNC_COUNT;
+			_app->requestSync();
+		}
+
 		return true;
 	}
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

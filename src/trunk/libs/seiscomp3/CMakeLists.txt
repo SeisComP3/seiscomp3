@@ -74,6 +74,7 @@ SC_LIB_LINK_LIBRARIES(
 		${Boost_filesystem_LIBRARY}
 		${Boost_regex_LIBRARY}
 		${Boost_LIBRARIES}
+		pthread
 		tau_internal
 		${LIBXML2_LIBRARIES}
 		${OPENSSL_LIBRARIES}
@@ -120,61 +121,61 @@ SET(SYSTEM_CLIENT_HEADERS "")
 
 
 IF(NOT WIN32)
-        SET(SPREAD_SOURCE_DIR ${SC3_PACKAGE_SOURCE_DIR}/libs/3rd-party/spread)
-        SET(SPREAD_BINARY_DIR ${SC3_PACKAGE_BINARY_DIR}/libs/3rd-party/spread)
-        SET(SPREAD_LIB_DIR ${SPREAD_BINARY_DIR}/lib)
-        SET(SPREAD_CONF_DIR ${SPREAD_BINARY_DIR}/share/doc/spread)
-        SET(SPREAD_LIBRARIES ${SPREAD_LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}tspread-core${CMAKE_SHARED_LIBRARY_SUFFIX})
-        SET(SPREAD_INC ${SPREAD_SOURCE_DIR}/include)
-        INCLUDE_DIRECTORIES(${SPREAD_INC})
+	SET(SPREAD_SOURCE_DIR ${SC3_PACKAGE_SOURCE_DIR}/libs/3rd-party/spread)
+	SET(SPREAD_BINARY_DIR ${SC3_PACKAGE_BINARY_DIR}/libs/3rd-party/spread)
+	SET(SPREAD_LIB_DIR ${SPREAD_BINARY_DIR}/lib)
+	SET(SPREAD_CONF_DIR ${SPREAD_BINARY_DIR}/share/doc/spread)
+	SET(SPREAD_LIBRARIES ${SPREAD_LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}tspread-core${CMAKE_SHARED_LIBRARY_SUFFIX})
+	SET(SPREAD_INC ${SPREAD_SOURCE_DIR}/include)
+	INCLUDE_DIRECTORIES(${SPREAD_INC})
 
-        SET_SOURCE_FILES_PROPERTIES(
-                communication/spread/spreaddriver.cpp
-                PROPERTIES OBJECT_DEPENDS ${SPREAD_LIBRARIES}
-        )
+	SET_SOURCE_FILES_PROPERTIES(
+		communication/spread/spreaddriver.cpp
+		PROPERTIES OBJECT_DEPENDS ${SPREAD_LIBRARIES}
+	)
 
-        SET_DIRECTORY_PROPERTIES(
-                PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${SPREAD_LIBRARIES}"
-        )
+	SET_DIRECTORY_PROPERTIES(
+		PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${SPREAD_LIBRARIES}"
+	)
 
-        IF(CMAKE_HOST_ARCHITECTURE)
-                ADD_CUSTOM_COMMAND(
-                        OUTPUT ${SPREAD_LIBRARIES}
-                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
-                        COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR} --host ${CMAKE_HOST_ARCHITECTURE}
-                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
-                        COMMAND ${CMAKE_MAKE_PROGRAM}
-                        COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
-                        WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
-                )
+	IF(CMAKE_HOST_ARCHITECTURE)
+		ADD_CUSTOM_COMMAND(
+			OUTPUT ${SPREAD_LIBRARIES}
+			DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
+			COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR} --host ${CMAKE_HOST_ARCHITECTURE}
+			COMMAND ${CMAKE_MAKE_PROGRAM} clean
+			COMMAND ${CMAKE_MAKE_PROGRAM}
+			COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
+			WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
+		)
 
-        ELSE(CMAKE_HOST_ARCHITECTURE)
-                ADD_CUSTOM_COMMAND(
-                        OUTPUT ${SPREAD_LIBRARIES}
-                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
-                        COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR}
-                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
-                        COMMAND ${CMAKE_MAKE_PROGRAM}
-                        COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
-                        WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
-                )
-        ENDIF(CMAKE_HOST_ARCHITECTURE)
+	ELSE(CMAKE_HOST_ARCHITECTURE)
+		ADD_CUSTOM_COMMAND(
+			OUTPUT ${SPREAD_LIBRARIES}
+			DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
+			COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR}
+			COMMAND ${CMAKE_MAKE_PROGRAM} clean
+			COMMAND ${CMAKE_MAKE_PROGRAM}
+			COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
+			WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
+		)
+	ENDIF(CMAKE_HOST_ARCHITECTURE)
 ENDIF(NOT WIN32)
 
 INCLUDE_DIRECTORIES(${SPREAD_INCLUDE_DIR})
 
 IF(NOT WIN32)
-        MAKE_DIRECTORY(${SPREAD_BINARY_DIR})
-        INSTALL(
-                DIRECTORY
-                        ${SPREAD_BINARY_DIR}/
-                DESTINATION
-                        ${SC3_PACKAGE_DIR}
-                USE_SOURCE_PERMISSIONS
-                PATTERN "CMakeFiles" EXCLUDE
-                PATTERN "*.cmake" EXCLUDE
-                PATTERN "Makefile" EXCLUDE
-        )
+	MAKE_DIRECTORY(${SPREAD_BINARY_DIR})
+	INSTALL(
+		DIRECTORY
+			${SPREAD_BINARY_DIR}/
+		DESTINATION
+			${SC3_PACKAGE_DIR}
+		USE_SOURCE_PERMISSIONS
+		PATTERN "CMakeFiles" EXCLUDE
+		PATTERN "*.cmake" EXCLUDE
+		PATTERN "Makefile" EXCLUDE
+	)
 ENDIF(NOT WIN32)
 
 SC_ADD_LIBRARY(SYSTEM_CLIENT client)

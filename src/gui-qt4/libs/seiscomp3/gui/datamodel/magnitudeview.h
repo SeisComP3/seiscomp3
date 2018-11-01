@@ -261,9 +261,23 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		                           DataModel::StationMagnitude* stationMagnitude,
 		                           double weight);
 
+		struct MagnitudeStatus {
+			MagnitudeStatus(const  std::string &t,
+			                const DataModel::Amplitude *a,
+			                Processing::MagnitudeProcessor::Status s)
+			: type(t), amplitude(a), status(s) {}
+
+			std::string                             type;
+			const DataModel::Amplitude             *amplitude;
+			Processing::MagnitudeProcessor::Status  status;
+		};
+
+		typedef QList<MagnitudeStatus> MagnitudeStats;
+
 		DataModel::Magnitude *
 		computeStationMagnitudes(const std::string &magType,
-		                         QList<Seiscomp::DataModel::AmplitudePtr> *amps);
+		                         QList<DataModel::AmplitudePtr> *amps,
+		                         MagnitudeStats *errors = NULL);
 
 		void computeMagnitude(DataModel::Magnitude *magnitude, const std::string &aggType);
 		bool editSelectionFilter();

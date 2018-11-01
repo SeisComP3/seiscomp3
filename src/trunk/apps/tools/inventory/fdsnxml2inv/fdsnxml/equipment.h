@@ -90,11 +90,11 @@ class Equipment : public Core::BaseObject {
 
 		//! XML tag: InstallationDate
 		void setInstallationDate(const OPT(DateTime)& installationDate);
-		DateTime installationDate() const throw(Seiscomp::Core::ValueException);
+		DateTime installationDate() const;
 
 		//! XML tag: RemovalDate
 		void setRemovalDate(const OPT(DateTime)& removalDate);
-		DateTime removalDate() const throw(Seiscomp::Core::ValueException);
+		DateTime removalDate() const;
 
 		//! This field contains a string that should serve as a unique resource
 		//! identifier. This identifier can be interpreted differently depending

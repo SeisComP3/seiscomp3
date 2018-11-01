@@ -23,14 +23,10 @@
 
 namespace Seiscomp {
 namespace RecordStream {
-namespace Combined {
-namespace _private {
 
 DEFINE_SMARTPOINTER(CombinedConnection);
 
-class SC_SYSTEM_CORE_API CombinedConnection : public Seiscomp::IO::RecordStream {
-	DECLARE_SC_CLASS(CombinedConnection)
-
+class SC_SYSTEM_CORE_API CombinedConnection : public IO::RecordStream {
 	public:
 		//! C'tor
 		CombinedConnection();
@@ -87,7 +83,6 @@ class SC_SYSTEM_CORE_API CombinedConnection : public Seiscomp::IO::RecordStream 
 
 		Core::Time          _startTime;
 		Core::Time          _endTime;
-		Core::Time          _curtime;
 		Core::Time          _archiveEndTime;
 		Core::TimeSpan      _realtimeAvailability;
 
@@ -96,10 +91,10 @@ class SC_SYSTEM_CORE_API CombinedConnection : public Seiscomp::IO::RecordStream 
 		IO::RecordStreamPtr _archive;
 };
 
-} // namesapce Combined
-} // namespace _private
+
 } // namespace RecordStream
 } // namespace Seiscomp
+
 
 #endif
 

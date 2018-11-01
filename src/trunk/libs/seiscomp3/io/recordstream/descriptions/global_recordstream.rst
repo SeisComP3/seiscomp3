@@ -1,4 +1,5 @@
-SeisComP applications access waveform data through the RecordStream interface. The following tables lists available implementations:
+SeisComP applications access waveform data through the RecordStream interface.
+The following tables lists available implementations:
 
 .. csv-table::
    :header: "Name", "Service Prefix", "Description"
@@ -16,10 +17,8 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
 The RecordStream used by an application is either specified on the
-commandline (`-I URI`) or configured through using the parameters
-:confval:`recordstream.service` and :confval:`recordstream.source`. While the
-`service` defines the RecordSteam implementation, the `source` supplies
-parameters like a IP address or a file name to use.
+commandline (`-I URI`) or configured through using the parameter
+:confval:`recordstream` and :confval:`recordstream`.
 
 .. _rs-slink:
 
@@ -91,7 +90,6 @@ Extension Record Type
 `*.xml`   `xml`
 `*.bin`   `binary`
 `*.mseed` `mseed`
-`*.ah`    `ah`
 ========= ===========
 
 Examples
@@ -105,24 +103,13 @@ Examples
 SDSArchive
 ----------
 
-This RecordStream reads data from one or more SeisComP (SDS) archives using the
-:ref:`rs-file` RecordStream. The source is interpreted as a directory path list
-separated using commas.
+This RecordStream reads data from an SeisComP (SDS) archive using the
+:ref:`rs-file` RecordStream. The source is interpreted as a directory path.
 
 Example
 ^^^^^^^
 
 - ``sdsarchive:///home/sysop/seiscomp3/var/lib/archive``
-
-- ``sdsarchive:///SDSA,/SDSB,/SDSC``
-
-Different SDS are not merged, but are read sequentially depending on data existence.
-If a requested file is missing in the current SDS it is searched on the next archive
-in the list. On success it will deliver all the rest of files for the current channel
-from this SDS archive. On failure the next SDS archive is searched.
-
-This process is repeated for each requested channel individually. It always starts to 
-search data from the first given SDS to the last one, for each data channel.
 
 .. _rs-odcarchive:
 

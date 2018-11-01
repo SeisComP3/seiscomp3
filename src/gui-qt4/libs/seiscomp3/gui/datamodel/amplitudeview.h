@@ -195,6 +195,7 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 			double allComponentsMaximumStationDistance;
 			double defaultAddStationsDistance;
 
+			bool ignoreDisabledStations;
 			bool hideStationsWithoutData;
 
 			QColor timingQualityLow;

@@ -1,12 +1,18 @@
 SET (GEO_SOURCES
-	geofeature.cpp
-	geofeatureset.cpp
+	coordinate.cpp
+	boundingbox.cpp
+	feature.cpp
+	featureset.cpp
 )
 
 SET(GEO_HEADERS
-	geofeature.h
-	geofeatureset.h
-	rtree.h
+	coordinate.h
+	coordinate.ipp
+	boundingbox.h
+	boundingbox.ipp
+	feature.h
+	featureset.h
 )
 
+SC_ADD_SUBDIR_SOURCES(GEO index)
 SC_SETUP_LIB_SUBDIR(GEO)

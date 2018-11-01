@@ -16,6 +16,7 @@
 
 #include <fstream>
 #include <queue>
+#include <list>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/io/recordstream/archive.h>
 #include <seiscomp3/io/recordstream/streamidx.h>
@@ -41,10 +42,9 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	public:
 		SDSArchive();
 		SDSArchive(const std::string arcroot);
+		SDSArchive(const SDSArchive &arc);
 		virtual ~SDSArchive();
 
-	protected:
-		SDSArchive(const SDSArchive &arc);
 
 	// ----------------------------------------------------------------------
 	//  Operators
@@ -78,6 +78,8 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 
 		virtual Record *next();
 
+		std::string archiveRoot() const;
+
 
 	// ----------------------------------------------------------------------
 	//  Protected interface
@@ -96,17 +98,16 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
-		std::vector<std::string>             _arcroots;
-		std::vector<std::string>::const_iterator _rootiter;
+		std::string                          _arcroot;
 		Seiscomp::Core::Time                 _stime;
 		Seiscomp::Core::Time                 _etime;
-		std::set<StreamIdx>                  _streams;
-		std::set<StreamIdx>::const_iterator  _curiter;
-		StreamIdx const                     *_curidx;
-		std::deque<std::string>              _fnames;
+		std::set<StreamIdx>                  _streamset;
+		std::list<StreamIdx>                 _ordered;
+		std::list<StreamIdx>::const_iterator _curiter;
+		const StreamIdx                     *_curidx;
+		std::queue<std::string>              _fnames;
 		std::fstream                         _recstream;
-		Record                              *_last;
-		std::string                          _currentfname;
+		std::string                          _currentFilename;
 
 	friend class IsoFile;
 };

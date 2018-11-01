@@ -169,9 +169,9 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _Seismology.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import IO
-import Math
-import Core
+import seiscomp3.IO
+import seiscomp3.Math
+import seiscomp3.Core
 import DataModel
 import seiscomp3.Config
 class TravelTimeList_internal(_object):
@@ -436,15 +436,15 @@ def Regions_polyRegions():
     return _Seismology.Regions_polyRegions()
 
 SC3_LOCATOR_INTERFACE_VERSION = _Seismology.SC3_LOCATOR_INTERFACE_VERSION
-class SensorLocationDelegate(Core.BaseObject):
+class SensorLocationDelegate(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Seismology::SensorLocationDelegate class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SensorLocationDelegate, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SensorLocationDelegate, name)
 
@@ -461,15 +461,15 @@ class SensorLocationDelegate(Core.BaseObject):
 SensorLocationDelegate_swigregister = _Seismology.SensorLocationDelegate_swigregister
 SensorLocationDelegate_swigregister(SensorLocationDelegate)
 
-class LocatorInterface(Core.BaseObject):
+class LocatorInterface(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Seismology::LocatorInterface class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocatorInterface, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LocatorInterface, name)
 
@@ -629,15 +629,15 @@ def LocatorInterface_Create(algo):
     """LocatorInterface_Create(char const * algo) -> LocatorInterface"""
     return _Seismology.LocatorInterface_Create(algo)
 
-class PickNotFoundException(Core.GeneralException):
+class PickNotFoundException(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::Seismology::PickNotFoundException class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, PickNotFoundException, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, PickNotFoundException, name)
     __repr__ = _swig_repr
@@ -657,15 +657,15 @@ class PickNotFoundException(Core.GeneralException):
 PickNotFoundException_swigregister = _Seismology.PickNotFoundException_swigregister
 PickNotFoundException_swigregister(PickNotFoundException)
 
-class LocatorException(Core.GeneralException):
+class LocatorException(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::Seismology::LocatorException class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocatorException, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LocatorException, name)
     __repr__ = _swig_repr
@@ -685,15 +685,15 @@ class LocatorException(Core.GeneralException):
 LocatorException_swigregister = _Seismology.LocatorException_swigregister
 LocatorException_swigregister(LocatorException)
 
-class StationNotFoundException(Core.GeneralException):
+class StationNotFoundException(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::Seismology::StationNotFoundException class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, StationNotFoundException, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, StationNotFoundException, name)
     __repr__ = _swig_repr
@@ -913,15 +913,15 @@ def LocSAT_currentDefaultProfile():
     """LocSAT_currentDefaultProfile() -> std::string"""
     return _Seismology.LocSAT_currentDefaultProfile()
 
-class FileNotFoundError(Core.GeneralException):
+class FileNotFoundError(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::FileNotFoundError class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, FileNotFoundError, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, FileNotFoundError, name)
     __repr__ = _swig_repr
@@ -938,15 +938,15 @@ class FileNotFoundError(Core.GeneralException):
 FileNotFoundError_swigregister = _Seismology.FileNotFoundError_swigregister
 FileNotFoundError_swigregister(FileNotFoundError)
 
-class MultipleModelsError(Core.GeneralException):
+class MultipleModelsError(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::MultipleModelsError class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, MultipleModelsError, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, MultipleModelsError, name)
     __repr__ = _swig_repr
@@ -963,15 +963,15 @@ class MultipleModelsError(Core.GeneralException):
 MultipleModelsError_swigregister = _Seismology.MultipleModelsError_swigregister
 MultipleModelsError_swigregister(MultipleModelsError)
 
-class NoPhaseError(Core.GeneralException):
+class NoPhaseError(seiscomp3.Core.GeneralException):
     """Proxy of C++ Seiscomp::NoPhaseError class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, NoPhaseError, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GeneralException]:
+    for _s in [seiscomp3.Core.GeneralException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NoPhaseError, name)
     __repr__ = _swig_repr
@@ -1089,15 +1089,15 @@ class TravelTimeList(TravelTimeList_internal):
 TravelTimeList_swigregister = _Seismology.TravelTimeList_swigregister
 TravelTimeList_swigregister(TravelTimeList)
 
-class TravelTimeTableInterface(Core.BaseObject):
+class TravelTimeTableInterface(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::TravelTimeTableInterface class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTimeTableInterface, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, TravelTimeTableInterface, name)
 

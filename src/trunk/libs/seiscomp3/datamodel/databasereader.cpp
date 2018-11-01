@@ -10,9 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
 
 #define SEISCOMP_COMPONENT DatabaseReader
 #include <seiscomp3/datamodel/databasereader.h>
@@ -36,9 +33,7 @@ namespace DataModel {
 
 
 DatabaseReader::DatabaseReader(Seiscomp::IO::DatabaseInterface* dbDriver)
-: DatabaseArchive(dbDriver) {
-	Object::RegisterObserver(this);
-}
+: DatabaseArchive(dbDriver) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

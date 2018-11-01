@@ -77,6 +77,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				//! The estimation of the Mw magnitude is not supported
 				MwEstimationNotSupported,
 				//! Unspecified error
+				IncompleteConfiguration,
+				//! Unspecified error
 				Error
 			),
 			ENAMES(
@@ -93,6 +95,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				"invalid amplitude unit",
 				"missing amplitude object",
 				"Mw estimation not supported",
+				"configuration incomplete",
 				"error"
 			)
 		);
@@ -188,6 +191,20 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 		 * @param magnitude The magnitude to be finalized
 		 */
 		virtual void finalizeMagnitude(DataModel::StationMagnitude *magnitude) const;
+
+
+	protected:
+		/**
+		 * @brief Converts am amplitude value to the SI unit, e.g. m/s.
+		 * @param amplitude The input value which will be changed
+		 * @param amplitudeUnit The unit associated with the amplitude value
+		 * @param defaultAmplitudeUnit The default amplitude unit if the
+		 *                             associated amplitude unit is empty.
+		 * @return Success or not
+		 */
+		bool convertAmplitude(double &amplitude,
+		                      const std::string &amplitudeUnit,
+		                      const std::string &desiredAmplitudeUnit) const;
 
 
 	private:

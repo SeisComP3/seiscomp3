@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH and GFZ Potsdam                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -16,6 +16,7 @@
 #include <QPainter>
 #include <iostream>
 
+#include <seiscomp3/math/geo.h>
 #include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 
@@ -25,24 +26,39 @@ IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Gui::Map::Projection, SC_GUI_API);
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Projection::Projection() {
 	setZoom(1.0f);
 	_background = qRgb(0,0,0);
 	_pixelPerDegreeFact = 90.0f;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Projection::~Projection() {
-}
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Projection::~Projection() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::setBackgroundColor(const QColor &c) {
 	_background = c.rgba();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::setZoom(qreal zoom) {
 	_radius = zoom;
 	_visibleRadius = _radius;
@@ -53,39 +69,196 @@ void Projection::setZoom(qreal zoom) {
 	_halfMapWidth = _scale * 2;
 	_mapWidth = _scale * 4;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 qreal Projection::zoom() const {
 	return _radius;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 qreal Projection::visibleZoom() const {
 	return _visibleRadius;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 qreal Projection::pixelPerDegree() const {
 	return _scale / _pixelPerDegreeFact;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::setView(const QPointF &geoCoords, qreal zoom) {
 	setZoom(zoom);
 	centerOn(geoCoords);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::center() const {
 	return QPointF(_center.x()*180.0f, _center.y()*90.0f);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::visibleCenter() const {
 	return QPointF(_visibleCenter.x()*180.0f, _visibleCenter.y()*90.0f);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Projection::updateBoundingBox() {
+	_mapBoundingBox.reset();
+	if ( _height <= 0 || _width <= 0 ) return;
+
+	int top = 1, left = 1, bottom = _height-2, right = _width-2;
+
+	if ( isRectangular() ) {
+		QPointF topLeft, bottomRight;
+		if ( unproject(topLeft, QPoint(left, top))
+		  && unproject(bottomRight, QPoint(right, bottom)) ) {
+			_mapBoundingBox.south = bottomRight.y();
+			_mapBoundingBox.west = topLeft.x();
+			_mapBoundingBox.north = topLeft.y();
+			_mapBoundingBox.east = bottomRight.x();
+
+			if ( _mapBoundingBox.west == _mapBoundingBox.east ) {
+				_mapBoundingBox.west = -180;
+				_mapBoundingBox.east = 180;
+			}
+		}
+		else {
+			std::cerr << "Failed to update map bounding box, reimplement this method!" << std::endl;
+		}
+	}
+	else {
+		bool hasVCoords = false;
+		bool hasHCoords = false;
+
+#define UPDATE_VCOORDS \
+	if ( !hasVCoords )\
+		_mapBoundingBox.north = _mapBoundingBox.south = gc.y();\
+	else {\
+		if ( gc.y() > _mapBoundingBox.north )\
+			_mapBoundingBox.north = gc.y();\
+		else if ( gc.y() < _mapBoundingBox.south )\
+			_mapBoundingBox.south = gc.y();\
+	}\
+	hasVCoords = true
+
+#define UPDATE_HCOORDS \
+	if ( !hasHCoords )\
+		_mapBoundingBox.west = _mapBoundingBox.east = gc.x();\
+	else {\
+		if ( gc.x() > _mapBoundingBox.east )\
+			_mapBoundingBox.east = gc.x();\
+		else if ( gc.x() < _mapBoundingBox.west )\
+			_mapBoundingBox.west = gc.x();\
+	}\
+	hasHCoords = true
+
+		QPointF gc;
+
+		for ( int x = 0; x < _width; x += 10 ) {
+			if ( unproject(gc, QPoint(x, top)) ) {
+				UPDATE_VCOORDS;
+			}
+
+			if ( unproject(gc, QPoint(x, bottom)) ) {
+				UPDATE_VCOORDS;
+			}
+		}
+
+		if ( unproject(gc, QPoint(right, top)) ) {
+			UPDATE_VCOORDS;
+			UPDATE_HCOORDS;
+		}
+
+		if ( unproject(gc, QPoint(right, bottom)) ) {
+			UPDATE_VCOORDS;
+			UPDATE_HCOORDS;
+		}
+
+		for ( int y = 0; y < _height; y += 10 ) {
+			if ( unproject(gc, QPoint(left, y)) ) {
+				UPDATE_HCOORDS;
+			}
+
+			if ( unproject(gc, QPoint(right, y)) ) {
+				UPDATE_HCOORDS;
+			}
+		}
+
+		QPointF center;
+		unproject(center, QPoint(_width/2, _height/2));
+
+		if ( !hasVCoords ) {
+			_mapBoundingBox.south = Geo::GeoCoordinate::normalizeLat(center.y() - 90.0);
+			_mapBoundingBox.north = Geo::GeoCoordinate::normalizeLat(center.y() + 90.0);
+		}
+
+		if ( !hasHCoords ) {
+			_mapBoundingBox.west = Geo::GeoCoordinate::normalizeLon(center.x() - (fabs(center.y())+90.0));
+			_mapBoundingBox.east = Geo::GeoCoordinate::normalizeLon(center.x() + (fabs(center.y())+90.0));
+		}
+
+		QPoint tmp;
+
+		if ( project(tmp, QPointF(0, 90)) ) {
+			if ( tmp.y() > 0 && tmp.y() < _height ) {
+				// North pole visible
+				_mapBoundingBox.north = 90;
+			}
+		}
+		else if ( project(tmp, QPointF(0, -90)) ) {
+			if ( tmp.y() > 0 && tmp.y() < _height ) {
+				// South pole visible
+				_mapBoundingBox.south = -90;
+			}
+		}
+
+		if ( _mapBoundingBox.west <= _mapBoundingBox.east ) {
+			if ( center.x() < _mapBoundingBox.west || center.x() > _mapBoundingBox.east )
+				std::swap(_mapBoundingBox.east, _mapBoundingBox.west);
+		}
+		else {
+			if ( center.x() < _mapBoundingBox.west && center.x() > _mapBoundingBox.east )
+				std::swap(_mapBoundingBox.east, _mapBoundingBox.west);
+		}
+
+	}
+
+	//std::cerr << "BB " << Geo::format(_mapBoundingBox) << std::endl;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::displayRect(const QRectF& rect) {
 	QPointF center = rect.center();
 
@@ -94,8 +267,12 @@ void Projection::displayRect(const QRectF& rect) {
 
 	setView(center, std::min(zoomLevelH, zoomLevelW));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::drawImage(QImage &, const QRectF &, const QImage &, bool, CompositionMode) {
 	static bool firstCall = true;
 	if ( firstCall ) {
@@ -103,13 +280,21 @@ void Projection::drawImage(QImage &, const QRectF &, const QImage &, bool, Compo
 		firstCall = false;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Projection::lineSteps(const QPointF &p0, const QPointF &p1) {
 	return 20;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Projection::drawLine(QPainter &p, const QPointF &from, const QPointF &to) {
 	QPoint x0, x1;
 	bool x0Visible, x1Visible;
@@ -130,13 +315,21 @@ bool Projection::drawLine(QPainter &p, const QPointF &from, const QPointF &to) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::moveTo(const QPointF &p) {
 	_cursorVisible = project(_cursor, p);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Projection::lineTo(QPainter &p, const QPointF &to) {
 	QPoint pp;
 	bool visible = project(pp, to);
@@ -161,8 +354,12 @@ bool Projection::lineTo(QPainter &p, const QPointF &to) {
 	_cursor = pp;
 	return not_clipped;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Projection::drawLatCircle(QPainter &p, qreal lon) {
 	int steps = 45;
 	bool visible = false;
@@ -175,8 +372,12 @@ bool Projection::drawLatCircle(QPainter &p, qreal lon) {
 
 	return visible;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Projection::drawLonCircle(QPainter &p, qreal lat) {
 	int steps = 45;
 	bool visible = false;
@@ -189,8 +390,12 @@ bool Projection::drawLonCircle(QPainter &p, qreal lat) {
 
 	return visible;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::setSize(int width, int height) {
 	_width = width;
 	_height = height;
@@ -204,8 +409,12 @@ void Projection::setSize(int width, int height) {
 
 	setZoom(_radius);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::draw(QImage &img, bool filter, TextureCache *cache) {
 	if ( cache ) cache->beginPaint();
 
@@ -222,9 +431,15 @@ void Projection::draw(QImage &img, bool filter, TextureCache *cache) {
 	          << ", fps = " << (1.0 / (double)ts)
 	          << std::endl;
 	*/
+
+	updateBoundingBox();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::setVisibleRadius(qreal r) {
 	_visibleRadius = r;
 	_scale = _screenRadius * _visibleRadius;
@@ -233,8 +448,12 @@ void Projection::setVisibleRadius(qreal r) {
 	_halfMapWidth = _scale * 2;
 	_mapWidth = _scale * 4;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::gridDistance() const {
 	qreal dist = std::min(double((_width / 4) / pixelPerDegree()), 180.0);
 	if ( dist < 0.01 )
@@ -250,26 +469,91 @@ QPointF Projection::gridDistance() const {
 
 	return QPointF(dist, dist);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/**
- * Returns true if the GUI object, represented by its bounding box in geo
- * coordinates, does not intersect the canvas. Note: This default implementation
- * is only valid for projections which protect the bounding box to a regular
- * rectangle (e.g. rectangular, mercator). Thus the clipping for the e.g.
- * spherical or kavrayskiy projections must be specialized.
- */
-bool Projection::isClipped(const QPointF &bboxLR, const QPointF &bboxUL) const {
-	QPoint p;
-	return
-		// Project the lower right corner of bounding box and check if
-		// it intersects with the upper left corner of the canvas
-		!project(p, bboxLR) || p.x() < 0 || p.y() < 0 ||
-		// Project the upper left corner of bounding box and check if
-		// it intersects with the lower right corner of the canvas
-		!project(p, bboxUL) || p.x() > _width || p.y() > _height;
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Projection::isClipped(const Geo::GeoBoundingBox &bbox) const {
+	return !_mapBoundingBox.intersects(bbox);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Projection::isClipped(const QPointF &bboxLR, const QPointF &bboxUL) const {
+	return isClipped(Geo::GeoBoundingBox(bboxLR.y(), bboxUL.x(),
+	                                     bboxUL.y(), bboxLR.x()));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Projection::project(QPainterPath &screenPath, size_t n,
+                         const Geo::GeoCoordinate *poly, bool closed,
+                         uint minPixelDist, ClipHint) const {
+	if ( n == 0 || !poly ) return false;
+
+	float minDist = ((float)minPixelDist)/pixelPerDegree();
+
+	QPointF v;
+	QPoint p;
+	size_t startIdx = 0;
+	while ( startIdx < n ) {
+		v.setX(poly[startIdx].lon); v.setY(poly[startIdx].lat);
+		++startIdx;
+		if ( project(p, v) ) {
+			screenPath.moveTo(p);
+			break;
+		}
+	}
+
+	if ( minDist == 0 ) {
+		for ( size_t i = startIdx; i < n; ++i ) {
+			v.setX(poly[i].lon); v.setY(poly[i].lat);
+			if ( project(p, v) ) screenPath.lineTo(p);
+		}
+	}
+	else {
+		for ( size_t i = startIdx; i < n; ++i ) {
+			if ( std::abs(poly[i].lon - v.x()) > minDist ||
+			     std::abs(poly[i].lat - v.y()) > minDist ) {
+#ifdef INTERPOLATE_FEATURE
+				Math::Geo::PositionInterpolator ip(v.y(), v.x(),
+				                                   poly[i].lat, poly[i].lon, 10);
+				++ip;
+
+				if ( project(p, QPointF(ip.longitude(),ip.latitude())) ) screenPath.lineTo(p);
+
+				while ( !ip.end() ) {
+					if ( project(p, QPointF(ip.longitude(),ip.latitude())) ) screenPath.lineTo(p);
+					++ip;
+				}
+#endif
+				v.setX(poly[i].lon); v.setY(poly[i].lat);
+#ifndef INTERPOLATE_FEATURE
+				if ( project(p, v) ) screenPath.lineTo(p);
+#endif
+			}
+		}
+	}
+
+	if ( closed )
+		screenPath.closeSubpath();
+
+	return !screenPath.isEmpty();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // of ns Map
 } // of ns Gui
 } // of ns Seiscomp

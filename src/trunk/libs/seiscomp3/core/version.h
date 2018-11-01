@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -40,22 +40,47 @@ namespace Core {
  ******************************************************************************
  "12.0.0"   0x0C0000
    - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes
+   - Added Seiscomp::Core::Time::localTimeZoneOffset()
+   - Removed geo prefix of all headers under <seiscomp3/geo/>
+   - Added Seiscomp::Util::UnitConverter
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration InvalidAmplitudeUnit
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration ReceiverOutOfRegions
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration RayPathOutOfRegions
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration MissingAmplitudeObject
-   - Added Seiscomp::Processing::MagnitudeProcessor::finalizeMagnitude
+   - Added Geo::GeoFeature::updateBoundingBox method
+   - Added static method Seiscomp::Geo::GeoFeatureSet::load
+   - Added class Seiscomp::Geo::GeoFeatureSetObserver
+   - Added Seiscomp::Gui::Map::StandardLegend::clear
+   - Added Seiscomp::Gui::Map::StandardLegend::count
+   - Added Seiscomp::Gui::Map::StandardLegend::itemAt
+   - Added Seiscomp::Gui::Map::StandardLegend::takeItem
+   - Added Seiscomp::Gui::EventLegend
+   - Removed Seiscomp::Gui::LayerProperties
+   - Removed Seiscomp::Gui::Map::Canvas::drawGeoFeature(LayerProperties ...)
+   - Added QPainter reference as 2nd parameter to Seiscomp::Gui::Map::Layer::bufferUpdated
+   - Added QPainter reference as 2nd parameter to Seiscomp::Gui::Map::Layer::baseBufferUpdated
+   - Added virtual Seiscomp::Gui::Map::Projection::project(QPainterPath, ...) method
+   - Added Seiscomp::Gui::Map::Projection::boundingBox() method
+   - Added enum Seiscomp::Gui::Map::FilterMode
+   - Changed prototype of Seiscomp::Gui::Map::Canvas::drawImage and add filterMode
+     parameter
+   - Renamed Seiscomp::Gui::Canvas::drawGeoLine to Seiscomp::Gui::Canvas::drawLine
+   - Renamed Seiscomp::Gui::Canvas::drawGeoPolyline to Seiscomp::Gui::Canvas::drawPolyline
+   - Renamed Seiscomp::Gui::Canvas::drawGeoPolygon to Seiscomp::Gui::Canvas::drawPolygon
+   - Renamed Seiscomp::Gui::Canvas::drawGeoFeature to Seiscomp::Gui::Canvas::drawFeature
+   - Seiscomp::Gui::Scheme::colors.records.gaps/overlaps is now a brush rather than
+     a color
+   - Added Seiscomp::Gui::Plot::addAxis
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration IncompleteConfiguration
    - Added Seiscomp::Processing::AmplitudeProcessor::setEnvironment
-   - Added Seiscomp::Processing::AmplitudeProcessor::environment
    - Added Seiscomp::Processing::AmplitudeProcessor::finalizeAmplitude
-   - Added unit to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
    - Added amplitude to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
-   - Added Seiscomp::Core::Time::localTimeZoneOffset()
+   - Added unit to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
    - Added Seiscomp::Gui::Map::StandardLegend
- 
+
  "11.0.0"   0x0B0000
    - Remove dynamic type throw declarations from all methods as this is
      deprecated in current C++ standard

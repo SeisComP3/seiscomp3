@@ -86,9 +86,32 @@ class SC_GUI_API StandardLegend : public Legend {
 	//  Public interface
 	// ----------------------------------------------------------------------
 	public:
+		//! Add an item to the legend. The legend will take the ownership of
+		//! the item.
 		void addItem(StandardLegendItem *item);
+
+		//! Removes all items in the legend.
+		void clear();
+
+		//! Returns the number of items in the legend.
+		int count();
+
+		//! Returns the item at index
+		StandardLegendItem *itemAt(int index) const;
+
+		//! Removes and returns the item from the given index in the leged;
+		//! otherwise returns 0. Items taken from a legend will not be managed
+		//! by the legend and will need to be deleted manually.
+		StandardLegendItem *takeItem(int index);
+
 		void setMaximumColumns(int columns);
 		void setOrientation(Qt::Orientation orientation);
+
+		//! This method needs to be called if the configuration of the
+		//! legend has changed to update its layout. Otherwise the update
+		//! will be delayed to the second render pass and might cause
+		//! one frame of distored rendering.
+		void update();
 
 
 	// ----------------------------------------------------------------------
@@ -114,10 +137,20 @@ class SC_GUI_API StandardLegend : public Legend {
 		QList<StandardLegendItem*> _items;
 		int                        _columns;
 		int                        _columnWidth;
+		QSize                      _symbolSize;
 		int                        _maxColumns;
 		bool                       _layoutDirty;
 
 };
+
+
+inline int StandardLegend::count() {
+	return _items.count();
+}
+
+inline StandardLegendItem *StandardLegend::itemAt(int index) const {
+	return _items[index];
+}
 
 
 } // namespace Map

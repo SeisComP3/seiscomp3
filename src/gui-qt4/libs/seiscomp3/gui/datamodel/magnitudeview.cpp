@@ -1638,7 +1638,9 @@ void MagnitudeView::computeMagnitudes() {
 	}
 
 	CalculateAmplitudes dlg(_origin.get(), this);
+	static QByteArray geomCalculateAmplitudes;
 
+	dlg.restoreGeometry(geomCalculateAmplitudes);
 	// TODO: This should go into the settings panel
 	dlg.setRecomputeAmplitudes(false);
 	dlg.setAmplitudeTypes(ampTypes);
@@ -1647,6 +1649,8 @@ void MagnitudeView::computeMagnitudes() {
 	dlg.setAmplitudeCache(&_amplitudes);
 	dlg.setSilentMode(_computeMagnitudesSilently);
 	if ( dlg.exec() != QDialog::Accepted ) return;
+
+	geomCalculateAmplitudes = dlg.saveGeometry();
 
 	QList<Seiscomp::DataModel::AmplitudePtr> sessionAmplitudes;
 
@@ -1673,8 +1677,10 @@ void MagnitudeView::computeMagnitudes() {
 
 	SEISCOMP_DEBUG("Amplitude cache size: %d", (int)_amplitudes.size());
 
+	MagnitudeStats magErrors;
+
 	for ( size_t i = 0; i < magnitudeTypes.size(); ++i ) {
-		Magnitude *mag = computeStationMagnitudes(magnitudeTypes[i], &sessionAmplitudes);
+		Magnitude *mag = computeStationMagnitudes(magnitudeTypes[i], &sessionAmplitudes, &magErrors);
 		if ( mag ) {
 			computeMagnitude(mag, _defaultMagnitudeAggregation?*_defaultMagnitudeAggregation:"");
 
@@ -1736,6 +1742,56 @@ void MagnitudeView::computeMagnitudes() {
 
 			_origin->add(mag.get());
 		}
+	}
+
+	if ( !magErrors.isEmpty() && !_computeMagnitudesSilently ) {
+		static QByteArray geomCalculateMagnitudes;
+
+		QDialog dlg;
+		dlg.setWindowTitle(tr("Compute magnitudes"));
+		dlg.restoreGeometry(geomCalculateMagnitudes);
+
+		QTableWidget *table = new QTableWidget;
+		QVBoxLayout *vlayout = new QVBoxLayout;
+		dlg.setLayout(vlayout);
+		vlayout->addWidget(table);
+
+		QHBoxLayout *hlayout = new QHBoxLayout;
+		hlayout->addStretch();
+		QPushButton *btnOK = new QPushButton(tr("OK"));
+		hlayout->addWidget(btnOK);
+		connect(btnOK, SIGNAL(pressed()), &dlg, SLOT(accept()));
+		vlayout->addLayout(hlayout);
+
+		table->setColumnCount(3);
+
+		table->horizontalHeader()->setStretchLastSection(true);
+		table->horizontalHeader()->setVisible(true);
+		table->setHorizontalHeaderLabels(QStringList() << tr("Channel") << tr("Type") << tr("Error"));
+
+		// Populate errors
+		foreach ( const MagnitudeStatus &s, magErrors ) {
+			QTableWidgetItem *itemStream = new QTableWidgetItem(waveformIDToStdString(s.amplitude->waveformID()).c_str());
+			itemStream->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			QTableWidgetItem *itemType = new QTableWidgetItem(s.type.c_str());
+			itemType->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			QTableWidgetItem *itemState = new QTableWidgetItem(s.status.toString());
+			itemState->setData(Qt::TextColorRole, Qt::red);
+			itemState->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+			int row = table->rowCount();
+			table->insertRow(row);
+
+			table->setItem(row, 0, itemStream);
+			table->setItem(row, 1, itemType);
+			table->setItem(row, 2, itemState);
+		}
+
+		table->resizeColumnsToContents();
+		table->setSortingEnabled(true);
+
+		dlg.exec();
+		geomCalculateMagnitudes = dlg.saveGeometry();
 	}
 
 	// Synchronize local amplitudes for commit
@@ -1857,7 +1913,6 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::amplitudesConfirmed(Origin *origin,
                                         QList<Seiscomp::DataModel::AmplitudePtr> amps) {
-	QVariant data;
 	AmplitudeView *view = (AmplitudeView*)sender();
 	ObjectChangeList<DataModel::Amplitude> changedAmps;
 	view->getChangedAmplitudes(changedAmps);
@@ -1929,7 +1984,8 @@ void MagnitudeView::amplitudesConfirmed(Origin *origin,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Magnitude *
 MagnitudeView::computeStationMagnitudes(const string &magType,
-                                        QList<Seiscomp::DataModel::AmplitudePtr> *amps) {
+                                        QList<Seiscomp::DataModel::AmplitudePtr> *amps,
+                                        MagnitudeStats *errors) {
 	Processing::MagnitudeProcessorPtr magProc = Processing::MagnitudeProcessorFactory::Create(magType.c_str());
 	if ( !magProc ) return NULL;
 
@@ -2154,6 +2210,8 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 				SEISCOMP_ERROR("Failed to compute magnitude for station %s: %d (%s)",
 				               amp->waveformID().stationCode().c_str(),
 				               (int)stat, stat.toString());
+				if ( errors != NULL )
+					errors->append(MagnitudeStatus(magProc->type(), amp.get(), stat));
 				continue;
 			}
 

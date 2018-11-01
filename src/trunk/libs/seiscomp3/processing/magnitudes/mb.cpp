@@ -17,8 +17,14 @@
 
 
 namespace Seiscomp {
-
 namespace Processing {
+
+
+namespace {
+
+std::string ExpectedAmplitudeUnit = "nm";
+
+}
 
 
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_mb, MagnitudeProcessor, "MagnitudeProcessor_mb");
@@ -55,13 +61,19 @@ MagnitudeProcessor::Status MagnitudeProcessor_mb::computeMagnitude(
 	if ( period < 0.4 || period > 3.0 )
 		return PeriodOutOfRange;
 
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
+
 	// amplitude is nanometers, whereas compute_mb wants micrometers
 	bool valid = Magnitudes::compute_mb(amplitude*1.E-3, period, delta, depth+1, &value);
 	value = correctMagnitude(value);
 	return valid ? OK : Error;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

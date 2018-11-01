@@ -315,6 +315,12 @@ MainFrame::MainFrame(){
 	try { pickerConfig.alignmentPosition = SCApp->configGetDouble("picker.alignmentPosition"); }
 	catch ( ... ) { pickerConfig.alignmentPosition = 0.5; }
 
+	try { pickerConfig.integrationFilter = SCApp->configGetString("picker.integration.preFilter").c_str(); }
+	catch ( ... ) {}
+
+	try { pickerConfig.onlyApplyIntegrationFilterOnce = SCApp->configGetBool("picker.integration.applyOnce"); }
+	catch ( ... ) { pickerConfig.onlyApplyIntegrationFilterOnce = true; }
+
 	if ( pickerConfig.alignmentPosition < 0 )
 		pickerConfig.alignmentPosition = 0;
 	else if ( pickerConfig.alignmentPosition > 1 )
@@ -533,7 +539,10 @@ MainFrame::MainFrame(){
 	catch ( ... ) { pickerConfig.hideStationsWithoutData = false; }
 
 	try { pickerConfig.hideDisabledStations = SCApp->configGetBool("olv.hideDisabledStations"); }
-	catch ( ... ) { pickerConfig.hideDisabledStations = true; }
+	catch ( ... ) { pickerConfig.hideDisabledStations = false; }
+
+	try { pickerConfig.ignoreDisabledStations = SCApp->configGetBool("olv.ignoreDisabledStations"); }
+	catch ( ... ) { pickerConfig.hideDisabledStations = false; }
 
 	try { pickerConfig.defaultDepth = SCApp->configGetDouble("olv.defaultDepth"); }
 	catch ( ... ) { pickerConfig.defaultDepth = 10; }
@@ -567,6 +576,8 @@ MainFrame::MainFrame(){
 	amplitudeConfig.defaultAddStationsDistance = pickerConfig.defaultAddStationsDistance;
 	amplitudeConfig.hideStationsWithoutData = pickerConfig.hideStationsWithoutData;
 	amplitudeConfig.loadStrongMotionData = pickerConfig.loadStrongMotionData;
+	amplitudeConfig.ignoreDisabledStations = pickerConfig.ignoreDisabledStations;
+	amplitudeConfig.ignoreDisabledStations = pickerConfig.ignoreDisabledStations;
 
 	_originLocator = new OriginLocatorView(mapTree.get(), pickerConfig);
 	_originLocator->setDatabase(SCApp->query());
@@ -1032,6 +1043,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetDouble("olv.defaultAddStationsDistance", pc.defaultAddStationsDistance);
 		SCApp->configSetBool("olv.hideStationsWithoutData", pc.hideStationsWithoutData);
 		SCApp->configSetBool("olv.hideDisabledStations", pc.hideDisabledStations);
+		SCApp->configSetBool("olv.ignoreDisabledStations", pc.ignoreDisabledStations);
 
 		SCApp->configSetBool("picker.showCrossHairCursor", pc.showCrossHair);
 		SCApp->configSetBool("picker.ignoreUnconfiguredStations", pc.ignoreUnconfiguredStations);
@@ -1077,6 +1089,9 @@ void MainFrame::configureAcquisition() {
 			SCApp->configSetDouble("picker.repickerEnd", *pc.repickerSignalEnd);
 		else
 			SCApp->configUnset("picker.repickerEnd");
+
+		SCApp->configSetString("picker.integration.preFilter", pc.integrationFilter.toStdString());
+		SCApp->configSetBool("picker.integration.applyOnce", pc.onlyApplyIntegrationFilterOnce);
 
 		SCApp->configSetInt("amplitudePicker.preOffset", ac.preOffset.seconds());
 		SCApp->configSetInt("amplitudePicker.postOffset", ac.postOffset.seconds());

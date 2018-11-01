@@ -214,7 +214,7 @@ const TravelTime* firstArrivalP(const TravelTimeList *);
 
 
 #define REGISTER_TRAVELTIMETABLE(Class, Service) \
-Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::TravelTimeTableInterface, Class> __##Class##InterfaceFactory__(Service)
+static Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::TravelTimeTableInterface, Class> __##Class##InterfaceFactory__(Service)
 
 
 #endif

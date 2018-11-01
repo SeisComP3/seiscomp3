@@ -137,7 +137,7 @@ void Sensitivity::setFrequencyStart(const OPT(double)& frequencyStart) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensitivity::frequencyStart() const throw(Seiscomp::Core::ValueException) {
+double Sensitivity::frequencyStart() const {
 	if ( _frequencyStart )
 		return *_frequencyStart;
 	throw Seiscomp::Core::ValueException("Sensitivity.FrequencyStart is not set");
@@ -157,7 +157,7 @@ void Sensitivity::setFrequencyEnd(const OPT(double)& frequencyEnd) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensitivity::frequencyEnd() const throw(Seiscomp::Core::ValueException) {
+double Sensitivity::frequencyEnd() const {
 	if ( _frequencyEnd )
 		return *_frequencyEnd;
 	throw Seiscomp::Core::ValueException("Sensitivity.FrequencyEnd is not set");
@@ -177,7 +177,7 @@ void Sensitivity::setFrequencyDBVariation(const OPT(double)& frequencyDBVariatio
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensitivity::frequencyDBVariation() const throw(Seiscomp::Core::ValueException) {
+double Sensitivity::frequencyDBVariation() const {
 	if ( _frequencyDBVariation )
 		return *_frequencyDBVariation;
 	throw Seiscomp::Core::ValueException("Sensitivity.FrequencyDBVariation is not set");
