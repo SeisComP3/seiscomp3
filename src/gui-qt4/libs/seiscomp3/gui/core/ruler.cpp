@@ -43,7 +43,7 @@ Ruler::Ruler(QWidget *parent, Qt::WindowFlags f, Position pos)
 	setFrameStyle(QFrame::Panel | QFrame::Plain);
 	setLineWidth(0);
 	setPosition(pos);
-	setLimits(std::numeric_limits<double>::min(),
+	setLimits(-std::numeric_limits<double>::max(),
 	          std::numeric_limits<double>::max(),
 	          0, 0);
 	_scl = 1.;
