@@ -57,7 +57,13 @@ class SC_SYSTEM_CLIENT_API AbstractAmplitudeProcessor_ML : public AmplitudeProce
 		double timeWindowLength(double distance) const;
 
 	private:
-		bool _computeAbsMax;
+		enum AmplitudeMeasureType {
+			AbsMax,
+			MinMax,
+			PeakTrough
+		};
+
+		AmplitudeMeasureType _amplitudeMeasureType;
 };
 
 

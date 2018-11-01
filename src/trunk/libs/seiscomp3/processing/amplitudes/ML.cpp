@@ -27,6 +27,69 @@ namespace Seiscomp {
 namespace Processing {
 
 
+namespace {
+
+
+bool computePeak2Peak(const double *data, size_t npts,
+                      double &amplitude, double &period, double &index) {
+	if ( npts <= 3 ) return false;
+
+	// This is a port of a Perl code from NRCAN
+	int ipeak_save = -1; // If > 0 indicates that at least 2 peaks or troughs
+	                     // have already been found.
+	                     // Stores position of 1st of pair of peak/trough
+	                     // for largest amp found so far.
+
+	// vel indicates up or down direction of signal
+	// as part of search for peaks and troughs.
+	int ipeak = -1;  // will be > 0 and indicate position of peak or trough.
+	                 // initialize direction in most cases. (a nonzero vel is wanted.)
+	double vel = data[2]-data[1];
+	for ( size_t isamp = 2; isamp < npts-1; ++isamp ) {
+		double vel2 = data[isamp+1]-data[isamp];
+		if ( vel2*vel < 0.0 ) {
+			// have found a peak or trough at $isamp.
+			if ( ipeak >= 0 ) {
+				// have found consecutive peak and trough.
+				double amp_temp = 0.5 * fabs(data[isamp] - data[ipeak]);
+				if ( ipeak_save < 0 || amp_temp > amplitude ) {
+					// Save this as the largest so far.
+					amplitude = amp_temp;
+
+					// The period will be converted to seconds in
+					// AmplitudeProcessor::process. Here we return the period
+					// in indexes
+					period = 2.0 * (isamp-ipeak);
+					ipeak_save = ipeak;
+				}
+			}
+
+			// store location of current peak
+			ipeak = isamp;
+			vel = vel2;
+		}
+		else {
+			// re-initialize direction in case where first few samples equal.
+			// This will only happen before first peak is found.
+			if ( vel == 0 )
+				vel = data[isamp+1]-data[isamp];
+		}
+	}
+
+	if ( ipeak_save < 0 )
+		// No amplitude found
+		return false;
+
+	// not really time of maximum
+	index = ipeak_save;
+
+	return true;
+}
+
+
+}
+
+
 IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(AbstractAmplitudeProcessor_ML, AmplitudeProcessor, "AbstractAmplitudeProcessor_ML");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -39,7 +102,7 @@ AbstractAmplitudeProcessor_ML::AbstractAmplitudeProcessor_ML(const std::string& 
 	setSignalEnd(150.);
 	setMinSNR(0);
 	setMaxDist(8);
-	_computeAbsMax = true;
+	_amplitudeMeasureType = AbsMax;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -53,7 +116,7 @@ AbstractAmplitudeProcessor_ML::AbstractAmplitudeProcessor_ML(const Core::Time& t
 	setMinSNR(0);
 	setMaxDist(8);
 	computeTimeWindow();
-	_computeAbsMax = true;
+	_amplitudeMeasureType = AbsMax;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -93,6 +156,7 @@ AbstractAmplitudeProcessor_ML::capabilityParameters(Capability cap) const {
 		IDList params;
 		params.push_back("AbsMax");
 		params.push_back("MinMax");
+		params.push_back("PeakTrough");
 		return params;
 	}
 
@@ -107,11 +171,15 @@ AbstractAmplitudeProcessor_ML::capabilityParameters(Capability cap) const {
 bool AbstractAmplitudeProcessor_ML::setParameter(Capability cap, const std::string &value) {
 	if ( cap == MeasureType ) {
 		if ( value == "AbsMax" ) {
-			_computeAbsMax = true;
+			_amplitudeMeasureType = AbsMax;
 			return true;
 		}
 		else if ( value == "MinMax" ) {
-			_computeAbsMax = false;
+			_amplitudeMeasureType = MinMax;
+			return true;
+		}
+		else if ( value == "PeakTrough" ) {
+			_amplitudeMeasureType = PeakTrough;
 			return true;
 		}
 
@@ -129,7 +197,17 @@ bool AbstractAmplitudeProcessor_ML::setParameter(Capability cap, const std::stri
 bool AbstractAmplitudeProcessor_ML::setup(const Settings &settings) {
 	if ( !AmplitudeProcessor::setup(settings) ) return false;
 
-	settings.getValue(_computeAbsMax, "amplitudes.ML.absMax");
+	bool absMax = false;
+	if ( settings.getValue(absMax, "amplitudes.ML.absMax") )
+		_amplitudeMeasureType = AbsMax;
+	else {
+		std::string measureType;
+		if ( settings.getValue(measureType, "amplitudes.ML.ampType") ) {
+			if ( !setParameter(MeasureType, measureType) )
+				return false;
+		}
+	}
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -181,18 +259,37 @@ bool AbstractAmplitudeProcessor_ML::computeAmplitude(
 		double *period, double *snr) {
 	double amax;
 
-	if ( _computeAbsMax ) {
-		size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
-		amax = fabs(data[imax] - offset);
-		dt->index = imax;
-	}
-	else {
-		int lmin, lmax;
-		find_minmax(lmin, lmax, data.size(), data.typedData(), si1, si2, offset);
-		amax = (data[lmax] - data[lmin]) * 0.5;
-		dt->index = (lmin+lmax)*0.5;
-		dt->begin = lmin - dt->index;
-		dt->end = lmax - dt->index;
+	switch ( _amplitudeMeasureType ) {
+		case AbsMax:
+		{
+			size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
+			amax = fabs(data[imax] - offset);
+			dt->index = imax;
+			break;
+		}
+
+		case MinMax:
+		{
+			int lmin, lmax;
+			find_minmax(lmin, lmax, data.size(), data.typedData(), si1, si2, offset);
+			amax = (data[lmax] - data[lmin]) * 0.5;
+			dt->index = (lmin+lmax)*0.5;
+			dt->begin = lmin - dt->index;
+			dt->end = lmax - dt->index;
+			break;
+		}
+
+		case PeakTrough:
+			if ( !computePeak2Peak(data.typedData()+si1, si2-si1, amax, *period, dt->index) )
+				return false;
+
+			dt->index += si1;
+			dt->begin = 0;
+			dt->end = *period * 0.5;
+			break;
+
+		default:
+			return false;
 	}
 
 	if ( *_noiseAmplitude == 0. )
