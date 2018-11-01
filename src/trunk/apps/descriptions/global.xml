@@ -612,6 +612,18 @@
 						amplitudes that use the MLv processing component.
 						</description>
 					</parameter>
+					<parameter name="measureType" type="string" default="AbsMax">
+						<description>
+						This parameter allows to set how the amplitude is measured.
+						Either by finding the absolute maximum of the demeaned
+						trace (AbsMax), the difference of maximum and minimum of
+						the signal window (MinMax) or the maximum peak-trough
+						of one cycle (PeakTrough).
+
+						Note that if absMax is already explicitly configured, this
+						parameter has no effect.
+						</description>
+					</parameter>
 				</group>
 				<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
 					<description>

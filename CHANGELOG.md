@@ -11,9 +11,14 @@
     the scolv locator setup dialog. The latter defaults to false to preserve
     the old behaviour
   * Add ConfigSyncMessage which wraps a database configuration synchronization
-  * Fixed ML amplitude calculation which had a factor of 2 applied and effectively
-    picked a peak-to-peak amplitude instead of zero-to-peak.
-
+  * Fixed amplitude computation for ML (on horizontals, not MLv) which applied
+    a wrong correction factor of 2. Therefore ML magnitudes will be 0.3 magnitudes
+    lower than before. To preserve the old (wrong) behaviour, apply a constant
+    correction in the bindings:
+    ```
+    # Add log10(2) to ML magnitudes for SC3 compatibility with <= 2017.334
+    mag.ML.offset = 0.301029995664
+    ```
 
 * fdsnxml2inv
 

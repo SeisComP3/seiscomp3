@@ -14,6 +14,7 @@
 
 #define SEISCOMP_COMPONENT AmplitudeML
 
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/processing/amplitudes/ML.h>
 #include <seiscomp3/math/mean.h>
 #include <seiscomp3/math/filter/seismometers.h>
@@ -197,14 +198,22 @@ bool AbstractAmplitudeProcessor_ML::setParameter(Capability cap, const std::stri
 bool AbstractAmplitudeProcessor_ML::setup(const Settings &settings) {
 	if ( !AmplitudeProcessor::setup(settings) ) return false;
 
-	bool absMax = false;
-	if ( settings.getValue(absMax, "amplitudes.ML.absMax") )
-		_amplitudeMeasureType = AbsMax;
+	bool absMax = true;
+	if ( settings.getValue(absMax, "amplitudes.ML.absMax") ) {
+		_amplitudeMeasureType = absMax ? AbsMax : MinMax;
+	}
 	else {
 		std::string measureType;
-		if ( settings.getValue(measureType, "amplitudes.ML.ampType") ) {
-			if ( !setParameter(MeasureType, measureType) )
+		if ( settings.getValue(measureType, "amplitudes.ML.measureType") ) {
+			if ( !setParameter(MeasureType, measureType) ) {
+				SEISCOMP_ERROR("%s.%s.%s.%s: invalid amplitude measure type: %s",
+				               settings.networkCode.c_str(),
+				               settings.stationCode.c_str(),
+				               settings.locationCode.c_str(),
+				               settings.channelCode.c_str(),
+				               measureType.c_str());
 				return false;
+			}
 		}
 	}
 
