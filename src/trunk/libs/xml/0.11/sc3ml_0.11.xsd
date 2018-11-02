@@ -518,6 +518,7 @@
       <xs:element name="amplitudeID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="waveformID" type="scs:WaveformStreamID" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="passedQC" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>

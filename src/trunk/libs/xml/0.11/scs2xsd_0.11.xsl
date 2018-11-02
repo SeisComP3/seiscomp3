@@ -26,7 +26,6 @@
 
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:qml="http://quakeml.org/xmlns/quakeml/1.0"
     xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.11">
 
 <xsl:output method="xml" indent="yes"/>
@@ -44,7 +43,20 @@
 <xsl:template match="scs:seiscomp-schema">
     <xsl:comment> Generated from Seiscomp Schema, do not edit </xsl:comment>
     <xs:schema targetNamespace="{namespace-uri()}" elementFormDefault="qualified" attributeFormDefault="unqualified">
-        <xs:import namespace="http://quakeml.org/xmlns/quakeml/1.0" schemaLocation="quakeml_types.xsd"/>
+        <xs:simpleType name="ResourceIdentifier">
+            <xs:restriction base="xs:string"/>
+        </xs:simpleType>
+        <xs:simpleType name="FloatArrayType">
+            <xs:list itemType="xs:double"/>
+        </xs:simpleType>
+        <xs:simpleType name="ComplexArrayType">
+            <xs:restriction base="xs:string">
+                <xs:pattern value="(\s*\(\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*,\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*\)\s*)*"/>
+            </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="TimeArrayType">
+            <xs:list itemType="xs:dateTime"/>
+        </xs:simpleType>
         <xsl:apply-templates select="scs:enum"/>
         <xsl:apply-templates select="scs:type"/>
         <xs:element name="{$root}">

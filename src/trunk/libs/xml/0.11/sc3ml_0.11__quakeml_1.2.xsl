@@ -95,20 +95,21 @@
  *  - Unmapped nodes: The following nodes can not be mapped to the QuakeML
  *    schema, thus their data is lost:
  *
- *    Parent          Element lost
- *    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
- *    creationInfo    modificationTime
- *    momentTensor    method
- *                    stationMomentTensorContribution
- *                    status
- *                    cmtName
- *                    cmtVersion
- *                    phaseSetting
- *    eventParameters reading
- *    comment         start
- *    comment         end
- *    RealQuantity    pdf
- *    TimeQuality     pdf
+ *    Parent           Element lost
+ *    """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ *    creationInfo     modificationTime
+ *    momentTensor     method
+ *                     stationMomentTensorContribution
+ *                     status
+ *                     cmtName
+ *                     cmtVersion
+ *                     phaseSetting
+ *    stationMagnitude passedQC
+ *    eventParameters  reading
+ *    comment          start
+ *    comment          end
+ *    RealQuantity     pdf
+ *    TimeQuality      pdf
  *
  *  - Mandatory nodes: The following nodes is mandatory in QuakeML but not in
  *    SC3ML:
@@ -170,6 +171,8 @@
  *
  *  * 27.07.2018: Version bump. No modification here, SC3 datamodel was
  *                extented by data availability top level element
+ *
+ *  * 02.11.2018: Don't export stationMagnitude passedQC attribute
  *
  ********************************************************************** -->
 <xsl:stylesheet version="1.0"
@@ -289,6 +292,7 @@
     <xsl:template match="scs:momentTensor/scs:cmtName"/>
     <xsl:template match="scs:momentTensor/scs:cmtVersion"/>
     <xsl:template match="scs:momentTensor/scs:phaseSetting"/>
+    <xsl:template match="scs:stationMagnitude/scs:passedQC"/>
     <xsl:template match="scs:pdf"/>
 
     <!-- Converts a scs magnitude/stationMagnitude to a qml
