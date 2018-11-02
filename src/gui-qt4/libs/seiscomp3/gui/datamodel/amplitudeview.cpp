@@ -3831,6 +3831,22 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 		return NULL;
 	}
 
+	if ( proc->config().minimumDistance < _minDist ) {
+		_minDist = proc->config().minimumDistance;
+		if ( SCScheme.unit.distanceInKM )
+			_spinDistance->setMinimum(Math::Geo::deg2km(_minDist));
+		else
+			_spinDistance->setMinimum(_minDist);
+	}
+
+	if ( proc->config().maximumDistance > _maxDist ) {
+		_maxDist = proc->config().maximumDistance;
+		if ( SCScheme.unit.distanceInKM )
+			_spinDistance->setMaximum(Math::Geo::deg2km(_maxDist));
+		else
+			_spinDistance->setMaximum(_maxDist);
+	}
+
 	proc->setTrigger(referenceTime);
 
 	try {
