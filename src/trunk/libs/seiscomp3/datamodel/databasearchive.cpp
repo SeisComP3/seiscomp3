@@ -506,6 +506,7 @@ void DatabaseArchive::setDriver(Seiscomp::IO::DatabaseInterface *db) {
 DatabaseArchive::DatabaseArchive(Seiscomp::IO::DatabaseInterface *i)
   : _db(i), _objectAttributes(NULL) {
 	setHint(IGNORE_CHILDS);
+	Object::RegisterObserver(this);
 	_allowDbClose = false;
 	_checkForCached = true;
 

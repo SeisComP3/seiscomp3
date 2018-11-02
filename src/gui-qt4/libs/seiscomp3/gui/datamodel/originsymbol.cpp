@@ -54,6 +54,7 @@ OriginSymbol::OriginSymbol(double latitude,
                            Map::Decorator* decorator)
 : Symbol(latitude, longitude, decorator)
 , _filled(false)
+, _magnitude(0)
 , _depth(depth) {
 	init();
 }

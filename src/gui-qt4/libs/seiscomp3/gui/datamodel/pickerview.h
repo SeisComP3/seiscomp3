@@ -497,6 +497,9 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void openConnectionInfo(const QPoint &);
 		void destroyedSpectrumWidget(QObject *);
 
+		void ttInterfaceChanged(QString);
+		void ttTableChanged(QString);
+
 
 	protected:
 		void showEvent(QShowEvent* event);
@@ -505,6 +508,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 
 	private:
+		void figureOutTravelTimeTable();
+
 		void init();
 		void initPhases();
 		bool fillTheoreticalArrivals();
@@ -621,90 +626,95 @@ class SC_GUI_API PickerView : public QMainWindow {
 		typedef std::list<WaveformRequest> WaveformStreamList;
 
 		Seiscomp::DataModel::DatabaseQuery *_reader;
-		QSet<QString> _stations;
-		QComboBox *_comboFilter;
-		QComboBox *_comboRotation;
-		QComboBox *_comboUnit;
-		QDoubleSpinBox *_spinDistance;
-		QComboBox *_comboPicker;
+		QSet<QString>                       _stations;
+		QComboBox                          *_comboFilter;
+		QComboBox                          *_comboRotation;
+		QComboBox                          *_comboUnit;
+		QComboBox                          *_comboTTT;
+		QComboBox                          *_comboTTTables;
+		QDoubleSpinBox                     *_spinDistance;
+		QComboBox                          *_comboPicker;
 
-		QLineEdit *_searchStation;
-		QLabel *_searchLabel;
+		QLineEdit                          *_searchStation;
+		QLabel                             *_searchLabel;
 
-		static QSize _defaultSpectrumWidgetSize;
-		static QByteArray _spectrumWidgetGeometry;
-		Config::UncertaintyList _uncertainties;
+		static QSize                        _defaultSpectrumWidgetSize;
+		static QByteArray                   _spectrumWidgetGeometry;
+		Config::UncertaintyList             _uncertainties;
 
 		//QScrollArea* _zoomTrace;
-		ConnectionStateLabel *_connectionState;
-		RecordView *_recordView;
-		RecordWidget *_currentRecord;
-		TimeScale *_timeScale;
-		Seiscomp::DataModel::OriginPtr _origin;
+		ConnectionStateLabel               *_connectionState;
+		RecordView                         *_recordView;
+		RecordWidget                       *_currentRecord;
+		TimeScale                          *_timeScale;
+		Seiscomp::DataModel::OriginPtr      _origin;
 
-		Core::TimeWindow _timeWindowOfInterest;
+		Core::TimeWindow                    _timeWindowOfInterest;
 
-		QActionGroup *_actionsUncertainty;
-		QActionGroup *_actionsPickGroupPhases;
-		QActionGroup *_actionsPickFavourites;
+		QActionGroup                       *_actionsUncertainty;
+		QActionGroup                       *_actionsPickGroupPhases;
+		QActionGroup                       *_actionsPickFavourites;
 
-		QActionGroup *_actionsAlignOnFavourites;
-		QActionGroup *_actionsAlignOnGroupPhases;
+		QActionGroup                       *_actionsAlignOnFavourites;
+		QActionGroup                       *_actionsAlignOnGroupPhases;
 
-		QList<QMenu*> _menusPickGroups;
-		QList<QMenu*> _menusAlignGroups;
+		QList<QMenu*>                       _menusPickGroups;
+		QList<QMenu*>                       _menusAlignGroups;
 
-		QList<QString> _phases;
-		QList<QString> _showPhases;
-		float _minTime, _maxTime;
-		Core::TimeWindow _timeWindow;
-		float _zoom;
-		float _currentAmplScale;
-		QString _currentPhase;
-		QString _lastRecordURL;
-		TravelTimeTable _ttTable;
-		bool _centerSelection;
-		bool _checkVisibility;
-		bool _acquireNextStations;
-		int _lastFilterIndex;
-		bool _autoScaleZoomTrace;
-		bool _loadedPicks;
-		int _currentSlot;
-		bool _alignedOnOT;
-		RecordWidget::Filter *_currentFilter;
-		QString _currentFilterID;
+		QList<QString>                      _phases;
+		QList<QString>                      _showPhases;
+		float                               _minTime, _maxTime;
+		Core::TimeWindow                    _timeWindow;
+		float                               _zoom;
+		float                               _currentAmplScale;
+		QString                             _currentPhase;
+		QString                             _lastRecordURL;
+		TravelTimeTableInterfacePtr         _ttTable;
+		bool                                _centerSelection;
+		bool                                _checkVisibility;
+		bool                                _acquireNextStations;
+		int                                 _lastFilterIndex;
+		bool                                _autoScaleZoomTrace;
+		bool                                _loadedPicks;
+		int                                 _currentSlot;
+		bool                                _alignedOnOT;
+		RecordWidget::Filter               *_currentFilter;
+		QString                             _currentFilterID;
 
-		QWidget *_pickInfoList;
+		QWidget                            *_pickInfoList;
 
-		double _tmpLowerUncertainty;
-		double _tmpUpperUncertainty;
+		double                              _tmpLowerUncertainty;
+		double                              _tmpUpperUncertainty;
 
-		int _currentRotationMode;
-		int _currentUnitMode;
-		int _lastFoundRow;
-		QColor _searchBase, _searchError;
+		int                                 _currentRotationMode;
+		int                                 _currentUnitMode;
+		int                                 _lastFoundRow;
+		QColor                              _searchBase, _searchError;
 
-		std::vector<std::string> _broadBandCodes;
-		std::vector<std::string> _strongMotionCodes;
+		std::vector<std::string>            _broadBandCodes;
+		std::vector<std::string>            _strongMotionCodes;
 
-		WaveformStreamList _nextStreams;
-		WaveformStreamList _allStreams;
+		WaveformStreamList                  _nextStreams;
+		WaveformStreamList                  _allStreams;
 
-		RecordItemMap _recordItemLabels;
+		RecordItemMap                       _recordItemLabels;
 
 		mutable ObjectChangeList<DataModel::Pick> _changedPicks;
-		std::vector<DataModel::PickPtr> _picksInTime;
+		std::vector<DataModel::PickPtr>     _picksInTime;
 
-		QVector<RecordStreamThread*> _acquisitionThreads;
-		QList<PickerMarkerActionPlugin*> _markerPlugins;
+		QVector<RecordStreamThread*>        _acquisitionThreads;
+		QList<PickerMarkerActionPlugin*>    _markerPlugins;
 
-		Config _config;
-		SpectrogramOptions _specOpts;
+		Config                              _config;
+		SpectrogramOptions                  _specOpts;
 
-		QWidget *_spectrumView;
+		QWidget                            *_spectrumView;
 
-		::Ui::PickerView _ui;
-		bool _settingsRestored;
+		::Ui::PickerView                    _ui;
+		bool                                _settingsRestored;
+
+		static std::string                  _ttInterface;
+		static std::string                  _ttTableName;
 };
 
 

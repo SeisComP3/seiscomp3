@@ -77,6 +77,7 @@
 #define COMP_NO_METADATA '\0'
 
 
+using namespace std;
 using namespace Seiscomp;
 using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Math;
@@ -2102,6 +2103,14 @@ void PickerRecordLabel::removeLabelColor() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+string PickerView::_ttInterface = "libtau";
+string PickerView::_ttTableName = "iasp91";
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::Config::Config() {
 	timingQualityLow = Qt::darkRed;
 	timingQualityMedium = Qt::yellow;
@@ -2495,6 +2504,39 @@ void PickerView::init() {
 	_comboUnit->setCurrentIndex(_currentUnitMode);
 
 	_ui.toolBarFilter->insertWidget(_ui.actionToggleFilter, _comboUnit);
+
+	// TTT selection
+	_comboTTT = new QComboBox;
+	_ui.toolBarTTT->addWidget(_comboTTT);
+
+	_comboTTT->setToolTip(tr("Select one of the supported travel time table backends."));
+	TravelTimeTableInterfaceFactory::ServiceNames *ttServices = TravelTimeTableInterfaceFactory::Services();
+	if ( ttServices ) {
+		TravelTimeTableInterfaceFactory::ServiceNames::iterator it;
+		int currentIndex = -1;
+		for ( it = ttServices->begin(); it != ttServices->end(); ++it ) {
+			_comboTTT->addItem((*it).c_str());
+			if ( _ttInterface == *it )
+				currentIndex = _comboTTT->count()-1;
+		}
+		delete ttServices;
+
+		if ( currentIndex >= 0 )
+			_comboTTT->setCurrentIndex(currentIndex);
+	}
+
+	if ( _comboTTT->count() > 0 ) {
+		connect(_comboTTT, SIGNAL(currentIndexChanged(QString)), this, SLOT(ttInterfaceChanged(QString)));
+		_comboTTTables = new QComboBox;
+		_comboTTTables->setToolTip(tr("Select one of the supported tables for the current travel time table backend."));
+		_ui.toolBarTTT->addWidget(_comboTTTables);
+		ttInterfaceChanged(_comboTTT->currentText());
+		connect(_comboTTTables, SIGNAL(currentIndexChanged(QString)), this, SLOT(ttTableChanged(QString)));
+	}
+	else {
+		delete _comboTTT;
+		_comboTTT = NULL;
+	}
 
 	connect(_ui.actionSetPolarityPositive, SIGNAL(triggered(bool)),
 	        this, SLOT(setPickPolarity()));
@@ -4155,6 +4197,21 @@ void PickerView::addArrival(Seiscomp::Gui::RecordWidget* widget,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::figureOutTravelTimeTable() {
+	if ( !_origin ) return;
+
+	int idx = _comboTTT->findText(_origin->methodID().c_str());
+	if ( idx < 0 ) return;
+
+	_ttTableName = _origin->earthModelID();
+	_comboTTT->setCurrentIndex(idx);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
                            double relTimeWindowStart,
                            double relTimeWindowEnd) {
@@ -4167,6 +4224,7 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 	_recordItemLabels.clear();
 
 	_origin = origin;
+	figureOutTravelTimeTable();
 
 	updateOriginInformation();
 	if ( _comboFilter->currentIndex() == 0 && _lastFilterIndex > 0 )
@@ -4356,6 +4414,7 @@ int PickerView::loadPicks() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::setOrigin(Seiscomp::DataModel::Origin* o) {
 	_origin = o;
+	figureOutTravelTimeTable();
 
 	// Remove picks and arrivals from all traces and update the ones
 	// from the new origin
@@ -4546,6 +4605,19 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
                                         const std::string& locCode) {
 	if ( _origin == NULL ) return false;
 
+	// First clear all theoretical arrivals
+	for ( int i = 0; i < item->widget()->markerCount(); ) {
+		PickerMarker* m = static_cast<PickerMarker*>(item->widget()->marker(i));
+		if ( m->type() == PickerMarker::Theoretical )
+			item->widget()->removeMarker(i);
+		else
+			++i;
+	}
+
+	item->widget()->update();
+
+	if ( !_ttTable ) return false;
+
 	try {
 		DataModel::SensorLocation *loc =
 			Client::Inventory::Instance()->getSensorLocation(
@@ -4610,8 +4682,8 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		}
 
 		if ( depth <= 0.0 ) depth = 1.0;
-//std::cerr << staCode << std::endl;
-		TravelTimeList* ttt = _ttTable.compute(elat, elon, depth, slat, slon, salt);
+
+		TravelTimeList* ttt = _ttTable->compute(elat, elon, depth, slat, slon, salt);
 
 		if ( ttt ) {
 			QMap<QString, RecordMarker*> currentPhases;
@@ -4715,6 +4787,8 @@ bool PickerView::fillTheoreticalArrivals() {
 		if ( addTheoreticalArrivals(item, stream_id.networkCode(), stream_id.stationCode(), stream_id.locationCode()) )
 			stationSet = true;
 	}
+
+	_currentRecord->update();
 
 	return stationSet;
 }
@@ -5421,6 +5495,60 @@ void PickerView::destroyedSpectrumWidget(QObject *o) {
 		_defaultSpectrumWidgetSize = w->size();
 		_spectrumWidgetGeometry = w->saveGeometry();
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::ttInterfaceChanged(QString interface) {
+	_comboTTTables->blockSignals(true);
+	_comboTTTables->clear();
+
+	_ttInterface = interface.toStdString();
+
+	try {
+		vector<string> models = SCApp->configGetStrings("ttt." + interface.toStdString() + ".tables");
+		int currentIndex = -1;
+		for ( size_t i = 0; i < models.size(); ++i ) {
+			_comboTTTables->addItem(models[i].c_str());
+			if ( _ttTableName == models[i] )
+				currentIndex = _comboTTTables->count()-1;
+		}
+
+		if ( currentIndex >= 0 )
+			_comboTTTables->setCurrentIndex(currentIndex);
+	}
+	catch ( ... ) {}
+
+	_comboTTTables->setEnabled(_comboTTTables->count() > 0);
+	_comboTTTables->blockSignals(false);
+
+	ttTableChanged(_comboTTTables->currentText());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::ttTableChanged(QString tables) {
+	_ttTableName = tables.toStdString();
+
+	_ttTable = TravelTimeTableInterfaceFactory::Create(_ttInterface.c_str());
+	if ( !_ttTable ) {
+		QMessageBox::critical(this, tr("Error"),
+		                      tr("Error creating travel time table backend %1")
+		                      .arg(_ttInterface.c_str()));
+	}
+	else if ( !_ttTable->setModel(_ttTableName.c_str()) ) {
+		QMessageBox::critical(this, tr("Error"),
+		                      tr("Failed to set table %1")
+		                      .arg(_ttTableName.c_str()));
+	}
+
+	fillTheoreticalArrivals();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

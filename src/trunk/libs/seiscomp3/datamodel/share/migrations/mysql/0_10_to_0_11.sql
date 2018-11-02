@@ -1,3 +1,6 @@
+SELECT 'Add StationMagnitude.passedQC' AS '';
+ALTER TABLE StationMagnitude ADD passedQC TINYINT(1) AFTER waveformID_used;
+
 SELECT 'Creating DataAvailability PublicObject entry' AS '';
 INSERT INTO Object(_oid) VALUES (NULL);
 INSERT INTO PublicObject(_oid,publicID) VALUES (LAST_INSERT_ID(),'DataAvailability');

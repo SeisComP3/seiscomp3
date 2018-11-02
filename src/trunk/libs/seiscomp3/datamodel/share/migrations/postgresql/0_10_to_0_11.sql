@@ -1,3 +1,6 @@
+\echo Add StationMagnitude.passedQC
+ALTER TABLE StationMagnitude ADD m_passedQC BOOLEAN;
+
 \echo Creating DataAvailability PublicObject entry
 INSERT INTO Object(_oid) VALUES (DEFAULT);
 INSERT INTO PublicObject(_oid,m_publicID) VALUES (CURRVAL('Object_seq'),'DataAvailability');

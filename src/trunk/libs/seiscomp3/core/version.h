@@ -40,6 +40,8 @@ namespace Core {
  ******************************************************************************
  "12.0.0"   0x0C0000
    - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes
+   - Changed Seiscomp::DataModel::DatabaseArchive::toString() from protected to
+     public const
    - Added Seiscomp::Core::Time::localTimeZoneOffset()
    - Removed geo prefix of all headers under <seiscomp3/geo/>
    - Added Seiscomp::Util::UnitConverter
@@ -76,6 +78,8 @@ namespace Core {
    - Added Seiscomp::Processing::AmplitudeProcessor::finalizeAmplitude
    - Added amplitude to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
    - Added unit to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added Seiscomp::Processing::MagnitudeProcessor::treatAsValidMagnitude()
+   - Added Seiscomp::IO::Exporter::put(std::streambuf* buf, const ObjectList &objects);
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike

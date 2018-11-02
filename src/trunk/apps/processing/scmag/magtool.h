@@ -112,7 +112,17 @@ class MagTool {
 
 
 	protected:
-		typedef std::pair<Processing::MagnitudeProcessor*, double> MagnitudeEntry;
+		struct MagnitudeEntry {
+			MagnitudeEntry() {}
+			MagnitudeEntry(Processing::MagnitudeProcessor *p,
+			               double v, bool t)
+			: proc(p), value(v), passedQC(t) {}
+
+			Processing::MagnitudeProcessor *proc;
+			double value;
+			bool passedQC;
+		};
+
 		typedef std::vector<MagnitudeEntry> MagnitudeList;
 
 		void publicObjectRemoved(DataModel::PublicObject*);

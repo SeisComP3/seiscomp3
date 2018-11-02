@@ -134,6 +134,18 @@ class SC_SYSTEM_CORE_API StationMagnitude : public PublicObject {
 		WaveformStreamID& waveformID();
 		const WaveformStreamID& waveformID() const;
 
+		//! An optional flag that indiciates whether a station
+		//! magnitude has passed
+		//! the quality control or not. For example, if a station
+		//! magnitude is
+		//! out of the defined distance range but should be associated
+		//! to a network
+		//! magnitude for further analysis then this flag can be set to
+		//! false.
+		//! If the flag is not set, it defaults to true.
+		void setPassedQC(const OPT(bool)& passedQC);
+		bool passedQC() const;
+
 		//! CreationInfo for the StationMagnitude object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
 		CreationInfo& creationInfo();
@@ -210,6 +222,7 @@ class SC_SYSTEM_CORE_API StationMagnitude : public PublicObject {
 		std::string _amplitudeID;
 		std::string _methodID;
 		OPT(WaveformStreamID) _waveformID;
+		OPT(bool) _passedQC;
 		OPT(CreationInfo) _creationInfo;
 
 		// Aggregations

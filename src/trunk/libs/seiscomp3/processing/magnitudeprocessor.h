@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -137,7 +137,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 		/**
 		 * @brief Computes the magnitude from an amplitude. The method signature
 		 *        has changed with API version >= 11. Prior to that version,
-		 *        @hypocenter and @receiver were not present.
+		 *        @hypocenter, @receiver and @amplitude were not present.
 		 * @param amplitudeValue The amplitude value without unit. The unit is
 		                         implicitly defined by the requested amplitude
 		 *                       type.
@@ -160,6 +160,23 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 		                                const DataModel::SensorLocation *receiver,
 		                                const DataModel::Amplitude *amplitude,
 		                                double &value) = 0;
+
+		/**
+		 * @brief When computeMagnitude return an error the computed magnitude
+		 *        value might nevertheless contain a meaningful value. E.g. if
+		 *        the distance is out of range according to the defined rules,
+		 *        the computation for a lower distance might still result in
+		 *        valid values. This function indicates whether the returned
+		 *        value should be treated as valid magnitude or not, even if an
+		 *        error was returned. This function's return value must not be
+		 *        used when computeMagnitude returned OK. A valid return value
+		 *        is only provided in case the computation failed. To make it
+		 *        clear: this function can only be called after
+		 *        computeMagnitude and only if computeMagnitude(...) != OK.
+		 * @return Whether the computed magnitude is a valid value or has to be
+		 *         ignored. The default implementation returns false.
+		 */
+		virtual bool treatAsValidMagnitude() const;
 
 		/**
 		 * @brief Estimates the Mw magnitude from a given magnitude. The
@@ -195,11 +212,12 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 
 	protected:
 		/**
-		 * @brief Converts am amplitude value to the SI unit, e.g. m/s.
+		 * @brief Converts an amplitude value in an input unit to a value in
+		 *        an output unit, e.g. mm/s -> nm/s.
 		 * @param amplitude The input value which will be changed
-		 * @param amplitudeUnit The unit associated with the amplitude value
-		 * @param defaultAmplitudeUnit The default amplitude unit if the
-		 *                             associated amplitude unit is empty.
+		 * @param amplitudeUnit The unit associated with the input amplitude value
+		 * @param desiredAmplitudeUnit The desired amplitude unit of the output
+		 *                             value.
 		 * @return Success or not
 		 */
 		bool convertAmplitude(double &amplitude,

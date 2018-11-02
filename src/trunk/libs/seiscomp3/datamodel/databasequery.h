@@ -201,10 +201,9 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * Returns waveform quality reports in a given time window for
 		 * a given streamID and parameter.
 		 * @param streamID a WaveformStreamID
-		 * @param parameter
-		 * latency/delay/timing quality/gaps interval/gaps
-		 * length/spikes interval/spikes amplitude/ spikes
-		 * count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param startTime start time
 		 * @param endTime end time
 		 * @return an iterator to iterate over the WaveformQuality
@@ -218,9 +217,9 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		/**
 		 * Returns waveform quality reports in a given time window for
 		 * a given streamID and parameter.
-		 * @param parameter latency/delay/timing
-		 * quality/gaps interval/gaps length/spikes interval/spikes
-		 * amplitude/ spikes count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param startTime start time
 		 * @param endTime end time
 		 * @return an iterator to iterate over the WaveformQuality
@@ -233,15 +232,14 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * Returns waveform quality of a certain type (report/alert)
 		 * in a given time window for a given streamID and parameter.
 		 * @param streamID a WaveformStreamID
-		 * @param parameter
-		 * latency/delay/timing quality/gaps interval/gaps
-		 * length/spikes interval/spikes amplitude/ spikes
-		 * count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param type report/alert
 		 * @param startTime start time
 		 * @param endTime end time
-		 * @return an iterator to iterate over
-		 * the WaveformQuality objects
+		 * @return an iterator to iterate over the WaveformQuality
+		 * objects
 		 */
 		DatabaseIterator getWaveformQuality(const WaveformStreamID& waveformID,
 		                                    const std::string& parameter,
@@ -283,8 +281,7 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * @param streamID a WaveformStreamID
 		 * @param startTime start time
 		 * @param endTime end time
-		 * @return an iterator to iterate over
-		 * the QCLog objects
+		 * @return an iterator to iterate over the QCLog objects
 		 */
 		DatabaseIterator getQCLog(const WaveformStreamID& waveformID,
 		                          Seiscomp::Core::Time startTime,

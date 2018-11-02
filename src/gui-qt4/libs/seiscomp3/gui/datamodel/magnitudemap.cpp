@@ -402,7 +402,7 @@ void MagnitudeMap::setOrigin(DataModel::Origin* o) {
 
 	if ( !_origin ) return;
 
-	OriginSymbol* symbol = new OriginSymbol(o->latitude(), o->longitude());
+	OriginSymbol *symbol = new OriginSymbol(o->latitude(), o->longitude());
 	try { symbol->setDepth(o->depth()); } catch ( Core::ValueException& ) {}
 	canvas().symbolCollection()->add(symbol);
 

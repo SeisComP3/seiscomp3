@@ -27,6 +27,7 @@
 #ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/datamodel/databasequery.h>
+#include <seiscomp3/datamodel/publicobjectcache.h>
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/arrival.h>
@@ -48,12 +49,13 @@ class SC_GUI_API StationMagnitudeModel : public QAbstractTableModel {
 	Q_OBJECT
 
 	public:
-		StationMagnitudeModel(DataModel::Origin* origin = NULL,
-		                      DataModel::Magnitude* netMag = NULL,
+		StationMagnitudeModel(DataModel::Origin *origin = NULL,
+		                      DataModel::Magnitude *netMag = NULL,
+		                      DataModel::PublicObjectCache *cache = NULL,
 		                      QObject *parent = 0);
 
-		void setOrigin(DataModel::Origin* origin,
-		               DataModel::Magnitude* netMag);
+		void setOrigin(DataModel::Origin *origin,
+		               DataModel::Magnitude *netMag);
 
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -72,12 +74,13 @@ class SC_GUI_API StationMagnitudeModel : public QAbstractTableModel {
 
 
 	private:
-		DataModel::Origin* _origin;
-		DataModel::Magnitude* _magnitude;
-		QVector<Qt::CheckState> _used;
-		QVector<double> _distance;
-		QStringList _header;
-		int _rowCount;
+		DataModel::PublicObjectCache *_cache;
+		DataModel::Origin            *_origin;
+		DataModel::Magnitude         *_magnitude;
+		QVector<Qt::CheckState>       _used;
+		QVector<double>               _distance;
+		QStringList                   _header;
+		int                           _rowCount;
 };
 
 
@@ -264,12 +267,14 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		struct MagnitudeStatus {
 			MagnitudeStatus(const  std::string &t,
 			                const DataModel::Amplitude *a,
-			                Processing::MagnitudeProcessor::Status s)
-			: type(t), amplitude(a), status(s) {}
+			                Processing::MagnitudeProcessor::Status s,
+			                bool isWarning = false)
+			: type(t), amplitude(a), status(s), warning(isWarning) {}
 
 			std::string                             type;
 			const DataModel::Amplitude             *amplitude;
 			Processing::MagnitudeProcessor::Status  status;
+			bool                                    warning;
 		};
 
 		typedef QList<MagnitudeStatus> MagnitudeStats;
@@ -290,36 +295,38 @@ class SC_GUI_API MagnitudeView : public QWidget {
 
 		Seiscomp::DataModel::DatabaseQuery *_reader;
 
-		::Ui::MagnitudeView      _ui;
+		::Ui::MagnitudeView                 _ui;
 
-		Map::ImageTreePtr        _maptree;
-		MagnitudeMap            *_map;
+		Map::ImageTreePtr                   _maptree;
+		MagnitudeMap                       *_map;
 
-		DiagramWidget           *_stamagnitudes;
-		StationMagnitudeModel    _modelStationMagnitudes;
-		QSortFilterProxyModel   *_modelStationMagnitudesProxy;
+		DiagramWidget                      *_stamagnitudes;
+		StationMagnitudeModel               _modelStationMagnitudes;
+		QSortFilterProxyModel              *_modelStationMagnitudesProxy;
 
-		AmplitudeView::Config    _amplitudeConfig;
-		AmplitudeView           *_amplitudeView;
+		AmplitudeView::Config               _amplitudeConfig;
+		AmplitudeView                      *_amplitudeView;
 
-		QTabBar                 *_tabMagnitudes;
+		QTabBar                            *_tabMagnitudes;
 
-		DataModel::OriginPtr     _origin;
-		DataModel::EventPtr      _event;
-		DataModel::MagnitudePtr  _netMag;
+		DataModel::OriginPtr                _origin;
+		DataModel::EventPtr                 _event;
+		DataModel::MagnitudePtr             _netMag;
 
-		double                   _minStationMagnitude;
-		double                   _maxStationMagnitude;
+		double                              _minStationMagnitude;
+		double                              _maxStationMagnitude;
 
-		bool                     _computeMagnitudesSilently;
-		bool                     _enableMagnitudeTypeSelection;
-		OPT(std::string)         _defaultMagnitudeAggregation;
+		DataModel::PublicObjectRingBuffer   _objCache;
 
-		PickAmplitudeMap         _amplitudes;
-		std::string              _preferredMagnitudeID;
-		std::vector<std::string> _magnitudeTypes;
-		std::vector<std::string> _currentMagnitudeTypes;
-		AvailableTypes          *_availableMagTypes;
+		bool                                _computeMagnitudesSilently;
+		bool                                _enableMagnitudeTypeSelection;
+		OPT(std::string)                    _defaultMagnitudeAggregation;
+
+		PickAmplitudeMap                    _amplitudes;
+		std::string                         _preferredMagnitudeID;
+		std::vector<std::string>            _magnitudeTypes;
+		std::vector<std::string>            _currentMagnitudeTypes;
+		AvailableTypes                     *_availableMagTypes;
 };
 
 

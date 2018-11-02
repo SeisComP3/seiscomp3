@@ -707,6 +707,7 @@ CREATE TABLE StationMagnitude (
 	waveformID_channelCode CHAR(8),
 	waveformID_resourceURI VARCHAR(255),
 	waveformID_used TINYINT(1) NOT NULL DEFAULT '0',
+	passedQC TINYINT(1),
 	creationInfo_agencyID VARCHAR(64),
 	creationInfo_agencyURI VARCHAR(255),
 	creationInfo_author VARCHAR(128),

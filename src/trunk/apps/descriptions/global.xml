@@ -371,6 +371,22 @@
 					</description>
 				</parameter>
 			</group>
+			<group name="ttt">
+				<description>
+				Travel time table related configuration. Travel time tables can
+				be added via plugins. Built-in interfaces are libtau and LOCSAT.
+				For each loaded interface a list of supported models must be
+				provided. The default list of tables for libtau is ak135 and
+				iasp91. LOCSAT's default tables are iasp91 and tab.
+				</description>
+				<struct type="TTT">
+					<parameter name="tables" type="list:string">
+						<description>
+						The list of supported model names per interface.
+						</description>
+					</parameter>
+				</struct>
+			</group>
 		</configuration>
 		<setup>
 			<group name="meta">

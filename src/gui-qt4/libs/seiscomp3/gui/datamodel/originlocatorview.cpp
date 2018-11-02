@@ -4754,7 +4754,6 @@ void OriginLocatorView::showWaveforms() {
 
 	if ( !_currentOrigin ) return;
 
-	//std::cout << "Number of objects before: " << Core::BaseObject::ObjectCount() << std::endl;
 	_recordView = new PickerView(NULL, Qt::Window);
 	_recordView->setDatabase(_reader);
 

@@ -136,6 +136,8 @@
   * Add configuration option to either ignore disabled stations or not
   * Allow to show all traces in the same unit, either acceleration, velocity
     or displacement
+  * Add travel time table selection, as default libtau (iasp91 and ak135) and
+    LocSAT (iasp91, tab) can selected
 
 * scmm
 

@@ -188,8 +188,8 @@ class SC_SYSTEM_CORE_API DatabaseObjectWriter : protected Visitor {
  * \brief A class containing basic functionality to read and write
  * \brief schema objects from and to a database.
  */
-class SC_SYSTEM_CORE_API DatabaseArchive : protected Core::Archive,
-                                           public Core::BaseObject {
+class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
+                                           public Observer {
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------

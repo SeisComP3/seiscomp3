@@ -960,15 +960,15 @@ class DatabaseObjectWriter(_object):
 DatabaseObjectWriter_swigregister = _DataModel.DatabaseObjectWriter_swigregister
 DatabaseObjectWriter_swigregister(DatabaseObjectWriter)
 
-class DatabaseArchive(seiscomp3.Core.BaseObject):
+class DatabaseArchive(Observer):
     """Proxy of C++ Seiscomp::DataModel::DatabaseArchive class."""
 
     __swig_setmethods__ = {}
-    for _s in [seiscomp3.Core.BaseObject]:
+    for _s in [Observer]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, DatabaseArchive, name, value)
     __swig_getmethods__ = {}
-    for _s in [seiscomp3.Core.BaseObject]:
+    for _s in [Observer]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, DatabaseArchive, name)
     __repr__ = _swig_repr

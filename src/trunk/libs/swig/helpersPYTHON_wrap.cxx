@@ -6161,7 +6161,7 @@ static void *_p_Seiscomp__DataModel__WaveformStreamIDTo_p_Seiscomp__Core__BaseOb
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::DataModel::WaveformStreamID *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::DataModel::DatabaseArchive *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *) ((Seiscomp::DataModel::DatabaseArchive *) x));
 }
 static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
@@ -6353,7 +6353,7 @@ static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseReaderTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::DatabaseArchive *) ((Seiscomp::DataModel::DatabaseReader *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *)(Seiscomp::DataModel::DatabaseArchive *) ((Seiscomp::DataModel::DatabaseReader *) x));
 }
 static void *_p_Seiscomp__DataModel__DataloggerCalibrationTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::DataloggerCalibration *) x));
@@ -6527,10 +6527,10 @@ static void *_p_Seiscomp__DataModel__RouteArclinkTo_p_Seiscomp__Core__BaseObject
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::RouteArclink *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseQueryTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *) ((Seiscomp::DataModel::DatabaseQuery *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *)(Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *) ((Seiscomp::DataModel::DatabaseQuery *) x));
 }
 static void *_p_Seiscomp__Sc3py___private___DatabaseQueryTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *)(Seiscomp::DataModel::DatabaseQuery *) ((Seiscomp::Sc3py::_private::_DatabaseQuery *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *)(Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *)(Seiscomp::DataModel::DatabaseQuery *) ((Seiscomp::Sc3py::_private::_DatabaseQuery *) x));
 }
 static void *_p_Seiscomp__DataModel__OutageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::Outage *) x));
@@ -6600,6 +6600,18 @@ static void *_p_Seiscomp__DataModel__AmplitudeTo_p_Seiscomp__Core__BaseObject(vo
 }
 static void *_p_Seiscomp__Sc3py___private___DatabaseQueryTo_p_Seiscomp__DataModel__DatabaseQuery(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::DataModel::DatabaseQuery *)  ((Seiscomp::Sc3py::_private::_DatabaseQuery *) x));
+}
+static void *_p_Seiscomp__DataModel__DatabaseArchiveTo_p_Seiscomp__DataModel__Observer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::DataModel::Observer *)  ((Seiscomp::DataModel::DatabaseArchive *) x));
+}
+static void *_p_Seiscomp__DataModel__DatabaseReaderTo_p_Seiscomp__DataModel__Observer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::DataModel::Observer *) (Seiscomp::DataModel::DatabaseArchive *) ((Seiscomp::DataModel::DatabaseReader *) x));
+}
+static void *_p_Seiscomp__DataModel__DatabaseQueryTo_p_Seiscomp__DataModel__Observer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::DataModel::Observer *) (Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *) ((Seiscomp::DataModel::DatabaseQuery *) x));
+}
+static void *_p_Seiscomp__Sc3py___private___DatabaseQueryTo_p_Seiscomp__DataModel__Observer(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::DataModel::Observer *) (Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *)(Seiscomp::DataModel::DatabaseQuery *) ((Seiscomp::Sc3py::_private::_DatabaseQuery *) x));
 }
 static void *_p_Seiscomp__IO__XMLArchiveTo_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *)  ((Seiscomp::IO::XMLArchive *) x));
@@ -6756,7 +6768,6 @@ static swig_type_info _swigt__p_Seiscomp__DataModel__Sensor = {"_p_Seiscomp__Dat
 static swig_type_info _swigt__p_Seiscomp__DataModel__DataloggerCalibration = {"_p_Seiscomp__DataModel__DataloggerCalibration", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__SensorCalibration = {"_p_Seiscomp__DataModel__SensorCalibration", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__GFReceiver = {"_p_Seiscomp__IO__GFReceiver", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__DataModel__Observer = {"_p_Seiscomp__DataModel__Observer", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__RecordStream__File = {"_p_Seiscomp__RecordStream__File", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__EventDescription = {"_p_Seiscomp__DataModel__EventDescription", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__Exporter = {"_p_Seiscomp__IO__Exporter", 0, 0, 0, 0, 0};
@@ -7144,6 +7155,7 @@ static swig_type_info _swigt__p_Seiscomp__DataModel__DatabaseReader = {"_p_Seisc
 static swig_type_info _swigt__p_Seiscomp__DataModel__IntegerQuantity = {"_p_Seiscomp__DataModel__IntegerQuantity", "Seiscomp::DataModel::IntegerQuantity *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__NodalPlane = {"_p_Seiscomp__DataModel__NodalPlane", "Seiscomp::DataModel::NodalPlane *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__NodalPlanes = {"_p_Seiscomp__DataModel__NodalPlanes", "Seiscomp::DataModel::NodalPlanes *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__DataModel__Observer = {"_p_Seiscomp__DataModel__Observer", "Seiscomp::DataModel::Observer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__OriginQuality = {"_p_Seiscomp__DataModel__OriginQuality", "Seiscomp::DataModel::OriginQuality *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__OriginUncertainty = {"_p_Seiscomp__DataModel__OriginUncertainty", "Seiscomp::DataModel::OriginUncertainty *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__Phase = {"_p_Seiscomp__DataModel__Phase", "Seiscomp::DataModel::Phase *", 0, 0, (void*)0, 0};
@@ -7861,7 +7873,6 @@ static swig_cast_info _swigc__p_Seiscomp__DataModel__Sensor[] = {{&_swigt__p_Sei
 static swig_cast_info _swigc__p_Seiscomp__DataModel__DataloggerCalibration[] = {{&_swigt__p_Seiscomp__DataModel__DataloggerCalibration, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__SensorCalibration[] = {{&_swigt__p_Seiscomp__DataModel__SensorCalibration, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__GFReceiver[] = {{&_swigt__p_Seiscomp__IO__GFReceiver, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__DataModel__Observer[] = {{&_swigt__p_Seiscomp__DataModel__Observer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__File[] = {{&_swigt__p_Seiscomp__RecordStream__File, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__EventDescription[] = {{&_swigt__p_Seiscomp__DataModel__EventDescription, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__Exporter[] = {{&_swigt__p_Seiscomp__IO__Exporter, 0, 0, 0},{0, 0, 0, 0}};
@@ -8250,6 +8261,7 @@ static swig_cast_info _swigc__p_Seiscomp__DataModel__DatabaseReader[] = {  {&_sw
 static swig_cast_info _swigc__p_Seiscomp__DataModel__IntegerQuantity[] = {  {&_swigt__p_Seiscomp__DataModel__IntegerQuantity, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__NodalPlane[] = {  {&_swigt__p_Seiscomp__DataModel__NodalPlane, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__NodalPlanes[] = {  {&_swigt__p_Seiscomp__DataModel__NodalPlanes, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__DataModel__Observer[] = {  {&_swigt__p_Seiscomp__DataModel__Observer, 0, 0, 0},  {&_swigt__p_Seiscomp__DataModel__DatabaseArchive, _p_Seiscomp__DataModel__DatabaseArchiveTo_p_Seiscomp__DataModel__Observer, 0, 0},  {&_swigt__p_Seiscomp__DataModel__DatabaseReader, _p_Seiscomp__DataModel__DatabaseReaderTo_p_Seiscomp__DataModel__Observer, 0, 0},  {&_swigt__p_Seiscomp__DataModel__DatabaseQuery, _p_Seiscomp__DataModel__DatabaseQueryTo_p_Seiscomp__DataModel__Observer, 0, 0},  {&_swigt__p_Seiscomp__Sc3py___private___DatabaseQuery, _p_Seiscomp__Sc3py___private___DatabaseQueryTo_p_Seiscomp__DataModel__Observer, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__OriginQuality[] = {  {&_swigt__p_Seiscomp__DataModel__OriginQuality, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__OriginUncertainty[] = {  {&_swigt__p_Seiscomp__DataModel__OriginUncertainty, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__Phase[] = {  {&_swigt__p_Seiscomp__DataModel__Phase, 0, 0, 0},{0, 0, 0, 0}};

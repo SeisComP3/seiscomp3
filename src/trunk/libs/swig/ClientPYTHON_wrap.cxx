@@ -28624,7 +28624,7 @@ static void *_p_Seiscomp__DataModel__WaveformStreamIDTo_p_Seiscomp__Core__BaseOb
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::DataModel::WaveformStreamID *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::DataModel::DatabaseArchive *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *) ((Seiscomp::DataModel::DatabaseArchive *) x));
 }
 static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
@@ -28816,7 +28816,7 @@ static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseReaderTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::DatabaseArchive *) ((Seiscomp::DataModel::DatabaseReader *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *)(Seiscomp::DataModel::DatabaseArchive *) ((Seiscomp::DataModel::DatabaseReader *) x));
 }
 static void *_p_Seiscomp__DataModel__DataloggerCalibrationTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::DataloggerCalibration *) x));
@@ -28993,7 +28993,7 @@ static void *_p_Seiscomp__DataModel__RouteArclinkTo_p_Seiscomp__Core__BaseObject
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::RouteArclink *) x));
 }
 static void *_p_Seiscomp__DataModel__DatabaseQueryTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *) ((Seiscomp::DataModel::DatabaseQuery *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Observer *)(Seiscomp::DataModel::DatabaseArchive *)(Seiscomp::DataModel::DatabaseReader *) ((Seiscomp::DataModel::DatabaseQuery *) x));
 }
 static void *_p_Seiscomp__DataModel__OutageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::Outage *) x));
