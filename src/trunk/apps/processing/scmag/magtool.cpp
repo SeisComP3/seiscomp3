@@ -699,7 +699,7 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 
 		if ( !magRef ) {
 			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
-			magRef->setWeight(0);
+			magRef->setWeight(0.0);
 			netMag->add(magRef.get());
 		}
 		else {
@@ -710,7 +710,7 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 			catch ( Core::ValueException & ) {}
 
 			if ( oldWeight != 0 ) {
-				magRef->setWeight(0);
+				magRef->setWeight(0.0);
 				magRef->update();
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}
