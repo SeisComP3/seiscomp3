@@ -74,7 +74,7 @@ class App : public Client::Application,
 		bool runFromEPFile(const char *fname);
 
 		void sync(const Core::Time &time);
-		const Core::Time &now() const;
+		const Core::Time now() const;
 		void timeStamp() const;
 
 	protected:

@@ -712,7 +712,7 @@ void App::sync(const Seiscomp::Core::Time &t) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Seiscomp::Core::Time& App::now() const {
+const Seiscomp::Core::Time App::now() const {
 
 	if (_inputFileXML.size() || _inputEPFile.size())
 		return syncTime;
