@@ -294,7 +294,7 @@ class ZoomRecordWidget : public RecordWidget {
 			painter.setBrush(palette().color(backgroundRole()));
 			spectrogram[slot].setAlignment(alignment());
 			spectrogram[slot].setTimeRange(tmin(), tmax());
-			spectrogram[slot].renderAxis(painter, r, false);
+			spectrogram[slot].renderAxis(painter, r, false, 6, 6);
 		}
 
 		void updateTraceColor() {
