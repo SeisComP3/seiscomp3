@@ -105,6 +105,7 @@ class EventStreams(seiscomp3.Client.Application):
 
       inv = seiscomp3.Client.Inventory.Instance().inventory()
 
+      lines = set()
       for pick in picks:
         loc = pick.waveformID().locationCode()
         streams = [pick.waveformID().channelCode()]
@@ -127,25 +128,20 @@ class EventStreams(seiscomp3.Client.Application):
           loc = ""
 
         for s in streams:
-          sys.stdout.write(minTime.toString("%F %T") + ";")
-          sys.stdout.write(maxTime.toString("%F %T") + ";")
-          sys.stdout.write(pick.waveformID().networkCode() + ".")
-          sys.stdout.write(pick.waveformID().stationCode() + ".")
-          sys.stdout.write(loc + ".")
-          sys.stdout.write(s)
-
-          sys.stdout.write("\n")
+          line = minTime.toString("%F %T") + ";" + maxTime.toString("%F %T") + ";" \
+          + pick.waveformID().networkCode() + "." + pick.waveformID().stationCode() \
+          + "." + loc + "." +  s
+          lines.add(line)
 
         for s in self.streams:
           if s != rawStream:
-            sys.stdout.write(minTime.toString("%F %T") + ";")
-            sys.stdout.write(maxTime.toString("%F %T") + ";")
-            sys.stdout.write(pick.waveformID().networkCode() + ".")
-            sys.stdout.write(pick.waveformID().stationCode() + ".")
-            sys.stdout.write(loc + ".")
-            sys.stdout.write(s + streams[0][2])
+            line = minTime.toString("%F %T") + ";" + maxTime.toString("%F %T") + ";" \
+            + pick.waveformID().networkCode() + "." + pick.waveformID().stationCode() \
+            + "." + loc + "." +  s  + streams[0][2]
+            lines.add(line)
 
-            sys.stdout.write("\n")
+      for line in sorted(lines):
+          sys.stdout.write(line+"\n")
 
       return True
     except:
@@ -155,4 +151,3 @@ class EventStreams(seiscomp3.Client.Application):
 
 app = EventStreams(len(sys.argv), sys.argv)
 sys.exit(app())
-

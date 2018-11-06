@@ -5,6 +5,10 @@
 ```SC_API_VERSION 12.0.0```
 ```Schema version 0.11```
 
+* scevtstreams
+
+  * Remove duplicate lines in output
+
 * scautoloc
 
   * Check the depth of the origin before sending to discard solutions with
