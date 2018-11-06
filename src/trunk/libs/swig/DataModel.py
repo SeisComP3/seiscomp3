@@ -21072,6 +21072,16 @@ class StationMagnitude(PublicObject):
         return _DataModel.StationMagnitude_waveformID(self, *args)
 
 
+    def setPassedQC(self, passedQC):
+        """setPassedQC(StationMagnitude self, Seiscomp::Core::Optional< bool >::Impl const & passedQC)"""
+        return _DataModel.StationMagnitude_setPassedQC(self, passedQC)
+
+
+    def passedQC(self):
+        """passedQC(StationMagnitude self) -> bool"""
+        return _DataModel.StationMagnitude_passedQC(self)
+
+
     def setCreationInfo(self, creationInfo):
         """setCreationInfo(StationMagnitude self, Seiscomp::Core::Optional< Seiscomp::DataModel::CreationInfo >::Impl const & creationInfo)"""
         return _DataModel.StationMagnitude_setCreationInfo(self, creationInfo)
