@@ -74,9 +74,6 @@ class VoiceAlert(seiscomp3.Client.Application):
         try: self._newWhenFirstSeen = self.configGetBool("firstNew");
         except: pass
 
-        try: self._agencyIDs = [ self.configGetString("agencyID") ]
-        except: pass
-
         try:
             agencyIDs = self.configGetStrings("agencyIDs")
             for item in agencyIDs:
