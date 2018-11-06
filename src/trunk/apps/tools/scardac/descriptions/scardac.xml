@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
-	<module name="scardac" category="Acquisition" standalone="true">
+	<module name="scardac" category="Acquisition">
 		<description>Waveform archive data availability collector</description>
 		<configuration>
 			<parameter name="archive" type="string" default="@SEISCOMP_ROOT@/var/lib/archive">

@@ -2,7 +2,7 @@ fdsnws is a server that provides
 `FDSN Web Services <http://www.fdsn.org/webservices>`_ from a SeisComP3 database
 and :ref:`global_recordstream` source. Also it may be configured to serve data
 availability information similar to the `IRIS DMC IRISWS availability Web
-Service <https://service.iris.edu/irisws/availability/1/>`_ 
+Service <https://service.iris.edu/irisws/availability/1/>`_
 
 Service Overview
 ----------------
@@ -15,7 +15,7 @@ The following services are available:
    ":ref:`fdsnws-dataselect <sec-dataSelect>`", "time series data", "`miniSEED <http://www.iris.edu/data/miniseed.htm>`_"
    ":ref:`fdsnws-station <sec-station>`", "network, station, channel, response metadata", "`FDSN Station XML <http://www.fdsn.org/xml/station/>`_, `StationXML <http://www.data.scec.org/station/xml.html>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
    ":ref:`fdsnws-event <sec-event>`", "earthquake origin and magnitude estimates", "`QuakeML <https://quake.ethz.ch/quakeml>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
-   ":ref:`ext-availabilty <sec-avail>`", "waveform data availability information", "text, geocsv, json, sync, request (`fdsnws-dataselect <https://service.iris.edu/fdsnws/dataselect/1>`_)"
+   ":ref:`ext-availability <sec-avail>`", "waveform data availability information", "text, geocsv, json, sync, request (`fdsnws-dataselect <https://service.iris.edu/fdsnws/dataselect/1>`_)"
 
 
 The available services can be reached from the fdsnws start page.  The services
@@ -215,7 +215,9 @@ Data Availability
 -----------------
 
 The data availability web service returns detailed time span information of
-what timeseries data is available at the DMC archive.
+what time series data is available at the DMC archive. The availability information
+can be created by :ref:`scardac` in the SeisComP3 database from where it is
+fetched by fdsnws.
 
 The availability service is no official standard yet. This implementation aims
 to be compatible with the `IRIS DMC IRISWS availability Web Service
@@ -239,8 +241,8 @@ URL
   form your data time span requests
 * http://localhost:8080/ext/availability/1/version
 
-Example
-^^^^^^^
+Examples
+^^^^^^^^
 
 * Request URL for data extents of seismic network ``IU``:
 
@@ -250,14 +252,18 @@ Example
 
   http://localhost:8080/fdsnws/ext/availability/1/extent?net=IU&start=2018-08-01
 
-* Request URL for continues timespans of station ``ANMO`` in July 2018:
+* Request URL for continues time spans of station ``ANMO`` in July 2018:
 
   http://localhost:8080/fdsnws/ext/availability/1/query?sta=ANMO&start=2018-07-01&end=2018-08-01
+
+.. note::
+
+   Use :ref:`scardac` for creating the availability information.
 
 Feature Notes
 ^^^^^^^^^^^^^
 
-* The IRISWS availability implementation truncates the timespans of the returned
+* The IRISWS availability implementation truncates the time spans of the returned
   data extents and segments to the requested start and end times (if any). This
   implementation truncates the start and end time only for the formats: ``sync``
   and ``request``. The ``text``, ``geocsv`` and ``json`` format will return the
@@ -266,16 +272,15 @@ Feature Notes
   The reasons for this derivation are:
 
   * Performance: With the ``/extent`` query the ``text``, ``geocsv`` and
-    ``json`` offer the display of the number of included timespans
-    (``show=timespancount``). The datamodel offers no efficient way to
-    recalculate the number of timespans represented by an extent if the extents
+    ``json`` offer the display of the number of included time spans
+    (``show=timespancount``). The data model offers no efficient way to
+    recalculate the number of time spans represented by an extent if the extents
     time window is altered by the requested start and end times. The ``sync``
     and ``request`` formats do not provided this counter and it is convenient to
     use their outputs for subsequent data requests.
   * By truncating the time windows information is lost. There would be no
     efficient way for a client to retrieve the exact time windows falling into a
-    specific
-    timespan.
+    specific time span.
   * Network and station epochs returned by the :ref:`sec-station` service are also
     not truncated to the requested start and end times.
   * Truncation can easily be done on client side. No additional network traffic is
@@ -480,7 +485,7 @@ A client like fdsnws_fetch is recommended, but also tools like wget and
 curl can be used. As an example, let's request data from the restricted
 station AAI (assuming that we are authorized to get data of this station).
 
-* The first step is to obtain the token from an athentication service.
+* The first step is to obtain the token from an authentication service.
   Assuming that the token is saved in "token.asc", credentials of the
   temporary account can be requsted using one of the following commands:
 

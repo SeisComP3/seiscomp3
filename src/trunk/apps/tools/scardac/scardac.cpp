@@ -816,9 +816,9 @@ void SCARDAC::createCommandLineDescription() {
 	                        "Acceptable derivation of end time and start time "
 	                        "of successive records in multiples of sample time",
 	                        &_jitter);
-	commandline().addOption("Collector", "deep-scan",
-	                        "Process all data files independ of their file "
-	                        "modification time");
+//	commandline().addOption("Collector", "deep-scan",
+//	                        "Process all data files independ of their file "
+//	                        "modification time");
 	commandline().addOption("Collector", "generate-test-data",
 	                        "For each stream in inventory generate test data. "
 	                        "Format: days,gaps,gapseconds,overlaps,"
@@ -931,9 +931,10 @@ bool SCARDAC::run() {
 	              "  threads     : %i\n"
 	              "  batch size  : %i\n"
 	              "  jitter      : %f\n"
-	              "  max segments: %i\n"
-	              "  deep scan   : %s", _archive.c_str(), _threads, _batchSize,
-	              _jitter, _maxSegments, Core::toString(_deepScan).c_str());
+	              "  max segments: %i",//\n"
+//	              "  deep scan   : %s",
+	              _archive.c_str(), _threads, _batchSize,
+	              _jitter, _maxSegments);//, Core::toString(_deepScan).c_str());
 	// disable public object cache
 	PublicObject::SetRegistrationEnabled(false);
 	Notifier::Disable();
