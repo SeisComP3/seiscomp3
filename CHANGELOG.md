@@ -8,6 +8,8 @@
 * scevtstreams
 
   * Remove duplicate lines in output
+  * Add capstool format for output
+  * Add options for using wildcards instead of network, stations, streams codes
 
 * scautoloc
 
