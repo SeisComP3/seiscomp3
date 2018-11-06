@@ -138,6 +138,13 @@ class SC_GUI_API RecordMarker : public QObject {
 
 		virtual RecordMarker *copy();
 
+		//! Draws the background of a marker. This method is called before
+		//! the traces are drawn.
+		virtual void drawBackground(QPainter &painter, RecordWidget *context,
+		                            int x, int y1, int y2,
+		                            QColor color, qreal lineWidth);
+
+		//! Draws the marker. This method is called after the traces are drawn.
 		virtual void draw(QPainter &painter, RecordWidget *context,
 		                  int x, int y1, int y2,
 		                  QColor color, qreal lineWidth);

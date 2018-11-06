@@ -716,10 +716,9 @@ class PickerMarker : public RecordMarker {
 
 		RecordMarker *copy() { return new PickerMarker(NULL, *this); }
 
-		void draw(QPainter &painter, RecordWidget *context, int x, int y1, int y2,
-		          QColor color, qreal lineWidth) {
-			static QPoint poly[3];
-
+		void drawBackground(QPainter &painter, Seiscomp::Gui::RecordWidget *context,
+		                    int x, int y1, int y2,
+		                    QColor color, qreal lineWidth) {
 			double loUncert = lowerUncertainty();
 			double hiUncert = upperUncertainty();
 
@@ -762,6 +761,11 @@ class PickerMarker : public RecordMarker {
 					}
 				}
 			}
+		}
+
+		void draw(QPainter &painter, RecordWidget *context, int x, int y1, int y2,
+		          QColor color, qreal lineWidth) {
+			static QPoint poly[3];
 
 			painter.setPen(QPen(color, lineWidth));
 			painter.drawLine(x, y1, x, y2);

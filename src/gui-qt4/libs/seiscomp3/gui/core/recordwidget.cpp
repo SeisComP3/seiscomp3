@@ -717,6 +717,15 @@ RecordMarker *RecordMarker::copy() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordMarker::drawBackground(QPainter &painter, RecordWidget *context,
+                                  int x, int y1, int y2,
+                                  QColor color, qreal lineWidth) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordMarker::draw(QPainter &painter, RecordWidget *,
                         int x, int y1, int y2,
                         QColor color, qreal lineWidth) {
@@ -2507,6 +2516,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 	QColor fg;
 	QColor bg = SCScheme.colors.records.background;
 	QColor alignColor;
+	int    x;
 
 	/*
 	if ( emptyTrace )
@@ -2902,6 +2912,51 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	painter.setClipRect(0, 0, _canvasRect.width(), _canvasRect.height());
 
+	// Draw marker background
+	int markerCanvasOffset = 0;
+	int markerCanvasHeight = h;
+
+	QVector<RecordMarker*> *markerList = &_marker;
+	RecordMarker *activeMarker = _activeMarker;
+
+	if ( _markerSourceWidget ) {
+		markerList = &_markerSourceWidget->_marker;
+		activeMarker = _markerSourceWidget->_activeMarker;
+	}
+
+	foreach ( RecordMarker* m, *markerList ) {
+		if ( m->isHidden() ) continue;
+
+		int startY = markerCanvasOffset, endY = startY + markerCanvasHeight;
+
+		switch ( m->_alignment ) {
+			case Qt::AlignTop:
+				endY = markerCanvasOffset + markerCanvasHeight*2/4-1;
+				break;
+			case Qt::AlignBottom:
+				startY = markerCanvasOffset + markerCanvasHeight*2/4+1;
+				break;
+		}
+
+		bool enabled = _enabled && m->isEnabled();
+
+		x = mapTime(m->correctedTime());
+		x -= _canvasRect.left();
+
+		//painter.drawRect(textRect.translated(x,textY-3));
+		if ( m->isMovable() && m->isModified() ) {
+			m->drawBackground(painter, this, x, markerCanvasOffset,
+			                  markerCanvasOffset + markerCanvasHeight,
+			                  enabled?m->modifiedColor():fg,
+			                  SCScheme.marker.lineWidth);
+		}
+		else {
+			m->drawBackground(painter, this, x, startY, endY,
+			                  enabled?m->color():fg,
+			                  SCScheme.marker.lineWidth);
+		}
+	}
+
 	customPaintTracesBegin(painter);
 
 	bool isAntialiasing = painter.renderHints() & QPainter::Antialiasing;
@@ -3141,7 +3196,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 	customPaintTracesEnd(painter);
 
 	painter.setPen(alignColor);
-	int x = (int)(-_tmin*_pixelPerSecond);
+	x = (int)(-_tmin*_pixelPerSecond);
 	painter.drawLine(x, 0, x, h);
 
 	// make the font a bit smaller (for the phase annotations)
@@ -3153,17 +3208,6 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	//font.setBold(true);
 	painter.setFont(font);
-
-	int markerCanvasOffset = 0;
-	int markerCanvasHeight = h;
-
-	QVector<RecordMarker*> *markerList = &_marker;
-	RecordMarker *activeMarker = _activeMarker;
-
-	if ( _markerSourceWidget ) {
-		markerList = &_markerSourceWidget->_marker;
-		activeMarker = _markerSourceWidget->_activeMarker;
-	}
 
 	foreach ( RecordMarker* m, *markerList ) {
 		if ( m->isHidden() ) continue;
