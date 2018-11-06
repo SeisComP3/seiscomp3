@@ -259,7 +259,7 @@ void Worker::processExtent(DataExtent *extent, bool foundInDB) {
 	for ( vector<string>::const_iterator f_it = streamFiles.begin();
 	      f_it != streamFiles.end() && !_app->_exitRequested &&
 	      !scanExt.segmentOverflow(); ++f_it ) {
-		fileName = SC_FS_PATH(*f_it).filename().string();
+		fileName = SC_FS_FILE_NAME(SC_FS_PATH(*f_it));
 		absFileName = _app->_archive + *f_it;
 
 		Core::Time fileStart = fileDate(fileName);
