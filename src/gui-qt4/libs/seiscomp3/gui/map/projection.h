@@ -170,6 +170,13 @@ class SC_GUI_API Projection {
 		                     const Geo::GeoCoordinate *poly, bool closed,
 		                     uint minPixelDist, ClipHint hint = NoClip) const;
 
+		/**
+		 *@brief Sets the number of grid lines for the largest screen dimension.
+		 *       The specified number is used in the grid distance calculation,
+		 *       @see gridDistance()
+		 *@since API Version 12.0.0
+		  */
+		void setGridLines(qreal numLines);
 
 	protected:
 		void setSize(int width, int height);
@@ -205,6 +212,7 @@ class SC_GUI_API Projection {
 		bool    _cursorVisible;
 
 		QRgb    _background;
+		qreal   _gridLines;
 
 		Geo::GeoBoundingBox _mapBoundingBox;
 };

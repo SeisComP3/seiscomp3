@@ -36,6 +36,7 @@ Projection::Projection() {
 	setZoom(1.0f);
 	_background = qRgb(0,0,0);
 	_pixelPerDegreeFact = 90.0f;
+	_gridLines = 4.0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -455,19 +456,21 @@ void Projection::setVisibleRadius(qreal r) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::gridDistance() const {
-	qreal dist = std::min(double((_width / 4) / pixelPerDegree()), 180.0);
-	if ( dist < 0.01 )
-		dist = std::max(int((dist*1000 + 0.6f)), 1)*0.001;
-	else if ( dist < 0.1 )
-		dist = std::max(int((dist*100 + 0.6f)), 1)*0.01;
-	else if ( dist < 1 )
-		dist = std::max(int((dist*10 + 0.6f)), 1)*0.1;
-	else if ( dist < 5 )
-		dist = std::max(int((dist + 0.6f)), 1);
-	else
-		dist = std::max(int((dist + 0.6f*5) / 5) * 5, 5);
+	static const std::vector<qreal> gridIntervals = {
+		0.0001, 0.0002, 0.0005,
+		0.001,  0.002,  0.005,
+		0.01,   0.02,   0.05,
+		0.1,    0.2,    0.5,
+		1, 2, 5, 10, 15, 20, 30, 45, 60, 90
+	};
+	// Grid distance is equal for latitudes and longitudes and targets
+	// _gridLines visible lines for the largest screen dimension.
+	std::vector<qreal>::const_iterator dist =
+	        std::upper_bound(gridIntervals.begin(), gridIntervals.end()-1,
+	                         qreal(std::max(_width, _height)) /
+	                                 ( pixelPerDegree() * _gridLines));
 
-	return QPointF(dist, dist);
+	return QPointF(*dist, *dist);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -547,6 +550,15 @@ bool Projection::project(QPainterPath &screenPath, size_t n,
 		screenPath.closeSubpath();
 
 	return !screenPath.isEmpty();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Projection::setGridLines(qreal numLines) {
+	_gridLines = numLines < 1.0 ? 1.0 : numLines;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
