@@ -354,10 +354,9 @@ bool Import::filterObject(Core::BaseObject* obj)
 	if ( filter ) {
 		if ( !filter->filter(obj) ) return true;
 	}
-	else {
+	else
 		SEISCOMP_DEBUG("Filter for class: %s not available", obj->className());
-		return true;
-	}
+
 	return false;
 }
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -370,7 +369,7 @@ bool Import::buildImportRoutingtable()
 {
 	// Build routing table
 	SEISCOMP_INFO("Calculating routing table ...");
-	try	{
+	try {
 		std::vector<std::string> tmpRoutingTable = configGetStrings("routingtable");
 
 		for ( std::vector<std::string>::iterator it = tmpRoutingTable.begin();
