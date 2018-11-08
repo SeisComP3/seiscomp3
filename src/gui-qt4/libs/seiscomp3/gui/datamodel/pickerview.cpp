@@ -5713,8 +5713,8 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 		}
 		catch ( ... ) {
 			SEISCOMP_WARNING("Unable to fetch orientation of stream %s.%s.%s.%s",
-		                 streamID.networkCode().c_str(), streamID.stationCode().c_str(),
-		                 streamID.locationCode().c_str(), streamID.channelCode().substr(0,streamID.channelCode().size()-1).c_str());
+			                 streamID.networkCode().c_str(), streamID.stationCode().c_str(),
+			                 streamID.locationCode().c_str(), streamID.channelCode().substr(0,streamID.channelCode().size()-1).c_str());
 			allComponents = false;
 		}
 	}
