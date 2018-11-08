@@ -1383,8 +1383,8 @@ void Canvas::translate(const QPoint &delta) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::translate(const QPointF &delta) {
-	_center += delta;
-	_projection->centerOn(_center);
+	_projection->centerOn(_center + delta);
+	_center = _projection->center();
 	updateBuffer();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
