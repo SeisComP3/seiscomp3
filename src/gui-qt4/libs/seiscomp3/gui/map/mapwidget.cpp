@@ -525,12 +525,10 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 	_isMeasureDragging = false;
 
 	if ( event->button() == Qt::LeftButton ) {
-		_lastDraggingPosition = event->pos();
-		_firstDrag = true;
+		QPointF p;
+		bool onMap = _canvas.projection()->unproject(p, event->pos());
 
-		if ( event->modifiers() == Qt::ControlModifier ) {
-			QPointF p;
-			_canvas.projection()->unproject(p, _lastDraggingPosition);
+		if ( event->modifiers() == Qt::ControlModifier && onMap ) {
 			if ( !_isMeasuring ) {
 				_isMeasuring = true;
 				_measurePoints.push_back(p);
@@ -545,7 +543,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 		}
 
 		if ( event->modifiers() == Qt::NoModifier ) {
-			_isDragging = true;
+			_isDragging = onMap;
+			_dragPosition = p;
 			_isMeasuring = false;
 			_isMeasureDragging = false;
 			_measurePoints.clear();
@@ -571,14 +570,11 @@ void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
 
 void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 	if ( _isDragging ) {
-		if ( _firstDrag ) _firstDrag = false;
-
-		QPoint delta = event->pos() - _lastDraggingPosition;
-		_lastDraggingPosition = event->pos();
-
-		_canvas.translate(delta);
-
-		update();
+		QPointF p;
+		if ( _canvas.projection()->unproject(p, event->pos()) ) {
+			_canvas.translate(_dragPosition - p);
+			update();
+		}
 	}
 	else if ( _isMeasuring ) {
 		_isMeasureDragging = true;
