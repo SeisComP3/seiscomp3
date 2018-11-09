@@ -7,7 +7,7 @@ SET(RECORDS_SOURCES
 SET(RECORDS_HEADERS
 	shrecord.h
 	sacrecord.h
-	binaryrecord.cpp
+	binaryrecord.h
 )
 
 IF (MSEED_FOUND)
