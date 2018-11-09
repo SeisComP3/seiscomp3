@@ -283,6 +283,7 @@ int locsat0_(char *dstaid, char *dwavid, char *dtype, char *atype,
 
 static const char *default_phases[] = {
 	"LQ", "LR", "Lg", "P", "PKP", "PP",
+	"PKPab", "PKPbc", "PKPdf", "SKPdf",
 	"PcP", "Pg", "Pn", "Rg", "S", "SKS",
 	"SS", "ScS", "Sn", "Sg", "pP", "sP",
 	"Pb", "Sb"
