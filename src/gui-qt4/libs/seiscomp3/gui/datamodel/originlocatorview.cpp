@@ -115,8 +115,8 @@ MAKEENUM(
 		"Dis",
 		"Az",
 		"Time",
-		"Baz",
 		"Slo",
+		"Baz",
 		"+/-",
 		"Created",
 		"Latency"
@@ -1583,7 +1583,6 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 						return pick->horizontalSlowness().value();
 				}
 				catch ( ValueException& ) {}
-
 				break;
 
 			// Picktime
@@ -1635,6 +1634,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return (int)a->azimuth();
 				}
 				catch ( ValueException& ) {}
+				break;
 
 			case METHOD:
 				pick = Pick::Find(a->pickID());
