@@ -13,8 +13,12 @@
 namespace Seiscomp {
 namespace Core {
 namespace Generic {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE>
 Archive<ROOT_TYPE>::Archive()
 : _hint(NONE), _isReading(true)
@@ -216,12 +220,105 @@ void Archive<ROOT_TYPE>::setHint(int h) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE>
-void Archive<ROOT_TYPE>::setValidity(bool v) {
+inline void Archive<ROOT_TYPE>::setValidity(bool v) {
 	if ( !v )
 		_validObject = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+inline size_t Archive<ROOT_TYPE>::propertyCount() const {
+	return _properties.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+bool Archive<ROOT_TYPE>::setProperty(const char *name, const PropertyValue &v) {
+	Properties::iterator it = _properties.find(name);
+	if ( it == _properties.end() ) {
+		_properties[name] = v;
+		return false;
+	}
+	else {
+		it->second = v;
+		return true;
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+inline const typename Archive<ROOT_TYPE>::PropertyValue *
+Archive<ROOT_TYPE>::property(const char *name) const {
+	Properties::const_iterator it = _properties.find(name);
+	if ( it == _properties.end() )
+		return NULL;
+
+	return &it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+inline void Archive<ROOT_TYPE>::clearProperties() {
+	_properties.clear();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+const int *Archive<ROOT_TYPE>::propertyInt(const char *name) const {
+	const PropertyValue *p = property(name);
+	if ( !p ) return NULL;
+	return boost::get<int>(p);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+const double *Archive<ROOT_TYPE>::propertyDouble(const char *name) const {
+	const PropertyValue *p = property(name);
+	if ( !p ) return NULL;
+	return boost::get<double>(p);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+const std::string *Archive<ROOT_TYPE>::propertyString(const char *name) const {
+	const PropertyValue *p = property(name);
+	if ( !p ) return NULL;
+	return boost::get<std::string>(p);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

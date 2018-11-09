@@ -17,11 +17,14 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
 #include <complex>
 #include <time.h>
 
 #include <boost/type_traits.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/variant.hpp>
+
 #include <seiscomp3/core.h>
 #include <seiscomp3/core/defs.h>
 #include <seiscomp3/core/optional.h>
@@ -58,6 +61,8 @@ class Archive {
 	// ------------------------------------------------------------------
 	public:
 		typedef ROOT_TYPE RootType;
+		typedef boost::variant<int, double, std::string> PropertyValue;
+		typedef std::map<std::string, PropertyValue> Properties;
 
 
 	// ------------------------------------------------------------------
@@ -170,6 +175,31 @@ class Archive {
 		bool supportsVersion() const {
 			return _version.packed >= VersionPacker<major,minor>::Value;
 		}
+
+
+	// ------------------------------------------------------------------
+	//  Property interface
+	// ------------------------------------------------------------------
+	public:
+		//! Returns the number of user set properties
+		size_t propertyCount() const;
+
+		//! Sets a value for the named property. If the property does not
+		//! yet exist, it will be added and false will be returned. If
+		//! the property exists already, true is returned. The value is
+		//! updated in both cases.
+		bool setProperty(const char *name, const PropertyValue &v);
+
+		//! Returns a property (if set) or NULL pointer given a property
+		//! name.
+		const PropertyValue *property(const char *name) const;
+
+		const int *propertyInt(const char *name) const;
+		const double *propertyDouble(const char *name) const;
+		const std::string *propertyString(const char *name) const;
+
+		//! Removes all set properties
+		void clearProperties();
 
 
 	// ------------------------------------------------------------------
@@ -492,13 +522,14 @@ class Archive {
 		int setChildHint(int h);
 
 	protected:
-		int     _hint;
-		bool    _isReading;
-		bool    _validObject;
-		bool    _first;
-		bool    _found;
-		bool    _strict;
-		Version _version;
+		int        _hint;
+		bool       _isReading;
+		bool       _validObject;
+		bool       _first;
+		bool       _found;
+		bool       _strict;
+		Version    _version;
+		Properties _properties;
 
 
 	template <typename ROOT, typename T, int CLASS_TYPE>

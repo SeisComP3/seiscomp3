@@ -39,6 +39,7 @@ namespace Core {
  API Changelog
  ******************************************************************************
  "12.0.0"   0x0C0000
+   - Added Seiscomp::Core::Generic::Archive property interface
    - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes
    - Changed Seiscomp::DataModel::DatabaseArchive::toString() from protected to
      public const
