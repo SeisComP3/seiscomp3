@@ -1050,7 +1050,7 @@ bool App::feed(DataModel::Origin *sc3origin) {
 
 	if ( ownOrigin ) {
 		if ( manual(sc3origin) ) {
-			if ( ! _config.useImportedOrigins ) {
+			if ( ! _config.useManualOrigins ) {
 				SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because autoloc.useManualOrigins = false");
 				return false;
 			}
