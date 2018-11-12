@@ -33,9 +33,9 @@ namespace Map {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Projection::Projection() {
-	setZoom(1.0f);
+	setZoom(1.0);
 	_background = qRgb(0,0,0);
-	_pixelPerDegreeFact = 90.0f;
+	_pixelPerDegreeFact = 90.0;
 	_gridLines = 4.0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -65,7 +65,7 @@ void Projection::setZoom(qreal zoom) {
 	_visibleRadius = _radius;
 
 	_scale = _screenRadius * _radius;
-	_oneOverScale = 1.0f / _scale;
+	_oneOverScale = 1.0 / _scale;
 
 	_halfMapWidth = _scale * 2;
 	_mapWidth = _scale * 4;
@@ -114,7 +114,7 @@ void Projection::setView(const QPointF &geoCoords, qreal zoom) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::center() const {
-	return QPointF(_center.x()*180.0f, _center.y()*90.0f);
+	return QPointF(_center.x()*180.0, _center.y()*90.0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -123,7 +123,7 @@ QPointF Projection::center() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPointF Projection::visibleCenter() const {
-	return QPointF(_visibleCenter.x()*180.0f, _visibleCenter.y()*90.0f);
+	return QPointF(_visibleCenter.x()*180.0, _visibleCenter.y()*90.0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -263,8 +263,8 @@ void Projection::updateBoundingBox() {
 void Projection::displayRect(const QRectF& rect) {
 	QPointF center = rect.center();
 
-	double zoomLevelH = 360.0f / rect.width();
-	double zoomLevelW = 360.0f / rect.height();
+	double zoomLevelH = 360.0 / rect.width();
+	double zoomLevelW = 360.0 / rect.height();
 
 	setView(center, std::min(zoomLevelH, zoomLevelW));
 }
@@ -444,7 +444,7 @@ void Projection::draw(QImage &img, bool filter, TextureCache *cache) {
 void Projection::setVisibleRadius(qreal r) {
 	_visibleRadius = r;
 	_scale = _screenRadius * _visibleRadius;
-	_oneOverScale = 1.0f / _scale;
+	_oneOverScale = 1.0 / _scale;
 
 	_halfMapWidth = _scale * 2;
 	_mapWidth = _scale * 4;
