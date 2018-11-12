@@ -74,6 +74,13 @@ class ESVApp : public Kicker {
 			}
 
 			try {
+				_scriptExportMap0 = configGetBool("scripts.script0.exportMap");
+			}
+			catch ( ... ) {
+				_scriptExportMap0 = false;
+			}
+
+			try {
 				_script1 = Seiscomp::Environment::Instance()->absolutePath(configGetString("scripts.script1"));
 			}
 			catch ( ... ) {}
@@ -85,13 +92,22 @@ class ESVApp : public Kicker {
 				_scriptStyle1 = true;
 			}
 
+			try {
+				_scriptExportMap1 = configGetBool("scripts.script1.exportMap");
+			}
+			catch ( ... ) {
+				_scriptExportMap1 = false;
+			}
+
 			return true;
 		}
 
 		void setupUi(MainWindow *mw) {
 			mw->loadEvents(_preloadDays);
-			mw->eventSummaryView()->setScript0(_script0, _scriptStyle0);
-			mw->eventSummaryView()->setScript1(_script1, _scriptStyle1);
+			mw->eventSummaryView()->setScript0(_script0, _scriptStyle0,
+			                                   _scriptExportMap0);
+			mw->eventSummaryView()->setScript1(_script1, _scriptStyle1,
+			                                   _scriptExportMap1);
 		}
 
 
@@ -101,6 +117,8 @@ class ESVApp : public Kicker {
 		std::string _script1;
 		bool        _scriptStyle0;
 		bool        _scriptStyle1;
+		bool        _scriptExportMap0;
+		bool        _scriptExportMap1;
 };
 
 
