@@ -132,6 +132,12 @@
   * Fix duplicate object bug which caused many error log messages in
     scmaster.log with respect to database insertions
 
+* scesv
+
+  * Add new script option ```exportMap``` that allows to export the current map to
+    file. The script has to take ownership of the file. This option is disabled by
+    default.
+
 * scolv
 
   * Allow to configure preferred event types which will be displayed first

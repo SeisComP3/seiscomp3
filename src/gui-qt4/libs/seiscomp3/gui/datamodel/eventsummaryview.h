@@ -156,8 +156,8 @@ class SC_GUI_API EventSummaryView : public QWidget
 
 		void setToolButtonText(const QString&);
 
-		void setScript0(const std::string&, bool oldStyle);
-		void setScript1(const std::string&, bool oldStyle);
+		void setScript0(const std::string&, bool oldStyle, bool exportMap);
+		void setScript1(const std::string&, bool oldStyle, bool exportMap);
 
 		Seiscomp::DataModel::Event* currentEvent() const;
 		Seiscomp::DataModel::Origin* currentOrigin() const;
@@ -209,7 +209,8 @@ class SC_GUI_API EventSummaryView : public QWidget
 
 	private:
 		void init();
-		void runScript(const QString&, const QString& name, bool oldStyle);
+		void runScript(const QString&, const QString& name, bool oldStyle,
+		               bool exportMap);
 
 		void processEventMsg(DataModel::Event* event, DataModel::Origin* org = NULL);
 
@@ -292,6 +293,8 @@ class SC_GUI_API EventSummaryView : public QWidget
 		std::string _script1;
 		bool        _scriptStyle0;
 		bool        _scriptStyle1;
+		bool        _scriptExportMap0;
+		bool        _scriptExportMap1;
 
 		std::string _displayCommentID;
 		std::string _displayCommentDefault;

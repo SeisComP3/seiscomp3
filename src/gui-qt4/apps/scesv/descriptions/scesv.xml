@@ -15,6 +15,11 @@
 					</description>
 				</parameter>
 				<group name="script0">
+					<parameter name="exportMap" type="boolean" default="false">
+						<description>
+							If enabled, the current map is exported to file. The filename is appened to the parameter list of script0. The script has to take ownership of the file.
+						</description>
+					</parameter>
 					<parameter name="oldStyle" type="boolean" default="true">
 						<description>
 							If enabled, the parameter list of script0 is eventID, arrivalCount,
@@ -31,6 +36,11 @@
 					</description>
 				</parameter>
 				<group name="script1">
+					<parameter name="exportMap" type="boolean" default="false">
+						<description>
+							If enabled, the current map is exported to file. The filename is appened to the parameter list of script1. The script has to take ownership of the file.
+						</description>
+					</parameter>
 					<parameter name="oldStyle" type="boolean" default="true">
 						<description>
 						If enabled, the parameter list of script1 is eventID, arrivalCount,
