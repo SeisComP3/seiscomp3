@@ -119,6 +119,7 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		std::string _currentProjection;
 
+		bool     _firstDrag;
 		bool     _isDragging;
 		bool     _isMeasuring;
 		bool     _isMeasureDragging;
@@ -128,7 +129,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		QVector<QPointF> _measurePoints;
 		QString          _measureText;
 		SaveBNADialog   *_measureBNADialog;
-		QPointF   _dragPosition;
+		QPoint   _lastDraggingPosition;
 
 		QMenu   *_contextProjectionMenu;
 		QMenu   *_contextFilterMenu;
