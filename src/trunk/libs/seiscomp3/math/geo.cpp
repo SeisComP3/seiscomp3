@@ -82,59 +82,42 @@ void delazi(double lat1, double lon1, double lat2, double lon2,
 	*azi2 *= ip180;
 }
 
-/* !To be moved into another package
-void delazi(const Origin &origin, const Station &station,
-	    double *out_dist, double *out_azi1, double *out_azi2)
-{
-	double lat1 = value(origin.latitude());
-	double lon1 = value(origin.longitude());
-	double lat2 = value(station.latitude());
-	double lon2 = value(station.longitude());
-
-	delazi(lat1, lon1, lat2, lon2, out_dist, out_azi1, out_azi2);
-}
-*/
-
 
 static void mb_geocr( double lon, double lat, double *a, double *b, double *c ) {
-	/* local variables */
-	double   blbda, bphi, ep, ug, vg;
+	double blbda, bphi, ep, ug, vg;
 
-	/* executable code */
-
-	blbda = deg2rad( lon );
-	bphi = deg2rad( lat );
+	blbda = deg2rad(lon);
+	bphi = deg2rad(lat);
 	ep = 1.0 - WGS84_FLATTENING;
 	ug = ep*ep*tan(bphi);
 	vg = 1.0/sqrt(1.0+ug*ug);
 	*a = vg*cos(blbda);
 	*b = vg*sin(blbda);
 	*c = ug*vg;
-
-} /* end of mb_geocr */
+}
 
 
 static double mb_azm(double x, double y) {
-	/* local variables */
-	double   th;
+	double th;
 
-	/* executable code */
-
-	if  (x == 0.0)  {
-		if  (y > 0.0)  return 90.0;
-		if  (y < 0.0)  return 270.0;
+	if ( x == 0.0 ) {
+		if ( y > 0.0 ) return 90.0;
+		if ( y < 0.0 ) return 270.0;
 		return 0.0;
-	} /*endif*/
+	}
 
-	th = rad2deg( atan(fabs(y/x)) );
-	if  (x > 0.0)  {
-		if  (y < 0.0)  return (360.0-th);
+	th = rad2deg(atan(fabs(y/x)));
+	if ( x > 0.0 ) {
+		if ( y < 0.0 )
+			return 360.0-th;
 		return th;
-	} else {
-		if  (y >= 0.0)  return (180.0-th);
-		return (180.0+th);
-	} /*endif*/
-} /* end of mb_azm */
+	}
+	else {
+		if ( y >= 0.0 )
+			return 180.0-th;
+		return 180.0+th;
+	}
+}
 
 
 void delazi_wgs84(double elat, double elon, double slat, double slon,
@@ -149,45 +132,42 @@ void delazi_wgs84(double elat, double elon, double slat, double slon,
 	 * double     *azim;         output; azimuth in degrees
 	 * double     *bazim;        output; back-azimuth in degrees
 	 */
-	/* local variables */
-	double   as, bs, cs, ds;
-	double   ae, be, ce, de;
-	double   bls, cbls, sbls, ble;
-	double   codel, bgdel;
-	double   xi, xj, xk;
-	double   sindt, cosz, sinz;
-
-	/* executable code */
+	double as, bs, cs, ds;
+	double ae, be, ce, de;
+	double bls, cbls, sbls, ble;
+	double codel, bgdel;
+	double xi, xj, xk;
+	double sindt, cosz, sinz;
 
 	/* check for equality */
 	as = fabs(slat-elat) + fabs(slon-elon);
-	if  (as < 1.0e-5)  {
+	if ( as < 1.0e-5 ) {
 		*distance = 0.0;
 		*azim = 0.0;
 		*bazim = 0.0;
 		return;
-	} /*endif*/
+	}
 
-	mb_geocr( slon, slat, &as, &bs, &cs );
-	ds = sqrt( 1.0 - cs*cs );
-	mb_geocr( elon, elat, &ae, &be, &ce );
-	de = sqrt( 1.0 - ce*ce );
+	mb_geocr(slon, slat, &as, &bs, &cs);
+	ds = sqrt(1.0 - cs*cs);
+	mb_geocr(elon, elat, &ae, &be, &ce);
+	de = sqrt(1.0 - ce*ce);
 
-	bls = deg2rad( slon );
-	cbls = cos( bls );
-	sbls = sin( bls );
+	bls = deg2rad(slon);
+	cbls = cos(bls);
+	sbls = sin(bls);
 	codel = ae*as + be*bs + ce*cs;
 
-	sindt = sqrt( 1.0-codel*codel );
-	if  (codel == 0.0)  {
+	sindt = sqrt(1.0-codel*codel);
+	if ( codel == 0.0 )
 		bgdel = M_PI/2.0;
-	} else {
-		bgdel = atan( fabs(sindt/codel) );
-		if  (codel <= 0.0)
+	else {
+		bgdel = atan(fabs(sindt/codel));
+		if ( codel <= 0.0 )
 			bgdel = M_PI - bgdel;
-	} /*endif*/
+	}
 
-	*distance = rad2deg( bgdel );
+	*distance = rad2deg(bgdel);
 
 	/* azimuths */
 	xi = bs*ce - be*cs;
@@ -195,11 +175,11 @@ void delazi_wgs84(double elat, double elon, double slat, double slon,
 	xk = as*be - ae*bs;
 	cosz = (xi*sbls + xj*cbls)/sindt;
 	sinz = xk/(ds*sindt);
-	*bazim = mb_azm( cosz, sinz );
-	ble = deg2rad( elon );
+	*bazim = mb_azm(cosz, sinz);
+	ble = deg2rad(elon);
 	cosz = -(xi*sin(ble) + xj*cos(ble))/sindt;
 	sinz = -xk/(de*sindt);
-	*azim = mb_azm( cosz, sinz );
+	*azim = mb_azm(cosz, sinz);
 }
 
 

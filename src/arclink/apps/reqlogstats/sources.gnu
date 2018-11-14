@@ -23,7 +23,7 @@ plot '<cut -c9- days3.dat' using 3:xtic(1) title 'BGR' ls 2, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \
      '' using  7 title 'IPGP' ls 6, \
-     '' using  8 title 'KOERI' ls 1, \
+     '' using  8 title 'KOERI' ls 11, \
      '' using  9 title 'LMU' ls 7, \
      '' using 10 title 'NIEP' ls 10, \
      '' using 11 title 'NOA' ls 5, \

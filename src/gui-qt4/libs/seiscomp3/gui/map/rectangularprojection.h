@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH and GFZ Potsdam                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -30,37 +30,42 @@ namespace Map {
 
 class SC_GUI_API RectangularProjection : public Projection {
 	// ----------------------------------------------------------------------
-	// X'struction
+	// X'truction
 	// ----------------------------------------------------------------------
 	public:
 		RectangularProjection();
 
 
 	// ----------------------------------------------------------------------
-	// Public interface
+	// Public projection interface
 	// ----------------------------------------------------------------------
 	public:
 		void setLowZoomEnabled(bool);
 
-		bool isRectangular() const;
-		bool wantsGridAntialiasing() const;
+		virtual bool isRectangular() const;
+		virtual bool wantsGridAntialiasing() const;
 
-		bool project(QPoint &screenCoords, const QPointF &geoCoords) const;
-		bool unproject(QPointF &geoCoords, const QPoint &screenCoords) const;
+		virtual bool project(QPoint &screenCoords, const QPointF &geoCoords) const;
+		virtual bool unproject(QPointF &geoCoords, const QPoint &screenCoords) const;
 
-		void centerOn(const QPointF &geoCoords);
+		virtual void centerOn(const QPointF &geoCoords);
 
-		int  lineSteps(const QPointF &p0, const QPointF &p1);
+		virtual int lineSteps(const QPointF &p0, const QPointF &p1);
 
-		void drawImage(QImage &buffer, const QRectF &geoReference, const QImage &image, bool highQuality,
-		               CompositionMode cm);
+		virtual void drawImage(QImage &buffer, const QRectF &geoReference,
+		                       const QImage &image, bool highQuality,
+		                       CompositionMode cm);
 
-		bool drawLine(QPainter &p, const QPointF &from, const QPointF &to);
-		void moveTo(const QPointF &p);
-		bool lineTo(QPainter &p, const QPointF &to);
+		virtual bool drawLine(QPainter &p, const QPointF &from, const QPointF &to);
+		virtual void moveTo(const QPointF &p);
+		virtual bool lineTo(QPainter &p, const QPointF &to);
 
-		bool drawLatCircle(QPainter &p, qreal lon);
-		bool drawLonCircle(QPainter &p, qreal lat);
+		virtual bool drawLatCircle(QPainter &p, qreal lon);
+		virtual bool drawLonCircle(QPainter &p, qreal lat);
+
+		virtual bool project(QPainterPath &screenPath, size_t n,
+		                     const Geo::GeoCoordinate *poly, bool closed,
+		                     uint minPixelDist, ClipHint hint = NoClip) const;
 
 
 	protected:
@@ -68,6 +73,8 @@ class SC_GUI_API RectangularProjection : public Projection {
 		void render(QImage &img, TextureCache *cache);
 
 		void render(QImage &img, bool highQuality, TextureCache *cache);
+
+		void projectUnwrapped(QPoint &screenCoords, const QPointF &geoCoords) const;
 
 
 	// ----------------------------------------------------------------------

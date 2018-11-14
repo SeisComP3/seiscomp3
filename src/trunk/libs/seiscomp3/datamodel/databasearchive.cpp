@@ -38,14 +38,14 @@ namespace DataModel {
 
 class AttributeMapper {
 	public:
-		AttributeMapper(const DatabaseArchive::AttributeMap& map)
+		AttributeMapper(const DatabaseArchive::AttributeMap &map)
 		  : _it(map.begin()), _end(map.end()) {}
 
 		inline bool next() const {
 			return _it != _end;
 		}
 
-		inline const std::string& attrib() const {
+		inline const std::string &attrib() const {
 			return _it++->first;
 		}
 
@@ -55,7 +55,7 @@ class AttributeMapper {
 };
 
 
-std::ostream& operator<<(std::ostream& os, const AttributeMapper& m) {
+std::ostream &operator<<(std::ostream &os, const AttributeMapper &m) {
 	bool first = true;
 	while ( m.next() ) {
 		if ( !first ) os << ",";
@@ -68,7 +68,7 @@ std::ostream& operator<<(std::ostream& os, const AttributeMapper& m) {
 
 class ValueMapper {
 	public:
-		ValueMapper(const DatabaseArchive::AttributeMap& map)
+		ValueMapper(const DatabaseArchive::AttributeMap &map)
 		  : _it(map.begin()), _end(map.end()) {}
 
 		inline bool next() const {
@@ -91,7 +91,7 @@ class ValueMapper {
 namespace {
 
 
-std::ostream& operator<<(std::ostream& os, const ValueMapper& m) {
+std::ostream &operator<<(std::ostream &os, const ValueMapper &m) {
 	bool first = true;
 	while ( m.next() ) {
 		if ( !first ) os << ",";
@@ -102,7 +102,7 @@ std::ostream& operator<<(std::ostream& os, const ValueMapper& m) {
 }
 
 
-const std::string& toSQL(const std::string& str) {
+const std::string &toSQL(const std::string &str) {
 	static std::string converted;
 	std::string::size_type pos = str.find('\'');
 	if ( pos == std::string::npos )
@@ -155,10 +155,10 @@ bool strtobool(bool &val, const char *str) {
 }
 
 
-DatabaseIterator::DatabaseIterator(DatabaseArchive* database,
-                                   const RTTI* rtti)
+DatabaseIterator::DatabaseIterator(DatabaseArchive *database, const RTTI *rtti)
 : _rtti(rtti), _reader(database), _count(0), _oid(-1), _parent_oid(-1), _cached(false) {
 	_object = fetch();
+	if ( !_object && _reader ) operator++();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -175,7 +175,7 @@ DatabaseIterator::DatabaseIterator()
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator::DatabaseIterator(const DatabaseIterator& iter)
+DatabaseIterator::DatabaseIterator(const DatabaseIterator &iter)
 : Seiscomp::Core::BaseObject(), _rtti(iter._rtti), _reader(iter._reader),
   _count(iter._count), _oid(iter._oid),
   _parent_oid(iter._parent_oid), _cached(iter._cached),
@@ -188,15 +188,14 @@ DatabaseIterator::DatabaseIterator(const DatabaseIterator& iter)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator::~DatabaseIterator() {
-}
+DatabaseIterator::~DatabaseIterator() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Object* DatabaseIterator::fetch() const {
+Object *DatabaseIterator::fetch() const {
 	if ( _rtti == NULL || _reader == NULL ) return NULL;
 
 	_cached = false;
@@ -230,7 +229,8 @@ Object* DatabaseIterator::fetch() const {
 
 	BaseObject *bobj = ClassFactory::Create(_rtti->className());
 	if ( bobj == NULL ) {
-		SEISCOMP_ERROR("DatabaseIterator: object of type '%s' could not be created", _rtti->className());
+		SEISCOMP_ERROR("DatabaseIterator: object of type '%s' could not be created",
+		               _rtti->className());
 		_reader->_db->endQuery();
 		return NULL;
 	}
@@ -238,7 +238,8 @@ Object* DatabaseIterator::fetch() const {
 	Object* obj = Object::Cast(bobj);
 	if ( obj == NULL ) {
 		delete bobj;
-		SEISCOMP_ERROR("DatabaseIterator: object of type '%s' could not be created", _rtti->className());
+		SEISCOMP_ERROR("DatabaseIterator: object of type '%s' could not be created",
+		               _rtti->className());
 		_reader->_db->endQuery();
 		return NULL;
 	}
@@ -249,10 +250,10 @@ Object* DatabaseIterator::fetch() const {
 	_reader->serializeObject(obj);
 
 	if ( !_reader->success() ) {
-		SEISCOMP_ERROR("DatabaseIterator: error while reading object of type '%s'", _rtti->className());
+		SEISCOMP_WARNING("DatabaseIterator: error while reading object of type '%s': ignoring it",
+		                 _rtti->className());
 		delete obj;
 		obj = NULL;
-		_reader->_db->endQuery();
 	}
 
 	return obj;
@@ -263,7 +264,7 @@ Object* DatabaseIterator::fetch() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator& DatabaseIterator::operator=(const DatabaseIterator& it) {
+DatabaseIterator& DatabaseIterator::operator=(const DatabaseIterator &it) {
 	_rtti = it._rtti;
 	_reader = it._reader;
 	_count = it._count;
@@ -335,12 +336,14 @@ Object* DatabaseIterator::operator*() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator& DatabaseIterator::operator++() {
-	if ( !_reader->_db->fetchRow() )
-		close();
+	while ( _reader->_db->fetchRow() ) {
+		_object = fetch();
+		if ( !_object ) continue;
+		++_count;
+		return *this;
+	}
 
-	_object = fetch();
-	++_count;
-
+	close();
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -382,7 +385,7 @@ size_t DatabaseIterator::count() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseObjectWriter::DatabaseObjectWriter(DatabaseArchive& archive,
+DatabaseObjectWriter::DatabaseObjectWriter(DatabaseArchive &archive,
                                            bool addToDatabase,
                                            int batchSize)
   : Visitor(addToDatabase?TM_TOPDOWN:TM_BOTTOMUP),
@@ -394,7 +397,7 @@ DatabaseObjectWriter::DatabaseObjectWriter(DatabaseArchive& archive,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseObjectWriter::operator()(Object* object) {
+bool DatabaseObjectWriter::operator()(Object *object) {
 	return (*this)(object, "");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -403,7 +406,7 @@ bool DatabaseObjectWriter::operator()(Object* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseObjectWriter::operator()(Object* object, const std::string& parentID) {
+bool DatabaseObjectWriter::operator()(Object *object, const std::string &parentID) {
 	if ( _archive.driver() == NULL )
 		return false;
 
@@ -426,7 +429,7 @@ bool DatabaseObjectWriter::operator()(Object* object, const std::string& parentI
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseObjectWriter::visit(PublicObject* publicObject) {
+bool DatabaseObjectWriter::visit(PublicObject *publicObject) {
 	return write(publicObject);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -435,7 +438,7 @@ bool DatabaseObjectWriter::visit(PublicObject* publicObject) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseObjectWriter::visit(Object* object) {
+void DatabaseObjectWriter::visit(Object *object) {
 	write(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -444,30 +447,28 @@ void DatabaseObjectWriter::visit(Object* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseObjectWriter::write(Object* object) {
+bool DatabaseObjectWriter::write(Object *object) {
 	++_count;
 
-	if ( _batchSize == 1 )
+	if ( _batchSize <= 1 )
 		_archive.driver()->start();
 	bool result = _addObjects?_archive.write(object, _parentID):_archive.remove(object, _parentID);
 
 	if ( !result ) {
 		++_errors;
-		if ( _batchSize == 1 )
+		if ( _batchSize <= 1 )
 			_archive.driver()->rollback();
 		return false;
 	}
 
-	if ( _batchSize == 1 )
+	if ( _batchSize <= 1 )
 		_archive.driver()->commit();
-	_parentID = "";
-
-	if ( _batchSize > 2 ) {
-		if ( (_count % _batchSize) == 0 ) {
-			_archive.driver()->commit();
-			_archive.driver()->start();
-		}
+	else if ( (_count % _batchSize) == 0 ) {
+		_archive.driver()->commit();
+		_archive.driver()->start();
 	}
+
+	_parentID = "";
 
 	return true;
 }
@@ -477,7 +478,7 @@ bool DatabaseObjectWriter::write(Object* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::IO::DatabaseInterface* DatabaseArchive::driver() const {
+Seiscomp::IO::DatabaseInterface *DatabaseArchive::driver() const {
 	return _db.get();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -486,7 +487,7 @@ Seiscomp::IO::DatabaseInterface* DatabaseArchive::driver() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::setDriver(Seiscomp::IO::DatabaseInterface* db) {
+void DatabaseArchive::setDriver(Seiscomp::IO::DatabaseInterface *db) {
 	_objectIdCache.clear();
 	_db = db;
 	_errorMsg = "";
@@ -502,7 +503,7 @@ void DatabaseArchive::setDriver(Seiscomp::IO::DatabaseInterface* db) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseArchive::DatabaseArchive(Seiscomp::IO::DatabaseInterface* i)
+DatabaseArchive::DatabaseArchive(Seiscomp::IO::DatabaseInterface *i)
   : _db(i), _objectAttributes(NULL) {
 	setHint(IGNORE_CHILDS);
 	Object::RegisterObserver(this);
@@ -529,7 +530,7 @@ DatabaseArchive::~DatabaseArchive() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::open(const char* dataSource) {
+bool DatabaseArchive::open(const char *dataSource) {
 	_errorMsg = "";
 
 	if ( _db == NULL ) return false;
@@ -678,8 +679,8 @@ bool DatabaseArchive::isPublicObjectCacheLookupEnabled() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Object* DatabaseArchive::queryObject(const Seiscomp::Core::RTTI& classType,
-                                     const std::string& query) {
+Object *DatabaseArchive::queryObject(const Seiscomp::Core::RTTI &classType,
+                                     const std::string &query) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return NULL;
@@ -741,8 +742,8 @@ Object* DatabaseArchive::queryObject(const Seiscomp::Core::RTTI& classType,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PublicObject* DatabaseArchive::getObject(const RTTI& classType,
-                                         const std::string& publicID) {
+PublicObject *DatabaseArchive::getObject(const RTTI &classType,
+                                         const std::string &publicID) {
 	if ( !classType.isTypeOf(PublicObject::TypeInfo()) )
 		return NULL;
 
@@ -777,8 +778,8 @@ PublicObject* DatabaseArchive::getObject(const RTTI& classType,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator DatabaseArchive::getObjects(const std::string& parentID,
-                                             const RTTI& classType,
+DatabaseIterator DatabaseArchive::getObjects(const std::string &parentID,
+                                             const RTTI &classType,
                                              bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
@@ -803,8 +804,8 @@ DatabaseIterator DatabaseArchive::getObjects(const std::string& parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator DatabaseArchive::getObjects(const PublicObject* parent,
-                                             const Seiscomp::Core::RTTI& classType,
+DatabaseIterator DatabaseArchive::getObjects(const PublicObject *parent,
+                                             const Seiscomp::Core::RTTI &classType,
                                              bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
@@ -829,8 +830,8 @@ DatabaseIterator DatabaseArchive::getObjects(const PublicObject* parent,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t DatabaseArchive::getObjectCount(const std::string& parentID,
-                                       const Seiscomp::Core::RTTI& classType) {
+size_t DatabaseArchive::getObjectCount(const std::string &parentID,
+                                       const Seiscomp::Core::RTTI &classType) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return 0;
@@ -865,7 +866,7 @@ size_t DatabaseArchive::getObjectCount(const std::string& parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::parentPublicID(const PublicObject* object) {
+std::string DatabaseArchive::parentPublicID(const PublicObject *object) {
 	std::string query;
 	query = "select Parent." + _publicIDColumn +
 	        " from PublicObject as Parent, PublicObject as Child, " +
@@ -895,8 +896,8 @@ std::string DatabaseArchive::parentPublicID(const PublicObject* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t DatabaseArchive::getObjectCount(const PublicObject* parent,
-                                       const Seiscomp::Core::RTTI& classType) {
+size_t DatabaseArchive::getObjectCount(const PublicObject *parent,
+                                       const Seiscomp::Core::RTTI &classType) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return 0;
@@ -932,7 +933,7 @@ size_t DatabaseArchive::getObjectCount(const PublicObject* parent,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
-                                                    const RTTI& classType,
+                                                    const RTTI &classType,
                                                     bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
@@ -972,7 +973,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator DatabaseArchive::getObjectIterator(const std::string& query,
+DatabaseIterator DatabaseArchive::getObjectIterator(const std::string &query,
                                                     const Seiscomp::Core::RTTI &classType) {
 	return getObjectIterator(query, &classType);
 }
@@ -982,7 +983,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(const std::string& query,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator DatabaseArchive::getObjectIterator(const std::string& query,
+DatabaseIterator DatabaseArchive::getObjectIterator(const std::string &query,
                                                     const Seiscomp::Core::RTTI *classType) {
 	if ( !_db->beginQuery(query.c_str()) ) {
 		SEISCOMP_ERROR("starting query '%s' failed", query.c_str());
@@ -1002,7 +1003,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(const std::string& query,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const Core::Time& value) {
+std::string DatabaseArchive::toString(const Core::Time &value) const {
 	return _db->timeToString(value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1011,7 +1012,7 @@ std::string DatabaseArchive::toString(const Core::Time& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const std::string &value) {
+std::string DatabaseArchive::toString(const std::string &value) const {
 	return toSQL(value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1020,7 +1021,7 @@ std::string DatabaseArchive::toString(const std::string &value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::toString(const char *value) {
+std::string DatabaseArchive::toString(const char *value) const {
 	return toSQL(std::string(value));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1029,7 +1030,7 @@ std::string DatabaseArchive::toString(const char *value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(int& value) {
+void DatabaseArchive::read(int &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1038,7 +1039,7 @@ void DatabaseArchive::read(int& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(float& value) {
+void DatabaseArchive::read(float &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1047,7 +1048,7 @@ void DatabaseArchive::read(float& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(double& value) {
+void DatabaseArchive::read(double &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1056,7 +1057,7 @@ void DatabaseArchive::read(double& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::complex<float>& value) {
+void DatabaseArchive::read(std::complex<float> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1065,7 +1066,7 @@ void DatabaseArchive::read(std::complex<float>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::complex<double>& value) {
+void DatabaseArchive::read(std::complex<double> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1074,7 +1075,7 @@ void DatabaseArchive::read(std::complex<double>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(bool& value) {
+void DatabaseArchive::read(bool &value) {
 	if ( !strtobool(value, field()) ) {
 		SEISCOMP_ERROR("DB: error in result field %d: could not cast '%s' to bool",
 		               _fieldIndex, field());
@@ -1087,7 +1088,7 @@ void DatabaseArchive::read(bool& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<char>& value) {
+void DatabaseArchive::read(std::vector<char> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1096,7 +1097,7 @@ void DatabaseArchive::read(std::vector<char>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<int>& value) {
+void DatabaseArchive::read(std::vector<int> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1105,7 +1106,7 @@ void DatabaseArchive::read(std::vector<int>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<float>& value) {
+void DatabaseArchive::read(std::vector<float> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1114,7 +1115,7 @@ void DatabaseArchive::read(std::vector<float>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<double>& value) {
+void DatabaseArchive::read(std::vector<double> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1123,7 +1124,7 @@ void DatabaseArchive::read(std::vector<double>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<std::string>& value) {
+void DatabaseArchive::read(std::vector<std::string> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1132,7 +1133,7 @@ void DatabaseArchive::read(std::vector<std::string>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<Core::Time>& value) {
+void DatabaseArchive::read(std::vector<Core::Time> &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1141,7 +1142,7 @@ void DatabaseArchive::read(std::vector<Core::Time>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::vector<std::complex<double> >& value) {
+void DatabaseArchive::read(std::vector<std::complex<double> > &value) {
 	fromString(value, field());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1150,7 +1151,7 @@ void DatabaseArchive::read(std::vector<std::complex<double> >& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(std::string& value) {
+void DatabaseArchive::read(std::string &value) {
 	value = field();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1159,7 +1160,7 @@ void DatabaseArchive::read(std::string& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(time_t& value) {
+void DatabaseArchive::read(time_t &value) {
 	Time t = _db->stringToTime(field());
 	value = t.seconds();
 }
@@ -1169,7 +1170,7 @@ void DatabaseArchive::read(time_t& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::read(Time& value) {
+void DatabaseArchive::read(Time &value) {
 	value = _db->stringToTime(field());
 	if ( hint() & SPLIT_TIME ) {
 		int microSeconds;
@@ -1214,7 +1215,7 @@ void DatabaseArchive::write(double value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::complex<float>& value) {
+void DatabaseArchive::write(std::complex<float> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1223,7 +1224,7 @@ void DatabaseArchive::write(std::complex<float>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::complex<double>& value) {
+void DatabaseArchive::write(std::complex<double> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1241,7 +1242,7 @@ void DatabaseArchive::write(bool value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<char>& value) {
+void DatabaseArchive::write(std::vector<char> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1250,7 +1251,7 @@ void DatabaseArchive::write(std::vector<char>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<int>& value) {
+void DatabaseArchive::write(std::vector<int> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1259,7 +1260,7 @@ void DatabaseArchive::write(std::vector<int>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<float>& value) {
+void DatabaseArchive::write(std::vector<float> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1268,7 +1269,7 @@ void DatabaseArchive::write(std::vector<float>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<double>& value) {
+void DatabaseArchive::write(std::vector<double> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1277,7 +1278,7 @@ void DatabaseArchive::write(std::vector<double>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<std::string>& value) {
+void DatabaseArchive::write(std::vector<std::string> &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1286,7 +1287,7 @@ void DatabaseArchive::write(std::vector<std::string>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<Core::Time>& value) {
+void DatabaseArchive::write(std::vector<Core::Time> &value) {
 	writeAttrib("'" + Core::toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1295,7 +1296,7 @@ void DatabaseArchive::write(std::vector<Core::Time>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::vector<std::complex<double> >& value) {
+void DatabaseArchive::write(std::vector<std::complex<double> > &value) {
 	writeAttrib("'" + toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1304,7 +1305,7 @@ void DatabaseArchive::write(std::vector<std::complex<double> >& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(std::string& value) {
+void DatabaseArchive::write(std::string &value) {
 	writeAttrib("'" + toSQL(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1322,7 +1323,7 @@ void DatabaseArchive::write(time_t value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::write(Time& value) {
+void DatabaseArchive::write(Time &value) {
 	writeAttrib("'" + toString(value) + "'");
 	if ( hint() & SPLIT_TIME ) {
 		std::string backupName = _currentAttributeName;
@@ -1366,7 +1367,7 @@ void DatabaseArchive::writeAttrib(OPT_CR(std::string) value) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::renderAttributes(const AttributeMap& attributes) {
+void DatabaseArchive::renderAttributes(const AttributeMap &attributes) {
 	SEISCOMP_DEBUG("collected attributes -- list:");
 	std::cout << AttributeMapper(attributes) << std::endl;
 	SEISCOMP_DEBUG("collected attributes -- end list");
@@ -1377,7 +1378,7 @@ void DatabaseArchive::renderAttributes(const AttributeMap& attributes) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::renderValues(const AttributeMap& attributes) {
+void DatabaseArchive::renderValues(const AttributeMap &attributes) {
 	SEISCOMP_DEBUG("collected values -- list:");
 	std::cout << ValueMapper(attributes) << std::endl;
 	SEISCOMP_DEBUG("collected values -- end list");
@@ -1388,7 +1389,7 @@ void DatabaseArchive::renderValues(const AttributeMap& attributes) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::publicObjectId(const std::string& publicId) {
+unsigned long DatabaseArchive::publicObjectId(const std::string &publicId) {
 	unsigned long id = 0;
 	std::stringstream ss;
 	ss << "select _oid from " << PublicObject::ClassName()
@@ -1409,7 +1410,7 @@ unsigned long DatabaseArchive::publicObjectId(const std::string& publicId) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::objectId(Object* object, const std::string& parentID) {
+unsigned long DatabaseArchive::objectId(Object *object, const std::string &parentID) {
 	PublicObject* publicObject = PublicObject::Cast(object);
 	if ( publicObject )
 		return publicObjectId(publicObject->publicID());
@@ -1523,7 +1524,7 @@ unsigned long DatabaseArchive::insertObject() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::insertPublicObject(const std::string& publicId) {
+unsigned long DatabaseArchive::insertPublicObject(const std::string &publicId) {
 	if ( publicId.empty() ) return 0;
 
 	unsigned long objectId = insertObject();
@@ -1548,9 +1549,9 @@ unsigned long DatabaseArchive::insertPublicObject(const std::string& publicId) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::insertRow(const std::string& table,
-                                const AttributeMap& attribs,
-                                const std::string& parentId) {
+bool DatabaseArchive::insertRow(const std::string &table,
+                                const AttributeMap &attribs,
+                                const std::string &parentId) {
 	std::stringstream ss;
 	ss.precision(12);
 	ss << "insert into " << table << "(";
@@ -1595,7 +1596,7 @@ bool DatabaseArchive::deleteObject(unsigned long id) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::write(Object* object, const std::string& parentId) {
+bool DatabaseArchive::write(Object* object, const std::string &parentId) {
 	if ( object == NULL ) return false;
 
 	if ( !validInterface() ) {
@@ -1702,7 +1703,7 @@ bool DatabaseArchive::write(Object* object, const std::string& parentId) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::update(Object* object, const std::string& parentID) {
+bool DatabaseArchive::update(Object *object, const std::string &parentID) {
 	if ( object == NULL ) return false;
 
 	if ( !validInterface() ) {
@@ -1834,7 +1835,7 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::remove(Object* object, const std::string& parentID) {
+bool DatabaseArchive::remove(Object *object, const std::string &parentID) {
 	if ( object == NULL ) return false;
 
 	if ( !validInterface() ) {
@@ -1846,10 +1847,10 @@ bool DatabaseArchive::remove(Object* object, const std::string& parentID) {
 	if ( objectID == 0 )
 		objectID = objectId(object, parentID);
 
-	if ( objectID == -1 ) {
-		SEISCOMP_ERROR("remove: object '%s' has not been found in database",
-		               object->className());
-		return false;
+	if ( objectID <= 0 ) {
+		SEISCOMP_WARNING("remove: object '%s' has not been found in database",
+		                 object->className());
+		return true;
 	}
 
 	_db->execute((std::string("delete from ") + object->className() +
@@ -1920,7 +1921,7 @@ void DatabaseArchive::readAttrib() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::locateObjectByName(const char* name, const char* targetClass, bool nullable) {
+bool DatabaseArchive::locateObjectByName(const char *name, const char *targetClass, bool nullable) {
 	if ( !isReading() ) {
 		if ( !isEmpty(targetClass) ) {
 			if ( !isEmpty(name) )
@@ -2002,7 +2003,7 @@ bool DatabaseArchive::locateObjectByName(const char* name, const char* targetCla
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::locateNextObjectByName(const char* name, const char* targetClass) {
+bool DatabaseArchive::locateNextObjectByName(const char *name, const char *targetClass) {
 	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2011,7 +2012,7 @@ bool DatabaseArchive::locateNextObjectByName(const char* name, const char* targe
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::locateNullObjectByName(const char* name, const char* targetClass, bool /*first*/) {
+void DatabaseArchive::locateNullObjectByName(const char *name, const char *targetClass, bool /*first*/) {
 	if ( !isEmpty(name) ) {
 		if ( !isEmpty(targetClass) ) {
 			if ( !(hint() & DB_TABLE) ) {
@@ -2049,7 +2050,7 @@ inline void DatabaseArchive::resetAttributePrefix() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void DatabaseArchive::pushAttributePrefix(const char* name) const {
+inline void DatabaseArchive::pushAttributePrefix(const char *name) const {
 	if ( _prefixPos >= 64 ) {
 		throw OverflowException("The attribute prefix cannot be pushed, stack overflow (more than 64 elements)");
 		return;
@@ -2086,7 +2087,7 @@ inline void DatabaseArchive::popAttribPrefix() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::serialize(RootType* object) {
+void DatabaseArchive::serialize(RootType *object) {
 	BaseObject::Archive::serialize(object);
 	popAttribPrefix();
 }
@@ -2096,7 +2097,7 @@ void DatabaseArchive::serialize(RootType* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::serialize(SerializeDispatcher& disp) {
+void DatabaseArchive::serialize(SerializeDispatcher &disp) {
 	if ( hint() & DB_TABLE ) {
 		if ( !isReading() ) {
 			std::string backupPrefix(_currentAttributePrefix);
@@ -2153,8 +2154,8 @@ void DatabaseArchive::setClassName(const char *) {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::buildQuery(const std::string& table,
-                                        const std::string& filter) {
+std::string DatabaseArchive::buildQuery(const std::string &table,
+                                        const std::string &filter) {
 	if ( filter.empty() )
 		return std::string("select * from ") + table;
 	else
@@ -2166,9 +2167,9 @@ std::string DatabaseArchive::buildQuery(const std::string& table,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string DatabaseArchive::buildExtendedQuery(const std::string& what,
-                                                   const std::string& tables,
-                                                   const std::string& filter)
+std::string DatabaseArchive::buildExtendedQuery(const std::string &what,
+                                                   const std::string &tables,
+                                                   const std::string &filter)
 {
 	if ( filter.empty() )
 		return std::string("select ") + what + " from " + tables;
@@ -2191,7 +2192,7 @@ bool DatabaseArchive::validInterface() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::onObjectDestroyed(Object* object) {
+void DatabaseArchive::onObjectDestroyed(Object *object) {
 	removeId(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2200,7 +2201,7 @@ void DatabaseArchive::onObjectDestroyed(Object* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int DatabaseArchive::getCachedId(const Object* o) const {
+int DatabaseArchive::getCachedId(const Object *o) const {
 	ObjectIdMap::const_iterator it = _objectIdCache.find(o);
 	if ( it == _objectIdCache.end() )
 		return 0;
@@ -2212,7 +2213,7 @@ int DatabaseArchive::getCachedId(const Object* o) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::registerId(const Object* o, int id) {
+void DatabaseArchive::registerId(const Object *o, int id) {
 	_objectIdCache[o] = id;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2230,7 +2231,7 @@ int DatabaseArchive::getCacheSize() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::serializeObject(Object* obj) {
+void DatabaseArchive::serializeObject(Object *obj) {
 	if ( obj == NULL ) return;
 
 	resetAttributePrefix();
@@ -2252,7 +2253,7 @@ void DatabaseArchive::serializeObject(Object* obj) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::removeId(Object* o) {
+void DatabaseArchive::removeId(Object *o) {
 	static int debug = 3;
 	ObjectIdMap::iterator it = _objectIdCache.find(o);
 	if ( it != _objectIdCache.end() ) {

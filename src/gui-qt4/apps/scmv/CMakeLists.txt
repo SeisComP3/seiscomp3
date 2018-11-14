@@ -12,7 +12,7 @@ SET(${PACKAGE_NAME}_SOURCES
 	legend.cpp
 	eventtablewidget.cpp
 	infowidget.cpp
-    main.cpp
+	main.cpp
 )
 
 SET(${PACKAGE_NAME}_HEADERS
@@ -31,6 +31,8 @@ SET(${PACKAGE_NAME}_MOC_HEADERS
 	mvmapwidget.h
 	eventtablewidget.h
 	infowidget.h
+	legend.h
+	types.h
 )
 
 SET(${PACKAGE_NAME}_UI

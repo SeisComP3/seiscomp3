@@ -13,9 +13,10 @@
 ############################################################################
 
 import glob, re, time, sys, os
-import seiscomp3.IO, seiscomp3.Logging
+import seiscomp3.IO, seiscomp3.Logging, seiscomp3.Client, seiscomp3.System
 from   getopt import getopt, GetoptError
 import bisect
+
 
 class Archive:
   def __init__(self, archiveDirectory):
@@ -455,7 +456,7 @@ Options:
                      of the real time difference between the records
     -n               network list (comma separated), default: *
     -c               channel filter (regular expression),
-                     default: (B|S|M|H|E)(L|H|N|G)(Z|N|E)
+                     default: (B|S|M|H|E)(L|H)(Z|N|E)
     -E               sort according to record end time; default is start time
         --files      specify the file handles to cache; default: 100
     -v, --verbose    verbose mode
@@ -493,7 +494,7 @@ recordURL    = "file://-"
 speed        = 0
 stdout       = False
 
-channels     = "(B|S|M|H|E)(L|H|N|G)(Z|N|E)"
+channels     = "(B|S|M|H|E)(L|H)(Z|N|E)"
 networks     = "*"
 
 archiveDirectory = "./"
@@ -521,7 +522,7 @@ if files:
   archiveDirectory = files[0]
 else:
   try:
-    archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/acquisition/archive"
+    archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/var/lib/archive"
   except: pass
 
 try:
@@ -609,6 +610,17 @@ if dump:
       sys.stdout.write(rec.raw().str())
 
 else:
+  env = seiscomp3.System.Environment.Instance()
+  cfg = seiscomp3.Config.Config()
+  env.initConfig(cfg, "scart")
+  try:
+    plugins = cfg.getStrings("plugins")
+    registry = seiscomp3.Client.PluginRegistry.Instance()
+    for p in plugins:
+      registry.addPluginName(p)
+    registry.loadPlugins()
+  except Exception,e: pass
+
   rs = seiscomp3.IO.RecordStream.Open(recordURL)
   if rs is None:
     sys.stderr.write("Unable to open recordstream '%s'\n" % recordURL)

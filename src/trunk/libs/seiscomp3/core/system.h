@@ -74,12 +74,14 @@
 		#define SC_FS_STEM_NAME(PATH) boost::filesystem::basename(PATH)
 		#define SC_FS_HAS_PARENT_PATH(PATH) PATH.has_branch_path()
 		#define SC_FS_PARENT_PATH(PATH) PATH.branch_path()
+		#define SC_FS_IS_REGULAR_FILE(PATH) boost::filesystem::is_regular(PATH)
 	#else
 		#define SC_FS_FILE_NAME(PATH) PATH.filename()
 		#define SC_FS_EXT_NAME(PATH) PATH.extension()
 		#define SC_FS_STEM_NAME(PATH) PATH.stem()
 		#define SC_FS_HAS_PARENT_PATH(PATH) PATH.has_parent_path()
 		#define SC_FS_PARENT_PATH(PATH) PATH.parent_path()
+		#define SC_FS_IS_REGULAR_FILE(PATH) boost::filesystem::is_regular_file(PATH)
 	#endif
 	#define SC_FS_FILE_PATH(PATH) FS_PATH(FS_FILE_NAME(PATH))
 	#define SC_FS_EXT_PATH(PATH) FS_PATH(FS_EXT_NAME(PATH))

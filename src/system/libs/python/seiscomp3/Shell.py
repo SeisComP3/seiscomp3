@@ -1,5 +1,5 @@
 ############################################################################
-#    Copyright (C) by GFZ Potsdam                                          #
+#    Copyright (C) by gempa GmbH, GFZ Potsdam                              #
 #                                                                          #
 #    You can redistribute and/or modify this program under the             #
 #    terms of the SeisComP Public License.                                 #
@@ -10,11 +10,14 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import os, sys, glob
+import os
+import sys
+import glob
 
 try:
     import readline
-except: pass
+except:
+    pass
 
 import seiscomp3.Config
 
@@ -29,9 +32,11 @@ def convert_wildcard(s):
         raise Exception("station selector: only one dot allowed")
 
     # Add station wildcard if only network is given
-    if len(wild) == 1: wild.append('*')
+    if len(wild) == 1:
+        wild.append('*')
     for i in range(len(wild)):
-        if len(wild[i]) == 0: wild[i] = '*'
+        if len(wild[i]) == 0:
+            wild[i] = '*'
     return '_'.join(wild)
 
 
@@ -46,6 +51,7 @@ class CLI:
     """
     Simple console shell.
     """
+
     def run(self, env):
         self.env = env
 
@@ -63,12 +69,13 @@ available commands with 'help'. 'exit' leaves the shell.
         while True:
             line = raw_input(prompt).strip()
             toks = split_tokens(line)
-            if len(toks) == 0: continue
+            if len(toks) == 0:
+                continue
 
-            if line == "exit" or line == "quit": break
+            if line == "exit" or line == "quit":
+                break
 
             self.handleCommand(toks[0], toks[1:])
-
 
     def handleCommand(self, cmd, args):
         try:
@@ -89,7 +96,6 @@ available commands with 'help'. 'exit' leaves the shell.
         except Exception, e:
             sys.stdout.write("%s\n" % str(e))
             return False
-
 
     def commandHelp(self, args):
         if len(args) == 0:
@@ -175,29 +181,33 @@ Commands:
     Alias for exit.
 """)
 
-
     def commandList(self, args):
         if len(args) == 0:
             raise Exception("Missing operand")
 
         if args[0] == "stations":
-            if len(args) > 2: raise Exception("Too many arguments")
+            if len(args) > 2:
+                raise Exception("Too many arguments")
 
             if len(args) > 1:
                 wild = convert_wildcard(args[1])
-            else: wild = "*"
+            else:
+                wild = "*"
 
             stas = []
             for f in sorted(glob.glob(os.path.join(self.env.key_dir, "station_" + wild))):
                 stas.append(os.path.basename(f)[8:].replace("_", "."))
 
-            for s in stas: print s
+            for s in stas:
+                print s
 
             return True
 
         elif args[0] == "profiles":
-            if len(args) > 2: raise Exception("Too many arguments")
-            if len(args) < 2: raise Exception("Expected: mod")
+            if len(args) > 2:
+                raise Exception("Too many arguments")
+            if len(args) < 2:
+                raise Exception("Expected: mod")
 
             module = args[1]
 
@@ -208,8 +218,10 @@ Commands:
             return True
 
         elif args[0] == "modules":
-            if len(args) > 2: raise Exception("Too many arguments")
-            if len(args) < 2: raise Exception("Expected: sta")
+            if len(args) > 2:
+                raise Exception("Too many arguments")
+            if len(args) < 2:
+                raise Exception("Expected: sta")
 
             sta = convert_stations(args[1])
 
@@ -218,30 +230,35 @@ Commands:
                 raise Exception("%s: station key does not exists" % args[1])
 
             for l in [line.strip() for line in open(f, "r").readlines()]:
-                if l.startswith("#"): continue
-                if len(l) == 0: continue
+                if l.startswith("#"):
+                    continue
+                if len(l) == 0:
+                    continue
                 print l
 
             return True
 
-        else: raise Exception("Invalid argument: %s" % args[0])
-
+        else:
+            raise Exception("Invalid argument: %s" % args[0])
 
     def commandDelete(self, args):
         if len(args) == 0:
             raise Exception("Missing operand")
 
         if args[0] == "profile":
-            if len(args) > 3: raise Exception("Too many arguments")
-            if len(args) < 3: raise Exception("Expected: mod profile")
+            if len(args) > 3:
+                raise Exception("Too many arguments")
+            if len(args) < 3:
+                raise Exception("Expected: mod profile")
 
             module = args[1]
             profile = args[2]
 
             if not os.path.exists(os.path.join(self.env.key_dir, module, "profile_" + profile)):
-                raise Exception("%s/%s: profile not found" % (module,profile))
+                raise Exception("%s/%s: profile not found" % (module, profile))
 
-            os.remove(os.path.join(self.env.key_dir, module, "profile_" + profile))
+            os.remove(os.path.join(self.env.key_dir,
+                                   module, "profile_" + profile))
 
             modified = 0
             for f in glob.glob(os.path.join(self.env.key_dir, "station_*")):
@@ -278,33 +295,36 @@ Commands:
 
                     new_lines.append(line)
 
-
                 if is_modified:
                     modified += 1
-                    try: open(f, "w").write('\n'.join(new_lines))
+                    try:
+                        open(f, "w").write('\n'.join(new_lines))
                     except Exception, e:
-                        sys.stdout.write("%s: %s\n" % (f,str(e)))
+                        sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
         elif args[0] == "binding":
-            if len(args) > 3: raise Exception("Too many arguments")
-            if len(args) < 3: raise Exception("Expected: mod profile")
+            if len(args) > 3:
+                raise Exception("Too many arguments")
+            if len(args) < 3:
+                raise Exception("Expected: mod profile")
 
             module = args[1]
             sta = convert_stations(args[2])
 
             if not os.path.exists(os.path.join(self.env.key_dir, module, "station_" + sta)):
-                raise Exception("%s/%s: binding not found" % (module,args[2]))
+                raise Exception("%s/%s: binding not found" % (module, args[2]))
 
             os.remove(os.path.join(self.env.key_dir, module, "station_" + sta))
 
             f = os.path.join(self.env.key_dir, "station_" + sta)
             try:
                 lines = [line.strip() for line in open(f, "r").readlines()]
-            except: pass
+            except:
+                pass
 
             new_lines = []
             is_modified = False
@@ -338,17 +358,19 @@ Commands:
                 new_lines.append(line)
 
             if is_modified:
-                try: open(f, "w").write('\n'.join(new_lines))
+                try:
+                    open(f, "w").write('\n'.join(new_lines))
                 except Exception, e:
-                    sys.stdout.write("%s: %s\n" % (f,str(e)))
+                    sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             return True
 
-        else: raise Exception("Invalid argument: %s" % args[0])
-
+        else:
+            raise Exception("Invalid argument: %s" % args[0])
 
     def commandPrint(self, args):
-        if len(args) == 0: raise Exception("Missing operand")
+        if len(args) == 0:
+            raise Exception("Missing operand")
 
         if args[0] == "station":
             if len(args) != 2:
@@ -356,7 +378,8 @@ Commands:
 
             sta = convert_stations(args[1])
             key = os.path.join(self.env.key_dir, "station_" + sta)
-            try: lines = [line.strip() for line in open(key, "r").readlines()]
+            try:
+                lines = [line.strip() for line in open(key, "r").readlines()]
             except IOError, e:
                 raise Exception("%s: station not configured" % sta)
             except Exception, e:
@@ -366,18 +389,23 @@ Commands:
 
             for line in lines:
                 # Comment line
-                if line.startswith("#"): continue
+                if line.startswith("#"):
+                    continue
                 # Empty line
-                if len(line) == 0: continue
+                if len(line) == 0:
+                    continue
 
                 toks = line.split(':')
 
                 if len(toks) == 1:
-                    binding = os.path.join(self.env.key_dir, toks[0], "station_" + sta)
+                    binding = os.path.join(
+                        self.env.key_dir, toks[0], "station_" + sta)
                 else:
-                    binding = os.path.join(self.env.key_dir, toks[0], "profile_" + toks[1])
+                    binding = os.path.join(
+                        self.env.key_dir, toks[0], "profile_" + toks[1])
 
-                if not first: sys.stdout.write("\n")
+                if not first:
+                    sys.stdout.write("\n")
 
                 first = False
                 sys.stdout.write("[%s]\n" % toks[0])
@@ -392,15 +420,17 @@ Commands:
                 except Exception, e:
                     sys.stdout.write("!unexpected error: %s\n" % str(e))
 
-        else: raise Exception("Invalid argument: %s" % args[0])
-
+        else:
+            raise Exception("Invalid argument: %s" % args[0])
 
     def commandSet(self, args):
-        if len(args) == 0: raise Exception("Missing operand")
+        if len(args) == 0:
+            raise Exception("Missing operand")
 
         if args[0] == "profile":
             if len(args) != 4:
-                raise Exception("missing arguments, expected: module profile station-selector")
+                raise Exception(
+                    "missing arguments, expected: module profile station-selector")
 
             module = args[1]
             profile = args[2]
@@ -408,7 +438,7 @@ Commands:
             wild = convert_wildcard(args[3])
 
             if not os.path.exists(os.path.join(self.env.key_dir, module, "profile_" + profile)):
-                raise Exception("%s/%s: profile not found" % (module,profile))
+                raise Exception("%s/%s: profile not found" % (module, profile))
 
             modified = 0
             for f in glob.glob(os.path.join(self.env.key_dir, "station_" + wild)):
@@ -421,21 +451,26 @@ Commands:
                     line = lines[i]
 
                     # Comment line
-                    if line.startswith("#"): continue
+                    if line.startswith("#"):
+                        continue
                     # Empty line
-                    if len(line) == 0: continue
+                    if len(line) == 0:
+                        continue
 
                     toks = line.split(':')
 
                     # Wrong module name
-                    if toks[0] != module: continue
+                    if toks[0] != module:
+                        continue
 
                     module_found = True
 
                     # No profile
-                    if len(toks) == 1: toks.append("")
+                    if len(toks) == 1:
+                        toks.append("")
                     # Profile already set
-                    elif toks[1] == profile: continue
+                    elif toks[1] == profile:
+                        continue
 
                     toks[1] = profile
                     lines[i] = ':'.join(toks)
@@ -448,9 +483,10 @@ Commands:
 
                 if is_modified:
                     modified += 1
-                    try: open(f, "w").write('\n'.join(lines))
+                    try:
+                        open(f, "w").write('\n'.join(lines))
                     except Exception, e:
-                        sys.stdout.write("%s: %s\n" % (f,str(e)))
+                        sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
@@ -458,7 +494,8 @@ Commands:
 
         elif args[0] == "module":
             if len(args) != 3:
-                raise Exception("missing arguments, expected: module station-selector")
+                raise Exception(
+                    "missing arguments, expected: module station-selector")
 
             module = args[1]
 
@@ -475,14 +512,17 @@ Commands:
                     line = lines[i]
 
                     # Comment line
-                    if line.startswith("#"): continue
+                    if line.startswith("#"):
+                        continue
                     # Empty line
-                    if len(line) == 0: continue
+                    if len(line) == 0:
+                        continue
 
                     toks = line.split(':')
 
                     # Wrong module name
-                    if toks[0] != module: continue
+                    if toks[0] != module:
+                        continue
 
                     module_found = True
 
@@ -496,23 +536,26 @@ Commands:
 
                 if is_modified:
                     modified += 1
-                    try: open(f, "w").write('\n'.join(lines))
+                    try:
+                        open(f, "w").write('\n'.join(lines))
                     except Exception, e:
-                        sys.stdout.write("%s: %s\n" % (f,str(e)))
+                        sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        else: raise Exception("Invalid argument: %s" % args[0])
-
+        else:
+            raise Exception("Invalid argument: %s" % args[0])
 
     def commandRemove(self, args):
-        if len(args) == 0: raise Exception("Missing operand")
+        if len(args) == 0:
+            raise Exception("Missing operand")
 
         if args[0] == "profile":
             if len(args) != 4:
-                raise Exception("Missing arguments, expected: module profile station-selector")
+                raise Exception(
+                    "Missing arguments, expected: module profile station-selector")
 
             module = args[1]
             profile = args[2]
@@ -528,21 +571,26 @@ Commands:
                     line = lines[i]
 
                     # Comment line
-                    if line.startswith("#"): continue
+                    if line.startswith("#"):
+                        continue
 
                     # Empty line
-                    if len(line) == 0: continue
+                    if len(line) == 0:
+                        continue
 
                     toks = line.split(':')
 
                     # No profile
-                    if len(toks) == 1: continue
+                    if len(toks) == 1:
+                        continue
 
                     # Wrong module name
-                    if toks[0] != module: continue
+                    if toks[0] != module:
+                        continue
 
                     # Wrong profile name
-                    if toks[1] != profile: continue
+                    if toks[1] != profile:
+                        continue
 
                     lines[i] = module
                     is_modified = True
@@ -555,9 +603,10 @@ Commands:
                     if (len(lines) > 0) and (len(lines[-1]) > 0):
                         lines.append("")
 
-                    try: open(f, "w").write('\n'.join(lines))
+                    try:
+                        open(f, "w").write('\n'.join(lines))
                     except Exception, e:
-                        sys.stdout.write("%s: %s\n" % (f,str(e)))
+                        sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
@@ -565,7 +614,8 @@ Commands:
 
         elif args[0] == "module":
             if len(args) != 3:
-                raise Exception("Missing arguments, expected: module station-selector")
+                raise Exception(
+                    "Missing arguments, expected: module station-selector")
 
             module = args[1]
 
@@ -605,17 +655,20 @@ Commands:
                     if (len(new_lines) > 0) and (len(new_lines[-1]) > 0):
                         new_lines.append("")
 
-                    try: open(f, "w").write('\n'.join(new_lines))
+                    try:
+                        open(f, "w").write('\n'.join(new_lines))
                     except Exception, e:
-                        sys.stdout.write("%s: %s\n" % (f,str(e)))
+                        sys.stdout.write("%s: %s\n" % (f, str(e)))
 
-                    try: os.remove(os.path.join(self.env.key_dir, module, os.path.basename(f)))
-                    except: pass
+                    try:
+                        os.remove(os.path.join(self.env.key_dir,
+                                               module, os.path.basename(f)))
+                    except:
+                        pass
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        else: raise Exception("Invalid argument: %s" % args[0])
-
-
+        else:
+            raise Exception("Invalid argument: %s" % args[0])

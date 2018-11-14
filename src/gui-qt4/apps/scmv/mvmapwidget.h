@@ -35,8 +35,6 @@ class MvMapWidget : public Seiscomp::Gui::MapWidget {
 	// Public interface
 	// ----------------------------------------------------------------------
 	public:
-		virtual void draw(QPainter& painter);
-
 		ApplicationStatus::Mode mode() const;
 		void setMode(ApplicationStatus::Mode mode);
 
@@ -50,8 +48,7 @@ class MvMapWidget : public Seiscomp::Gui::MapWidget {
 	// Private data members
 	// ----------------------------------------------------------------------
 	private:
-		Legend         _mapLegend;
-		EQSymbolLegend _eqSymbolLegend;
+		Legend *_mapLegend;
 };
 
 

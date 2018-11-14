@@ -195,6 +195,7 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 			double allComponentsMaximumStationDistance;
 			double defaultAddStationsDistance;
 
+			bool ignoreDisabledStations;
 			bool hideStationsWithoutData;
 
 			QColor timingQualityLow;
@@ -414,8 +415,8 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 		void ensureVisibility(const Seiscomp::Core::Time &time, int pixelMargin);
 
 		RecordMarker *updatePhaseMarker(Seiscomp::Gui::RecordViewItem*,
-		                                const Processing::AmplitudeProcessor::Result &res,
-		                                const QString &text);
+		                                const Processing::AmplitudeProcessor *proc,
+		                                const Processing::AmplitudeProcessor::Result &res);
 
 		void setPhaseMarker(Seiscomp::Gui::RecordWidget*, const Seiscomp::Core::Time&);
 

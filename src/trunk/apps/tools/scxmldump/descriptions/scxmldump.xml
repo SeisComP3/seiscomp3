@@ -79,6 +79,16 @@
 						Dump the routing database.
 					</description>
 				</option>
+				<option flag="Y" long-flag="availability">
+					<description>
+						Dump data availability information.
+					</description>
+				</option>
+				<option long-flag="with-segments">
+					<description>
+						Dump individual data segments.
+					</description>
+				</option>
 				<option flag="O" long-flag="origin" argument="id">
 					<description>
 						Origin publicID(s) to dump. Multiple origins may be specified

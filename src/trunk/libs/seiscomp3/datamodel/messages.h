@@ -25,6 +25,47 @@ namespace Seiscomp {
 namespace DataModel {
 
 
+DEFINE_SMARTPOINTER(ConfigSyncMessage);
+
+class SC_SYSTEM_CORE_API ConfigSyncMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ConfigSyncMessage);
+	DECLARE_SERIALIZATION;
+
+	// ------------------------------------------------------------------
+	//  Xstruction
+	// ------------------------------------------------------------------
+	public:
+		ConfigSyncMessage();
+		ConfigSyncMessage(bool finished);
+
+
+	// ------------------------------------------------------------------
+	//  Message interface
+	// ------------------------------------------------------------------
+	public:
+		bool empty() const;
+
+
+	// ------------------------------------------------------------------
+	//  Public interface
+	// ------------------------------------------------------------------
+	public:
+		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
+		CreationInfo &creationInfo();
+		const CreationInfo &creationInfo() const;
+
+
+	// ------------------------------------------------------------------
+	//  Public members
+	// ------------------------------------------------------------------
+	public:
+		bool isFinished;
+
+	private:
+		OPT(CreationInfo) _creationInfo;
+};
+
+
 DEFINE_SMARTPOINTER(InventorySyncMessage);
 
 class SC_SYSTEM_CORE_API InventorySyncMessage : public Seiscomp::Core::Message {
@@ -40,6 +81,15 @@ class SC_SYSTEM_CORE_API InventorySyncMessage : public Seiscomp::Core::Message {
 
 
 	// ------------------------------------------------------------------
+	//  Public interface
+	// ------------------------------------------------------------------
+	public:
+		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
+		CreationInfo &creationInfo();
+		const CreationInfo &creationInfo() const;
+
+
+	// ------------------------------------------------------------------
 	//  Message interface
 	// ------------------------------------------------------------------
 	public:
@@ -51,7 +101,9 @@ class SC_SYSTEM_CORE_API InventorySyncMessage : public Seiscomp::Core::Message {
 	// ------------------------------------------------------------------
 	public:
 		bool isFinished;
-		OPT(CreationInfo) creationInfo;
+
+	private:
+		OPT(CreationInfo) _creationInfo;
 };
 
 

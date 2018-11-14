@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #include <seiscomp3/gui/datamodel/eventsummary.h>
 
 #include <seiscomp3/core/system.h>
@@ -1161,7 +1159,7 @@ void EventSummary::resetContent() {
 	_ui.momentTensor->setPixmap(QPixmap());
 	_ui.momentTensor->setToolTip("");
 	if ( _map ) {
-		_map->canvas().displayRect(_map->canvas().geoRect());
+		_map->canvas().displayRect(QRectF(-180.0, -90.0, 360.0, 180.0));
 		_map->update();
 	}
 

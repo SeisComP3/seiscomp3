@@ -115,8 +115,8 @@ MAKEENUM(
 		"Dis",
 		"Az",
 		"Time",
-		"Baz",
 		"Slo",
+		"Baz",
 		"+/-",
 		"Created",
 		"Latency"
@@ -303,13 +303,52 @@ class CommitOptions : public QDialog {
 		: QDialog(parent, f) {
 			ui.setupUi(this);
 
+			QList<DataModel::EventType> eventTypesWhitelist;
+
+			try {
+				vector<string> eventTypes = SCApp->configGetStrings("olv.commonEventTypes");
+				for (  size_t i = 0; i < eventTypes.size(); ++i ) {
+					DataModel::EventType type;
+					if ( !type.fromString(eventTypes[i].c_str()) ) {
+						SEISCOMP_WARNING("olv.commonEventTypes: invalid type, ignoring: %s",
+						                 eventTypes[i].c_str());
+					}
+					else
+						eventTypesWhitelist.append(type);
+				}
+			}
+			catch ( ... ) {}
+
 			// Fill event types
 			ui.comboEventTypes->addItem("- unset -");
-			for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
-				if ( (EventType::Type)i == NOT_EXISTING )
-					ui.comboEventTypes->insertItem(1, EventType::NameDispatcher::name(i));
-				else
+
+			if ( eventTypesWhitelist.isEmpty() ) {
+				for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
+					if ( (EventType::Type)i == NOT_EXISTING )
+						ui.comboEventTypes->insertItem(1, EventType::NameDispatcher::name(i));
+					else
+						ui.comboEventTypes->addItem(EventType::NameDispatcher::name(i));
+				}
+			}
+			else {
+				bool usedFlags[DataModel::EventType::Quantity];
+				for ( int i = 0; i < DataModel::EventType::Quantity; ++i )
+					usedFlags[i] = false;
+
+				for ( int i = 0; i < eventTypesWhitelist.count(); ++i ) {
+					if ( usedFlags[i] ) continue;
+					ui.comboEventTypes->addItem(eventTypesWhitelist[i].toString());
+					usedFlags[i] = true;
+				}
+
+				QColor reducedColor;
+				reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 50);
+
+				for ( int i = 0; i < DataModel::EventType::Quantity; ++i ) {
+					if ( usedFlags[i] ) continue;
 					ui.comboEventTypes->addItem(EventType::NameDispatcher::name(i));
+					ui.comboEventTypes->setItemData(ui.comboEventTypes->count()-1, reducedColor, Qt::ForegroundRole);
+				}
 			}
 
 			EventType defaultType = EARTHQUAKE;
@@ -1271,19 +1310,22 @@ void ArrivalDelegate::paint(QPainter *painter,
 		if ( i == hoverIndex && option.state & QStyle::State_MouseOver ) {
 			QFont font = option.font;
 			font.setBold(true);
-			font.setPointSize(font.pointSize() + 2);
 			painter->setFont(font);
 		}
 
 		bool enabled = mask & _flags[i];
 		bool checked = (flags & _flags[i]) && enabled;
-		if ( !enabled )
-			painter->setPen(option.palette.color(QPalette::Disabled, QPalette::WindowText));
+		if ( !enabled ) {
+			if ( option.state & QStyle::State_Selected )
+				painter->setPen(option.palette.color(QPalette::Disabled, QPalette::HighlightedText));
+			else
+				painter->setPen(option.palette.color(QPalette::Disabled, QPalette::WindowText));
+		}
 		else
 			painter->setPen(pen);
 
 		painter->drawText(rects[i], Qt::AlignVCenter | Qt::AlignHCenter,
-		                  checked?_labels[i]:"-");
+		                  checked ? _labels[i] : (enabled ? "n" : "-"));
 		painter->setFont(option.font);
 	}
 
@@ -1541,7 +1583,6 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 						return pick->horizontalSlowness().value();
 				}
 				catch ( ValueException& ) {}
-
 				break;
 
 			// Picktime
@@ -1593,6 +1634,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return (int)a->azimuth();
 				}
 				catch ( ValueException& ) {}
+				break;
 
 			case METHOD:
 				pick = Pick::Find(a->pickID());
@@ -1937,7 +1979,18 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 		used = true;
 	}
 	catch ( ... ) {
-		setBackazimuthUsed(row, true);
+		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
+		try {
+			if ( pick ) {
+				pick->backazimuth().value();
+				setBackazimuthUsed(row, true);
+			}
+			else
+				setBackazimuthUsed(row, false);
+		}
+		catch ( ValueException& ) {
+			setBackazimuthUsed(row, false);
+		}
 	}
 
 	try {
@@ -1945,7 +1998,18 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 		used = true;
 	}
 	catch ( ... ) {
-		setHorizontalSlownessUsed(row, true);
+		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
+		try {
+			if ( pick ) {
+				pick->horizontalSlowness().value();
+				setHorizontalSlownessUsed(row, true);
+			}
+			else
+				setHorizontalSlownessUsed(row, false);
+		}
+		catch ( ValueException& ) {
+			setHorizontalSlownessUsed(row, false);
+		}
 	}
 
 	try {
@@ -2937,15 +3001,15 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName("Residual");
+		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Azimuth / Residual
 	else if ( tab == PT_AZIMUTH ) {
 		_residuals->setMarkerDistance(10, 1);
 		_residuals->setType(DiagramWidget::Rectangular);
 		_residuals->setIndicies(PC_AZIMUTH,PC_RESIDUAL);
-		_residuals->setAbscissaName("Azimuth");
-		_residuals->setOrdinateName("Residual");
+		_residuals->setAbscissaName("Azimuth (deg)");
+		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Distance / TravelTime
 	else if ( tab == PT_TRAVELTIME ) {
@@ -2956,7 +3020,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName("TravelTime");
+		_residuals->setOrdinateName("TravelTime (s)");
 	}
 	else if ( tab == PT_MOVEOUT ) {
 		_residuals->setMarkerDistance(10, 10);
@@ -2966,7 +3030,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 			_residuals->setAbscissaName("Distance (km)");
 		else
 			_residuals->setAbscissaName("Distance (deg)");
-		_residuals->setOrdinateName(QString("TTred >x/%1").arg(_config.reductionVelocityP));
+		_residuals->setOrdinateName(QString("Tred = T-d/%1 km/s (s)").arg(_config.reductionVelocityP));
 	}
 	else if ( tab == PT_POLAR ) {
 		_residuals->setType(DiagramWidget::Spherical);
@@ -4690,7 +4754,6 @@ void OriginLocatorView::showWaveforms() {
 
 	if ( !_currentOrigin ) return;
 
-	//std::cout << "Number of objects before: " << Core::BaseObject::ObjectCount() << std::endl;
 	_recordView = new PickerView(NULL, Qt::Window);
 	_recordView->setDatabase(_reader);
 
@@ -6258,9 +6321,12 @@ void OriginLocatorView::renameArrivals() {
 
 	if ( _currentOrigin == NULL ) return;
 
-
 	OriginPtr origin = Origin::Create();
 	*origin = *_currentOrigin;
+
+	phases.clear();
+	foreach ( QListWidgetItem *item, sourceItems )
+		phases.insert(item->text());
 
 	for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
 		Arrival *arr = _currentOrigin->arrival(i);

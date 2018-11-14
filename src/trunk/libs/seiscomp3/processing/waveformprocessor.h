@@ -57,7 +57,8 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 
 		enum ProcessingHint {
 			Distance,
-			Depth
+			Depth,
+			Time
 		};
 
 		MAKEENUM(
@@ -115,7 +116,30 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 				//! the sampling frequencies of different channels do not match.
 				InvalidSamplingFreq,
 				//! No associated value yet (error code?)
-				Error
+				Error,
+				// -- The following enumerations were added with API 12 ---
+				//!  No distance hint set
+				MissingDistance,
+				//!  No depth hint set
+				MissingDepth,
+				//!  No time hint set
+				MissingTime,
+				//! No hypocenter (Origin) given
+				MissingHypocenter,
+				//! No receiver (SensorLocation) given
+				MissingReceiver,
+				//! No pick (Pick) given
+				MissingPick,
+				//! Metadata is incomplete, e.g. a particualr stream attribute
+				//! is not set or empty
+				IncompleteMetadata,
+				//! The epicentre is out of supported regions
+				EpicenterOutOfRegions,
+				//! The receiver is out of supported regions
+				ReceiverOutOfRegions,
+				//! The entire raypath does not lie entirely in the supported
+				//! regions
+				RayPathOutOfRegions
 			),
 			ENAMES(
 				"waiting for data",
@@ -133,7 +157,17 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 				"missing gain",
 				"missing response",
 				"invalid sampling frequency",
-				"error"
+				"error",
+				"missing distance hint",
+				"missing depth hint",
+				"missing time hint",
+				"missing hypocenter",
+				"missing receiver",
+				"missing pick",
+				"incomplete metadata",
+				"epicenter out of regions",
+				"receiver out of regions",
+				"ray path out of regions"
 			)
 		);
 

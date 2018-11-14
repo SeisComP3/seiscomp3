@@ -51,7 +51,6 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 			setLoadConfigModuleEnabled(true);
 
-			_cleanupInterval = 1000;
 			setPrimaryMessagingGroup("MAGNITUDE");
 			addMessagingSubscription("LOCATION");
 			addMessagingSubscription("PICK");
@@ -331,7 +330,6 @@ class MagToolApp : public Seiscomp::Client::Application {
 			_magtool.outputMagLog = addOutputObjectLog("magnitude", primaryMessagingGroup());
 
 			_expiry = _fExpiry * 3600.;
-			_cleanupCounter = 0;
 
 			_magtool.init(_magTypes, _expiry);
 
@@ -417,12 +415,6 @@ class MagToolApp : public Seiscomp::Client::Application {
 				}
 			}
 	
-			// periodic house keeping
-			if ( ++_cleanupCounter >= _cleanupInterval ) {
-				countPublicObjectsByType();
-				_cleanupCounter = 0;
-			}
-
 			_sendImmediately = false;
 		}
 
@@ -481,9 +473,6 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 
 	private:
-		int _cleanupInterval;
-		int _cleanupCounter;
-
 		bool _sendImmediately;
 
 		unsigned int _interval;

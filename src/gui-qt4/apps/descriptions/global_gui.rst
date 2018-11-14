@@ -196,6 +196,22 @@ Available configuration parameters are:
    If set to 0 then the feature is disabled.
    Default is ``3``.
 
+.. confval:: symbol.size
+
+   Type: *int*
+
+   In case of single points, this specifies the size of the symbol in pixels.
+
+   Default is ``8``.
+
+.. confval:: symbol.shape
+
+   Type: *string*
+
+   In case of single points, this specifies the shape of the symbol. Valid
+   values are *circle* and *square*.
+
+   Default is ``circle``.
 
 .. confval:: debug
 
@@ -234,9 +250,9 @@ Available configuration parameters are:
    Fill color.
    Default is ``000000ff``.
 
-.. confval:: brush.pattern
+.. confval:: brush.style
 
-   Type: *color*
+   Type: *string*
 
    Fill pattern. Supported values are:
    nobrush, solid, dense1, dense2, dense3, dense4,

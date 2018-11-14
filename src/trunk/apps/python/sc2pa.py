@@ -134,7 +134,7 @@ class ProcAlert(seiscomp3.Client.Application):
                 return
 
         except:
-            print >> sys.stderr, sys.exc_info()
+            sys.stderr.write("%s\n" % sys.exc_info())
 
 
     def hasValidNetworkMagnitude(self, org, evt):

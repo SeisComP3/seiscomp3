@@ -10,10 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
-
 
 #define SEISCOMP_COMPONENT DataModel
 #include <seiscomp3/datamodel/routeseedlink.h>
@@ -312,7 +308,7 @@ void RouteSeedlink::accept(Visitor* visitor) {
 void RouteSeedlink::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,10>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: RouteSeedlink skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

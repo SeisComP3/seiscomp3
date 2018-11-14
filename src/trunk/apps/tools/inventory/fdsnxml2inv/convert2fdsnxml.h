@@ -17,6 +17,8 @@
 
 #include "converter.h"
 
+#include <seiscomp3/datamodel/dataextent.h>
+
 #include <list>
 #include <map>
 #include <string>
@@ -49,6 +51,7 @@ class ResponseIIR;
 class ResponsePAZ;
 class ResponseFAP;
 class ResponsePolynomial;
+class DataAvailability;
 
 }
 
@@ -68,6 +71,7 @@ class Convert2FDSNStaXML : public Converter {
 	//  Public interface
 	// ------------------------------------------------------------------
 	public:
+		void setAvailability(const DataModel::DataAvailability *dataAvailability);
 		bool push(const DataModel::Inventory *inv);
 
 
@@ -100,17 +104,20 @@ class Convert2FDSNStaXML : public Converter {
 	// ------------------------------------------------------------------
 	private:
 		typedef std::map<std::string, const DataModel::Object*> ObjectLookup;
+		typedef std::map<std::string, DataModel::DataExtentPtr> ExtentLookup;
 
-		ObjectLookup                _dataloggerLookup;
-		ObjectLookup                _sensorLookup;
-		ObjectLookup                _firLookup;
-		ObjectLookup                _iirLookup;
-		ObjectLookup                _pazLookup;
-		ObjectLookup                _fapLookup;
-		ObjectLookup                _polyLookup;
+		ObjectLookup                       _dataloggerLookup;
+		ObjectLookup                       _sensorLookup;
+		ObjectLookup                       _firLookup;
+		ObjectLookup                       _iirLookup;
+		ObjectLookup                       _pazLookup;
+		ObjectLookup                       _fapLookup;
+		ObjectLookup                       _polyLookup;
+		ExtentLookup                       _dataAvailabilityLookup;
 
-		FDSNXML::FDSNStationXML    *_msg;
-		const DataModel::Inventory *_inv;
+		FDSNXML::FDSNStationXML           *_msg;
+		const DataModel::Inventory        *_inv;
+
 };
 
 

@@ -267,6 +267,70 @@ class Timer(_object):
 Timer_swigregister = _Utils.Timer_swigregister
 Timer_swigregister(Timer)
 
+class UnitConversion(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, UnitConversion, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, UnitConversion, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _Utils.new_UnitConversion(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["fromUnit"] = _Utils.UnitConversion_fromUnit_set
+    __swig_getmethods__["fromUnit"] = _Utils.UnitConversion_fromUnit_get
+    if _newclass:
+        fromUnit = _swig_property(_Utils.UnitConversion_fromUnit_get, _Utils.UnitConversion_fromUnit_set)
+    __swig_setmethods__["toUnit"] = _Utils.UnitConversion_toUnit_set
+    __swig_getmethods__["toUnit"] = _Utils.UnitConversion_toUnit_get
+    if _newclass:
+        toUnit = _swig_property(_Utils.UnitConversion_toUnit_get, _Utils.UnitConversion_toUnit_set)
+    __swig_setmethods__["toQMLUnit"] = _Utils.UnitConversion_toQMLUnit_set
+    __swig_getmethods__["toQMLUnit"] = _Utils.UnitConversion_toQMLUnit_get
+    if _newclass:
+        toQMLUnit = _swig_property(_Utils.UnitConversion_toQMLUnit_get, _Utils.UnitConversion_toQMLUnit_set)
+    __swig_setmethods__["toSEEDUnit"] = _Utils.UnitConversion_toSEEDUnit_set
+    __swig_getmethods__["toSEEDUnit"] = _Utils.UnitConversion_toSEEDUnit_get
+    if _newclass:
+        toSEEDUnit = _swig_property(_Utils.UnitConversion_toSEEDUnit_get, _Utils.UnitConversion_toSEEDUnit_set)
+    __swig_setmethods__["scale"] = _Utils.UnitConversion_scale_set
+    __swig_getmethods__["scale"] = _Utils.UnitConversion_scale_get
+    if _newclass:
+        scale = _swig_property(_Utils.UnitConversion_scale_get, _Utils.UnitConversion_scale_set)
+    __swig_destroy__ = _Utils.delete_UnitConversion
+    __del__ = lambda self: None
+UnitConversion_swigregister = _Utils.UnitConversion_swigregister
+UnitConversion_swigregister(UnitConversion)
+
+class UnitConverter(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, UnitConverter, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, UnitConverter, name)
+    __repr__ = _swig_repr
+    if _newclass:
+        get = staticmethod(_Utils.UnitConverter_get)
+    else:
+        get = _Utils.UnitConverter_get
+
+    def __init__(self):
+        this = _Utils.new_UnitConverter()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _Utils.delete_UnitConverter
+    __del__ = lambda self: None
+UnitConverter_swigregister = _Utils.UnitConverter_swigregister
+UnitConverter_swigregister(UnitConverter)
+
+def UnitConverter_get(fromUnit):
+    return _Utils.UnitConverter_get(fromUnit)
+UnitConverter_get = _Utils.UnitConverter_get
+
 # This file is compatible with both classic and new-style classes.
 
 

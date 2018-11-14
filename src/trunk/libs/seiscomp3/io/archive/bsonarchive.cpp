@@ -507,7 +507,7 @@ void BSONArchive::read(float& value) {
 		case BSON_TYPE_DOUBLE:
 		{
 			double tmp = bson_iter_double(&_impl->iter);
-			if ( (tmp >= std::numeric_limits<float>::min() && tmp <= std::numeric_limits<float>::max()) ||
+			if ( (tmp >= -std::numeric_limits<float>::max() && tmp <= std::numeric_limits<float>::max()) ||
 			     tmp == std::numeric_limits<double>::infinity() || tmp == -std::numeric_limits<double>::infinity()) {
 				value = tmp;
 				setValidity(true);
@@ -518,7 +518,7 @@ void BSONArchive::read(float& value) {
 		case BSON_TYPE_INT32:
 		{
 			double tmp = bson_iter_int32(&_impl->iter);
-			if ( (tmp >= std::numeric_limits<float>::min() && tmp <= std::numeric_limits<float>::max()) ||
+			if ( (tmp >= -std::numeric_limits<float>::max() && tmp <= std::numeric_limits<float>::max()) ||
 			     tmp == std::numeric_limits<double>::infinity() || tmp == -std::numeric_limits<double>::infinity()) {
 				value = tmp;
 				setValidity(true);
@@ -529,7 +529,7 @@ void BSONArchive::read(float& value) {
 		case BSON_TYPE_INT64:
 		{
 			double tmp = bson_iter_int64(&_impl->iter);
-			if ( (tmp >= std::numeric_limits<float>::min() && tmp <= std::numeric_limits<float>::max()) ||
+			if ( (tmp >= -std::numeric_limits<float>::max() && tmp <= std::numeric_limits<float>::max()) ||
 			      tmp == std::numeric_limits<double>::infinity() || tmp == -std::numeric_limits<double>::infinity()) {
 				value = tmp;
 				setValidity(true);

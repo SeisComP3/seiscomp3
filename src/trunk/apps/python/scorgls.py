@@ -42,12 +42,12 @@ class OriginList(seiscomp3.Client.Application):
       start = self.commandline().optionString("begin")
       self._startTime = seiscomp3.Core.Time()
       if self._startTime.fromString(start, "%F %T") == False:
-        print >> sys.stderr, "Wrong 'begin' format '%s' -> setting to None" % start
+        sys.stderr.write("Wrong 'begin' format '%s' -> setting to None\n" % start)
     except:
-      print >> sys.stderr, "Wrong 'begin' format -> setting to None"
+      sys.stderr.write("Wrong 'begin' format -> setting to None\n")
       self._startTime = seiscomp3.Core.Time()
 
-    print >> sys.stderr, "Setting start to %s" % self._startTime.toString("%F %T")
+#   sys.stderr.write("Setting start to %s\n" % self._startTime.toString("%F %T"))
 
     try:
       end = self.commandline().optionString("end")
@@ -55,7 +55,7 @@ class OriginList(seiscomp3.Client.Application):
     except:
       self._endTime = seiscomp3.Core.Time.GMT()
 
-    print >> sys.stderr, "Setting end to %s" % self._endTime.toString("%F %T")
+#   sys.stderr.write("Setting end to %s\n" % self._endTime.toString("%F %T"))
 
     return True
 
@@ -71,7 +71,7 @@ class OriginList(seiscomp3.Client.Application):
     for obj in self.query().getObjectIterator(q, seiscomp3.DataModel.Origin.TypeInfo()):
       org = seiscomp3.DataModel.Origin.Cast(obj)
       if org:
-        print org.publicID()
+        sys.stdout.write("%s\n" % org.publicID())
 
     return True
 
@@ -80,7 +80,7 @@ try:
   app = OriginList(len(sys.argv), sys.argv)
   rc = app()
 except:
-  print traceback.format_exc()
+  sys.stderr.write("%s\n" % traceback.format_exc())
   sys.exit(1)
 
 sys.exit(rc)

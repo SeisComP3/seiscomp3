@@ -40,8 +40,6 @@ using namespace Seiscomp::Core;
 using namespace Seiscomp::Communication;
 using namespace Seiscomp::DataModel;
 
-SC_QCPLUGIN_API std::string i2s(DataModel::Object* obj);
-
 
 class SC_QCPLUGIN_API ConfigException: public GeneralException {
 	public:
@@ -61,41 +59,45 @@ class SC_QCPLUGIN_API DatabaseException: public GeneralException {
 	DatabaseException(const string& what): GeneralException(what) {}
 };
 
-class SC_QCPLUGIN_API QcIndex {
+
+struct SC_QCPLUGIN_API QcIndex {
+	QcIndex() {}
+	QcIndex(const std::string &k, const Core::Time &s) : key(k), startTime(s) {}
+
+	std::string key;
+	Core::Time  startTime;
+};
+
+
+class SC_QCPLUGIN_API QcIndexMap {
 	public:
-		QcIndex(size_t maxSize=100000) : _maxSize(maxSize) {};
+		QcIndexMap() {}
 
-		bool find(const std::string& s) {
-			return (_buffer.find(s) != _buffer.end());
+		bool find(const QcIndex &idx) const {
+			std::map<std::string, Core::Time>::const_iterator it;
+			it = _indexMap.find(idx.key);
+			return it != _indexMap.end() && it->second == idx.startTime;
 		}
 
-		void insert(const std::string& s) {
-			_buffer.insert(s);
-			if (_buffer.size() > _maxSize)
-				_buffer.erase(_buffer.begin());
+		void insert(const QcIndex &idx) {
+			_indexMap[idx.key] = idx.startTime;
 		}
 
-		size_t size() {
-			return _buffer.size();
+		size_t size() const {
+			return _indexMap.size();
 		}
 	
 	private:
-		std::set<std::string> _buffer;
-		size_t _maxSize;
+		std::map<std::string, Core::Time> _indexMap;
 };
 
 
 DEFINE_SMARTPOINTER(QcMessenger);
 
 class SC_QCPLUGIN_API QcMessenger : public Core::BaseObject {
-	DECLARE_SC_CLASS(QcMessenger);
-
 	public:
-		//! Default Constructor
-		QcMessenger();
-		
 		//! Initializing Constructor
-		QcMessenger(const QcApp* app);
+		QcMessenger(QcApp* app);
 		
 		//! Attach object to message and schedule sending 
 		//! (if notifier is true send as notifier message; as data message otherwise)
@@ -105,19 +107,18 @@ class SC_QCPLUGIN_API QcMessenger : public Core::BaseObject {
 		void scheduler();
 
 		//! Send Qc Message
-		bool sendMessage(Message* msg) throw (ConnectionException);
+		bool sendMessage(Message* msg);
 
 		void flushMessages();
 
-	public:
-		QcIndex _qcIndex;
-
 	private:
+		QcIndexMap _qcIndex;
 		NotifierMessagePtr _notifierMsg;
 		DataMessagePtr _dataMsg;
-		const QcApp* _app;
+		QcApp* _app;
 		Core::TimeSpan _sendInterval;
 		int _maxSize;
+		int _syncCounter;
 		Util::StopWatch _timer;
 
 };

@@ -81,7 +81,7 @@ Classes
         Origin [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Origin</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="time"><font color="#8b0000">+ time: TimeQuantity</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: RealQuantity</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: RealQuantity</font></td></tr><tr><td align="left" port="depth"><font color="#8b0000">+ depth: RealQuantity  [0..1]</font></td></tr><tr><td align="left" port="depthType"><font color="#8b0000">+ depthType: OriginDepthType  [0..1]</font></td></tr><tr><td align="left" port="timeFixed"><font color="#8b0000">+ timeFixed: boolean  [0..1]</font></td></tr><tr><td align="left" port="epicenterFixed"><font color="#8b0000">+ epicenterFixed: boolean  [0..1]</font></td></tr><tr><td align="left" port="referenceSystemID"><font color="#8b0000">+ referenceSystemID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="earthModelID"><font color="#8b0000">+ earthModelID: string</font></td></tr><tr><td align="left" port="quality"><font color="#8b0000">+ quality: OriginQuality  [0..1]</font></td></tr><tr><td align="left" port="uncertainty"><font color="#8b0000">+ uncertainty: OriginUncertainty  [0..1]</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: OriginType  [0..1]</font></td></tr><tr><td align="left" port="evaluationMode"><font color="#8b0000">+ evaluationMode: EvaluationMode  [0..1]</font></td></tr><tr><td align="left" port="evaluationStatus"><font color="#8b0000">+ evaluationStatus: EvaluationStatus  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ compositeTime: CompositeTime [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ arrival: Arrival [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stationMagnitude: StationMagnitude [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ magnitude: Magnitude [0..*]</font></td></tr></table>>]
         CompositeTime [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>CompositeTime</td></tr><tr><td align="left" port="year"><font color="#8b0000">+ year: IntegerQuantity  [0..1]</font></td></tr><tr><td align="left" port="month"><font color="#8b0000">+ month: IntegerQuantity  [0..1]</font></td></tr><tr><td align="left" port="day"><font color="#8b0000">+ day: IntegerQuantity  [0..1]</font></td></tr><tr><td align="left" port="hour"><font color="#8b0000">+ hour: IntegerQuantity  [0..1]</font></td></tr><tr><td align="left" port="minute"><font color="#8b0000">+ minute: IntegerQuantity  [0..1]</font></td></tr><tr><td align="left" port="second"><font color="#8b0000">+ second: RealQuantity  [0..1]</font></td></tr></table>>]
         Arrival [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Arrival</td></tr><tr><td align="left" port="pickID"><font color="#8b0000">+ pickID: string</font></td></tr><tr><td align="left" port="phase"><font color="#8b0000">+ phase: Phase</font></td></tr><tr><td align="left" port="timeCorrection"><font color="#8b0000">+ timeCorrection: float  [0..1]</font></td></tr><tr><td align="left" port="azimuth"><font color="#8b0000">+ azimuth: float  [0..1]</font></td></tr><tr><td align="left" port="distance"><font color="#8b0000">+ distance: float  [0..1]</font></td></tr><tr><td align="left" port="takeOffAngle"><font color="#8b0000">+ takeOffAngle: float  [0..1]</font></td></tr><tr><td align="left" port="timeResidual"><font color="#8b0000">+ timeResidual: float  [0..1]</font></td></tr><tr><td align="left" port="horizontalSlownessResidual"><font color="#8b0000">+ horizontalSlownessResidual: float  [0..1]</font></td></tr><tr><td align="left" port="backazimuthResidual"><font color="#8b0000">+ backazimuthResidual: float  [0..1]</font></td></tr><tr><td align="left" port="timeUsed"><font color="#8b0000">+ timeUsed: boolean  [0..1]</font></td></tr><tr><td align="left" port="horizontalSlownessUsed"><font color="#8b0000">+ horizontalSlownessUsed: boolean  [0..1]</font></td></tr><tr><td align="left" port="backazimuthUsed"><font color="#8b0000">+ backazimuthUsed: boolean  [0..1]</font></td></tr><tr><td align="left" port="weight"><font color="#8b0000">+ weight: float  [0..1]</font></td></tr><tr><td align="left" port="earthModelID"><font color="#8b0000">+ earthModelID: string</font></td></tr><tr><td align="left" port="preliminary"><font color="#8b0000">+ preliminary: boolean  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
-        StationMagnitude [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>StationMagnitude</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="originID"><font color="#8b0000">+ originID: string</font></td></tr><tr><td align="left" port="magnitude"><font color="#8b0000">+ magnitude: RealQuantity</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="amplitudeID"><font color="#8b0000">+ amplitudeID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="waveformID"><font color="#8b0000">+ waveformID: WaveformStreamID  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
+        StationMagnitude [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>StationMagnitude</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="originID"><font color="#8b0000">+ originID: string</font></td></tr><tr><td align="left" port="magnitude"><font color="#8b0000">+ magnitude: RealQuantity</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="amplitudeID"><font color="#8b0000">+ amplitudeID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="waveformID"><font color="#8b0000">+ waveformID: WaveformStreamID  [0..1]</font></td></tr><tr><td align="left" port="passedQC"><font color="#8b0000">+ passedQC: boolean  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Magnitude [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Magnitude</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="magnitude"><font color="#8b0000">+ magnitude: RealQuantity</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="originID"><font color="#8b0000">+ originID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="stationCount"><font color="#8b0000">+ stationCount: int  [0..1]</font></td></tr><tr><td align="left" port="azimuthalGap"><font color="#8b0000">+ azimuthalGap: float  [0..1]</font></td></tr><tr><td align="left" port="evaluationStatus"><font color="#8b0000">+ evaluationStatus: EvaluationStatus  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stationMagnitudeContribution: StationMagnitudeContribution [0..*]</font></td></tr></table>>]
         StationMagnitudeContribution [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>StationMagnitudeContribution</td></tr><tr><td align="left" port="stationMagnitudeID"><font color="#8b0000">+ stationMagnitudeID: string</font></td></tr><tr><td align="left" port="residual"><font color="#8b0000">+ residual: float  [0..1]</font></td></tr><tr><td align="left" port="weight"><font color="#8b0000">+ weight: float  [0..1]</font></td></tr></table>>]
         FocalMechanism [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>FocalMechanism</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="triggeringOriginID"><font color="#8b0000">+ triggeringOriginID: string</font></td></tr><tr><td align="left" port="nodalPlanes"><font color="#8b0000">+ nodalPlanes: NodalPlanes  [0..1]</font></td></tr><tr><td align="left" port="principalAxes"><font color="#8b0000">+ principalAxes: PrincipalAxes  [0..1]</font></td></tr><tr><td align="left" port="azimuthalGap"><font color="#8b0000">+ azimuthalGap: float  [0..1]</font></td></tr><tr><td align="left" port="stationPolarityCount"><font color="#8b0000">+ stationPolarityCount: int  [0..1]</font></td></tr><tr><td align="left" port="misfit"><font color="#8b0000">+ misfit: float  [0..1]</font></td></tr><tr><td align="left" port="stationDistributionRatio"><font color="#8b0000">+ stationDistributionRatio: float  [0..1]</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="evaluationMode"><font color="#8b0000">+ evaluationMode: EvaluationMode  [0..1]</font></td></tr><tr><td align="left" port="evaluationStatus"><font color="#8b0000">+ evaluationStatus: EvaluationStatus  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ momentTensor: MomentTensor [0..*]</font></td></tr></table>>]
@@ -357,6 +357,34 @@ Classes
         ArclinkRequest -> ArclinkStatusLine
         ArclinkRequest -> ArclinkRequestLine
         ArclinkLog -> ArclinkUser
+     }
+
+* :ref:`DataAvailability <api-python-datamodel-dataavailability>`
+
+  * :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`
+  * :ref:`DataExtent <api-python-datamodel-dataextent>`
+  * :ref:`DataSegment <api-python-datamodel-datasegment>`
+  * :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
+
+  .. graphviz::
+     :caption: DataAvailability object connections from parent to child.
+
+     digraph G {
+        graph [size="8, 100"]
+        node [fontname=Verdana,fontsize=8]
+        node [shape=plaintext]
+        node [penwidth=0.5]
+        node [style="rounded,filled"]
+        node [fillcolor="#fcf2e3"]
+        node [color="#000000"]
+        edge [color="#000000"]
+        layout="dot"
+        DataExtent [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataExtent</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="waveformID"><font color="#8b0000">+ waveformID: WaveformStreamID</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime</font></td></tr><tr><td align="left" port="updated"><font color="#8b0000">+ updated: datetime</font></td></tr><tr><td align="left" port="lastScan"><font color="#8b0000">+ lastScan: datetime</font></td></tr><tr><td align="left" port="segmentOverflow"><font color="#8b0000">+ segmentOverflow: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ dataSegment: DataSegment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ dataAttributeExtent: DataAttributeExtent [0..*]</font></td></tr></table>>]
+        DataSegment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataSegment</td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime</font></td></tr><tr><td align="left" port="updated"><font color="#8b0000">+ updated: datetime</font></td></tr><tr><td align="left" port="sampleRate"><font color="#8b0000">+ sampleRate: double</font></td></tr><tr><td align="left" port="quality"><font color="#8b0000">+ quality: string</font></td></tr><tr><td align="left" port="outOfOrder"><font color="#8b0000">+ outOfOrder: boolean</font></td></tr></table>>]
+        DataAttributeExtent [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataAttributeExtent</td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime</font></td></tr><tr><td align="left" port="sampleRate"><font color="#8b0000">+ sampleRate: double</font></td></tr><tr><td align="left" port="quality"><font color="#8b0000">+ quality: string</font></td></tr><tr><td align="left" port="updated"><font color="#8b0000">+ updated: datetime</font></td></tr><tr><td align="left" port="segmentCount"><font color="#8b0000">+ segmentCount: int</font></td></tr></table>>]
+        DataAvailability -> DataExtent
+        DataExtent -> DataSegment
+        DataExtent -> DataAttributeExtent
      }
 
 
@@ -4330,6 +4358,675 @@ Reference
    .. py:method:: version()
 
       :rtype: string
+
+.. _api-python-datamodel-dataattributeextent:
+
+.. py:class:: DataAttributeExtent
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type DataAttributeExtent if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to DataAttributeExtent if the internal wrapped
+      representation is an DataAttributeExtent object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type DataAttributeExtentIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setStart(start)
+
+      :param start: seiscomp3.Core.Time
+
+      Time of first sample of data attribute extent.
+
+   .. py:method:: start()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setEnd(end)
+
+      :param end: seiscomp3.Core.Time
+
+      Time after last sample of data attribute extent.
+
+   .. py:method:: end()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setSampleRate(sampleRate)
+
+      :param sampleRate: double
+
+      Sample rate of the current data attribute extent.
+
+   .. py:method:: sampleRate()
+
+      :rtype: double
+
+   .. py:method:: setQuality(quality)
+
+      :param quality: string
+
+      Quality indicator of current data attribute extent.
+
+   .. py:method:: quality()
+
+      :rtype: string
+
+   .. py:method:: setUpdated(updated)
+
+      :param updated: seiscomp3.Core.Time
+
+      The time of the last update or creation of this data attribute extent.
+
+   .. py:method:: updated()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setSegmentCount(segmentCount)
+
+      :param segmentCount: int
+
+      Number of data segments covered by this data attribute extent.
+
+   .. py:method:: segmentCount()
+
+      :rtype: int
+
+   .. py:method:: dataExtent()
+
+      :rtype: DataExtent
+
+      Returns the parent DataExtent if available. Returns None
+      if the parent is not a DataExtent. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned DataAttributeExtent.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-dataavailability:
+
+.. py:class:: DataAvailability
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type can hold data availability related objects \(extent and segment\).
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type DataAvailability if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to DataAvailability if the internal wrapped
+      representation is an DataAvailability object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`DataAvailability <api-python-datamodel-dataavailability>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: add(dataExtent)
+
+      :param dataExtent: Object of type :ref:`DataExtent <api-python-datamodel-dataextent>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a DataExtent object to DataAvailability. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: remove(dataExtent)
+
+      :param dataExtent: Object of type :ref:`DataExtent <api-python-datamodel-dataextent>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added DataExtent object from DataAvailability.
+
+   .. py:method:: removeDataExtent(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeDataExtent(dataExtentIndex);
+
+      :param dataExtentIndex: The index of the object to be removed of type DataExtentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: dataExtentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of DataExtent child objects.
+
+   .. py:method:: dataExtent(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`DataExtent <api-python-datamodel-dataextent>`.
+
+      Returns the DataExtent at index idx.
+
+   .. py:method:: dataExtent(dataExtentIndex)
+
+      :param dataExtentIndex: The index of the object to be removed of type DataExtentIndex.
+      :rtype: Object of type :ref:`DataExtent <api-python-datamodel-dataextent>`.
+
+      Returns the DataExtent at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
+   .. py:method:: findDataExtent(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`DataExtent <api-python-datamodel-dataextent>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned DataAvailability.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-dataextent:
+
+.. py:class:: DataExtent
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type DataExtent if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to DataExtent if the internal wrapped
+      representation is an DataExtent object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type DataExtent.
+
+      Creates and registers (if enabled) a DataExtent instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type DataExtent.
+
+      Creates and registers (if enabled) a DataExtent instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`DataExtent <api-python-datamodel-dataextent>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type DataExtentIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`DataExtent <api-python-datamodel-dataextent>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setWaveformID(waveformID)
+
+      :param waveformID: :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
+
+   .. py:method:: waveformID()
+
+      :rtype: :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
+
+   .. py:method:: setStart(start)
+
+      :param start: seiscomp3.Core.Time
+
+      Time of first sample of data available
+
+   .. py:method:: start()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setEnd(end)
+
+      :param end: seiscomp3.Core.Time
+
+      Time after last sample of data available
+
+   .. py:method:: end()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setUpdated(updated)
+
+      :param updated: seiscomp3.Core.Time
+
+      The time of the last update or creation of this segment
+
+   .. py:method:: updated()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setLastScan(lastScan)
+
+      :param lastScan: seiscomp3.Core.Time
+
+      The time of the last waveform archive scan
+
+   .. py:method:: lastScan()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setSegmentOverflow(segmentOverflow)
+
+      :param segmentOverflow: boolean
+
+      Flags the stream to be to fragmented for processing.
+
+   .. py:method:: segmentOverflow()
+
+      :rtype: boolean
+
+   .. py:method:: add(dataSegment)
+
+      :param dataSegment: Object of type :ref:`DataSegment <api-python-datamodel-datasegment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a DataSegment object to DataExtent. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: add(dataAttributeExtent)
+
+      :param dataAttributeExtent: Object of type :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a DataAttributeExtent object to DataExtent. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: remove(dataSegment)
+
+      :param dataSegment: Object of type :ref:`DataSegment <api-python-datamodel-datasegment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added DataSegment object from DataExtent.
+
+   .. py:method:: remove(dataAttributeExtent)
+
+      :param dataAttributeExtent: Object of type :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added DataAttributeExtent object from DataExtent.
+
+   .. py:method:: removeDataSegment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeDataSegment(dataSegmentIndex);
+
+      :param dataSegmentIndex: The index of the object to be removed of type DataSegmentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeDataAttributeExtent(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeDataAttributeExtent(dataAttributeExtentIndex);
+
+      :param dataAttributeExtentIndex: The index of the object to be removed of type DataAttributeExtentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: dataSegmentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of DataSegment child objects.
+
+   .. py:method:: dataAttributeExtentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of DataAttributeExtent child objects.
+
+   .. py:method:: dataSegment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`DataSegment <api-python-datamodel-datasegment>`.
+
+      Returns the DataSegment at index idx.
+
+   .. py:method:: dataSegment(dataSegmentIndex)
+
+      :param dataSegmentIndex: The index of the object to be removed of type DataSegmentIndex.
+      :rtype: Object of type :ref:`DataSegment <api-python-datamodel-datasegment>`.
+
+      Returns the DataSegment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
+   .. py:method:: dataAttributeExtent(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`.
+
+      Returns the DataAttributeExtent at index idx.
+
+   .. py:method:: dataAttributeExtent(dataAttributeExtentIndex)
+
+      :param dataAttributeExtentIndex: The index of the object to be removed of type DataAttributeExtentIndex.
+      :rtype: Object of type :ref:`DataAttributeExtent <api-python-datamodel-dataattributeextent>`.
+
+      Returns the DataAttributeExtent at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
+   .. py:method:: dataAvailability()
+
+      :rtype: DataAvailability
+
+      Returns the parent DataAvailability if available. Returns None
+      if the parent is not a DataAvailability. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned DataExtent.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-datasegment:
+
+.. py:class:: DataSegment
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type DataSegment if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to DataSegment if the internal wrapped
+      representation is an DataSegment object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`DataSegment <api-python-datamodel-datasegment>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type DataSegmentIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`DataSegment <api-python-datamodel-datasegment>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setStart(start)
+
+      :param start: seiscomp3.Core.Time
+
+      Time of first sample of data segment.
+
+   .. py:method:: start()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setEnd(end)
+
+      :param end: seiscomp3.Core.Time
+
+      Time after last sample of data segment.
+
+   .. py:method:: end()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setUpdated(updated)
+
+      :param updated: seiscomp3.Core.Time
+
+      The time of the last update or creation of this data segment.
+
+   .. py:method:: updated()
+
+      :rtype: seiscomp3.Core.Time
+
+   .. py:method:: setSampleRate(sampleRate)
+
+      :param sampleRate: double
+
+      Sample rate of the current data segment.
+
+   .. py:method:: sampleRate()
+
+      :rtype: double
+
+   .. py:method:: setQuality(quality)
+
+      :param quality: string
+
+      Quality indicator of current data segment.
+
+   .. py:method:: quality()
+
+      :rtype: string
+
+   .. py:method:: setOutOfOrder(outOfOrder)
+
+      :param outOfOrder: boolean
+
+      Whether this segment is an out\-of\-order segment or not.
+
+   .. py:method:: outOfOrder()
+
+      :rtype: boolean
+
+   .. py:method:: dataExtent()
+
+      :rtype: DataExtent
+
+      Returns the parent DataExtent if available. Returns None
+      if the parent is not a DataExtent. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned DataSegment.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 .. _api-python-datamodel-dataused:
 
@@ -15532,6 +16229,25 @@ Reference
    .. py:method:: waveformID()
 
       :rtype: :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setPassedQC(passedQC)
+
+      :param passedQC: boolean
+
+      An optional flag that indiciates whether a station magnitude has passed
+      the quality control or not. For example, if a station magnitude is
+      out of the defined distance range but should be associated to a network
+      magnitude for further analysis then this flag can be set to false.
+      If the flag is not set, it defaults to true.
+
+   .. py:method:: passedQC()
+
+      :rtype: boolean
 
       .. note::
 

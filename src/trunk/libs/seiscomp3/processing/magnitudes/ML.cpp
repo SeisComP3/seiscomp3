@@ -19,6 +19,13 @@ namespace Seiscomp {
 namespace Processing {
 
 
+namespace {
+
+std::string ExpectedAmplitudeUnit = "mm";
+
+}
+
+
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_ML, MagnitudeProcessor, "MagnitudeProcessor_ML");
 REGISTER_MAGNITUDEPROCESSOR(MagnitudeProcessor_ML, "ML");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -100,13 +107,11 @@ double MagnitudeProcessor_ML::logA0(double dist_km) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
-	double amplitude,   // in micrometers per second
-	double,             // in seconds
-	double delta,       // in degrees
-	double depth,       // in kilometers
+	double amplitude, const std::string &unit,
+	double, double, double delta, double depth,
 	const DataModel::Origin *, const DataModel::SensorLocation *,
-	double &value)
-{
+	const DataModel::Amplitude *,
+	double &value) {
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
 
@@ -116,6 +121,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
 	double distanceKm = Math::Geo::deg2km(delta);
 	if ( maxDistanceKm > 0 && distanceKm > maxDistanceKm )
 		return DistanceOutOfRange;
+
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
 
 	try {
 		value = log10(amplitude) - logA0(distanceKm);

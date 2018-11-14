@@ -63,7 +63,7 @@ inline Range::Range(double lower, double upper) : lower(lower), upper(upper) {
 
 inline double Range::length() const { return upper - lower; }
 
-inline double Range::center() const { return (lower-upper)*0.5; }
+inline double Range::center() const { return (lower+upper)*0.5; }
 
 inline bool Range::contains(double value) const {
 	return (value >= lower) && (value <= upper);

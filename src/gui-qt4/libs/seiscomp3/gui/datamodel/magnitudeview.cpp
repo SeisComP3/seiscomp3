@@ -58,6 +58,8 @@ MAKEENUM(
 		MAGNITUDE,
 		RESIDUAL,
 		DISTANCE,
+		SNR,
+		PERIOD,
 		MISC
 		//SNR
 	),
@@ -68,7 +70,9 @@ MAKEENUM(
 		"Loc/Cha",
 		"Mag",
 		"Res",
-		"Dis",
+		"Dist",
+		"SNR",
+		"Per (s)",
 		""
 		//"SNR"
 	)
@@ -80,6 +84,8 @@ QVariant colAligns[StaMagsListColumns::Quantity] = {
 	int(Qt::AlignHCenter | Qt::AlignVCenter),
 	int(Qt::AlignHCenter | Qt::AlignVCenter),
 	int(Qt::AlignHCenter | Qt::AlignVCenter),
+	int(Qt::AlignRight | Qt::AlignVCenter),
+	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignRight | Qt::AlignVCenter),
@@ -95,7 +101,9 @@ class StaMagsSortFilterProxyModel : public QSortFilterProxyModel {
 		bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
 			if ( (left.column() == MAGNITUDE && right.column() == MAGNITUDE) ||
 			     (left.column() == RESIDUAL && right.column() == RESIDUAL) ||
-			     (left.column() == DISTANCE && right.column() == DISTANCE) )
+			     (left.column() == DISTANCE && right.column() == DISTANCE) ||
+			     (left.column() == SNR && right.column() == SNR) ||
+			     (left.column() == PERIOD && right.column() == PERIOD) )
 				return sourceModel()->data(left, Qt::UserRole).toDouble() < sourceModel()->data(right, Qt::UserRole).toDouble();
 			else
 				return QSortFilterProxyModel::lessThan(left, right);
@@ -371,6 +379,7 @@ struct opXor {
 
 typedef ModelRowFilterMultiOperation<opOr> ModelRowFilter;
 
+QColor failedQCColor(255,160,0,64);
 
 }
 
@@ -382,9 +391,9 @@ typedef ModelRowFilterMultiOperation<opOr> ModelRowFilter;
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationMagnitudeModel::StationMagnitudeModel(DataModel::Origin* origin,
                                              DataModel::Magnitude* netMag,
+                                             PublicObjectCache *cache,
                                              QObject *parent)
- : QAbstractTableModel(parent) {
-
+: QAbstractTableModel(parent), _cache(cache) {
 	for ( int i = 0; i < StaMagsListColumns::Quantity; ++i )
 		if ( i == DISTANCE ) {
 			if ( SCScheme.unit.distanceInKM )
@@ -538,6 +547,30 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 				}
 				break;
 
+			case SNR:
+			{
+				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
+				if ( amp ) {
+					try {
+						return QString("%1").arg(amp->snr(), 0, 'f', 1);
+					}
+					catch ( ... ) {}
+				}
+				break;
+			}
+
+			case PERIOD:
+			{
+				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
+				if ( amp ) {
+					try {
+						return QString("%1").arg(amp->period().value(), 0, 'f', 2);
+					}
+					catch ( ... ) {}
+				}
+				break;
+			}
+
 			case MISC:
 				break;
 
@@ -545,6 +578,15 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 
 			default:
 				break;
+		}
+	}
+	else if ( role == Qt::BackgroundRole ) {
+		if ( sm != NULL ) {
+			try {
+				if ( !sm->passedQC() )
+					return failedQCColor;
+			}
+			catch ( ... ) {}
 		}
 	}
 	else if ( role == Qt::UserRole ) {
@@ -592,6 +634,28 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 						return distance;
 				}
 				break;
+			case SNR:
+			{
+				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
+				if ( amp ) {
+					try {
+						return amp->snr();
+					}
+					catch ( ... ) {}
+				}
+				return -1;
+			}
+			case PERIOD:
+			{
+				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
+				if ( amp ) {
+					try {
+						return amp->period().value();
+					}
+					catch ( ... ) {}
+				}
+				return -1;
+			}
 			default:
 				break;
 		}
@@ -671,7 +735,6 @@ Qt::ItemFlags StationMagnitudeModel::flags(const QModelIndex &index) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool StationMagnitudeModel::setData(const QModelIndex &index, const QVariant &value,
                                     int role) {
-
 	// set checkBox
 	if ( index.isValid() && role == Qt::CheckStateRole ) {
 		if ( _used.count() <= index.row() )
@@ -954,7 +1017,11 @@ ModelAbstractRowFilter *&selectionFilter() {
 MagnitudeView::MagnitudeView(const MapsDesc &maps,
                              Seiscomp::DataModel::DatabaseQuery* reader,
                              QWidget * parent, Qt::WFlags f)
- : QWidget(parent, f), _reader(reader), _origin(NULL) {
+: QWidget(parent, f)
+, _reader(reader)
+, _modelStationMagnitudes(NULL, NULL, &_objCache)
+, _origin(NULL)
+, _objCache(_reader, 500) {
 	_maptree = new Map::ImageTree(maps);
 	_modelStationMagnitudesProxy = NULL;
 	init(reader);
@@ -968,8 +1035,13 @@ MagnitudeView::MagnitudeView(const MapsDesc &maps,
 MagnitudeView::MagnitudeView(Map::ImageTree* mapTree,
                              Seiscomp::DataModel::DatabaseQuery* reader,
                              QWidget * parent, Qt::WFlags f)
- : QWidget(parent, f), _reader(reader), _origin(NULL) {
+: QWidget(parent, f)
+, _reader(reader)
+, _modelStationMagnitudes(NULL, NULL, &_objCache)
+, _origin(NULL)
+, _objCache(_reader, 500) {
 	_maptree = mapTree;
+	_modelStationMagnitudesProxy = NULL;
 	init(reader);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1287,7 +1359,18 @@ void MagnitudeView::recalculateMagnitude() {
 
 	double netmag, stdev;
 
-	if ( _ui.btnMean->isChecked() ) {
+	if ( _ui.btnDefault->isChecked() ) {
+		if ( mags.size() < 4 ) {
+			Math::Statistics::computeMean(mags, netmag, stdev);
+			weights.resize(mags.size(), 1.);
+			_netMag->setMethodID("mean");
+		}
+		else {
+			Math::Statistics::computeTrimmedMean(mags, 25.0, netmag, stdev, &weights);
+			_netMag->setMethodID("trimmed mean");
+		}
+	}
+	else if ( _ui.btnMean->isChecked() ) {
 		if ( !Math::Statistics::computeMean(mags, netmag, stdev) ) {
 			QMessageBox::critical(this, "Error", "Recalculating the magnitude using the trimmed mean failed for unknown reason");
 			return;
@@ -1638,7 +1721,9 @@ void MagnitudeView::computeMagnitudes() {
 	}
 
 	CalculateAmplitudes dlg(_origin.get(), this);
+	static QByteArray geomCalculateAmplitudes;
 
+	dlg.restoreGeometry(geomCalculateAmplitudes);
 	// TODO: This should go into the settings panel
 	dlg.setRecomputeAmplitudes(false);
 	dlg.setAmplitudeTypes(ampTypes);
@@ -1647,6 +1732,8 @@ void MagnitudeView::computeMagnitudes() {
 	dlg.setAmplitudeCache(&_amplitudes);
 	dlg.setSilentMode(_computeMagnitudesSilently);
 	if ( dlg.exec() != QDialog::Accepted ) return;
+
+	geomCalculateAmplitudes = dlg.saveGeometry();
 
 	QList<Seiscomp::DataModel::AmplitudePtr> sessionAmplitudes;
 
@@ -1673,8 +1760,10 @@ void MagnitudeView::computeMagnitudes() {
 
 	SEISCOMP_DEBUG("Amplitude cache size: %d", (int)_amplitudes.size());
 
+	MagnitudeStats magErrors;
+
 	for ( size_t i = 0; i < magnitudeTypes.size(); ++i ) {
-		Magnitude *mag = computeStationMagnitudes(magnitudeTypes[i], &sessionAmplitudes);
+		Magnitude *mag = computeStationMagnitudes(magnitudeTypes[i], &sessionAmplitudes, &magErrors);
 		if ( mag ) {
 			computeMagnitude(mag, _defaultMagnitudeAggregation?*_defaultMagnitudeAggregation:"");
 
@@ -1736,6 +1825,58 @@ void MagnitudeView::computeMagnitudes() {
 
 			_origin->add(mag.get());
 		}
+	}
+
+	if ( !magErrors.isEmpty() && !_computeMagnitudesSilently ) {
+		static QByteArray geomCalculateMagnitudes;
+
+		QDialog dlg;
+		dlg.setWindowTitle(tr("Compute magnitudes"));
+		dlg.restoreGeometry(geomCalculateMagnitudes);
+
+		QTableWidget *table = new QTableWidget;
+		QVBoxLayout *vlayout = new QVBoxLayout;
+		dlg.setLayout(vlayout);
+		vlayout->addWidget(table);
+
+		QHBoxLayout *hlayout = new QHBoxLayout;
+		hlayout->addStretch();
+		QPushButton *btnOK = new QPushButton(tr("OK"));
+		hlayout->addWidget(btnOK);
+		connect(btnOK, SIGNAL(pressed()), &dlg, SLOT(accept()));
+		vlayout->addLayout(hlayout);
+
+		table->setColumnCount(3);
+
+		table->horizontalHeader()->setStretchLastSection(true);
+		table->horizontalHeader()->setVisible(true);
+		table->setHorizontalHeaderLabels(QStringList() << tr("Channel") << tr("Type") << tr("Error"));
+
+		QColor orange(255,128,0);
+
+		// Populate errors
+		foreach ( const MagnitudeStatus &s, magErrors ) {
+			QTableWidgetItem *itemStream = new QTableWidgetItem(waveformIDToStdString(s.amplitude->waveformID()).c_str());
+			itemStream->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			QTableWidgetItem *itemType = new QTableWidgetItem(s.type.c_str());
+			itemType->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			QTableWidgetItem *itemState = new QTableWidgetItem(s.status.toString());
+			itemState->setData(Qt::TextColorRole, s.warning ? orange : Qt::red);
+			itemState->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+			int row = table->rowCount();
+			table->insertRow(row);
+
+			table->setItem(row, 0, itemStream);
+			table->setItem(row, 1, itemType);
+			table->setItem(row, 2, itemState);
+		}
+
+		table->resizeColumnsToContents();
+		table->setSortingEnabled(true);
+
+		dlg.exec();
+		geomCalculateMagnitudes = dlg.saveGeometry();
 	}
 
 	// Synchronize local amplitudes for commit
@@ -1857,7 +1998,6 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::amplitudesConfirmed(Origin *origin,
                                         QList<Seiscomp::DataModel::AmplitudePtr> amps) {
-	QVariant data;
 	AmplitudeView *view = (AmplitudeView*)sender();
 	ObjectChangeList<DataModel::Amplitude> changedAmps;
 	view->getChangedAmplitudes(changedAmps);
@@ -1929,7 +2069,8 @@ void MagnitudeView::amplitudesConfirmed(Origin *origin,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Magnitude *
 MagnitudeView::computeStationMagnitudes(const string &magType,
-                                        QList<Seiscomp::DataModel::AmplitudePtr> *amps) {
+                                        QList<Seiscomp::DataModel::AmplitudePtr> *amps,
+                                        MagnitudeStats *errors) {
 	Processing::MagnitudeProcessorPtr magProc = Processing::MagnitudeProcessorFactory::Create(magType.c_str());
 	if ( !magProc ) return NULL;
 
@@ -2139,21 +2280,33 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			}
 
 			double magValue;
-			double period;
+			double period = 0, snr = 0;
+			bool passedQC = true;
 
-			try { period = amp->period().value(); } catch ( ... ) { period = 0; }
+			try { period = amp->period().value(); } catch ( ... ) {}
+			try { snr = amp->snr(); } catch ( ... ) {}
 
 			Processing::MagnitudeProcessor::Status stat =
 				magProc->computeMagnitude(
-					amp->amplitude().value(), period,
-					dist, _origin->depth(), _origin.get(), loc, magValue
+					amp->amplitude().value(), amp->unit(), period, snr,
+					dist, _origin->depth(), _origin.get(), loc, amp.get(), magValue
 				);
 
 			if ( stat != Processing::MagnitudeProcessor::OK ) {
 				SEISCOMP_ERROR("Failed to compute magnitude for station %s: %d (%s)",
 				               amp->waveformID().stationCode().c_str(),
 				               (int)stat, stat.toString());
-				continue;
+
+				if ( !magProc->treatAsValidMagnitude() ) {
+					if ( errors != NULL )
+						errors->append(MagnitudeStatus(magProc->type(), amp.get(), stat));
+					continue;
+				}
+				else {
+					passedQC = false;
+					if ( errors != NULL )
+						errors->append(MagnitudeStatus(magProc->type(), amp.get(), stat, true));
+				}
 			}
 
 			StationMagnitudePtr staMag = StationMagnitude::Create();
@@ -2161,17 +2314,20 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			ci.setAgencyID(SCApp->agencyID());
 			ci.setAuthor(SCApp->author());
 			ci.setCreationTime(Core::Time::GMT());
+			staMag->setPassedQC(passedQC);
 			staMag->setType(mag->type());
 			staMag->setCreationInfo(ci);
 			staMag->setWaveformID(amp->waveformID());
 			staMag->setMagnitude(magValue);
 			staMag->setAmplitudeID(amp->publicID());
 
+			magProc->finalizeMagnitude(staMag.get());
+
 			_origin->add(staMag.get());
 
 			StationMagnitudeContributionPtr ref = new StationMagnitudeContribution;
 			ref->setStationMagnitudeID(staMag->publicID());
-			ref->setWeight(1.0);
+			ref->setWeight(passedQC ? 1.0 : 0.0);
 
 			mag->add(ref.get());
 		}
@@ -2196,9 +2352,20 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
                                      const std::string &aggType) {
 	vector<double> mags;
 	vector<double> weights;
+	vector<StationMagnitudeContribution*> stamags, stamagsZeroWeight;
 
 	for ( size_t i = 0; i < magnitude->stationMagnitudeContributionCount(); ++i ) {
-		StationMagnitude* sm = StationMagnitude::Find(magnitude->stationMagnitudeContribution(i)->stationMagnitudeID());
+		StationMagnitude *sm = StationMagnitude::Find(magnitude->stationMagnitudeContribution(i)->stationMagnitudeID());
+
+		try {
+			if ( !sm->passedQC() ) {
+				stamagsZeroWeight.push_back(magnitude->stationMagnitudeContribution(i));
+				continue;
+			}
+		}
+		catch ( ... ) {}
+
+		stamags.push_back(magnitude->stationMagnitudeContribution(i));
 		mags.push_back(sm->magnitude().value());
 	}
 
@@ -2244,13 +2411,24 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 	}
 
 	int staCount = 0;
-	for ( size_t i = 0; i < magnitude->stationMagnitudeContributionCount(); ++i ) {
-		StationMagnitudeContribution *ref = magnitude->stationMagnitudeContribution(i);
+	for ( size_t i = 0; i < stamags.size(); ++i ) {
+		StationMagnitudeContribution *ref = stamags[i];
 		ref->setWeight(weights[i]);
 		ref->setResidual(mags[i]-netmag);
 
 		if ( weights[i] > 0.0 )
 			++staCount;
+	}
+
+	for ( size_t i = 0; i < stamagsZeroWeight.size(); ++i ) {
+		StationMagnitudeContribution *ref = stamagsZeroWeight[i];
+		StationMagnitude *sm = StationMagnitude::Find(ref->stationMagnitudeID());
+
+		ref->setWeight(0.0);
+		try {
+			ref->setResidual(sm->magnitude().value()-netmag);
+		}
+		catch ( ... ) {}
 	}
 
 	magnitude->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
@@ -2814,7 +2992,7 @@ void MagnitudeView::setContent() {
 			_ui.btnTrimmedMean->setChecked(true);
 	}
 	else
-		_ui.btnMean->setChecked(true);
+		_ui.btnDefault->setChecked(true);
 
 	updateContent();
 }
@@ -2825,7 +3003,6 @@ void MagnitudeView::setContent() {
 //! reset content to default, disconnect signals
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::resetContent() {
-
 	_ui.frameMagnitudeTypes->setVisible(false);
 
 	// remove all entries in comboBox
@@ -2862,8 +3039,6 @@ void MagnitudeView::resetContent() {
 //! update map, diagram, table and labels
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::updateContent() {
-	SEISCOMP_DEBUG("update magnitude view");
-
 	Regions regions;
 
 	_ui.labelRegion->setText("");

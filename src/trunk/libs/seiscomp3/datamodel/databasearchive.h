@@ -45,14 +45,14 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	// ----------------------------------------------------------------------
 	protected:
 		//! Protected c'tor used by DatabaseArchive
-		DatabaseIterator(DatabaseArchive* database,
-		                 const Seiscomp::Core::RTTI* rtti);
+		DatabaseIterator(DatabaseArchive *database,
+		                 const Seiscomp::Core::RTTI *rtti);
 
 	public:
 		//! C'tor
 		DatabaseIterator();
 		//! Copy c'tor
-		DatabaseIterator(const DatabaseIterator& iter);
+		DatabaseIterator(const DatabaseIterator &iter);
 
 		//! D'tor
 		~DatabaseIterator();
@@ -62,7 +62,7 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	//  Public interface
 	// ----------------------------------------------------------------------
 	public:
-		Object* get() const;
+		Object *get() const;
 
 		//! Returns the current result column count
 		size_t fieldCount() const;
@@ -70,11 +70,11 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 		//! Returns the current result field
 		const char *field(size_t index) const;
 
-		DatabaseIterator& operator=(const DatabaseIterator& it);
+		DatabaseIterator &operator=(const DatabaseIterator& it);
 		Object* operator*() const;
 
-		DatabaseIterator& operator++();
-		DatabaseIterator& operator++(int);
+		DatabaseIterator &operator++();
+		DatabaseIterator &operator++(int);
 
 		//! Returns if the current objectiterator is valid
 		//! and has a valid result set
@@ -110,12 +110,12 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 	//  Implementation
 	// ----------------------------------------------------------------------
 	private:
-		Object* fetch() const;
+		Object *fetch() const;
 
 
 	private:
-		const Seiscomp::Core::RTTI* _rtti;
-		DatabaseArchive* _reader;
+		const Seiscomp::Core::RTTI *_rtti;
+		DatabaseArchive *_reader;
 		mutable size_t _count;
 		ObjectPtr _object;
 
@@ -310,6 +310,11 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		size_t getObjectCount(const PublicObject* parent,
 		                      const Seiscomp::Core::RTTI &classType);
 
+
+		//! Returns the database id for an object
+		//! @return The id or -1 of no id was cached for this object
+		int getCachedId(const Object*) const;
+
 		/**
 		 * Returns the publicID of the parent object if any.
 		 * @param object The PublicObject whose parent is queried.
@@ -375,6 +380,13 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		DatabaseIterator getObjectIterator(const std::string &query,
 		                                   const Seiscomp::Core::RTTI *classType);
+
+		template <typename T>
+		std::string toString(const T& value) const { return Core::toString(value); }
+
+		std::string toString(const std::string &value) const;
+		std::string toString(const char *value) const;
+		std::string toString(const Core::Time& value) const;
 
 
 	// ----------------------------------------------------------------------
@@ -495,10 +507,6 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		bool validInterface() const;
 
-		//! Returns the database id for an object
-		//! @return The id or -1 of no id was cached for this object
-		int getCachedId(const Object*) const;
-
 		//! Associates an objects with an id and caches
 		//! this information
 		void registerId(const Object*, int id);
@@ -508,13 +516,6 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		//! Serializes an objects and registeres its id in the cache
 		void serializeObject(Object*);
-
-		template <typename T>
-		std::string toString(const T& value) { return Core::toString(value); }
-
-		std::string toString(const std::string &value);
-		std::string toString(const char *value);
-		std::string toString(const Core::Time& value);
 
 		Object* queryObject(const Seiscomp::Core::RTTI& classType,
 		                    const std::string& query);

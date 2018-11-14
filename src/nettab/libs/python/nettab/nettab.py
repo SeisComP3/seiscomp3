@@ -85,7 +85,7 @@ def _parse_paz(npaz, s):
     
     while pos < len(s):
         m = _rx_paz.match(s, pos)
-        if m == None:
+        if m is None:
             raise NettabError, "error parsing PAZ at '" + s[pos:] + "'"
 
         try:

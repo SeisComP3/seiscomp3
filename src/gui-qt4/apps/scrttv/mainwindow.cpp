@@ -86,6 +86,22 @@ QString prettyPrint(long seconds) {
 }
 
 
+bool isStreamBlacklisted(const vector<string> &blacklist,
+                         const string &net, const string &sta,
+                         const string &loc, const string &cha) {
+	if ( blacklist.empty() )
+		return false;
+
+	string sid = net + "." + sta + "." + loc + "." + cha;
+
+	for ( size_t i = 0; i < blacklist.size(); ++i )
+		if ( Core::wildcmp(blacklist[i], sid) )
+			return true;
+
+	return false;
+}
+
+
 }
 
 
@@ -1355,6 +1371,12 @@ void MainWindow::openAcquisition() {
 
 		bool usePreconfigured = false;
 
+		std::vector<std::string> streamsBlackList;
+		try {
+			streamsBlackList = SCApp->configGetStrings("streams.blacklist");
+		}
+		catch ( ... ) {}
+
 		try {
 			std::vector<std::string> vstreams = SCApp->configGetStrings("streams.codes");
 			if ( vstreams.empty() ) usePreconfigured = true;
@@ -1437,6 +1459,9 @@ void MainWindow::openAcquisition() {
 								else
 									cha += compCode;
 							}
+
+							if ( isStreamBlacklisted(streamsBlackList, net, sta, loc, cha) )
+								continue;
 
 							requestMap.append(WaveformStreamID(net, sta, loc, cha, ""));
 							QMap<QString, QMultiMap<QString, ChannelEntry> > & stationMap = streamMap[requestMap.last().networkCode().c_str()];

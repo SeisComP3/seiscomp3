@@ -11,16 +11,17 @@ SET(SERIALPLUGIN_SOURCES
 	serial_plugin.cc
 	rw2300.c
 	linux2300.c
+	proto_dr24.cc
 	proto_edata.cc
 	proto_edata2.cc
 	proto_guralp2.cc
-	proto_dr24.cc
-	proto_prema.cc
 	proto_hrd24.cc
-	proto_sadc.cc
-	proto_ws2300.cc
 	proto_mws.cc
+	proto_prema.cc
+	proto_sadc.cc
 	proto_solar.cc
+	proto_ws2300.cc
+	proto_modbus.cc
 )
 
 INCLUDE_DIRECTORIES(../../libs/plugin)
@@ -29,8 +30,8 @@ INCLUDE_DIRECTORIES(../libgcf2-2.3.2/src)
 
 SET(CONFIG_FILE ${SC3_PACKAGE_INSTALL_PREFIX}/acquisition/config/plugins.ini)
 
-SET(OPTIONS -DSYSLOG_FACILITY=LOG_LOCAL0 -DCONFIG_FILE=\\\"${CONFIG_FILE}\\\")
-SET(WSOPTIONS -DVERSION=\\\"1.10\\\")
+SET(OPTIONS -DSYSLOG_FACILITY=LOG_LOCAL0 -DCONFIG_FILE="${CONFIG_FILE}")
+SET(WSOPTIONS -DVERSION="1.10")
 
 ADD_DEFINITIONS(${OPTIONS} ${WSOPTIONS})
 

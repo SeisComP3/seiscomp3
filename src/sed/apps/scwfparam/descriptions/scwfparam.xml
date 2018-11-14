@@ -522,7 +522,7 @@
 					<description>Sensitivity correction low-pass filter frequency</description>
 				</option>
 				<option long-flag="offline">
-					<description>Do not connect to the messaging and to the database</description>
+					<description>Do not connect to the messaging and  and disable the database in combination with --inventory-db and --ep</description>
 				</option>
 				<option long-flag="force">
 					<description>Force event processing even if a journal entry exists that processing has completed</description>

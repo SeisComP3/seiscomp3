@@ -138,7 +138,7 @@ def _retr(val):
 	return s
 
 def _modifiedAfter(obj, modified_after):
-	if (obj.last_modified == None) or (modified_after == None):
+	if (obj.last_modified is None) or (modified_after is None):
 		return True
 	return (obj.last_modified >= modified_after)
 

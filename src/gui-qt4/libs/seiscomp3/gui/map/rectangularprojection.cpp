@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH and GFZ Potsdam                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -37,6 +37,7 @@ REGISTER_PROJECTION_INTERFACE(RectangularProjection, "Rectangular");
 
 
 namespace {
+
 
 const qreal ooLat = 1.0 / 90.0;
 const qreal ooLon = 1.0 / 180.0;
@@ -350,6 +351,10 @@ void drawHighQualityImage(RectangularProjectionProxy *proj, QImage &buffer, cons
 		Coord y;
 		y.parts.hi = 0;
 		y.parts.lo = yofs.parts.lo;
+		if ( y.value > Coord::fraction_half_max )
+			y.value -= Coord::fraction_half_max;
+		else
+			y.value = 0;
 
 		for ( int i = y0c; i <= y1; ++i ) {
 			QRgb *targetPixel = targetData;
@@ -359,7 +364,10 @@ void drawHighQualityImage(RectangularProjectionProxy *proj, QImage &buffer, cons
 
 			for ( int j = x0c; j <= x1c; ++j ) {
 				QRgb c;
-				getTexelBilinear(c, data, width, height, x, y);
+				if ( x.value > Coord::fraction_half_max )
+					getTexelBilinear(c, data, width, height, x.value - Coord::fraction_half_max, y);
+				else
+					getTexelBilinear(c, data, width, height, 0, y);
 				COMPOSITOR::combine(*targetPixel, c);
 				++targetPixel;
 
@@ -390,29 +398,49 @@ void drawHighQualityImage(RectangularProjectionProxy *proj, QImage &buffer, cons
 
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RectangularProjection::RectangularProjection()
 : Projection() {
 	_enableLowZoom = false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RectangularProjection::setLowZoomEnabled(bool e) {
 	_enableLowZoom = e;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::isRectangular() const {
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::wantsGridAntialiasing() const {
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename PROC>
 void RectangularProjection::render(QImage &img, TextureCache *cache) {
 	_screenRadius = std::min(_width*0.25, _height*0.5);
@@ -582,16 +610,53 @@ void RectangularProjection::render(QImage &img, TextureCache *cache) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RectangularProjection::render(QImage& img, bool highQuality, TextureCache *cache) {
 	if ( highQuality )
 		render<BilinearFilter>(img, cache);
 	else
 		render<NearestFilter>(img, cache);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+inline void RectangularProjection::projectUnwrapped(QPoint &screenCoords, const QPointF &geoCoords) const {
+	qreal x = geoCoords.x() * ooLon;
+
+	qreal lat = geoCoords.y();
+	if ( lat > 90.0 ) {
+		lat = 180.0 - lat;
+		x += 1.0;
+		if ( x > 1.0 ) x -= 2.0;
+	}
+	else if ( lat < -90.0 ) {
+		lat = -180.0 - lat;
+		x += 1.0;
+		if ( x > 1.0 ) x -= 2.0;
+	}
+
+	qreal y = lat * ooLat;
+
+	x = (x - _visibleCenter.x()) * _halfMapWidth;
+	y = (y - _visibleCenter.y()) * _scale;
+
+	screenCoords.setX(_halfWidth  + x);
+	screenCoords.setY(_halfHeight - y);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::project(QPoint &screenCoords, const QPointF &geoCoords) const {
 	qreal x = geoCoords.x() * ooLon;
 
@@ -612,6 +677,7 @@ bool RectangularProjection::project(QPoint &screenCoords, const QPointF &geoCoor
 	x = (x - _visibleCenter.x()) * _halfMapWidth;
 	y = (y - _visibleCenter.y()) * _scale;
 
+	// Wrapping
 	if ( x > _halfMapWidth )
 		x -= _mapWidth;
 
@@ -623,8 +689,12 @@ bool RectangularProjection::project(QPoint &screenCoords, const QPointF &geoCoor
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::unproject(QPointF &geoCoords, const QPoint &screenCoords) const {
 	qreal x = screenCoords.x() - _halfWidth;
 	qreal y = _halfHeight - screenCoords.y();
@@ -646,8 +716,12 @@ bool RectangularProjection::unproject(QPointF &geoCoords, const QPoint &screenCo
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RectangularProjection::centerOn(const QPointF &geoCoords) {
 	qreal x = geoCoords.x() * ooLon;
 	qreal y = geoCoords.y() * ooLat;
@@ -661,8 +735,12 @@ void RectangularProjection::centerOn(const QPointF &geoCoords) {
 	_center = QPointF(x,y);
 	_visibleCenter = _center;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int RectangularProjection::lineSteps(const QPointF &p0, const QPointF &p1) {
 	// Calculate the distance between p0 and p1 in pixels and
 	// divide its manhattanLength by 20
@@ -675,8 +753,12 @@ int RectangularProjection::lineSteps(const QPointF &p0, const QPointF &p1) {
 	//return dist * pixelPerDegree() * (1.0 / 20.0);
 	return 20;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RectangularProjection::drawImage(QImage &buffer, const QRectF &geoReference,
                                       const QImage &image, bool highQuality,
                                       CompositionMode cm) {
@@ -730,8 +812,12 @@ void RectangularProjection::drawImage(QImage &buffer, const QRectF &geoReference
 			break;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::drawLine(QPainter &p, const QPointF &from, const QPointF &to) {
 	QPoint x0, x1;
 	bool x0Visible, x1Visible;
@@ -773,14 +859,22 @@ bool RectangularProjection::drawLine(QPainter &p, const QPointF &from, const QPo
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RectangularProjection::moveTo(const QPointF &p) {
 	Projection::moveTo(p);
 	_cursorLon = fmod(p.x(), 360.0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::lineTo(QPainter &p, const QPointF &to) {
 	QPoint x1;
 	bool x1Visible;
@@ -830,8 +924,12 @@ bool RectangularProjection::lineTo(QPainter &p, const QPointF &to) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 	QPoint pp;
 
@@ -849,8 +947,12 @@ bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 	QPoint pp;
 
@@ -868,8 +970,81 @@ bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RectangularProjection::project(QPainterPath &screenPath, size_t n,
+                                    const Geo::GeoCoordinate *poly, bool closed,
+                                    uint minPixelDist, ClipHint) const {
+	if ( n == 0 || !poly ) return false;
+
+	float minDist = ((float)minPixelDist)/pixelPerDegree();
+	int duplicationDirection = 0;
+
+	QPointF v(poly[0].lon, poly[0].lat);
+	QPoint p;
+
+	projectUnwrapped(p, v);
+	if ( p.x() >= _width )
+		duplicationDirection = -1;
+	else if ( p.x() < 0 )
+		duplicationDirection = 1;
+
+	screenPath.moveTo(p);
+
+	if ( minDist == 0 ) {
+		for ( size_t i = 1; i < n; ++i ) {
+			Math::Geo::CoordF::ValueType lonDiff = poly[i].lon - v.x();
+			if ( lonDiff > 180 ) lonDiff -= 360;
+			else if ( lonDiff < -180 ) lonDiff += 360;
+
+			v.setX(v.x()+lonDiff); v.setY(poly[i].lat);
+			projectUnwrapped(p, v);
+			if ( p.x() >= _width )
+				duplicationDirection = -1;
+			else if ( p.x() < 0 )
+				duplicationDirection = 1;
+
+			screenPath.lineTo(p);
+		}
+	}
+	else {
+		for ( size_t i = 1; i < n; ++i ) {
+			Math::Geo::CoordF::ValueType lonDiff = poly[i].lon - v.x();
+			if ( lonDiff > 180 ) lonDiff -= 360;
+			else if ( lonDiff < -180 ) lonDiff += 360;
+
+			if ( std::abs(lonDiff) > minDist ||
+			     std::abs(poly[i].lat - v.y()) > minDist ) {
+				v.setX(v.x()+lonDiff); v.setY(poly[i].lat);
+				projectUnwrapped(p, v);
+				if ( p.x() >= _width )
+					duplicationDirection = -1;
+				else if ( p.x() < 0 )
+					duplicationDirection = 1;
+
+				screenPath.lineTo(p);
+			}
+		}
+	}
+
+	if ( closed )
+		screenPath.closeSubpath();
+
+	if ( duplicationDirection )
+		screenPath.addPath(screenPath.translated(_mapWidth*duplicationDirection, 0));
+
+	return !screenPath.isEmpty();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

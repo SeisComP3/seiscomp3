@@ -288,7 +288,11 @@ findStreamMaxSR(DataModel::Station *station, const Core::Time &time,
 
 			// Unable to retrieve the unit enumeration from string
 			//if ( !unit.fromString(sensor->unit().c_str()) ) continue;
-			if ( !unit.fromString(stream->gainUnit().c_str()) ) continue;
+
+			string gainUnit = stream->gainUnit();
+			std::transform(gainUnit.begin(), gainUnit.end(), gainUnit.begin(), ::toupper);
+
+			if ( !unit.fromString(gainUnit) ) continue;
 			if ( unit != requestedUnit ) continue;
 
 			if ( firewall != NULL ) {

@@ -16,10 +16,8 @@
 #define __SEISCOMP_SEISMOLOGY_REGIONS_POLY_H__
 
 #include <seiscomp3/core.h>
-#include <seiscomp3/math/polygon.h>
-#include <seiscomp3/geo/geofeature.h>
+#include <seiscomp3/geo/feature.h>
 #include <vector>
-#include <ostream>
 
 
 namespace Seiscomp {

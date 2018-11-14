@@ -154,6 +154,12 @@
 				Enables/disables the Station service.
 				</description>
 			</parameter>
+			<parameter name="serveAvailability" type="boolean" default="false">
+				<description>
+				Enables/disables the Availability service. Note: This is a non
+				standard FDSNWS extension served under fdsnws/ext/availability.
+				</description>
+			</parameter>
 			<parameter name="stationFilter" type="string">
 				<description>
 				Path to station inventory filter file.
@@ -176,6 +182,38 @@
 				For data loaded using dataselect, it is thus fdsnws.mseed by default.
 				</description>
 			</parameter>
+			<group name="dataAvailability">
+				<description>
+				Provide access to waveform data availability information stored
+				in the SeisComP3 database. In case of a SDS archive this
+				information may be collected by scardac (SeisComP archive
+				data availability collector).
+				</description>
+				<parameter name="enable" type="boolean" default="true">
+					<description>
+					Enable loading of data availabilty information from
+					SeisComP3 database. Availability information is used by
+					station and ext/availability service.
+					</description>
+				</parameter>
+				<parameter name="cacheDuration" type="int" default="300" unit="s">
+					<description>
+					Number of seconds data availabilty information is considered
+					valid. If the duration time is exeeded the information is
+					fetched again from the database.
+					</description>
+				</parameter>
+				<parameter name="dccName" type="string" default="DCC">
+					<description>
+					Name of the archive use in sync format of dataavailability extent service
+					</description>
+				</parameter>
+				<parameter name="repositoryName" type="string" default="primary">
+					<description>
+					Name of the archive use in some format of dataavailability extent service
+					</description>
+				</parameter>
+			</group>
 			<group name="trackdb">
 				<parameter name="enable" type="boolean" default="false">
 					<description>

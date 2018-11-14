@@ -392,9 +392,10 @@ bool AmpTool::run() {
 					dbAmps[amp->type()] = amp;
 					proc->setTrigger(pick->time().value());
 					proc->setReferencingPickID(pick->publicID());
+					proc->setEnvironment(NULL, NULL, pick.get());
 					proc->setPublishFunction(boost::bind(&AmpTool::storeLocalAmplitude, this, _1, _2));
 					_report << "     + Data" << std::endl;
-					addProcessor(proc.get(), pick.get(), None, None);
+					addProcessor(proc.get(), NULL, pick.get(), None, None, None);
 				}
 
 				cerr << endl;
@@ -763,7 +764,7 @@ void AmpTool::process(Origin *origin) {
 			proc->setTrigger(pickTime);
 			proc->setReferencingPickID(pickID);
 
-			int res = addProcessor(proc.get(), pick.get(), distance, depth);
+			int res = addProcessor(proc.get(), origin, pick.get(), distance, depth, (double) origin->time().value());
 			if ( res < 0 ) {
 				// RecordStream not available
 				if ( res == -2 ) return;
@@ -816,8 +817,9 @@ void AmpTool::process(Origin *origin) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
+                          const Seiscomp::DataModel::Origin *origin,
                           const DataModel::Pick *pick,
-                          OPT(double) distance, OPT(double) depth) {
+                          OPT(double) distance, OPT(double) depth, OPT(double) originTime) {
 	WaveformProcessor::Component components[3];
 	int componentCount = 0;
 
@@ -935,6 +937,9 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 			_report << "   - " << proc->type().c_str() << " [gain not found]" << std::endl;
 			return -1;
 		}
+
+		if ( !i )
+			proc->setEnvironment(origin, tc.comps[components[i]]->sensorLocation(), pick);
 	}
 
 
@@ -962,6 +967,14 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 
 	if ( distance ) {
 		proc->setHint(WaveformProcessor::Distance, *distance);
+		if ( proc->isFinished() ) {
+			_report << "     - " << proc->type() << " [" << proc->status().toString() << " (" << proc->statusValue() << ")]" << std::endl;
+			return -1;
+		}
+	}
+
+	if ( originTime ) {
+		proc->setHint(WaveformProcessor::Time, *originTime);
 		if ( proc->isFinished() ) {
 			_report << "     - " << proc->type() << " [" << proc->status().toString() << " (" << proc->statusValue() << ")]" << std::endl;
 			return -1;
@@ -1176,6 +1189,8 @@ AmpTool::createAmplitude(const Seiscomp::Processing::AmplitudeProcessor *proc,
 	ci.setAuthor(author());
 	ci.setCreationTime(now);
 	amp->setCreationInfo(ci);
+
+	proc->finalizeAmplitude(amp.get());
 
 	logObject(_outputAmps, now);
 

@@ -13,15 +13,19 @@
 #ifndef __SEISCOMP_GUI_MAP_LAYERS_GRIDLAYER_H__
 #define __SEISCOMP_GUI_MAP_LAYERS_GRIDLAYER_H__
 
+
 #include <seiscomp3/gui/qt4.h>
 #include <seiscomp3/gui/map/layer.h>
 #include <seiscomp3/math/coord.h>
+
 
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
 
+
 class Canvas;
+
 
 class SC_GUI_API GridLayer : public Layer {
 	public:
@@ -35,6 +39,7 @@ class SC_GUI_API GridLayer : public Layer {
 	private:
 		QPointF                _gridDistance;
 };
+
 
 } // namespace Map
 } // namespce Gui

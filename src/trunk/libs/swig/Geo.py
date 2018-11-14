@@ -162,49 +162,318 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _Geo.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
-import Math
-import Core
-class BBox(_object):
-    """Proxy of C++ Seiscomp::Geo::BBox class."""
+import seiscomp3.Math
+import seiscomp3.Core
+class GeoCoordinate(_object):
+    """Proxy of C++ Seiscomp::Geo::GeoCoordinate class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, BBox, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoCoordinate, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, BBox, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoCoordinate, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["lonMin"] = _Geo.BBox_lonMin_set
-    __swig_getmethods__["lonMin"] = _Geo.BBox_lonMin_get
-    if _newclass:
-        lonMin = _swig_property(_Geo.BBox_lonMin_get, _Geo.BBox_lonMin_set)
-    __swig_setmethods__["latMin"] = _Geo.BBox_latMin_set
-    __swig_getmethods__["latMin"] = _Geo.BBox_latMin_get
-    if _newclass:
-        latMin = _swig_property(_Geo.BBox_latMin_get, _Geo.BBox_latMin_set)
-    __swig_setmethods__["lonMax"] = _Geo.BBox_lonMax_set
-    __swig_getmethods__["lonMax"] = _Geo.BBox_lonMax_get
-    if _newclass:
-        lonMax = _swig_property(_Geo.BBox_lonMax_get, _Geo.BBox_lonMax_set)
-    __swig_setmethods__["latMax"] = _Geo.BBox_latMax_set
-    __swig_getmethods__["latMax"] = _Geo.BBox_latMax_get
-    if _newclass:
-        latMax = _swig_property(_Geo.BBox_latMax_get, _Geo.BBox_latMax_set)
-    __swig_setmethods__["dateLineCrossed"] = _Geo.BBox_dateLineCrossed_set
-    __swig_getmethods__["dateLineCrossed"] = _Geo.BBox_dateLineCrossed_get
-    if _newclass:
-        dateLineCrossed = _swig_property(_Geo.BBox_dateLineCrossed_get, _Geo.BBox_dateLineCrossed_set)
 
-    def __init__(self):
-        """__init__(Seiscomp::Geo::BBox self) -> BBox"""
-        this = _Geo.new_BBox()
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::Geo::GeoCoordinate self) -> GeoCoordinate
+        __init__(Seiscomp::Geo::GeoCoordinate self, Seiscomp::Geo::GeoCoordinate::ValueType lat_, Seiscomp::Geo::GeoCoordinate::ValueType lon_) -> GeoCoordinate
+        """
+        this = _Geo.new_GeoCoordinate(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _Geo.delete_BBox
-    __del__ = lambda self: None
-BBox_swigregister = _Geo.BBox_swigregister
-BBox_swigregister(BBox)
 
+    def set(self, lat, lon):
+        """set(GeoCoordinate self, Seiscomp::Geo::GeoCoordinate::ValueType lat, Seiscomp::Geo::GeoCoordinate::ValueType lon)"""
+        return _Geo.GeoCoordinate_set(self, lat, lon)
+
+
+    def latitude(self):
+        """latitude(GeoCoordinate self) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_latitude(self)
+
+
+    def longitude(self):
+        """longitude(GeoCoordinate self) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_longitude(self)
+
+
+    def __eq__(self, other):
+        """__eq__(GeoCoordinate self, GeoCoordinate other) -> bool"""
+        return _Geo.GeoCoordinate___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(GeoCoordinate self, GeoCoordinate other) -> bool"""
+        return _Geo.GeoCoordinate___ne__(self, other)
+
+
+    def normalize(self):
+        """normalize(GeoCoordinate self) -> GeoCoordinate"""
+        return _Geo.GeoCoordinate_normalize(self)
+
+
+    def width(lon0, lon1):
+        """width(Seiscomp::Geo::GeoCoordinate::ValueType lon0, Seiscomp::Geo::GeoCoordinate::ValueType lon1) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_width(lon0, lon1)
+
+    width = staticmethod(width)
+
+    def normalizeLat(lat):
+        """normalizeLat(Seiscomp::Geo::GeoCoordinate::ValueType lat) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_normalizeLat(lat)
+
+    normalizeLat = staticmethod(normalizeLat)
+
+    def normalizeLon(lon):
+        """normalizeLon(Seiscomp::Geo::GeoCoordinate::ValueType lon) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_normalizeLon(lon)
+
+    normalizeLon = staticmethod(normalizeLon)
+
+    def normalizeLatLon(lat, lon):
+        """normalizeLatLon(Seiscomp::Geo::GeoCoordinate::ValueType & lat, Seiscomp::Geo::GeoCoordinate::ValueType & lon)"""
+        return _Geo.GeoCoordinate_normalizeLatLon(lat, lon)
+
+    normalizeLatLon = staticmethod(normalizeLatLon)
+
+    def distanceLon(lon0, lon1):
+        """distanceLon(Seiscomp::Geo::GeoCoordinate::ValueType lon0, Seiscomp::Geo::GeoCoordinate::ValueType lon1) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+        return _Geo.GeoCoordinate_distanceLon(lon0, lon1)
+
+    distanceLon = staticmethod(distanceLon)
+    __swig_setmethods__["lat"] = _Geo.GeoCoordinate_lat_set
+    __swig_getmethods__["lat"] = _Geo.GeoCoordinate_lat_get
+    if _newclass:
+        lat = _swig_property(_Geo.GeoCoordinate_lat_get, _Geo.GeoCoordinate_lat_set)
+    __swig_setmethods__["lon"] = _Geo.GeoCoordinate_lon_set
+    __swig_getmethods__["lon"] = _Geo.GeoCoordinate_lon_get
+    if _newclass:
+        lon = _swig_property(_Geo.GeoCoordinate_lon_get, _Geo.GeoCoordinate_lon_set)
+    __swig_destroy__ = _Geo.delete_GeoCoordinate
+    __del__ = lambda self: None
+GeoCoordinate_swigregister = _Geo.GeoCoordinate_swigregister
+GeoCoordinate_swigregister(GeoCoordinate)
+
+def GeoCoordinate_width(lon0, lon1):
+    """GeoCoordinate_width(Seiscomp::Geo::GeoCoordinate::ValueType lon0, Seiscomp::Geo::GeoCoordinate::ValueType lon1) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+    return _Geo.GeoCoordinate_width(lon0, lon1)
+
+def GeoCoordinate_normalizeLat(lat):
+    """GeoCoordinate_normalizeLat(Seiscomp::Geo::GeoCoordinate::ValueType lat) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+    return _Geo.GeoCoordinate_normalizeLat(lat)
+
+def GeoCoordinate_normalizeLon(lon):
+    """GeoCoordinate_normalizeLon(Seiscomp::Geo::GeoCoordinate::ValueType lon) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+    return _Geo.GeoCoordinate_normalizeLon(lon)
+
+def GeoCoordinate_normalizeLatLon(lat, lon):
+    """GeoCoordinate_normalizeLatLon(Seiscomp::Geo::GeoCoordinate::ValueType & lat, Seiscomp::Geo::GeoCoordinate::ValueType & lon)"""
+    return _Geo.GeoCoordinate_normalizeLatLon(lat, lon)
+
+def GeoCoordinate_distanceLon(lon0, lon1):
+    """GeoCoordinate_distanceLon(Seiscomp::Geo::GeoCoordinate::ValueType lon0, Seiscomp::Geo::GeoCoordinate::ValueType lon1) -> Seiscomp::Geo::GeoCoordinate::ValueType"""
+    return _Geo.GeoCoordinate_distanceLon(lon0, lon1)
+
+class formatted_lat(_object):
+    """Proxy of C++ Seiscomp::Geo::formatted_lat class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, formatted_lat, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, formatted_lat, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, lat):
+        """__init__(Seiscomp::Geo::formatted_lat self, double lat) -> formatted_lat"""
+        this = _Geo.new_formatted_lat(lat)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["v"] = _Geo.formatted_lat_v_set
+    __swig_getmethods__["v"] = _Geo.formatted_lat_v_get
+    if _newclass:
+        v = _swig_property(_Geo.formatted_lat_v_get, _Geo.formatted_lat_v_set)
+    __swig_destroy__ = _Geo.delete_formatted_lat
+    __del__ = lambda self: None
+formatted_lat_swigregister = _Geo.formatted_lat_swigregister
+formatted_lat_swigregister(formatted_lat)
+
+class formatted_lon(_object):
+    """Proxy of C++ Seiscomp::Geo::formatted_lon class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, formatted_lon, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, formatted_lon, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, lon):
+        """__init__(Seiscomp::Geo::formatted_lon self, double lon) -> formatted_lon"""
+        this = _Geo.new_formatted_lon(lon)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_setmethods__["v"] = _Geo.formatted_lon_v_set
+    __swig_getmethods__["v"] = _Geo.formatted_lon_v_get
+    if _newclass:
+        v = _swig_property(_Geo.formatted_lon_v_get, _Geo.formatted_lon_v_set)
+    __swig_destroy__ = _Geo.delete_formatted_lon
+    __del__ = lambda self: None
+formatted_lon_swigregister = _Geo.formatted_lon_swigregister
+formatted_lon_swigregister(formatted_lon)
+
+class GeoBoundingBox(_object):
+    """Proxy of C++ Seiscomp::Geo::GeoBoundingBox class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoBoundingBox, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoBoundingBox, name)
+    __repr__ = _swig_repr
+    Disjunct = _Geo.GeoBoundingBox_Disjunct
+    Contains = _Geo.GeoBoundingBox_Contains
+    Intersects = _Geo.GeoBoundingBox_Intersects
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::Geo::GeoBoundingBox self) -> GeoBoundingBox
+        __init__(Seiscomp::Geo::GeoBoundingBox self, Seiscomp::Geo::GeoBoundingBox::ValueType south, Seiscomp::Geo::GeoBoundingBox::ValueType west, Seiscomp::Geo::GeoBoundingBox::ValueType north, Seiscomp::Geo::GeoBoundingBox::ValueType east) -> GeoBoundingBox
+        """
+        this = _Geo.new_GeoBoundingBox(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, other):
+        """__eq__(GeoBoundingBox self, GeoBoundingBox other) -> bool"""
+        return _Geo.GeoBoundingBox___eq__(self, other)
+
+
+    def __iadd__(self, other):
+        """__iadd__(GeoBoundingBox self, GeoBoundingBox other) -> GeoBoundingBox"""
+        return _Geo.GeoBoundingBox___iadd__(self, other)
+
+
+    def __add__(self, other):
+        """__add__(GeoBoundingBox self, GeoBoundingBox other) -> GeoBoundingBox"""
+        return _Geo.GeoBoundingBox___add__(self, other)
+
+
+    def __and__(self, other):
+        """__and__(GeoBoundingBox self, GeoBoundingBox other) -> bool"""
+        return _Geo.GeoBoundingBox___and__(self, other)
+
+
+    def normalize(self):
+        """normalize(GeoBoundingBox self) -> GeoBoundingBox"""
+        return _Geo.GeoBoundingBox_normalize(self)
+
+
+    def isEmpty(self):
+        """isEmpty(GeoBoundingBox self) -> bool"""
+        return _Geo.GeoBoundingBox_isEmpty(self)
+
+
+    def isNull(self):
+        """isNull(GeoBoundingBox self) -> bool"""
+        return _Geo.GeoBoundingBox_isNull(self)
+
+
+    def reset(self):
+        """reset(GeoBoundingBox self)"""
+        return _Geo.GeoBoundingBox_reset(self)
+
+
+    def coversFullLongitude(self):
+        """coversFullLongitude(GeoBoundingBox self) -> bool"""
+        return _Geo.GeoBoundingBox_coversFullLongitude(self)
+
+
+    def width(self):
+        """width(GeoBoundingBox self) -> Seiscomp::Geo::GeoBoundingBox::ValueType"""
+        return _Geo.GeoBoundingBox_width(self)
+
+
+    def height(self):
+        """height(GeoBoundingBox self) -> Seiscomp::Geo::GeoBoundingBox::ValueType"""
+        return _Geo.GeoBoundingBox_height(self)
+
+
+    def crossesDateLine(*args):
+        """
+        crossesDateLine() -> bool
+        crossesDateLine(Seiscomp::Geo::GeoBoundingBox::ValueType east, Seiscomp::Geo::GeoBoundingBox::ValueType west) -> bool
+        """
+        return _Geo.GeoBoundingBox_crossesDateLine(*args)
+
+    crossesDateLine = staticmethod(crossesDateLine)
+
+    def center(self):
+        """center(GeoBoundingBox self) -> GeoCoordinate"""
+        return _Geo.GeoBoundingBox_center(self)
+
+
+    def contains(self, *args):
+        """
+        contains(GeoBoundingBox self, GeoCoordinate v) -> bool
+        contains(GeoBoundingBox self, GeoBoundingBox other) -> bool
+        """
+        return _Geo.GeoBoundingBox_contains(self, *args)
+
+
+    def relation(self, other):
+        """relation(GeoBoundingBox self, GeoBoundingBox other) -> Seiscomp::Geo::GeoBoundingBox::Relation"""
+        return _Geo.GeoBoundingBox_relation(self, other)
+
+
+    def merge(self, other):
+        """merge(GeoBoundingBox self, GeoBoundingBox other)"""
+        return _Geo.GeoBoundingBox_merge(self, other)
+
+
+    def intersects(self, other):
+        """intersects(GeoBoundingBox self, GeoBoundingBox other) -> bool"""
+        return _Geo.GeoBoundingBox_intersects(self, other)
+
+
+    def fromPolygon(self, n, coords, isClosed=True):
+        """
+        fromPolygon(GeoBoundingBox self, size_t n, GeoCoordinate coords, bool isClosed=True)
+        fromPolygon(GeoBoundingBox self, size_t n, GeoCoordinate coords)
+        """
+        return _Geo.GeoBoundingBox_fromPolygon(self, n, coords, isClosed)
+
+    __swig_setmethods__["Empty"] = _Geo.GeoBoundingBox_Empty_set
+    __swig_getmethods__["Empty"] = _Geo.GeoBoundingBox_Empty_get
+    if _newclass:
+        Empty = _swig_property(_Geo.GeoBoundingBox_Empty_get, _Geo.GeoBoundingBox_Empty_set)
+    __swig_destroy__ = _Geo.delete_GeoBoundingBox
+    __del__ = lambda self: None
+GeoBoundingBox_swigregister = _Geo.GeoBoundingBox_swigregister
+GeoBoundingBox_swigregister(GeoBoundingBox)
+
+def GeoBoundingBox_crossesDateLine(*args):
+    """
+    crossesDateLine() -> bool
+    GeoBoundingBox_crossesDateLine(Seiscomp::Geo::GeoBoundingBox::ValueType east, Seiscomp::Geo::GeoBoundingBox::ValueType west) -> bool
+    """
+    return _Geo.GeoBoundingBox_crossesDateLine(*args)
+cvar = _Geo.cvar
+
+
+def __lshift__(*args):
+    """
+    __lshift__(std::ostream & os, GeoCoordinate arg2) -> std::ostream
+    __lshift__(std::ostream & os, formatted_lat arg2) -> std::ostream
+    __lshift__(std::ostream & os, formatted_lon arg2) -> std::ostream
+    __lshift__(std::ostream & os, GeoBoundingBox box) -> std::ostream &
+    """
+    return _Geo.__lshift__(*args)
 class Category(_object):
     """Proxy of C++ Seiscomp::Geo::Category class."""
 
@@ -221,6 +490,10 @@ class Category(_object):
     __swig_getmethods__["name"] = _Geo.Category_name_get
     if _newclass:
         name = _swig_property(_Geo.Category_name_get, _Geo.Category_name_set)
+    __swig_setmethods__["localName"] = _Geo.Category_localName_set
+    __swig_getmethods__["localName"] = _Geo.Category_localName_get
+    if _newclass:
+        localName = _swig_property(_Geo.Category_localName_get, _Geo.Category_localName_set)
     __swig_setmethods__["parent"] = _Geo.Category_parent_set
     __swig_getmethods__["parent"] = _Geo.Category_parent_get
     if _newclass:
@@ -246,15 +519,15 @@ class Category(_object):
 Category_swigregister = _Geo.Category_swigregister
 Category_swigregister(Category)
 
-class GeoFeature(Core.BaseObject):
+class GeoFeature(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Geo::GeoFeature class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GeoFeature, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GeoFeature, name)
     __repr__ = _swig_repr
@@ -296,8 +569,8 @@ class GeoFeature(Core.BaseObject):
 
     def addVertex(self, *args):
         """
-        addVertex(GeoFeature self, CoordF vertex, bool newSubFeature=False)
-        addVertex(GeoFeature self, CoordF vertex)
+        addVertex(GeoFeature self, GeoCoordinate vertex, bool newSubFeature=False)
+        addVertex(GeoFeature self, GeoCoordinate vertex)
         addVertex(GeoFeature self, float lat, float lon, bool newSubFeature=False)
         addVertex(GeoFeature self, float lat, float lon)
         """
@@ -314,13 +587,33 @@ class GeoFeature(Core.BaseObject):
         return _Geo.GeoFeature_setClosedPolygon(self, closed)
 
 
+    def updateBoundingBox(self):
+        """updateBoundingBox(GeoFeature self)"""
+        return _Geo.GeoFeature_updateBoundingBox(self)
+
+
+    def invertOrder(self):
+        """invertOrder(GeoFeature self)"""
+        return _Geo.GeoFeature_invertOrder(self)
+
+
+    def setUserData(self, arg2):
+        """setUserData(GeoFeature self, void * arg2)"""
+        return _Geo.GeoFeature_setUserData(self, arg2)
+
+
+    def userData(self):
+        """userData(GeoFeature self) -> void *"""
+        return _Geo.GeoFeature_userData(self)
+
+
     def vertices(self):
         """vertices(GeoFeature self) -> Vertices"""
         return _Geo.GeoFeature_vertices(self)
 
 
     def bbox(self):
-        """bbox(GeoFeature self) -> BBox"""
+        """bbox(GeoFeature self) -> GeoBoundingBox"""
         return _Geo.GeoFeature_bbox(self)
 
 
@@ -330,14 +623,14 @@ class GeoFeature(Core.BaseObject):
 
 
     def contains(self, v):
-        """contains(GeoFeature self, CoordF v) -> bool"""
+        """contains(GeoFeature self, GeoCoordinate v) -> bool"""
         return _Geo.GeoFeature_contains(self, v)
 
 
     def area(*args):
         """
         area() -> double
-        area(CoordF polygon, size_t sides) -> double
+        area(GeoCoordinate polygon, size_t sides) -> double
         """
         return _Geo.GeoFeature_area(*args)
 
@@ -348,19 +641,40 @@ GeoFeature_swigregister(GeoFeature)
 def GeoFeature_area(*args):
     """
     area() -> double
-    GeoFeature_area(CoordF polygon, size_t sides) -> double
+    GeoFeature_area(GeoCoordinate polygon, size_t sides) -> double
     """
     return _Geo.GeoFeature_area(*args)
 
-class GeoFeatureSet(Core.BaseObject):
+class GeoFeatureSetObserver(_object):
+    """Proxy of C++ Seiscomp::Geo::GeoFeatureSetObserver class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GeoFeatureSetObserver, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GeoFeatureSetObserver, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _Geo.delete_GeoFeatureSetObserver
+    __del__ = lambda self: None
+
+    def geoFeatureSetUpdated(self):
+        """geoFeatureSetUpdated(GeoFeatureSetObserver self)"""
+        return _Geo.GeoFeatureSetObserver_geoFeatureSetUpdated(self)
+
+GeoFeatureSetObserver_swigregister = _Geo.GeoFeatureSetObserver_swigregister
+GeoFeatureSetObserver_swigregister(GeoFeatureSetObserver)
+
+class GeoFeatureSet(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::Geo::GeoFeatureSet class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GeoFeatureSet, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GeoFeatureSet, name)
     __repr__ = _swig_repr
@@ -375,9 +689,24 @@ class GeoFeatureSet(Core.BaseObject):
     __swig_destroy__ = _Geo.delete_GeoFeatureSet
     __del__ = lambda self: None
 
+    def registerObserver(self, arg2):
+        """registerObserver(GeoFeatureSet self, GeoFeatureSetObserver arg2) -> bool"""
+        return _Geo.GeoFeatureSet_registerObserver(self, arg2)
+
+
+    def unregisterObserver(self, arg2):
+        """unregisterObserver(GeoFeatureSet self, GeoFeatureSetObserver arg2) -> bool"""
+        return _Geo.GeoFeatureSet_unregisterObserver(self, arg2)
+
+
     def clear(self):
         """clear(GeoFeatureSet self)"""
         return _Geo.GeoFeatureSet_clear(self)
+
+
+    def load(self):
+        """load(GeoFeatureSet self)"""
+        return _Geo.GeoFeatureSet_load(self)
 
 
     def readBNADir(self, dirPath):
@@ -388,6 +717,11 @@ class GeoFeatureSet(Core.BaseObject):
     def readBNAFile(self, filename, category):
         """readBNAFile(GeoFeatureSet self, std::string const & filename, Category category) -> bool"""
         return _Geo.GeoFeatureSet_readBNAFile(self, filename, category)
+
+
+    def addFeature(self, feature):
+        """addFeature(GeoFeatureSet self, GeoFeature feature) -> bool"""
+        return _Geo.GeoFeatureSet_addFeature(self, feature)
 
 
     def features(self):
@@ -839,7 +1173,7 @@ GeoFeatures_swigregister = _Geo.GeoFeatures_swigregister
 GeoFeatures_swigregister(GeoFeatures)
 
 class Vertices(_object):
-    """Proxy of C++ std::vector<(Seiscomp::Geo::Vertex)> class."""
+    """Proxy of C++ std::vector<(Seiscomp::Geo::GeoCoordinate)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Vertices, name, value)
@@ -865,31 +1199,31 @@ class Vertices(_object):
 
 
     def __len__(self):
-        """__len__(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type"""
+        """__len__(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::size_type"""
         return _Geo.Vertices___len__(self)
 
 
     def __getslice__(self, i, j):
-        """__getslice__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type j) -> Vertices"""
+        """__getslice__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type j) -> Vertices"""
         return _Geo.Vertices___getslice__(self, i, j)
 
 
     def __setslice__(self, *args):
         """
-        __setslice__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type j)
-        __setslice__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type j, Vertices v)
+        __setslice__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type j)
+        __setslice__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type j, Vertices v)
         """
         return _Geo.Vertices___setslice__(self, *args)
 
 
     def __delslice__(self, i, j):
-        """__delslice__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type j)"""
+        """__delslice__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type j)"""
         return _Geo.Vertices___delslice__(self, i, j)
 
 
     def __delitem__(self, *args):
         """
-        __delitem__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i)
+        __delitem__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i)
         __delitem__(Vertices self, PySliceObject * slice)
         """
         return _Geo.Vertices___delitem__(self, *args)
@@ -898,7 +1232,7 @@ class Vertices(_object):
     def __getitem__(self, *args):
         """
         __getitem__(Vertices self, PySliceObject * slice) -> Vertices
-        __getitem__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i) -> CoordF
+        __getitem__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i) -> GeoCoordinate
         """
         return _Geo.Vertices___getitem__(self, *args)
 
@@ -907,18 +1241,18 @@ class Vertices(_object):
         """
         __setitem__(Vertices self, PySliceObject * slice, Vertices v)
         __setitem__(Vertices self, PySliceObject * slice)
-        __setitem__(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::difference_type i, CoordF x)
+        __setitem__(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::difference_type i, GeoCoordinate x)
         """
         return _Geo.Vertices___setitem__(self, *args)
 
 
     def pop(self):
-        """pop(Vertices self) -> CoordF"""
+        """pop(Vertices self) -> GeoCoordinate"""
         return _Geo.Vertices_pop(self)
 
 
     def append(self, x):
-        """append(Vertices self, CoordF x)"""
+        """append(Vertices self, GeoCoordinate x)"""
         return _Geo.Vertices_append(self, x)
 
 
@@ -928,7 +1262,7 @@ class Vertices(_object):
 
 
     def size(self):
-        """size(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type"""
+        """size(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::size_type"""
         return _Geo.Vertices_size(self)
 
 
@@ -938,22 +1272,22 @@ class Vertices(_object):
 
 
     def begin(self):
-        """begin(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator"""
+        """begin(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::iterator"""
         return _Geo.Vertices_begin(self)
 
 
     def end(self):
-        """end(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator"""
+        """end(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::iterator"""
         return _Geo.Vertices_end(self)
 
 
     def rbegin(self):
-        """rbegin(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::reverse_iterator"""
+        """rbegin(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::reverse_iterator"""
         return _Geo.Vertices_rbegin(self)
 
 
     def rend(self):
-        """rend(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::reverse_iterator"""
+        """rend(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::reverse_iterator"""
         return _Geo.Vertices_rend(self)
 
 
@@ -963,7 +1297,7 @@ class Vertices(_object):
 
 
     def get_allocator(self):
-        """get_allocator(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::allocator_type"""
+        """get_allocator(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::allocator_type"""
         return _Geo.Vertices_get_allocator(self)
 
 
@@ -974,18 +1308,18 @@ class Vertices(_object):
 
     def erase(self, *args):
         """
-        erase(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator pos) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator
-        erase(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator first, std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator last) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator
+        erase(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::iterator pos) -> std::vector< Seiscomp::Geo::GeoCoordinate >::iterator
+        erase(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::iterator first, std::vector< Seiscomp::Geo::GeoCoordinate >::iterator last) -> std::vector< Seiscomp::Geo::GeoCoordinate >::iterator
         """
         return _Geo.Vertices_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(Seiscomp::Geo::Vertex)> self) -> Vertices
-        __init__(std::vector<(Seiscomp::Geo::Vertex)> self, Vertices arg2) -> Vertices
-        __init__(std::vector<(Seiscomp::Geo::Vertex)> self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type size) -> Vertices
-        __init__(std::vector<(Seiscomp::Geo::Vertex)> self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type size, CoordF value) -> Vertices
+        __init__(std::vector<(Seiscomp::Geo::GeoCoordinate)> self) -> Vertices
+        __init__(std::vector<(Seiscomp::Geo::GeoCoordinate)> self, Vertices arg2) -> Vertices
+        __init__(std::vector<(Seiscomp::Geo::GeoCoordinate)> self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type size) -> Vertices
+        __init__(std::vector<(Seiscomp::Geo::GeoCoordinate)> self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type size, GeoCoordinate value) -> Vertices
         """
         this = _Geo.new_Vertices(*args)
         try:
@@ -994,48 +1328,48 @@ class Vertices(_object):
             self.this = this
 
     def push_back(self, x):
-        """push_back(Vertices self, CoordF x)"""
+        """push_back(Vertices self, GeoCoordinate x)"""
         return _Geo.Vertices_push_back(self, x)
 
 
     def front(self):
-        """front(Vertices self) -> CoordF"""
+        """front(Vertices self) -> GeoCoordinate"""
         return _Geo.Vertices_front(self)
 
 
     def back(self):
-        """back(Vertices self) -> CoordF"""
+        """back(Vertices self) -> GeoCoordinate"""
         return _Geo.Vertices_back(self)
 
 
     def assign(self, n, x):
-        """assign(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type n, CoordF x)"""
+        """assign(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type n, GeoCoordinate x)"""
         return _Geo.Vertices_assign(self, n, x)
 
 
     def resize(self, *args):
         """
-        resize(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type new_size)
-        resize(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type new_size, CoordF x)
+        resize(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type new_size)
+        resize(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type new_size, GeoCoordinate x)
         """
         return _Geo.Vertices_resize(self, *args)
 
 
     def insert(self, *args):
         """
-        insert(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator pos, CoordF x) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator
-        insert(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::iterator pos, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type n, CoordF x)
+        insert(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::iterator pos, GeoCoordinate x) -> std::vector< Seiscomp::Geo::GeoCoordinate >::iterator
+        insert(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::iterator pos, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type n, GeoCoordinate x)
         """
         return _Geo.Vertices_insert(self, *args)
 
 
     def reserve(self, n):
-        """reserve(Vertices self, std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type n)"""
+        """reserve(Vertices self, std::vector< Seiscomp::Geo::GeoCoordinate >::size_type n)"""
         return _Geo.Vertices_reserve(self, n)
 
 
     def capacity(self):
-        """capacity(Vertices self) -> std::vector< Seiscomp::Math::Geo::Coord< float > >::size_type"""
+        """capacity(Vertices self) -> std::vector< Seiscomp::Geo::GeoCoordinate >::size_type"""
         return _Geo.Vertices_capacity(self)
 
     __swig_destroy__ = _Geo.delete_Vertices

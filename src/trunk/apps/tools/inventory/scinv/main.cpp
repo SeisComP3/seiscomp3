@@ -922,10 +922,10 @@ class InventoryManager : public Client::Application,
 					else if ( !testMode ) {
 						// Notify about start of synchronization
 						DataModel::InventorySyncMessagePtr ismsg = new DataModel::InventorySyncMessage(false);
-						ismsg->creationInfo = DataModel::CreationInfo();
-						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
-						ismsg->creationInfo->setAuthor(author());
-						ismsg->creationInfo->setAgencyID(agencyID());
+						ismsg->setCreationInfo(DataModel::CreationInfo());
+						ismsg->creationInfo().setCreationTime(Core::Time::GMT());
+						ismsg->creationInfo().setAuthor(author());
+						ismsg->creationInfo().setAgencyID(agencyID());
 						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
 
 						// Send an inital sync command to also wake-up the messaging
@@ -976,7 +976,7 @@ class InventoryManager : public Client::Application,
 						sync();
 
 						// Notify about end of synchronization
-						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
+						ismsg->creationInfo().setCreationTime(Core::Time::GMT());
 						ismsg->isFinished = true;
 						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
 

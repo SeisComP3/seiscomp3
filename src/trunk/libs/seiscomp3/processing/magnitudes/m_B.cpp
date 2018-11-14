@@ -17,8 +17,14 @@
 #include <math.h>
 
 namespace Seiscomp {
-
 namespace Processing {
+
+
+namespace {
+
+std::string ExpectedAmplitudeUnit = "nm/s";
+
+}
 
 
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_mB, MagnitudeProcessor, "MagnitudeProcessor_mB");
@@ -39,18 +45,19 @@ MagnitudeProcessor_mB::MagnitudeProcessor_mB(const std::string& type)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_mB::computeMagnitude(
-	double amplitude, // in micrometers per second
-	double,           // period is unused
-	double delta,     // in degrees
-	double depth,     // in kilometers
-	const DataModel::Origin *, const DataModel::SensorLocation *,
-	double &value)
-{
+        double amplitude, const std::string &unit,
+        double, double,
+        double delta, double depth,
+        const DataModel::Origin *, const DataModel::SensorLocation *,
+        const DataModel::Amplitude *, double &value) {
 	// Clip depth to 0
 	if ( depth < 0 ) depth = 0;
 
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
+
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
 
 	bool status = Magnitudes::compute_mb(amplitude*1.E-3, 2*M_PI, delta, depth+1, &value);
 	value -= 0.14; // HACK until we have an optimal calibration function
@@ -89,5 +96,4 @@ MagnitudeProcessor::Status MagnitudeProcessor_mB::estimateMw(
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

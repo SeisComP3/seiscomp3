@@ -16,6 +16,7 @@
 
 #include <fstream>
 #include <queue>
+#include <list>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/io/recordstream/archive.h>
 #include <seiscomp3/io/recordstream/streamidx.h>
@@ -100,11 +101,13 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 		std::string                          _arcroot;
 		Seiscomp::Core::Time                 _stime;
 		Seiscomp::Core::Time                 _etime;
-		std::set<StreamIdx>                  _streams;
-		std::set<StreamIdx>::const_iterator  _curiter;
-		StreamIdx const                     *_curidx;
+		std::set<StreamIdx>                  _streamset;
+		std::list<StreamIdx>                 _ordered;
+		std::list<StreamIdx>::const_iterator _curiter;
+		const StreamIdx                     *_curidx;
 		std::queue<std::string>              _fnames;
 		std::fstream                         _recstream;
+		std::string                          _currentFilename;
 
 	friend class IsoFile;
 };

@@ -54,7 +54,6 @@ App::App(int argc, char **argv)
 , _outputOrgs(NULL)
 {
 	setMessagingEnabled(true);
-	setLoadStationsEnabled(true);
 
 	setPrimaryMessagingGroup("LOCATION");
 
@@ -169,6 +168,16 @@ bool App::validateParameters() {
 			setDatabaseEnabled(false, false);
 	}
 
+	// Load inventory from database only if no station location file was specified.
+	if ( ! _stationLocationFile.empty()) {
+		setLoadStationsEnabled(false);
+		setDatabaseEnabled(false, false);
+	}
+	else {
+		setLoadStationsEnabled(true);
+		setDatabaseEnabled(true, true);
+	}
+
 	// Maybe we do want to allow sending of origins in offline mode?
 	if ( commandline().hasOption("test") )
 		_config.test = true;
@@ -216,6 +225,7 @@ bool App::initConfiguration() {
 
 	try { _config.maxAziGapSecondary = configGetDouble("autoloc.maxSGAP"); } catch (...) {}
 	try { _config.maxRMS = configGetDouble("autoloc.maxRMS"); } catch (...) {}
+	try { _config.maxDepth = configGetDouble("autoloc.maxDepth"); } catch (...) {}
 	try { _config.maxResidualUse = configGetDouble("autoloc.maxResidual"); } catch (...) {}
 	try { _config.maxStaDist = configGetDouble("autoloc.maxStationDistance"); } catch (...) {}
 	try { _config.defaultMaxNucDist = configGetDouble("autoloc.defaultMaxNucleationDistance"); } catch (...) {}
@@ -321,6 +331,7 @@ bool App::initConfiguration() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::init() {
+
 	if ( ! Client::Application::init() ) return false;
 
 	_inputPicks = addInputObjectLog("pick");
@@ -333,7 +344,7 @@ bool App::init() {
 	if ( ! setGridFile(_gridConfigFile) )
 		return false;
 
-	if ( ! initStations() )
+	if ( ! initInventory() )
 		return false;
 
 	setPickLogFilePrefix(_config.pickLogFile);
@@ -363,81 +374,107 @@ bool App::init() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool App::initStations() {
-	::Autoloc::StationDB *stations = NULL;
-
-	if ( Autoloc3::config().offline && !_stationLocationFile.empty() ) {
-		SEISCOMP_DEBUG_S("Reading station locations from file '" + _stationLocationFile + "'");
-		// read station locations from file; the file has one entry
-		// per station, a line consisting of
-		//    net sta lat lon alt
-		stations = ::Autoloc::Utils::readStationLocations(_stationLocationFile);
-		if ( ! stations ) {
-			SEISCOMP_DEBUG("initStations failed");
+bool App::initInventory() {
+	if ( _stationLocationFile.empty() ) {
+		SEISCOMP_DEBUG("Initializing station inventory from DB");
+		inventory = Inventory::Instance()->inventory();
+		if ( ! inventory ) {
+			SEISCOMP_ERROR("no inventory!");
 			return false;
 		}
 	}
 	else {
-		SEISCOMP_DEBUG("Reading station locations from DB");
-		stations = new ::Autoloc::StationDB;
-	
-		Core::Time now = Core::Time::GMT();
-	
-		DataModel::Inventory *inventory = Inventory::Instance()->inventory();
-		if ( inventory ) {
-			for ( size_t n = 0; n < inventory->networkCount(); ++n ) {
-				DataModel::Network *network = inventory->network(n);
-				try {
-					if ( network->end() <= now )
-						continue;
-				}
-				catch ( ... ) {
-				}
-	
-				for ( size_t s = 0; s < network->stationCount(); ++s ) {
-					DataModel::Station *station = network->station(s);
-	
-					try {
-						if ( station->end() <= now )
-							continue;
-					}
-					catch ( ... ) {
-					}
-
-					double elev = 0;
-					try { elev = station->elevation(); }
-					catch ( ... ) {}
-
-					::Autoloc::Station *sta =
-						new ::Autoloc::Station(
-							station->code(),
-							network->code(),
-							station->latitude(),
-							station->longitude(),
-							elev);
-
-					sta->used = true;
-					sta->maxNucDist = _config.defaultMaxNucDist;
-
-					// now see if maxNucDist was set in
-					// nucleator.conf
-
-					std::string key = sta->net + "." + sta->code;
-					stations->insert(::Autoloc::StationDB::value_type(key, sta));
-					SEISCOMP_DEBUG("Initialized station %-8s", key.c_str());
-				}
-			}
-			SEISCOMP_DEBUG("Finished reading station locations from DB");
-		}
-		else {
-			SEISCOMP_ERROR("Unable to read inventory");
-			return false;
-		}
+		SEISCOMP_DEBUG_S("Initializing station inventory from file '" + _stationLocationFile + "'");
+		inventory = ::Autoloc::Utils::inventoryFromStationLocationFile(_stationLocationFile);
 	}
 
-	if ( ! setStations(stations))
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool App::initOneStation(const DataModel::WaveformStreamID &wfid, const Core::Time &time) {
+
+	bool found = false;
+	static std::set<std::string> configuredStreams;
+	std::string key = wfid.networkCode() + "." + wfid.stationCode();
+	if (configuredStreams.find(key) != configuredStreams.end())
 		return false;
 
+	for ( size_t n = 0; n < inventory->networkCount(); ++n ) {
+		DataModel::Network *network = inventory->network(n);
+
+		if (network->code() != wfid.networkCode())
+			continue;
+
+		try {
+			if ( time < network->start() )
+				continue;
+		}
+		catch ( ... ) { }
+
+		try {
+			if ( time > network->end() )
+				continue;
+		}
+		catch ( ... ) { }
+
+		for ( size_t s = 0; s < network->stationCount(); ++s ) {
+			DataModel::Station *station = network->station(s);
+
+			if (station->code() != wfid.stationCode())
+				continue;
+
+			std::string epochStart="unset", epochEnd="unset";
+
+			try {
+				if (time < station->start())
+					continue;
+				epochStart = station->start().toString("%FT%TZ");
+			}
+			catch ( ... ) { } 
+
+			try {
+				if (time > station->end())
+					continue;
+				epochEnd = station->end().toString("%FT%TZ");
+			}
+			catch ( ... ) { } 
+
+			SEISCOMP_DEBUG_S("Station "+network->code()+" "+station->code()+
+					 "  epoch "+epochStart+" ... "+epochEnd); 
+
+			double elev = 0;
+			try { elev = station->elevation(); }
+			catch ( ... ) {}
+			::Autoloc::Station *sta =
+				new ::Autoloc::Station(
+					station->code(),
+					network->code(),
+					station->latitude(),
+					station->longitude(),
+					elev);
+
+			sta->used = true;
+			sta->maxNucDist = _config.defaultMaxNucDist;
+
+			setStation(sta);
+			found = true;
+
+			break;
+		}
+		break;
+	}
+
+	if ( ! found) {
+		SEISCOMP_WARNING_S(key+" not found in station inventory");
+		return false;
+	}
+
+	configuredStreams.insert(key);
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -666,6 +703,37 @@ bool App::runFromEPFile(const char *fname) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::sync(const Seiscomp::Core::Time &t) {
+	syncTime = t;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const Seiscomp::Core::Time App::now() const {
+
+	if (_inputFileXML.size() || _inputEPFile.size())
+		return syncTime;
+
+	return Core::Time::GMT();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::timeStamp() const {
+	SEISCOMP_DEBUG_S("Timestamp: "+now().toString("%F %T"));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::run() {
 	if ( !_inputEPFile.empty() )
 		return runFromEPFile(_inputEPFile.c_str());
@@ -811,10 +879,9 @@ static bool preliminary(const DataModel::Origin *origin) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::addObject(const std::string& parentID, DataModel::Object* o) {
 	DataModel::PublicObject *po = DataModel::PublicObject::Cast(o);
-	if ( po != NULL )
-		SEISCOMP_DEBUG("adding  %-12s %s",o->className(),po->publicID().c_str());
-	else
+	if ( po == NULL )
 		return;
+	// SEISCOMP_DEBUG("adding  %-12s %s", po->className(), po->publicID().c_str());
 
 	DataModel::Pick *pick = DataModel::Pick::Cast(o);
 	if ( pick ) {
@@ -844,7 +911,6 @@ void App::addObject(const std::string& parentID, DataModel::Object* o) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::removeObject(const std::string& parentID, DataModel::Object* o) {
-	
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -853,7 +919,6 @@ void App::removeObject(const std::string& parentID, DataModel::Object* o) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::updateObject(const std::string& parentID, DataModel::Object* o) {
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -864,6 +929,16 @@ void App::updateObject(const std::string& parentID, DataModel::Object* o) {
 bool App::feed(DataModel::Pick *sc3pick) {
 
 	const std::string &pickID = sc3pick->publicID();
+
+	if (_inputFileXML.size() || _inputEPFile.size()) {
+		try {
+			const Core::Time &creationTime = sc3pick->creationInfo().creationTime();
+			sync(creationTime);
+		}
+		catch(...) {
+			SEISCOMP_WARNING_S("Pick "+pickID+" without creation time!");
+		}
+	}
 
 	if (objectAgencyID(sc3pick) != agencyID()) {
 		if ( isAgencyIDBlocked(objectAgencyID(sc3pick)) ) {
@@ -884,48 +959,17 @@ bool App::feed(DataModel::Pick *sc3pick) {
 		sc3pick->setEvaluationMode(DataModel::EvaluationMode(DataModel::AUTOMATIC));
 	}
 
+	// configure station if needed
+	initOneStation(sc3pick->waveformID(), sc3pick->time().value());
 
 	::Autoloc::PickPtr pick = convertFromSC3(sc3pick);
-	if ( ! pick ) {
-//		SEISCOMP_ERROR_S(sc3pick->publicID());
+	if ( ! pick )
 		return false;
-	}
 
-	if (_amplTypeAbs.size()) {
-		// assign absolute amplitude to pick
-		std::string key = pickID+"#"+_amplTypeAbs;
-		if (ampmap.find(key) != ampmap.end()) {
-			DataModel::Amplitude *ampl = ampmap[key].get();
-			pick->amp = ampl->amplitude().value();
-			pick->per = (_amplTypeAbs == "mb") ? ampl->period().value() : 1;
-		}
-	}
-	else { // default
-		pick->amp = 0.5*_config.xxlMinAmplitude;
-		pick->per = 1;
-	}
-
-	if (_amplTypeSNR.size()) {
-		// assign SNR amplitude to pick
-		std::string key = pickID+"#"+_amplTypeSNR;
-		if (ampmap.find(key) != ampmap.end()) {
-			DataModel::Amplitude *ampl = ampmap[key].get();
-			pick->snr = ampl->amplitude().value();
-		}
-	}
-	else // default
-		pick->snr = 10;
+	timeStamp();
 
 	if ( ! ::Autoloc::Autoloc3::feed(pick.get()))
 		return false;
-
-	// cleanup
-	std::string key = pickID+"#"+_amplTypeAbs;
-	if (ampmap.find(key) != ampmap.end())
-		ampmap.erase(key);
-	key = pickID+"#"+_amplTypeSNR;
-	if (ampmap.find(key) != ampmap.end())
-		ampmap.erase(key);
 
 	if ( _config.offline )
 		_flush();
@@ -940,6 +984,16 @@ bool App::feed(DataModel::Pick *sc3pick) {
 bool App::feed(DataModel::Amplitude *sc3ampl) {
 
 	const std::string &amplID = sc3ampl->publicID();
+
+	if (_inputFileXML.size() || _inputEPFile.size()) {
+		try {
+			const Core::Time &creationTime = sc3ampl->creationInfo().creationTime();
+			sync(creationTime);
+		}
+		catch(...) {
+			SEISCOMP_WARNING_S("Pick "+amplID+" without creation time!");
+		}
+	}
 
 	if (objectAgencyID(sc3ampl) != agencyID()) {
 		if ( isAgencyIDBlocked(objectAgencyID(sc3ampl)) ) {
@@ -958,7 +1012,6 @@ bool App::feed(DataModel::Amplitude *sc3ampl) {
 	::Autoloc::Pick *pick = (::Autoloc::Pick *) Autoloc3::pick(pickID);
 	if ( ! pick ) {
 		SEISCOMP_WARNING_S("Pick " + pickID + " not found for " + atype + " amplitude");
-		ampmap[pickID+"#"+atype] = sc3ampl;
 		return false;
 	}
 
@@ -993,14 +1046,23 @@ bool App::feed(DataModel::Origin *sc3origin) {
 	SEISCOMP_INFO_S("got origin " + sc3origin->publicID() +
 			"   agency: " + objectAgencyID(sc3origin));
 
-	// if its an internal origin which is not manual -> ignore
-	if ( objectAgencyID(sc3origin) == agencyID() && ! manual(sc3origin) ) {
-		SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because not a manual origin");
-		return false;
-	}
+	const bool ownOrigin = objectAgencyID(sc3origin) == agencyID();
 
-	// if it's an imported origin
-	if (objectAgencyID(sc3origin) != agencyID()) {
+	if ( ownOrigin ) {
+		if ( manual(sc3origin) ) {
+			if ( ! _config.useManualOrigins ) {
+				SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because autoloc.useManualOrigins = false");
+				return false;
+			}
+		}
+		else {
+			// own origin which is not manual -> ignore
+			SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because not a manual origin");
+			return false;
+		}
+	}
+	else {
+		// imported origin
 
 		if ( ! _config.useImportedOrigins ) {
 			SEISCOMP_INFO_S("Ignored origin from " + objectAgencyID(sc3origin) + " because autoloc.useImportedOrigins = false");
@@ -1048,10 +1110,9 @@ bool App::feed(DataModel::Origin *sc3origin) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::_report(const ::Autoloc::Origin *origin) {
-	Core::Time now = Core::Time::GMT();
 
 	// Log object flow
-	logObject(_outputOrgs, now);
+	logObject(_outputOrgs, now());
 
 	if ( _config.offline || _config.test ) {
 		std::string reportStr = ::Autoloc::printDetailed(origin);
@@ -1063,7 +1124,7 @@ bool App::_report(const ::Autoloc::Origin *origin) {
 			DataModel::CreationInfo ci;
 			ci.setAgencyID(agencyID());
 			ci.setAuthor(author());
-			ci.setCreationTime(now);
+			ci.setCreationTime(now());
 			sc3origin->setCreationInfo(ci);
 
 			_ep->add(sc3origin.get());
@@ -1080,7 +1141,7 @@ bool App::_report(const ::Autoloc::Origin *origin) {
 	DataModel::CreationInfo ci;
 	ci.setAgencyID(agencyID());
 	ci.setAuthor(author());
-	ci.setCreationTime(now);
+	ci.setCreationTime(now());
 	sc3origin->setCreationInfo(ci);
 
 	DataModel::EventParameters ep;

@@ -11,7 +11,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
+import sphinx
+from distutils.version import LooseVersion
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -26,6 +29,7 @@ import sys, os
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 
+
 # NOTE:
 # rst2pdf.pdfbuilder conflicts with pngmath. So it must be added before pngmath is added
 # otherwise the math role is overwritten by rst2pdf with "do nothing" and html won't render
@@ -33,8 +37,13 @@ import sys, os
 extensions = [
 #    'rst2pdf.pdfbuilder',
     'sphinx.ext.ifconfig', 'sphinx.ext.todo',
-    'sphinx.ext.autodoc', 'sphinx.ext.pngmath', 'sphinx.ext.viewcode',
+    'sphinx.ext.autodoc', 'sphinx.ext.viewcode',
     'sphinx.ext.graphviz']
+
+if LooseVersion(sphinx.__version__) < LooseVersion('1.4'):
+    extensions.append('sphinx.ext.pngmath')
+else:
+    extensions.append('sphinx.ext.imgmath')
 
 graphviz_output_format = 'svg'
 

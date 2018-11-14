@@ -12,385 +12,346 @@
 
 
 
+#define SEISCOMP_COMPONENT AmplitudeML
+
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/processing/amplitudes/ML.h>
+#include <seiscomp3/math/mean.h>
 #include <seiscomp3/math/filter/seismometers.h>
+#include <seiscomp3/math/restitution/fft.h>
 
-#include <boost/bind.hpp>
-#include <cstdio>
 
+using namespace Seiscomp::Math;
 
 namespace Seiscomp {
+
 namespace Processing {
+
 
 namespace {
 
-AmplitudeProcessor::AmplitudeValue average(
-	const AmplitudeProcessor::AmplitudeValue &v0,
-	const AmplitudeProcessor::AmplitudeValue &v1)
-{
-	AmplitudeProcessor::AmplitudeValue v;
-	// Average both values
-	v.value = (v0.value + v1.value) * 0.5;
 
-	// Compute lower and upper uncertainty
-	double v0l = v0.value;
-	double v0u = v0.value;
-	double v1l = v1.value;
-	double v1u = v1.value;
+bool computePeak2Peak(const double *data, size_t npts,
+                      double &amplitude, double &period, double &index) {
+	if ( npts <= 3 ) return false;
 
-	if ( v0.lowerUncertainty ) v0l -= *v0.lowerUncertainty;
-	if ( v0.upperUncertainty ) v0u += *v0.upperUncertainty;
-	if ( v1.lowerUncertainty ) v1l -= *v1.lowerUncertainty;
-	if ( v1.upperUncertainty ) v1u += *v1.upperUncertainty;
+	// This is a port of a Perl code from NRCAN
+	int ipeak_save = -1; // If > 0 indicates that at least 2 peaks or troughs
+	                     // have already been found.
+	                     // Stores position of 1st of pair of peak/trough
+	                     // for largest amp found so far.
 
-	double l = 0, u = 0;
+	// vel indicates up or down direction of signal
+	// as part of search for peaks and troughs.
+	int ipeak = -1;  // will be > 0 and indicate position of peak or trough.
+	                 // initialize direction in most cases. (a nonzero vel is wanted.)
+	double vel = data[2]-data[1];
+	for ( size_t isamp = 2; isamp < npts-1; ++isamp ) {
+		double vel2 = data[isamp+1]-data[isamp];
+		if ( vel2*vel < 0.0 ) {
+			// have found a peak or trough at $isamp.
+			if ( ipeak >= 0 ) {
+				// have found consecutive peak and trough.
+				double amp_temp = 0.5 * fabs(data[isamp] - data[ipeak]);
+				if ( ipeak_save < 0 || amp_temp > amplitude ) {
+					// Save this as the largest so far.
+					amplitude = amp_temp;
 
-	l = std::max(l, v.value - v0l);
-	l = std::max(l, v.value - v0u);
-	l = std::max(l, v.value - v1l);
-	l = std::max(l, v.value - v1u);
+					// The period will be converted to seconds in
+					// AmplitudeProcessor::process. Here we return the period
+					// in indexes
+					period = 2.0 * (isamp-ipeak);
+					ipeak_save = ipeak;
+				}
+			}
 
-	u = std::max(l, v0l - v.value);
-	u = std::max(l, v0u - v.value);
-	u = std::max(l, v1l - v.value);
-	u = std::max(l, v1u - v.value);
+			// store location of current peak
+			ipeak = isamp;
+			vel = vel2;
+		}
+		else {
+			// re-initialize direction in case where first few samples equal.
+			// This will only happen before first peak is found.
+			if ( vel == 0 )
+				vel = data[isamp+1]-data[isamp];
+		}
+	}
 
-	v.lowerUncertainty = l;
-	v.upperUncertainty = u;
+	if ( ipeak_save < 0 )
+		// No amplitude found
+		return false;
 
-	return v;
+	// not really time of maximum
+	index = ipeak_save;
+
+	return true;
 }
 
-
-AmplitudeProcessor::AmplitudeTime average(
-	const AmplitudeProcessor::AmplitudeTime &t0,
-	const AmplitudeProcessor::AmplitudeTime &t1)
-{
-	AmplitudeProcessor::AmplitudeTime t;
-	t.reference = Core::Time((double(t0.reference) + double(t1.reference)) * 0.5);
-
-	// Compute lower and upper uncertainty
-	Core::Time t0b = t0.reference + Core::TimeSpan(t0.begin);
-	Core::Time t0e = t0.reference + Core::TimeSpan(t0.end);
-	Core::Time t1b = t1.reference + Core::TimeSpan(t1.begin);
-	Core::Time t1e = t1.reference + Core::TimeSpan(t1.end);
-
-	Core::Time minTime = t.reference;
-	Core::Time maxTime = t.reference;
-
-	minTime = std::min(minTime, t0b);
-	minTime = std::min(minTime, t0e);
-	minTime = std::min(minTime, t1b);
-	minTime = std::min(minTime, t1e);
-
-	maxTime = std::max(maxTime, t0b);
-	maxTime = std::max(maxTime, t0e);
-	maxTime = std::max(maxTime, t1b);
-	maxTime = std::max(maxTime, t1e);
-
-	t.begin = (double)(minTime - t.reference);
-	t.end = (double)(maxTime - t.reference);
-
-	return t;
-}
 
 }
 
 
-IMPLEMENT_SC_CLASS_DERIVED(AmplitudeProcessor_ML, AmplitudeProcessor, "AmplitudeProcessor_ML");
-REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_ML, "ML");
+IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(AbstractAmplitudeProcessor_ML, AmplitudeProcessor, "AbstractAmplitudeProcessor_ML");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-AmplitudeProcessor_MLh::AmplitudeProcessor_MLh()
-{
-	_type = "ML";
-}
 
 
-AmplitudeProcessor_ML::AmplitudeProcessor_ML()
- : Processing::AmplitudeProcessor("ML") {
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+AbstractAmplitudeProcessor_ML::AbstractAmplitudeProcessor_ML(const std::string& type)
+: AmplitudeProcessor(type) {
 	setSignalEnd(150.);
 	setMinSNR(0);
-	// Maximum distance is 8 degrees
 	setMaxDist(8);
-	// Maximum depth is 80 km
-	setMaxDepth(80);
-
-	setUsedComponent(Horizontal);
-
-	_combiner = TakeAverage;
-
-	_ampN.setUsedComponent(FirstHorizontal);
-	_ampE.setUsedComponent(SecondHorizontal);
-
-	_ampE.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
-	_ampN.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
-
-	// Propagate configuration to single processors
-	_ampN.setConfig(config());
-	_ampE.setConfig(config());
+	_amplitudeMeasureType = AbsMax;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-const AmplitudeProcessor *AmplitudeProcessor_ML::componentProcessor(Component comp) const {
-	switch ( comp ) {
-		case FirstHorizontalComponent:
-			return &_ampN;
-		case SecondHorizontalComponent:
-			return &_ampE;
-		default:
-			break;
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+AbstractAmplitudeProcessor_ML::AbstractAmplitudeProcessor_ML(const Core::Time& trigger, const std::string &type)
+: AmplitudeProcessor(trigger, type) {
+	setSignalEnd(150.);
+	setMinSNR(0);
+	setMaxDist(8);
+	computeTimeWindow();
+	_amplitudeMeasureType = AbsMax;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AbstractAmplitudeProcessor_ML::initFilter(double fsamp) {
+	if ( !_enableResponses ) {
+		AmplitudeProcessor::setFilter(
+			new Filtering::IIR::WoodAndersonFilter<double>(Velocity, _config.woodAndersonResponse)
+		);
 	}
+	else
+		AmplitudeProcessor::setFilter(NULL);
 
-	return NULL;
+	AmplitudeProcessor::initFilter(fsamp);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-const DoubleArray *AmplitudeProcessor_ML::processedData(Component comp) const {
-	switch ( comp ) {
-		case FirstHorizontalComponent:
-			return _ampN.processedData(comp);
-		case SecondHorizontalComponent:
-			return _ampE.processedData(comp);
-		default:
-			break;
-	}
 
-	return NULL;
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int AbstractAmplitudeProcessor_ML::capabilities() const {
+	return MeasureType;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-void AmplitudeProcessor_ML::reprocess(OPT(double) searchBegin, OPT(double) searchEnd) {
-	setStatus(WaitingForData, 0);
-	_ampN.setConfig(config());
-	_ampE.setConfig(config());
-
-	_results[0] = _results[1] = Core::None;
-
-	_ampN.reprocess(searchBegin, searchEnd);
-	_ampE.reprocess(searchBegin, searchEnd);
-
-	if ( !isFinished() ) {
-		if ( _ampN.status() > Finished )
-			setStatus(_ampN.status(), _ampN.statusValue());
-		else
-			setStatus(_ampE.status(), _ampE.statusValue());
-	}
-}
 
 
-int AmplitudeProcessor_ML::capabilities() const {
-	return _ampN.capabilities() | Combiner;
-}
-
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeProcessor::IDList
-AmplitudeProcessor_ML::capabilityParameters(Capability cap) const {
-	if ( cap == Combiner ) {
+AbstractAmplitudeProcessor_ML::capabilityParameters(Capability cap) const {
+	if ( cap == MeasureType ) {
 		IDList params;
-		params.push_back("Average");
-		params.push_back("Max");
-		params.push_back("Min");
+		params.push_back("AbsMax");
+		params.push_back("MinMax");
+		params.push_back("PeakTrough");
 		return params;
 	}
 
-	return _ampN.capabilityParameters(cap);
+	return AmplitudeProcessor::capabilityParameters(cap);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool AmplitudeProcessor_ML::setParameter(Capability cap, const std::string &value) {
-	if ( cap == Combiner ) {
-		if ( value == "Min" ) {
-			_combiner = TakeMin;
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool AbstractAmplitudeProcessor_ML::setParameter(Capability cap, const std::string &value) {
+	if ( cap == MeasureType ) {
+		if ( value == "AbsMax" ) {
+			_amplitudeMeasureType = AbsMax;
 			return true;
 		}
-		else if ( value == "Max" ) {
-			_combiner = TakeMax;
+		else if ( value == "MinMax" ) {
+			_amplitudeMeasureType = MinMax;
 			return true;
 		}
-		else if ( value == "Average" ) {
-			_combiner = TakeAverage;
+		else if ( value == "PeakTrough" ) {
+			_amplitudeMeasureType = PeakTrough;
 			return true;
 		}
 
 		return false;
 	}
 
-	_ampN.setParameter(cap, value);
-	return _ampE.setParameter(cap, value);
+	return AmplitudeProcessor::setParameter(cap, value);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool AmplitudeProcessor_ML::setup(const Settings &settings) {
-	// Copy the stream configurations (gain, orientation, responses, ...) to
-	// the horizontal processors
-	_ampN.streamConfig(FirstHorizontalComponent) = streamConfig(FirstHorizontalComponent);
-	_ampE.streamConfig(SecondHorizontalComponent) = streamConfig(SecondHorizontalComponent);
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool AbstractAmplitudeProcessor_ML::setup(const Settings &settings) {
 	if ( !AmplitudeProcessor::setup(settings) ) return false;
 
-	// Setup each component
-	if ( !_ampN.setup(settings) || !_ampE.setup(settings) ) return false;
-
-	return true;
-}
-
-
-void AmplitudeProcessor_ML::setTrigger(const Core::Time& trigger) {
-	AmplitudeProcessor::setTrigger(trigger);
-	_ampE.setTrigger(trigger);
-	_ampN.setTrigger(trigger);
-}
-
-
-void AmplitudeProcessor_ML::computeTimeWindow() {
-	// Copy configuration to each component
-	_ampN.setConfig(config());
-	_ampE.setConfig(config());
-
-	_ampE.computeTimeWindow();
-	_ampN.computeTimeWindow();
-	setTimeWindow(_ampE.timeWindow() | _ampN.timeWindow());
-}
-
-
-double AmplitudeProcessor_ML::timeWindowLength(double distance_deg) const {
-	double endN = _ampN.timeWindowLength(distance_deg);
-	double endE = _ampE.timeWindowLength(distance_deg);
-	_ampN.setSignalEnd(endN);
-	_ampE.setSignalEnd(endE);
-	return std::max(endN, endE);
-}
-
-
-void AmplitudeProcessor_ML::reset() {
-	AmplitudeProcessor::reset();
-
-	_results[0] = _results[1] = Core::None;
-
-	_ampE.reset();
-	_ampN.reset();
-}
-
-
-void AmplitudeProcessor_ML::close() {
-	// TODO: Check for best available amplitude here
-}
-
-
-bool AmplitudeProcessor_ML::feed(const Record *record) {
-	// Both processors finished already?
-	if ( _ampE.isFinished() && _ampN.isFinished() ) return false;
-
-	// Did an error occur?
-	if ( status() > WaveformProcessor::Finished ) return false;
-
-	if ( record->channelCode() == _streamConfig[FirstHorizontalComponent].code() ) {
-		if ( !_ampN.isFinished() ) {
-			_ampN.feed(record);
-			if ( _ampN.status() == InProgress )
-				setStatus(WaveformProcessor::InProgress, _ampN.statusValue());
-			else if ( _ampN.isFinished() && _ampE.isFinished() ) {
-				if ( !isFinished() ) {
-					if ( _ampE.status() == Finished )
-						setStatus(_ampN.status(), _ampN.statusValue());
-					else
-						setStatus(_ampE.status(), _ampE.statusValue());
-				}
-			}
-		}
+	bool absMax = true;
+	if ( settings.getValue(absMax, "amplitudes.ML.absMax") ) {
+		_amplitudeMeasureType = absMax ? AbsMax : MinMax;
 	}
-	else if ( record->channelCode() == _streamConfig[SecondHorizontalComponent].code() ) {
-		if ( !_ampE.isFinished() ) {
-			_ampE.feed(record);
-			if ( _ampE.status() == InProgress )
-				setStatus(WaveformProcessor::InProgress, _ampE.statusValue());
-			else if ( _ampE.isFinished() && _ampN.isFinished() ) {
-				if ( !isFinished() ) {
-					if ( _ampN.status() == Finished )
-						setStatus(_ampE.status(), _ampE.statusValue());
-					else
-						setStatus(_ampN.status(), _ampN.statusValue());
-				}
+	else {
+		std::string measureType;
+		if ( settings.getValue(measureType, "amplitudes.ML.measureType") ) {
+			if ( !setParameter(MeasureType, measureType) ) {
+				SEISCOMP_ERROR("%s.%s.%s.%s: invalid amplitude measure type: %s",
+				               settings.networkCode.c_str(),
+				               settings.stationCode.c_str(),
+				               settings.locationCode.c_str(),
+				               settings.channelCode.c_str(),
+				               measureType.c_str());
+				return false;
 			}
 		}
 	}
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool AmplitudeProcessor_ML::computeAmplitude(const DoubleArray &data,
-                                             size_t i1, size_t i2,
-                                             size_t si1, size_t si2,
-                                             double offset,
-                                             AmplitudeIndex *dt,
-                                             AmplitudeValue *amplitude,
-                                             double *period, double *snr) {
-	return false;
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool AbstractAmplitudeProcessor_ML::deconvolveData(Response *resp,
+                                                   DoubleArray &data,
+                                                   int numberOfIntegrations) {
+	if ( numberOfIntegrations < -1 )
+		return false;
+
+	Math::Restitution::FFT::TransferFunctionPtr tf =
+		resp->getTransferFunction(numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
+
+	if ( tf == NULL )
+		return false;
+
+	Math::SeismometerResponse::WoodAnderson paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity,
+	                                            _config.woodAndersonResponse);
+	Math::Restitution::FFT::PolesAndZeros woodAnderson(paz);
+	Math::Restitution::FFT::TransferFunctionPtr cascade =
+		*tf / woodAnderson;
+
+	// Remove linear trend
+	double m,n;
+	Math::Statistics::computeLinearTrend(data.size(), data.typedData(), m, n);
+	Math::Statistics::detrend(data.size(), data.typedData(), m, n);
+
+	return Math::Restitution::transformFFT(data.size(), data.typedData(),
+	                                       _stream.fsamp, cascade.get(),
+	                                       _config.respTaper, _config.respMinFreq,
+	                                       _config.respMaxFreq);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool AbstractAmplitudeProcessor_ML::computeAmplitude(
+		const DoubleArray &data,
+		size_t i1, size_t i2,
+		size_t si1, size_t si2,
+		double offset,
+		AmplitudeIndex *dt, AmplitudeValue *amplitude,
+		double *period, double *snr) {
+	double amax;
+
+	switch ( _amplitudeMeasureType ) {
+		case AbsMax:
+		{
+			size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
+			amax = fabs(data[imax] - offset);
+			dt->index = imax;
+			break;
+		}
+
+		case MinMax:
+		{
+			int lmin, lmax;
+			find_minmax(lmin, lmax, data.size(), data.typedData(), si1, si2, offset);
+			amax = (data[lmax] - data[lmin]) * 0.5;
+			dt->index = (lmin+lmax)*0.5;
+			dt->begin = lmin - dt->index;
+			dt->end = lmax - dt->index;
+			break;
+		}
+
+		case PeakTrough:
+			if ( !computePeak2Peak(data.typedData()+si1, si2-si1, amax, *period, dt->index) )
+				return false;
+
+			dt->index += si1;
+			dt->begin = 0;
+			dt->end = *period * 0.5;
+			break;
+
+		default:
+			return false;
+	}
+
+	if ( *_noiseAmplitude == 0. )
+		*snr = 1000000.0;
+	else
+		*snr = amax / *_noiseAmplitude;
+
+	if ( *snr < _config.snrMin ) {
+		setStatus(LowSNR, *snr);
+		return false;
+	}
+
+	*period = -1;
+
+	amplitude->value = amax;
+
+	if ( _streamConfig[_usedComponent].gain != 0.0 )
+		amplitude->value /= _streamConfig[_usedComponent].gain;
+	else {
+		setStatus(MissingGain, 0.0);
+		return false;
+	}
+
+	// - convert to millimeter
+	amplitude->value *= 1E03;
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double AbstractAmplitudeProcessor_ML::timeWindowLength(double distance_deg) const {
+	// Minimal S/SW group velocity.
+	//
+	// This is very approximate and may need refinement. Usually the Lg
+	// group velocity is around 3.2-3.6 km/s. By setting v_min to 3 km/s,
+	// we are probably on the safe side. We add 30 s to count for rupture
+	// duration, which may, however, not be sufficient.
+	double v_min = 3;
+
+	double distance_km = distance_deg*111.2;
+	double windowLength = distance_km/v_min + 30;
+	return windowLength < _config.signalEnd ? windowLength :_config.signalEnd;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 
-
-void AmplitudeProcessor_ML::newAmplitude(const AmplitudeProcessor *proc,
-                                         const AmplitudeProcessor::Result &res) {
-
-	if ( isFinished() ) return;
-
-	int idx = 0;
-
-	if ( proc == &_ampE ) {
-		idx = 0;
-	}
-	else if ( proc == &_ampN ) {
-		idx = 1;
-	}
-
-	_results[idx] = ComponentResult();
-	_results[idx]->value = res.amplitude;
-	_results[idx]->time = res.time;
-
-	if ( _results[0] && _results[1] ) {
-		setStatus(Finished, 100.);
-		Result newRes;
-		newRes.record = res.record;
-
-		switch ( _combiner ) {
-			case TakeAverage:
-				newRes.amplitude = average(_results[0]->value, _results[1]->value);
-				newRes.time = average(_results[0]->time, _results[1]->time);
-				newRes.component = Horizontal;
-				break;
-			case TakeMin:
-				if ( _results[0]->value.value >= _results[1]->value.value ) {
-					newRes.amplitude =  _results[0]->value;
-					newRes.time = _results[0]->time;
-					newRes.component = _ampE.usedComponent();
-				}
-				else {
-					newRes.amplitude =  _results[1]->value;
-					newRes.time = _results[1]->time;
-					newRes.component = _ampN.usedComponent();
-				}
-				break;
-			case TakeMax:
-				if ( _results[0]->value.value <= _results[1]->value.value ) {
-					newRes.amplitude =  _results[0]->value;
-					newRes.time = _results[0]->time;
-					newRes.component = _ampE.usedComponent();
-				}
-				else {
-					newRes.amplitude =  _results[1]->value;
-					newRes.time = _results[1]->time;
-					newRes.component = _ampN.usedComponent();
-				}
-				break;
-		};
-
-		newRes.period = -1;
-		newRes.snr = -1;
-		emitAmplitude(newRes);
-	}
-}
-
-
-}
 }

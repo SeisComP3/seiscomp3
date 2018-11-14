@@ -49,13 +49,13 @@
 						</description>
 					</parameter>
 
-					<parameter name="minDepth" type="double" >
+					<parameter name="minDepth" type="double"  unit="km">
 						<description>
 							Minimum depth for which scevent is allowed to create events.
 						</description>
 					</parameter>
 
-					<parameter name="maxDepth" type="double" >
+					<parameter name="maxDepth" type="double" unit="km">
 						<description>
 							Maximum depth for which scevent is allowed to create events.
 						</description>
@@ -219,6 +219,13 @@
 					</description>
 				</parameter>
 
+				<parameter name="score" type="string">
+					<description>
+						Defines the ScoreProcessor interface to be used along
+						with priority &quot;SCORE&quot;.
+					</description>
+				</parameter>
+
 				<parameter name="priorities" type="list:string">
 					<description>
 						The general priority list to decide if an origin becomes preferred.
@@ -264,12 +271,15 @@
 						TIME: more recent origins (creationTime) have higher priorities
 
 						TIME_AUTOMATIC: only check creationTime priority on incoming automatic origins
+
+						SCORE: evaluates the score according to a configured ScoreProcessor and
+						       prefers the origin/focalmechanism with the highest score
 					</description>
 				</parameter>
 
-				<parameter name="delayTimeSpan" type="int">
+				<parameter name="delayTimeSpan" type="int" unit="s">
 					<description>
-						Configures a timespan in seconds to delay event creation. If a new origin arrives
+						Configures a timespan to delay event creation. If a new origin arrives
 						which cannot be associated to an existing event, delay the event creation for a certain
 						timespan.
 					</description>

@@ -18,7 +18,7 @@
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/rtti.h>
 #endif
-#include <seiscomp3/gui/map/mapsymbol.h>
+#include <seiscomp3/gui/map/legend.h>
 #include <seiscomp3/gui/map/mapwidget.h>
 
 #ifndef Q_MOC_RUN
@@ -26,7 +26,9 @@
 #endif
 
 
-class Legend : public Seiscomp::Gui::Map::Symbol {
+class Legend : public Seiscomp::Gui::Map::Legend {
+	Q_OBJECT
+
 	private:
 		typedef QPair<QString, QChar> Annotation;
 		typedef QPair<Annotation, QColor> ContentItem;
@@ -41,75 +43,50 @@ class Legend : public Seiscomp::Gui::Map::Symbol {
 					append(ContentItem(Annotation(text, character), c));
 				}
 
-				void draw(const Seiscomp::Gui::Map::Canvas* canvas, const Legend& legend,
-				          const QString& header, QPainter& painter, const QPoint& pos);
+				QSize getSize(const Legend& legend) const;
+				void draw(const Legend& legend, QPainter& painter, const QRect& rect);
+
+			public:
+				QString title;
 		};
 
 	public:
-		Legend();
+		Legend(QObject *parent);
 
 	public:
 		ApplicationStatus::Mode mode() const;
 		void setMode(ApplicationStatus::Mode mode);
 
-	private:
-		virtual bool isInside(int x, int y) const { return false; }
-		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
+		virtual void draw(const QRect &rect, QPainter &painter);
+
+	public slots:
+		void setParameter(int);
 
 	private:
 		void init();
-		void drawStation(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter,
-		                 const QPoint& pos, const QColor& color,
+		void drawStation(QPainter& painter, const QPoint& pos, const QColor& color,
 		                 const QChar& character, const QString& annotation) const;
 
-		void handleQcStatus(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
+		void handleQcStatus(QPainter &painter, const QRect &rect);
 
 	private:
 		ApplicationStatus::Mode _mode;
 		int                     _stationSize;
 		int                     _offset;
-		QPoint                  _legendPos;
 
-		Content _qcDelay;
-		Content _qcLatency;
-		Content _qcTimingInterval;
-		Content _qcGapsInterval;
-		Content _qcGapsLength;
-		Content _qcSpikesInterval;
-		Content _qcSpikesAmplitude;
-		Content _qcOffset;
-		Content _qcRMS;
-		Content _event;
-		Content _gm;
-};
+		Content                *_currentContent;
 
-
-class EQSymbolLegend : public Seiscomp::Gui::Map::Symbol {
-	public:
-		EQSymbolLegend();
-
-
-	public:
-		/**
-		 * @brief Sets the relative position to the lower left corner of the
-		 *        parent widget.
-		 * @param pos
-		 */
-		void setRelativePosition(const QPoint &pos);
-
-
-	protected:
-		virtual bool isInside(int x, int y) const { return false; }
-		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
-
-
-	private:
-		typedef QPair<QString, int> StringWithWidth;
-		typedef QPair<QColor, StringWithWidth> DepthItem;
-		typedef QPair<int, StringWithWidth> MagItem;
-
-		QVector<DepthItem> _depthItems;
-		QVector<MagItem> _magItems;
+		Content                 _qcDelay;
+		Content                 _qcLatency;
+		Content                 _qcTimingInterval;
+		Content                 _qcGapsInterval;
+		Content                 _qcGapsLength;
+		Content                 _qcSpikesInterval;
+		Content                 _qcSpikesAmplitude;
+		Content                 _qcOffset;
+		Content                 _qcRMS;
+		Content                 _event;
+		Content                 _gm;
 };
 
 

@@ -40,6 +40,12 @@ bool fromString(QColor& value, const std::string& str) {
 
 	std::string col = str;
 
+	QColor tmp(str.c_str());
+	if ( tmp.isValid() ) {
+		value = tmp;
+		return true;
+	}
+
 	int red = 0, green = 0, blue = 0, alpha = 255;
 
 	if ( col.substr(0,4) == "rgb(" ) {

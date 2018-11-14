@@ -72,6 +72,7 @@ class MNcursesPlugin : public MonitorOutPluginInterface {
 	// Private data member
 	// ----------------------------------------------------------------------
 	private:
+		void                              *_context;
 		Header                             _header;
 		ColumnSizes                        _columnSizes;
 		TagOrder                           _tagOrder;

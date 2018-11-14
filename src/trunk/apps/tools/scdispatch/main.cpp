@@ -552,7 +552,7 @@ class DispatchTool : public Seiscomp::Client::Application {
 
 					if ( _operation != OP_ADD && _operation != OP_REMOVE && _operation != OP_UPDATE ) {
 						cout << "Notifier operation " << _notifierOperation << " is not valid" << endl;
-						cout << "Operations are add, update, remove or merge" << endl;
+						cout << "Operations are add, update, remove, merge or merge-without-remove" << endl;
 						return false;
 					}
 				}

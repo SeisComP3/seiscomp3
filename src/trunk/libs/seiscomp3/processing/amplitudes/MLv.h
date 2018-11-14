@@ -15,47 +15,31 @@
 #ifndef __SEISCOMP_PROCESSING_AMPLITUDEPROCESSOR_MLv_H__
 #define __SEISCOMP_PROCESSING_AMPLITUDEPROCESSOR_MLv_H__
 
-#include <seiscomp3/processing/amplitudeprocessor.h>
+#include <seiscomp3/processing/amplitudes/ML.h>
 
 
 namespace Seiscomp {
-
 namespace Processing {
 
 
-class SC_SYSTEM_CLIENT_API AmplitudeProcessor_MLv : public AmplitudeProcessor {
+class SC_SYSTEM_CLIENT_API AmplitudeProcessor_MLv : public AbstractAmplitudeProcessor_ML {
 	DECLARE_SC_CLASS(AmplitudeProcessor_MLv);
 
 	public:
 		AmplitudeProcessor_MLv();
-		AmplitudeProcessor_MLv(const Core::Time& trigger);
+		AmplitudeProcessor_MLv(const Core::Time &trigger);
 
 	public:
-		virtual void initFilter(double fsamp);
-
-		virtual int capabilities() const;
-		virtual IDList capabilityParameters(Capability cap) const;
-		virtual bool setParameter(Capability cap, const std::string &value);
-
-	protected:
-		bool deconvolveData(Response *resp, DoubleArray &data, int numberOfIntegrations);
-
 		bool computeAmplitude(const DoubleArray &data,
 		                      size_t i1, size_t i2,
 		                      size_t si1, size_t si2,
 		                      double offset,
 		                      AmplitudeIndex *dt, AmplitudeValue *amplitude,
 		                      double *period, double *snr);
-
-		double timeWindowLength(double distance) const;
-
-	private:
-		bool _computeAbsMax;
 };
 
 
 }
-
 }
 
 

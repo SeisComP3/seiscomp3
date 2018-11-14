@@ -13,10 +13,48 @@ Initial configuration
 
 To configure SeisComP3 initially, run :program:`seiscomp setup`. This is the
 successor of the former :program:`./setup` script.
+The initial configuration also allows to setup the MySQL database for SeisComP3.
 
-As a wrapper to :program:`seiscomp setup`, a wizard can be started from :ref:`scconfig<scconfig>` (Ctrl-N).
+As a wrapper to :program:`seiscomp setup`, a wizard can be started from
+:ref:`scconfig<scconfig>` (Ctrl-N).
 
-In :program:`seiscomp setup` default values are given in brackets []. 
+.. note::
+
+    With **Ubuntu 16.04** MariaDB has become the standard flavour of MySQL in Ubuntu
+    and either MariaDB or MySQL can be installed. The implementation of MariaDB
+    in Ubuntu requires additional steps. They must be taken in order to allow
+    SeisComP3 to make use of MariaDB.
+
+    The full procedure including database optimization is:
+
+    .. code-block:: sh
+
+        user@hosst:~$ sudo systemctl enable mysql
+        user@host:~$ sudo mysql_secure_installation
+            provide new root password
+            answer all questions with yes [Enter]
+
+        user@host:~$ sudo mysql -u root -p
+            CREATE DATABASE seiscomp3 CHARACTER SET utf8 COLLATE utf8_bin;
+            grant usage on seiscomp3.* to sysop@localhost identified by 'sysop';
+            grant all privileges on seiscomp3.* to sysop@localhost;
+            grant usage on seiscomp3.* to sysop@'%' identified by 'sysop';
+            grant all privileges on seiscomp3.* to sysop@'%';
+            flush privileges;
+
+        user@host:~$ sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf
+            [mysqld]
+            innodb_buffer_pool_size = <your value>
+            innodb_flush_log_at_trx_commit = 2
+
+        user@host:~$ sudo systemctl restart mysql
+        user@host:~$ mysql -u sysop -p seiscomp3 < ~/seiscomp3/share/db/mysql.sql
+
+    Currently, the :ref:`scconfig` wizard and :program:`seiscomp setup` cannot
+    be used to set up the MariaDB database. The option "Create database" must
+    therefore be unchecked or answered with "no".
+
+In :program:`seiscomp setup` default values are given in brackets [].
 
 .. code-block:: none
 
@@ -85,12 +123,12 @@ supports two main backends: MySQL and PostgreSQL. Select the backend to be used
 here but be prepared that only for the MySQL backend the setup can help to
 create the database and tables for you. If you are using PostgreSQL you have
 to provide a working database with the correct schema. The schema files are
-part of the distribution and can be found in :file:`share/db/postgresql.sql`. 
+part of the distribution and can be found in :file:`share/db/postgresql.sql`.
 
 .. note::
 
    As of PostgreSQL version 9 the default output encoding has changed to hex.
-   In order to fix issues with seiscomp3 log in to your database and run the 
+   In order to fix issues with seiscomp3 log in to your database and run the
    following command.
 
    .. code-block:: sql
@@ -131,12 +169,12 @@ database with the same name, say 'yes' here.
 
 .. code-block:: none
 
-   Database name [seiscomp3]: 
-   Database hostname [localhost]: 
-   Database read-write user [sysop]: 
-   Database read-write password [sysop]: 
-   Database public hostname [localhost]: 
-   Database read-only user [sysop]: 
+   Database name [seiscomp3]:
+   Database hostname [localhost]:
+   Database read-write user [sysop]:
+   Database read-write password [sysop]:
+   Database public hostname [localhost]:
+   Database read-only user [sysop]:
    Database read-only password [sysop]:
 
 Setup the various database options valid for all database backends. Give
@@ -156,7 +194,7 @@ without doing anything.
    P) Proceed to apply configuration
    B) Back to last parameter
    Q) Quit without changes
-   Command? [P]: 
+   Command? [P]:
 
 
 Activate modules
@@ -170,8 +208,7 @@ you may use:
 
 .. code-block:: sh
 
-   user@host:~$ seiscomp3/bin/seiscomp enable seedlink \
-   scautopick scautoloc scamp scmag scevent
+   user@host:~$ seiscomp3/bin/seiscomp enable seedlink scautopick scautoloc scamp scmag scevent
    enabled seedlink
    enabled scautopick
    enabled scautoloc
@@ -182,17 +219,17 @@ you may use:
 A successive call of :program:`seiscomp start` will then start all enabled
 modules. This is also required to restart enabled modules with :program:`seiscomp check`.
 
-Alternatively, :ref:`scconfig<scconfig>` can be used to enable/disable 
+Alternatively, :ref:`scconfig<scconfig>` can be used to enable/disable
 and to start/stop/restart modules.
 
-However, before starting seiscomp, station information (metadata) need to 
+However, before starting seiscomp, station information (metadata) need to
 be provided and the configuration needs to be updated.
 
 
 Supply metadata for networks and stations
 =========================================
 
-SeisComP3 requires the metadata from seismic stations for data acquisition 
+SeisComP3 requires the metadata from seismic stations for data acquisition
 and processing. The metadata can be obtained from network operators or
 various other sources in different formats. The metadata include, e.g.:
 
@@ -202,7 +239,7 @@ various other sources in different formats. The metadata include, e.g.:
 - sensor and data logger specifications
 - data stream specificiations
 
-SeisComP3 comes with various importers to add metadata 
+SeisComP3 comes with various importers to add metadata
 for networks and stations including full response information.
 
 :ref:`import_inv` is the tool to import inventory data into SeisComP3.

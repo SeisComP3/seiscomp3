@@ -75,6 +75,9 @@ class _EventRequestOptions(RequestOptions):
 
 	# non standard parameters
 	PPicks         = [ 'includepicks', 'picks' ]
+	PFM            = [ 'includefocalmechanism', 'focalmechanism', 'fm' ]
+	PAllFMs        = [ 'includeallfocalmechanisms', 'allfocalmechanisms', 'allfms' ]
+	PStaMTs        = [ 'includestationmts', 'stationmts', 'stamts' ]
 	PComments      = [ 'includecomments', 'comments' ]
 	PFormatted     = [ 'formatted' ]
 
@@ -123,6 +126,9 @@ class _EventRequestOptions(RequestOptions):
 		self.comments     = None
 		self.formatted    = None
 		self.picks        = None
+		self.fm           = None
+		self.allFMs       = None
+		self.staMTs       = None
 
 
 	#---------------------------------------------------------------------------
@@ -157,6 +163,9 @@ class _EventRequestOptions(RequestOptions):
 		self.allMags    = self.parseBool(self.PAllMags)
 		self.arrivals   = self.parseBool(self.PArrivals)
 		self.picks      = self.parseBool(self.PPicks)
+		self.fm         = self.parseBool(self.PFM)
+		self.allFMs     = self.parseBool(self.PAllFMs)
+		self.staMTs     = self.parseBool(self.PStaMTs)
 		self.comments   = self.parseBool(self.PComments)
 
 		# limit, offset, orderBy, updatedAfter
@@ -190,10 +199,8 @@ class _EventRequestOptions(RequestOptions):
 			raise ValueError, "invalid mixture of parameters, the parameter " \
 			      "'%s' may only be combined with: %s, %s, %s, %s, %s" % (
 			      self.PEventID[0], self.PAllOrigins[0], self.PAllMags[0],
-			      self.PArrivals[0], self.PPicks[0], self.PComments[0])
-
-		# include comments
-		self.comments = self.parseBool(self.PComments)
+			      self.PArrivals[0], self.PPicks[0], self.PFM[0],
+			      self.PAllFMs[0], self.PAllMTs[0], self.PComments[0])
 
 		# format XML
 		self.formatted = self.parseBool(self.PFormatted)
@@ -218,7 +225,8 @@ class FDSNEvent(resource.Resource):
 	def render_OPTIONS(self, req):
 		req.setHeader('Access-Control-Allow-Origin', '*')
 		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Access-Control-Allow-Headers',
+                      'Accept, Content-Type, X-Requested-With, Origin')
 		req.setHeader('Content-Type', 'text/plain')
 		return ""
 
@@ -233,19 +241,19 @@ class FDSNEvent(resource.Resource):
 			Logging.warning(str(e))
 			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
-		# Catalog filter is not supported, any filter value will result in 204
+		# Catalog filter is not supported
 		if ro.catalogs:
-			msg = "no matching events found"
-			return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			msg = "catalog filter not supported"
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# updateafter not implemented
 		if ro.updatedAfter:
 			msg = "filtering based on update time not supported"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if self._formatList is not None and ro.format not in self._formatList:
 			msg = "output format '%s' not available" % ro.format
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
@@ -257,7 +265,7 @@ class FDSNEvent(resource.Resource):
 			else:
 				msg = "output format '%s' not available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
-				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Create database query
 		db = DatabaseInterface.Open(Application.Instance().databaseURI())
@@ -314,6 +322,10 @@ class FDSNEvent(resource.Resource):
 			if self._hideAuthor:
 				self._removeAuthor(e)
 
+			originIDs = set()
+			magIDs = set()
+			magIDs.add(e.preferredMagnitudeID())
+
 			# eventDescriptions and comments
 			objCount += dbq.loadEventDescriptions(e)
 			if ro.comments:
@@ -329,24 +341,95 @@ class FDSNEvent(resource.Resource):
 					continue
 				if ro.allOrigins:
 					e.add(oRef)
+					originIDs.add(oRef.originID())
 				elif oRef.originID() == e.preferredOriginID():
 					e.add(oRef)
+					originIDs.add(oRef.originID())
 					dbIter.close()
-				# TODO: if focal mechanisms are added make sure derived
-				# origin is loaded
 
 			objCount += e.originReferenceCount()
+
+			# focalMechanism references: either none, preferred only or all
+			if ro.fm or ro.allFMs:
+				dbIter = dbq.getObjects(e, DataModel.FocalMechanismReference.TypeInfo())
+				for obj in dbIter:
+					fmRef = DataModel.FocalMechanismReference.Cast(obj)
+					if fmRef is None:
+						continue
+					if ro.allFMs:
+						e.add(fmRef)
+					elif fmRef.focalMechanismID() == e.preferredFocalMechanismID():
+						e.add(fmRef)
+						dbIter.close()
+
+			objCount += e.focalMechanismReferenceCount()
 
 			if not HTTP.checkObjects(req, objCount, maxObj):
 				return False
 
-			# TODO: add focal mechanisms
-
-			# origins
-			for iORef in xrange(e.originReferenceCount()):
+			# focal mechanisms: process before origins to add derived origin to
+			# originID list since it may be missing from origin reference list
+			for iFMRef in xrange(e.focalMechanismReferenceCount()):
 				if req._disconnected:
 					return False
-				oID = e.originReference(iORef).originID()
+				fmID = e.focalMechanismReference(iFMRef).focalMechanismID()
+				obj = dbq.getObject(DataModel.FocalMechanism.TypeInfo(), fmID)
+				fm = DataModel.FocalMechanism.Cast(obj)
+				if fm is None:
+					continue
+
+				ep.add(fm)
+				objCount += 1
+				if self._hideAuthor:
+					self._removeAuthor(fm)
+
+				# comments
+				if ro.comments:
+					objCount += self._loadComments(dbq, fm)
+
+				# momentTensors
+				objCount += dbq.loadMomentTensors(fm)
+
+				if not HTTP.checkObjects(req, objCount, maxObj):
+					return False
+
+				for iMT in xrange(fm.momentTensorCount()):
+					mt = fm.momentTensor(iMT)
+
+					originIDs.add(mt.derivedOriginID())
+					magIDs.add(mt.momentMagnitudeID())
+
+					if self._hideAuthor:
+						self._removeAuthor(mt)
+
+					if ro.comments:
+						for iMT in xrange(fm.momentTensorCount()):
+							objCount += self._loadComments(dbq, mt)
+
+					objCount += dbq.loadDataUseds(mt);
+					objCount += dbq.loadMomentTensorPhaseSettings(mt);
+					if ro.staMTs:
+						objCount += dbq.loadMomentTensorStationContributions(mt);
+						for iStaMT in xrange(mt.momentTensorStationContributionCount()):
+							objCount += dbq.load(mt.momentTensorStationContribution(iStaMT))
+
+					if not HTTP.checkObjects(req, objCount, maxObj):
+						return False
+
+			# find ID of origin containing preferred Magnitude
+			if e.preferredMagnitudeID():
+				obj = dbq.getObject(DataModel.Magnitude.TypeInfo(),
+				                    e.preferredMagnitudeID())
+				m = DataModel.Magnitude.Cast(obj)
+				if m is not None:
+					oID = dbq.parentPublicID(m)
+					if oID:
+						originIDs.add(oID)
+
+			# origins
+			for oID in originIDs:
+				if req._disconnected:
+					return False
 				obj = dbq.getObject(DataModel.Origin.TypeInfo(), oID)
 				o = DataModel.Origin.Cast(obj)
 				if o is None:
@@ -371,7 +454,7 @@ class FDSNEvent(resource.Resource):
 						continue
 					if ro.allMags:
 						o.add(mag)
-					elif mag.publicID() == e.preferredMagnitudeID():
+					elif mag.publicID() in magIDs:
 						o.add(mag)
 						dbIter.close()
 
@@ -744,3 +827,6 @@ class FDSNEvent(resource.Resource):
 
 		for e in dbq.getObjectIterator(q, DataModel.Event.TypeInfo()):
 			ep.add(DataModel.Event.Cast(e))
+
+
+# vim: ts=4 noet

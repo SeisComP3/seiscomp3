@@ -199,6 +199,12 @@ class SC_SYSTEM_CORE_API Time : public TimeSpan {
 		 */
 		static Time FromYearDay(int year, int year_day);
 
+		/**
+		 * @return The offset from UTC/GMT time to local time, essentially
+		 *         localtime minus GMT.
+		 */
+		TimeSpan localTimeZoneOffset() const;
+
 		//! Saves the current localtime in the calling object
 		Time &localtime();
 

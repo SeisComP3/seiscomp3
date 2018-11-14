@@ -799,6 +799,15 @@ Time Time::FromYearDay(int year, int year_day) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+TimeSpan Time::localTimeZoneOffset() const {
+	return *this - toGMT();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time& Time::localtime() {
 	gettimeofday(&_timeval, NULL);
 	time_t secs = (time_t)_timeval.tv_sec;
@@ -898,7 +907,7 @@ std::string Time::toString(const char* fmt) const {
 			memcpy(tgt, last, f-last);
 			tgt += f-last;
 
-			char number[12];
+			char number[32];
 			size_t numberOfDigits;
 			if ( usecs > 0 ) {
 				numberOfDigits = sprintf(number, "%06ld", usecs);

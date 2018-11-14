@@ -328,17 +328,17 @@ class ios(ios_base):
 ios_swigregister = _IO.ios_swigregister
 ios_swigregister(ios)
 
-import Math
-import Core
-class DatabaseInterface(Core.BaseObject):
+import seiscomp3.Math
+import seiscomp3.Core
+class DatabaseInterface(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::DatabaseInterface class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, DatabaseInterface, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, DatabaseInterface, name)
 
@@ -547,15 +547,15 @@ def DatabaseInterface_Open(uri):
     """DatabaseInterface_Open(char const * uri) -> DatabaseInterface"""
     return _IO.DatabaseInterface_Open(uri)
 
-class GFSource(Math.CoordD):
+class GFSource(seiscomp3.Math.CoordD):
     """Proxy of C++ Seiscomp::IO::GFSource class."""
 
     __swig_setmethods__ = {}
-    for _s in [Math.CoordD]:
+    for _s in [seiscomp3.Math.CoordD]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFSource, name, value)
     __swig_getmethods__ = {}
-    for _s in [Math.CoordD]:
+    for _s in [seiscomp3.Math.CoordD]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GFSource, name)
     __repr__ = _swig_repr
@@ -581,15 +581,15 @@ class GFSource(Math.CoordD):
 GFSource_swigregister = _IO.GFSource_swigregister
 GFSource_swigregister(GFSource)
 
-class GFReceiver(Math.CoordD):
+class GFReceiver(seiscomp3.Math.CoordD):
     """Proxy of C++ Seiscomp::IO::GFReceiver class."""
 
     __swig_setmethods__ = {}
-    for _s in [Math.CoordD]:
+    for _s in [seiscomp3.Math.CoordD]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFReceiver, name, value)
     __swig_getmethods__ = {}
-    for _s in [Math.CoordD]:
+    for _s in [seiscomp3.Math.CoordD]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GFReceiver, name)
     __repr__ = _swig_repr
@@ -615,15 +615,15 @@ class GFReceiver(Math.CoordD):
 GFReceiver_swigregister = _IO.GFReceiver_swigregister
 GFReceiver_swigregister(GFReceiver)
 
-class GFArchive(Core.BaseObject):
+class GFArchive(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::GFArchive class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFArchive, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, GFArchive, name)
 
@@ -760,15 +760,15 @@ def GFArchive_Open(url):
     """GFArchive_Open(char const * url) -> GFArchive"""
     return _IO.GFArchive_Open(url)
 
-class RecordStream(Core.InterruptibleObject):
+class RecordStream(seiscomp3.Core.InterruptibleObject):
     """Proxy of C++ Seiscomp::IO::RecordStream class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.InterruptibleObject]:
+    for _s in [seiscomp3.Core.InterruptibleObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordStream, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.InterruptibleObject]:
+    for _s in [seiscomp3.Core.InterruptibleObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RecordStream, name)
 
@@ -969,15 +969,15 @@ class RecordIterator(_object):
 RecordIterator_swigregister = _IO.RecordIterator_swigregister
 RecordIterator_swigregister(RecordIterator)
 
-class RecordInput(Core.BaseObject):
+class RecordInput(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::RecordInput class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordInput, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RecordInput, name)
     __repr__ = _swig_repr
@@ -1022,15 +1022,15 @@ class RecordInput(Core.BaseObject):
 RecordInput_swigregister = _IO.RecordInput_swigregister
 RecordInput_swigregister(RecordInput)
 
-class RecordFilterInterface(Core.BaseObject):
+class RecordFilterInterface(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::RecordFilterInterface class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordFilterInterface, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RecordFilterInterface, name)
 
@@ -1143,15 +1143,15 @@ class RecordResamplerBase(RecordFilterInterface):
 RecordResamplerBase_swigregister = _IO.RecordResamplerBase_swigregister
 RecordResamplerBase_swigregister(RecordResamplerBase)
 
-class RecordStreamException(Core.StreamException):
+class RecordStreamException(seiscomp3.Core.StreamException):
     """Proxy of C++ Seiscomp::IO::RecordStreamException class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.StreamException]:
+    for _s in [seiscomp3.Core.StreamException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordStreamException, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.StreamException]:
+    for _s in [seiscomp3.Core.StreamException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RecordStreamException, name)
     __repr__ = _swig_repr
@@ -1199,15 +1199,15 @@ class RecordStreamTimeout(RecordStreamException):
 RecordStreamTimeout_swigregister = _IO.RecordStreamTimeout_swigregister
 RecordStreamTimeout_swigregister(RecordStreamTimeout)
 
-class Importer(Core.BaseObject):
+class Importer(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::Importer class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Importer, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Importer, name)
 
@@ -1338,15 +1338,15 @@ class ExportSink(_object):
 ExportSink_swigregister = _IO.ExportSink_swigregister
 ExportSink_swigregister(ExportSink)
 
-class Exporter(Core.BaseObject):
+class Exporter(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::IO::Exporter class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Exporter, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.BaseObject]:
+    for _s in [seiscomp3.Core.BaseObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Exporter, name)
 
@@ -1417,6 +1417,9 @@ class Exporter(Core.BaseObject):
         write(Exporter self, std::streambuf * buf, BaseObject arg3) -> bool
         write(Exporter self, string filename, BaseObject arg3) -> bool
         write(Exporter self, ExportSink sink, BaseObject arg3) -> bool
+        write(Exporter self, std::streambuf * buf, ExportObjectList objects) -> bool
+        write(Exporter self, string filename, ExportObjectList objects) -> bool
+        write(Exporter self, ExportSink sink, ExportObjectList objects) -> bool
         """
         return _IO.Exporter_write(self, *args)
 
@@ -1449,15 +1452,15 @@ def Exporter_Create(type):
     """Exporter_Create(char const * type) -> Exporter"""
     return _IO.Exporter_Create(type)
 
-class XMLArchive(Core.GenericArchive):
+class XMLArchive(seiscomp3.Core.GenericArchive):
     """Proxy of C++ Seiscomp::IO::XMLArchive class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GenericArchive]:
+    for _s in [seiscomp3.Core.GenericArchive]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, XMLArchive, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GenericArchive]:
+    for _s in [seiscomp3.Core.GenericArchive]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, XMLArchive, name)
     __repr__ = _swig_repr
@@ -1585,15 +1588,15 @@ class XMLArchive(Core.GenericArchive):
 XMLArchive_swigregister = _IO.XMLArchive_swigregister
 XMLArchive_swigregister(XMLArchive)
 
-class BinaryArchive(Core.GenericArchive):
+class BinaryArchive(seiscomp3.Core.GenericArchive):
     """Proxy of C++ Seiscomp::IO::BinaryArchive class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.GenericArchive]:
+    for _s in [seiscomp3.Core.GenericArchive]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, BinaryArchive, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.GenericArchive]:
+    for _s in [seiscomp3.Core.GenericArchive]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, BinaryArchive, name)
     __repr__ = _swig_repr
@@ -1741,293 +1744,15 @@ class VBinaryArchive(BinaryArchive):
 VBinaryArchive_swigregister = _IO.VBinaryArchive_swigregister
 VBinaryArchive_swigregister(VBinaryArchive)
 
-NEXTRAS = _IO.NEXTRAS
-AH_DATATYPE_UNDEFINED = _IO.AH_DATATYPE_UNDEFINED
-AH_DATATYPE_FLOAT = _IO.AH_DATATYPE_FLOAT
-AH_DATATYPE_COMPLEX = _IO.AH_DATATYPE_COMPLEX
-AH_DATATYPE_VECTOR = _IO.AH_DATATYPE_VECTOR
-AH_DATATYPE_TENSOR = _IO.AH_DATATYPE_TENSOR
-AH_DATATYPE_DOUBLE = _IO.AH_DATATYPE_DOUBLE
-class AHRecord(Core.Record):
-    """Proxy of C++ Seiscomp::IO::AHRecord class."""
-
-    __swig_setmethods__ = {}
-    for _s in [Core.Record]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, AHRecord, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Core.Record]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, AHRecord, name)
-    __repr__ = _swig_repr
-
-    def ClassName():
-        """ClassName() -> char const *"""
-        return _IO.AHRecord_ClassName()
-
-    ClassName = staticmethod(ClassName)
-
-    def TypeInfo():
-        """TypeInfo() -> RTTI"""
-        return _IO.AHRecord_TypeInfo()
-
-    TypeInfo = staticmethod(TypeInfo)
-
-    def className(self):
-        """className(AHRecord self) -> char const *"""
-        return _IO.AHRecord_className(self)
-
-
-    def typeInfo(self):
-        """typeInfo(AHRecord self) -> RTTI"""
-        return _IO.AHRecord_typeInfo(self)
-
-
-    def Cast(*args):
-        """
-        Cast(BaseObject o) -> AHRecord
-        Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord
-        """
-        return _IO.AHRecord_Cast(*args)
-
-    Cast = staticmethod(Cast)
-
-    def ConstCast(*args):
-        """
-        ConstCast(BaseObject o) -> AHRecord
-        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord
-        """
-        return _IO.AHRecord_ConstCast(*args)
-
-    ConstCast = staticmethod(ConstCast)
-
-    def __init__(self, *args):
-        """
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt, Seiscomp::Record::Hint h) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha, Time stime, double fsamp=0., int tqual=-1) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha, Time stime, double fsamp=0.) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha, Time stime) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc, string cha) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta, string loc) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net, string sta) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, string net) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, AHRecord rec) -> AHRecord
-        __init__(Seiscomp::IO::AHRecord self, Record rec) -> AHRecord
-        """
-        this = _IO.new_AHRecord(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _IO.delete_AHRecord
-    __del__ = lambda self: None
-
-    def setSamplingFrequency(self, freq):
-        """setSamplingFrequency(AHRecord self, double freq)"""
-        return _IO.AHRecord_setSamplingFrequency(self, freq)
-
-
-    def data(self, *args):
-        """
-        data(AHRecord self) -> Array
-        data(AHRecord self) -> Array
-        """
-        return _IO.AHRecord_data(self, *args)
-
-
-    def raw(self):
-        """raw(AHRecord self) -> Array"""
-        return _IO.AHRecord_raw(self)
-
-
-    def setData(self, *args):
-        """
-        setData(AHRecord self, Array data)
-        setData(AHRecord self, int size, void const * data, Seiscomp::Array::DataType datatype)
-        """
-        return _IO.AHRecord_setData(self, *args)
-
-
-    def saveSpace(self):
-        """saveSpace(AHRecord self)"""
-        return _IO.AHRecord_saveSpace(self)
-
-
-    def copy(self):
-        """copy(AHRecord self) -> AHRecord"""
-        return _IO.AHRecord_copy(self)
-
-
-    def read(self, arg2):
-        """read(AHRecord self, std::istream & arg2)"""
-        return _IO.AHRecord_read(self, arg2)
-
-
-    def write(self, out):
-        """write(AHRecord self, std::ostream & out)"""
-        return _IO.AHRecord_write(self, out)
-
-
-    def gain(self):
-        """gain(AHRecord self) -> float"""
-        return _IO.AHRecord_gain(self)
-
-
-    def setGain(self, value):
-        """setGain(AHRecord self, float value)"""
-        return _IO.AHRecord_setGain(self, value)
-
-
-    def extra(self, i):
-        """extra(AHRecord self, int i) -> float"""
-        return _IO.AHRecord_extra(self, i)
-
-
-    def setExtra(self, i, value):
-        """setExtra(AHRecord self, int i, float value)"""
-        return _IO.AHRecord_setExtra(self, i, value)
-
-    __swig_setmethods__["elat"] = _IO.AHRecord_elat_set
-    __swig_getmethods__["elat"] = _IO.AHRecord_elat_get
-    if _newclass:
-        elat = _swig_property(_IO.AHRecord_elat_get, _IO.AHRecord_elat_set)
-    __swig_setmethods__["elon"] = _IO.AHRecord_elon_set
-    __swig_getmethods__["elon"] = _IO.AHRecord_elon_get
-    if _newclass:
-        elon = _swig_property(_IO.AHRecord_elon_get, _IO.AHRecord_elon_set)
-    __swig_setmethods__["edep"] = _IO.AHRecord_edep_set
-    __swig_getmethods__["edep"] = _IO.AHRecord_edep_get
-    if _newclass:
-        edep = _swig_property(_IO.AHRecord_edep_get, _IO.AHRecord_edep_set)
-    __swig_setmethods__["etim"] = _IO.AHRecord_etim_set
-    __swig_getmethods__["etim"] = _IO.AHRecord_etim_get
-    if _newclass:
-        etim = _swig_property(_IO.AHRecord_etim_get, _IO.AHRecord_etim_set)
-    __swig_setmethods__["com"] = _IO.AHRecord_com_set
-    __swig_getmethods__["com"] = _IO.AHRecord_com_get
-    if _newclass:
-        com = _swig_property(_IO.AHRecord_com_get, _IO.AHRecord_com_set)
-    __swig_setmethods__["ecom"] = _IO.AHRecord_ecom_set
-    __swig_getmethods__["ecom"] = _IO.AHRecord_ecom_get
-    if _newclass:
-        ecom = _swig_property(_IO.AHRecord_ecom_get, _IO.AHRecord_ecom_set)
-    __swig_setmethods__["log"] = _IO.AHRecord_log_set
-    __swig_getmethods__["log"] = _IO.AHRecord_log_get
-    if _newclass:
-        log = _swig_property(_IO.AHRecord_log_get, _IO.AHRecord_log_set)
-    __swig_setmethods__["slat"] = _IO.AHRecord_slat_set
-    __swig_getmethods__["slat"] = _IO.AHRecord_slat_get
-    if _newclass:
-        slat = _swig_property(_IO.AHRecord_slat_get, _IO.AHRecord_slat_set)
-    __swig_setmethods__["slon"] = _IO.AHRecord_slon_set
-    __swig_getmethods__["slon"] = _IO.AHRecord_slon_get
-    if _newclass:
-        slon = _swig_property(_IO.AHRecord_slon_get, _IO.AHRecord_slon_set)
-    __swig_setmethods__["salt"] = _IO.AHRecord_salt_set
-    __swig_getmethods__["salt"] = _IO.AHRecord_salt_get
-    if _newclass:
-        salt = _swig_property(_IO.AHRecord_salt_get, _IO.AHRecord_salt_set)
-    __swig_setmethods__["sgain"] = _IO.AHRecord_sgain_set
-    __swig_getmethods__["sgain"] = _IO.AHRecord_sgain_get
-    if _newclass:
-        sgain = _swig_property(_IO.AHRecord_sgain_get, _IO.AHRecord_sgain_set)
-    __swig_setmethods__["snorm"] = _IO.AHRecord_snorm_set
-    __swig_getmethods__["snorm"] = _IO.AHRecord_snorm_get
-    if _newclass:
-        snorm = _swig_property(_IO.AHRecord_snorm_get, _IO.AHRecord_snorm_set)
-    __swig_setmethods__["rmin"] = _IO.AHRecord_rmin_set
-    __swig_getmethods__["rmin"] = _IO.AHRecord_rmin_get
-    if _newclass:
-        rmin = _swig_property(_IO.AHRecord_rmin_get, _IO.AHRecord_rmin_set)
-    __swig_setmethods__["maxamp"] = _IO.AHRecord_maxamp_set
-    __swig_getmethods__["maxamp"] = _IO.AHRecord_maxamp_get
-    if _newclass:
-        maxamp = _swig_property(_IO.AHRecord_maxamp_get, _IO.AHRecord_maxamp_set)
-    __swig_setmethods__["delta"] = _IO.AHRecord_delta_set
-    __swig_getmethods__["delta"] = _IO.AHRecord_delta_get
-    if _newclass:
-        delta = _swig_property(_IO.AHRecord_delta_get, _IO.AHRecord_delta_set)
-    __swig_setmethods__["cal"] = _IO.AHRecord_cal_set
-    __swig_getmethods__["cal"] = _IO.AHRecord_cal_get
-    if _newclass:
-        cal = _swig_property(_IO.AHRecord_cal_get, _IO.AHRecord_cal_set)
-    __swig_setmethods__["_delta"] = _IO.AHRecord__delta_set
-    __swig_getmethods__["_delta"] = _IO.AHRecord__delta_get
-    if _newclass:
-        _delta = _swig_property(_IO.AHRecord__delta_get, _IO.AHRecord__delta_set)
-AHRecord_swigregister = _IO.AHRecord_swigregister
-AHRecord_swigregister(AHRecord)
-
-def AHRecord_ClassName():
-    """AHRecord_ClassName() -> char const *"""
-    return _IO.AHRecord_ClassName()
-
-def AHRecord_TypeInfo():
-    """AHRecord_TypeInfo() -> RTTI"""
-    return _IO.AHRecord_TypeInfo()
-
-def AHRecord_Cast(*args):
-    """
-    Cast(BaseObject o) -> AHRecord
-    AHRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord
-    """
-    return _IO.AHRecord_Cast(*args)
-
-def AHRecord_ConstCast(*args):
-    """
-    ConstCast(BaseObject o) -> AHRecord
-    AHRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord
-    """
-    return _IO.AHRecord_ConstCast(*args)
-
-class AHOutput(_object):
-    """Proxy of C++ Seiscomp::IO::AHOutput class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, AHOutput, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, AHOutput, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(Seiscomp::IO::AHOutput self) -> AHOutput
-        __init__(Seiscomp::IO::AHOutput self, string filename) -> AHOutput
-        """
-        this = _IO.new_AHOutput(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _IO.delete_AHOutput
-    __del__ = lambda self: None
-
-    def put(self, rec):
-        """put(AHOutput self, AHRecord rec) -> bool"""
-        return _IO.AHOutput_put(self, rec)
-
-AHOutput_swigregister = _IO.AHOutput_swigregister
-AHOutput_swigregister(AHOutput)
-
-
-def read_one(arg1):
-    """read_one(std::istream & arg1) -> AHRecord"""
-    return _IO.read_one(arg1)
-
-def write_one(rec, os):
-    """write_one(AHRecord rec, std::ostream & os) -> bool"""
-    return _IO.write_one(rec, os)
-class LibmseedException(Core.StreamException):
+class LibmseedException(seiscomp3.Core.StreamException):
     """Proxy of C++ Seiscomp::IO::LibmseedException class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.StreamException]:
+    for _s in [seiscomp3.Core.StreamException]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LibmseedException, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.StreamException]:
+    for _s in [seiscomp3.Core.StreamException]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LibmseedException, name)
     __repr__ = _swig_repr
@@ -2047,15 +1772,15 @@ class LibmseedException(Core.StreamException):
 LibmseedException_swigregister = _IO.LibmseedException_swigregister
 LibmseedException_swigregister(LibmseedException)
 
-class MSeedRecord(Core.Record):
+class MSeedRecord(seiscomp3.Core.Record):
     """Proxy of C++ Seiscomp::IO::MSeedRecord class."""
 
     __swig_setmethods__ = {}
-    for _s in [Core.Record]:
+    for _s in [seiscomp3.Core.Record]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, MSeedRecord, name, value)
     __swig_getmethods__ = {}
-    for _s in [Core.Record]:
+    for _s in [seiscomp3.Core.Record]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, MSeedRecord, name)
     __repr__ = _swig_repr
@@ -2861,7 +2586,7 @@ def ArclinkConnection_ConstCast(*args):
     return _IO.ArclinkConnection_ConstCast(*args)
 
 class CombinedConnection(RecordStream):
-    """Proxy of C++ Seiscomp::RecordStream::Combined::_private::CombinedConnection class."""
+    """Proxy of C++ Seiscomp::RecordStream::CombinedConnection class."""
 
     __swig_setmethods__ = {}
     for _s in [RecordStream]:
@@ -2873,50 +2598,10 @@ class CombinedConnection(RecordStream):
     __getattr__ = lambda self, name: _swig_getattr(self, CombinedConnection, name)
     __repr__ = _swig_repr
 
-    def ClassName():
-        """ClassName() -> char const *"""
-        return _IO.CombinedConnection_ClassName()
-
-    ClassName = staticmethod(ClassName)
-
-    def TypeInfo():
-        """TypeInfo() -> RTTI"""
-        return _IO.CombinedConnection_TypeInfo()
-
-    TypeInfo = staticmethod(TypeInfo)
-
-    def className(self):
-        """className(CombinedConnection self) -> char const *"""
-        return _IO.CombinedConnection_className(self)
-
-
-    def typeInfo(self):
-        """typeInfo(CombinedConnection self) -> RTTI"""
-        return _IO.CombinedConnection_typeInfo(self)
-
-
-    def Cast(*args):
-        """
-        Cast(BaseObject o) -> CombinedConnection
-        Cast(Seiscomp::Core::BaseObjectPtr o) -> CombinedConnection
-        """
-        return _IO.CombinedConnection_Cast(*args)
-
-    Cast = staticmethod(Cast)
-
-    def ConstCast(*args):
-        """
-        ConstCast(BaseObject o) -> CombinedConnection
-        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> CombinedConnection
-        """
-        return _IO.CombinedConnection_ConstCast(*args)
-
-    ConstCast = staticmethod(ConstCast)
-
     def __init__(self, *args):
         """
-        __init__(Seiscomp::RecordStream::Combined::_private::CombinedConnection self) -> CombinedConnection
-        __init__(Seiscomp::RecordStream::Combined::_private::CombinedConnection self, string serverloc) -> CombinedConnection
+        __init__(Seiscomp::RecordStream::CombinedConnection self) -> CombinedConnection
+        __init__(Seiscomp::RecordStream::CombinedConnection self, string serverloc) -> CombinedConnection
         """
         this = _IO.new_CombinedConnection(*args)
         try:
@@ -2970,28 +2655,6 @@ class CombinedConnection(RecordStream):
 
 CombinedConnection_swigregister = _IO.CombinedConnection_swigregister
 CombinedConnection_swigregister(CombinedConnection)
-
-def CombinedConnection_ClassName():
-    """CombinedConnection_ClassName() -> char const *"""
-    return _IO.CombinedConnection_ClassName()
-
-def CombinedConnection_TypeInfo():
-    """CombinedConnection_TypeInfo() -> RTTI"""
-    return _IO.CombinedConnection_TypeInfo()
-
-def CombinedConnection_Cast(*args):
-    """
-    Cast(BaseObject o) -> CombinedConnection
-    CombinedConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> CombinedConnection
-    """
-    return _IO.CombinedConnection_Cast(*args)
-
-def CombinedConnection_ConstCast(*args):
-    """
-    ConstCast(BaseObject o) -> CombinedConnection
-    CombinedConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> CombinedConnection
-    """
-    return _IO.CombinedConnection_ConstCast(*args)
 
 class RecordIIRFilterF(RecordFilterInterface):
     """Proxy of C++ Seiscomp::IO::RecordIIRFilter<(float)> class."""
@@ -3274,6 +2937,211 @@ class RecordResamplerI(RecordResamplerBase):
 
 RecordResamplerI_swigregister = _IO.RecordResamplerI_swigregister
 RecordResamplerI_swigregister(RecordResamplerI)
+
+class ExportObjectList(_object):
+    """Proxy of C++ std::vector<(p.Seiscomp::Core::BaseObject)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ExportObjectList, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ExportObjectList, name)
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        """iterator(ExportObjectList self) -> SwigPyIterator"""
+        return _IO.ExportObjectList_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        """__nonzero__(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList___nonzero__(self)
+
+
+    def __bool__(self):
+        """__bool__(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList___bool__(self)
+
+
+    def __len__(self):
+        """__len__(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList___len__(self)
+
+
+    def __getslice__(self, i, j):
+        """__getslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j) -> ExportObjectList"""
+        return _IO.ExportObjectList___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)
+        __setslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j, ExportObjectList v)
+        """
+        return _IO.ExportObjectList___setslice__(self, *args)
+
+
+    def __delslice__(self, i, j):
+        """__delslice__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, std::vector< Seiscomp::Core::BaseObject * >::difference_type j)"""
+        return _IO.ExportObjectList___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i)
+        __delitem__(ExportObjectList self, PySliceObject * slice)
+        """
+        return _IO.ExportObjectList___delitem__(self, *args)
+
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(ExportObjectList self, PySliceObject * slice) -> ExportObjectList
+        __getitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i) -> BaseObject
+        """
+        return _IO.ExportObjectList___getitem__(self, *args)
+
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(ExportObjectList self, PySliceObject * slice, ExportObjectList v)
+        __setitem__(ExportObjectList self, PySliceObject * slice)
+        __setitem__(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::difference_type i, BaseObject x)
+        """
+        return _IO.ExportObjectList___setitem__(self, *args)
+
+
+    def pop(self):
+        """pop(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_pop(self)
+
+
+    def append(self, x):
+        """append(ExportObjectList self, BaseObject x)"""
+        return _IO.ExportObjectList_append(self, x)
+
+
+    def empty(self):
+        """empty(ExportObjectList self) -> bool"""
+        return _IO.ExportObjectList_empty(self)
+
+
+    def size(self):
+        """size(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList_size(self)
+
+
+    def swap(self, v):
+        """swap(ExportObjectList self, ExportObjectList v)"""
+        return _IO.ExportObjectList_swap(self, v)
+
+
+    def begin(self):
+        """begin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"""
+        return _IO.ExportObjectList_begin(self)
+
+
+    def end(self):
+        """end(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::iterator"""
+        return _IO.ExportObjectList_end(self)
+
+
+    def rbegin(self):
+        """rbegin(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"""
+        return _IO.ExportObjectList_rbegin(self)
+
+
+    def rend(self):
+        """rend(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::reverse_iterator"""
+        return _IO.ExportObjectList_rend(self)
+
+
+    def clear(self):
+        """clear(ExportObjectList self)"""
+        return _IO.ExportObjectList_clear(self)
+
+
+    def get_allocator(self):
+        """get_allocator(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::allocator_type"""
+        return _IO.ExportObjectList_get_allocator(self)
+
+
+    def pop_back(self):
+        """pop_back(ExportObjectList self)"""
+        return _IO.ExportObjectList_pop_back(self)
+
+
+    def erase(self, *args):
+        """
+        erase(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        erase(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator first, std::vector< Seiscomp::Core::BaseObject * >::iterator last) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        """
+        return _IO.ExportObjectList_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, ExportObjectList arg2) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, std::vector< Seiscomp::Core::BaseObject * >::size_type size) -> ExportObjectList
+        __init__(std::vector<(p.Seiscomp::Core::BaseObject)> self, std::vector< Seiscomp::Core::BaseObject * >::size_type size, BaseObject value) -> ExportObjectList
+        """
+        this = _IO.new_ExportObjectList(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x):
+        """push_back(ExportObjectList self, BaseObject x)"""
+        return _IO.ExportObjectList_push_back(self, x)
+
+
+    def front(self):
+        """front(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_front(self)
+
+
+    def back(self):
+        """back(ExportObjectList self) -> BaseObject"""
+        return _IO.ExportObjectList_back(self)
+
+
+    def assign(self, n, x):
+        """assign(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)"""
+        return _IO.ExportObjectList_assign(self, n, x)
+
+
+    def resize(self, *args):
+        """
+        resize(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type new_size)
+        resize(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type new_size, BaseObject x)
+        """
+        return _IO.ExportObjectList_resize(self, *args)
+
+
+    def insert(self, *args):
+        """
+        insert(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos, BaseObject x) -> std::vector< Seiscomp::Core::BaseObject * >::iterator
+        insert(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::iterator pos, std::vector< Seiscomp::Core::BaseObject * >::size_type n, BaseObject x)
+        """
+        return _IO.ExportObjectList_insert(self, *args)
+
+
+    def reserve(self, n):
+        """reserve(ExportObjectList self, std::vector< Seiscomp::Core::BaseObject * >::size_type n)"""
+        return _IO.ExportObjectList_reserve(self, n)
+
+
+    def capacity(self):
+        """capacity(ExportObjectList self) -> std::vector< Seiscomp::Core::BaseObject * >::size_type"""
+        return _IO.ExportObjectList_capacity(self)
+
+    __swig_destroy__ = _IO.delete_ExportObjectList
+    __del__ = lambda self: None
+ExportObjectList_swigregister = _IO.ExportObjectList_swigregister
+ExportObjectList_swigregister(ExportObjectList)
 
 # This file is compatible with both classic and new-style classes.
 

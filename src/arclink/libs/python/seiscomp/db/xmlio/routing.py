@@ -76,6 +76,7 @@ def _route_in(xroute, routing):
 
     except KeyError:
         route = routing.insert_route(xroute.networkCode, xroute.stationCode, xroute.locationCode, xroute.streamCode, publicID=xroute.publicID)
+        xroute.publicID = route.publicID
         
     xroute._copy_to(route)
 
@@ -255,7 +256,7 @@ def xml_out(routing, dest, use_access=False, modified_after=None, stylesheet=Non
 
     fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
 
-    if stylesheet != None:
+    if stylesheet is not None:
         fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     

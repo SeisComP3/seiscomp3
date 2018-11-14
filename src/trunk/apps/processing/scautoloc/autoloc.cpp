@@ -70,7 +70,6 @@ static int arrivalWithLargestResidual(const Origin *origin)
 
 Autoloc3::Autoloc3()
 {
-	_stations = 0;
 	_now = _nextCleanup = 0;
 	_associator.setOrigins(&_origins);
 	_relocator.setMinimumDepth(_config.minimumDepth);
@@ -79,7 +78,6 @@ Autoloc3::Autoloc3()
 
 Autoloc3::~Autoloc3()
 {
-	setStations(NULL);
 }
 
 
@@ -87,13 +85,20 @@ bool Autoloc3::init()
 {
 	_relocator.setMinimumDepth(_config.minimumDepth);
 
+	if ( ! _config.staConfFile.empty()) {
+		SEISCOMP_DEBUG_S("Reading station config from file '"+ _config.staConfFile +"'");
+
+		if ( ! _stationConfig.read(_config.staConfFile) )
+		    return false;
+	}
+
 	return true; // ready to start processing
 }
 
 
 void Autoloc3::dumpState() const
 {
-	for (OriginDB::const_iterator
+	for (OriginVector::const_iterator
 	     it = _origins.begin(); it != _origins.end(); ++it) {
 
 		const Origin *origin = (*it).get();
@@ -113,7 +118,7 @@ bool Autoloc3::_report(const Origin *origin)
 
 bool Autoloc3::report()
 {
-	for (OriginDB::iterator
+	for (OriginVector::iterator
 	     it = _newOrigins.begin(); it != _newOrigins.end(); ) {
 
 		Origin *origin = (*it).get();
@@ -244,8 +249,8 @@ bool Autoloc3::_addStationInfo(const Pick *pick)
 		return true; // nothing to do
 
 	const string net_sta = pick->net + "." + pick->sta;
-	StationDB::const_iterator it = _stations->find(net_sta);
-	if (it == _stations->end()) {
+	StationMap::const_iterator it = _stations.find(net_sta);
+	if (it == _stations.end()) {
 
 		// remember missing stations already complained about
 		if (_missingStations.find(net_sta) == _missingStations.end()) {
@@ -353,7 +358,7 @@ Origin *Autoloc3::_findMatchingOrigin(const Origin *origin)
 	unsigned int bestmatch = 0;
 
 	// iterate over existing origins
-	for (OriginDB::iterator
+	for (OriginVector::iterator
 	     it = _origins.begin(); it != _origins.end(); ++it) {
 		Origin *existing = (*it).get();
 
@@ -636,8 +641,6 @@ bool Autoloc3::_tooManyRecentPicks(const Pick *newPick) const
 
 
 
-//#define NEW_MERGE
-
 Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 {
 	// The second origin is merged into the first. A new instance
@@ -645,8 +648,8 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 	OriginID id = origin1->id;
 
 	// make origin1 the better origin
-//	if (_score(origin2) > _score(origin1)) {
-	if (origin2->definingPhaseCount() > origin1->definingPhaseCount()) {
+	if (_score(origin2) > _score(origin1)) {
+//	if (origin2->definingPhaseCount() > origin1->definingPhaseCount()) {
 		const Origin *tmp = origin1;
 		origin1 = origin2;
 		origin2 = tmp;
@@ -657,8 +660,6 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 
 	SEISCOMP_DEBUG_S(" MRG1 " + printOneliner(origin1));
 	SEISCOMP_DEBUG_S(" MRG2 " + printOneliner(origin2));
-
-#ifdef NEW_MERGE
 
 	// This is a brute-force merge! Put everything into one origin.
 	int arrivalCount2 = origin2->arrivals.size();
@@ -711,8 +712,6 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 		
 	_trimResiduals(combined);
 
-#endif
-
 	return combined;
 }
 
@@ -756,7 +755,7 @@ bool Autoloc3::_perhapsPdiff(const Pick *pick) const
 
 	bool result = false;
 
-	for (OriginDB::const_iterator
+	for (OriginVector::const_iterator
 	     it = _origins.begin(); it != _origins.end(); ++it) {
 
 		const Origin *origin = (*it).get();
@@ -989,7 +988,9 @@ OriginPtr Autoloc3::_tryAssociate(const Pick *pick)
 			continue;
 		OriginPtr associatedOrigin = new Origin(*asso.origin.get());
 
-		/* bool success = */ _associate(associatedOrigin.get(), pick, asso.phase);
+		bool success = _associate(associatedOrigin.get(), pick, asso.phase);
+		if ( ! success)
+			continue;
 		int index = associatedOrigin->findArrival(pick);
 		if (index==-1) {
 			SEISCOMP_ERROR("THIS SHOULD NEVER HAPPEN @_tryAssociate");
@@ -1083,12 +1084,12 @@ OriginPtr Autoloc3::_tryNucleate(const Pick *pick)
 	// The aim is to find an acceptable new origin.
 	//
 	OriginPtr newOrigin = 0;
-	OriginDB candidates = _nucleator.newOrigins();
+	OriginVector candidates = _nucleator.newOrigins();
 
 	SEISCOMP_DEBUG("Autoloc3::_tryNucleate A  candidate origins: %d", int(candidates.size()));
 
 	double bestScore = 0;
-	for (OriginDB::iterator
+	for (OriginVector::iterator
 	     it = candidates.begin(); it != candidates.end(); ++it) {
 
 		Origin *candidate = (*it).get();
@@ -1180,7 +1181,7 @@ Origin *Autoloc3::_findEquivalent(const Origin *origin)
 {
 	Origin *result = 0;
 
-	for (OriginDB::iterator
+	for (OriginVector::iterator
 	     it = _origins.begin(); it != _origins.end(); ++it) {
 
 		Origin *other = (*it).get();
@@ -1217,15 +1218,10 @@ bool Autoloc3::_process(const Pick *pick)
 		const_cast<Pick*>(pick)->xxl = true;
 	}
 
-	// This has turned out to be too fuzzy a criterion:
-	// If it has a bigger SNR, the threshold is lowered accordingly, because 
-	// it is justified to treat a large-SNR pick as XXL pick even if its amplitude
-	// is somewhat below the threshold.
-	//if ( pick->amp*pick->snr > _config.xxlMinSNR*_config.xxlMinAmplitude && pick->snr > _config.xxlMinSNR )
-	//	((Pick*)pick)->xxl = true;
-
-	// experimental:
-	const_cast<Pick*>(pick)->normamp = pick->amp/_config.xxlMinAmplitude;
+	double normalizationAmplitude = 2000.; // rather arbitrary choice
+	if ( _config.xxlEnabled )
+		normalizationAmplitude = _config.xxlMinAmplitude;
+	const_cast<Pick*>(pick)->normamp = pick->amp/normalizationAmplitude;
 
 	if ( automatic(pick) && _tooManyRecentPicks(pick) ) {
 		const_cast<Pick*>(pick)->status = Pick::IgnoredAutomatic;
@@ -1761,10 +1757,13 @@ bool Autoloc3::_excludeDistantStations(Origin *origin)
 
 bool Autoloc3::_passedFinalCheck(const Origin *origin)
 {
-	if (origin->dep > _config.maxDepth) {
-		SEISCOMP_DEBUG("Too deep origin: %ld - depth=%.0f -> ignored", origin->id, origin->dep);
-		return false;
-	}
+// Do not execute the check here. It may result in missing origins which are
+// correct after relocation, move the check to: Autoloc3::_publishable
+//	if (origin->dep > _config.maxDepth) {
+//		SEISCOMP_DEBUG("Ignore origin %ld: depth %.3f km > maxDepth %.3f km",
+//		               origin->id, origin->dep, _config.maxDepth);
+//		return false;
+//	}
 
 	if ( ! origin->preliminary &&
 	     origin->definingPhaseCount() < _config.minPhaseCount)
@@ -1853,6 +1852,13 @@ bool Autoloc3::_publishable(const Origin *origin) const
 	if (origin->rms() > _config.maxRMS) {
 		SEISCOMP_INFO("Origin %ld not sent (too large RMS of %.1f > %.1f)",
 			      origin->id, origin->rms(), _config.maxRMS);
+		return false;
+	}
+
+
+	if (origin->dep > _config.maxDepth) {
+		SEISCOMP_INFO("Origin %ld too deep: %.1f km > %.1f km (maxDepth)",
+			      origin->id, origin->dep, _config.maxDepth);
 		return false;
 	}
 
@@ -2373,7 +2379,7 @@ double Autoloc3::_testFake(Origin *origin) const
 	double maxProbability = 0;
 	int arrivalCount = origin->arrivals.size();
 
-	for (OriginDB::const_iterator
+	for (OriginVector::const_iterator
 	     it = _origins.begin(); it != _origins.end(); ++it) {
 
 		const Origin *otherOrigin = (*it).get();
@@ -2657,8 +2663,6 @@ bool Autoloc3::_trimResiduals(Origin *origin)
 			Arrival &arr = origin->arrivals[i];
 			if (arr.excluded)
 				continue;
-			if (arr.ascore*arr.dscore > 2.) // HACK!
-				continue;
 
 			double normalizedResidual = arr.residual/_config.maxResidualUse;
 			// add penalty for positive residuals  // TODO: make it configurable?
@@ -2736,37 +2740,26 @@ bool Autoloc3::_trimResiduals(Origin *origin)
 }
 
 
-bool Autoloc3::setStations(StationDB *stations)
-{
-	if (_stations == stations) return true;
+bool Autoloc3::setStation(Station *station) {
 
-	if (_stations) delete _stations;
-	_stations = stations;
+	std::string key = station->net + "." + station->code;
+	// if the station was configured already, there is nothing to do
+	if (_stations.find(key) != _stations.end())
+		return false;
 
-	// If a _config.staConfFile was specified, read the config information
-	// for the stations from that file. For stations not configured in
-	// hat file, reasonable defaults are used.
-	if (_config.staConfFile != "" && _stations != NULL) {
-		SEISCOMP_DEBUG_S("Reading station configs from file '"+ _config.staConfFile +"'");
+	const StationConfig::Entry &e
+		= _stationConfig.get(station->net, station->code);
+	station->maxNucDist = e.maxNucDist;
+	station->maxLocDist = 180;
+	station->used = e.usage > 0;
+        _stations.insert(StationMap::value_type(key, station));
 
-		StationConfig cfg;
-		if ( ! cfg.read(_config.staConfFile) )
-		    return false;
+	// propagate to _nucleator and _relocator
+	_relocator.setStation(station);
+	_nucleator.setStation(station);
 
-		for (StationDB::iterator
-			it = _stations->begin(); it !=_stations->end(); ++it) {
+        SEISCOMP_DEBUG("Initialized station %-8s", key.c_str());
 
-			Station *station = (Station *)((*it).second.get());
-			const StationConfig::Entry &e
-				= cfg.get(station->net, station->code);
-			station->maxNucDist = e.maxNucDist;
-			station->maxLocDist = 180;
-			station->used = e.usage > 0;
-		}
-	}
-
-	_nucleator.setStations(_stations);
-	_relocator.setStations(_stations);
 	return true;
 }
 
@@ -2794,7 +2787,6 @@ bool Autoloc3::setGridFile(const string &gridfile)
 void Autoloc3::setPickLogFilePrefix(const string &fname)
 {
 	_pickLogFilePrefix = fname;
-//	setPickLogFileName(fname);
 }
 
 void Autoloc3::setPickLogFileName(const string &fname)
@@ -2873,8 +2865,8 @@ void Autoloc3::cleanup(Time minTime)
 	SEISCOMP_INFO("CLEANUP ********** pick count   = %d/%d", beforePickCount,Pick::count());
 	SEISCOMP_INFO("CLEANUP ********** origin count = %d/%d", beforeOriginCount,Origin::count());
 
-	OriginDB _originsTmp;
-	for(OriginDB::iterator
+	OriginVector _originsTmp;
+	for(OriginVector::iterator
 	    it = _origins.begin(); it != _origins.end(); ++it) {
 
 		OriginPtr origin = *it;

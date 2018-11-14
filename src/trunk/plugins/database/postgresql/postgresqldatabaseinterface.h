@@ -65,6 +65,9 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	//  Protected interface
 	// ------------------------------------------------------------------
 	protected:
+		bool handleURIParameter(const std::string &name,
+		                        const std::string &value);
+
 		bool open();
 
 
@@ -72,11 +75,12 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
-		PGconn *_handle;
+		PGconn   *_handle;
 		PGresult *_result;
-		int _row;
-		int _nRows;
-		int _fieldCount;
+		bool      _debug;
+		int       _row;
+		int       _nRows;
+		int       _fieldCount;
 };
 
 

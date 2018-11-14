@@ -33,6 +33,10 @@
 #include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/filter.h>
+#include <seiscomp3/math/filter/const.h>
+#include <seiscomp3/math/filter/chainfilter.h>
+#include <seiscomp3/math/filter/iirdifferentiate.h>
+#include <seiscomp3/math/filter/iirintegrate.h>
 #include <seiscomp3/math/windows/cosine.h>
 #include <seiscomp3/math/windows/hann.h>
 #include <seiscomp3/math/windows/hamming.h>
@@ -44,6 +48,7 @@
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
+#include <algorithm>
 #include <numeric>
 #include <fstream>
 #include <limits>
@@ -72,6 +77,7 @@
 #define COMP_NO_METADATA '\0'
 
 
+using namespace std;
 using namespace Seiscomp;
 using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Math;
@@ -99,18 +105,53 @@ char Z12_COMPS[3] = {'Z', '1', '2'};
 MAKEENUM(
 	RotationType,
 	EVALUES(
-		RT_Z12,
+		RT_123,
 		RT_ZNE,
 		RT_ZRT,
 		RT_ZH
 	),
 	ENAMES(
-		"Z12",
+		"123",
 		"ZNE",
 		"ZRT",
 		"ZH(L2)"
 	)
 );
+
+
+MAKEENUM(
+	UnitType,
+	EVALUES(
+		UT_RAW,
+		UT_ACC,
+		UT_VEL,
+		UT_DISP
+	),
+	ENAMES(
+		"Sensor",
+		"Acceleration",
+		"Velocity",
+		"Displacement"
+	)
+);
+
+
+const char *Units[3] = {
+	"m/s**2",
+	"m/s",
+	"m"
+};
+
+
+UnitType fromGainUnit(const std::string &gainUnit) {
+	if ( !strcasecmp(gainUnit.c_str(), Units[0]) )
+		return UT_ACC;
+	else if ( !strcasecmp(gainUnit.c_str(), Units[1]) )
+		return UT_VEL;
+	else if ( !strcasecmp(gainUnit.c_str(), Units[2]) )
+		return UT_DISP;
+	return UT_RAW;
+}
 
 
 class ZoomRecordWidget : public RecordWidget {
@@ -235,21 +276,25 @@ class ZoomRecordWidget : public RecordWidget {
 		}
 
 		void drawSpectrogram(QPainter &painter, int slot) {
-			QRect r = rect();
+			QRect r(0, 0, canvasRect().width(), canvasRect().height());
 			r.setHeight(streamHeight(slot));
 			r.moveTop(streamYPos(slot));
 			spectrogram[slot].setAlignment(alignment());
 			spectrogram[slot].setTimeRange(tmin(), tmax());
+			painter.save();
+			painter.setClipRect(r);
 			spectrogram[slot].render(painter, r, false, false);
+			painter.restore();
 		}
 
 		void drawSpectrogramAxis(QPainter &painter, int slot) {
-			QRect r = rect();
+			QRect r(canvasRect());
 			r.setHeight(streamHeight(slot));
 			r.moveTop(streamYPos(slot));
+			painter.setBrush(palette().color(backgroundRole()));
 			spectrogram[slot].setAlignment(alignment());
 			spectrogram[slot].setTimeRange(tmin(), tmax());
-			spectrogram[slot].renderAxis(painter, r, false);
+			spectrogram[slot].renderAxis(painter, r, false, 6, 6);
 		}
 
 		void updateTraceColor() {
@@ -438,7 +483,7 @@ class PickerMarker : public RecordMarker {
 		             Type type, bool newPick)
 		: RecordMarker(parent, pos),
 		  _type(type),
-		  _slot(-1), _rot(RT_Z12) {
+		  _slot(-1), _rot(RT_123) {
 			setMovable(newPick);
 			init();
 		}
@@ -449,7 +494,7 @@ class PickerMarker : public RecordMarker {
 		             Type type, bool newPick)
 		: RecordMarker(parent, pos, text),
 		  _type(type),
-		  _slot(-1), _rot(RT_Z12) {
+		  _slot(-1), _rot(RT_123) {
 			setMovable(newPick);
 			init();
 		}
@@ -671,10 +716,9 @@ class PickerMarker : public RecordMarker {
 
 		RecordMarker *copy() { return new PickerMarker(NULL, *this); }
 
-		void draw(QPainter &painter, RecordWidget *context, int x, int y1, int y2,
-		          QColor color, qreal lineWidth) {
-			static QPoint poly[3];
-
+		void drawBackground(QPainter &painter, Seiscomp::Gui::RecordWidget *context,
+		                    int x, int y1, int y2,
+		                    QColor color, qreal lineWidth) {
 			double loUncert = lowerUncertainty();
 			double hiUncert = upperUncertainty();
 
@@ -717,6 +761,11 @@ class PickerMarker : public RecordMarker {
 					}
 				}
 			}
+		}
+
+		void draw(QPainter &painter, RecordWidget *context, int x, int y1, int y2,
+		          QColor color, qreal lineWidth) {
+			static QPoint poly[3];
 
 			painter.setPen(QPen(color, lineWidth));
 			painter.drawLine(x, y1, x, y2);
@@ -826,6 +875,16 @@ class PickerMarker : public RecordMarker {
 				text += QString("\nmethod: %1").arg(_referencedPick->methodID().c_str());
 			if ( !_referencedPick->filterID().empty() )
 				text += QString("\nfilter: %1").arg(_referencedPick->filterID().c_str());
+			try {
+				double baz = _referencedPick->backazimuth().value();
+				text += QString("\nback azimuth: %1°").arg(baz);
+			}
+			catch ( ... ) {}
+			try {
+				double hs = _referencedPick->horizontalSlowness().value();
+				text += QString("\nhoriz. slowness: %1 deg/s").arg(hs);
+			}
+			catch ( ... ) {}
 
 			text += QString("\narrival: %1").arg(isArrival()?"yes":"no");
 
@@ -1291,7 +1350,9 @@ Stream* findStream(Station *station, const Seiscomp::Core::Time &time,
 
 			// Unable to retrieve the unit enumeration from string
 			//if ( !unit.fromString(sensor->unit().c_str()) ) continue;
-			if ( !unit.fromString(stream->gainUnit().c_str()) ) continue;
+			std::string gainUnit = stream->gainUnit();
+			std::transform(gainUnit.begin(), gainUnit.end(), gainUnit.begin(), ::toupper);
+			if ( !unit.fromString(gainUnit.c_str()) ) continue;
 			if ( unit != requestedUnit ) continue;
 
 			return stream;
@@ -1861,12 +1922,14 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 
 
 PickerRecordLabel::PickerRecordLabel(int items, QWidget *parent, const char* name)
-	: StandardRecordLabel(items, parent, name), _isLinkedItem(false), _isExpanded(false) {
+: StandardRecordLabel(items, parent, name), _isLinkedItem(false), _isExpanded(false) {
 	_btnExpand = NULL;
 	_linkedItem = NULL;
 
 	latitude = 999;
 	longitude = 999;
+
+	unit = UT_RAW;
 
 	hasGotData = false;
 	isEnabledByConfig = false;
@@ -2044,6 +2107,14 @@ void PickerRecordLabel::removeLabelColor() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+string PickerView::_ttInterface = "libtau";
+string PickerView::_ttTableName = "iasp91";
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::Config::Config() {
 	timingQualityLow = Qt::darkRed;
 	timingQualityMedium = Qt::yellow;
@@ -2054,7 +2125,10 @@ PickerView::Config::Config() {
 	offsetWindowStart = 0;
 	offsetWindowEnd = 0;
 
-	hideDisabledStations = true;
+	hideDisabledStations = false;
+
+	onlyApplyIntegrationFilterOnce = true;
+	ignoreDisabledStations = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2173,15 +2247,17 @@ void PickerView::init() {
 
 	_ui.setupUi(this);
 
-	_ui.labelStationCode->setFont(SCScheme.fonts.heading3);
-	_ui.labelCode->setFont(SCScheme.fonts.normal);
+	QFont f(font());
+	f.setBold(true);
+	_ui.labelStationCode->setFont(f);
 
 	//setContextMenuPolicy(Qt::ActionsContextMenu);
 	//_recordView->setMinimumRowHeight(70);
 
 	//_ttTable.setBranch("P");
 
-	_currentRotationMode = RT_Z12;
+	_currentRotationMode = RT_123;
+	_currentUnitMode = UT_RAW;
 	_settingsRestored = false;
 	_currentSlot = -1;
 	_currentFilter = NULL;
@@ -2234,9 +2310,18 @@ void PickerView::init() {
 	connect(_connectionState, SIGNAL(customInfoWidgetRequested(const QPoint &)),
 	        this, SLOT(openConnectionInfo(const QPoint &)));
 
+	QWidget *wrapper = new QWidget;
+	wrapper->setBackgroundRole(QPalette::Base);
+	wrapper->setAutoFillBackground(true);
+
 	QBoxLayout* layout = new QVBoxLayout(_ui.framePickList);
-	layout->setMargin(2);
+	layout->setMargin(0);
 	layout->setSpacing(0);
+	layout->addWidget(wrapper);
+
+	layout = new QVBoxLayout(wrapper);
+	layout->setMargin(_ui.frameZoom->layout()->margin());
+	layout->setSpacing(6);
 	layout->addWidget(_recordView);
 
 	_searchStation = new QLineEdit();
@@ -2264,6 +2349,10 @@ void PickerView::init() {
 	_currentRecord->setClippingEnabled(_ui.actionClipComponentsToViewport->isChecked());
 	_currentRecord->setMouseTracking(true);
 	_currentRecord->setContextMenuPolicy(Qt::CustomContextMenu);
+	_currentRecord->setRowSpacing(6);
+	_currentRecord->setAxisSpacing(6);
+	_currentRecord->setDrawAxis(true);
+	_currentRecord->setAxisPosition(RecordWidget::Left);
 
 	//_currentRecord->setFocusPolicy(Qt::StrongFocus);
 
@@ -2283,6 +2372,7 @@ void PickerView::init() {
 	layout = new QVBoxLayout(_ui.frameCurrentRow);
 	layout->setMargin(0);
 	layout->setSpacing(0);
+	layout->addWidget(_currentRecord);
 
 	_timeScale = new TimeScale();
 	_timeScale->setSelectionEnabled(false);
@@ -2290,7 +2380,9 @@ void PickerView::init() {
 	_timeScale->setAbsoluteTimeEnabled(true);
 	_timeScale->setRangeSelectionEnabled(true);
 
-	layout->addWidget(_currentRecord);
+	layout = new QVBoxLayout(_ui.frameTimeScale);
+	layout->setMargin(0);
+	layout->setSpacing(0);
 	layout->addWidget(_timeScale);
 
 	connect(_timeScale, SIGNAL(dragged(double)),
@@ -2316,6 +2408,7 @@ void PickerView::init() {
 	pal.setColor(_currentRecord->backgroundRole(), Qt::white);
 	pal.setColor(_currentRecord->foregroundRole(), Qt::black);
 	_currentRecord->setPalette(pal);
+	_currentRecord->setAutoFillBackground(true);
 
 	// add actions
 	addAction(_ui.actionIncreaseAmplitudeScale);
@@ -2404,9 +2497,50 @@ void PickerView::init() {
 	_comboRotation->setDuplicatesEnabled(false);
 	for ( int i = 0; i < RotationType::Quantity; ++i )
 		_comboRotation->addItem(ERotationTypeNames::name(i));
-	_comboRotation->setCurrentIndex(0);
+	_comboRotation->setCurrentIndex(_currentRotationMode);
 
 	_ui.toolBarFilter->insertWidget(_ui.actionToggleFilter, _comboRotation);
+
+	_comboUnit = new QComboBox;
+	_comboUnit->setDuplicatesEnabled(false);
+	for ( int i = 0; i < UnitType::Quantity; ++i )
+		_comboUnit->addItem(EUnitTypeNames::name(i));
+	_comboUnit->setCurrentIndex(_currentUnitMode);
+
+	_ui.toolBarFilter->insertWidget(_ui.actionToggleFilter, _comboUnit);
+
+	// TTT selection
+	_comboTTT = new QComboBox;
+	_ui.toolBarTTT->addWidget(_comboTTT);
+
+	_comboTTT->setToolTip(tr("Select one of the supported travel time table backends."));
+	TravelTimeTableInterfaceFactory::ServiceNames *ttServices = TravelTimeTableInterfaceFactory::Services();
+	if ( ttServices ) {
+		TravelTimeTableInterfaceFactory::ServiceNames::iterator it;
+		int currentIndex = -1;
+		for ( it = ttServices->begin(); it != ttServices->end(); ++it ) {
+			_comboTTT->addItem((*it).c_str());
+			if ( _ttInterface == *it )
+				currentIndex = _comboTTT->count()-1;
+		}
+		delete ttServices;
+
+		if ( currentIndex >= 0 )
+			_comboTTT->setCurrentIndex(currentIndex);
+	}
+
+	if ( _comboTTT->count() > 0 ) {
+		connect(_comboTTT, SIGNAL(currentIndexChanged(QString)), this, SLOT(ttInterfaceChanged(QString)));
+		_comboTTTables = new QComboBox;
+		_comboTTTables->setToolTip(tr("Select one of the supported tables for the current travel time table backend."));
+		_ui.toolBarTTT->addWidget(_comboTTTables);
+		ttInterfaceChanged(_comboTTT->currentText());
+		connect(_comboTTTables, SIGNAL(currentIndexChanged(QString)), this, SLOT(ttTableChanged(QString)));
+	}
+	else {
+		delete _comboTTT;
+		_comboTTT = NULL;
+	}
 
 	connect(_ui.actionSetPolarityPositive, SIGNAL(triggered(bool)),
 	        this, SLOT(setPickPolarity()));
@@ -2421,6 +2555,8 @@ void PickerView::init() {
 	        this, SLOT(changeFilter(int)));
 	connect(_comboRotation, SIGNAL(currentIndexChanged(int)),
 	        this, SLOT(changeRotation(int)));
+	connect(_comboUnit, SIGNAL(currentIndexChanged(int)),
+	        this, SLOT(changeUnit(int)));
 
 	connect(_ui.actionLimitFilterToZoomTrace, SIGNAL(triggered(bool)),
 	        this, SLOT(limitFilterToZoomTrace(bool)));
@@ -2542,6 +2678,8 @@ void PickerView::init() {
 	        this, SLOT(scaleTimeUp()));
 	connect(_ui.actionTimeScaleDown, SIGNAL(triggered(bool)),
 	        this, SLOT(scaleTimeDown()));
+	connect(_ui.actionResetScale, SIGNAL(triggered(bool)),
+	        this, SLOT(scaleReset()));
 	connect(_ui.actionClipComponentsToViewport, SIGNAL(triggered(bool)),
 	        _currentRecord, SLOT(setClippingEnabled(bool)));
 	connect(_ui.actionScrollLeft, SIGNAL(triggered(bool)),
@@ -2617,16 +2755,10 @@ void PickerView::init() {
 	connect(_ui.actionShowUsedStations, SIGNAL(triggered(bool)),
 	        this, SLOT(showUsedStations(bool)));
 
-	connect(_ui.btnAmplScaleUp, SIGNAL(clicked()),
-	        this, SLOT(scaleAmplUp()));
-	connect(_ui.btnAmplScaleDown, SIGNAL(clicked()),
-	        this, SLOT(scaleAmplDown()));
-	connect(_ui.btnTimeScaleUp, SIGNAL(clicked()),
-	        this, SLOT(scaleTimeUp()));
-	connect(_ui.btnTimeScaleDown, SIGNAL(clicked()),
-	        this, SLOT(scaleTimeDown()));
+	/* TODO: Remove me
 	connect(_ui.btnScaleReset, SIGNAL(clicked()),
 	        this, SLOT(scaleReset()));
+	*/
 
 	connect(_ui.btnRowAccept, SIGNAL(clicked()),
 	        this, SLOT(confirmPick()));
@@ -2687,6 +2819,9 @@ void PickerView::init() {
 	connect(_recordView, SIGNAL(cursorTextChanged(const QString&)),
 	        _currentRecord, SLOT(setCursorText(const QString&)));
 	*/
+
+	_ui.frameZoom->setBackgroundRole(QPalette::Base);
+	_ui.frameZoom->setAutoFillBackground(true);
 
 	_actionsUncertainty = NULL;
 	_actionsPickGroupPhases = NULL;
@@ -3204,7 +3339,7 @@ void PickerView::setStrongMotionCodes(const std::vector<std::string> &codes) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::showEvent(QShowEvent *e) {
 	// avoid truncated distance labels
-	int w1 = _ui.frameCurrentRowLabel->width();
+	int w1 = _ui.frameZoomControls->sizeHint().width();
 	int w2 = 0;
 	QFont f(_ui.labelDistance->font()); // hack to get default font size
 	QFontMetrics fm(f);
@@ -3217,8 +3352,8 @@ void PickerView::showEvent(QShowEvent *e) {
 	else
 		w2 = std::max(w2, fm.boundingRect(QString("155.5%1").arg(degrees)).width());
 
-	if (w2>w1)
-		_ui.frameCurrentRowLabel->setFixedWidth(w2);
+	if ( w2 < w1 )
+		w2 = w1;
 
 	if ( !_settingsRestored ) {
 		QList<int> sizes;
@@ -3256,9 +3391,9 @@ void PickerView::showEvent(QShowEvent *e) {
 		_settingsRestored = true;
 	}
 
-	_recordView->setLabelWidth(_ui.frameCurrentRowLabel->width() +
-	                           _ui.frameCurrentRow->frameWidth() +
-	                           _ui.frameCurrentRow->layout()->margin());
+	_ui.frameZoomControls->setFixedWidth(w2);
+	_recordView->setLabelWidth(w2);
+	_currentRecord->setAxisWidth(w2 + _currentRecord->axisSpacing());
 
 	QWidget::showEvent(e);
 }
@@ -3742,7 +3877,7 @@ void PickerView::componentByState() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::resetState() {
-	if ( _comboRotation->currentIndex() > RT_Z12 )
+	if ( _comboRotation->currentIndex() > RT_123 )
 		changeRotation(_comboRotation->currentIndex());
 
 	showComponent('Z');
@@ -4066,6 +4201,21 @@ void PickerView::addArrival(Seiscomp::Gui::RecordWidget* widget,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::figureOutTravelTimeTable() {
+	if ( !_origin ) return;
+
+	int idx = _comboTTT->findText(_origin->methodID().c_str());
+	if ( idx < 0 ) return;
+
+	_ttTableName = _origin->earthModelID();
+	_comboTTT->setCurrentIndex(idx);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
                            double relTimeWindowStart,
                            double relTimeWindowEnd) {
@@ -4078,6 +4228,7 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 	_recordItemLabels.clear();
 
 	_origin = origin;
+	figureOutTravelTimeTable();
 
 	updateOriginInformation();
 	if ( _comboFilter->currentIndex() == 0 && _lastFilterIndex > 0 )
@@ -4267,6 +4418,7 @@ int PickerView::loadPicks() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::setOrigin(Seiscomp::DataModel::Origin* o) {
 	_origin = o;
+	figureOutTravelTimeTable();
 
 	// Remove picks and arrivals from all traces and update the ones
 	// from the new origin
@@ -4457,6 +4609,19 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
                                         const std::string& locCode) {
 	if ( _origin == NULL ) return false;
 
+	// First clear all theoretical arrivals
+	for ( int i = 0; i < item->widget()->markerCount(); ) {
+		PickerMarker* m = static_cast<PickerMarker*>(item->widget()->marker(i));
+		if ( m->type() == PickerMarker::Theoretical )
+			item->widget()->removeMarker(i);
+		else
+			++i;
+	}
+
+	item->widget()->update();
+
+	if ( !_ttTable ) return false;
+
 	try {
 		DataModel::SensorLocation *loc =
 			Client::Inventory::Instance()->getSensorLocation(
@@ -4521,8 +4686,8 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		}
 
 		if ( depth <= 0.0 ) depth = 1.0;
-//std::cerr << staCode << std::endl;
-		TravelTimeList* ttt = _ttTable.compute(elat, elon, depth, slat, slon, salt);
+
+		TravelTimeList* ttt = _ttTable->compute(elat, elon, depth, slat, slon, salt);
 
 		if ( ttt ) {
 			QMap<QString, RecordMarker*> currentPhases;
@@ -4626,6 +4791,8 @@ bool PickerView::fillTheoreticalArrivals() {
 		if ( addTheoreticalArrivals(item, stream_id.networkCode(), stream_id.stationCode(), stream_id.locationCode()) )
 			stationSet = true;
 	}
+
+	_currentRecord->update();
 
 	return stationSet;
 }
@@ -5339,6 +5506,60 @@ void PickerView::destroyedSpectrumWidget(QObject *o) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::ttInterfaceChanged(QString interface) {
+	_comboTTTables->blockSignals(true);
+	_comboTTTables->clear();
+
+	_ttInterface = interface.toStdString();
+
+	try {
+		vector<string> models = SCApp->configGetStrings("ttt." + interface.toStdString() + ".tables");
+		int currentIndex = -1;
+		for ( size_t i = 0; i < models.size(); ++i ) {
+			_comboTTTables->addItem(models[i].c_str());
+			if ( _ttTableName == models[i] )
+				currentIndex = _comboTTTables->count()-1;
+		}
+
+		if ( currentIndex >= 0 )
+			_comboTTTables->setCurrentIndex(currentIndex);
+	}
+	catch ( ... ) {}
+
+	_comboTTTables->setEnabled(_comboTTTables->count() > 0);
+	_comboTTTables->blockSignals(false);
+
+	ttTableChanged(_comboTTTables->currentText());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::ttTableChanged(QString tables) {
+	_ttTableName = tables.toStdString();
+
+	_ttTable = TravelTimeTableInterfaceFactory::Create(_ttInterface.c_str());
+	if ( !_ttTable ) {
+		QMessageBox::critical(this, tr("Error"),
+		                      tr("Error creating travel time table backend %1")
+		                      .arg(_ttInterface.c_str()));
+	}
+	else if ( !_ttTable->setModel(_ttTableName.c_str()) ) {
+		QMessageBox::critical(this, tr("Error"),
+		                      tr("Failed to set table %1")
+		                      .arg(_ttTableName.c_str()));
+	}
+
+	fillTheoreticalArrivals();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
                                          const WaveformStreamID& sid,
                                          double distance,
@@ -5400,14 +5621,18 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 	label->data.setRecordWidget(item->widget());
 
 	bool allComponents = true;
-
-	applyFilter(item);
+	label->gainUnit[0] = label->gainUnit[1] = label->gainUnit[2] = QString();
 
 	if ( loc ) {
 		getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time());
 
-		if ( tc.comps[ThreeComponents::Vertical] )
+		label->unit = UT_RAW;
+
+		if ( tc.comps[ThreeComponents::Vertical] ) {
 			comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
+			label->gainUnit[0] = tc.comps[ThreeComponents::Vertical]->gainUnit().c_str();
+			label->unit = fromGainUnit(tc.comps[ThreeComponents::Vertical]->gainUnit());
+		}
 		else {
 			allComponents = false;
 			if ( base )
@@ -5416,15 +5641,21 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 				comps[0] = COMP_NO_METADATA;
 		}
 
-		if ( tc.comps[ThreeComponents::FirstHorizontal] )
+		if ( tc.comps[ThreeComponents::FirstHorizontal] ) {
 			comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
+			label->gainUnit[1] = tc.comps[ThreeComponents::FirstHorizontal]->gainUnit().c_str();
+			label->unit = fromGainUnit(tc.comps[ThreeComponents::FirstHorizontal]->gainUnit());
+		}
 		else {
 			allComponents = false;
 			comps[1] = COMP_NO_METADATA;
 		}
 
-		if ( tc.comps[ThreeComponents::SecondHorizontal] )
+		if ( tc.comps[ThreeComponents::SecondHorizontal] ) {
 			comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
+			label->gainUnit[2] = tc.comps[ThreeComponents::SecondHorizontal]->gainUnit().c_str();
+			label->unit = fromGainUnit(tc.comps[ThreeComponents::SecondHorizontal]->gainUnit());
+		}
 		else {
 			allComponents = false;
 			comps[2] = COMP_NO_METADATA;
@@ -5482,8 +5713,8 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 		}
 		catch ( ... ) {
 			SEISCOMP_WARNING("Unable to fetch orientation of stream %s.%s.%s.%s",
-		                 streamID.networkCode().c_str(), streamID.stationCode().c_str(),
-		                 streamID.locationCode().c_str(), streamID.channelCode().substr(0,streamID.channelCode().size()-1).c_str());
+			                 streamID.networkCode().c_str(), streamID.stationCode().c_str(),
+			                 streamID.locationCode().c_str(), streamID.channelCode().substr(0,streamID.channelCode().size()-1).c_str());
 			allComponents = false;
 		}
 	}
@@ -5492,6 +5723,7 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 		// Set identity matrix
 		label->orientationZNE.identity();
 
+	applyFilter(item);
 	applyRotation(item, _comboRotation->currentIndex());
 
 	for ( int i = 0; i < 3; ++i ) {
@@ -5582,6 +5814,7 @@ void PickerView::setupItem(const char comps[3],
 	}
 
 	item->widget()->showScaledValues(_ui.actionShowTraceValuesInNmS->isChecked());
+	updateRecordAxisLabel(item);
 
 	// Default station distance is INFINITY to sort unknown stations
 	// to the end of the view
@@ -5652,6 +5885,7 @@ void PickerView::showTraceScaleToggled(bool e) {
 	for ( int i = 0; i < _recordView->rowCount(); ++i ) {
 		RecordViewItem* item = _recordView->itemAt(i);
 		item->widget()->showScaledValues(e);
+		updateRecordAxisLabel(item);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5690,7 +5924,7 @@ void PickerView::updateItemLabel(RecordViewItem* item, char component) {
 
 		if ( slot >= 0 && slot < 3 ) {
 			switch ( _comboRotation->currentIndex() ) {
-				case RT_Z12:
+				case RT_123:
 					break;
 				case RT_ZNE:
 					comp = ZNE_COMPS[slot];
@@ -5832,8 +6066,8 @@ void PickerView::setAlignment(Seiscomp::Core::Time t) {
 
 	_timeScale->setAlignment(t);
 
-	float tmin = _currentRecord->tmin()+offset;
-	float tmax = _currentRecord->tmax()+offset;
+	double tmin = _currentRecord->tmin()+offset;
+	double tmax = _currentRecord->tmax()+offset;
 
 	if ( _checkVisibility ) ensureVisibility(tmin, tmax);
 	setTimeRange(tmin, tmax);
@@ -5844,17 +6078,17 @@ void PickerView::setAlignment(Seiscomp::Core::Time t) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void PickerView::ensureVisibility(float& tmin, float& tmax) {
+void PickerView::ensureVisibility(double &tmin, double &tmax) {
 	if ( _recordView->currentItem() ) {
 		RecordWidget* w = _recordView->currentItem()->widget();
-		float leftOffset = tmin - w->tmin();
-		float rightOffset = tmax - w->tmax();
+		double leftOffset = tmin - w->tmin();
+		double rightOffset = tmax - w->tmax();
 		if ( leftOffset < 0 ) {
 			tmin = w->tmin();
 			tmax -= leftOffset;
 		}
 		else if ( rightOffset > 0 ) {
-			float usedOffset = std::min(leftOffset, rightOffset);
+			double usedOffset = std::min(leftOffset, rightOffset);
 			tmin -= usedOffset;
 			tmax -= usedOffset;
 		}
@@ -6054,7 +6288,7 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 
 	if ( slot >= 0 && slot < 3 ) {
 		switch ( _comboRotation->currentIndex() ) {
-			case RT_Z12:
+			case RT_123:
 				break;
 			case RT_ZNE:
 				component = ZNE_COMPS[slot];
@@ -6073,7 +6307,7 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 		if ( code == '?' ) continue;
 
 		switch ( _comboRotation->currentIndex() ) {
-			case RT_Z12:
+			case RT_123:
 				_currentRecord->setRecordID(i, QString("%1").arg(code));
 				break;
 			case RT_ZNE:
@@ -6679,16 +6913,16 @@ void PickerView::zoom(float factor) {
 	if ( _zoom > 100 )
 		_zoom = 100;
 
-	float currentScale = _currentRecord->timeScale();
-	float newScale = _recordView->timeScale()*_zoom;
+	double currentScale = _currentRecord->timeScale();
+	double newScale = _recordView->timeScale()*_zoom;
 
 	factor = newScale/currentScale;
 
-	float tmin = _currentRecord->tmin();
-	float tmax = _recordView->currentItem()?
+	double tmin = _currentRecord->tmin();
+	double tmax = _recordView->currentItem()?
 		tmin + _recordView->currentItem()->widget()->width()/_currentRecord->timeScale():
 		_currentRecord->tmax();
-	float tcen = tmin + (tmax-tmin)*0.5;
+	double tcen = tmin + (tmax-tmin)*0.5;
 
 	tmin = tcen - (tcen-tmin)/factor;
 	tmax = tcen + (tmax-tcen)/factor;
@@ -6706,10 +6940,10 @@ void PickerView::zoom(float factor) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::applyTimeRange(double rmin, double rmax) {
-	float tmin = (float)rmin;
-	float tmax = (float)rmax;
+	double tmin = rmin;
+	double tmax = rmax;
 
-	float newScale = _currentRecord->width() / (tmax-tmin);
+	double newScale = _currentRecord->canvasRect().width() / (tmax-tmin);
 	if ( newScale < _recordView->timeScale() )
 		newScale = _recordView->timeScale();
 
@@ -6831,29 +7065,31 @@ void PickerView::automaticRepick() {
 			WaveformStreamID wid = _recordView->streamID(_recordView->currentItem()->row());
 			KeyValues params;
 			DataModel::ConfigModule *module = SCApp->configModule();
-			for ( size_t i = 0; i < module->configStationCount(); ++i ) {
-				DataModel::ConfigStation *station = module->configStation(i);
-				if ( station->networkCode() != wid.networkCode() ||
-				     station->stationCode() != wid.stationCode() ) continue;
+			if ( module != NULL ) {
+				for ( size_t i = 0; i < module->configStationCount(); ++i ) {
+					DataModel::ConfigStation *station = module->configStation(i);
+					if ( station->networkCode() != wid.networkCode() ||
+					     station->stationCode() != wid.stationCode() ) continue;
 
-				DataModel::Setup *configSetup = DataModel::findSetup(station, SCApp->name(), true);
+					DataModel::Setup *configSetup = DataModel::findSetup(station, SCApp->name(), true);
 
-				if ( configSetup ) {
-					DataModel::ParameterSet* ps = NULL;
-					try {
-						ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
+					if ( configSetup ) {
+						DataModel::ParameterSet* ps = NULL;
+						try {
+							ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
+						}
+						catch ( Core::ValueException ) {
+							continue;
+						}
+
+						if ( !ps ) {
+							SEISCOMP_ERROR("Cannot find parameter set %s",
+							               configSetup->parameterSetID().c_str());
+							continue;
+						}
+
+						params.init(ps);
 					}
-					catch ( Core::ValueException ) {
-						continue;
-					}
-
-					if ( !ps ) {
-						SEISCOMP_ERROR("Cannot find parameter set %s",
-						               configSetup->parameterSetID().c_str());
-						continue;
-					}
-
-					params.init(ps);
 				}
 			}
 
@@ -7040,7 +7276,7 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 					char comp;
 					switch ( marker->rotation() ) {
 						default:
-						case RT_Z12:
+						case RT_123:
 							comp = rvi->mapSlotToComponent(marker->slot());
 							break;
 						case RT_ZNE:
@@ -7586,7 +7822,7 @@ void PickerView::diffStreamState(Seiscomp::DataModel::Origin* oldOrigin,
 void PickerView::addStations() {
 	if ( !_origin ) return;
 
-	SelectStation dlg(_origin->time(), _stations, this);
+	SelectStation dlg(_origin->time(), _config.ignoreDisabledStations, _stations, this);
 	dlg.setReferenceLocation(_origin->latitude(), _origin->longitude());
 	if ( dlg.exec() != QDialog::Accepted ) return;
 
@@ -8192,7 +8428,7 @@ void PickerView::changeRotation(int index) {
 			if ( code == '?' ) continue;
 
 			switch ( index ) {
-				case RT_Z12:
+				case RT_123:
 					_currentRecord->setRecordID(i, QString("%1").arg(code));
 					break;
 				case RT_ZNE:
@@ -8218,18 +8454,133 @@ void PickerView::changeRotation(int index) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::changeUnit(int index) {
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+	_currentUnitMode = index;
+	applyFilter();
+
+	QApplication::restoreOverrideCursor();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::updateRecordAxisLabel(RecordViewItem *item) {
+	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+
+	switch ( _currentUnitMode ) {
+		case UT_DISP:
+		case UT_VEL:
+		case UT_ACC:
+			if ( label->unit != UT_RAW ) {
+				if ( item->widget()->areScaledValuesShown() ) {
+					for ( int i = 0; i < 3; ++i )
+						item->widget()->setRecordLabel(i, tr("n%1").arg(Units[_currentUnitMode-UT_ACC]));
+				}
+				else {
+					for ( int i = 0; i < 3; ++i )
+						item->widget()->setRecordLabel(i, tr("counts"));
+				}
+			}
+			else {
+				for ( int i = 0; i < 3; ++i )
+					item->widget()->setRecordLabel(i, QString());
+			}
+			break;
+		default:
+			if ( item->widget()->areScaledValuesShown() ) {
+				for ( int i = 0; i < 3; ++i ) {
+					if ( label->gainUnit[i].isEmpty() )
+						item->widget()->setRecordLabel(i, tr("-"));
+					else
+						item->widget()->setRecordLabel(i, tr("%1 * 1E9").arg(label->gainUnit[i]));
+				}
+			}
+			else {
+				for ( int i = 0; i < 3; ++i )
+					item->widget()->setRecordLabel(i, tr("counts"));
+			}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::applyFilter(RecordViewItem *item) {
 	if ( item == NULL ) {
-		for ( int i = 0; i < _recordView->rowCount(); ++i ) {
-			RecordViewItem* rvi = _recordView->itemAt(i);
-			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(rvi->label());
-
-			label->data.setFilter(_currentFilter);
-		}
+		for ( int i = 0; i < _recordView->rowCount(); ++i )
+			applyFilter(_recordView->itemAt(i));
 	}
 	else {
 		PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-		label->data.setFilter(_currentFilter);
+		int integrationSteps = 0;
+		switch ( _currentUnitMode ) {
+			case UT_DISP:
+			case UT_VEL:
+			case UT_ACC:
+				if ( label->unit != UT_RAW ) {
+					integrationSteps = _currentUnitMode - label->unit;
+				}
+				else {
+					Math::Filtering::ConstFilter<float> constFilter(0);
+					label->data.setFilter(&constFilter);
+					return true;
+				}
+				break;
+			case UT_RAW:
+			default:
+				break;
+		}
+
+		updateRecordAxisLabel(item);
+
+		if ( integrationSteps == 0 )
+			label->data.setFilter(_currentFilter);
+		else {
+			Math::Filtering::ChainFilter<float> chainFilter;
+
+			if ( integrationSteps < 0  ) {
+				// Derivation
+				for ( int s = 0; s < -integrationSteps; ++s )
+					chainFilter.add(new Math::Filtering::IIRDifferentiate<float>());
+			}
+			else {
+				Math::Filtering::InPlaceFilter<float> *preFilter = NULL;
+
+				for ( int s = 0; s < integrationSteps; ++s ) {
+					if ( !_config.onlyApplyIntegrationFilterOnce || (s == 0) ) {
+						if ( preFilter != NULL )
+							chainFilter.add(preFilter->clone());
+						else if ( !_config.integrationFilter.isEmpty() ) {
+							preFilter = Math::Filtering::InPlaceFilter<float>::Create(_config.integrationFilter.toStdString().c_str());
+							if ( preFilter == NULL ) {
+								// ERROR
+							}
+							else
+								chainFilter.add(preFilter->clone());
+						}
+					}
+
+					chainFilter.add(new Math::Filtering::IIRIntegrate<float>());
+				}
+
+				if ( preFilter != NULL )
+					delete preFilter;
+			}
+
+			if ( _currentFilter )
+				chainFilter.add(_currentFilter->clone());
+
+			if ( chainFilter.filterCount() > 0 )
+				label->data.setFilter(&chainFilter);
+			else
+				label->data.setFilter(NULL);
+		}
 	}
 
 	return true;
@@ -8242,7 +8593,7 @@ bool PickerView::applyFilter(RecordViewItem *item) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PickerView::applyRotation(RecordViewItem *item, int type) {
 	switch ( type ) {
-		case RT_Z12:
+		case RT_123:
 		{
 			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
 			label->data.transformation.identity();

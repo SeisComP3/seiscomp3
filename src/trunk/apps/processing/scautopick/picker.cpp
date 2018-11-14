@@ -610,7 +610,7 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
                         Processing::WaveformProcessor::StreamComponent comp,
                         const Core::Time &time,
                         const std::string &streamID,
-			const DataModel::WaveformStreamID &waveformID,
+                        const DataModel::WaveformStreamID &waveformID,
                         bool metaDataRequired) {
 	const std::string dottedWaveformID = dotted(waveformID);
 	switch ( comp ) {
@@ -778,7 +778,7 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::initDetector(const string &streamID,
-		       const DataModel::WaveformStreamID &waveformID,
+                       const DataModel::WaveformStreamID &waveformID,
                        const Core::Time &time) {
 	double trigOn = _config.defaultTriggerOnThreshold;
 	double trigOff = _config.defaultTriggerOffThreshold;
@@ -1018,9 +1018,10 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::addAmplitudeProcessor(AmplitudeProcessorPtr proc,
-                                const Record *rec, const string &pickID) {
+                                const Record *rec,
+                                const Seiscomp::DataModel::Pick *pick) {
 	proc->setPublishFunction(boost::bind(&App::emitAmplitude, this, _1, _2));
-	proc->setReferencingPickID(pickID);
+	proc->setReferencingPickID(pick->publicID());
 
 	const DataModel::WaveformStreamID waveformID(waveformStreamID(rec));
 	const std::string &n = rec->networkCode();
@@ -1262,7 +1263,7 @@ void App::emitPPick(const Processing::Picker *proc,
 			if ( !proc ) continue;
 
 			proc->setTrigger(res.time);
-			addAmplitudeProcessor(proc.get(), res.record, pick->publicID());
+			addAmplitudeProcessor(proc.get(), res.record, pick.get());
 		}
 	}
 
@@ -1462,7 +1463,7 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 			if ( !proc ) continue;
 
 			proc->setTrigger(time);
-			addAmplitudeProcessor(proc.get(), rec, pick->publicID());
+			addAmplitudeProcessor(proc.get(), rec, pick.get());
 		}
 	}
 
@@ -1546,6 +1547,8 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 			Core::None
 		)
 	);
+
+	ampProc->finalizeAmplitude(amp.get());
 
 #ifdef LOG_PICKS
 	if ( !isMessagingEnabled() && !_ep ) {

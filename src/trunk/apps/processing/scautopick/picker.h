@@ -85,7 +85,7 @@ class App : public Processing::Application {
 		                        const std::string& pickID);
 		void addAmplitudeProcessor(Processing::AmplitudeProcessorPtr proc,
 		                           const Record *rec,
-		                           const std::string& pickID);
+		                           const Seiscomp::DataModel::Pick *pick);
 
 		void handleNewStream(const Record *rec);
 		void processorFinished(const Record *rec, Processing::WaveformProcessor *wp);

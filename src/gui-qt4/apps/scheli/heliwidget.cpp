@@ -182,7 +182,6 @@ void HeliCanvas::setRowColors(const QVector<QColor> &cols) {
 
 
 void HeliCanvas::setLineWidth(int lw) {
-	std::cout << lw << std::endl;
 	_lineWidth = lw;
 }
 
@@ -476,7 +475,7 @@ void HeliCanvas::render(QPainter &p) {
 	rowPos = rowHeight;
 
 	for ( int i = 0; i < _rows.size(); ++i, rowPos += rowHeight + heightOfs ) {
-		QColor gapColor = _gaps[i % 2];
+		QBrush gapBrush = _gaps[i % 2];
 
 		// Create new sequence
 		if ( _rows[i].dirty ) {
@@ -491,7 +490,6 @@ void HeliCanvas::render(QPainter &p) {
 			                          tw.startTime(), tw.endTime(),
 			                          (double)recordWidth / (double)_rowTimeSpan,
 			                          _amplitudeRange[0], _amplitudeRange[1], ofs, rowHeight);
-			_rows[i].polyline->translate(_labelMargin, 0);
 			_rows[i].dirty = false;
 		}
 
@@ -501,17 +499,17 @@ void HeliCanvas::render(QPainter &p) {
 				if ( _rows[i].polyline->front().first().x() > _labelMargin )
 					p.fillRect(_labelMargin, rowPos,
 					           _rows[i].polyline->front().first().x() - _labelMargin,
-					           rowHeight, gapColor);
+					           rowHeight, gapBrush);
 
 				if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) ) {
 					if ( _rows[i].polyline->back().last().x() < _size.width()-2 )
 						p.fillRect(_rows[i].polyline->back().last().x(),
 						           rowPos, _size.width()-1 - _rows[i].polyline->back().last().x(),
-						           rowHeight, gapColor);
+						           rowHeight, gapBrush);
 				}
 			}
 			else if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) )
-				p.fillRect(QRect(_labelMargin, rowPos, recordWidth, rowHeight), gapColor);
+				p.fillRect(QRect(_labelMargin, rowPos, recordWidth, rowHeight), gapBrush);
 		}
 
 		--remainingGap;
@@ -529,8 +527,8 @@ void HeliCanvas::render(QPainter &p) {
 	p.setRenderHint(QPainter::Antialiasing, _antialiasing);
 
 	for ( int i = 0; i < _rows.size(); ++i, rowPos += rowHeight + heightOfs ) {
-		QColor gapColor = _gaps[i & 1];
-		QColor overlapColor = _gaps[i & 1];
+		QBrush gapBrush = _gaps[i & 1];
+		QBrush overlapBrush = _gaps[i & 1];
 		p.setPen(QPen(_rowColors[rowColorIndex], _lineWidth));
 
 		++rowColorIndex;
@@ -539,9 +537,9 @@ void HeliCanvas::render(QPainter &p) {
 
 		if ( !_rows[i].polyline ) continue;
 
-		p.translate(0, rowPos);
-		_rows[i].polyline->draw(p, 0, rowHeight, gapColor, overlapColor);
-		p.translate(0, -rowPos);
+		p.translate(_labelMargin, rowPos);
+		_rows[i].polyline->draw(p, 0, rowHeight, gapBrush, overlapBrush);
+		p.translate(-_labelMargin, -rowPos);
 
 		--remainingGap;
 		if ( remainingGap <= 0 )

@@ -24,10 +24,10 @@
 
 #include "combined.h"
 
+
 namespace Seiscomp {
 namespace RecordStream {
-namespace Combined {
-namespace _private {
+
 
 using namespace std;
 using namespace Seiscomp::Core;
@@ -51,38 +51,85 @@ size_t findClosingParenthesis(const string &s, size_t p) {
 }
 
 
+bool timeFromString(Core::Time &time, const std::string &s) {
+	if ( Core::fromString(time, s) )
+		return true;
+
+	if ( time.fromString(s.c_str(), "%F") )
+		return true;
+
+	if ( time.fromString(s.c_str(), "%Y") )
+		return true;
+
+	return false;
 }
 
 
-IMPLEMENT_SC_CLASS_DERIVED(CombinedConnection, Seiscomp::IO::RecordStream,
-                           "CombinedConnection");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 REGISTER_RECORDSTREAM(CombinedConnection, "combined");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CombinedConnection::CombinedConnection() {
 	init();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CombinedConnection::CombinedConnection(std::string serverloc) {
 	init();
 	setSource(serverloc);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CombinedConnection::~CombinedConnection() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void CombinedConnection::init() {
 	_started = false;
 	_nStream = _nArchive = _nRealtime = 0;
 	_realtimeAvailability = DefaultRealtimeAvailability;
 	_realtime = _archive = NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::setRecordType(const char* type) {
 	return _realtime->setRecordType(type) && _archive->setRecordType(type);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::setSource(const std::string &serverloc) {
 	size_t p1,p2;
+
+	_archiveEndTime = Core::Time();
 
 	/*
 	 * Format of source is:
@@ -266,6 +313,23 @@ bool CombinedConnection::setSource(const std::string &serverloc) {
 				               number*multiplicator, number, multiplicator);
 				_realtimeAvailability = Core::TimeSpan(number*multiplicator);
 			}
+			else if ( name == "splitTime" ) {
+				if ( value.empty() ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' is empty",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
+				}
+
+				if ( !timeFromString(_archiveEndTime, value) ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' not datetime",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
+				}
+
+				_realtimeAvailability = Core::TimeSpan(0,0);
+			}
 		}
 	}
 
@@ -299,12 +363,19 @@ bool CombinedConnection::setSource(const std::string &serverloc) {
 		return false;
 	}
 
-	_curtime = Time::GMT();
-	_archiveEndTime = _curtime - _realtimeAvailability;
+	if ( !_archiveEndTime.valid() )
+		_archiveEndTime = Time::GMT() - _realtimeAvailability;
+
+	SEISCOMP_DEBUG("Split   : %s", _archiveEndTime.iso().c_str());
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::addStream(const string &net, const string &sta,
                                    const string &loc, const string &cha) {
 	SEISCOMP_DEBUG("add stream %lu %s.%s.%s.%s", (unsigned long) _nStream, net.c_str(),
@@ -343,29 +414,54 @@ bool CombinedConnection::addStream(const string &net, const string &sta,
 	++_nStream;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::setStartTime(const Seiscomp::Core::Time &stime) {
 	_startTime = stime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::setEndTime(const Seiscomp::Core::Time &etime) {
 	_endTime = etime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool CombinedConnection::setTimeout(int seconds) {
 	_realtime->setTimeout(seconds);
 	_archive->setTimeout(seconds);
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void CombinedConnection::close() {
 	_realtime->close();
 	_archive->close();
 	_nArchive = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Record *CombinedConnection::next() {
 	if ( !_started ) {
 		_started = true;
@@ -404,10 +500,12 @@ Record *CombinedConnection::next() {
 	else
 		return _realtime->next();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-} // namesapce Combined
-} // namespace _private
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // namespace RecordStream
 } // namespace Seiscomp
 

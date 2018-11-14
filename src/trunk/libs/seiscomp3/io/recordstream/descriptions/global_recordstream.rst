@@ -1,4 +1,5 @@
-SeisComP applications access waveform data through the RecordStream interface. The following tables lists available implementations:
+SeisComP applications access waveform data through the RecordStream interface.
+The following tables lists available implementations:
 
 .. csv-table::
    :header: "Name", "Service Prefix", "Description"
@@ -16,10 +17,8 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
 The RecordStream used by an application is either specified on the
-commandline (`-I URI`) or configured through using the parameters
-:confval:`recordstream.service` and :confval:`recordstream.source`. While the
-`service` defines the RecordSteam implementation, the `source` supplies
-parameters like a IP address or a file name to use.
+commandline (`-I URI`) or configured through using the parameter
+:confval:`recordstream` and :confval:`recordstream`.
 
 .. _rs-slink:
 
@@ -91,7 +90,6 @@ Extension Record Type
 `*.xml`   `xml`
 `*.bin`   `binary`
 `*.mseed` `mseed`
-`*.ah`    `ah`
 ========= ===========
 
 Examples
@@ -152,7 +150,34 @@ archive-stream is set to :ref:`rs-arclink`. Any other streams may be configured.
 The parameters of the combined stream are separated by 2 question marks (`??`)
 in order to distinguish them from the parameters used in the proxy streams:
 
-- `slinkMax|rtMax` - Buffer size in seconds of the real-time stream, default: 3600
+- `slinkMax|rtMax|1stMax` - Buffer size in seconds of the first stream
+  (typically the real-time stream), default: 3600
+
+  Time spans can be configured with an additional and optional suffix:
+
+  ======  =============
+  Suffix  Multiplicator
+  ======  =============
+  s       1
+  m       60
+  h       3600
+  d       86400
+  w       86400*7
+  ======  =============
+
+- `splitTime` - The absolute time of the separation of both sources. The argument
+  is an ISO time string, e.g. 2018-05-10T12:00:00Z or a year, e.g. 2018, which is
+  the same as 2018-01-01T00:00:00.000Z.
+  `splitTime` can be used if the waveform archives are spread over several directories
+  or harddisks. See also the :ref:`examples<rs_splitTime>`.
+
+The combined record stream may be nested allowing the configuration of a
+(theoretically) infinite number of archive streams. The syntax for a nested
+configuration uses parenthesis:
+
+``combined://real-time-stream;combined/(archive-stream1;archive-stream2??parameters)??parameters``
+
+.. _rs_splitTime:
 
 Examples
 ^^^^^^^^
@@ -165,6 +190,9 @@ Examples
    "``combined://;``", "Same as above"
    "``combined://:18042;?user=foo&pwd=secret??rtMax=1800``", "Seedlink on localhost:18042 combined with Arclink on localhost 18001, real-time (SeedLink) buffer size set to 30min"
    "``combined://slink/localhost:18000;sdsarchive//home/sysop/seiscomp3/var/lib/archive``", Seedlink combined with SDS archive
+   "``combined://slink/localhost:18000;combined/(arclink/localhost:18001;arclink/localhost:18002??1stMax=30d)??1stMax=1h``", Seedlink combined with a combined record stream using two Arclink sources
+   "``combined://slink/localhost:18000;combined/(sdsarchive//home/sysop/seiscomp3/var/lib/archive;combined/(sdsarchive//home/sysop/seiscomp3/var/lib/archive2017;sdsarchive//home/sysop/seiscomp3/var/lib/archive2016??splitTime=2017)??splitTime=2018)``", "Seedlink combined with a combined recordStream providing access to 3 different SDS archives separated by time. The first SDS archive contains the most recent archived data. The other two contain the data from 2016 and 2017."
+   "``combined://slink/localhost:18000;combined/(sdsarchive//home/sysop/seiscomp3/var/lib/archive;combined/(sdsarchive//home/sysop/seiscomp3/var/lib/archive2017;sdsarchive//home/sysop/seiscomp3/var/lib/archive2016??splitTime=2017-06-01T00:00:00Z)??splitTime=2018-06-01T00:00:00Z)``", "Seedlink combined with a combined recordStream providing access to 3 different SDS archives separated by time. The first SDS archive contains the most recent archived data. The other two are separated in mid of 2016."
 
 .. _rs-balanced:
 

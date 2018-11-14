@@ -10,9 +10,10 @@
 			</parameter>
 			<parameter name="refresh" type="double" default="180" unit="s">
 				<description>
-				Refresh interval of the generated web page. The interval should
-				be similar to the interval for starting slmon. If empty, the web page
-				must be refreshed manually.
+				Refresh interval of the generated web page used by the browser.
+				The interval should be similar to the interval for starting slmon.
+				If empty, the web page must be manually refreshed from within
+				the browser.
 				</description>
 			</parameter>
 			<parameter name="address" type="string" default="127.0.0.1">

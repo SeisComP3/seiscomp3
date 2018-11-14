@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module Core
+%module(package="seiscomp3") Core
 
 %exceptionclass GeneralException;
 

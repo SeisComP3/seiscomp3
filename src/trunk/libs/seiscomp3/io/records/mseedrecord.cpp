@@ -473,7 +473,7 @@ void MSeedRecord::write(std::ostream& out) {
 	strcpy(pmsr->station,_sta.c_str());
 	strcpy(pmsr->location,_loc.c_str());
 	strcpy(pmsr->channel,_cha.c_str());
-	pmsr->dataquality = 'D';
+	pmsr->dataquality = _rectype;
 	pmsr->starttime = ms_timestr2hptime(const_cast<char *>(_stime.iso().c_str()));
 	pmsr->samprate = _fsamp;
 	pmsr->byteorder = 1;

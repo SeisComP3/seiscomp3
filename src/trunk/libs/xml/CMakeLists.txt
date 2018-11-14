@@ -1,3 +1,11 @@
+# quakeml types
+INSTALL(
+FILES
+	quakeml_types.xsd
+DESTINATION
+	${SC3_PACKAGE_SHARE_DIR}/xml
+)
+
 # 0.3
 INSTALL(
 FILES

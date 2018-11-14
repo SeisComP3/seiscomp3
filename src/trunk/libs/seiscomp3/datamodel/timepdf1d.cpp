@@ -10,10 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
-
 
 #define SEISCOMP_COMPONENT DataModel
 #include <seiscomp3/datamodel/timepdf1d.h>
@@ -162,7 +158,7 @@ TimePDF1D& TimePDF1D::operator=(const TimePDF1D& other) {
 void TimePDF1D::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,10>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: TimePDF1D skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

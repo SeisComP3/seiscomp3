@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -14,6 +14,7 @@
 
 #define SEISCOMP_COMPONENT AmplitudeProcessor
 
+#include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/processing/amplitudeprocessor.h>
 #include <seiscomp3/math/mean.h>
 #include <seiscomp3/math/filter/iirdifferentiate.h>
@@ -105,6 +106,30 @@ void AmplitudeProcessor::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeProcessor::~AmplitudeProcessor() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmplitudeProcessor::setEnvironment(const DataModel::Origin *hypocenter,
+                                        const DataModel::SensorLocation *receiver,
+                                        const DataModel::Pick *pick) {
+	_environment.hypocenter = hypocenter;
+	_environment.receiver = receiver;
+	setPick(pick);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmplitudeProcessor::setPick(const DataModel::Pick *pick) {
+	_environment.pick = pick;
+	if ( pick )
+		setReferencingPickID(pick->publicID());
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -419,7 +444,7 @@ void AmplitudeProcessor::process(const Record *record) {
 				if ( status() == LowSNR )
 					SEISCOMP_DEBUG("Amplitude %s computation for stream %s failed because of low SNR (%.2f < %.2f)",
 					              _type.c_str(), record->streamID().c_str(), res.snr, _config.snrMin);
-				else {
+				else if ( status() < Terminated ) {
 					SEISCOMP_DEBUG("Amplitude %s computation for stream %s failed -> abort",
 					              _type.c_str(), record->streamID().c_str());
 					setStatus(Error, 3);
@@ -754,6 +779,15 @@ double AmplitudeProcessor::timeWindowLength(double distance) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmplitudeProcessor::finalizeAmplitude(DataModel::Amplitude *) const {
+	// Do nothing
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void AmplitudeProcessor::setHint(ProcessingHint hint, double value) {
 	WaveformProcessor::setHint(hint, value);
 
@@ -778,6 +812,9 @@ void AmplitudeProcessor::setHint(ProcessingHint hint, double value) {
 			if ( (value < _config.minimumDepth) || (value > _config.maximumDepth) )
 				setStatus(DepthOutOfRange, value);
 			// To be defined
+			break;
+
+		default:
 			break;
 	}
 }

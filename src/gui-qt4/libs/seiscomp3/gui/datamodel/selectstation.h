@@ -37,10 +37,11 @@ class SC_GUI_API SelectStation : public QDialog {
 	// X'struction
 	// ------------------------------------------------------------------
 	public:
-		SelectStation(Core::Time time, QWidget* parent = 0, Qt::WFlags f = 0);
-		SelectStation(Core::Time time,
-		              const QSet<QString> &blackList,
-		              QWidget* parent = 0, Qt::WFlags f = 0);
+		explicit SelectStation(Core::Time time, bool ignoreDisabledStations,
+		                       QWidget* parent = 0, Qt::WFlags f = 0);
+		explicit SelectStation(Core::Time time, bool ignoreDisabledStations,
+		                       const QSet<QString> &blackList,
+		                       QWidget* parent = 0, Qt::WFlags f = 0);
 		~SelectStation();
 
 		QList<DataModel::Station*> selectedStations() const;
@@ -56,7 +57,8 @@ class SC_GUI_API SelectStation : public QDialog {
 
 
 	private:
-		void init(Core::Time, const QSet<QString> *blackList);
+		void init(Core::Time, bool ignoreDisabledStations,
+		          const QSet<QString> *blackList);
 
 
 	// ------------------------------------------------------------------

@@ -23,6 +23,9 @@
 #include <seiscomp3/io/gfarchive/sc3gf1d.h>
 #include <seiscomp3/io/records/sacrecord.h>
 
+#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
+
 #include <iostream>
 #include <fstream>
 
@@ -32,10 +35,90 @@
 #include <boost/regex.hpp>
 
 
+/******************************************************************************
+ * To be used along with rapidjson. To make these macros work it is expected
+ * to have a variable itr of type
+ * rapidjson::Value::ConstMemberIterator. Use JINIT for that.
+ * Supported type names are:
+ * - Null
+ * - False
+ * - True
+ * - Bool
+ * - String
+ * - Object
+ * - Array
+ * - Number
+ * - Int
+ * - Uint
+ * - Int64
+ * - Uint64
+ * - Double
+ * To retrieve the value, use Get[type]() on the Value object.
+ * ----------------------------------------------------------------------------
+ * Usage example:
+ *
+ * void parseSomething() {
+ *     rapidjson::Document doc;
+ *     JINIT; // Create temporary iterator
+ *     doc.Parse("...");
+ *     // Check for member "test" with type Object. If thats fails, return
+ *     if ( JFAIL(doc, "test", Object) )
+ *         return;
+ *     // Store the last found member value
+ *     const rapidjson::Value &test = JVAL;
+ *     if ( JOK(test, "attrib1", String) )
+ *         cout << JNAME.GetString() << " = " << JVAL.GetString() << endl;
+ *     ...
+ * }
+ ******************************************************************************/
+#define JINIT rapidjson::Value::ConstMemberIterator jitr
+#define JFAIL(node, member, type) ((jitr = node.FindMember(member)) == node.MemberEnd() || !jitr->value.Is##type())
+#define JOK(node, member, type) ((jitr = node.FindMember(member)) != node.MemberEnd() && jitr->value.Is##type())
+#define JNAME jitr->name
+#define JVAL jitr->value
+
+
 namespace fs = boost::filesystem;
 
 namespace Seiscomp {
 namespace IO {
+
+
+namespace {
+
+
+double getValue(const std::map<double, double> &map, double ref) {
+	// Get element after the distance
+	std::map<double, double>::const_iterator it_to = map.lower_bound(ref);
+	std::map<double, double>::const_iterator it_from = it_to;
+
+	// After supported key range
+	if ( it_to == map.end() )
+		return -1;
+
+	double toRef = it_to->first;
+	double fromRef = toRef;
+
+	// Before supported key range
+	if ( it_to == map.begin() ) {
+		if ( toRef > ref )
+			return -1;
+
+		return it_to->second;
+	}
+
+	--it_from;
+	fromRef = it_from->first;
+
+	double ref1 = it_from->second;
+	double ref2 = it_to->second;
+
+	// Interpolate value
+	return (ref1 * (toRef-ref) + ref2 * (ref-fromRef)) / (toRef - fromRef);
+}
+
+
+}
 
 
 REGISTER_GFARCHIVE(SC3GF1DArchive, "sc3gf1d");
@@ -769,7 +852,197 @@ OPT(double) SC3GF1DArchive::getTravelTime(const std::string &phase,
                                           const std::string &model,
                                           const GFSource &source,
                                           const GFReceiver &receiver) {
-	return Core::None;
+	ModelMap::iterator it = _models.find(model);
+	if ( it == _models.end() )
+		return Core::None;
+
+	ModelConfig &config = it->second;
+	if ( !config.travelTimesInitialized ) {
+		// Read travel time table
+		config.travelTimesInitialized = true;
+
+		std::string tttfile = _baseDirectory + "/" + model + ".ttt";
+		std::ifstream ifttt;
+		ifttt.open(tttfile.c_str());
+
+		if ( !ifttt )
+			return Core::None;
+
+		rapidjson::IStreamWrapper isw(ifttt);
+		rapidjson::Document doc;
+		doc.ParseStream(isw);
+		if ( doc.HasParseError() ) {
+			SEISCOMP_ERROR("%s/%s.ttt: invalid JSON document",
+			               _baseDirectory.c_str(), model.c_str());
+			return Core::None;
+		}
+
+		std::vector<std::string> phaseMap;
+		std::vector<double> distanceMap;
+		std::vector<double> depthMap;
+
+		JINIT;
+
+		if ( JFAIL(doc, "phases", Array) ) {
+			SEISCOMP_ERROR("%s/%s.ttt: missing 'phases' array attribute",
+			               _baseDirectory.c_str(), model.c_str());
+			return Core::None;
+		}
+
+		const rapidjson::Value &vPhases = JVAL;
+
+		if ( JFAIL(doc, "distances", Array) ) {
+			SEISCOMP_ERROR("%s/%s.ttt: missing 'distances' array attribute",
+			               _baseDirectory.c_str(), model.c_str());
+			return Core::None;
+		}
+
+		const rapidjson::Value &vDistances = JVAL;
+
+		if ( JFAIL(doc, "depths", Array) ) {
+			SEISCOMP_ERROR("%s/%s.ttt: missing 'depths' array attribute",
+			               _baseDirectory.c_str(), model.c_str());
+			return Core::None;
+		}
+
+		const rapidjson::Value &vDepths = JVAL;
+
+		if ( JFAIL(doc, "travelTimes", Array) ) {
+			SEISCOMP_ERROR("%s/%s.ttt: missing 'travelTimes' array attribute",
+			               _baseDirectory.c_str(), model.c_str());
+			return Core::None;
+		}
+
+		const rapidjson::Value &vTT = JVAL;
+
+		for ( rapidjson::SizeType i = 0; i < vPhases.Size(); ++i ) {
+			const rapidjson::Value &ph = vPhases[i];
+			if ( !ph.IsString() ) {
+				SEISCOMP_ERROR("%s/%s.ttt: phase at index %d is not a string",
+				               _baseDirectory.c_str(), model.c_str(), i);
+				return Core::None;
+			}
+
+			phaseMap.push_back(ph.GetString());
+		}
+
+		for ( rapidjson::SizeType i = 0; i < vDistances.Size(); ++i ) {
+			const rapidjson::Value &d = vDistances[i];
+			if ( !d.IsNumber() ) {
+				SEISCOMP_ERROR("%s/%s.ttt: distance at index %d is not a number",
+				               _baseDirectory.c_str(), model.c_str(), i);
+				return Core::None;
+			}
+
+			distanceMap.push_back(d.GetDouble());
+		}
+
+		for ( rapidjson::SizeType i = 0; i < vDepths.Size(); ++i ) {
+			const rapidjson::Value &d = vDepths[i];
+			if ( !d.IsNumber() ) {
+				SEISCOMP_ERROR("%s/%s.ttt: depth at index %d is not a number",
+				               _baseDirectory.c_str(), model.c_str(), i);
+				return Core::None;
+			}
+
+			depthMap.push_back(d.GetDouble());
+		}
+
+		if ( vTT.Size() != depthMap.size() ) {
+			SEISCOMP_ERROR("%s/%s.ttt: travelTimes are of wrong dimension: %d != %d",
+			               _baseDirectory.c_str(), model.c_str(),
+			               (int)vTT.Size(), (int)distanceMap.size());
+			return Core::None;
+		}
+
+		for ( rapidjson::SizeType i = 0; i < vTT.Size(); ++i ) {
+			const rapidjson::Value &distances = vTT[i];
+			if ( !distances.IsArray() ) {
+				SEISCOMP_ERROR("%s/%s.ttt: travelTimes at index %d are not a distance array",
+				               _baseDirectory.c_str(), model.c_str(), i);
+				return Core::None;
+			}
+
+			if ( distances.Size() != distanceMap.size() ) {
+				SEISCOMP_ERROR("%s/%s.ttt: travelTimes distance array at index %d has wrong dimension: %d != %d",
+				               _baseDirectory.c_str(), model.c_str(), i,
+				               (int)distances.Size(), (int)distanceMap.size());
+				return Core::None;
+			}
+
+			for ( rapidjson::SizeType j = 0; j < distances.Size(); ++j ) {
+				const rapidjson::Value &phases = distances[j];
+				if ( !phases.IsArray() ) {
+					SEISCOMP_ERROR("%s/%s.ttt: travelTimes depth phases at index %d/%d are not an array",
+					               _baseDirectory.c_str(), model.c_str(), i, j);
+					return Core::None;
+				}
+
+				if ( phases.Size() != phaseMap.size() ) {
+					SEISCOMP_ERROR("%s/%s.ttt: travelTimes depth phase array at index %d/%d has wrong dimension: %d != %d",
+					               _baseDirectory.c_str(), model.c_str(), i, j,
+					               (int)phases.Size(), (int)phaseMap.size());
+					return Core::None;
+				}
+
+				for ( rapidjson::SizeType k = 0; k < phases.Size(); ++k ) {
+					const rapidjson::Value &tt = phases[k];
+					if ( !tt.IsNumber() ) {
+						SEISCOMP_ERROR("%s/%s.ttt: travelTimes depth phase at index %d/%d/%d is not a number",
+						               _baseDirectory.c_str(), model.c_str(), i, j, k);
+						return Core::None;
+					}
+
+					// Populate table
+					config.travelTimes[phaseMap[k]][distanceMap[j]][depthMap[i]] = tt.GetDouble();
+				}
+			}
+		}
+	}
+
+	TTPhases::iterator pit = config.travelTimes.find(phase);
+	if ( pit == config.travelTimes.end() )
+		return Core::None;
+
+	TTDistance &distanceDepths = pit->second;
+
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
+	dist = Math::Geo::deg2km(dist);
+
+	// Get element after the distance
+	TTDistance::iterator it_dist_to = distanceDepths.lower_bound(dist);
+	TTDistance::iterator it_dist_from = it_dist_to;
+
+	// Distance out of range
+	if ( it_dist_to == distanceDepths.end() )
+		return Core::None;
+
+	double toDist = it_dist_to->first;
+	double fromDist = toDist;
+
+	// Before supported distance
+	if ( it_dist_to == distanceDepths.begin() ) {
+		if ( toDist > dist )
+			return Core::None;
+
+		return getValue(it_dist_to->second, source.depth);
+	}
+
+	--it_dist_from;
+	fromDist = it_dist_from->first;
+
+	double tt1 = getValue(it_dist_from->second, source.depth);
+	double tt2 = getValue(it_dist_to->second, source.depth);
+
+	if ( tt1 < 0 || tt2 < 0 )
+		return Core::None;
+
+	// Interpolate distances
+	return (tt1 * (toDist-dist) + tt2 * (dist-fromDist)) / (toDist - fromDist);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

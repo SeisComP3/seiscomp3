@@ -72,8 +72,8 @@ class Network : public BaseNode {
 		//! network, including inactive or terminated stations.
 		//! XML tag: TotalNumberStations
 		void setTotalNumberOfStations(const OPT(CounterType)& totalNumberOfStations);
-		CounterType& totalNumberOfStations() throw(Seiscomp::Core::ValueException);
-		const CounterType& totalNumberOfStations() const throw(Seiscomp::Core::ValueException);
+		CounterType& totalNumberOfStations();
+		const CounterType& totalNumberOfStations() const;
 
 		//! SelectedNumberStations the total number of stations in this network
 		//! that were selected by the query that produced this StationXML
@@ -82,8 +82,8 @@ class Network : public BaseNode {
 		//! further than the Network level.)
 		//! XML tag: SelectedNumberStations
 		void setSelectedNumberStations(const OPT(CounterType)& selectedNumberStations);
-		CounterType& selectedNumberStations() throw(Seiscomp::Core::ValueException);
-		const CounterType& selectedNumberStations() const throw(Seiscomp::Core::ValueException);
+		CounterType& selectedNumberStations();
+		const CounterType& selectedNumberStations() const;
 
 	
 	// ------------------------------------------------------------------

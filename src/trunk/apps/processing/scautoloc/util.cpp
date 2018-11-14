@@ -326,9 +326,9 @@ std::string printOrigin(const Origin *origin, bool oneliner)
 
 namespace Utils {
 
-StationDB *readStationLocations(const std::string &fname)
+StationMap *readStationLocations(const std::string &fname)
 {
-	StationDB *stations = new StationDB;
+	StationMap *stations = new StationMap;
 	std::string code, net;
 	double lat, lon, alt;
 
@@ -352,9 +352,47 @@ StationDB *readStationLocations(const std::string &fname)
 }
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Seiscomp::DataModel::Inventory* inventoryFromStationLocationFile(const std::string &filename) {
+                // read inventory from station locations file
+                StationMap *stations = readStationLocations(filename);
+
+		Seiscomp::DataModel::Inventory *inventory = new Seiscomp::DataModel::Inventory;
+                for (StationMap::iterator
+                     it=stations->begin(); it!=stations->end(); ++it) {
+                        std::string key = (*it).first;
+                        const Station *s = (*it).second.get();
+			std::string netId = "Network/"+s->net;
+			Seiscomp::DataModel::Network *network = inventory->findNetwork(netId);
+                        if ( ! network) {
+                                network = new Seiscomp::DataModel::Network(netId);
+                                network->setCode(s->net);
+                                inventory->add(network);
+                        }
+
+			std::string staId = "Station/"+s->net+"/"+s->code;
+			Seiscomp::DataModel::Station *station = new Seiscomp::DataModel::Station(staId);
+                        station->setCode(s->code);
+                        station->setLatitude(s->lat);
+                        station->setLongitude(s->lon);
+                        station->setElevation(s->alt);
+                        network->add(station);
+                }
+                delete stations;
+
+		return inventory;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+
 Pick* readPickLine()
 {
-	PickDB picks;
+	PickVector picks;
 	std::string sta, net, cha, loc, date, time, id;
 	double snr, amp, per;
 	char stat;
@@ -380,9 +418,9 @@ Pick* readPickLine()
 }
 
 
-PickDB readPickFile()
+PickVector readPickFile()
 {
-	PickDB picks;
+	PickVector picks;
 	PickPtr pick = 0;
 
 	while ( (pick = readPickLine()) != NULL)

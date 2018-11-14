@@ -47,6 +47,12 @@ const char *homeDir() {
 }
 
 
+#define BLOCK_BEGIN "{"
+#define BLOCK_END   "}"
+
+#define KEYWORD_INCLUDE   "include"
+
+
 namespace Seiscomp {
 namespace Config {
 
@@ -74,7 +80,7 @@ std::string stripEscapes(const std::string &str) {
 	return tmpString;
 }
 
-std::string escape(const std::string &str) {
+std::string escapeDoubleQuotes(const std::string &str) {
 	std::string tmpString(str);
 	size_t pos = tmpString.find('\"');
 	while ( pos != std::string::npos ) {
@@ -285,7 +291,9 @@ bool Config::readConfig(const std::string &filename, int stage, bool raw) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Config::readInternalConfig(const std::string &file,
-		                        SymbolTable* symbolTable, int stage, bool raw) {
+                                SymbolTable* symbolTable,
+                                const std::string &namespacePrefix,
+                                int stage, bool raw) {
 	if ( _symbolTable ) {
 		_symbolTable->decrementObjectCount();
 		if ( _symbolTable->objectCount() <= 0 ) {
@@ -296,6 +304,8 @@ bool Config::readInternalConfig(const std::string &file,
 	_symbolTable = symbolTable;
 	_symbolTable->incrementObjectCount();
 
+	_defaultNamespacePrefix = namespacePrefix;
+
 	return readConfig(file, stage, raw);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -304,7 +314,8 @@ bool Config::readInternalConfig(const std::string &file,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::writeConfig(const std::string &filename, bool localOnly)
+bool Config::writeConfig(const std::string &filename, bool localOnly,
+                         bool multilineLists)
 {
 	SymbolTable::iterator it = _symbolTable->begin();
 	int firstLine = true;
@@ -339,7 +350,7 @@ bool Config::writeConfig(const std::string &filename, bool localOnly)
 		if ( !(*it)->comment.empty() )
 			*os << (*it)->comment << std::endl;
 
-		writeSymbol(*os, *it);
+		writeSymbol(*os, *it, multilineLists);
 	}
 
 	return true;
@@ -360,14 +371,42 @@ bool Config::writeConfig(bool localOnly)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Config::writeValues(std::ostream &os, const Symbol *symbol)
+void Config::writeValues(std::ostream &os, const Symbol *symbol,
+                         bool multilineLists)
 {
 	if ( symbol->values.empty() )
 		os << "\"\"";
+	else if ( multilineLists ) {
+		os << quote(escapeDoubleQuotes(symbol->values[0]));
+		if ( symbol->values.size() > 1 ) {
+			// Evaluate the complete length of the values
+			size_t valueCharacterLength = 0;
+			for ( size_t i = 0; i < symbol->values.size(); ++i )
+				valueCharacterLength += symbol->values[i].size();
+			valueCharacterLength += (symbol->values.size()-1)*2;
+
+			if ( valueCharacterLength > 80 ) {
+				os << ",\\" << std::endl;
+				size_t prefix = symbol->name.size() + 3;
+				for ( size_t i = 1; i < symbol->values.size(); ++i ) {
+					for ( size_t f = 0; f < prefix; ++f ) os << ' ';
+					os << quote(escapeDoubleQuotes(symbol->values[i]));
+					if ( i < symbol->values.size()-1 )
+						os << ",\\" << std::endl;
+				}
+			}
+			else {
+				for ( size_t i = 1; i < symbol->values.size(); ++i ) {
+					if ( i != 0 ) os << ", ";
+					os << quote(escapeDoubleQuotes(symbol->values[i]));
+				}
+			}
+		}
+	}
 	else {
 		for ( size_t i = 0; i < symbol->values.size(); ++i ) {
 			if ( i != 0 ) os << ", ";
-			os << quote(escape(symbol->values[i]));
+			os << quote(escapeDoubleQuotes(symbol->values[i]));
 		}
 	}
 }
@@ -377,10 +416,56 @@ void Config::writeValues(std::ostream &os, const Symbol *symbol)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Config::writeSymbol(std::ostream &os, const Symbol *symbol)
+void Config::writeContent(std::ostream &os, const Symbol *symbol,
+                          bool multilineLists) {
+	if ( symbol->content.empty() )
+		os << "\"\"";
+	else {
+		std::vector<std::string> values;
+		std::string errorMsg;
+		if ( !multilineLists
+		  || !parseRValue(symbol->content, values, NULL, false, true, &errorMsg) )
+			os << symbol->content;
+		else if ( !values.empty() ) {
+			os << values[0];
+			if ( values.size() > 1 ) {
+				// Evaluate the complete length of the values
+				size_t valueCharacterLength = 0;
+				for ( size_t i = 0; i < values.size(); ++i )
+					valueCharacterLength += values[i].size();
+				valueCharacterLength += (values.size()-1)*2;
+
+				if ( valueCharacterLength > 80 ) {
+					os << ",\\" << std::endl;
+					size_t prefix = symbol->name.size() + 3;
+					for ( size_t i = 1; i < values.size(); ++i ) {
+						for ( size_t f = 0; f < prefix; ++f ) os << ' ';
+						os << values[i];
+						if ( i < values.size()-1 )
+							os << ",\\" << std::endl;
+					}
+				}
+				else {
+					for ( size_t i = 1; i < values.size(); ++i ) {
+						if ( i != 0 ) os << ", ";
+						os << values[i];
+					}
+				}
+			}
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Config::writeSymbol(std::ostream &os, const Symbol *symbol,
+                         bool multilineLists)
 {
 	os << symbol->name << " = ";
-	writeValues(os, symbol);
+	writeValues(os, symbol, multilineLists);
 	os << std::endl;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -402,6 +487,15 @@ void Config::trackVariables(bool enabled) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Variables& Config::getVariables() const {
 	return _variables;
+}
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+std::string Config::escape(const std::string &s) const {
+	return quote(escapeDoubleQuotes(s));
 }
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -449,6 +543,9 @@ bool Config::parseFile(std::istream &is) {
 	std::string line;
 	bool stringMode = false;
 	bool success = true;
+
+	_namespacePrefix = _defaultNamespacePrefix;
+	_namespaces.clear();
 
 	while ( getline(is, line) ) {
 		++_line;
@@ -500,6 +597,11 @@ bool Config::parseFile(std::istream &is) {
 		}
 	}
 
+	if ( !_namespaces.empty() ) {
+		CONFIG_ERROR("Namespace '%s' has not been closed", _namespaces.back().c_str());
+		return false;
+	}
+
 	return success;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -529,8 +631,29 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 
 	//SEISCOMP_DEBUG("Parsing entry");
 	if ( tokens.size() < 2 ) {
-		CONFIG_ERROR("Config entry malformed: Too few parameters for %s", entry.c_str());
-		return false;
+		if ( (tokens.size() == 1) && (tokens[0] == BLOCK_END) ) {
+			if ( _namespaces.empty() ) {
+				CONFIG_ERROR("Unexpected closing block: %s", entry.c_str());
+				return false;
+			}
+
+			_namespaces.pop_back();
+
+			// Update prefix
+			_namespacePrefix = _defaultNamespacePrefix;
+
+			Namespaces::iterator it = _namespaces.begin();
+			for ( ; it != _namespaces.end(); ++it ) {
+				_namespacePrefix += *it;
+				_namespacePrefix += '.';
+			}
+
+			return true;
+		}
+		else {
+			CONFIG_ERROR("Config entry malformed: Too few parameters for %s", entry.c_str());
+			return false;
+		}
 	}
 
 	if ( tokens[0][0] == '$' ) {
@@ -540,7 +663,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 
 	// Handle operators
 	std::vector<std::string> parsedValues;
-	if ( tokens[0] == "include" ) {
+	if ( tokens[0] == KEYWORD_INCLUDE ) {
 		if ( tokens.size() > 2 ) {
 			CONFIG_ERROR("Operator %s has too many operands -> %s file",
 			          tokens[0].c_str(), tokens[0].c_str());
@@ -548,7 +671,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 		}
 
 		if ( !parseRValue(tokens[1], parsedValues, _symbolTable,
-		                  _resolveReferences, &errmsg) ) {
+		                  _resolveReferences, false, &errmsg) ) {
 			CONFIG_ERROR("%s", errmsg.c_str());
 			return false;
 		}
@@ -571,7 +694,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 
 		parsedValues.clear();
 		if ( !parseRValue(tmp, parsedValues, _symbolTable,
-		                  _resolveReferences, &errmsg) ) {
+		                  _resolveReferences, false, &errmsg) ) {
 			CONFIG_ERROR("%s", errmsg.c_str());
 			return false;
 		}
@@ -583,6 +706,11 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 				return false;
 			}
 		}
+	}
+	else if ( (tokens.size() == 2) && (tokens[1] == BLOCK_BEGIN) ) {
+		_namespaces.push_back(tokens[0]);
+		_namespacePrefix += tokens[0];
+		_namespacePrefix += ".";
 	}
 	else if ( tokens[1] == "=" ) {
 		if ( tokens.size() < 3 ) {
@@ -637,13 +765,12 @@ bool Config::handleInclude(const std::string& fileName)
 		}
 	}
 
-
 	if ( !_symbolTable->hasFileBeenIncluded(tmpFileName) ) {
 		//SEISCOMP_DEBUG("Handling include: %s", tmpFileName.c_str());
 		Config conf;
-		if ( !conf.readInternalConfig(tmpFileName, _symbolTable, _stage, !_resolveReferences) )
+		if ( !conf.readInternalConfig(tmpFileName, _symbolTable, _namespacePrefix,
+		                              _stage, !_resolveReferences) )
 			return false;
-
 	}
 
 	if ( isRelativePath )
@@ -660,9 +787,9 @@ bool Config::handleInclude(const std::string& fileName)
 void Config::handleAssignment(const std::string& name,
                               const std::string& content,
                               std::vector<std::string>& values,
-                              const std::string& comment)
-{
-	_symbolTable->add(name, content, values, _fileName, comment, _stage, _line);
+                              const std::string& comment) {
+	_symbolTable->add(_namespacePrefix + name, _namespacePrefix, content,
+	                  values, _fileName, comment, _stage, _line);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -775,7 +902,7 @@ std::vector<std::string> Config::tokenize(const std::string& entry)
 bool Config::parseRValue(const std::string& entry,
                          std::vector<std::string>& parsedValues,
                          const SymbolTable *symtab,
-                         bool resolveReferences,
+                         bool resolveReferences, bool rawMode,
                          std::string *errmsg) {
 	bool openCurlyBrace = false;
 	bool stringMode     = false;
@@ -785,6 +912,8 @@ bool Config::parseRValue(const std::string& entry,
 	std::string::const_iterator it       = entry.begin();
 	std::string::const_iterator previous = entry.begin();
 	std::string::const_iterator next     = entry.begin();
+
+	if ( rawMode ) resolveReferences = false;
 
 	//SEISCOMP_DEBUG("entry: %s", entry.c_str());
 
@@ -801,9 +930,10 @@ bool Config::parseRValue(const std::string& entry,
 			parsedEntry.push_back(*it);
 			escapeMode = false;
 		}
-		else if ( *it == '"' && *previous != '\\' ) {
+		else if ( *it == '"' ) {
 			stringMode = !stringMode;
-			if ( next != entry.end() && *next == '"' ) tokens.push_back("");
+			if ( rawMode ) parsedEntry.push_back(*it);
+			else if ( next != entry.end() && *next == '"' ) tokens.push_back("");
 		}
 		else if ( *it == '$' && !stringMode && resolveReferences ) {
 			std::string variable;
@@ -968,7 +1098,7 @@ bool Config::eval(const std::string &rvalue, std::vector<std::string> &result,
 bool Config::Eval(const std::string &rvalue, std::vector<std::string> &result,
                   bool resolveReferences, SymbolTable *symtab,
                   std::string *errmsg) {
-	if ( !parseRValue(rvalue, result, symtab, resolveReferences, errmsg) )
+	if ( !parseRValue(rvalue, result, symtab, resolveReferences, false, errmsg) )
 		return false;
 
 	std::vector<std::string>::iterator it;
@@ -1118,18 +1248,6 @@ bool Config::getString(std::string& value, const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Config* Config::Instance(const std::string& fileName) {
-	static Config conf;
-	if ( !conf.readConfig(fileName) )
-		return NULL;
-	return &conf;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::vector<int> Config::getInts(const std::string& name) const {
 	addVariable(name, "list:int");
 	return getVec<int>(name);

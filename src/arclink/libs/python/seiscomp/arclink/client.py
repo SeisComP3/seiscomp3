@@ -69,7 +69,7 @@ class _StatusAttr(XAttribute):
         elif val == "DENIED":      return STATUS_DENIED
         elif val == "NODATA":      return STATUS_NODATA
         elif val == "UNSET":       return STATUS_UNSET
-        elif val == None:          return STATUS_UNSET
+        elif val is None:          return STATUS_UNSET
 
         raise ValueError, "invalid status value: " + val
 
@@ -84,7 +84,7 @@ class SSLWrapper:
         if password is None:
             raise Exception ('Password should not be Empty')
             #	password = util.passphrase_callback(0)
-            #	if len(password) == 0 or password == "" or password == None:
+            #	if len(password) == 0 or password == "" or password is None:
             #	raise Exception('Empty passphrase.')
             #	self._password=password
         else:
@@ -251,21 +251,21 @@ class Arclink(object):
             self.software = r
             self.organization = self.__fd.readline(LINESIZE).rstrip()
 
-            if user == None:
+            if user is None:
                 raise ArclinkAuthFailed, self.organization
 
             try:
-                if(passwd == None):
+                if(passwd is None):
                     self.send_command("USER " + user)
                 else:
                     self.send_command("USER " + user + " " + passwd)
             except ArclinkCommandNotAccepted:
                 raise ArclinkAuthFailed, self.organization
 
-            if inst != None:
+            if inst is not None:
                 self.send_command("INSTITUTION " + inst)
 
-            if user_ip != None:
+            if user_ip is not None:
                 self.send_command("USER_IP " + user_ip)
 
         except Exception, e:
@@ -348,12 +348,12 @@ class Arclink(object):
         return r
 
     def __init_download(self, req_id, vol_id, pos, timeout):
-        if vol_id == None:
+        if vol_id is None:
             req_vol = req_id
         else:
             req_vol = req_id + "." + vol_id
 
-        if pos == None:
+        if pos is None:
             pos_ext = ""
         else:
             pos_ext = " " + pos

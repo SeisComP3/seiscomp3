@@ -37,11 +37,14 @@ using namespace Seiscomp::Math;
 namespace Seiscomp {
 namespace Applications {
 namespace Qc {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QcTool::QcTool(int argc, char **argv) : QcApp(argc, argv) {
-
+QcTool::QcTool(int argc, char **argv)
+: QcApp(argc, argv) {
 	setLoadInventoryEnabled(false);
 	setLoadStationsEnabled(true);
 	setLoadConfigModuleEnabled(true);
@@ -80,9 +83,17 @@ bool QcTool::archiveMode() const {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string QcTool::creatorID() const {
 	return _creator;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTool::createCommandLineDescription() {
@@ -195,7 +206,7 @@ bool QcTool::initConfiguration() {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-		
+
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -467,7 +478,6 @@ Core::Time QcTool::findLast(string net, string sta, string loc, string cha) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTool::done() {
-
 	//! trigger QcPlugins to make last calculation before finish
 	doneSignal();
 
@@ -481,8 +491,8 @@ void QcTool::done() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcTool::initQc(const string& networkCode, const string& stationCode,
-					const string& locationCode, const string& channelCode) {
+void QcTool::initQc(const string &networkCode, const string &stationCode,
+                    const string &locationCode, const string &channelCode) {
 
 	QcPlugin* qcPlugin;
 
@@ -505,7 +515,7 @@ void QcTool::initQc(const string& networkCode, const string& stationCode,
 		addProcessor(networkCode, stationCode, locationCode, channelCode, qcPlugin->qcProcessor());
 	}
 	
-	if (_plugins.size() > 0)
+	if ( _plugins.size() > 0 )
 		SEISCOMP_DEBUG("number of Streams: %ld", (long int)(_qcPluginMap.size() / _plugins.size()));
 	else
 		SEISCOMP_ERROR("no Qc Plugins loaded!");
@@ -516,7 +526,7 @@ void QcTool::initQc(const string& networkCode, const string& stationCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QcMessenger* QcTool::qcMessenger() const {
+QcMessenger *QcTool::qcMessenger() const {
 	return _qcMessenger;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -573,6 +583,7 @@ void QcTool::addTimeout(const TimerSignal::slot_type& onTimeout) const {
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

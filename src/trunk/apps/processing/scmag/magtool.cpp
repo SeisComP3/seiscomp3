@@ -459,6 +459,9 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 	double period = 0;
 	try { period = ampl->period().value(); } catch ( ... ) {}
 
+	double snr = 0;
+	try { snr = ampl->snr(); } catch ( ... ) {}
+
 	Util::KeyValues *params = NULL;
 	std::string stationID = ampl->waveformID().networkCode() + "." +
 	                        ampl->waveformID().stationCode();
@@ -524,14 +527,19 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 		}
 
 		MagnitudeProcessor::Status status =
-			it->second->computeMagnitude(ampl->amplitude().value(),
-			                             period, distance, depth,
-			                             origin, loc, mag);
+			it->second->computeMagnitude(ampValue, ampl->unit(),
+			                             period, snr, distance, depth,
+			                             origin, loc, ampl, mag);
 
-		if ( status != MagnitudeProcessor::OK )
-			continue;
+		bool passedQC = true;
 
-		mags.push_back(MagnitudeEntry(it->second->type(), mag));
+		if ( status != MagnitudeProcessor::OK ) {
+			if ( !it->second->treatAsValidMagnitude() )
+				continue;
+			passedQC = false;
+		}
+
+		mags.push_back(MagnitudeEntry(it->second.get(), mag, passedQC));
 
 		const string &net = ampl->waveformID().networkCode();
 		const string &sta = ampl->waveformID().stationCode();
@@ -550,15 +558,23 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 	using namespace DataModel;
 
 	StaMagArray stationMagnitudes;
+	StaMagArray stationMagnitudesZeroWeight;
+
 	vector<double> mv; // vector of station magnitude values
 
 	// retrieve from the origin all station magnitudes of specified type
-	for (int i=0, nmag = origin->stationMagnitudeCount(); i<nmag; i++) {
-
+	for ( int i = 0, nmag = origin->stationMagnitudeCount(); i < nmag; ++i ) {
 		const DataModel::StationMagnitude *mag = origin->stationMagnitude(i);
 
-		if (mag->type() != mtype)
-			continue;
+		if ( mag->type() != mtype ) continue;
+
+		try {
+			if ( !mag->passedQC() ) {
+				stationMagnitudesZeroWeight.push_back(mag);
+				continue;
+			}
+		}
+		catch ( ... ) {}
 
 		stationMagnitudes.push_back(mag);
 
@@ -569,7 +585,7 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 	// Set configured average method
 	AverageDescription averageMethod;
 	AverageMethods::iterator am_it = _magnitudeAverageMethods.find(mtype);
-	if (am_it == _magnitudeAverageMethods.end())
+	if ( am_it == _magnitudeAverageMethods.end() )
 		averageMethod.type = Default;
 	else
 		averageMethod = am_it->second;
@@ -581,81 +597,75 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 	string methodID = "mean";
 	std::vector<double> weights;
 
-	if (count == 0) return false;
+	if ( !count ) return false;
 
 	weights.resize(mv.size(), 1);
 
-	switch(averageMethod.type) {
+	switch( averageMethod.type ) {
+		case Default:
+			if ( count > 3 ) {
+				trimPercentage = 25.;
+				methodID = "trimmed mean(25)";
+			}
 
-	case Default:
-		if ( count > 3 ) {
-			trimPercentage = 25.;
-			methodID = "trimmed mean(25)";
-		}
+			// compute the trimmed mean and the corresponding weights
+			Math::Statistics::computeTrimmedMean(mv, trimPercentage, value, stdev, &weights);
+			break;
 
-		// compute the trimmed mean and the corresponding weights
-		Math::Statistics::computeTrimmedMean(mv, trimPercentage, value, stdev, &weights);
-		break;
+		case Mean:
+			Math::Statistics::computeTrimmedMean(mv, 0, value, stdev, &weights);
+			break;
 
-	case Mean:
-		Math::Statistics::computeTrimmedMean(mv, 0, value, stdev, &weights);
-		break;
+		case TrimmedMean:
+			methodID = "trimmed mean(" + Core::toString(averageMethod.parameter) + ")";
+			Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
+			break;
 
-	case TrimmedMean:
-		methodID = "trimmed mean(" + Core::toString(averageMethod.parameter) + ")";
-		Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
-		break;
+		case Median:
+			methodID = "median";
+			value = Math::Statistics::median(mv);
+			if ( mv.size() > 1 ) {
+				stdev = 0;
+				for ( size_t i = 0; i < mv.size(); ++i )
+					stdev += (mv[i] - value) * (mv[i] - value);
+				stdev /= mv.size()-1;
+				stdev = sqrt(stdev);
+			}
+			break;
 
-	case Median:
-		methodID = "median";
-		value = Math::Statistics::median(mv);
-		if ( mv.size() > 1 ) {
+		case TrimmedMedian:
+			methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
+			Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
+			value = Math::Statistics::median(mv);
 			stdev = 0;
-			for ( size_t i = 0; i < mv.size(); ++i )
-				stdev += (mv[i] - value) * (mv[i] - value);
-			stdev /= mv.size()-1;
-			stdev = sqrt(stdev);
-		}
-		break;
+			for ( size_t i = 0; i < mv.size(); ++i ) {
+				stdev += (mv[i] - value) * (mv[i] - value) * weights[i];
+				cumw += weights[i];
+			}
 
-	case TrimmedMedian:
-		methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
-		Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
-		value = Math::Statistics::median(mv);
-		stdev = 0;
-		for ( size_t i = 0; i < mv.size(); ++i ) {
-			stdev += (mv[i] - value) * (mv[i] - value) * weights[i];
-			cumw += weights[i];
-		}
+			if ( cumw > 1 )
+				stdev = sqrt(stdev/(cumw-1));
+			else
+				stdev = 0;
 
-		if ( cumw > 1 )
-			stdev = sqrt(stdev/(cumw-1));
-		else
-			stdev = 0;
+			break;
 
-		break;
-
-	default:
-		return false;
+		default:
+			return false;
 	}
 
-
-	// adding stamag references and set the weights
+	// adding stamag referencomputeStationMagnitudeces and set the weights
 	size_t weightIndex = 0;
 	size_t staCount = 0;
-	for (StaMagArray::iterator
-	     it = stationMagnitudes.begin(); it != stationMagnitudes.end(); ++it) {
-
+	for ( StaMagArray::iterator it = stationMagnitudes.begin();
+	      it != stationMagnitudes.end(); ++it ) {
 		const DataModel::StationMagnitude *stationMagnitude = (*it).get();
-		if (stationMagnitude->type() != mtype)
-			continue;
 
 		StationMagnitudeContributionPtr magRef =
 			netMag->stationMagnitudeContribution(stationMagnitude->publicID());
+
 		if ( !magRef ) {
-//			SEISCOMP_INFO("Adding new magnitude reference for %s", stationMagnitude->publicID().c_str());
-			magRef = new
-				StationMagnitudeContribution(stationMagnitude->publicID());
+			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
 			magRef->setWeight(weights[weightIndex]);
 			netMag->add(magRef.get());
 		}
@@ -677,6 +687,34 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 			++staCount;
 
 		++weightIndex;
+	}
+
+	// Associate zero weight magnitudes with weight 0
+	for ( StaMagArray::iterator it = stationMagnitudesZeroWeight.begin();
+	      it != stationMagnitudesZeroWeight.end(); ++it ) {
+		const DataModel::StationMagnitude *stationMagnitude = (*it).get();
+
+		StationMagnitudeContributionPtr magRef =
+			netMag->stationMagnitudeContribution(stationMagnitude->publicID());
+
+		if ( !magRef ) {
+			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
+			magRef->setWeight(0.0);
+			netMag->add(magRef.get());
+		}
+		else {
+			double oldWeight = -1;
+			try {
+				oldWeight = magRef->weight();
+			}
+			catch ( Core::ValueException & ) {}
+
+			if ( oldWeight != 0 ) {
+				magRef->setWeight(0.0);
+				magRef->update();
+				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
+			}
+		}
 	}
 
 	netMag->setMethodID(methodID);
@@ -1047,10 +1085,12 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 				continue;
 
 			for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
-				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->first, it->second, false);
+				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->proc->type(), it->value, false);
 				if ( stationMagnitude ) {
+					it->proc->finalizeMagnitude(stationMagnitude.get());
 					stationMagnitude->setAmplitudeID(aid);
-					magTypes.insert(it->first);
+					stationMagnitude->setPassedQC(it->passedQC);
+					magTypes.insert(it->proc->type());
 				}
 			}
 		}
@@ -1100,15 +1140,12 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 
 	if ( !_feed(ampl, update) ) return false;
 
-	Util::StopWatch updateTime;
-
 	const std::string &pickID = ampl->pickID();
 
 	OriginList *origins = originsForPick(pickID);
 
 	if ( origins == NULL && SCCoreApp->query() ) {
 		// No pick - origin information cached => read from database
-//		SEISCOMP_INFO("Fetching all origins for pick %s from database (%lu accesses so far)", ampl->pickID().c_str(), (unsigned long)_dbAccesses);
 
 		++_dbAccesses;
 
@@ -1280,10 +1317,11 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 		bool updateSummary = false;
 
 		for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
-
-			StaMagPtr stationMagnitude = getStationMagnitude(origin, wfid, it->first, it->second, update);
+			StaMagPtr stationMagnitude = getStationMagnitude(origin, wfid, it->proc->type(), it->value, update);
 			if ( stationMagnitude ) {
+				it->proc->finalizeMagnitude(stationMagnitude.get());
 				stationMagnitude->setAmplitudeID(ampl->publicID());
+				stationMagnitude->setPassedQC(it->passedQC);
 
 				const string &mtype = stationMagnitude->type();
 				bool newInstance;

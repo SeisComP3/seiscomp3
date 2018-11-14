@@ -1,24 +1,33 @@
-Reads database objects and writes them to the command line.
+Reads objects from a SeisComP3 database and writes them to the command line.
+
+Setup
+=====
+
+*scquery* reads and writes objects from the SeisComP3 database configured in
+:ref:`scquery.cfg<scquery_config>`. It takes into account the query profiles
+defined in :ref:`queries.cfg<scquery_queries>`.
+
+.. _scquery_examples:
 
 Examples
 ========
 
-Choose any query profile defined in the :ref:`queries.cfg<scquery_files>`. Provide
+Choose any query profile defined in the :ref:`queries.cfg<scquery_queries>`. Provide
 the required parameters in the same order as in the database request. The required
 parameters are indicated by hashes, e.g. ##latMin##
 
-1. List all available query profiles:
+1. List all available query profiles using the commandline option :confval:`showqueries`:
 
    .. code-block:: sh
 
-      scquery --showqueries
+      scquery -d localhost/seiscomp3 --showqueries
 
 #. Profile **event_filter**: fetch all event IDs and event parameters for events
    with magnitude ranging from 2.5 to 5 in central Germany between 2014 and 2017:
 
    .. code-block:: sh
 
-      scquery event_filter 50 52  11.5 12.5 2.5 5 2014-01-01 2018-01-01 -d localhost/seiscomp3 > events_vogtland.txt
+      scquery -d localhost/seiscomp3 event_filter 50 52  11.5 12.5 2.5 5 2014-01-01 2018-01-01 > events_vogtland.txt
 
 #. Profile **eventByAuthor**: fetch all event IDs where the preferred origin was
    provided by a specfic author for events 2.5 to 5 with 6 to 20 phases in central
@@ -26,27 +35,39 @@ parameters are indicated by hashes, e.g. ##latMin##
 
    .. code-block:: sh
 
-      scquery eventByAuthor 50 52  11.5 12.5 6 20 2.5 5 2014-01-01 2018-01-01 scautoloc -d localhost/seiscomp3 > events_vogtland.txt
+      scquery -d localhost/seiscomp3 eventByAuthor 50 52  11.5 12.5 6 20 2.5 5 2014-01-01 2018-01-01 scautoloc > events_vogtland.txt
 
-Parameter files
-===============
+#. Profile **eventType**: fetch all event IDs and event times from events
+   with the given event type and within the provided time interval:
 
-.. _scquery_files:
+   .. code-block:: sh
 
-1. **scquery.cfg** configuration file containing the database connection, e.g.:
+      scquery -d localhost/seiscomp3 eventType explosion '2017-11-01 00:00:00' '2018-11-01 00:00:00'
+
+Parameter and query profile files
+=================================
+
+.. _scquery_config:
+
+1. The configuration file **scquery.cfg** contains the database connection paraemters.
+   Copy the file to @CONFIGDIR@ or to @SYSTEMCONFIGDIR@.
 
    .. code-block:: sh
 
       database.type = mysql
       database.parameters = sysop:sysop@localhost/seiscomp3
 
+If the database connection is configured, the database option :confval:`-d <database>` in the
+:ref:`Examples<scquery_examples>` can be omitted or used to overwrite the configuration.
 
-#. **queries.cfg**: file containing the database queries. Copy the file to
-   @LOGDIR@ or @SYSTMCOFIGDIR@
+.. _scquery_queries:
+
+#. Profile file **queries.cfg** containing the database queries. Copy the file to
+   @CONFIGDIR@ or to @SYSTEMCONFIGDIR@
 
    .. code-block:: sh
 
-      queries = event_filter, eventByAuthor, eventWithStationCount,phaseCountPerAuthor
+      queries = event_filter, eventByAuthor, eventWithStationCount, phaseCountPerAuthor, eventType
 
       query.event_filter.description = "Returns all events (lat, lon, mag, time) that fall into a certain region and a magnitude range"
       query.event_filter = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value,Origin.longitude_value, Origin.depth_value,Magnitude.magnitude_value, Magnitude.type from Origin,PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where Event._oid=PEvent._oid and Origin._oid=POrigin._oid and Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.latitude_value >= ##latMin## and Origin.latitude_value <= ##latMax## and Origin.longitude_value >= ##lonMin## and Origin.longitude_value <= ##lonMax## and Magnitude.magnitude_value >= ##minMag## and Magnitude.magnitude_value <= ##maxMag## and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
@@ -57,5 +78,8 @@ Parameter files
       query.eventWithStationCount.description = "get events by prefered origin author etc"
       query.eventWithStationCount = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value as lat,Origin.longitude_value as lon, Origin.depth_value as dep, Magnitude.magnitude_value as mag, Magnitude.type as mtype, Origin.quality_usedStationCount as stations, Event.type as type, Event.typeCertainty as certainty, Origin.creationInfo_author from   Origin, PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where  Event._oid=PEvent._oid and Origin._oid=POrigin._oid and  Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
 
-      query.phaseCountPerAuthor="Get phase count per author from #EventID#"
+      query.phaseCountPerAuthor.description="Get phase count per author from #EventID#"
       query.phaseCountPerAuthor="select PEvent.publicID,Origin.creationInfo_author, max(Origin.quality_usedPhaseCount) from Origin, PublicObject as POrigin, Event, PublicObject as PEvent, OriginReference where Origin._oid=POrigin._oid and Event._oid=PEvent._oid and OriginReference._parent_oid=Event._oid and OriginReference.originID=POrigin.publicID and PEvent.publicID='##EventID##' group by Origin.creationInfo_author;"
+
+      query.eventType.description = "Returns all eventIDs from event where the type is flagged as 'event type'"
+      query.eventType = "select pe.publicID, o.time_value as OT from PublicObject pe, PublicObject po, Event e, Origin o where pe._oid = e._oid and po._oid = o._oid and e.preferredOriginID = po.publicID and e.type = '##type##' and o.time_value >= '##startTime##' and o.time_value <= '##endTime##'";

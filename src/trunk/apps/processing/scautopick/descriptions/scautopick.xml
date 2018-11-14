@@ -9,24 +9,24 @@
 					will override this value.
 				</description>
 			</parameter>
-			<parameter name="timeCorrection" type="double" default="-0.8">
+			<parameter name="timeCorrection" type="double" default="-0.8" unit="s">
 				<description>
 					Time correction applied for each pick made. Station specific
 					values override this value.
 				</description>
 			</parameter>
-			<parameter name="ringBufferSize" type="int" default="300">
+			<parameter name="ringBufferSize" type="int" default="300" unit="s">
 				<description>
 					Defined the record ringbuffer size in seconds.
 				</description>
 			</parameter>
-			<parameter name="leadTime" type="int" default="60">
+			<parameter name="leadTime" type="int" default="60" unit="s">
 				<description>
 					The leadTime defines the time in seconds to start picking on
 					waveforms before current time.
 				</description>
 			</parameter>
-			<parameter name="initTime" type="int" default="60">
+			<parameter name="initTime" type="int" default="60" unit="s">
 				<description>
 					The initTime defines a timespan in seconds for that the picker
 					is blind after initialization. This time is needed to initialize
@@ -99,19 +99,19 @@
 						specific values ovveride this value.
 					</description>
 				</parameter>
-				<parameter name="maxGapLength" type="double" default="4.5">
+				<parameter name="maxGapLength" type="double" default="4.5" unit="s">
 					<description>
 						The maximum gap length in seconds to handle.
 						Gaps larger than this will cause the picker to be resettet.
 					</description>
 				</parameter>
-				<parameter name="amplMaxTimeWindow" type="double" default="10">
+				<parameter name="amplMaxTimeWindow" type="double" default="10" unit="s">
 					<description>
 						The time window used to compute a maximum (snr) amplitude
 						on the filtered waveforms.
 					</description>
 				</parameter>
-				<parameter name="deadTime" type="double" default="30">
+				<parameter name="deadTime" type="double" default="30" unit="s">
 					<description>
 						The dead time in seconds.
 					</description>

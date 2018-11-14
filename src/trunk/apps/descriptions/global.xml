@@ -62,6 +62,36 @@
 					Name of the configuration module.
 				</description>
 			</parameter>
+			<parameter name="database" type="string">
+				<description>
+					Defines the database connection. If no database is configured
+					(which is the default) and a messaging connection is available
+					the application will receive the parameters after the connection
+					is established. Override these values only if you know what you
+					are doing.
+
+					The format is: service://user:pwd@host/database.
+					&quot;service&quot; is the name of the database driver which can be
+					queried with &quot;--db-driver-list&quot;.
+
+					Note that this parameter overrides 'database.type' and
+					'database.parameters' if present.
+				</description>
+			</parameter>
+			<parameter name="recordstream" type="string">
+				<description>
+				SeisComP3 applications access waveform data through the RecordStream
+				interface. Please consult the SeisComP3 documentation for a list of
+				supported services and their configuration.
+
+				This parameter configures recordstream source URL, format: [service://]location[#type].
+				&quot;service&quot; is the name of the recordstream implementation.
+				If &quot;service&quot; is not given &quot;file://&quot; is implied.
+
+				This parameter overrides recordstream.service and recordstream.source
+				and has been added as a shortcut.
+				</description>
+			</parameter>
 			<group name="logging">
 				<parameter name="level" type="int" default="2">
 					<description>
@@ -205,7 +235,8 @@
 					<description>
 					Defines the database backend to be used. The name corresponds to
 					the defined name in the database plugin. Examples are: mysql, postgresql or
-					sqlite3.
+					sqlite3. Note that this parameter is deprecated. Please use
+					'database = mysql://localhost/seiscomp3' instead.
 					</description>
 				</parameter>
 				<parameter name="parameters" type="string">
@@ -214,6 +245,8 @@
 					database backend. E.g. sqlite3 expects the path to the database
 					file whereas MYSQL or PostgreSQL expect an URI in the format
 					user:pwd@host/database?param1=val1&amp;param2=val2.
+					Note that this parameter is deprecated. Please use
+					'database = mysql://localhost/seiscomp3' instead.
 					</description>
 				</parameter>
 				<parameter name="inventory" type="string">
@@ -275,7 +308,9 @@
 				<description>
 				SeisComP3 applications access waveform data through the RecordStream
 				interface. Please consult the SeisComP3 documentation for a list of
-				supported services and their configuration.
+				supported services and their configuration. Note that this set of
+				parameters is deprecated and will be removed in future versions.
+				Please use the short form (recordstream = slink://localhost) in future.
 				</description>
 				<parameter name="service" type="string" default="slink">
 					<description>
@@ -335,6 +370,22 @@
 						command, ".*$" can be used.
 					</description>
 				</parameter>
+			</group>
+			<group name="ttt">
+				<description>
+				Travel time table related configuration. Travel time tables can
+				be added via plugins. Built-in interfaces are libtau and LOCSAT.
+				For each loaded interface a list of supported models must be
+				provided. The default list of tables for libtau is ak135 and
+				iasp91. LOCSAT's default tables are iasp91 and tab.
+				</description>
+				<struct type="TTT">
+					<parameter name="tables" type="list:string">
+						<description>
+						The list of supported model names per interface.
+						</description>
+					</parameter>
+				</struct>
 			</group>
 		</configuration>
 		<setup>
@@ -599,6 +650,29 @@
 					<parameter name="h" type="double" default="0.8">
 						<description>
 						The damping constant of the Wood-Anderson seismometer.
+						</description>
+					</parameter>
+				</group>
+				<group name="ML">
+					<parameter name="absMax" type="boolean" default="true">
+						<description>
+						Whether to use the absolute maximum of the filtered trace
+						for ML amplitudes, such as MLv, MLh and ML or the
+						difference of the maximum and minimum value of the
+						signal window. Basically this parameter is valid for all
+						amplitudes that use the MLv processing component.
+						</description>
+					</parameter>
+					<parameter name="measureType" type="string" default="AbsMax">
+						<description>
+						This parameter allows to set how the amplitude is measured.
+						Either by finding the absolute maximum of the demeaned
+						trace (AbsMax), the difference of maximum and minimum of
+						the signal window (MinMax) or the maximum peak-trough
+						of one cycle (PeakTrough).
+
+						Note that if absMax is already explicitly configured, this
+						parameter has no effect.
 						</description>
 					</parameter>
 				</group>

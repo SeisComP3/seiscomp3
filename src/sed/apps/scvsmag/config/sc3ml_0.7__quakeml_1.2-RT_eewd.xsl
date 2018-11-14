@@ -128,7 +128,7 @@
  ********************************************************************** -->
 <xsl:stylesheet version="1.0"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.9"
+        xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.11"
         xmlns:qml="http://quakeml.org/xmlns/quakeml/1.0"
         xmlns="http://quakeml.org/xmlns/bed-rt/1.2"
 	xmlns:vs="http://quakeml.org/xmlns/vstypes/0.1"

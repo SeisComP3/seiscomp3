@@ -17,7 +17,7 @@
 
 #include <seiscomp3/math/filter/average.h>
 #include <seiscomp3/core/exceptions.h>
-#include<seiscomp3/logging/log.h>
+#include <seiscomp3/logging/log.h>
 
 
 namespace Seiscomp {
@@ -51,23 +51,22 @@ void Average<TYPE>::apply(int n, TYPE *inout) {
 	// Initialize the average buffer with the first sample
 	if ( _firstSample && n ) {
 		std::fill(_buffer.begin(), _buffer.end(), inout[0]);
-		_lastSum = inout[0] * _buffer.size();
+		_lastSum = inout[0] * (double)_buffer.size();
 		_firstSample = false;
 	}
 
 	for ( int i = 0; i < n; ++i ) {
-		_lastValue = inout[i];
+		TYPE lastValue = inout[i];
 
 		TYPE firstValue = _buffer[_index];
-		_buffer[_index] = _lastValue;
+		_buffer[_index] = lastValue;
 
 		++_index;
 
 		if ( _index >= _sampleCount )
 			_index = 0;
 
-		_lastSum = _lastSum + _lastValue - firstValue;
-
+		_lastSum = _lastSum + lastValue - firstValue;
 		inout[i] = (TYPE)(_lastSum * _oocount);
 	}
 }

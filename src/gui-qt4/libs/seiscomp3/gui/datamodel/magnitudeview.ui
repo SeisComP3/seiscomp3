@@ -548,6 +548,24 @@
             <number>6</number>
            </property>
            <item>
+            <widget class="QRadioButton" name="btnDefault" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>4</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Default</string>
+             </property>
+             <property name="checked" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QRadioButton" name="btnMean" >
              <property name="sizePolicy" >
               <sizepolicy>
@@ -559,9 +577,6 @@
              </property>
              <property name="text" >
               <string>Mean</string>
-             </property>
-             <property name="checked" >
-              <bool>true</bool>
              </property>
             </widget>
            </item>

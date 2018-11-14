@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #define SEISCOMP_COMPONENT EventSummaryView
 
 #include "eventsummaryview.h"
@@ -473,7 +471,7 @@ void MagRow::setReferenceMagnitudeColor(QColor c) {
 
 
 void MagRow::setBold(bool bold) {
-	QFont font(_netMag || !_header ? SCScheme.fonts.large : SCScheme.fonts.normal);
+	QFont font(SCScheme.fonts.normal);
 	if ( bold ) font.setBold(true);
 
 	_magnitude->setFont(font);
@@ -1079,9 +1077,11 @@ void EventSummaryView::setToolButtonText(const QString& text) {
 }
 
 
-void EventSummaryView::setScript0(const std::string& script, bool oldStyle) {
+void EventSummaryView::setScript0(const std::string& script, bool oldStyle,
+                                  bool exportMap) {
 	_script0 = script;
 	_scriptStyle0 = oldStyle;
+	_scriptExportMap0 = exportMap;
 	bool visible0 = !_script0.empty() && _interactive;
 	bool visible1 = !_script1.empty() && _interactive;
 	ui.btnPlugable0->setVisible(visible0);
@@ -1089,9 +1089,11 @@ void EventSummaryView::setScript0(const std::string& script, bool oldStyle) {
 }
 
 
-void EventSummaryView::setScript1(const std::string& script, bool oldStyle) {
+void EventSummaryView::setScript1(const std::string& script, bool oldStyle,
+                                  bool exportMap) {
 	_script1 = script;
 	_scriptStyle1 = oldStyle;
+	_scriptExportMap1 = exportMap;
 	bool visible0 = !_script0.empty() && _interactive;
 	bool visible1 = !_script1.empty() && _interactive;
 	ui.btnPlugable1->setVisible(visible1);
@@ -2735,12 +2737,13 @@ void EventSummaryView::setInteractiveEnabled(bool e) {
 	ui.frameProcessing->setVisible(_interactive);
 	//ui.btnShowDetails->setVisible(_interactive);
 
-	setScript0(_script0, _scriptStyle0);
-	setScript1(_script1, _scriptStyle1);
+	setScript0(_script0, _scriptStyle0, _scriptExportMap0);
+	setScript1(_script1, _scriptStyle1, _scriptExportMap1);
 }
 
 
-void EventSummaryView::runScript(const QString& script, const QString& name, bool oldStyle) {
+void EventSummaryView::runScript(const QString& script, const QString& name, bool oldStyle,
+                                 bool exportMap) {
 	if ( QMessageBox::question(this, "Run action",
 	                           tr("Do you really want to continue (%1)?").arg(name),
 	                           QMessageBox::Yes, QMessageBox::No) == QMessageBox::No )
@@ -2767,6 +2770,30 @@ void EventSummaryView::runScript(const QString& script, const QString& name, boo
 		      .arg(_currentEvent->preferredOriginID().c_str())
 		      .arg(_currentEvent->preferredMagnitudeID().c_str())
 		      .arg(_currentEvent->preferredFocalMechanismID().c_str());
+	}
+
+	if ( exportMap ) {
+		QString templ = QDir::toNativeSeparators(QDir::tempPath() + "/XXXXXXXX.png");
+		QTemporaryFile tempFile(templ);
+		tempFile.setAutoRemove(false);
+		if ( tempFile.open() ) {
+			QImage img = QImage(_map->canvas().size(), QImage::Format_ARGB32);
+			img.fill(Qt::transparent);
+
+			QPainter p(&img);
+			_map->canvas().draw(p);
+			img.save(tempFile.fileName(), "PNG");
+			cmd += QString(" %1").arg(tempFile.fileName());
+			SEISCOMP_DEBUG("Stored screenshot of the current map as file %s",
+			               qPrintable(tempFile.fileName()));
+		}
+		else {
+			QMessageBox::warning(this, "Export event",
+			                     tr("Unable to wite map "
+			                        "content to temporary file."));
+			return;
+		}
+
 	}
 
 	QString command = QString(cmd);
@@ -2796,11 +2823,13 @@ void EventSummaryView::switchToAutomaticPressed() {
 
 
 void EventSummaryView::runScript0() {
-	runScript(_script0.c_str(), ui.btnPlugable0->text(), _scriptStyle0);
+	runScript(_script0.c_str(), ui.btnPlugable0->text(), _scriptStyle0,
+	          _scriptExportMap0);
 }
 
 void EventSummaryView::runScript1() {
-	runScript(_script1.c_str(), ui.btnPlugable1->text(), _scriptStyle1);
+	runScript(_script1.c_str(), ui.btnPlugable1->text(), _scriptStyle1,
+	          _scriptExportMap1);
 }
 
 std::string EventSummaryView::description(Origin* origin) const {

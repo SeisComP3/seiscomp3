@@ -10,9 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
 
 #define SEISCOMP_COMPONENT DatabaseReader
 #include <seiscomp3/datamodel/databasereader.h>
@@ -26,6 +23,7 @@
 #include <seiscomp3/datamodel/routing_package.h>
 #include <seiscomp3/datamodel/journaling_package.h>
 #include <seiscomp3/datamodel/arclinklog_package.h>
+#include <seiscomp3/datamodel/dataavailability_package.h>
 #include <seiscomp3/datamodel/comment.h>
 #include <boost/bind.hpp>
 
@@ -36,9 +34,7 @@ namespace DataModel {
 
 
 DatabaseReader::DatabaseReader(Seiscomp::IO::DatabaseInterface* dbDriver)
-: DatabaseArchive(dbDriver) {
-	Object::RegisterObserver(this);
-}
+: DatabaseArchive(dbDriver) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -202,6 +198,12 @@ PublicObject* DatabaseReader::loadObject(const Seiscomp::Core::RTTI& classType,
 	if ( arclinkRequest ) {
 		load(arclinkRequest);
 		return arclinkRequest;
+	}
+
+	DataExtent* dataExtent = DataExtent::Cast(publicObject);
+	if ( dataExtent ) {
+		load(dataExtent);
+		return dataExtent;
 	}
 
 	return publicObject;
@@ -3056,6 +3058,146 @@ int DatabaseReader::loadArclinkRequestLines(ArclinkRequest* arclinkRequest) {
 		}
 		else
 			SEISCOMP_INFO("ArclinkRequest::add(ArclinkRequestLine) -> ArclinkRequestLine has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataAvailability* DatabaseReader::loadDataAvailability() {
+	if ( !validInterface() ) return NULL;
+
+	DataAvailability *dataAvailability = new DataAvailability;
+
+	load(dataAvailability);
+
+	SEISCOMP_DEBUG("objects in cache: %d", getCacheSize());
+	
+	return dataAvailability;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::load(DataAvailability* dataAvailability) {
+	size_t count = 0;
+
+	count += loadDataExtents(dataAvailability);
+	{
+		size_t elementCount = dataAvailability->dataExtentCount();
+		for ( size_t i = 0; i < elementCount; ++i )
+			load(dataAvailability->dataExtent(i));
+	}
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadDataExtents(DataAvailability* dataAvailability) {
+	if ( !validInterface() || dataAvailability == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(dataAvailability, DataExtent::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			dataAvailability->add(DataExtent::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("DataAvailability::add(DataExtent) -> DataExtent has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::load(DataExtent* dataExtent) {
+	size_t count = 0;
+
+	count += loadDataSegments(dataExtent);
+
+	count += loadDataAttributeExtents(dataExtent);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadDataSegments(DataExtent* dataExtent) {
+	if ( !validInterface() || dataExtent == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(dataExtent, DataSegment::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			dataExtent->add(DataSegment::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("DataExtent::add(DataSegment) -> DataSegment has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadDataAttributeExtents(DataExtent* dataExtent) {
+	if ( !validInterface() || dataExtent == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(dataExtent, DataAttributeExtent::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			dataExtent->add(DataAttributeExtent::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("DataExtent::add(DataAttributeExtent) -> DataAttributeExtent has already another parent");
 		++it;
 	}
 	it.close();

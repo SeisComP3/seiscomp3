@@ -15,6 +15,7 @@
 #include <sstream>
 #include <ctype.h>
 #include <algorithm>
+#include <iostream>
 
 
 namespace Seiscomp {
@@ -37,17 +38,18 @@ std::string toupper(const std::string &s) {
 
 
 
-Symbol::Symbol(const std::string& name,
+Symbol::Symbol(const std::string& name, const std::string &ns,
                const std::vector<std::string>& values,
                const std::string& uri,
                const std::string& comment,
                int s)
-: name(name),
-  values(values),
-  uri(uri),
-  comment(comment),
-  stage(s),
-  line(-1) {}
+: name(name)
+, ns(ns)
+, values(values)
+, uri(uri)
+, comment(comment)
+, stage(s)
+, line(-1) {}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
@@ -61,12 +63,13 @@ Symbol::Symbol() : stage(-1), line(-1) {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Symbol::set(const std::string& name,
+void Symbol::set(const std::string& name, const std::string &ns,
                  const std::vector<std::string>& values,
                  const std::string& uri,
                  const std::string& comment,
                  int stage) {
 	this->name    = name;
+	this->ns      = ns;
 	this->values  = values;
 	this->uri     = uri;
 	this->comment = comment;
@@ -132,6 +135,7 @@ void SymbolTable::setLogger(Logger *l) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SymbolTable::add(const std::string& name,
+                      const std::string& ns,
                       const std::string& content,
                       const std::vector<std::string>& values,
                       const std::string& uri,
@@ -141,12 +145,12 @@ void SymbolTable::add(const std::string& name,
 	itp = _symbols.insert(Symbols::value_type(name, Symbol()));
 	if ( itp.second ) {
 		Symbol &newSymbol = itp.first->second;
-		newSymbol = Symbol(name, values, uri, comment, stage);
+		newSymbol = Symbol(name, ns, values, uri, comment, stage);
 		newSymbol.content = content;
 		_symbolOrder.push_back(&newSymbol);
 	}
 	else {
-		itp.first->second.set(name, values, uri, comment, stage);
+		itp.first->second.set(name, ns, values, uri, comment, stage);
 		itp.first->second.content = content;
 	}
 

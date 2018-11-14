@@ -114,14 +114,14 @@ class ProcLatency(seiscomp3.Client.Application):
     try:
       self.logObject(parentID, obj, False)
     except:
-      print >> sys.stderr, traceback.format_exc()
+      sys.stderr.write("%s\n" % traceback.format_exc())
 
 
   def updateObject(self, parentID, obj):
     try:
       self.logObject("", obj, True)
     except:
-      print >> sys.stderr, traceback.format_exc()
+      sys.stderr.write("%s\n" % traceback.format_exc())
 
 
   def logObject(self, parentID, obj, update):
@@ -210,7 +210,7 @@ class ProcLatency(seiscomp3.Client.Application):
 
     logEntry = logEntry + ";" + text
 
-    print timeToString(received) + ";" + logEntry
+    sys.stdout.write("%s;%s\n" % (timeToString(received), logEntry))
 
     if nowDirectory != self._nowDirectory:
       if createDirectory(nowDirectory) == False:
@@ -256,7 +256,7 @@ class ProcLatency(seiscomp3.Client.Application):
 
     logEntry = logEntry + ";" + text
 
-    print timeToString(received) + ";" + logEntry
+    sys.stdout.write("%s;%s\n" % (timeToString(received), logEntry))
 
     if nowDirectory != self._nowDirectory:
       if createDirectory(nowDirectory) == False:

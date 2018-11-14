@@ -471,10 +471,20 @@ std::vector<SchemaPlugin*> SchemaDefinitions::pluginsForModule(const std::string
 
 
 bool SchemaDefinitions::load(const char *path) {
+	_path = path;
+	return reload();
+}
+
+
+bool SchemaDefinitions::reload() {
 	IO::XMLArchive ar;
 
+	_modules.clear();
+	_plugins.clear();
+	_bindings.clear();
+
 	try {
-		SC_FS_DECLARE_PATH(directory, path);
+		SC_FS_DECLARE_PATH(directory, _path);
 
 		// Search for all XML files and parse them
 		for ( fs::directory_iterator it(directory); it != fsDirEnd; ++it ) {
@@ -493,7 +503,7 @@ bool SchemaDefinitions::load(const char *path) {
 		}
 
 		// Read the aliases file and create the aliases
-		fs::path aliases = path / fs::path("aliases");
+		fs::path aliases = _path / fs::path("aliases");
 		ifstream ifs(aliases.string().c_str());
 		if ( ifs.is_open() ) {
 			string line;

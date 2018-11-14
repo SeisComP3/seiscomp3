@@ -10,9 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
 
 #ifndef __SEISCOMP_DATAMODEL_DATABASEREADER_H__
 #define __SEISCOMP_DATAMODEL_DATABASEREADER_H__
@@ -90,6 +87,10 @@ class ArclinkRequest;
 class ArclinkStatusLine;
 class ArclinkRequestLine;
 class ArclinkUser;
+class DataAvailability;
+class DataExtent;
+class DataSegment;
+class DataAttributeExtent;
 
 DEFINE_SMARTPOINTER(DatabaseReader);
 
@@ -242,6 +243,13 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int load(ArclinkRequest*);
 		int loadArclinkStatusLines(ArclinkRequest*);
 		int loadArclinkRequestLines(ArclinkRequest*);
+		
+		DataAvailability* loadDataAvailability();
+		int load(DataAvailability*);
+		int loadDataExtents(DataAvailability*);
+		int load(DataExtent*);
+		int loadDataSegments(DataExtent*);
+		int loadDataAttributeExtents(DataExtent*);
 
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

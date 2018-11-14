@@ -52,13 +52,13 @@ Associator::~Associator()
 }
 
 void
-Associator::setStations(const StationDB *stations)
+Associator::setStations(const StationMap *stations)
 {
 	_stations = stations;
 }
 
 void
-Associator::setOrigins(const OriginDB *origins)
+Associator::setOrigins(const OriginVector *origins)
 {
 	_origins = origins;
 }
@@ -90,7 +90,7 @@ Associator::feed(const Pick* pick)
 
 	int count = 0;
 
-	for(OriginDB::const_iterator
+	for(OriginVector::const_iterator
 	    it=_origins->begin(); it != _origins->end(); ++it) {
 
 		const Origin  *origin = (*it).get();

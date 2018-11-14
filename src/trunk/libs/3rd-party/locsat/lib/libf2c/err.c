@@ -193,8 +193,8 @@ f_init(Void)
 	p->ufmt=1;
 	p->uwrt=0;
 	p= &f__units[6];
-	p->ufd=stdout;
-	p->useek=f__canseek(stdout);
+	p->ufd=stderr;
+	p->useek=f__canseek(stderr);
 	p->ufmt=1;
 	p->uwrt=1;
 }

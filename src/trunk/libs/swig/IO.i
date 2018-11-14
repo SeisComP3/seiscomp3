@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(directors="1") IO
+%module(package="seiscomp3", directors="1") IO
 %{
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core/interruptible.h>
@@ -44,7 +44,6 @@
 #include <seiscomp3/io/gfarchive.h>
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
-#include <seiscomp3/io/records/ahrecord.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/file.h>
 #include <seiscomp3/io/recordstream/slconnection.h>
@@ -103,7 +102,6 @@
 %include "seiscomp3/io/exporter.h"
 %include "seiscomp3/io/archive/xmlarchive.h"
 %include "seiscomp3/io/archive/binarchive.h"
-%include "seiscomp3/io/records/ahrecord.h"
 //#ifdef HAVE_MSEED
 %include "seiscomp3/io/records/mseedrecord.h"
 %include "seiscomp3/io/recordstream/file.h"
@@ -132,3 +130,5 @@
 %template(RecordResamplerF) Seiscomp::IO::RecordResampler<float>;
 %template(RecordResamplerD) Seiscomp::IO::RecordResampler<double>;
 %template(RecordResamplerI) Seiscomp::IO::RecordResampler<int>;
+
+%template(ExportObjectList) std::vector<Seiscomp::Core::BaseObject*>;

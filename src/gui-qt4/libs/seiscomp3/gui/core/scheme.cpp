@@ -28,6 +28,9 @@
 #define READ_COLOR(location) \
 	location = SCApp->configGetColor("scheme."#location, location);
 
+#define READ_BRUSH_COLOR(location) \
+	location = SCApp->configGetColor("scheme."#location, location.color());
+
 #define READ_COLOR_GRADIENT(location) \
 	location = SCApp->configGetColorGradient("scheme."#location, location);
 
@@ -359,6 +362,7 @@ Scheme::Map::Map() :
 	showLegends(false),
 	cityPopulationWeight(150),
 	toBGR(false),
+	polygonRoughness(3),
 	projection("")
 {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -378,7 +382,7 @@ Scheme::Marker::Marker() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Records::Records() {
 	lineWidth = 1;
-	antiAliasing = false;
+	antiAliasing = true;
 	optimize = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -495,8 +499,8 @@ void Scheme::fetch() {
 	READ_COLOR(colors.records.foreground);
 	READ_COLOR(colors.records.alternateForeground);
 	READ_COLOR(colors.records.spectrogram);
-	READ_COLOR(colors.records.gaps);
-	READ_COLOR(colors.records.overlaps);
+	READ_BRUSH_COLOR(colors.records.gaps);
+	READ_BRUSH_COLOR(colors.records.overlaps);
 	READ_COLOR(colors.records.states.unrequested);
 	READ_COLOR(colors.records.states.requested);
 	READ_COLOR(colors.records.states.inProgress);
@@ -610,6 +614,7 @@ void Scheme::fetch() {
 	READ_BOOL(map.showLegends);
 	READ_INT(map.cityPopulationWeight);
 	READ_BOOL(map.toBGR);
+	READ_INT(map.polygonRoughness);
 	READ_STRING(map.projection);
 
 	READ_INT(precision.depth);

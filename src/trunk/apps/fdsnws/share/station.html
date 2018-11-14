@@ -26,13 +26,11 @@
   <h2>Feature Notes</h2>
   <ul>
     <li>back-end software: <a href="http://www.seiscomp3.org">SeisComP3</a></li>
-    <li><em>includeavailability</em> request parameter not implemented</li>
     <li><em>updatedafter</em> request parameter not implemented: The last
       modification time in SeisComP is tracked on the object level. If a child
       of an object is updated the update time is not propagated to all parents.
       In order to check if a station was updated all children must be evaluated
       recursively. This operation would be much to expensive.</li>
-    <li><em>matchtimeseries</em> request parameter not implemented</li>
     <li>additional request parameters, effective only for xml output:
       <ul>
         <li><em>formatted</em>: boolean, default: <em>false</em></li>

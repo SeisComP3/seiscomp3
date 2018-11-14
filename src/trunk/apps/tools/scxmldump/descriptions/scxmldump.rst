@@ -3,8 +3,8 @@ task for the user. :ref:`scxmldump` queries the database and transforms that
 information into XML. The result can be converted into a bulletin with
 scbulletin or imported into another database with :ref:`scdb`.
 
-An XSD schema of the XML output can be downloaded
-at http://geofon.gfz-potsdam.de/schema/.
+An XSD schema of the XML output can be found under
+:file:`$SEISCOMP_ROOT/share/xml/`.
 
 Examples
 --------

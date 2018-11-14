@@ -31,57 +31,8 @@ using namespace std;
 #include <seiscomp3/datamodel/publicobject.h>
 #include <seiscomp3/datamodel/utils.h>
 
-// This is for debugging only
-void
-countPublicObjectsByType()
-{
-	using namespace Seiscomp::DataModel;
-	map<string, int> counter;
 
-	// count public objects by type
-	for (PublicObject::Iterator
-	     it = PublicObject::Begin(); it != PublicObject::End(); ++it) {
-
-		const PublicObject *obj = (*it).second;
-		const string name = obj->className();
-
-		if (counter.find(name) == counter.end())
-			counter[name] = 0;
-
-		counter[name]++;
-	}
-
-	SEISCOMP_DEBUG("PUBLIC OBJECTS %16lu", (unsigned long)PublicObject::ObjectCount());
-	for (map<string, int>::iterator
-	     it = counter.begin(); it != counter.end(); ++it) {
-
-		const char *name = (*it).first.c_str();
-		const int  count = (*it).second;
-		SEISCOMP_INFO("  %22s %6d", name, count);
-	}
-}
-
-
-/*
-
-static std::ostream &
-operator << (std::ostream &os, const Seiscomp::Core::Time &t)
-{
-	int k = os.precision();
-	if (k <= 0)  k = -1;
-	if (k >  6)  k =  6;
-	os << t.toString("%F %T.%f").substr(0, 20+k);
-	return os;
-
-}
-
-*/
-
-
-
-bool
-dumpOrigin(const Seiscomp::DataModel::Origin *origin)
-{
+bool dumpOrigin(const Seiscomp::DataModel::Origin *origin) {
 	using namespace Seiscomp::DataModel;
 	using namespace Seiscomp::Core;
 
@@ -137,11 +88,8 @@ dumpOrigin(const Seiscomp::DataModel::Origin *origin)
 }
 
 
-bool
-equivalent( 
-	const Seiscomp::DataModel::WaveformStreamID &wfid1, 
-	const Seiscomp::DataModel::WaveformStreamID &wfid2) 
-{ 
+bool equivalent(const Seiscomp::DataModel::WaveformStreamID &wfid1,
+                const Seiscomp::DataModel::WaveformStreamID &wfid2) {
 	if (wfid1.networkCode() != wfid2.networkCode()) return false;
 	if (wfid1.stationCode() != wfid2.stationCode()) return false;
 	// here we consider different component codes to be irrelevant
@@ -151,9 +99,7 @@ equivalent(
 }
 
 
-double
-arrivalWeight(const Seiscomp::DataModel::Arrival *arr, double defaultWeight=1.)
-{
+double arrivalWeight(const Seiscomp::DataModel::Arrival *arr, double defaultWeight=1.) {
 	try {
 		return arr->weight();
 	}
@@ -163,8 +109,7 @@ arrivalWeight(const Seiscomp::DataModel::Arrival *arr, double defaultWeight=1.)
 }
 
 
-char
-getShortPhaseName(const string &phase) {
+char getShortPhaseName(const string &phase) {
 	for ( string::const_reverse_iterator it = phase.rbegin();
 	      it != phase.rend(); ++it ) {
 		if ( isupper(*it ) )
@@ -175,25 +120,20 @@ getShortPhaseName(const string &phase) {
 }
 
 
-bool
-validArrival(const Seiscomp::DataModel::Arrival *arr, double minWeight) {
+bool validArrival(const Seiscomp::DataModel::Arrival *arr, double minWeight) {
 	return arrivalWeight(arr) >= minWeight
 	       && getShortPhaseName(arr->phase().code()) == 'P';
 }
 
 
-Seiscomp::DataModel::EvaluationStatus
-status(const Seiscomp::DataModel::Origin *origin)
-{
+Seiscomp::DataModel::EvaluationStatus status(const Seiscomp::DataModel::Origin *origin) {
 	Seiscomp::DataModel::EvaluationStatus status = Seiscomp::DataModel::PRELIMINARY;
 
 	try {
 		status = origin->evaluationStatus();
 	}
 	catch (...) {
-		SEISCOMP_DEBUG("assuming origin.status as %s",
-			       status.toString());
+		SEISCOMP_DEBUG("assuming origin.status as %s", status.toString());
 	}
 	return status;
 }
-

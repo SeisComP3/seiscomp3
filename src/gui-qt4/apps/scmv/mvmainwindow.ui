@@ -53,14 +53,6 @@
          <string>ground motion</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="eventTab" >
-        <property name="enabled" >
-         <bool>true</bool>
-        </property>
-        <attribute name="title" >
-         <string>event</string>
-        </attribute>
-       </widget>
        <widget class="QWidget" name="qcTab" >
         <attribute name="title" >
          <string>qc</string>
@@ -77,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>824</width>
-     <height>29</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu" >
@@ -98,6 +90,22 @@
      <addaction name="qcOffsetAction" />
      <addaction name="qcRmsAction" />
     </widget>
+    <widget class="QMenu" name="menuEvents" >
+     <property name="title" >
+      <string>Events</string>
+     </property>
+     <addaction name="actionEventsModeUnset" />
+     <addaction name="actionEventsManual" />
+     <addaction name="actionEventsAutomatic" />
+     <addaction name="separator" />
+     <addaction name="actionEventsStatusUnset" />
+     <addaction name="actionEventsPreliminary" />
+     <addaction name="actionEventsConfirmed" />
+     <addaction name="actionEventsReviewed" />
+     <addaction name="actionEventsFinal" />
+     <addaction name="actionEventsRejected" />
+     <addaction name="actionEventsReported" />
+    </widget>
     <addaction name="showEventTableWidgetAction" />
     <addaction name="showWaveformPropagationAction" />
     <addaction name="showStationIdAction" />
@@ -107,6 +115,7 @@
     <addaction name="separator" />
     <addaction name="centerOriginForLatestEventAction" />
     <addaction name="separator" />
+    <addaction name="menuEvents" />
     <addaction name="menuQC" />
     <addaction name="searchStationAction" />
     <addaction name="separator" />
@@ -120,9 +129,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>574</y>
+     <y>571</y>
      <width>824</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -276,6 +285,116 @@
    </property>
    <property name="text" >
     <string>Show station channel codes</string>
+   </property>
+  </action>
+  <action name="actionEventsManual" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Manual</string>
+   </property>
+  </action>
+  <action name="actionEventsAutomatic" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Automatic</string>
+   </property>
+  </action>
+  <action name="actionEventsConfirmed" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Confirmed</string>
+   </property>
+  </action>
+  <action name="actionEventsPreliminary" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Preliminary</string>
+   </property>
+  </action>
+  <action name="actionEventsReviewed" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Reviewed</string>
+   </property>
+  </action>
+  <action name="actionEventsFinal" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Final</string>
+   </property>
+  </action>
+  <action name="actionEventsRejected" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Rejected</string>
+   </property>
+  </action>
+  <action name="actionEventsReported" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Reported</string>
+   </property>
+  </action>
+  <action name="actionEventsModeUnset" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Unset</string>
+   </property>
+  </action>
+  <action name="actionEventsStatusUnset" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Unset</string>
    </property>
   </action>
  </widget>

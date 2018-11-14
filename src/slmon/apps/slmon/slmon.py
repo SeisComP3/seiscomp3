@@ -6,10 +6,57 @@ from    datetime import datetime
 import  os, sys, signal, glob, re
 from    seiscomp.myconfig import MyConfig
 import  seiscomp.slclient
+import seiscomp3.Kernel, seiscomp3.Config
 
-ini_stations, ini_setup = "stations.ini", "setup.ini"
+usage_info = """
+slmon - SeedLink monitor creating static web pages
+
+Usage: slmon [options]
+
+Options:
+    -h, --help       display this help message
+    -c              ini_setup = arg
+    -s              ini_stations = arg
+    -t              refresh = float(arg) # XXX not yet used
+    -v              verbose = 1
+
+Examples:
+
+Start slmon from the command line
+
+slmon -c $SEISCOMP_ROOT/var/lib/slmon/config.ini
+
+Application:
+
+Restart slmon in order to update the web pages. Use crontab entries for
+automatic restart, e.g.:
+
+*/3 * * * * /home/sysop/seiscomp3/bin/seiscomp check slmon >/dev/null 2>&1
+"""
+
+def usage(exitcode=0):
+    sys.stderr.write(usage_info)
+    exit(exitcode)
+
+try:
+    seiscompRoot=os.environ["SEISCOMP_ROOT"]
+except:
+    print >> sys.stderr, "\nSEISCOMP_ROOT must be defined - EXIT\n"
+    usage(exitcode=2)
+
+ini_stations = os.path.join(seiscompRoot,'var/lib/slmon/stations.ini')
+ini_setup = os.path.join(seiscompRoot,'var/lib/slmon/config.ini')
+
+regexStreams = re.compile("[SLBVEH][HNLG][ZNE123]")
 
 verbose = 0
+
+class Module(seiscomp3.Kernel.Module):
+  def __init__(self, env):
+    seiscomp3.Kernel.Module.__init__(self, env, env.moduleName(__file__))
+
+  def printCrontab(self):
+    print "3 * * * * %s/bin/seiscomp check slmon >/dev/null 2>&1" % (self.env.SEISCOMP_ROOT)
 
 class Status:
 
@@ -28,7 +75,8 @@ class StatusDict(dict):
         cmd = "slinktool -nd 10 -nt 10 -Q %s" % server
         print cmd
         f = os.popen(cmd)
-        regex = re.compile("[SLBVEH]H[ZNE]")
+        # regex = re.compile("[SLBVEH][HNLG][ZNE123]")
+        regex = regexStreams
         for line in f.xreadlines():
             net_sta = line[:2].strip() + "_" + line[3:8].strip()
             if not net_sta in stations:
@@ -107,7 +155,7 @@ def encode(txt): return ''.join(["&#%d;" % ord(c) for c in txt])
 def total_seconds(td): return td.seconds + (td.days*86400)
 
 def pageTrailer(htmlfile, config):
-    
+
     htmlfile.write("<hr>\n" \
         "<table width='99%%' cellpaddding='2' cellspacing='1' border='0'>\n" \
             "<tr>\n<td>Last updated %04d/%02d/%02d %02d:%02d:%02d UTC</td>\n" \
@@ -156,7 +204,7 @@ def myrename(name1, name2):
     try:
         os.rename(name1, name2)
     except OSError:
-        print "failed to rename(%s,%s)" % (name1, name2)
+        print >> sys.stderr,"failed to rename(%s,%s)" % (name1, name2)
 
 
 def makeMainHTML(config):
@@ -167,8 +215,7 @@ def makeMainHTML(config):
 
     stations = []
 
-    streams = [ x for x in status.keys() if x.find("BHZ")>0 or
-        x.find("SHZ")>0 or x.find("EHZ")>0 ]
+    streams = [ x for x in status.keys() if regexStreams.search(x) ]
 
     streams.sort()
 
@@ -203,7 +250,7 @@ def makeMainHTML(config):
 
     temp = "%s/tmp.html"   % config['setup']['wwwdir']
     dest = "%s/index.html" % config['setup']['wwwdir']
-    
+
     table_begin = """
     <table cellpaddding='2' cellspacing='1' border='0' bgcolor='#000000'>
     <tr>
@@ -282,7 +329,7 @@ def makeStatHTML(net_sta, config):
             (   config['setup']['title'], net_sta, int(config['setup']['refresh']),
                 config['setup']['icon'],
                 config['setup']['title'], net_sta.split("_")[-1]))
-        
+
     try:
         name = config.station[net_sta]['info']
         htmlfile.write("<br><font size='+1'>%s</font>" % name)
@@ -331,7 +378,7 @@ def makeStatHTML(net_sta, config):
 
     htmlfile.write("</table></p>\n")
     colorLegend(htmlfile)
-    
+
     htmlfile.write("<p>\nHow to <a href='http://geofon.gfz-potsdam.de/waveform/status/latency.php' target='_blank'>interpret</a> " \
 		    "these numbers?<br>\n")
     if 'liveurl' in config['setup']:
@@ -346,9 +393,16 @@ def makeStatHTML(net_sta, config):
 
 def read_ini():
     global config, ini_setup, ini_stations
-    print "reading setup config from '%s'" % ini_setup
+    print "\nreading setup config from '%s'" % ini_setup
+    if not os.path.isfile(ini_setup):
+        print  >> sys.stderr,"[error] setup config '%s' does not exist" % ini_setup
+        usage(exitcode=2)
+
     config = MyConfig(ini_setup)
     print "reading station config from '%s'" % ini_stations
+    if not os.path.isfile(ini_stations):
+        print  >> sys.stderr,"[error] station config '%s' does not exist" % ini_stations
+        usage(exitcode=2)
     config.station = MyConfig(ini_stations)
 
 def SIGINT_handler(signum, frame):
@@ -357,19 +411,18 @@ def SIGINT_handler(signum, frame):
 #   status.write("status.tab")
     sys.exit(0)
 
-
 try:
     opts, args = getopt(sys.argv[1:], "c:s:t:hv")
 except GetoptError:
+    print >> sys.stderr, "\nUnknown option in "+str(sys.argv[1:])+" - EXIT."
     usage(exitcode=2)
 
-
 for flag, arg in opts:
-    if flag == "-c":    ini_setup = arg
-    if flag == "-s":    ini_stations = arg
-    if flag == "-t":    refresh = float(arg) # XXX not yet used
-    if flag == "-h":    usage(exitcode=0)
-    if flag == "-v":    verbose = 1
+    if flag == "-c":         ini_setup = arg
+    if flag == "-s":         ini_stations = arg
+    if flag == "-t":         refresh = float(arg) # XXX not yet used
+    if flag == "-h":         usage(exitcode=0)
+    if flag == "-v":         verbose = 1
 
 
 signal.signal(signal.SIGHUP,  SIGINT_handler)
@@ -379,13 +432,14 @@ signal.signal(signal.SIGTERM, SIGINT_handler)
 
 read_ini()
 
-cha = "?H?"
+cha = "???"
 loc = ""
 
 s = config.station
 net_sta = ["%s_%s" % (s[k]['net'],s[k]['sta']) for k in s]
 s_arg = ','.join(net_sta)
 streams = [ (s[k]['net'],s[k]['sta'],loc,cha)  for k in s ]
+
 
 if 'server' in config['setup']:
         server = config['setup']['server']

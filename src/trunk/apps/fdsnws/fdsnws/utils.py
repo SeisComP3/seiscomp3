@@ -157,3 +157,4 @@ class AccessLogEntry:
 		return self.msgPrefix + userHost + self.msgSuffix
 
 
+# vim: ts=4 noet

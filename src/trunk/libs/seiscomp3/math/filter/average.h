@@ -47,8 +47,7 @@ class Average : public InPlaceFilter<TYPE> {
 		double _oocount;
 		int _sampleCount;
 		int _index;
-		TYPE _lastSum;
-		TYPE _lastValue;
+		double _lastSum;
 		bool _firstSample;
 		std::vector<TYPE> _buffer;
 };

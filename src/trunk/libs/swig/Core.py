@@ -271,6 +271,9 @@ class Time(TimeSpan):
     else:
         FromYearDay = _Core.Time_FromYearDay
 
+    def localTimeZoneOffset(self):
+        return _Core.Time_localTimeZoneOffset(self)
+
     def localtime(self):
         return _Core.Time_localtime(self)
 

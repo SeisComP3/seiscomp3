@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(directors="1") Client
+%module(package="seiscomp3", directors="1") Client
 %{
 #include "seiscomp3/core/typedarray.h"
 #include "seiscomp3/core/genericrecord.h"
@@ -28,7 +28,6 @@
 #include "seiscomp3/io/gfarchive.h"
 #include "seiscomp3/io/archive/binarchive.h"
 #include "seiscomp3/io/archive/xmlarchive.h"
-#include "seiscomp3/io/records/ahrecord.h"
 #include "seiscomp3/io/records/mseedrecord.h"
 #include "seiscomp3/communication/servicemessage.h"
 #include "seiscomp3/communication/systemconnection.h"

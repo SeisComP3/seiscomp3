@@ -28,19 +28,9 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_mBc : public MagnitudeProcessor_mB
 
 	public:
 		MagnitudeProcessor_mBc();
-/*
 
-		Status computeMagnitude(
-			double amplitude, // in micrometers per second
-			double period,    // in seconds
-			double delta,     // in degrees
-			double depth,     // in kilometers
-			double &value);
-*/
-		Status estimateMw(
-			double magnitude,
-			double &Mw_estimate,
-			double &Mw_stdError);
+		Status estimateMw(double magnitude, double &Mw_estimate,
+		                  double &Mw_stdError);
 };
 
 

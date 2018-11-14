@@ -35,79 +35,79 @@ public:
 
 
 DEFINE_SMARTPOINTER(QcConfig);
-
-class SC_QCPLUGIN_API QcConfig: public Core::BaseObject {
+class SC_QCPLUGIN_API QcConfig : public Core::BaseObject {
 	DECLARE_SC_CLASS(QcConfig);
 
-public:
-	//! default Constructor
-	QcConfig();
+	public:
+		//! default Constructor
+		QcConfig();
 
-	//! initializing Constructor
-	QcConfig(QcApp *app, const std::string &pluginName="default");
+		//! initializing Constructor
+		QcConfig(QcApp *app, const std::string &pluginName="default");
 	
-	//! destructor
-	virtual ~QcConfig();
+		//! destructor
+		virtual ~QcConfig();
 	
-	//! Read plugin specific configuration from config files. If not found,
-	//! use plugin.defaults. If not found, use compiled-in default.
-	std::string readConfig(const std::string& pluginName, const std::string& keyWord,
-						const std::string& defaultValue) const throw(QcConfigException);
-		
-	//! Returns true if configured in realtime only mode; false otherwise
-	bool realtimeOnly() const;
-	
-	//! Returns the over all buffer length
-	int buffer() const;
-	
-	//! Returns the archive interval time span
-	int archiveInterval() const;
-	
-	//! Returns the configured archive buffer length
-	//! if it is <= buffer length; buffer length otherwise
-	int archiveBuffer() const;
-	
-	//! Returns the report interval time span
-	int reportInterval() const;
-	
-	//! Returns the configured report buffer length
-	//! if it is <= buffer length; buffer length otherwise
-	int reportBuffer() const;
-	
-	//! Returns the configured timeout for realtime only processors
-	//! throws exception in case of archive mode
-	int reportTimeout() const throw (QcConfigException);
-	
-	//! Returns the alert interval time span if in realtime processing mode
-	//! throws exception in case of archive mode
-	int alertInterval() const throw (QcConfigException);
-	
-	//! Returns the configured report buffer length
-	//! if it is <= buffer length; buffer length otherwise in realtime mode
-	//! throws exception in case of archive mode
-	int alertBuffer() const throw (QcConfigException);
-	
-	//! Returns the thresholds triggering alarm in realtime mode
-	//! throws exception in case of archive mode
-	std::vector<int> alertThresholds() const throw (QcConfigException);
-		
-	//! Returns true if configured in realtime only mode; false otherwise
-	static bool RealtimeOnly(const QcApp *app, const std::string &pluginName);
+		//! Read plugin specific configuration from config files. If not found,
+		//! use plugin.defaults. If not found, use compiled-in default.
+		std::string readConfig(const std::string& pluginName,
+		                       const std::string& keyWord,
+		                       const std::string& defaultValue) const;
 
-private:
-	QcApp* _app;
-	bool _realtime;
-	int _buffer;
-	int _archiveInterval;
-	int _archiveBuffer;
-	int _reportInterval;
-	int _reportBuffer;
-	int _reportTimeout;
-	int _alertInterval;
-	int _alertBuffer;
-	std::vector<int> _alertThresholds;
+		//! Returns true if configured in realtime only mode; false otherwise
+		bool realtimeOnly() const;
 
-	void setQcConfig(const std::string &pluginName) throw(QcConfigException);
+		//! Returns the over all buffer length
+		int buffer() const;
+
+		//! Returns the archive interval time span
+		int archiveInterval() const;
+
+		//! Returns the configured archive buffer length
+		//! if it is <= buffer length; buffer length otherwise
+		int archiveBuffer() const;
+
+		//! Returns the report interval time span
+		int reportInterval() const;
+
+		//! Returns the configured report buffer length
+		//! if it is <= buffer length; buffer length otherwise
+		int reportBuffer() const;
+
+		//! Returns the configured timeout for realtime only processors
+		//! throws exception in case of archive mode
+		int reportTimeout() const;
+
+		//! Returns the alert interval time span if in realtime processing mode
+		//! throws exception in case of archive mode
+		int alertInterval() const;
+
+		//! Returns the configured report buffer length
+		//! if it is <= buffer length; buffer length otherwise in realtime mode
+		//! throws exception in case of archive mode
+		int alertBuffer() const;
+
+		//! Returns the thresholds triggering alarm in realtime mode
+		//! throws exception in case of archive mode
+		std::vector<int> alertThresholds() const;
+
+		//! Returns true if configured in realtime only mode; false otherwise
+		static bool RealtimeOnly(const QcApp *app, const std::string &pluginName);
+
+	private:
+		QcApp* _app;
+		bool _realtime;
+		int _buffer;
+		int _archiveInterval;
+		int _archiveBuffer;
+		int _reportInterval;
+		int _reportBuffer;
+		int _reportTimeout;
+		int _alertInterval;
+		int _alertBuffer;
+		std::vector<int> _alertThresholds;
+
+		void setQcConfig(const std::string &pluginName);
 };
 
 

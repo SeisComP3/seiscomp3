@@ -46,6 +46,16 @@
 					in locationMax. permissible RMS for a location to be reported.
 					</description>
 				</parameter>
+				<parameter name="minPhaseCount" type="integer" default="6">
+					<description>
+					Minimum number of phases.
+					</description>
+				</parameter>
+				<parameter name="maxDepth" type="double" default="1000" unit="km">
+					<description>
+					Maximum permissible depth for a location to be reported.
+					</description>
+				</parameter>
 				<parameter name="maxSGAP" type="double" default="360" unit="deg">
 					<description>
 					Max. secondary azimuth gap for an origin to be reported by.
@@ -55,11 +65,6 @@
 				<parameter name="maxStationDistance" type="double" default="180" unit="deg">
 					<description>
 					Stations outside the maximum distance range are ignored.
-					</description> 
-				</parameter>
-				<parameter name="minPhaseCount" type="integer" default="6">
-					<description>
-					Minimum number of phases.
 					</description> 
 				</parameter>
 				<parameter name="minStaCountIgnorePKP" type="integer" default="30">

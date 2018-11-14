@@ -34,7 +34,8 @@ Layer::Layer(QObject* parent)
 , Core::BaseObject()
 , _canvas(NULL)
 , _visible(true)
-, _antiAliasing(false) {
+, _antiAliasing(false)
+, _dirty(true) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -70,14 +71,14 @@ void Layer::calculateMapPosition(const Map::Canvas *canvas) {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Layer::baseBufferUpdated(Map::Canvas *canvas) {}
+void Layer::baseBufferUpdated(Map::Canvas *canvas, QPainter &painter) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Layer::bufferUpdated(Map::Canvas *canvas) {}
+void Layer::bufferUpdated(Map::Canvas *canvas, QPainter &painter) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -187,7 +188,7 @@ void Layer::init(const Seiscomp::Config::Config&) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Layer::isInside(int x, int y) const {
+bool Layer::isInside(const QMouseEvent *event, const QPointF &geoPos) {
 	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -261,6 +262,15 @@ void Layer::setAntiAliasingEnabled(bool v) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Layer::isAntiAliasingEnabled() const {
 	return _antiAliasing;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Layer::setDirty() {
+	_dirty = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

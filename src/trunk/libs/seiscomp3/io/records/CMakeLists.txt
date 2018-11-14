@@ -7,13 +7,8 @@ SET(RECORDS_SOURCES
 SET(RECORDS_HEADERS
 	shrecord.h
 	sacrecord.h
-	binaryrecord.cpp
+	binaryrecord.h
 )
-
-IF (NOT WIN32)
-	SET(RECORDS_SOURCES ${RECORDS_SOURCES} ahrecord.cpp)
-	SET(RECORDS_HEADERS ${RECORDS_HEADERS} ahrecord.h)
-ENDIF (NOT WIN32)
 
 IF (MSEED_FOUND)
 	SET(RECORDS_SOURCES ${RECORDS_SOURCES} mseedrecord.cpp)

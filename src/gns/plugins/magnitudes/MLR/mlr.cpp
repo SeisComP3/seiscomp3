@@ -53,6 +53,15 @@ ADD_SC_PLUGIN(
 );
 
 
+namespace {
+
+
+std::string ExpectedAmplitudeUnit = "mm";
+
+
+}
+
+
 class Magnitude_MLR : public Processing::MagnitudeProcessor {
 	public:
 		struct param_struct {
@@ -91,11 +100,15 @@ class Magnitude_MLR : public Processing::MagnitudeProcessor {
 		}
 
 		MagnitudeProcessor::Status computeMagnitude(
-		      double amplitude,   // in milimeters
-		      double period,      // in seconds
-		      double delta,       // in degrees
-		      double depth,       // in kilometers
-		      const DataModel::Origin *, const DataModel::SensorLocation *,
+		      double amplitude,        // in milimeters (default)
+		      const std::string &unit,
+		      double period,           // in seconds
+		      double snr,              // no unit
+		      double delta,            // in degrees
+		      double depth,            // in kilometers
+		      const DataModel::Origin *,
+		      const DataModel::SensorLocation *,
+		      const DataModel::Amplitude *,
 		      double &value)
 		{
 			if ( delta < DELTA_MIN || delta > DELTA_MAX )
@@ -103,6 +116,9 @@ class Magnitude_MLR : public Processing::MagnitudeProcessor {
 
 			if ( depth > DEPTH_MAX )
 				return DepthOutOfRange;
+
+			if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+				return InvalidAmplitudeUnit;
 
 			return compute_ML(amplitude, delta, depth, &value);
 		}

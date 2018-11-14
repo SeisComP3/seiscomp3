@@ -74,9 +74,6 @@ class VoiceAlert(seiscomp3.Client.Application):
         try: self._newWhenFirstSeen = self.configGetBool("firstNew");
         except: pass
 
-        try: self._agencyIDs = [ self.configGetString("agencyID") ]
-        except: pass
-
         try:
             agencyIDs = self.configGetStrings("agencyIDs")
             for item in agencyIDs:
@@ -170,7 +167,7 @@ class VoiceAlert(seiscomp3.Client.Application):
     def runAmpScript(self, net, sta, amp):
         if not self._ampScript: return
 
-        if self._ampProc != None:
+        if self._ampProc is not None:
             if self._ampProc.poll() is None:
                 seiscomp3.Logging.warning("AmplitudeScript still in progress -> skipping message")
                 return
@@ -184,7 +181,7 @@ class VoiceAlert(seiscomp3.Client.Application):
     def runAlert(self, lat, lon):
         if not self._alertScript: return
 
-        if self._alertProc != None:
+        if self._alertProc is not None:
             if self._alertProc.poll() is None:
                 seiscomp3.Logging.warning("AlertScript still in progress -> skipping message")
                 return
@@ -355,7 +352,7 @@ class VoiceAlert(seiscomp3.Client.Application):
 
             if not self._eventScript: return
 
-            if self._eventProc != None:
+            if self._eventProc is not None:
                 if self._eventProc.poll() is None:
                     seiscomp3.Logging.warning("EventScript still in progress -> skipping message")
                     return

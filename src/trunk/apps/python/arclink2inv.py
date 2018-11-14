@@ -28,7 +28,7 @@ Options:
 def main(argv):
     imp = seiscomp3.IO.Importer.Create("arclink")
     if imp is None:
-        print >> sys.stderr, "Arclink import not available"
+        sys.stderr.write("Arclink import not available\n")
         return 1
 
     formatted = False
@@ -37,13 +37,13 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:], "hf", ["help", "formatted"])
     except getopt.error, msg:
-        print >> sys.stderr, msg
-        print >> sys.stderr, "for help use --help"
+        sys.stderr.write("%s\n" % msg)
+        sys.stderr.write("for help use --help\n")
         return 1
 
     for o, a in opts:
         if o in ["-h", "--help"]:
-            print >> sys.stderr, usage
+            sys.stderr.write("%s\n" % usage)
             return 1
         elif o in ["-f", "--formatted"]:
             formatted = True
@@ -57,7 +57,7 @@ def main(argv):
 
     inv = seiscomp3.DataModel.Inventory.Cast(o)
     if inv is None:
-        print >> sys.stderr, "No inventory found"
+        sys.stderr.write("No inventory found\n")
         return 1
 
     ar = seiscomp3.IO.XMLArchive()
@@ -67,7 +67,7 @@ def main(argv):
         res = ar.create("-")
 
     if not res:
-        print >> sys.stderr, "Failed to open output"
+        sys.stderr.write("Failed to open output\n")
         return 1
 
     ar.setFormattedOutput(formatted)

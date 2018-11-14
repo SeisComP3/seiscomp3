@@ -10,9 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
 
 #ifndef __SEISCOMP_DATAMODEL_DATABASE_QUERY_H__
 #define __SEISCOMP_DATAMODEL_DATABASE_QUERY_H__
@@ -114,6 +111,17 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		                        const std::string& type);
 
 		/**
+		 * Returns all Amplitudes in a given timewindow. As reference
+		 * time
+		 * for the Amplitude is timeWindow.reference used.
+		 * @param startTime The starttime of the timewindow
+		 * @param endTime The endtime of the timewindow
+		 * @return An iterator to iterate over the amplitudes.
+		 */
+		DatabaseIterator getAmplitudes(Seiscomp::Core::Time startTime,
+		                               Seiscomp::Core::Time endTime);
+
+		/**
 		 * Returns all Amplitudes referencing a certain Pick.
 		 * @param pickID The referenced publicID of a Pick
 		 * @return An iterator to iterate over the result set
@@ -193,10 +201,9 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * Returns waveform quality reports in a given time window for
 		 * a given streamID and parameter.
 		 * @param streamID a WaveformStreamID
-		 * @param parameter
-		 * latency/delay/timing quality/gaps interval/gaps
-		 * length/spikes interval/spikes amplitude/ spikes
-		 * count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param startTime start time
 		 * @param endTime end time
 		 * @return an iterator to iterate over the WaveformQuality
@@ -210,9 +217,9 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		/**
 		 * Returns waveform quality reports in a given time window for
 		 * a given streamID and parameter.
-		 * @param parameter latency/delay/timing
-		 * quality/gaps interval/gaps length/spikes interval/spikes
-		 * amplitude/ spikes count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param startTime start time
 		 * @param endTime end time
 		 * @return an iterator to iterate over the WaveformQuality
@@ -225,15 +232,14 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * Returns waveform quality of a certain type (report/alert)
 		 * in a given time window for a given streamID and parameter.
 		 * @param streamID a WaveformStreamID
-		 * @param parameter
-		 * latency/delay/timing quality/gaps interval/gaps
-		 * length/spikes interval/spikes amplitude/ spikes
-		 * count/offset/rms/availability
+		 * @param parameter latency/delay/timing quality/gaps
+		 * interval/gaps length/spikes interval/spikes amplitude/
+		 * spikes count/offset/rms/availability
 		 * @param type report/alert
 		 * @param startTime start time
 		 * @param endTime end time
-		 * @return an iterator to iterate over
-		 * the WaveformQuality objects
+		 * @return an iterator to iterate over the WaveformQuality
+		 * objects
 		 */
 		DatabaseIterator getWaveformQuality(const WaveformStreamID& waveformID,
 		                                    const std::string& parameter,
@@ -275,8 +281,7 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 		 * @param streamID a WaveformStreamID
 		 * @param startTime start time
 		 * @param endTime end time
-		 * @return an iterator to iterate over
-		 * the QCLog objects
+		 * @return an iterator to iterate over the QCLog objects
 		 */
 		DatabaseIterator getQCLog(const WaveformStreamID& waveformID,
 		                          Seiscomp::Core::Time startTime,

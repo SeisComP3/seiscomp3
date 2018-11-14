@@ -43,7 +43,7 @@ CREATE TABLE ArcStatsSummary (
     /* Assert: count(*) from ArcStatsUsers with start_day, host, port matching == users */
     stations INT UNSIGNED,
     total_lines INT UNSIGNED,
-    total_size INT UNSIGNED,
+    total_size BIGINT UNSIGNED,
     PRIMARY KEY (src, start_day)
 );
 
@@ -51,6 +51,8 @@ CREATE TABLE ArcStatsUser (
     start_day DATETIME NOT NULL,
     src INT UNSIGNED NOT NULL,
     userID VARCHAR(80) NOT NULL,
+    userHash INT default 0,   /* Hash alg used on userID; 512 = SHA-512 etc. */
+    clientID VARCHAR(40) default NULL,
     requests INT UNSIGNED,
     lines INT UNSIGNED,
     errors INT UNSIGNED,
@@ -67,7 +69,7 @@ CREATE TABLE ArcStatsRequest (
     lines INT UNSIGNED,
     nodata INT UNSIGNED,
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     PRIMARY KEY (src, start_day, type)
     );
 
@@ -80,7 +82,7 @@ CREATE TABLE ArcStatsVolume (
     lines INT UNSIGNED,
     /* not currently displayed, but why not? */
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     PRIMARY KEY (src, start_day, type)
     );
 
@@ -94,7 +96,7 @@ CREATE TABLE ArcStatsStation (
     requests INT UNSIGNED,
     lines INT UNSIGNED,    /* not currently displayed, but why not? */
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     time INT UNSIGNED default 0
 );
 
@@ -106,7 +108,7 @@ CREATE TABLE ArcStatsNetwork (
     lines INT UNSIGNED,
     nodata INT UNSIGNED,
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     time INT UNSIGNED default 0
 );
 
@@ -125,7 +127,7 @@ CREATE TABLE ArcStatsUserIP (
     requests INT UNSIGNED,
     lines INT UNSIGNED,  
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     /* not currently displayed, but why not? */
     PRIMARY KEY (src, start_day, userIP)
 );
@@ -138,7 +140,7 @@ CREATE TABLE ArcStatsClientIP (
     requests INT UNSIGNED,
     lines INT UNSIGNED,  
     errors INT UNSIGNED,
-    size INT UNSIGNED default 0,
+    size BIGINT UNSIGNED default 0,
     /* not currently displayed, but why not? */
     PRIMARY KEY (src, start_day, clientIP)
 );

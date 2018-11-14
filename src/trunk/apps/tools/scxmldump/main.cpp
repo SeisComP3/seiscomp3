@@ -19,6 +19,7 @@
 #include <seiscomp3/datamodel/inventory.h>
 #include <seiscomp3/datamodel/config.h>
 #include <seiscomp3/datamodel/routing.h>
+#include <seiscomp3/datamodel/dataavailability.h>
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
@@ -62,6 +63,8 @@ class EventDump : public Seiscomp::Client::Application {
 			commandline().addOption("Dump", "stations", "if inventory is exported filter the stations to export where each item is in format net[.{sta|*}]", &_stationIDs);
 			commandline().addOption("Dump", "config,C", "export the config");
 			commandline().addOption("Dump", "routing,R", "export routing");
+			commandline().addOption("Dump", "availability,Y", "export data availability information");
+			commandline().addOption("Dump", "with-segments", "export individual data availability segments");
 			commandline().addOption("Dump", "origin,O", "origin id(s)", &_originIDs, false);
 			commandline().addOption("Dump", "event,E", "event id(s)", &_eventIDs, false);
 			commandline().addOption("Dump", "with-picks,P", "export associated picks");
@@ -79,10 +82,14 @@ class EventDump : public Seiscomp::Client::Application {
 
 		bool validateParameters() {
 			if ( !commandline().hasOption("listen") ) {
-				if ( !commandline().hasOption("event") && !commandline().hasOption("origin")
-				     && !commandline().hasOption("inventory") && !commandline().hasOption("config")
-				     && !commandline().hasOption("routing") ) {
-					cerr << "Require inventory flag, origin id or event id" << endl;
+				if ( !commandline().hasOption("event") &&
+				     !commandline().hasOption("origin") &&
+				     !commandline().hasOption("inventory") &&
+				     !commandline().hasOption("config") &&
+				     !commandline().hasOption("routing") &&
+				     !commandline().hasOption("availability") ) {
+					cerr << "Require inventory, config, routing or "
+					        "availability flag, or origin or event id" << endl;
 					return false;
 				}
 
@@ -375,6 +382,28 @@ class EventDump : public Seiscomp::Client::Application {
 				}
 
 				if ( !write(routing.get()) ) return false;
+			}
+
+			if ( commandline().hasOption("availability") ) {
+				DataAvailabilityPtr avail = new DataAvailability();
+				query()->loadDataExtents(avail.get());
+				if ( avail->dataExtentCount() == 0 ) {
+					SEISCOMP_ERROR("No data availability extents found");
+					return false;
+				}
+
+				if ( commandline().hasOption("with-segments") ) {
+					for ( size_t i = 0; i < avail->dataExtentCount(); ++i ) {
+						query()->load(avail->dataExtent(i));
+					}
+				}
+				else {
+					for ( size_t i = 0; i < avail->dataExtentCount(); ++i ) {
+						query()->loadDataAttributeExtents(avail->dataExtent(i));
+					}
+				}
+
+				if ( !write(avail.get()) ) return false;
 			}
 
 			if ( commandline().hasOption("event") ) {

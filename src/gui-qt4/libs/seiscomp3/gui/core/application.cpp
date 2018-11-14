@@ -26,6 +26,7 @@
 #include <seiscomp3/datamodel/databasequery.h>
 #include <license.h>
 #include <seiscomp3/utils/files.h>
+#include <seiscomp3/utils/misc.h>
 
 #include <QSplashScreen>
 #include <QMessageBox>
@@ -750,6 +751,34 @@ QBrush Application::configGetBrush(const std::string& query, const QBrush& base)
 	catch ( ... ) {}
 
 	return b;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::configSetColorGradient(const std::string& query, const Gradient &gradient) {
+	std::vector<std::string> colors;
+	Gradient::const_iterator it;
+	for ( it = gradient.begin(); it != gradient.end(); ++it ) {
+		string c = Core::toString(it.key());
+		c += ":";
+
+		Util::toHex(c, (unsigned char)it.value().first.red());
+		Util::toHex(c, (unsigned char)it.value().first.green());
+		Util::toHex(c, (unsigned char)it.value().first.blue());
+		if ( it.value().first.alpha() != 255 )
+			Util::toHex(c, (unsigned char)it.value().first.alpha());
+
+		if ( !it.value().second.isEmpty() ) {
+			c += ":";
+			c += it.value().second.toStdString();
+		}
+		colors.push_back(c);
+	}
+
+	_configuration.setStrings(query, colors);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1492,7 +1521,7 @@ void Application::messagesAvailable() {
 
 		if ( isDatabaseEnabled() ) {
 			Communication::DatabaseProvideMessage* dbmsg = Communication::DatabaseProvideMessage::Cast(msg);
-			if ( dbmsg ) {
+			if ( dbmsg && cdlg() ) {
 				cdlg()->setDefaultDatabaseParameters(dbmsg->service(), dbmsg->parameters());
 				if ( database() == NULL ) {
 					cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
@@ -1511,7 +1540,7 @@ void Application::messagesAvailable() {
 			if ( re.exactMatch(_messagingUser.c_str()) )
 				emit messageAvailable(cmd, nmsg.get());
 			else {
-				SEISCOMP_DEBUG("Ignoring command message for client: %s, mysql is: %s",
+				SEISCOMP_DEBUG("Ignoring command message for client: %s, user is: %s",
 				               cmd->client().c_str(), _messagingUser.c_str());
 			}
 

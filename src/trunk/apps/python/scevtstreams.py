@@ -37,9 +37,15 @@ class EventStreams(seiscomp3.Client.Application):
     self.commandline().addStringOption("Dump", "event,E", "event id")
     self.commandline().addIntOption("Dump", "margin,m", "time margin around the picked timewindow, default is 300")
     self.commandline().addStringOption("Dump", "streams,S", "comma separated list of streams per station to add, e.g. BH,SH,HH")
+    self.commandline().addOption("Dump", "all-streams", "dump all streams. If unused just streams with picks are dumped.")
     self.commandline().addIntOption("Dump", "all-components,C", "all components or just the picked one, default is True")
     self.commandline().addIntOption("Dump", "all-locations,L", "all components or just the picked one, default is True")
+    self.commandline().addOption("Dump", "all-stations", "dump all stations from the same network. If unused just stations with picks are dumped.")
+    self.commandline().addOption("Dump", "all-networks", "dump all networks. If unused just networks with picks are dumped. "\
+                                            "This option implies all-stations, all-locations, all-streams, all-components "\
+                                            "and will only provide the time window.")
     self.commandline().addOption("Dump", "resolve-wildcards,R", "if all components are used, use inventory to resolve stream components instead of using '?' (important when Arclink should be used)")
+    self.commandline().addOption("Dump", "caps", "dump in capstool format (Common Acquisition Protocol Server by gempa GmbH)")
     return True
 
   def validateParameters(self):
@@ -66,19 +72,35 @@ class EventStreams(seiscomp3.Client.Application):
       except: pass
 
       try:
+        self.allStreams = self.commandline().hasOption("all-streams")
+      except: pass
+
+      try:
         self.allComponents = self.commandline().optionInt("all-components") != 0
+      except: pass
+
+      try:
+        self.allStations = self.commandline().hasOption("all-stations")
+      except: pass
+
+      try:
+        self.allNetworks = self.commandline().hasOption("all-networks")
       except: pass
 
       try:
         self.allLocations = self.commandline().optionInt("all-locations") != 0
       except: pass
 
+      try:
+        self.caps = self.commandline().hasOption("caps") != 0
+      except: pass
+
       return True
     except:
       cla, exc, trbk = sys.exc_info()
-      print cla.__name__
-      print exc.__dict__["args"]
-      print traceback.format_tb(trbk, 5)
+      sys.stderr.write("%s\n" % cla.__name__)
+      sys.stderr.write("%s\n" % exc.__dict__["args"])
+      sys.stderr.write("%s\n" % traceback.format_tb(trbk, 5))
 
 
   def run(self):
@@ -105,6 +127,7 @@ class EventStreams(seiscomp3.Client.Application):
 
       inv = seiscomp3.Client.Inventory.Instance().inventory()
 
+      lines = set()
       for pick in picks:
         loc = pick.waveformID().locationCode()
         streams = [pick.waveformID().channelCode()]
@@ -124,28 +147,58 @@ class EventStreams(seiscomp3.Client.Application):
             streams = [rawStream + "?"]
 
         if self.allLocations == True:
-          loc = ""
+          if self.caps:
+            loc = "*"
+          else:
+            loc = ""
+
+        if self.allStations:
+          station = "*"
+        else:
+          station = pick.waveformID().stationCode()
+
+        if self.allNetworks:
+          net = "*"
+          station = "*"
+          loc = "*"
+        else:
+          net = pick.waveformID().networkCode()
 
         for s in streams:
-          sys.stdout.write(minTime.toString("%F %T") + ";")
-          sys.stdout.write(maxTime.toString("%F %T") + ";")
-          sys.stdout.write(pick.waveformID().networkCode() + ".")
-          sys.stdout.write(pick.waveformID().stationCode() + ".")
-          sys.stdout.write(loc + ".")
-          sys.stdout.write(s)
 
-          sys.stdout.write("\n")
+          if self.allStreams or self.allNetworks:
+            s = "*"
+
+          if self.caps:
+
+            line = minTime.toString("%Y,%m,%d,%H,%M,%S") + " " + maxTime.toString("%Y,%m,%d,%H,%M,%S") + " " \
+                   + net + " " + station \
+                   + " " + loc + " " +  s
+          else:
+            line = minTime.toString("%F %T") + ";" + maxTime.toString("%F %T") + ";" \
+                   + net + "." + station \
+                   + "." + loc + "." +  s
+
+          lines.add(line)
 
         for s in self.streams:
           if s != rawStream:
-            sys.stdout.write(minTime.toString("%F %T") + ";")
-            sys.stdout.write(maxTime.toString("%F %T") + ";")
-            sys.stdout.write(pick.waveformID().networkCode() + ".")
-            sys.stdout.write(pick.waveformID().stationCode() + ".")
-            sys.stdout.write(loc + ".")
-            sys.stdout.write(s + streams[0][2])
 
-            sys.stdout.write("\n")
+            if self.allStreams or self.allNetworks:
+              s = "*"
+
+            if self.caps:
+
+              line = minTime.toString("%Y,%m,%d,%H,%M,%S") + " " + maxTime.toString("%Y,%m,%d,%H,%M,%S") + " " \
+                     + net + " " + station + " " + loc + " " +  s  + streams[0][2]
+            else:
+              line = minTime.toString("%F %T") + ";" + maxTime.toString("%F %T") + ";" \
+                     + net + "." + station + "." + loc + "." +  s  + streams[0][2]
+
+            lines.add(line)
+
+      for line in sorted(lines):
+          sys.stdout.write(line+"\n")
 
       return True
     except:
@@ -155,4 +208,3 @@ class EventStreams(seiscomp3.Client.Application):
 
 app = EventStreams(len(sys.argv), sys.argv)
 sys.exit(app())
-

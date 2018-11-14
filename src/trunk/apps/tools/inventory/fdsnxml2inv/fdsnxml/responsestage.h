@@ -69,33 +69,33 @@ class ResponseStage : public Core::BaseObject {
 	public:
 		//! XML tag: PolesZeros
 		void setPolesZeros(const OPT(PolesAndZeros)& polesZeros);
-		PolesAndZeros& polesZeros() throw(Seiscomp::Core::ValueException);
-		const PolesAndZeros& polesZeros() const throw(Seiscomp::Core::ValueException);
+		PolesAndZeros& polesZeros();
+		const PolesAndZeros& polesZeros() const;
 
 		//! XML tag: Coefficients
 		void setCoefficients(const OPT(Coefficients)& coefficients);
-		Coefficients& coefficients() throw(Seiscomp::Core::ValueException);
-		const Coefficients& coefficients() const throw(Seiscomp::Core::ValueException);
+		Coefficients& coefficients();
+		const Coefficients& coefficients() const;
 
 		//! XML tag: ResponseList
 		void setResponseList(const OPT(ResponseList)& responseList);
-		ResponseList& responseList() throw(Seiscomp::Core::ValueException);
-		const ResponseList& responseList() const throw(Seiscomp::Core::ValueException);
+		ResponseList& responseList();
+		const ResponseList& responseList() const;
 
 		//! XML tag: FIR
 		void setFIR(const OPT(FIR)& fIR);
-		FIR& fIR() throw(Seiscomp::Core::ValueException);
-		const FIR& fIR() const throw(Seiscomp::Core::ValueException);
+		FIR& fIR();
+		const FIR& fIR() const;
 
 		//! XML tag: Polynomial
 		void setPolynomial(const OPT(Polynomial)& polynomial);
-		Polynomial& polynomial() throw(Seiscomp::Core::ValueException);
-		const Polynomial& polynomial() const throw(Seiscomp::Core::ValueException);
+		Polynomial& polynomial();
+		const Polynomial& polynomial() const;
 
 		//! XML tag: Decimation
 		void setDecimation(const OPT(Decimation)& decimation);
-		Decimation& decimation() throw(Seiscomp::Core::ValueException);
-		const Decimation& decimation() const throw(Seiscomp::Core::ValueException);
+		Decimation& decimation();
+		const Decimation& decimation() const;
 
 		//! StageSensitivity is the gain at the stage of the encapsulating
 		//! response element and corresponds to SEED blockette 58. In the SEED
@@ -105,8 +105,8 @@ class ResponseStage : public Core::BaseObject {
 		//! InstrumentSensitivity element.
 		//! XML tag: StageGain
 		void setStageGain(const OPT(Gain)& stageGain);
-		Gain& stageGain() throw(Seiscomp::Core::ValueException);
-		const Gain& stageGain() const throw(Seiscomp::Core::ValueException);
+		Gain& stageGain();
+		const Gain& stageGain() const;
 
 		//! Stage sequence number. This is used in all the response SEED
 		//! blockettes.

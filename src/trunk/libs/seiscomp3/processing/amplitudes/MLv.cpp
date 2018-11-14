@@ -23,11 +23,10 @@
 using namespace Seiscomp::Math;
 
 namespace Seiscomp {
-
 namespace Processing {
 
 
-IMPLEMENT_SC_CLASS_DERIVED(AmplitudeProcessor_MLv, AmplitudeProcessor, "AmplitudeProcessor_MLv");
+IMPLEMENT_SC_CLASS_DERIVED(AmplitudeProcessor_MLv, AbstractAmplitudeProcessor_ML, "AmplitudeProcessor_MLv");
 REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_MLv, "MLv");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -36,203 +35,39 @@ REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_MLv, "MLv");
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeProcessor_MLv::AmplitudeProcessor_MLv()
-	: AmplitudeProcessor("MLv") {
-	setSignalEnd(150.);
-	setMinSNR(0);
-	setMaxDist(8);
-	_computeAbsMax = true;
-}
+: AbstractAmplitudeProcessor_ML("MLv") {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const Core::Time& trigger)
-	: AmplitudeProcessor(trigger, "MLv") {
-	setSignalEnd(150.);
-	setMinSNR(0);
-	setMaxDist(8);
-	computeTimeWindow();
-	_computeAbsMax = true;
-}
+AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const Core::Time &trigger)
+: AbstractAmplitudeProcessor_ML(trigger, "MLv") {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeProcessor_MLv::initFilter(double fsamp) {
-	if ( !_enableResponses ) {
-		AmplitudeProcessor::setFilter(
-			new Filtering::IIR::WoodAndersonFilter<double>(Velocity, _config.woodAndersonResponse)
-		);
-	}
-	else
-		AmplitudeProcessor::setFilter(NULL);
+bool AmplitudeProcessor_MLv::computeAmplitude(const DoubleArray &data,
+                                              size_t i1, size_t i2,
+                                              size_t si1, size_t si2,
+                                              double offset,
+                                              AmplitudeIndex *dt, AmplitudeValue *amplitude,
+                                              double *period, double *snr) {
+	bool r = AbstractAmplitudeProcessor_ML::computeAmplitude(data, i1, i2, si1, si2,
+	                                                         offset, dt, amplitude,
+	                                                         period, snr);
+	if ( !r ) return false;
 
-	AmplitudeProcessor::initFilter(fsamp);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int AmplitudeProcessor_MLv::capabilities() const {
-	return MeasureType;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor::IDList
-AmplitudeProcessor_MLv::capabilityParameters(Capability cap) const {
-	if ( cap == MeasureType ) {
-		IDList params;
-		params.push_back("AbsMax");
-		params.push_back("MinMax");
-		return params;
-	}
-
-	return AmplitudeProcessor::capabilityParameters(cap);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AmplitudeProcessor_MLv::setParameter(Capability cap, const std::string &value) {
-	if ( cap == MeasureType ) {
-		if ( value == "AbsMax" ) {
-			_computeAbsMax = true;
-			return true;
-		}
-		else if ( value == "MinMax" ) {
-			_computeAbsMax = false;
-			return true;
-		}
-
-		return false;
-	}
-
-	return AmplitudeProcessor::setParameter(cap, value);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AmplitudeProcessor_MLv::deconvolveData(Response *resp,
-                                            DoubleArray &data,
-                                            int numberOfIntegrations) {
-	if ( numberOfIntegrations < -1 )
-		return false;
-
-	Math::Restitution::FFT::TransferFunctionPtr tf =
-		resp->getTransferFunction(numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
-
-	if ( tf == NULL )
-		return false;
-
-	Math::SeismometerResponse::WoodAnderson paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity,
-	                                            _config.woodAndersonResponse);
-	Math::Restitution::FFT::PolesAndZeros woodAnderson(paz);
-	Math::Restitution::FFT::TransferFunctionPtr cascade =
-		*tf / woodAnderson;
-
-	// Remove linear trend
-	double m,n;
-	Math::Statistics::computeLinearTrend(data.size(), data.typedData(), m, n);
-	Math::Statistics::detrend(data.size(), data.typedData(), m, n);
-
-	return Math::Restitution::transformFFT(data.size(), data.typedData(),
-	                                       _stream.fsamp, cascade.get(),
-	                                       _config.respTaper, _config.respMinFreq,
-	                                       _config.respMaxFreq);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AmplitudeProcessor_MLv::computeAmplitude(
-		const DoubleArray &data,
-		size_t i1, size_t i2,
-		size_t si1, size_t si2,
-		double offset,
-		AmplitudeIndex *dt, AmplitudeValue *amplitude,
-		double *period, double *snr) {
-	double amax;
-
-	if ( _computeAbsMax ) {
-		size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
-		amax = fabs(data[imax] - offset);
-		dt->index = imax;
-	}
-	else {
-		int lmin, lmax;
-		find_minmax(lmin, lmax, data.size(), data.typedData(), si1, si2, offset);
-		amax = data[lmax] - data[lmin];
-		dt->index = (lmin+lmax)*0.5;
-		dt->begin = lmin - dt->index;
-		dt->end = lmax - dt->index;
-	}
-
-	if ( *_noiseAmplitude == 0. )
-		*snr = 1000000.0;
-	else
-		*snr = amax / *_noiseAmplitude;
-
-	if ( *snr < _config.snrMin ) {
-		setStatus(LowSNR, *snr);
-		return false;
-	}
-
-	*period = -1;
-
-	amplitude->value = amax;
-
-	if ( _streamConfig[_usedComponent].gain != 0.0 )
-		amplitude->value /= _streamConfig[_usedComponent].gain;
-	else {
-		setStatus(MissingGain, 0.0);
-		return false;
-	}
-
-	// - convert to millimeter
-	amplitude->value *= 1E03;
-
-	// - estimate peak-to-peak from absmax amplitude
-	if ( _computeAbsMax )
-		amplitude->value *= 2.0;
-
+	// Apply empirical correction for measuring ML on the vertical component.
+	// Normally ML is measured on both horizontal components and the average
+	// is taken.
+	amplitude->value *= 2.0;
 	return true;
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double AmplitudeProcessor_MLv::timeWindowLength(double distance_deg) const {
-	// Minimal S/SW group velocity.
-	//
-	// This is very approximate and may need refinement. Usually the Lg
-	// group velocity is around 3.2-3.6 km/s. By setting v_min to 3 km/s,
-	// we are probably on the safe side. We add 30 s to count for rupture
-	// duration, which may, however, not be sufficient.
-	double v_min = 3;
-
-	double distance_km = distance_deg*111.2;
-	double windowLength = distance_km/v_min + 30; 
-	return windowLength < _config.signalEnd ? windowLength :_config.signalEnd;
-}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

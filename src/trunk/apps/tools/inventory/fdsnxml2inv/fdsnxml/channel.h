@@ -105,24 +105,24 @@ class Channel : public BaseNode {
 		//! Azimuth of the sensor in degrees from north, clockwise.
 		//! XML tag: Azimuth
 		void setAzimuth(const OPT(AzimuthType)& azimuth);
-		AzimuthType& azimuth() throw(Seiscomp::Core::ValueException);
-		const AzimuthType& azimuth() const throw(Seiscomp::Core::ValueException);
+		AzimuthType& azimuth();
+		const AzimuthType& azimuth() const;
 
 		//! Dip of the instrument in degrees, down from horizontal.
 		//! XML tag: Dip
 		void setDip(const OPT(DipType)& dip);
-		DipType& dip() throw(Seiscomp::Core::ValueException);
-		const DipType& dip() const throw(Seiscomp::Core::ValueException);
+		DipType& dip();
+		const DipType& dip() const;
 
 		//! XML tag: SampleRate
 		void setSampleRate(const OPT(SampleRateType)& sampleRate);
-		SampleRateType& sampleRate() throw(Seiscomp::Core::ValueException);
-		const SampleRateType& sampleRate() const throw(Seiscomp::Core::ValueException);
+		SampleRateType& sampleRate();
+		const SampleRateType& sampleRate() const;
 
 		//! XML tag: SampleRateRatio
 		void setSampleRateRatio(const OPT(SampleRateRatioType)& sampleRateRatio);
-		SampleRateRatioType& sampleRateRatio() throw(Seiscomp::Core::ValueException);
-		const SampleRateRatioType& sampleRateRatio() const throw(Seiscomp::Core::ValueException);
+		SampleRateRatioType& sampleRateRatio();
+		const SampleRateRatioType& sampleRateRatio() const;
 
 		//! The storage format of the recorded data (e.g. SEED).
 		//! XML tag: StorageFormat
@@ -133,38 +133,38 @@ class Channel : public BaseNode {
 		//! for time error detection in data from the channel.
 		//! XML tag: ClockDrift
 		void setClockDrift(const OPT(ClockDriftType)& clockDrift);
-		ClockDriftType& clockDrift() throw(Seiscomp::Core::ValueException);
-		const ClockDriftType& clockDrift() const throw(Seiscomp::Core::ValueException);
+		ClockDriftType& clockDrift();
+		const ClockDriftType& clockDrift() const;
 
 		//! XML tag: CalibrationUnits
 		void setCalibrationUnits(const OPT(UnitsType)& calibrationUnits);
-		UnitsType& calibrationUnits() throw(Seiscomp::Core::ValueException);
-		const UnitsType& calibrationUnits() const throw(Seiscomp::Core::ValueException);
+		UnitsType& calibrationUnits();
+		const UnitsType& calibrationUnits() const;
 
 		//! XML tag: Sensor
 		void setSensor(const OPT(Equipment)& sensor);
-		Equipment& sensor() throw(Seiscomp::Core::ValueException);
-		const Equipment& sensor() const throw(Seiscomp::Core::ValueException);
+		Equipment& sensor();
+		const Equipment& sensor() const;
 
 		//! XML tag: PreAmplifier
 		void setPreAmplifier(const OPT(Equipment)& preAmplifier);
-		Equipment& preAmplifier() throw(Seiscomp::Core::ValueException);
-		const Equipment& preAmplifier() const throw(Seiscomp::Core::ValueException);
+		Equipment& preAmplifier();
+		const Equipment& preAmplifier() const;
 
 		//! XML tag: DataLogger
 		void setDataLogger(const OPT(Equipment)& dataLogger);
-		Equipment& dataLogger() throw(Seiscomp::Core::ValueException);
-		const Equipment& dataLogger() const throw(Seiscomp::Core::ValueException);
+		Equipment& dataLogger();
+		const Equipment& dataLogger() const;
 
 		//! XML tag: Equipment
 		void setEquipment(const OPT(Equipment)& equipment);
-		Equipment& equipment() throw(Seiscomp::Core::ValueException);
-		const Equipment& equipment() const throw(Seiscomp::Core::ValueException);
+		Equipment& equipment();
+		const Equipment& equipment() const;
 
 		//! XML tag: Response
 		void setResponse(const OPT(Response)& response);
-		Response& response() throw(Seiscomp::Core::ValueException);
-		const Response& response() const throw(Seiscomp::Core::ValueException);
+		Response& response();
+		const Response& response() const;
 
 		//! XML tag: locationCode
 		void setLocationCode(const std::string& locationCode);

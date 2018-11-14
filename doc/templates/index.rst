@@ -26,4 +26,5 @@ ${generator.refs.extensions}
    /base/glossary
    /base/contributing-docs
    /base/coding-conventions
+   /base/tests
    /base/license

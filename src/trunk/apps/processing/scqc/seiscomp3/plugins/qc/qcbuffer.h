@@ -30,19 +30,19 @@ typedef std::list<QcParameterCPtr> BufferBase;
 DEFINE_SMARTPOINTER(QcBuffer);
 
 class SC_QCPLUGIN_API QcBuffer : public Core::BaseObject, public BufferBase {
-	DECLARE_SC_CLASS(QcBuffer);
-
 	public:
 		QcBuffer();
 		QcBuffer(double maxBufferSize);
 		
 		mutable Core::Time lastEvalTime;
 
- 		void push_back(const QcParameter* qcp);
+		void push_back(const QcParameter *qcp);
 
-		const QcParameter* qcParameter(const Core::Time& time) const;
-		const QcBuffer* qcParameter(const Core::Time& startTime, const Core::Time& endTime) const;
-		const QcBuffer* qcParameter(const Core::TimeSpan& lastNSeconds) const;
+		/*
+		const QcParameter* qcParameter(const Core::Time &time) const;
+		const QcBuffer* qcParameter(const Core::Time &startTime, const Core::Time &endTime) const;
+		*/
+		QcBuffer *qcParameter(const Core::TimeSpan &lastNSeconds) const;
 
 		void info() const;
 		void dump() const;

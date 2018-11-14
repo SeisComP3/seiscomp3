@@ -120,6 +120,9 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		bool isVisible() const;
 		bool isAntiAliasingEnabled() const;
 
+		void setDirty();
+		bool isDirty() const;
+
 		Canvas *canvas() const { return _canvas; }
 
 	public:
@@ -132,9 +135,9 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual QSize size() const;
 
 		virtual void calculateMapPosition(const Canvas *canvas);
-		virtual bool isInside(int x, int y) const;
-		virtual void baseBufferUpdated(Canvas *canvas);
-		virtual void bufferUpdated(Canvas *canvas);
+		virtual bool isInside(const QMouseEvent *event, const QPointF &geoPos);
+		virtual void baseBufferUpdated(Canvas *canvas, QPainter &painter);
+		virtual void bufferUpdated(Canvas *canvas, QPainter &painter);
 
 		virtual void handleEnterEvent();
 		virtual void handleLeaveEvent();
@@ -159,9 +162,16 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		bool     _visible;
 		bool     _antiAliasing;
 		Legends  _legends;
+		bool     _dirty;
 
 	friend class Canvas;
 };
+
+
+
+inline bool Layer::isDirty() const {
+	return _dirty;
+}
 
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Layer::UpdateHints)

@@ -28,7 +28,7 @@ class SendJournal(seiscomp3.Client.Application):
 		if not seiscomp3.Client.Application.init(self): return False
 		self.params = self.commandline().unrecognizedOptions()
 		if len(self.params) < 2:
-			print >> sys.stderr, self.name() + " [opts] {objectID} {action} [parameters]"
+			sys.stderr.write(self.name() + " [opts] {objectID} {action} [parameters]\n")
 			return False
 		return True
 
@@ -41,7 +41,7 @@ class SendJournal(seiscomp3.Client.Application):
 		entry.setSender(self.author())
 		entry.setAction(self.params[1])
 
-		print >> sys.stderr, "Sending entry (" + entry.objectID() + "," + entry.action() + ")"
+		sys.stderr.write("Sending entry (" + entry.objectID() + "," + entry.action() + ")\n")
 
 		if len(self.params) > 2:
 			entry.setParameters(self.params[2])

@@ -89,10 +89,15 @@ SET(
 		arclinkrequestsummary.h
 		arclinkrequest.h
 		arclinklog.h
+		datasegment.h
+		dataattributeextent.h
+		dataextent.h
+		dataavailability.h
 		journaling_package.h
 		arclinklog_package.h
 		qualitycontrol_package.h
 		inventory_package.h
+		dataavailability_package.h
 		eventparameters_package.h
 		config_package.h
 		routing_package.h
@@ -192,6 +197,10 @@ SET(
 		arclinkrequestsummary.cpp
 		arclinkrequest.cpp
 		arclinklog.cpp
+		datasegment.cpp
+		dataattributeextent.cpp
+		dataextent.cpp
+		dataavailability.cpp
 		databasereader.cpp
 		databasequery.cpp
 )

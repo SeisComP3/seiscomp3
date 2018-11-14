@@ -67,7 +67,8 @@ The routing table is defined as a comma-separated list of
 recursively within the SC3 object tree. If no explicit rule exists for an object
 the routing of its parent is evaluated up to the ``EventParameters`` root node.
 
-Examples:
+Examples
+--------
 
 .. code-block:: none
 
@@ -88,6 +89,42 @@ Imports everything except comments
 Sends origins and it's children arrival, origin uncertainty to the ``LOCATION``
 group but the magnitude children to the ``MAGNITUDE`` group. Skips picks,
 amplitudes, focal mechanisms and events.
+
+Default routing table
+---------------------
+
+The default use case of ql2sc is to import earthquake solutions from other data
+centers or in-house redundant SeisComP3 systems. The intention is not to
+reprocess the solution but to add them to the local catalog.
+
+By default we route:
+
+* Picks and Amplitudes to the ``IMPORT_GROUP`` group to prevent processing by
+  the local locator and amplitude processor
+* Origins (including its StationMagnitude and Magnitude children) to the
+  ``LOCATION`` to allow event association.
+* FocalMechanisms to the ``FOCMECH`` group to trigger processing by specialized
+  applications, e.g. graphical user interfaces for strong motion analysis or
+  tsunami risk assessment.
+
+We don't route events at all. With the help of :ref:`scevent` locations are
+either associated to existing events or will create new events with local
+settings.
+
+We don't route StationMagnitudes and Magnitude to the ``MAGNITDUE`` group
+because :ref:`scmag` subscribes to ``LOCATION`` and ``MAGNITUDE``. Separated
+groups might lead to duplicated magnitude types in case a manual magnitude
+solution is imported. In this case the foreign Origin with its Magnitudes would
+be split into at least two messages, the first one containing the Origin, the
+second one the Magnitude. The Origin message immediately triggers magnitude
+calculation, potentially for a magnitude type which is received with the second
+message.
+
+The default routing table is set to:
+
+.. code-block:: none
+
+   Pick:IMPORT_GROUP,Amplitude:IMPORT_GROUP,FocalMechanism:FOCMECH,Origin:LOCATION
 
 .. _agency_filter:
 

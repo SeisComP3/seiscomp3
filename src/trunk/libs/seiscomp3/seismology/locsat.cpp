@@ -40,33 +40,100 @@ using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Seismology;
 
 
-#define ARRIVAL_TIME_ERROR 1.0
+#define ARRIVAL_DEFAULT_TIME_ERROR 1.0
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace Seiscomp{
 
 
+namespace {
+
+
+enum LocSATParams {
+	LP_NUM_DEG_FREEDOM,      /* 9999    - number of degrees of freedom    */
+	LP_EST_STD_ERROR,        /* 1.0     - estimate of data std error      */
+	LP_CONF_LEVEL,           /* 0.9     - confidence level    		     */
+	LP_DAMPING,              /* -1.0    - damping (-1.0 means no damping) */
+	LP_MAX_ITERATIONS,       /* 20      - limit iterations to convergence */
+	LP_FIX_DEPTH,            /* true    - use fixed depth ?               */
+	LP_FIXING_DEPTH,         /* 0.0     - fixing depth value              */
+	LP_LAT_INIT,             /* modifiable - initial latitude             */
+	LP_LONG_INIT,            /* modifiable - initial longitude            */
+	LP_DEPTH_INIT,           /* modifiable - initial depth                */
+	LP_USE_LOCATION,         /* true    - use current origin data ?       */
+	LP_VERBOSE,              /* true    - verbose output of data ?        */
+	LP_COR_LEVEL,            /* 0       - correction table level          */
+	LP_OUT_FILENAME,         /* NULL    - name of file to print data      */
+	LP_PREFIX,               /* NULL    - dir name & prefix of tt tables  */
+	LP_MIN_ARRIVAL_WEIGHT,   /* 0.5     - if arr-weight = less than this, locsat will ignore this arrival */
+	LP_DEFAULT_TIME_ERROR,   /* 1.0     - the default pick uncertainty */
+	LP_USE_PICK_UNCERTAINTY  /* false   - whether to use pick uncertainty or not */
+};
+
+
+float getTimeError(const Seiscomp::DataModel::Pick *pick,
+                   double defaultTimeError,
+                   bool useUncertainties) {
+	if ( useUncertainties ) {
+		try {
+			return pick->time().uncertainty();
+		}
+		catch ( ... ) {
+			try {
+				return 0.5 * (pick->time().lowerUncertainty() + pick->time().upperUncertainty());
+			}
+			catch ( ... ) {}
+		}
+	}
+
+	return defaultTimeError;
+}
+
+
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string LocSAT::_defaultTablePrefix = "iasp91";
 LocSAT::IDList LocSAT::_allowedParameters;
 
 REGISTER_LOCATOR(LocSAT, "LOCSAT");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 LocSAT::~LocSAT(){
 	delete _locator_params;
 	if (_locateEvent)
 		delete _locateEvent;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 LocSAT::LocSAT() {
 	_name = "LOCSAT";
 	_newOriginID = "";
 	_computeConfidenceEllipsoid = false;
+	_enableDebugOutput = false;
 
 	if ( _allowedParameters.empty() ) {
 		_allowedParameters.push_back("VERBOSE");
 		_allowedParameters.push_back("MAX_ITERATIONS");
 		_allowedParameters.push_back("NUM_DEG_FREEDOM");
+		_allowedParameters.push_back("DEFAULT_TIME_ERROR");
+		_allowedParameters.push_back("USE_PICK_UNCERTAINTY");
 	}
 
 	_locator_params = new Internal::Locator_params;
@@ -79,8 +146,12 @@ LocSAT::LocSAT() {
 	setProfile(_defaultTablePrefix);
 	setDefaultLocatorParams();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool LocSAT::init(const Config::Config &config) {
 	setDefaultLocatorParams();
 
@@ -99,19 +170,47 @@ bool LocSAT::init(const Config::Config &config) {
 	catch ( ... ) {}
 
 	try {
+		_enableDebugOutput = config.getBool("LOCSAT.enableDebugOutput");
+		if ( _enableDebugOutput )
+			setLocatorParams(LP_VERBOSE, "y");
+	}
+	catch ( ... ) {}
+
+	try {
 		_locator_params->depth_init = config.getDouble("LOCSAT.depthInit");
 	}
 	catch ( ... ) {}
 
+	try {
+		_usePickUncertainties = config.getBool("LOCSAT.usePickUncertainties");
+	}
+	catch ( ... ) {}
+
+	try {
+		_defaultPickUncertainty = config.getDouble("LOCSAT.defaultTimeError");
+	}
+	catch ( ... ) {}
+	
+	if ( _enableDebugOutput )
+		SEISCOMP_INFO("LOCSAT: enabled locator-specific debug output");
+
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 LocatorInterface::IDList LocSAT::parameters() const {
 	return _allowedParameters;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string LocSAT::parameter(const std::string &name) const {
 	if ( name == "VERBOSE" )
 		return getLocatorParams(LP_VERBOSE);
@@ -119,11 +218,19 @@ std::string LocSAT::parameter(const std::string &name) const {
 		return getLocatorParams(LP_MAX_ITERATIONS);
 	else if ( name == "NUM_DEG_FREEDOM" )
 		return getLocatorParams(LP_NUM_DEG_FREEDOM);
+	else if ( name == "DEFAULT_TIME_ERROR" )
+		return getLocatorParams(LP_DEFAULT_TIME_ERROR);
+	else if ( name == "USE_PICK_UNCERTAINTY" )
+		return getLocatorParams(LP_USE_PICK_UNCERTAINTY);
 
 	return std::string();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool LocSAT::setParameter(const std::string &name,
                           const std::string &value) {
 	if ( name == "VERBOSE" )
@@ -132,23 +239,39 @@ bool LocSAT::setParameter(const std::string &name,
 		setLocatorParams(LP_MAX_ITERATIONS, value.c_str());
 	else if ( name == "NUM_DEG_FREEDOM" )
 		setLocatorParams(LP_NUM_DEG_FREEDOM, value.c_str());
+	else if ( name == "DEFAULT_TIME_ERROR" )
+		setLocatorParams(LP_DEFAULT_TIME_ERROR, value.c_str());
+	else if ( name == "USE_PICK_UNCERTAINTY" )
+		setLocatorParams(LP_USE_PICK_UNCERTAINTY, value.c_str());
 	else
 		return false;
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void LocSAT::setNewOriginID(const std::string& newOriginID) {
 	_newOriginID = newOriginID;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int LocSAT::capabilities() const {
 	return InitialLocation | FixedDepth | IgnoreInitialLocation;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Origin* LocSAT::locate(PickList& pickList,
                                   double initLat, double initLon, double initDepth,
                                   const Core::Time &initTime) {
@@ -164,8 +287,12 @@ DataModel::Origin* LocSAT::locate(PickList& pickList,
 
 	return fromPicks(pickList);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Origin* LocSAT::locate(PickList& picks) {
 	if (_locateEvent) delete _locateEvent;
 	_locateEvent = new Internal::LocSAT;
@@ -175,8 +302,12 @@ DataModel::Origin* LocSAT::locate(PickList& picks) {
 
 	return fromPicks(picks);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 	if ( _usingFixedDepth ) {
 		_locator_params->fixing_depth = _fixedDepth;
@@ -214,7 +345,8 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 			double cor = stationCorrection(stationID, pick->waveformID().stationCode(), phase);
 			_locateEvent->addArrival(i++, stationID.c_str(), phase.c_str(),
 			                         (double)pick->time().value()-cor,
-			                         ARRIVAL_TIME_ERROR, pickItem.flags & F_TIME);
+			                         getTimeError(pick, _defaultPickUncertainty, _usePickUncertainties),
+			                         pickItem.flags & F_TIME);
 
 			// Set backazimuth
 			if ( pickItem.flags & F_BACKAZIMUTH ) {
@@ -223,7 +355,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 					float delaz;
 					try { delaz = pick->backazimuth().uncertainty(); }
 					// Default delaz
-					catch ( ... ) { delaz = 0; }
+					catch ( ... ) { delaz = 1.0; }
 					_locateEvent->setArrivalAzimuth(az,delaz, 1);
 				}
 				catch ( ... ) {}
@@ -237,7 +369,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 
 					try { delslo = pick->horizontalSlowness().uncertainty(); }
 					// Default delaz
-					catch ( ... ) { delslo = 0; }
+					catch ( ... ) { delslo = 1.0; }
 
 					_locateEvent->setArrivalSlowness(slo, delslo, 1);
 				}
@@ -258,7 +390,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 	}
 
 	_locateEvent->setLocatorParams(_locator_params);
-	Internal::Loc* newLoc = _locateEvent->doLocation();
+	Internal::Loc *newLoc = _locateEvent->doLocation();
 
 	DataModel::Origin *origin = loc2Origin(newLoc);
 
@@ -301,24 +433,15 @@ DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 	delete _locateEvent;
 	_locateEvent = NULL;
 
-	if ( origin && _useArrivalRMSAsTimeError ) {
-		double sig = 0.0;
-		int used = 0;
-		for ( size_t i = 0; i < origin->arrivalCount(); ++i )
-			if ( origin->arrival(i)->weight() >= 0.5 ) {
-				++used;
-				sig += origin->arrival(i)->timeResidual() * origin->arrival(i)->timeResidual();
-			}
-
-		DataModel::OriginPtr originPtr(origin);
-		origin = relocate(origin, used > 4?sqrt(sig / (used - 4)):ARRIVAL_TIME_ERROR);
-	}
-
 	return origin;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double timeError) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::Origin *LocSAT::relocate(const DataModel::Origin *origin) {
 	if ( origin == NULL ) return NULL;
 
 	if ( isInitialLocationIgnored() )
@@ -338,7 +461,7 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 
 	_locateEvent->setOriginTime((double)origin->time().value());
 
-	if ( !loadArrivals(origin, timeError)) {
+	if ( !loadArrivals(origin)) {
 		delete _locateEvent;
 		_locateEvent = NULL;
 		return NULL;
@@ -352,9 +475,9 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 		_locator_params->fix_depth = 'n';
 
 	_locateEvent->setLocatorParams(_locator_params);
-	Internal::Loc* newLoc = _locateEvent->doLocation();
+	Internal::Loc *newLoc = _locateEvent->doLocation();
 
-	DataModel::Origin* result = loc2Origin(newLoc);
+	DataModel::Origin *result = loc2Origin(newLoc);
 
 	if ( result ) {
 		std::set<std::string> stationsUsed;
@@ -366,7 +489,7 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 
 			if ( (size_t)i < result->arrivalCount() ) {
 				result->arrival(i)->setPickID(origin->arrival(arid)->pickID());
-				DataModel::Pick* p = Pick::Find(result->arrival(i)->pickID());
+				DataModel::Pick *p = Pick::Find(result->arrival(i)->pickID());
 
 				if ( p != NULL )
 					stationsAssociated.insert(p->waveformID().networkCode() + "." + p->waveformID().stationCode());
@@ -399,33 +522,21 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 
 	return result;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
-	DataModel::Origin* o = relocate(origin, ARRIVAL_TIME_ERROR);
-	if ( o && _useArrivalRMSAsTimeError ) {
-		double sig = 0.0;
-		int used = 0;
-		for ( size_t i = 0; i < o->arrivalCount(); ++i )
-			if ( o->arrival(i)->weight() >= 0.5 ) {
-				++used;
-				sig += o->arrival(i)->timeResidual() * o->arrival(i)->timeResidual();
-			}
-
-		DataModel::OriginPtr origin(o);
-		o = relocate(o, used > 4?sqrt(sig / (used - 4)):ARRIVAL_TIME_ERROR);
-	}
-
-	return o;
-}
 
 
-static bool atTransitionPtoPKP(const DataModel::Arrival* arrival)
-{
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+static bool atTransitionPtoPKP(const DataModel::Arrival* arrival) {
 	return (arrival->distance() > 106.9 && arrival->distance() < 111.1);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Let this be a local hack for the time being. See the same routine in Autoloc
 static bool travelTimeP(double lat, double lon, double depth, double delta, double azi, TravelTime &tt)
 {
@@ -456,8 +567,12 @@ static bool travelTimeP(double lat, double lon, double depth, double delta, doub
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double LocSAT::stationCorrection(const std::string &staid,
                                  const std::string &stacode,
                                  const std::string &phase) const {
@@ -481,9 +596,13 @@ double LocSAT::stationCorrection(const std::string &staid,
 
 	return 0.0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool LocSAT::loadArrivals(const DataModel::Origin *origin) {
 	if ( !origin )
 		return false;
 
@@ -491,8 +610,8 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 	SEISCOMP_DEBUG("Load arrivals:");
 #endif
 	for (unsigned int i = 0; i < origin->arrivalCount(); i++){
-		DataModel::Arrival* arrival = origin->arrival(i);
-		DataModel::Pick* pick = getPick(arrival);
+		DataModel::Arrival *arrival = origin->arrival(i);
+		DataModel::Pick *pick = getPick(arrival);
 		if (!pick){
 			throw PickNotFoundException("pick '" + arrival->pickID() + "' not found");
 		}
@@ -570,7 +689,8 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 
 		_locateEvent->addArrival(i, stationID.c_str(), phaseCode.c_str(),
 		                         (double)pick->time().value()-cor,
-		                         timeError, timeUsed ? 1 : 0);
+		                         getTimeError(pick, _defaultPickUncertainty, _usePickUncertainties),
+		                         timeUsed ? 1 : 0);
 
 		// Set backazimuth
 		bool backazimuthUsed = true;
@@ -586,7 +706,7 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 
 				try { delaz = pick->backazimuth().uncertainty(); }
 				// Default delaz
-				catch ( ... ) { delaz = 0; }
+				catch ( ... ) { delaz = 1.0; }
 
 				_locateEvent->setArrivalAzimuth(az,delaz,1);
 			}
@@ -607,7 +727,7 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 
 				try { delslo = pick->horizontalSlowness().uncertainty(); }
 				// Default delaz
-				catch ( ... ) { delslo = 0; }
+				catch ( ... ) { delslo = 1.0; }
 
 				_locateEvent->setArrivalSlowness(slo, delslo,1);
 			}
@@ -617,8 +737,12 @@ bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	if ( loc == NULL ) return NULL;
 
@@ -1023,8 +1147,12 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 
 	return origin;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void LocSAT::setDefaultLocatorParams(){
 	_locator_params->cor_level      = 0;
 	_locator_params->use_location   = TRUE;
@@ -1040,26 +1168,44 @@ void LocSAT::setDefaultLocatorParams(){
 	_locator_params->num_dof        = 9999;
 	_locator_params->max_iterations = 100;
 	_minArrivalWeight               = 0.5;
-	_useArrivalRMSAsTimeError       = false;
+	_defaultPickUncertainty         = ARRIVAL_DEFAULT_TIME_ERROR;
+	_usePickUncertainties           = false;
 
 	strcpy(_locator_params->outfile_name, "");
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void LocSAT::setDefaultProfile(const std::string &prefix) {
 	_defaultTablePrefix = prefix;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string LocSAT::currentDefaultProfile() {
 	return _defaultTablePrefix;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 LocatorInterface::IDList LocSAT::profiles() const {
 	return _profiles;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void LocSAT::setProfile(const std::string &prefix) {
 	if ( prefix.empty() ) return;
 
@@ -1115,61 +1261,80 @@ void LocSAT::setProfile(const std::string &prefix) {
 		               cnt, lc);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string LocSAT::getLocatorParams(int param) const {
 	char value[256];
 
-	switch(param){
+	switch ( param ) {
+		case LP_USE_LOCATION:
+			if ( _locator_params->use_location == TRUE )
+				strcpy(value, "y");
+			else
+				strcpy(value, "n");
+			break;
 
-	case LP_USE_LOCATION:
-		if (_locator_params->use_location == TRUE)
-			strcpy(value, "y");
-		else
-			strcpy(value, "n");
-		break;
+		case LP_FIX_DEPTH:
+			value[0] = _locator_params->fix_depth;
+			value[1] = '\0';
+			break;
 
-	case LP_FIX_DEPTH:
-		value[0] = _locator_params->fix_depth;
-		value[1] = '\0';
-		break;
+		case LP_FIXING_DEPTH:
+			sprintf(value, "%7.2f", _locator_params->fixing_depth);
+			break;
 
-	case LP_FIXING_DEPTH:
-		sprintf(value, "%7.2f", _locator_params->fixing_depth);
-		break;
+		case LP_VERBOSE:
+			strcpy(value, &_locator_params->verbose);
+			break;
 
-	case LP_VERBOSE:
-		strcpy(value, &_locator_params->verbose);
-		break;
+		case LP_PREFIX:
+			strcpy(value, _locator_params->prefix);
+			break;
 
-	case LP_PREFIX:
-		strcpy(value, _locator_params->prefix);
-		break;
+		case LP_MAX_ITERATIONS:
+			sprintf(value, "%d", _locator_params->max_iterations);
+			break;
 
-	case LP_MAX_ITERATIONS:
-		sprintf(value, "%d", _locator_params->max_iterations);
-		break;
+		case LP_EST_STD_ERROR:
+			sprintf(value, "%7.2f", _locator_params->est_std_error);
+			break;
 
-	case LP_EST_STD_ERROR:
-		sprintf(value, "%7.2f", _locator_params->est_std_error);
-		break;
+		case LP_NUM_DEG_FREEDOM:
+			sprintf(value, "%d", _locator_params->num_dof);
+			break;
 
-	case LP_NUM_DEG_FREEDOM:
-		sprintf(value, "%d", _locator_params->num_dof);
-		break;
+		case LP_MIN_ARRIVAL_WEIGHT:
+			sprintf(value, "%7.2f", _minArrivalWeight);
+			break;
 
-	case LP_MIN_ARRIVAL_WEIGHT:
-		sprintf(value, "%7.2f", _minArrivalWeight);
-		break;
+		case LP_DEFAULT_TIME_ERROR:
+			sprintf(value, "%f", _defaultPickUncertainty);
+			break;
 
-	default:
-		SEISCOMP_ERROR("getLocatorParam: wrong Parameter: %d", param);
-		return "error";
+		case LP_USE_PICK_UNCERTAINTY:
+			if ( _usePickUncertainties )
+				strcpy(value, "y");
+			else
+				strcpy(value, "n");
+			break;
+
+		default:
+			SEISCOMP_ERROR("getLocatorParam: wrong Parameter: %d", param);
+			return "error";
 	}
+
 	return value;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void LocSAT::setLocatorParams(int param, const char* value){
 	switch ( param ) {
 		case LP_USE_LOCATION:
@@ -1214,14 +1379,25 @@ void LocSAT::setLocatorParams(int param, const char* value){
 			_minArrivalWeight = atof(value);
 			break;
 
-		case LP_RMS_AS_TIME_ERROR:
-			_useArrivalRMSAsTimeError = !strcmp(value, "y");
+		case LP_DEFAULT_TIME_ERROR:
+			_defaultPickUncertainty = atof(value);
+			break;
+
+		case LP_USE_PICK_UNCERTAINTY:
+			if ( !strcmp(value, "y") )
+				_usePickUncertainties = true;
+			else
+				_usePickUncertainties = false;
 			break;
 
 		default:
 			SEISCOMP_ERROR("setLocatorParam: wrong Parameter: %d", param);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }// of namespace Seiscomp

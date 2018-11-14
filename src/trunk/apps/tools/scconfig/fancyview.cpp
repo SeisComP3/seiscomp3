@@ -653,6 +653,31 @@ void FancyView::setRootIndex(const QModelIndex &index) {
 	}
 	*/
 
+	if ( index.data(ConfigurationTreeItemModel::Type).toInt() == ConfigurationTreeItemModel::TypeModule ) {
+		Module *mod = reinterpret_cast<Module*>(index.data(ConfigurationTreeItemModel::Link).value<void*>());
+		QLabel *info = new QLabel(_rootWidget);
+		info->setWordWrap(true);
+		QPalette pal = info->palette();
+		pal.setColor(QPalette::Text, DescColor);
+		info->setPalette(pal);
+		QFont f = info->font();
+		f.setBold(true);
+		info->setFont(f);
+		if ( mod->supportsBindings() )
+			info->setText(tr(
+				"This module considers module configuration parameters. "
+				"It also requires bindings which may overwrite module "
+				"configuration parameters."
+			));
+		else
+			info->setText(tr(
+				"This module only considers module configuration parameters. "
+				"It does not provide a bindings configuration."
+			));
+		info->setMargin(8);
+		l->addWidget(info);
+	}
+
 	QString secName;
 	int type = index.data(ConfigurationTreeItemModel::Type).toInt();
 	if ( type == ConfigurationTreeItemModel::TypeModule ||

@@ -1481,7 +1481,7 @@ $(document).ready(function() {
 				foundVolume = True
 
 			foundLine = False
-			if lines or restricted != None:
+			if lines or restricted is not None:
 				self.query().loadArclinkRequestLines(request)
 				lineCount = 0
 				errorCount = 0
@@ -1498,7 +1498,7 @@ $(document).ready(function() {
 						if sta != "" and sta != line.streamID().stationCode(): continue
 						if loc != "" and loc != line.streamID().locationCode(): continue
 						if cha != "" and cha != line.streamID().channelCode(): continue
-					if restricted != None and restricted != line.restricted(): continue
+					if restricted is not None and restricted != line.restricted(): continue
 
 					Xrequest.add(DataModel.ArclinkRequestLine(line))
 					foundLine = True

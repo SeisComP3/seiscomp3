@@ -27,8 +27,8 @@ Equipment::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject
 	addProperty(Core::simpleProperty("SerialNumber", "string", false, false, false, false, false, false, NULL, &Equipment::setSerialNumber, &Equipment::serialNumber));
 	addProperty(Core::simpleProperty("InstallationDate", "datetime", false, false, false, false, true, false, NULL, &Equipment::setInstallationDate, &Equipment::installationDate));
 	addProperty(Core::simpleProperty("RemovalDate", "datetime", false, false, false, false, true, false, NULL, &Equipment::setRemovalDate, &Equipment::removalDate));
-	addProperty(Core::simpleProperty("resourceId", "string", false, false, false, false, false, false, NULL, &Equipment::setResourceId, &Equipment::resourceId));
 	addProperty(arrayClassProperty<DateType>("CalibrationDate", "FDSNXML::DateType", &Equipment::calibrationDateCount, &Equipment::calibrationDate, static_cast<bool (Equipment::*)(DateType*)>(&Equipment::addCalibrationDate), &Equipment::removeCalibrationDate, static_cast<bool (Equipment::*)(DateType*)>(&Equipment::removeCalibrationDate)));
+	addProperty(Core::simpleProperty("resourceId", "string", false, false, false, false, false, false, NULL, &Equipment::setResourceId, &Equipment::resourceId));
 }
 
 
@@ -206,7 +206,7 @@ void Equipment::setInstallationDate(const OPT(DateTime)& installationDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Equipment::installationDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Equipment::installationDate() const {
 	if ( _installationDate )
 		return *_installationDate;
 	throw Seiscomp::Core::ValueException("Equipment.InstallationDate is not set");
@@ -226,7 +226,7 @@ void Equipment::setRemovalDate(const OPT(DateTime)& removalDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Equipment::removalDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Equipment::removalDate() const {
 	if ( _removalDate )
 		return *_removalDate;
 	throw Seiscomp::Core::ValueException("Equipment.RemovalDate is not set");

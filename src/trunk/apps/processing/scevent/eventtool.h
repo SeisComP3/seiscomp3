@@ -219,6 +219,7 @@ class EventTool : public Application {
 		double                        _fExpiry;
 		Cache                         _cache;
 		bool                          _testMode;
+		bool                          _sendClearCache;
 		Util::StopWatch               _timer;
 		std::string                   _originID;
 		std::string                   _eventID;

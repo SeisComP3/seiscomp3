@@ -32,6 +32,9 @@ struct SC_SYSTEM_CORE_API ExportSink {
 };
 
 
+typedef std::vector<Core::BaseObject*> ExportObjectList;
+
+
 DEFINE_SMARTPOINTER(Exporter);
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -43,7 +46,8 @@ DEFINE_SMARTPOINTER(Exporter);
  */
 class SC_SYSTEM_CORE_API Exporter : public Core::BaseObject {
 	DECLARE_SC_CLASS(Exporter);
- 
+
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -73,6 +77,13 @@ class SC_SYSTEM_CORE_API Exporter : public Core::BaseObject {
 		//! the data.
 		bool write(ExportSink *sink, Core::BaseObject *);
 
+		bool write(std::streambuf* buf, const ExportObjectList &objects);
+		bool write(std::string filename, const ExportObjectList &objects);
+
+		//! Converts the objects using the Sink interface to write
+		//! the data.
+		bool write(ExportSink *sink, const ExportObjectList &objects);
+
 
 	// ------------------------------------------------------------------
 	//  Protected interface
@@ -80,6 +91,12 @@ class SC_SYSTEM_CORE_API Exporter : public Core::BaseObject {
 	protected:
 		//! Interface method that must be implemented by real exporters.
 		virtual bool put(std::streambuf* buf, Core::BaseObject *) = 0;
+
+		//! Interface method that should be implemented by real exporters. The
+		//! default implementation does nothing and returns false. Since that
+		//! method has been introduced with API 12 it is not abstract to
+		//! maintain compilation of existing exporters.
+		virtual bool put(std::streambuf* buf, const ExportObjectList &objects);
 
 
 	protected:

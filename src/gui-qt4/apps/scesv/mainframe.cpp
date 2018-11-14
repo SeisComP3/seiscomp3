@@ -55,16 +55,16 @@ MainFrame::MainFrame() {
 		delete _ui.tabWidget;
 		_ui.tabWidget = NULL;
 		setCentralWidget(_eventSummary);
-		_eventSummary->setContentsMargins(4,4,4,4);
+		_eventSummary->setContentsMargins(9,9,9,9);
 		_listPage->setVisible(false);
 	}
 	else {
 		QLayout* layoutSummary = new QVBoxLayout(_ui.tabSummary);
-		layoutSummary->setMargin(4);
+		layoutSummary->setMargin(9);
 		layoutSummary->addWidget(_eventSummary);
 	
 		QLayout* layoutEventList = new QVBoxLayout(_ui.tabEventList);
-		layoutEventList->setMargin(4);
+		layoutEventList->setMargin(9);
 		layoutEventList->addWidget(_listPage);
 
 		SCScheme.applyTabPosition(_ui.tabWidget);

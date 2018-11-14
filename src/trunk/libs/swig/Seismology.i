@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module (docstring="Codes for various seismological computations") Seismology
+%module(package="seiscomp3", docstring="Codes for various seismological computations") Seismology
 %{
 /* headers to be included in the wrapper code */
 #include "seiscomp3/core/typedarray.h"
@@ -43,7 +43,6 @@
 #include "seiscomp3/io/gfarchive.h"
 #include "seiscomp3/io/archive/binarchive.h"
 #include "seiscomp3/io/archive/xmlarchive.h"
-#include "seiscomp3/io/records/ahrecord.h"
 #include "seiscomp3/io/records/mseedrecord.h"
 #include "seiscomp3/io/recordstream/file.h"
 #include "seiscomp3/io/recordstream/slconnection.h"
@@ -87,6 +86,10 @@
     SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
   }
 }
+
+%newobject Seiscomp::TravelTimeTableInterface::Create;
+%newobject Seiscomp::TravelTimeTableInterface::compute;
+%newobject Seiscomp::TravelTimeTable::compute;
 
 %include "seiscomp3/core.h"
 %include "seiscomp3/seismology/regions.h"

@@ -130,7 +130,8 @@ class SC_GUI_API Axis : public QObject {
 		 *        the axis in the flexible direction.
 		 * @param painter The painter used to render the axis.
 		 * @param rect The target rect which will be changed according to the
-		 *             flexible dimension, e.g. width or height.
+		 *             flexible dimension, e.g. width or height. The width/height
+		 *             of the rect is only changed if it is equal to 0.
 		 */
 		void updateLayout(QPainter &painter, QRect &rect);
 
@@ -150,8 +151,12 @@ class SC_GUI_API Axis : public QObject {
 		 *             the rect dimension (either width or height) is not valid.
 		 *             A valid dimension forces the axis to render into the given
 		 *             rect.
+		 * @param clipText Whether to check for tick label overlaps with the given
+		 *                 rect or not. If enabled, then tick labels that intersect
+		 *                 with the rect will be pushed into the rect if possible.
 		 */
-		void draw(QPainter &painter, const QRect &rect);
+		void draw(QPainter &painter, const QRect &rect,
+		          bool clipText = false);
 
 		/**
 		 * @brief Draws the grid lines at the (sub)ticks within a passed plot rect.

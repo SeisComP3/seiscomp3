@@ -29,7 +29,9 @@ class MMApp : public Kicker<MessageMonitor::MainFrame> {
 			if ( !Kicker<MessageMonitor::MainFrame>::init() )
 				return false;
 
-			connection()->subscribe("STATUS_GROUP");
+			if ( connection() )
+				connection()->subscribe("STATUS_GROUP");
+
 			return true;
 		}
 };

@@ -23,8 +23,14 @@
 
 
 namespace Seiscomp {
-
 namespace Processing {
+
+
+namespace {
+
+std::string ExpectedAmplitudeUnit = "m";
+
+}
 
 
 IMPLEMENT_SC_CLASS_DERIVED(MagnitudeProcessor_msbb, MagnitudeProcessor, "MagnitudeProcessor_msbb");
@@ -44,14 +50,13 @@ MagnitudeProcessor_msbb::MagnitudeProcessor_msbb()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_msbb::computeMagnitude(
-	double amplitude, // in micrometers per second
-	double period,    // in seconds
-	double delta,     // in degrees
-	double depth,     // in kilometers
+	double amplitude, const std::string &unit,
+	double period, double snr,
+	double delta, double depth,
 	const DataModel::Origin *hypocenter,
 	const DataModel::SensorLocation *receiver,
-	double &value)
-{
+	const DataModel::Amplitude *,
+	double &value) {
 	if ( amplitude <= 0 )
 		return AmplitudeOutOfRange;
 
@@ -64,13 +69,19 @@ MagnitudeProcessor::Status MagnitudeProcessor_msbb::computeMagnitude(
 	if ( depth > DEPTH_MAX )
 		return DepthOutOfRange; // strictly speaking it would be 60 km
 
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
+
 	// Convert amplitude unit from meters to micrometers
 	value = correctMagnitude(log10((amplitude*1E06)/(2*M_PI)) + 1.66*log10(delta) + 3.3);
 
 	return OK;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

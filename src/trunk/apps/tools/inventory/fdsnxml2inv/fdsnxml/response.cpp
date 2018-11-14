@@ -77,7 +77,7 @@ void Response::setInstrumentSensitivity(const OPT(Sensitivity)& instrumentSensit
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Sensitivity& Response::instrumentSensitivity() throw(Seiscomp::Core::ValueException) {
+Sensitivity& Response::instrumentSensitivity() {
 	if ( _instrumentSensitivity )
 		return *_instrumentSensitivity;
 	throw Seiscomp::Core::ValueException("Response.InstrumentSensitivity is not set");
@@ -88,7 +88,7 @@ Sensitivity& Response::instrumentSensitivity() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Sensitivity& Response::instrumentSensitivity() const throw(Seiscomp::Core::ValueException) {
+const Sensitivity& Response::instrumentSensitivity() const {
 	if ( _instrumentSensitivity )
 		return *_instrumentSensitivity;
 	throw Seiscomp::Core::ValueException("Response.InstrumentSensitivity is not set");
@@ -108,7 +108,7 @@ void Response::setInstrumentPolynomial(const OPT(Polynomial)& instrumentPolynomi
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Polynomial& Response::instrumentPolynomial() throw(Seiscomp::Core::ValueException) {
+Polynomial& Response::instrumentPolynomial() {
 	if ( _instrumentPolynomial )
 		return *_instrumentPolynomial;
 	throw Seiscomp::Core::ValueException("Response.InstrumentPolynomial is not set");
@@ -119,7 +119,7 @@ Polynomial& Response::instrumentPolynomial() throw(Seiscomp::Core::ValueExceptio
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Polynomial& Response::instrumentPolynomial() const throw(Seiscomp::Core::ValueException) {
+const Polynomial& Response::instrumentPolynomial() const {
 	if ( _instrumentPolynomial )
 		return *_instrumentPolynomial;
 	throw Seiscomp::Core::ValueException("Response.InstrumentPolynomial is not set");

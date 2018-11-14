@@ -30,9 +30,13 @@
 #include <fdsnxml/poleandzero.h>
 #include <fdsnxml/responselist.h>
 #include <fdsnxml/responselistelement.h>
+#include <fdsnxml/dataavailability.h>
+#include <fdsnxml/dataavailabilityextent.h>
+#include <fdsnxml/dataavailabilityspan.h>
 
 #include <seiscomp3/core/timewindow.h>
 #include <seiscomp3/datamodel/inventory_package.h>
+#include <seiscomp3/datamodel/dataavailability_package.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/logging/log.h>
 
@@ -457,6 +461,27 @@ Convert2FDSNStaXML::Convert2FDSNStaXML(FDSNXML::FDSNStationXML *msg)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Convert2FDSNStaXML::setAvailability(const DataModel::DataAvailability *dataAvailability) {
+	if ( dataAvailability == NULL )
+		_dataAvailabilityLookup = ExtentLookup();
+	else {
+		size_t extentCount = dataAvailability->dataExtentCount();
+		for ( size_t i = 0; i < extentCount; ++i ) {
+			DataModel::DataExtentPtr extent = dataAvailability->dataExtent(i);
+			string sid = extent->waveformID().networkCode() + "." +
+			             extent->waveformID().stationCode() + "." +
+			             extent->waveformID().locationCode() + "." +
+			             extent->waveformID().channelCode();
+			_dataAvailabilityLookup[sid] = extent;
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Convert2FDSNStaXML::push(const DataModel::Inventory *inv) {
 	if ( _msg == NULL ) return false;
 	_inv = inv;
@@ -869,6 +894,37 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
 		catch ( ... ) {}
 		sx_chan->addComment(sx_comment.get());
+	}
+
+	// Populate availability if available
+	if ( !_dataAvailabilityLookup.empty() ) {
+		string sid = loc->station()->network()->code() + "." +
+		             loc->station()->code() + "." +
+		             loc->code() + "." +
+		             stream->code();
+		ExtentLookup::iterator it = _dataAvailabilityLookup.find(sid);
+		if ( it != _dataAvailabilityLookup.end() ) {
+			DataModel::DataExtent *extent = it->second.get();
+			FDSNXML::DataAvailabilityPtr sx_avail = new FDSNXML::DataAvailability;
+
+			FDSNXML::DataAvailabilityExtent sx_extent;
+			size_t attributeSegmentCount = extent->dataAttributeExtentCount();
+
+			sx_extent.setStart(extent->start());
+			sx_extent.setEnd(extent->end());
+			sx_avail->setExtent(sx_extent);
+
+			for ( size_t j = 0; j < attributeSegmentCount; ++j ) {
+				DataModel::DataAttributeExtent *attributeExtent = extent->dataAttributeExtent(j);
+				FDSNXML::DataAvailabilitySpanPtr sx_span = new FDSNXML::DataAvailabilitySpan;
+				sx_span->setStart(attributeExtent->start());
+				sx_span->setEnd(attributeExtent->end());
+				sx_span->setNumberSegments(attributeExtent->segmentCount());
+				sx_avail->addSpan(sx_span.get());
+			}
+
+			sx_chan->addDataAvailability(sx_avail.get());
+		}
 	}
 
 	return true;

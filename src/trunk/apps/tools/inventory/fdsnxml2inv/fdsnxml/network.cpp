@@ -77,7 +77,7 @@ void Network::setTotalNumberOfStations(const OPT(CounterType)& totalNumberOfStat
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Network::totalNumberOfStations() throw(Seiscomp::Core::ValueException) {
+CounterType& Network::totalNumberOfStations() {
 	if ( _totalNumberOfStations )
 		return *_totalNumberOfStations;
 	throw Seiscomp::Core::ValueException("Network.totalNumberOfStations is not set");
@@ -88,7 +88,7 @@ CounterType& Network::totalNumberOfStations() throw(Seiscomp::Core::ValueExcepti
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Network::totalNumberOfStations() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Network::totalNumberOfStations() const {
 	if ( _totalNumberOfStations )
 		return *_totalNumberOfStations;
 	throw Seiscomp::Core::ValueException("Network.totalNumberOfStations is not set");
@@ -108,7 +108,7 @@ void Network::setSelectedNumberStations(const OPT(CounterType)& selectedNumberSt
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Network::selectedNumberStations() throw(Seiscomp::Core::ValueException) {
+CounterType& Network::selectedNumberStations() {
 	if ( _selectedNumberStations )
 		return *_selectedNumberStations;
 	throw Seiscomp::Core::ValueException("Network.selectedNumberStations is not set");
@@ -119,7 +119,7 @@ CounterType& Network::selectedNumberStations() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Network::selectedNumberStations() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Network::selectedNumberStations() const {
 	if ( _selectedNumberStations )
 		return *_selectedNumberStations;
 	throw Seiscomp::Core::ValueException("Network.selectedNumberStations is not set");

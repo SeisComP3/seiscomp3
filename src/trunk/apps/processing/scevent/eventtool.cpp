@@ -30,6 +30,8 @@
 
 #include <seiscomp3/io/archive/xmlarchive.h>
 
+#include <seiscomp3/communication/systemmessages.h>
+#include <seiscomp3/core/genericmessage.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/math/geo.h>
 
@@ -113,6 +115,54 @@ struct GlobalRegion : public Client::Config::Region {
 };
 
 
+DEFINE_SMARTPOINTER(ClearCacheRequestMessage);
+
+/**
+ * \brief Message for requesting a clearing of the cache
+ * This message type requests a response from a peer. 
+ */
+class SC_SYSTEM_CLIENT_API ClearCacheRequestMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ClearCacheRequestMessage);
+	DECLARE_SERIALIZATION;
+	
+	public:
+		//! Constructor
+		ClearCacheRequestMessage() {}
+
+		//! Implemented interface from Message
+		virtual bool empty() const  { return false; }
+};
+
+void ClearCacheRequestMessage::serialize(Archive& ar) {}
+
+IMPLEMENT_SC_CLASS_DERIVED(
+	ClearCacheRequestMessage, Message, "clear_cache_request_message"
+);
+
+DEFINE_SMARTPOINTER(ClearCacheResponseMessage);
+
+/**
+ * \brief Message to respond to a clear cache request
+ */
+class SC_SYSTEM_CLIENT_API ClearCacheResponseMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ClearCacheResponseMessage);
+	DECLARE_SERIALIZATION;
+	
+	public:
+		//! Constructor
+		ClearCacheResponseMessage() {}
+
+		//! Implemented interface from Message
+		virtual bool empty() const  { return false; }
+};
+
+void ClearCacheResponseMessage::serialize(Archive& ar) {}
+
+IMPLEMENT_SC_CLASS_DERIVED(
+	ClearCacheResponseMessage, Message, "clear_cache_response_message"
+);
+
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -133,6 +183,7 @@ EventTool::EventTool(int argc, char **argv) : Application(argc, argv) {
 	addMessagingSubscription("LOCATION");
 	addMessagingSubscription("MAGNITUDE");
 	addMessagingSubscription("FOCMECH");
+	addMessagingSubscription("EVENT");
 
 	_cache.setPopCallback(boost::bind(&EventTool::removedFromCache, this, _1));
 
@@ -161,6 +212,7 @@ void EventTool::createCommandLineDescription() {
 	Application::createCommandLineDescription();
 
 	commandline().addOption("Messaging", "test", "Test mode, no messages are sent");
+	commandline().addOption("Messaging", "clear-cache", "Send a clear cache message and quit");
 	commandline().addOption("Database", "db-disable", "Do not use the database at all");
 	commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
 	commandline().addOption("Generic", "origin-id,O", "Origin ID to associate (local only)", &_originID, true);
@@ -177,6 +229,8 @@ void EventTool::createCommandLineDescription() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool EventTool::validateParameters() {
 	_testMode = commandline().hasOption("test");
+
+	_sendClearCache = commandline().hasOption("clear-cache");
 
 	if ( commandline().hasOption("db-disable") )
 		setDatabaseEnabled(false, false);
@@ -401,6 +455,23 @@ bool EventTool::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool EventTool::run() {
+
+	if ( _sendClearCache ) {
+		SEISCOMP_DEBUG("Sending clear cache request");
+		ClearCacheRequestMessage cc_msg;
+		connection()->send(&cc_msg);
+		SEISCOMP_DEBUG("Waiting for clear cache response message...");
+		while ( ! isExitRequested() ) { // sigkill or ctrl+c
+			int error;
+			Message *msg = connection()->readMessage(true, Communication::Connection::READ_ALL, NULL, &error);
+			if ( ClearCacheResponseMessage::Cast(msg) ) {
+				SEISCOMP_DEBUG("Clear cache response message received.");
+				return true;
+			}
+		}
+		return false;
+	}
+
 	if ( !_epFile.empty() ) {
 		IO::XMLArchive ar;
 		if ( !ar.open(_epFile.c_str()) ) {
@@ -444,6 +515,7 @@ bool EventTool::run() {
 			if ( !info ) continue;
 
 			updatePreferredOrigin(info.get());
+
 		}
 
 		ar.create("-");
@@ -451,6 +523,7 @@ bool EventTool::run() {
 		ar << _ep;
 		ar.close();
 
+		cerr << _ep->eventCount() << " events found" << endl;
 		return true;
 	}
 
@@ -507,6 +580,15 @@ void EventTool::handleMessage(Core::Message *msg) {
 	_originBlackList.clear();
 
 	Application::handleMessage(msg);
+
+	ClearCacheRequestMessage *cc_msg = ClearCacheRequestMessage::Cast(msg);
+	if ( cc_msg ) {
+		SEISCOMP_DEBUG("Received clear cache request");
+		_cache.clear();
+		SEISCOMP_DEBUG("Sending clear cache response");
+		ClearCacheResponseMessage cc_resp;
+		connection()->send(&cc_resp);
+	}
 
 	SEISCOMP_DEBUG("Work on TODO list");
 	for ( TodoList::iterator it = _adds.begin(); it != _adds.end(); ++it ) {
@@ -874,7 +956,9 @@ void EventTool::addObject(const string &parentID, Object* object) {
 	JournalEntryPtr journalEntry = JournalEntry::Cast(object);
 	if ( journalEntry ) {
 		logObject(_inputJournal, Core::Time::GMT());
-		SEISCOMP_LOG(_infoChannel, "Received new journal entry for object %s", journalEntry->objectID().c_str());
+		SEISCOMP_LOG(_infoChannel,
+		             "Received new journal entry from %s for object %s",
+		             journalEntry->sender().c_str(), journalEntry->objectID().c_str());
 		if ( handleJournalEntry(journalEntry.get()) )
 			return;
 	}
@@ -1035,6 +1119,9 @@ createEntry(const std::string &id, const std::string &proc,
 bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 	JournalEntryPtr response;
 
+	static const std::string Failed = "Failed";
+	static const std::string OK = "OK";
+
 	// Not event specific journals
 	if ( entry->action() == "EvNewEvent" ) {
 		SEISCOMP_INFO("Handling journal entry for origin %s: %s(%s)",
@@ -1043,7 +1130,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 		EventPtr e = getEventForOrigin(entry->objectID());
 		if ( e )
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":origin already associated:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":origin already associated:");
 		else {
 			OriginPtr origin = _cache.get<Origin>(entry->objectID());
 			if ( !origin ) {
@@ -1080,17 +1167,17 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 				Notifier::Disable();
 
-				response = createEntry(info->event->publicID(), entry->action() + "OK", "created by command");
+				response = createEntry(info->event->publicID(), entry->action() + OK, "created by command");
 				info->addJournalEntry(response.get());
 				response->setSender(name() + "@" + Core::getHostname());
 				Notifier::Enable();
 				Notifier::Create(_journal->publicID(), OP_ADD, response.get());
 				Notifier::Disable();
 
-				response = createEntry(entry->objectID(), entry->action() + "OK", string("associated to event ") + info->event->publicID());
+				response = createEntry(entry->objectID(), entry->action() + OK, string("associated to event ") + info->event->publicID());
 			}
 			else
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":running out of eventIDs:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":running out of eventIDs:");
 		}
 
 		if ( response ) {
@@ -1126,7 +1213,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 	if ( entry->action() == "EvPrefMagType" ) {
 		SEISCOMP_DEBUG("...set preferred magnitude type");
-		response = createEntry(entry->objectID(), entry->action() + "OK", !info->constraints.preferredMagnitudeType.empty()?info->constraints.preferredMagnitudeType:":automatic:");
+		response = createEntry(entry->objectID(), entry->action() + OK, !info->constraints.preferredMagnitudeType.empty()?info->constraints.preferredMagnitudeType:":automatic:");
 
 		if ( info->preferredOrigin && !info->preferredOrigin->magnitudeCount() && query() ) {
 			SEISCOMP_DEBUG("... loading magnitudes for origin %s", info->preferredOrigin->publicID().c_str());
@@ -1143,7 +1230,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 		// Release fixed origin and choose the best one automatically
 		if ( info->constraints.preferredOriginID.empty() ) {
-			response = createEntry(entry->objectID(), entry->action() + "OK", ":automatic:");
+			response = createEntry(entry->objectID(), entry->action() + OK, ":automatic:");
 
 			Notifier::Enable();
 			updatePreferredOrigin(info.get());
@@ -1151,7 +1238,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		}
 		else {
 			if ( info->event->originReference(info->constraints.preferredOriginID) == NULL ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":unreferenced:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":unreferenced:");
 			}
 			else {
 				OriginPtr org = _cache.get<Origin>(info->constraints.preferredOriginID);
@@ -1161,13 +1248,13 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 						query()->loadMagnitudes(org.get());
 					}
 
-					response = createEntry(entry->objectID(), entry->action() + "OK", info->constraints.preferredOriginID);
+					response = createEntry(entry->objectID(), entry->action() + OK, info->constraints.preferredOriginID);
 					Notifier::Enable();
 					choosePreferred(info.get(), org.get(), NULL);
 					Notifier::Disable();
 				}
 				else {
-					response = createEntry(entry->objectID(), entry->action() + "Failed", ":not available:");
+					response = createEntry(entry->objectID(), entry->action() + Failed, ":not available:");
 				}
 			}
 		}
@@ -1178,14 +1265,14 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		DataModel::EvaluationMode em;
 		if ( !em.fromString(entry->parameters().c_str()) && !entry->parameters().empty() ) {
 			// If a mode is requested but an invalid mode identifier has been submitted
-			response = createEntry(entry->objectID(), entry->action() + "Failed", string(":mode '") + entry->parameters() + "' unknown:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, string(":mode '") + entry->parameters() + "' unknown:");
 		}
 		else {
 			// Release fixed origin mode and choose the best one automatically
 			if ( !info->constraints.preferredOriginEvaluationMode )
-				response = createEntry(entry->objectID(), entry->action() + "OK", ":automatic:");
+				response = createEntry(entry->objectID(), entry->action() + OK, ":automatic:");
 			else
-				response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+				response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 
 			Notifier::Enable();
 			updatePreferredOrigin(info.get());
@@ -1193,7 +1280,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		}
 	}
 	else if ( entry->action() == "EvPrefOrgAutomatic" ) {
-		response = createEntry(entry->objectID(), entry->action() + "OK", ":automatic mode:");
+		response = createEntry(entry->objectID(), entry->action() + OK, ":automatic mode:");
 
 		Notifier::Enable();
 		updatePreferredOrigin(info.get());
@@ -1206,26 +1293,26 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		EventType newEt;
 
 		if ( !entry->parameters().empty() && !newEt.fromString(entry->parameters()) ) {
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":invalid type:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":invalid type:");
 		}
 		else {
 			try { et = info->event->type(); }
 			catch ( ... ) {}
 
 			if ( !et && entry->parameters().empty() ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":not modified:");
 			}
 			else if ( et && !entry->parameters().empty() && *et == newEt ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":not modified:");
 			}
 			else {
 				if ( !entry->parameters().empty() ) {
 					info->event->setType(newEt);
-					response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+					response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 				}
 				else {
 					info->event->setType(None);
-					response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+					response = createEntry(entry->objectID(), entry->action() + OK, ":unset:");
 				}
 
 				Notifier::Enable();
@@ -1241,26 +1328,26 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		EventTypeCertainty newEtc;
 
 		if ( !entry->parameters().empty() && !newEtc.fromString(entry->parameters()) ) {
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":invalid type certainty:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":invalid type certainty:");
 		}
 		else {
 			try { etc = info->event->typeCertainty(); }
 			catch ( ... ) {}
 
 			if ( !etc && entry->parameters().empty() ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":not modified:");
 			}
 			else if ( etc && !entry->parameters().empty() && *etc == newEtc ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":not modified:");
 			}
 			else {
 				if ( !entry->parameters().empty() ) {
 					info->event->setTypeCertainty(newEtc);
-					response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+					response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 				}
 				else {
 					info->event->setTypeCertainty(None);
-					response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+					response = createEntry(entry->objectID(), entry->action() + OK, ":unset:");
 				}
 				Notifier::Enable();
 				updateEvent(info->event.get());
@@ -1274,9 +1361,9 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		string error;
 		Notifier::Enable();
 		if ( info->setEventName(entry, error) )
-			response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+			response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 		else
-			response = createEntry(entry->objectID(), entry->action() + "Failed", error);
+			response = createEntry(entry->objectID(), entry->action() + Failed, error);
 		Notifier::Disable();
 	}
 	else if ( entry->action() == "EvOpComment" ) {
@@ -1285,9 +1372,9 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		string error;
 		Notifier::Enable();
 		if ( info->setEventOpComment(entry, error) )
-			response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+			response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 		else
-			response = createEntry(entry->objectID(), entry->action() + "Failed", error);
+			response = createEntry(entry->objectID(), entry->action() + Failed, error);
 		Notifier::Disable();
 	}
 	else if ( entry->action() == "EvPrefFocMecID" ) {
@@ -1295,11 +1382,11 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 		if ( entry->parameters().empty() ) {
 			info->event->setPreferredFocalMechanismID("");
-			response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+			response = createEntry(entry->objectID(), entry->action() + OK, ":unset:");
 		}
 		else {
 			if ( info->event->focalMechanismReference(info->constraints.preferredFocalMechanismID) == NULL ) {
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":unreferenced:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":unreferenced:");
 			}
 			else {
 				FocalMechanismPtr fm = _cache.get<FocalMechanism>(info->constraints.preferredFocalMechanismID);
@@ -1309,13 +1396,13 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 						query()->loadMomentTensors(fm.get());
 					}
 
-					response = createEntry(entry->objectID(), entry->action() + "OK", info->constraints.preferredFocalMechanismID);
+					response = createEntry(entry->objectID(), entry->action() + OK, info->constraints.preferredFocalMechanismID);
 					Notifier::Enable();
 					choosePreferred(info.get(), fm.get());
 					Notifier::Disable();
 				}
 				else {
-					response = createEntry(entry->objectID(), entry->action() + "Failed", ":not available:");
+					response = createEntry(entry->objectID(), entry->action() + Failed, ":not available:");
 				}
 			}
 		}
@@ -1326,18 +1413,18 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 	else if ( entry->action() == "EvPrefMw" ) {
 		SEISCOMP_DEBUG("...set Mw from focal mechanism as preferred magnitude");
 		if ( entry->parameters().empty() ) {
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":empty parameter (true or false expected):");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":empty parameter (true or false expected):");
 		}
 		else {
 			if ( entry->parameters() == "true" || entry->parameters() == "false" ) {
-				response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+				response = createEntry(entry->objectID(), entry->action() + OK, entry->parameters());
 
 				Notifier::Enable();
 				choosePreferred(info.get(), info->preferredOrigin.get(), NULL);
 				Notifier::Disable();
 			}
 			else
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":true or false expected:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":true or false expected:");
 		}
 	}
 	// Merge event in  parameters into event in objectID. The source
@@ -1346,9 +1433,9 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		SEISCOMP_DEBUG("...merge event '%s'", entry->parameters().c_str());
 
 		if ( entry->parameters().empty() )
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":empty source event id:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":empty source event id:");
 		else if ( info->event->publicID() == entry->parameters() ) {
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":source and target are equal:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":source and target are equal:");
 		}
 		else {
 			EventInformationPtr sourceInfo = cachedEvent(entry->parameters());
@@ -1366,7 +1453,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 			}
 
 			if ( !sourceInfo )
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":source event not found:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":source event not found:");
 			else {
 				Notifier::Enable();
 				// Do the merge
@@ -1381,10 +1468,10 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 						Notifier::Disable();
 					}
 
-					response = createEntry(entry->objectID(), entry->action() + "OK", sourceInfo->event->publicID());
+					response = createEntry(entry->objectID(), entry->action() + OK, sourceInfo->event->publicID());
 				}
 				else
-					response = createEntry(entry->objectID(), entry->action() + "Failed", ":internal error:");
+					response = createEntry(entry->objectID(), entry->action() + Failed, ":internal error:");
 				Notifier::Disable();
 			}
 		}
@@ -1397,7 +1484,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		list<string> fmIDsToMove;
 
 		if ( !org )
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":origin not found:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":origin not found:");
 		else {
 			EventPtr e = getEventForOrigin(org->publicID());
 			if ( e ) {
@@ -1409,7 +1496,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 				}
 
 				if ( sourceInfo->event->originReferenceCount() < 2 ) {
-					response = createEntry(entry->objectID(), entry->action() + "Failed", ":last origin cannot be removed:");
+					response = createEntry(entry->objectID(), entry->action() + Failed, ":last origin cannot be removed:");
 				}
 				else {
 					Notifier::Enable();
@@ -1475,7 +1562,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 				Notifier::Disable();
 
-				response = createEntry(entry->objectID(), entry->action() + "OK", org->publicID());
+				response = createEntry(entry->objectID(), entry->action() + OK, org->publicID());
 			}
 		}
 	}
@@ -1487,13 +1574,13 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 		list<string> fmIDsToMove;
 
 		if ( !org )
-			response = createEntry(entry->objectID(), entry->action() + "Failed", ":origin not found:");
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":origin not found:");
 		else {
 			if ( info->event->originReference(org->publicID()) == NULL )
-				response = createEntry(entry->objectID(), entry->action() + "Failed", ":origin not associated:");
+				response = createEntry(entry->objectID(), entry->action() + Failed, ":origin not associated:");
 			else {
 				if ( info->event->originReferenceCount() < 2 )
-					response = createEntry(entry->objectID(), entry->action() + "Failed", ":last origin cannot be removed:");
+					response = createEntry(entry->objectID(), entry->action() + Failed, ":last origin cannot be removed:");
 				else {
 					EventInformationPtr newInfo = createEvent(org.get());
 					JournalEntryPtr newResponse;
@@ -1545,7 +1632,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 
 						Notifier::Disable();
 
-						response = createEntry(entry->objectID(), entry->action() + "OK", org->publicID() + " removed by command");
+						response = createEntry(entry->objectID(), entry->action() + OK, org->publicID() + " removed by command");
 
 						SEISCOMP_INFO("%s: created", newInfo->event->publicID().c_str());
 						SEISCOMP_LOG(_infoChannel, "Origin %s created a new event %s",
@@ -1586,14 +1673,25 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 						}
 					}
 					else
-						response = createEntry(entry->objectID(), entry->action() + "Failed", ":running out of eventIDs:");
+						response = createEntry(entry->objectID(), entry->action() + Failed, ":running out of eventIDs:");
 				}
 			}
 		}
 	}
 	// Is this command ours by starting with Ev?
-	else if ( !entry->action().empty() && (entry->action().compare(0, 2,"Ev") == 0) )
-		response = createEntry(entry->objectID(), entry->action() + "Failed", ":unknown command:");
+	else if ( !entry->action().empty() && (entry->action().compare(0, 2,"Ev") == 0) ) {
+		// Make sure we don't process result journal entries ending on either
+		// OK or Failed
+		if ( ( entry->action().size() >= Failed.size() + 2 &&
+		       std::equal(Failed.rbegin(), Failed.rend(), entry->action().rbegin() ) ) ||
+		     ( entry->action().size() >= OK.size() + 2 &&
+		       std::equal(OK.rbegin(), OK.rend(), entry->action().rbegin() ) ) )
+			SEISCOMP_ERROR("Ignoring already processed journal entry from %s: %s(%s)",
+			               entry->sender().c_str(), entry->action().c_str(),
+			               entry->parameters().c_str());
+		else
+			response = createEntry(entry->objectID(), entry->action() + Failed, ":unknown command:");
+	}
 
 	if ( response ) {
 		info->addJournalEntry(response.get());
@@ -3138,10 +3236,7 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 			              info->event->publicID().c_str());
 
 			// User has manually fixed an origin, don't touch the event type
-			if ( info->constraints.fixedOrigin() )
-				notExistingEvent = false;
-
-			if ( !notExistingEvent ) {
+			if ( !info->constraints.fixedOrigin() && !notExistingEvent ) {
 				SEISCOMP_INFO("%s: set type to 'not existing' since preferred origin is rejected",
 				              info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Set type to 'not existing' since preferred origin is rejected in event %s",
@@ -3152,12 +3247,9 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 		}
 		else {
 			// User has manually fixed an origin, don't touch the event type
-			if ( info->constraints.fixedOrigin() )
-				notExistingEvent = false;
-
 			// Preferred origin is not rejected, remove the event type if it is
 			// set to 'not existing'
-			if ( notExistingEvent ) {
+			if ( !info->constraints.fixedOrigin() && notExistingEvent ) {
 				SEISCOMP_INFO("%s: remove type since preferred origin changed to not rejected",
 				              info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Remove type since preferred origin is changed from rejected in event %s",

@@ -291,7 +291,6 @@ class WFParam : public Application {
 		Cache                      _cache;
 
 		bool                       _firstRecord;
-		bool                       _receivedRecords;
 
 		Config                     _config;
 

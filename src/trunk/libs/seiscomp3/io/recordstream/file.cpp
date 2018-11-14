@@ -118,7 +118,7 @@ bool File::setSource(const string &name) {
 		}
 
 		_current = &_fstream;
-		return !_fstream.fail();
+		return _fstream.is_open();
 	}
 
 	_current = &cin;
@@ -231,6 +231,7 @@ Record *File::next() {
 		catch ( std::exception &e ) {
 			SEISCOMP_ERROR("file read exception: %s", e.what());
 			delete rec;
+			return NULL;
 		}
 
 		if ( !_filter.empty() ) {

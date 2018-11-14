@@ -17,8 +17,10 @@
 
 
 #include <QObject>
+#include <QPoint>
 
 #include <seiscomp3/gui/qt4.h>
+#include <seiscomp3/gui/plot/axis.h>
 
 
 class QRect;
@@ -29,7 +31,6 @@ namespace Seiscomp {
 namespace Gui {
 
 
-class Axis;
 class Graph;
 class AbstractLegend;
 
@@ -64,6 +65,14 @@ class SC_GUI_API Plot : public QObject {
 		 *              the plot.
 		 */
 		void addGraph(Graph *graph);
+
+		/**
+		 * @brief Adds an additional plot axis. This method was added with
+		 *        API 12.
+		 * @param position The position of the new axis
+		 * @return The axis instance which is a child of this plot
+		 */
+		Axis *addAxis(Axis::AxisPosition position);
 
 		/**
 		 * @brief Sets a legend instance for which the draw method is called
@@ -117,6 +126,10 @@ class SC_GUI_API Plot : public QObject {
 		typedef QList<Graph*> Graphs;
 		Graphs          _graphs;
 		AbstractLegend *_legend;
+		QVector<Axis*>  _extraXAxis1; //!< additional bottom x axes
+		QVector<Axis*>  _extraXAxis2; //!< additional top x axes
+		QVector<Axis*>  _extraYAxis1; //!< additional left y axes
+		QVector<Axis*>  _extraYAxis2; //!< additional right y axes
 		QRect           _plotRect; //!< The plot rectangle of the last draw
 };
 

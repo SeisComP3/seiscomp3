@@ -21,8 +21,10 @@ namespace Seiscomp {
 namespace Gui {
 namespace Map {
 
+
 class Canvas;
 class Projection;
+
 
 class SC_GUI_API CitiesLayer : public Layer {
 	public:
@@ -40,12 +42,13 @@ class SC_GUI_API CitiesLayer : public Layer {
 
 	private:
 		void drawCity(QPainter&, Grid&, QFont&, bool&, bool&,
-                      const Projection*, const Math::Geo::CityD&,
-                      const QFontMetrics&, int, int);
+		              const Projection*, const Math::Geo::CityD&,
+		              const QFontMetrics&, int, int);
 
 	private:
 		const Math::Geo::CityD*         _selectedCity;
 };
+
 
 } // namespace Map
 } // namespce Gui

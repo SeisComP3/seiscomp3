@@ -38,7 +38,7 @@ def have_key(sesskey):
 
 def get_data(sesskey):
     sessdata = sessions.get(sesskey)
-    if sessdata == None:
+    if sessdata is None:
         sessdata = SessionData()
         sessions[sesskey] = sessdata
 

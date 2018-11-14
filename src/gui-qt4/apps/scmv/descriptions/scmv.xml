@@ -44,6 +44,18 @@
 			<parameter name="annotationsWithChannels" type="boolean" default="true">
 				<description>Enables/disabled drawing of station annotations with location/channel codes.</description>
 			</parameter>
+			<parameter name="mapLegendPosition" type="string" default="topleft">
+				<description>
+					Sets the location of the map symbol legend (QC, ground motion).
+					Use either: topleft, topright, bottomright or bottomleft.
+				</description>
+			</parameter>
+			<parameter name="eventLegendPosition" type="string" default="bottomleft">
+				<description>
+					Sets the location of the event symbol legend. Use either:
+					topleft, topright, bottomright or bottomleft.
+				</description>
+			</parameter>
 			<group name="eventTable">
 				<parameter name="visible" type="boolean" default="false">
 					<description>

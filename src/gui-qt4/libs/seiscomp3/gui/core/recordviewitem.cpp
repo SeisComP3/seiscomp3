@@ -695,7 +695,7 @@ void RecordViewItem::setRecordWidget(RecordWidget *widget) {
 
 	if ( _widget ) {
 		_widgetLayout->addWidget(_widget);
-		_widget->setBackgroundRole(QPalette::Window);
+		_widget->setAutoFillBackground(true);
 		setupConnection();
 
 		if ( _label )
@@ -737,7 +737,7 @@ void RecordViewItem::setBackgroundColor(const QColor& c) {
 	*/
 
 	pal = _widget->palette();
-	pal.setColor(QPalette::Window, c);
+	pal.setColor(QPalette::Base, c);
 	_widget->setPalette(pal);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -811,7 +811,7 @@ void RecordViewItem::setColor() {
 		//_label->setBackgroundRole(QPalette::Highlight);
 	}
 	else {
-		_widget->setBackgroundRole(_selected?QPalette::Highlight:QPalette::Window);
+		_widget->setBackgroundRole(_selected?QPalette::Highlight:QPalette::Base);
 		//_label->setBackgroundRole(_selected?QPalette::Highlight:QPalette::Window);
 	}
 }

@@ -69,5 +69,22 @@ bool ExporterTrunk::put(std::streambuf* buf, Core::BaseObject *obj) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ExporterTrunk::put(std::streambuf* buf, const IO::ExportObjectList &objects) {
+	IO::XMLArchive ar;
+	if ( !ar.create(buf) )
+		return false;
+	ar.setFormattedOutput(_prettyPrint);
+	for ( IO::ExportObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it ) {
+		Core::BaseObject *obj = *it;
+		ar << obj;
+	}
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

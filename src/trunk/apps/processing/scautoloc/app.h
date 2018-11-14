@@ -21,6 +21,7 @@
 #include <seiscomp3/datamodel/amplitude.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/eventparameters.h>
+#include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/client/application.h>
 #include "autoloc.h"
 
@@ -49,7 +50,9 @@ class App : public Client::Application,
 		void createCommandLineDescription();
 		bool validateParameters();
 		bool initConfiguration();
-		bool initStations();
+		bool initInventory();
+		// initialize one station at runtime
+		bool initOneStation(const DataModel::WaveformStreamID&, const Core::Time&);
 
 		void readHistoricEvents();
 
@@ -70,6 +73,9 @@ class App : public Client::Application,
 		bool runFromXMLFile(const char *fname);
 		bool runFromEPFile(const char *fname);
 
+		void sync(const Core::Time &time);
+		const Core::Time now() const;
+		void timeStamp() const;
 
 	protected:
 //		DataModel::Origin *convertToSC3  (const ::Autoloc::Origin* origin, bool allPhases=true);
@@ -86,16 +92,16 @@ class App : public Client::Application,
 		std::queue<DataModel::PublicObjectPtr> _objects; // for XML playback
 		double _playbackSpeed;
 		Core::Time playbackStartTime;
-		Core::Time  objectsStartTime;
+		Core::Time objectsStartTime;
+		Core::Time syncTime;
 		unsigned int objectCount;
 
 		DataModel::EventParametersPtr _ep;
+		DataModel::InventoryPtr inventory;
 
 		::Autoloc::Autoloc3::Config _config;
 		int _keepEventsTimeSpan;
 		int _wakeUpTimout;
-
-		std::map<std::string, DataModel::AmplitudePtr> ampmap;
 
 		ObjectLog   *_inputPicks;
 		ObjectLog   *_inputAmps;

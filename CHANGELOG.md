@@ -1,5 +1,235 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+```SC_API_VERSION 12.0.0```
+```Schema version 0.11```
+
+* scevtstreams
+
+  * Remove duplicate lines in output
+  * Add capstool format for output
+  * Add options for using wildcards instead of network, stations, streams codes
+
+* scautoloc
+
+  * Check the depth of the origin before sending to discard solutions with
+    too great depth
+  * Add configuration parameter maxDepth
+  * Remove depth check from previous origin filter where it was not effective
+  * Changes affecting behaviour in playback mode:
+    * A time stamp is now logged whenever an new object arrives.
+    * The creationTime of new origins is set to the creation
+      time of the most recently received object.
+
+    Both changes help to more realistically simulate and assess the real-time behaviour.
+
+  * Fix bug that caused autoloc.useManualOrigins to always be treated
+    as true
+
+* scdumpcfg
+
+  * Add the documentation
+
+* bindings2cfg
+
+  * Add the documentation
+
+* trunk
+
+  * Add namespace support in configuration files. Example:
+    ```
+    recordstream {
+      service = slink
+      source = localhost:18000
+    }
+    ```
+    Namespaces can be nested.
+  * Remov LocSAT unused configuration option to use the location rms as
+    time error
+  * Add LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
+    which can be configured via the configuration files or during runtime in
+    the scolv locator setup dialog. The latter defaults to false to preserve
+    the old behaviour
+  * Add ConfigSyncMessage which wraps a database configuration synchronization
+  * All applications are now encouraged to use ```recordstream = service://params```
+    in their configuration rather than the two parameters ```recordstream.service```
+    and ```recordstream.source```. They are now declared deprecated and will be
+    removed in future versions.
+  * All applications are now encouraged to use ```database = type://params```
+    in their configuration rather than the two parameters ```database.type```
+    and ```database.parameters```. They are now declared deprecated and will be
+    removed in future versions.
+  * Fix amplitude computation for ML (on horizontals, not MLv) which applied
+    a wrong correction factor of 2. Therefore ML magnitudes will be 0.3 magnitudes
+    lower than before. To preserve the old (wrong) behaviour, apply a constant
+    correction in the bindings:
+    ```
+    # Add log10(2) to ML magnitudes for SC3 compatibility with <= 2017.334
+    mag.ML.offset = 0.301029995664
+    ```
+  * Add scardac module, see below
+
+* fdsnws
+
+  * Add FocalMechanism support in event query
+  * Add support for cross-referenced preferred magnitude in event query
+  * Add data availability support according to the IRIS webservice
+    availability http://service.iris.edu/irisws/availability/1/ under
+    path ```ext/availability```
+
+* fdsnxml2inv
+
+  * Fix wrong datalogger conversion if commandline option ```--log-stages```
+    is not set
+
+* GUI
+
+  * Add event layer legend which will show if legends are visible in scolv
+  * scmv uses now the map legend interface rather than rendering the legends
+    as map symbols
+  * Add support for BNA point rendering. New configuration options have
+    been added: ```[{prefix}.]symbol.size``` and ```[{prefix}.]symbol.shape```.
+  * Show in scconfig header of module configuration if bindings are required
+  * Fix event list "Hide events outside region" edit dialog: OK and Cancel
+    did not work
+  * Prepend "amax" and "mean" to the statistic values printed in the lower
+    left corner in the trace widgets
+  * Improve rendering of traces significantly when anti-aliasing is enabled
+    which is default now
+  * Improved optimizing traces for rendering with respect to correctness and
+    memory consumption
+
+* scheli
+
+  * Add documentation and descriptions
+
+* scmv
+
+  * Add filter of origin mode and status for showing events on map
+  * Add configuration for map/event legend position
+  * Improve documentation
+
+* scwfparam
+
+  * Fix wrong handling of data acquisition timeouts when no data is received
+    within one second
+  * Compare inventory gain.unit ignoring the case to detect velocity and
+    acceleration channels correctly
+
+* scbulletin
+
+  * In enhanced mode all coordinates and distances have precisions 
+    of e-05 degree
+
+* scart
+
+  * Change default archive path from $SEISCOMP_ROOT/acquisition/archive to
+    $SEISCOMP_ROOT/var/lib/archive. Thanks to Sergio Tardioli.
+
+* scqc
+
+  * Fix duplicate object bug which caused many error log messages in
+    scmaster.log with respect to database insertions
+
+* scesv
+
+  * Add new script option ```exportMap``` that allows to export the current map to
+    file. The script has to take ownership of the file. This option is disabled by
+    default.
+
+* scolv
+
+  * Allow to configure preferred event types which will be displayed first
+    in the event type drop-down list
+  * Fix rename phases command when only a subset of source phases is selected
+  * Show vertical scale in picker zoom trace
+  * Set default for hiding disabled stations to ```false```
+  * Add configuration option to either ignore disabled stations or not
+  * Allow to show all traces in the same unit, either acceleration, velocity
+    or displacement
+  * Add travel time table selection, as default libtau (iasp91 and ak135) and
+    LocSAT (iasp91, tab) can selected
+
+* scmm
+
+  * Fix crash when connection cannot be established at startup
+
+* scardac
+
+  * Initial version of the module which collect availability information
+    from an SDS archive by scanning its content repeatedly and populating
+    the new availability database tables (read by fdsnws)
+
+
+## Release 2017.334 patch5
+
+* scart
+
+  * Support loading of plugins via scart.cfg
+
+* trunk
+
+  * Fix sdsarchive handler with respect to corrupt files which caused
+    and endless loop
+  * Add parameter splitTime to sdsarchive which is an absolute time rather
+    than a relative time
+  * Add sh2proc script which converts Seismic Handler event files to
+    EventParameters
+
+* Seedlink
+
+  * Fix scream_plugin scream2sl.map parser if a stream id is composed
+    from sysid.streamid. The internal parser has rejected lines which
+    duplicate streamid without taking the sysid into account.
+  * Enable modbus support in serial plugin
+
+* Arclink
+
+  * Fix crash of Python components when inventory comments are used
+  * Fix re-generation of empty or conflicting publicIDs
+
+* scevent
+
+  * Fix sending updates if automatic fake event declaration is activated
+    and the event.type would actually not change
+
+* slmon
+
+  * Fix default paths and streams regular expression which is used to gather
+    station information
+
+* fdsnws
+
+  * Set default data source to sdsarchive:// and do not use the global default
+    which most likely is set to a streaming source such as Seedlink
+  * Fix queryauth exception in combination with htpasswd
+  * Fix incorrect epoch usage when request spans multiple epochs
+
+* scolv
+
+  * Fix arrival used flags evaluation. This resulted in activated arrivals in
+    the various plots event if they were not used.
+  * Fix rename phases command when only a subset of source phases is selected
+
+* scautoloc
+
+  * Fix bug with respect to latest data model changes and taking Arrival.timeUsed()
+    into account.
+  * Make playbacks work with station epochs that ended in the past. This is important
+    for playbacks of historical events.
+
+* scimport
+
+  * Add support to enable/disable message filtering in configuration file
+
+    ```
+    useFilter = false
+    ```
+
+    Settings ```useFilter``` to false is equal to passing ```--no-filter``` via
+    command-line.
+
 ## Release 2017.334 patch4
 
 * dlsv2inv
@@ -100,7 +330,6 @@
   * Event list shows only the full summary tooltip if the mouse hovers
     the ID column (last column)
 
-
 * scmapcut
 
   * Add new module documentation
@@ -140,7 +369,7 @@ mysql> source /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
 and in psql with
 
 ```
-seiscomp3=> \i /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
+seiscomp3=> \i /home/sysop/seiscomp3/share/db/migrations/postgresql/0_9_to_0_10.sql;
 ```
 
 **Rationale**

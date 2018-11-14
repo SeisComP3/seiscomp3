@@ -21,7 +21,7 @@ set output 'out.svg'
 
 plot 'days3.dat' using 1:2 title 'All EIDA nodes', \
   '' using 1:5 title 'GFZ', \
-  '/srv/www/webdc/eida/data/total-2017.txt' using 1:(1024*1024*$2) title 'All requests' w l
+  '/srv/www/webdc/eida/data/total-' . year . '.txt' using 1:(1024*1024*$2) title 'All requests' w l
 
 #set terminal dumb
 #set output

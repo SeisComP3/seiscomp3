@@ -645,11 +645,15 @@ class SC_SYSTEM_CORE_API Model : public Core::BaseObject {
 	public:
 		//! Creates the tree from schema definitions
 		bool create(SchemaDefinitions *def);
+		bool recreate();
+
 		bool readConfig(int updateMaxStage = Environment::CS_LAST,
 		                ConfigDelegate *delegate = NULL);
-		bool writeConfig(int stage = Environment::CS_CONFIG_APP,
+		bool writeConfig(bool multilineLists,
+		                 int stage = Environment::CS_CONFIG_APP,
 		                 ConfigDelegate *delegate = NULL);
 		bool writeConfig(Module *, const std::string &filename, int stage,
+		                 bool multilineLists,
 		                 ConfigDelegate *delegate = NULL);
 
 

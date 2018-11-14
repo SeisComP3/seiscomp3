@@ -503,7 +503,7 @@ def _retr(val):
 
 
 def _modifiedAfter(obj, modified_after):
-	if (obj.last_modified == None) or (modified_after == None):
+	if (obj.last_modified is None) or (modified_after is None):
 		return True
 		
 	return (obj.last_modified >= modified_after)
@@ -527,14 +527,14 @@ def _inTimeSpan(obj, start_time, end_time):
 	
 
 def _restricted(obj, restricted):
-	if (obj.restricted == None) or (restricted == None):
+	if (obj.restricted is None) or (restricted is None):
 		return True
 	
 	return (obj.restricted == restricted)
 	
 
 def _permanent(netClass, permanent):
-	if (netClass == None) or (permanent == None):
+	if (netClass is None) or (permanent is None):
 		return True
 	
 	if permanent == True:
@@ -564,7 +564,7 @@ def _inRegion(obj, latmin, latmax, lonmin, lonmax):
 	
 
 def _sensortype(obj, sensortype, sensor_dict):
-	if (obj.sensor == None) or (sensortype == None):
+	if (obj.sensor is None) or (sensortype is None):
 		return True
 	
 	for st in sensortype.split("+"):

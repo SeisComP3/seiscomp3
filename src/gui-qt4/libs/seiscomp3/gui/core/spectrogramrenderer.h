@@ -105,7 +105,8 @@ class SC_GUI_API SpectrogramRenderer {
 
 		//! Renders the y axis. This call must precede a call to render otherwise
 		//! the frequency range can by out of sync.
-		void renderAxis(QPainter &p, const QRect &rect, bool leftAlign = true);
+		void renderAxis(QPainter &p, const QRect &rect, bool leftAlign = true,
+		                int paddingOuter = 6, int paddingInner = 0);
 
 
 	// ----------------------------------------------------------------------

@@ -20,12 +20,12 @@
 #include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/gui/map/legend.h>
 #include <seiscomp3/gui/map/imagetree.h>
-#include <seiscomp3/gui/map/mapsymbolcollection.h>
 #include <seiscomp3/gui/map/layers/citieslayer.h>
 #include <seiscomp3/gui/map/layers/gridlayer.h>
 #include <seiscomp3/gui/map/layers/geofeaturelayer.h>
+#include <seiscomp3/gui/map/layers/symbollayer.h>
 #include <seiscomp3/math/coord.h>
-#include <seiscomp3/geo/geofeature.h>
+#include <seiscomp3/geo/feature.h>
 #endif
 
 #include <QHash>
@@ -45,43 +45,8 @@ class Layer;
 
 DEFINE_SMARTPOINTER(TextureCache);
 
-
-struct SC_GUI_API LayerProperties {
-	const LayerProperties *parent;
-	std::string            name;
-	std::string            title;
-	Qt::Orientation        orientation;
-	Qt::Alignment          legendArea;
-	std::string            label;
-	int                    index;
-	bool                   visible;
-	QPen                   pen;
-	QBrush                 brush;
-	QFont                  font;
-	bool                   drawName;
-	bool                   debug;
-	int                    rank;
-	int                    roughness;
-	bool                   filled;
-
-	LayerProperties(const std::string &name)
-	: parent(NULL), name(name), orientation(Qt::Vertical)
-	, legendArea(Qt::AlignTop | Qt::AlignLeft)
-	, index(0), visible(true), drawName(false)
-	, debug(false), rank(-1), roughness(3)
-	, filled(false) {}
-
-	LayerProperties(const std::string &name, const LayerProperties *parent)
-	: parent(parent), name(name), orientation(Qt::Vertical)
-	, legendArea(Qt::AlignTop | Qt::AlignLeft)
-	, index(0), visible(parent->visible), pen(parent->pen)
-	, brush(parent->brush), font(parent->font)
-	, drawName(parent->drawName), debug(parent->debug)
-	, rank(-1), roughness(parent->roughness)
-	, filled(parent->filled) {}
-
-	bool isChild(const LayerProperties* child) const;
-};
+// For backward compatibility
+typedef SymbolLayer SymbolCollection;
 
 
 class SC_GUI_API Canvas : public QObject {
@@ -92,6 +57,8 @@ class SC_GUI_API Canvas : public QObject {
 		Canvas(ImageTree *mapTree);
 		~Canvas();
 
+
+	public:
 		void setFont(QFont f);
 		QFont font() const { return _font; }
 
@@ -159,7 +126,6 @@ class SC_GUI_API Canvas : public QObject {
 		void setImageFilter(bool);
 		bool isImageFilterEnabled() const;
 
-		const QRectF& geoRect() const;
 		bool displayRect(const QRectF& rect);
 
 		void setMapCenter(QPointF c);
@@ -173,42 +139,76 @@ class SC_GUI_API Canvas : public QObject {
 		void setView(QPoint c, float zoom);
 		void setView(QPointF c, float zoom);
 
+		/**
+		 * @brief Sets the minimum pixel distance of two adjacent vertices
+		 *        to be rendered as a line when rendering GeoFeatures and polylines.
+		 * Or in other words, if the pixel distance of two adjacent vertices is
+		 * less than the given distance, both vertices collapse into a single
+		 * vertex. The greater the distance the less details the rendered shape
+		 * will have.
+		 * @param pixel The distance in pixels
+		 */
+		void setPolygonRoughness(uint pixel);
+		uint polygonRoughness() const;
+
+		/**
+		 * @brief Sets the polygon clip hint.
+		 *
+		 * The hint might or might not be interpreted by projections. If the
+		 * clipHint is DoClip then polygons are clipped against the viewport
+		 * before rendering them. This will reduce the number of vertices
+		 * significantly but also increases processing time. The default
+		 * is DoClip.
+		 * @param hint The clipping hint
+		 */
+		void setPolygonClipHint(ClipHint hint);
+		ClipHint polygonClipHint() const;
+
 		Map::Projection *projection() const { return _projection; }
 
-		bool isInside(double lon, double lat) const;
 		bool isVisible(double lon, double lat) const;
-
-		const SymbolCollection *symbolCollection() const;
-		SymbolCollection *symbolCollection();
 
 		void setSelectedCity(const Math::Geo::CityD*);
 
 		//! Draws a geometric line (great circle) given in geographical coordinates (lon, lat)
 		//! Returns the distance in degree of the line
-		double drawGeoLine(QPainter& painter, const QPointF& start, const QPointF& end) const;
-
-		//! Draws a geofeature with layer properties.
-		bool drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
-		                    const LayerProperties *props, const QPen &debugPen,
-		                    size_t &linesPlotted, size_t &polyPlotted,
-		                    bool filled) const;
+		double drawLine(QPainter &painter, const QPointF &start, const QPointF &end) const;
 
 		//! Draws a polyline in geographical coordinates (lon, lat).
 		//! Returns number of line segments drawn.
 		//! Does not check for clipping
-		size_t drawGeoPolyline(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
-		                       bool isClosedPolygon, uint minPixelDist = 3,
-		                       bool interpolate = false) const;
+		size_t drawPolyline(QPainter &painter, size_t n, const Geo::GeoCoordinate *line,
+		                    bool isClosedPolygon, bool interpolate = false,
+		                    int roughness = -1) const;
+
 		//! Does not check for clipping
-		size_t drawGeoPolygon(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
-		                      uint minPixelDist = 3) const;
+		size_t drawPolygon(QPainter &painter, size_t n, const Geo::GeoCoordinate *line,
+		                   bool isClosedPolygon = true, int roughness = -1,
+		                   ClipHint clipHint = DoClip) const;
+
 		//! Draws a GeoFeature as either polyline or filled polygon and
 		//! checks for clipping
-		size_t drawGeoFeature(QPainter &painter, const Geo::GeoFeature *feature,
-		                      uint minPixelDist = 3, bool interpolate = false,
-		                      bool filled = false) const;
+		size_t drawFeature(QPainter &painter, const Geo::GeoFeature *feature,
+		                   bool filled = false, int roughness = -1,
+		                   ClipHint clipHint = DoClip) const;
 
-		void draw(QPainter& p);
+		/**
+		 * @brief Draws an image onto the current map buffer. If this function
+		 *        is called *after* @drawImageLayer then it does not have an
+		 *        effect because the map buffer has been rendered already onto
+		 *        the painter device.
+		 * @param geoReference The geo reference of the image.
+		 * @param image The image to be rendered.
+		 * @param compositionMode The composition mode which will be used to
+		 *                        combine the current base layer (tiles) with
+		 *                        the image.
+		 * @param filterMode The filter mode used to render the image.
+		 */
+		void drawImage(const QRectF &geoReference, const QImage &image,
+		               CompositionMode compositionMode = CompositionMode_Default,
+		               FilterMode filterMode = FilterMode_Auto);
+
+		void draw(QPainter &p);
 
 		void centerMap(const QPoint &centerPnt);
 		void translate(const QPoint &delta);
@@ -218,9 +218,6 @@ class SC_GUI_API Canvas : public QObject {
 		void drawVectorLayer(QPainter &painter);
 
 		void drawLayers(QPainter &painter);
-		void drawDrawables(QPainter &painter);
-		void drawImage(const QRectF &geoReference, const QImage &image,
-		               CompositionMode compositionMode = CompositionMode_Default);
 
 		void updateBuffer();
 
@@ -237,7 +234,8 @@ class SC_GUI_API Canvas : public QObject {
 			return _layers[i];
 		}
 
-		//! Canvas does not take ownership of layer.
+		//! Canvas does take ownership of layer if the layer does not
+		//! have a parent at the time of appending or prepending.
 		bool prependLayer(Layer*);
 		bool addLayer(Layer*);
 		bool insertLayerBefore(const Layer*, Layer*);
@@ -246,6 +244,8 @@ class SC_GUI_API Canvas : public QObject {
 
 		void lower(Layer*);
 		void raise(Layer*);
+
+		Layer *hoverLayer() const;
 
 		bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
 		bool filterKeyPressEvent(QKeyEvent *event);
@@ -263,6 +263,20 @@ class SC_GUI_API Canvas : public QObject {
 		//! once it is done.
 		//! This function was introduced in API 1.1.
 		bool renderingComplete() const;
+
+
+	public:
+		GridLayer *gridLayer();
+		const GridLayer *gridLayer() const;
+
+		CitiesLayer *citiesLayer();
+		const CitiesLayer *citiesLayer() const;
+
+		GeoFeatureLayer *geoFeatureLayer();
+		const GeoFeatureLayer *geoFeatureLayer() const;
+
+		SymbolLayer *symbolCollection();
+		const SymbolLayer *symbolCollection() const;
 
 
 	public slots:
@@ -330,13 +344,7 @@ class SC_GUI_API Canvas : public QObject {
 		              int rowHeight,
 		              bool &lastUnderline, bool &lastBold);
 
-		void drawDrawables(QPainter &painter, Symbol::Priority priority);
-
 		void drawLegends(QPainter &painter);
-
-		int polyToCache(size_t n, const Math::Geo::CoordF *points,
-		                uint minPixelDist) const;
-
 		void setupLayer(Layer *layer);
 
 
@@ -378,19 +386,16 @@ class SC_GUI_API Canvas : public QObject {
 		QImage                        _buffer;
 		QColor                        _backgroundColor;
 
-		QRectF                        _geoReference;
-
+		uint                          _polygonRoughness;
 		double                        _maxZoom;
 		QPointF                       _center;
 		float                         _zoomLevel;
 		bool                          _grayScale;
 		bool                          _filterMap;
-		bool                          _dirtyImage;
-		bool                          _dirtyLayers;
+		bool                          _dirtyRasterLayer;
+		bool                          _dirtyVectorLayers;
 		bool                          _previewMode;
 		bool                          _stackLegends;
-
-		DefaultSymbolCollection       _mapSymbolCollection;
 
 		Layers                        _layers;
 		Layer                        *_hoverLayer;
@@ -398,17 +403,60 @@ class SC_GUI_API Canvas : public QObject {
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;
 		GeoFeatureLayer               _geoFeatureLayer;
+		SymbolLayer                   _symbolLayer;
 
 		LegendAreas                   _legendAreas;
 		int                           _margin;
 		bool                          _isDrawLegendsEnabled;
-
-		mutable QPolygon              _polyCache;
 };
 
 
 inline bool Canvas::previewMode() const {
 	return _previewMode;
+}
+
+inline Layer *Canvas::hoverLayer() const {
+	return _hoverLayer;
+}
+
+inline GridLayer *Canvas::gridLayer() {
+	return &_gridLayer;
+}
+
+inline const GridLayer *Canvas::gridLayer() const {
+	return &_gridLayer;
+}
+
+inline CitiesLayer *Canvas::citiesLayer() {
+	return &_citiesLayer;
+}
+
+inline const CitiesLayer *Canvas::citiesLayer() const {
+	return &_citiesLayer;
+}
+
+inline GeoFeatureLayer *Canvas::geoFeatureLayer() {
+	return &_geoFeatureLayer;
+}
+
+inline const GeoFeatureLayer *Canvas::geoFeatureLayer() const {
+	return &_geoFeatureLayer;
+}
+
+inline SymbolLayer *Canvas::symbolCollection() {
+	return &_symbolLayer;
+}
+
+inline const SymbolLayer *Canvas::symbolCollection() const {
+	return &_symbolLayer;
+}
+
+inline uint Canvas::polygonRoughness() const {
+	return _polygonRoughness;
+}
+
+inline void Canvas::setPolygonRoughness(uint pixel) {
+	_polygonRoughness = pixel;
 }
 
 

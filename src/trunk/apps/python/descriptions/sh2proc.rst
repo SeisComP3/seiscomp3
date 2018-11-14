@@ -10,20 +10,81 @@ The channel and stream code is extracted from the dectecStream and detecLocid
 configured in the global binding. In case no configuration module is available
 the first location and stream is used.
 
-Example
-=======
+Examples
+========
 
-Converts the SeismicHandler file `shm.evt` and writes SC3ML into the file
-`sc3.xml`. The database connection to read inventory and configuration
-information is fetched from the default messaging connection.
+#. Converts the SeismicHandler file `shm.evt` and writes SC3ML into the file
+   `sc3.xml`. The database connection to read inventory and configuration
+   information is fetched from the default messaging connection.
+
+   .. code-block:: sh
+
+      sh2proc shm.evt > sc3.xml
+
+#. Reads SeismicHandler data from `stdin`. Inventory and configuration information
+   is provided through files.
+
+   .. code-block:: sh
+
+      cat shm.evt | sh2proc --inventory-db=inv.xml --config-db=config.xml > sc3.xml
+
+shm.evt file format
+===================
+
+The list of parameters supported by sh2proc may be incomplete.
+Read the original `format and parameter description <http://www.seismic-handler.org/wiki/ShmDocFileEvt>`_
+of the SeismicHandler .evt files for providing correct input files.
+
+Example of a SeismicHandler `shm.evt` file with supported parameters:
 
 .. code-block:: sh
 
-   sh2proc shm.evt > sc3.xml
+    Event ID               : 1170102002
+    Station code           : VITZ
+    Onset time             : 2-JAN-2017_12:25:40.415
+    Onset type             : emergent
+    Phase name             : Pg
+    Event Type             : mining event
+    Applied filter         : SHM_BP_1HZ_25HZ_3
+    Component              : Z
+    Quality number         : 2
+    Pick Type              : manual
+    Weight                 : 4
+    Theo. Azimuth (deg)    :   27.29
+    Theo. Backazimuth (deg):  207.36
+    Distance (deg)         :  0.122
+    Distance (km)          : 13.572
+    Magnitude ml           : 1.0
+    Phase Flags            : L
+    --- End of Phase ---
 
-Reads SeismicHandler data from `stdin`. Inventory and configuration information
-is provided through files.
 
-.. code-block:: sh
-
-   cat shm.evt | sh2proc --inventory-db=inv.xml --config-db=config.xml > sc3.xml
+    Event ID               : 1170102002
+    Station code           : WESF
+    Onset time             : 2-JAN-2017_12:25:53.714
+    Onset type             : emergent
+    Phase name             : Pg
+    Event Type             : mining event
+    Applied filter         : SHM_BP_1HZ_25HZ_3
+    Component              : Z
+    Quality number         : 2
+    Pick Type              : manual
+    Weight                 : 4
+    Theo. Azimuth (deg)    :  106.98
+    Theo. Backazimuth (deg):  287.91
+    Distance (deg)         :  0.807
+    Distance (km)          : 89.708
+    Magnitude ml           : 1.8
+    Mean Magnitude ml      : 1.1
+    Latitude               : +50.779
+    Longitude              :  +10.003
+    Depth (km)             :   0.0
+    Depth type             : (g) estimated
+    Origin time            :  2-JAN-2017_12:25:38.273
+    Region Table           : GEO_REG
+    Region ID              : 5326
+    Source region          : Tann, E of Fulda
+    Velocity Model         : deu
+    Location Input Params  : 20
+    Reference Location Name: CENTRE
+    --- End of Phase ---

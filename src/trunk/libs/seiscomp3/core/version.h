@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(11, 1, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(12, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x0B0100
+#define SC_API_VERSION 0x0C0000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,51 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "12.0.0"   0x0C0000
+   - Added Seiscomp::Core::Generic::Archive property interface
+   - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes
+   - Changed Seiscomp::DataModel::DatabaseArchive::toString() from protected to
+     public const
+   - Added Seiscomp::Core::Time::localTimeZoneOffset()
+   - Removed geo prefix of all headers under <seiscomp3/geo/>
+   - Added Seiscomp::Util::UnitConverter
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration InvalidAmplitudeUnit
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration ReceiverOutOfRegions
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration RayPathOutOfRegions
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration MissingAmplitudeObject
+   - Added Geo::GeoFeature::updateBoundingBox method
+   - Added static method Seiscomp::Geo::GeoFeatureSet::load
+   - Added class Seiscomp::Geo::GeoFeatureSetObserver
+   - Added Seiscomp::Gui::Map::StandardLegend::clear
+   - Added Seiscomp::Gui::Map::StandardLegend::count
+   - Added Seiscomp::Gui::Map::StandardLegend::itemAt
+   - Added Seiscomp::Gui::Map::StandardLegend::takeItem
+   - Added Seiscomp::Gui::EventLegend
+   - Removed Seiscomp::Gui::LayerProperties
+   - Removed Seiscomp::Gui::Map::Canvas::drawGeoFeature(LayerProperties ...)
+   - Added QPainter reference as 2nd parameter to Seiscomp::Gui::Map::Layer::bufferUpdated
+   - Added QPainter reference as 2nd parameter to Seiscomp::Gui::Map::Layer::baseBufferUpdated
+   - Added virtual Seiscomp::Gui::Map::Projection::project(QPainterPath, ...) method
+   - Added Seiscomp::Gui::Map::Projection::boundingBox() method
+   - Added enum Seiscomp::Gui::Map::FilterMode
+   - Changed prototype of Seiscomp::Gui::Map::Canvas::drawImage and add filterMode
+     parameter
+   - Renamed Seiscomp::Gui::Canvas::drawGeoLine to Seiscomp::Gui::Canvas::drawLine
+   - Renamed Seiscomp::Gui::Canvas::drawGeoPolyline to Seiscomp::Gui::Canvas::drawPolyline
+   - Renamed Seiscomp::Gui::Canvas::drawGeoPolygon to Seiscomp::Gui::Canvas::drawPolygon
+   - Renamed Seiscomp::Gui::Canvas::drawGeoFeature to Seiscomp::Gui::Canvas::drawFeature
+   - Seiscomp::Gui::Scheme::colors.records.gaps/overlaps is now a brush rather than
+     a color
+   - Added Seiscomp::Gui::Plot::addAxis
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration IncompleteConfiguration
+   - Added Seiscomp::Processing::AmplitudeProcessor::setEnvironment
+   - Added Seiscomp::Processing::AmplitudeProcessor::finalizeAmplitude
+   - Added amplitude to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added unit to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added Seiscomp::Processing::MagnitudeProcessor::treatAsValidMagnitude()
+   - Added Seiscomp::IO::Exporter::put(std::streambuf* buf, const ObjectList &objects);
+   - Added Seiscomp::Gui::RecordMarker::drawBackground
+
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
    - Added Seiscomp::Gui::Map::StandardLegend

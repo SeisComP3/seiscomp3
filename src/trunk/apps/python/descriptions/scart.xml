@@ -11,7 +11,7 @@
 			<description>
 			The last option has to be the archive directory when dump mode is enabled.
 			When no archive directory is explicitly given,
-			$SEISCOMP_ROOT/acquisition/archive or the current directory
+			$SEISCOMP_ROOT/var/lib/archive or the current directory
 			is used depending on whether $SEISCOMP_ROOT has been set or not.
 			The default operation mode is import. That means that a multiplexed
 			MiniSEED file or another record source such as ArcLink is used to import

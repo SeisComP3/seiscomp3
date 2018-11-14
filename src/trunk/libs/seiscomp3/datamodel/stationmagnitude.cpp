@@ -10,10 +10,6 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-// This file was created by a source code generator.
-// Do not modify the contents. Change the definition and run the generator
-// again!
-
 
 #define SEISCOMP_COMPONENT DataModel
 #include <seiscomp3/datamodel/stationmagnitude.h>
@@ -37,6 +33,7 @@ StationMagnitude::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Cor
 	addProperty(Core::simpleProperty("amplitudeID", "string", false, false, false, true, false, false, NULL, &StationMagnitude::setAmplitudeID, &StationMagnitude::amplitudeID));
 	addProperty(Core::simpleProperty("methodID", "string", false, false, false, false, false, false, NULL, &StationMagnitude::setMethodID, &StationMagnitude::methodID));
 	addProperty(objectProperty<WaveformStreamID>("waveformID", "WaveformStreamID", false, false, true, &StationMagnitude::setWaveformID, &StationMagnitude::waveformID));
+	addProperty(Core::simpleProperty("passedQC", "boolean", false, false, false, false, true, false, NULL, &StationMagnitude::setPassedQC, &StationMagnitude::passedQC));
 	addProperty(objectProperty<CreationInfo>("creationInfo", "CreationInfo", false, false, true, &StationMagnitude::setCreationInfo, &StationMagnitude::creationInfo));
 	addProperty(arrayClassProperty<Comment>("comment", "Comment", &StationMagnitude::commentCount, &StationMagnitude::comment, static_cast<bool (StationMagnitude::*)(Comment*)>(&StationMagnitude::add), &StationMagnitude::removeComment, static_cast<bool (StationMagnitude::*)(Comment*)>(&StationMagnitude::remove)));
 }
@@ -127,6 +124,7 @@ bool StationMagnitude::operator==(const StationMagnitude& rhs) const {
 	if ( _amplitudeID != rhs._amplitudeID ) return false;
 	if ( _methodID != rhs._methodID ) return false;
 	if ( _waveformID != rhs._waveformID ) return false;
+	if ( _passedQC != rhs._passedQC ) return false;
 	if ( _creationInfo != rhs._creationInfo ) return false;
 	return true;
 }
@@ -284,6 +282,26 @@ const WaveformStreamID& StationMagnitude::waveformID() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void StationMagnitude::setPassedQC(const OPT(bool)& passedQC) {
+	_passedQC = passedQC;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool StationMagnitude::passedQC() const {
+	if ( _passedQC )
+		return *_passedQC;
+	throw Seiscomp::Core::ValueException("StationMagnitude.passedQC is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationMagnitude::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 	_creationInfo = creationInfo;
 }
@@ -332,6 +350,7 @@ StationMagnitude& StationMagnitude::operator=(const StationMagnitude& other) {
 	_amplitudeID = other._amplitudeID;
 	_methodID = other._methodID;
 	_waveformID = other._waveformID;
+	_passedQC = other._passedQC;
 	_creationInfo = other._creationInfo;
 	return *this;
 }
@@ -609,7 +628,7 @@ bool StationMagnitude::removeComment(const CommentIndex& i) {
 void StationMagnitude::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,10>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: StationMagnitude skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -625,6 +644,9 @@ void StationMagnitude::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("amplitudeID", _amplitudeID, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("methodID", _methodID, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("waveformID", _waveformID, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,11>() ) {
+		ar & NAMED_OBJECT_HINT("passedQC", _passedQC, Archive::XML_ELEMENT);
+	}
 	ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
 	ar & NAMED_OBJECT_HINT("comment",

@@ -28,10 +28,10 @@ IMPLEMENT_SC_CLASS_DERIVED(PostgreSQLDatabase,
                            "postgresql_database_interface");
 
 REGISTER_DB_INTERFACE(PostgreSQLDatabase, "postgresql");
-ADD_SC_PLUGIN("PostgreSQL database driver", "GFZ Potsdam <seiscomp-devel@gfz-potsdam.de>", 0, 9, 1)
+ADD_SC_PLUGIN("PostgreSQL database driver", "GFZ Potsdam <seiscomp-devel@gfz-potsdam.de>", 0, 10, 0)
 
 PostgreSQLDatabase::PostgreSQLDatabase()
- : _handle(NULL), _result(NULL) {}
+ : _handle(NULL), _result(NULL), _debug(false) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -40,6 +40,23 @@ PostgreSQLDatabase::PostgreSQLDatabase()
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PostgreSQLDatabase::~PostgreSQLDatabase() {
 	disconnect();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PostgreSQLDatabase::handleURIParameter(const std::string &name,
+                                            const std::string &value) {
+	if ( !DatabaseInterface::handleURIParameter(name, value) ) return false;
+
+	if ( name == "debug" ) {
+		if ( value != "0" && value != "false" )
+			_debug = true;
+	}
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -155,6 +172,9 @@ void PostgreSQLDatabase::rollback() {
 bool PostgreSQLDatabase::execute(const char* command) {
 	if ( !isConnected() || command == NULL ) return false;
 
+	if ( _debug )
+		SEISCOMP_DEBUG("[postgresql-execute] %s", command);
+
 	PGresult *result = PQexec(_handle, command);
 	if ( result == NULL ) {
 		SEISCOMP_ERROR("execute(\"%s\"): %s", command, PQerrorMessage(_handle));
@@ -189,6 +209,9 @@ bool PostgreSQLDatabase::beginQuery(const char* query) {
 	}
 
 	endQuery();
+
+	if ( _debug )
+		SEISCOMP_DEBUG("[postgresql-query] %s", query);
 
 	_result = PQexec(_handle, query);
 	if ( _result == NULL ) {

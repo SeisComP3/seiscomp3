@@ -43,6 +43,16 @@ SET(
 	iasp91.Pg
 	iasp91.PKKP
 	iasp91.PKP
+	iasp91.PKPab
+	iasp91.PKPbc
+	iasp91.PKPdf
+	iasp91.pPKPab
+	iasp91.pPKPbc
+	iasp91.pPKPdf
+	iasp91.sPKPab
+	iasp91.sPKPbc
+	iasp91.sPKPdf
+	iasp91.SKPdf
 	iasp91.Pn
 	iasp91.pP_
 	iasp91.PP

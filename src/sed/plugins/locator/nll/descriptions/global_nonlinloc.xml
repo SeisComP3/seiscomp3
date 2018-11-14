@@ -20,6 +20,21 @@
 					</description>
 				</parameter>
 
+				<parameter name="saveInput" type="boolean" default="true">
+					<description>
+						Save input files *.obs in outputPath for later processing.
+						Setting to false reduces file i/o and saves disk space.
+					</description>
+				</parameter>
+
+				<parameter name="saveIntermediateOutput" type="boolean" default="true">
+					<description>
+						Save output files in outputPath for later processing or
+						for viewing by the Seismicity Viewer.
+						Setting to false reduces file i/o and saves disk space.
+					</description>
+				</parameter>
+
 				<parameter name="controlFile" type="path">
 					<description>
 						The default NonLinLoc control file to use.
@@ -41,6 +56,17 @@
 					</description>
 				</parameter>
 
+				<parameter name="allowMissingStations" type="boolean" default="true">
+					<description>
+						Picks from stations with missing configuration will be
+						ignored. The origin will be relocated without that pick
+						if possible.
+
+						If set to false, the plug-in throws
+						an excepection without locating.
+					</description>
+				</parameter>
+
 				<parameter name="profiles" type="list:string">
 					<description>
 						Defines a list of active profiles to be used by the plugin.
@@ -58,7 +84,7 @@
 								earthModelID that is stored in the created origin.
 							</description>
 						</parameter>
-						<parameter name="methodID" type="string">
+						<parameter name="methodID" type="string" default="NonLinLoc">
 							<description>
 								methodID that is stored in the created origin.
 							</description>

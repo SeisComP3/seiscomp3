@@ -15,7 +15,7 @@
 #include <seiscomp3/gui/map/canvas.h>
 
 #include <seiscomp3/gui/core/application.h>
-#include <seiscomp3/geo/geofeatureset.h>
+#include <seiscomp3/geo/featureset.h>
 #include <seiscomp3/seismology/regions.h>
 #include <seiscomp3/gui/map/layer.h>
 #include <seiscomp3/gui/map/projection.h>
@@ -133,19 +133,6 @@ QImage getDecorationSymbol(const QSize& size) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool LayerProperties::isChild(const LayerProperties* child) const {
-	while ( child ) {
-		if ( child == this ) return true;
-		child = child->parent;
-	}
-	return false;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define MAX_ZOOM (1 << 24)
 
 bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
@@ -231,13 +218,12 @@ int Canvas::LegendArea::findNext(bool forward) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::Canvas(const MapsDesc &meta)
-: _geoReference(-180.0, -90.0, 360.0, 180.0)
-, _dirtyImage(true)
-, _dirtyLayers(true)
+: _backgroundColor(Qt::lightGray)
+, _dirtyRasterLayer(true)
+, _dirtyVectorLayers(true)
 , _hoverLayer(NULL)
 , _margin(10)
-, _isDrawLegendsEnabled(true)
-, _polyCache(10) {
+, _isDrawLegendsEnabled(true) {
 	_maptree = new ImageTree(meta);
 	if ( !_maptree->valid() )
 		_maptree = NULL;
@@ -251,13 +237,12 @@ Canvas::Canvas(const MapsDesc &meta)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::Canvas(ImageTree *mapTree)
-: _geoReference(-180.0, -90.0, 360.0, 180.0)
-, _dirtyImage(true)
-, _dirtyLayers(true)
+: _backgroundColor(Qt::lightGray)
+, _dirtyRasterLayer(true)
+, _dirtyVectorLayers(true)
 , _hoverLayer(NULL)
 , _margin(10)
-, _isDrawLegendsEnabled(true)
-, _polyCache(10) {
+, _isDrawLegendsEnabled(true) {
 	_maptree = mapTree;
 
 	if ( _maptree && !_maptree->valid() )
@@ -273,7 +258,6 @@ Canvas::Canvas(ImageTree *mapTree)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::~Canvas() {
 	delete _projection;
-	_mapSymbolCollection.clear();
 
 	for ( CustomLayers::const_iterator it = _customLayers.begin();
 	      it != _customLayers.end(); ++it ) {
@@ -385,6 +369,7 @@ void Canvas::init() {
 	_font = SCScheme.fonts.base;
 	_projection = NULL;
 
+	_polygonRoughness = SCScheme.map.polygonRoughness;
 	_filterMap = SCScheme.map.bilinearFilter;
 	_previewMode = false;
 
@@ -417,10 +402,14 @@ void Canvas::init() {
 	setupLayer(&_geoFeatureLayer);
 	_geoFeatureLayer.setVisible(SCScheme.map.showLayers);
 
+	setupLayer(&_symbolLayer);
+	_symbolLayer.setVisible(true);
+
 	_layers.clear();
 	_layers.append(&_gridLayer);
 	_layers.append(&_citiesLayer);
 	_layers.append(&_geoFeatureLayer);
+	_layers.append(&_symbolLayer);
 
 	_center = QPointF(0.0, 0.0);
 	_zoomLevel = 1;
@@ -495,7 +484,7 @@ void Canvas::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setGrayScale(bool e) {
-	if ( _grayScale != e ) _dirtyImage = true;
+	if ( _grayScale != e ) _dirtyRasterLayer = true;
 	_grayScale = e;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -628,18 +617,9 @@ void Canvas::setLegendStacking(bool enable) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const QRectF &Canvas::geoRect() const {
-	return _geoReference;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateBuffer() {
-	_dirtyImage = true;
-	_dirtyLayers = true;
+	_dirtyRasterLayer = true;
+	_dirtyVectorLayers = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -746,7 +726,7 @@ bool Canvas::displayRect(const QRectF& rect) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Canvas::drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end) const {
+double Canvas::drawLine(QPainter& p, const QPointF& start, const QPointF& end) const {
 	QPoint pp0, pp1;
 
 	if ( !_projection->project(pp0, start) && !_projection->project(pp1, end) )
@@ -778,40 +758,25 @@ double Canvas::drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
-                        uint minPixelDist) const {
-	if ( n == 0 || !poly ) return 0;
+size_t Canvas::drawPolygon(QPainter &painter, size_t n, const Geo::GeoCoordinate *poly,
+                           bool isClosedPolygon, int roughness, ClipHint clipHint) const {
+	QPainterPath pp;
 
-	uint polySize = 1;
-	float minDist = ((float)minPixelDist)/_projection->pixelPerDegree();
+	if ( !_projection->project(pp, n, poly, isClosedPolygon,
+	                           roughness < 0 ? _polygonRoughness : roughness,
+	                           clipHint) )
+		return 0;
 
-	QPointF v(poly[0].lon, poly[0].lat);
-
-	_projection->project(_polyCache[0], v);
-
-	// Grow cache if necessary
-	if ( _polyCache.size() < (int)n ) _polyCache.resize(n);
-
-	if ( minDist == 0 ) {
-		for ( size_t i = 1; i < n; ++i ) {
-			v.setX(poly[i].lon); v.setY(poly[i].lat);
-			_projection->project(_polyCache[i], v);
-		}
-
-		polySize = n;
+	if ( !isClosedPolygon ) {
+		QBrush backup = painter.brush();
+		painter.setBrush(Qt::NoBrush);
+		painter.drawPath(pp);
+		painter.setBrush(backup);
 	}
-	else {
-		for ( size_t i = 1; i < n; ++i ) {
-			if ( std::abs(poly[i].lon - v.x()) > minDist ||
-			     std::abs(poly[i].lat - v.y()) > minDist ) {
-				v.setX(poly[i].lon); v.setY(poly[i].lat);
-				_projection->project(_polyCache[polySize], v);
-				++polySize;
-			}
-		}
-	}
+	else
+		painter.drawPath(pp);
 
-	return polySize;
+	return pp.elementCount();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -819,25 +784,13 @@ int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t Canvas::drawGeoPolygon(QPainter& painter, size_t n, const Math::Geo::CoordF *poly,
-                              uint minPixelDist) const {
-	int polySize = polyToCache(n, poly, minPixelDist);
-	if ( polySize == 0 ) return 0;
-	painter.drawPolygon(&_polyCache[0], polySize);
-	return polySize-1;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::CoordF *line,
-                               bool isClosedPolygon, uint minPixelDist, bool interpolate) const {
+size_t Canvas::drawPolyline(QPainter &painter, size_t n, const Geo::GeoCoordinate *line,
+                            bool isClosedPolygon, bool interpolate,
+                            int roughness) const {
 	if ( n == 0 || !line ) return 0;
 
 	uint linesPlotted = 0;
-	float minDist = ((float)minPixelDist)/_projection->pixelPerDegree();
+	float minDist = ((float)(roughness < 0 ? _polygonRoughness : roughness))/_projection->pixelPerDegree();
 
 	if ( interpolate ) {
 		QPointF p1(line[0].lon, line[0].lat);
@@ -845,7 +798,7 @@ size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::Coo
 		if ( minDist == 0 ) {
 			for ( size_t i = 1; i < n; ++i ) {
 				p2.setX(line[i].lon); p2.setY(line[i].lat);
-				drawGeoLine(painter, p1, p2);
+				drawLine(painter, p1, p2);
 				p1 = p2;
 			}
 			linesPlotted =  n-1;
@@ -856,7 +809,7 @@ size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::Coo
 				if ( std::abs(p2.x() - p1.x()) > minDist ||
 				     std::abs(p2.y() - p1.y()) > minDist ||
 				     (!isClosedPolygon && i == n-1) ) {
-					drawGeoLine(painter, p1, p2);
+					drawLine(painter, p1, p2);
 					++linesPlotted;
 					p1 = p2;
 				}
@@ -865,7 +818,7 @@ size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::Coo
 		if ( isClosedPolygon ) {
 			p2.setX(line[0].lon); p2.setY(line[0].lat);
 			if ( p1 != p2 ) {
-				drawGeoLine(painter, p1, p2);
+				drawLine(painter, p1, p2);
 				++linesPlotted;
 			}
 		}
@@ -907,19 +860,25 @@ size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::Coo
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t Canvas::drawGeoFeature(QPainter& painter, const Geo::GeoFeature *f,
-                              uint minPixelDist, bool interpolate,
-                              bool filled) const {
+size_t Canvas::drawFeature(QPainter &painter, const Geo::GeoFeature *f,
+                           bool filled, int roughness, ClipHint clipHint) const {
 	if ( !f ) return 0;
 
 	// Check whether the feature is visible
-	const Geo::BBox &bbox = f->bbox();
-	if ( _projection->isClipped(QPointF(bbox.lonMax, bbox.latMin),
-	                            QPointF(bbox.lonMin, bbox.latMax)) )
+	const Geo::GeoBoundingBox &bbox = f->bbox();
+	if ( _projection->isClipped(QPointF(bbox.east, bbox.south),
+	                            QPointF(bbox.west, bbox.north)) )
 		return 0;
 
+	Geo::GeoBoundingBox::Relation relBB = _projection->boundingBox().relation(bbox);
+
+	if ( relBB == Geo::GeoBoundingBox::Contains )
+		clipHint = NoClip;
+
+	int effectiveRoughness = roughness < 0 ? _polygonRoughness : roughness;
 	size_t lines = 0, startIdx = 0, endIdx = 0;
 	size_t nSubFeat = f->subFeatures().size();
+	bool gotFirstPath = false;
 
 	if ( f->closedPolygon() && filled ) {
 		if ( nSubFeat > 0 ) {
@@ -929,60 +888,55 @@ size_t Canvas::drawGeoFeature(QPainter& painter, const Geo::GeoFeature *f,
 			for ( size_t i = 0; i <= nSubFeat; ++i, startIdx = endIdx ) {
 				endIdx = (i == nSubFeat ? f->vertices().size() : f->subFeatures()[i]);
 
-				int n = polyToCache(endIdx - startIdx, &f->vertices()[startIdx], minPixelDist);
-				if ( n < 2 ) continue;
-
-				_polyCache.resize(n);
-
-				bool forward = Geo::GeoFeature::area(&f->vertices()[startIdx], endIdx-startIdx) > 0;
-				if ( i == 0 ) firstForward = forward;
-				forward = firstForward == forward;
-
-				if ( forward ) {
-					path.addPolygon(_polyCache);
-					path.closeSubpath();
+				if ( !gotFirstPath ) {
+					if ( !_projection->project(path, endIdx - startIdx, &f->vertices()[startIdx], true, effectiveRoughness, clipHint) )
+						continue;
+					gotFirstPath = true;
 				}
 				else {
-					QPainterPath sub;
-					sub.addPolygon(_polyCache);
-					sub.closeSubpath();
+					QPainterPath subPath;
+					if ( !_projection->project(subPath, endIdx - startIdx, &f->vertices()[startIdx], true, effectiveRoughness, clipHint) )
+						continue;
+
+					bool forward = Geo::GeoFeature::area(&f->vertices()[startIdx], endIdx-startIdx) > 0;
+					if ( i == 0 ) firstForward = forward;
+					forward = firstForward == forward;
+
+					if ( forward )
+						path.addPath(subPath);
+					else {
 #if QT_VERSION >= 0x040500
-					path -= sub;
+						path -= subPath;
 #elif QT_VERSION >= 0x040300
-					path = path.subtracted(sub);
+						path = path.subtracted(subPath);
 #else
-					path.addPath(sub.toReversed());
+						path.addPath(subPath.toReversed());
 #endif
+					}
+
+					lines += subPath.elementCount();
 				}
 			}
 
 			painter.drawPath(path);
 		}
 		else
-			lines += drawGeoPolygon(painter, f->vertices().size(),
-			                        &f->vertices()[0], minPixelDist);
+			lines += drawPolygon(painter, f->vertices().size(),
+			                     &f->vertices()[0], f->closedPolygon(),
+			                     roughness, clipHint);
 	}
 	else {
 		for ( size_t i = 0; i <= nSubFeat; ++i) {
 			endIdx = (i == nSubFeat ? f->vertices().size() : f->subFeatures()[i]);
 
-			lines += drawGeoPolyline(painter, endIdx - startIdx,
-			                         &(f->vertices()[startIdx]), f->closedPolygon(),
-			                         minPixelDist, interpolate);
+			lines += drawPolygon(painter, endIdx - startIdx,
+			                     &(f->vertices()[startIdx]),
+			                     f->closedPolygon(), roughness, clipHint);
 			startIdx = endIdx;
 		}
 	}
 
 	return lines;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::isInside(double lon, double lat) const {
-	return _geoReference.contains(QPointF(lon, lat));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1002,24 +956,6 @@ bool Canvas::isVisible(double lon, double lat) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const SymbolCollection *Canvas::symbolCollection() const {
-	return &_mapSymbolCollection;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SymbolCollection *Canvas::symbolCollection() {
-	return &_mapSymbolCollection;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSelectedCity(const Math::Geo::CityD *c) {
 	_citiesLayer.setSelectedCity(c);
 }
@@ -1029,93 +965,20 @@ void Canvas::setSelectedCity(const Math::Geo::CityD *c) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
-                            const LayerProperties *layProp, const QPen &debugPen,
-                            size_t &linesPlotted, size_t &polysPlotted,
-                            bool filled) const {
-	// Skip, if the layer was disabled
-	if ( !layProp->visible ) return true;
-
-	int rank = layProp->rank < 0?f->rank():layProp->rank;
-
-	// The lines are sorted according to their rank, hence we can
-	// stop here if we found a rank greater than the desired rank
-	if ( rank > _zoomLevel ) return false;
-
-	// There must be at least 2 verticies to draw something
-	if ( f->vertices().size() < 2 ) return true;
-
-	size_t lines = drawGeoFeature(painter, f, layProp->roughness, false, filled);
-	if ( !lines ) return true;
-
-	// Draw the geo feature
-	linesPlotted += lines;
-
-	const Geo::BBox &bbox = f->bbox();
-
-	// Draw the name if requested and if there is enough space
-	if ( layProp->drawName ) {
-		QPoint p1, p2;
-		if ( _projection->project(p1, QPointF(bbox.lonMin, bbox.latMax))
-		  && _projection->project(p2, QPointF(bbox.lonMax, bbox.latMin)) ) {
-			QRect bboxRect = QRect(p1, p2);
-			QString name = f->name().c_str();
-			QRect textRect = painter.fontMetrics().boundingRect(name);
-			if ( textRect.width()*100 < bboxRect.width()*80 &&
-			     textRect.height()*100 < bboxRect.height()*80 )
-				painter.drawText(bboxRect, Qt::AlignCenter, name);
-		}
-	}
-
-	// Debug: Print the segment name and draw the bounding box
-	if ( layProp->debug ) {
-		QPoint debugPoint;
-		painter.setPen(debugPen);
-		// project the center of the bounding box
-		float bboxWidth = bbox.lonMax - bbox.lonMin;
-		float bboxHeight = bbox.latMax - bbox.latMin;
-
-		if ( _projection->project(debugPoint, QPointF(
-		                          bbox.lonMin + bboxWidth/2,
-		                          bbox.latMin + bboxHeight/2)) ) {
-			QFont font;
-			float maxBBoxEdge = bboxWidth > bboxHeight ? bboxWidth : bboxHeight;
-			int pixelSize = (int)(_projection->pixelPerDegree() * maxBBoxEdge / 10.0);
-			font.setPixelSize(pixelSize < 1 ? 1 : pixelSize > 30 ? 30 : pixelSize);
-			QFontMetrics metrics(font);
-			QRect labelRect(metrics.boundingRect(f->name().c_str()));
-			labelRect.moveTo(debugPoint.x() - labelRect.width()/2,
-			                 debugPoint.y() - labelRect.height()/2);
-
-			painter.setFont(font);
-			painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop,
-			                 f->name().c_str());
-		}
-
-		_projection->moveTo(QPointF(bbox.lonMin, bbox.latMin));
-		_projection->lineTo(painter, QPointF(bbox.lonMax, bbox.latMin));
-		_projection->lineTo(painter, QPointF(bbox.lonMax, bbox.latMax));
-		_projection->lineTo(painter, QPointF(bbox.lonMin, bbox.latMax));
-		_projection->lineTo(painter, QPointF(bbox.lonMin, bbox.latMin));
-		painter.setPen(layProp->pen);
-		painter.setFont(layProp->font);
-	}
-
-	++polysPlotted;
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawLayers(QPainter& painter) {
+void Canvas::drawLayers(QPainter &painter) {
 	foreach ( Layer *layer, _layers ) {
+		if ( _dirtyVectorLayers ) layer->setDirty();
 		if ( !layer->isVisible() ) continue;
+
+		if ( layer->isDirty() ) {
+			layer->calculateMapPosition(this);
+			layer->_dirty = false;
+		}
 
 		layer->draw(this, painter);
 	}
+
+	_dirtyVectorLayers = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1123,47 +986,14 @@ void Canvas::drawLayers(QPainter& painter) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
-	for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
-	      it != _mapSymbolCollection.end(); ++it ) {
-		Symbol* mapSymbol = *it;
-
-		if ( !mapSymbol->hasValidPosition() )
-			mapSymbol->calculateMapPosition(this);
-
-		bool isConsidered = !mapSymbol->isClipped() &&
-		                    mapSymbol->isVisible() &&
-		                    mapSymbol->priority() == priority;
-		if ( isConsidered )
-			mapSymbol->draw(this, painter);
-	}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawDrawables(QPainter& painter) {
-	painter.setPen(Qt::white);
-	painter.setBrush(Qt::NoBrush);
-
-	drawDrawables(painter, Symbol::NONE);
-	drawDrawables(painter, Symbol::LOW);
-	drawDrawables(painter, Symbol::MEDIUM);
-	drawDrawables(painter, Symbol::HIGH);
-
-	Symbol* tmp = _mapSymbolCollection.top();
-	if ( tmp ) tmp->draw(this, painter);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawImage(const QRectF &geoReference, const QImage &image, CompositionMode compositionMode) {
-	_projection->drawImage(_buffer, geoReference, image, _filterMap && !_previewMode, compositionMode);
+void Canvas::drawImage(const QRectF &geoReference, const QImage &image,
+                       CompositionMode compositionMode, FilterMode filterMode) {
+	bool smoothFilter = false;
+	if ( filterMode == FilterMode_Bilinear )
+		smoothFilter = true;
+	else if ( filterMode == FilterMode_Auto )
+		smoothFilter = _filterMap && !_previewMode;
+	_projection->drawImage(_buffer, geoReference, image, smoothFilter, compositionMode);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1174,7 +1004,7 @@ void Canvas::drawImage(const QRectF &geoReference, const QImage &image, Composit
 void Canvas::drawImageLayer(QPainter &painter) {
 	static QMutex mapRenderMutex;
 
-	if ( _dirtyImage ) {
+	if ( _dirtyRasterLayer ) {
 		_projection->setBackgroundColor(_backgroundColor);
 		mapRenderMutex.lock();
 		_projection->draw(_buffer, _filterMap && !_previewMode,
@@ -1211,34 +1041,39 @@ void Canvas::drawImageLayer(QPainter &painter) {
 			}
 		}
 		else
-			_buffer.fill(Qt::lightGray);
+			_buffer.fill(_backgroundColor.rgba());
 
-		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
-			if ( (*it)->isVisible() )
-				(*it)->baseBufferUpdated(this);
+		if ( painter.device() == &_buffer ) {
+			for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+				if ( (*it)->isVisible() )
+					(*it)->baseBufferUpdated(this, painter);
+			}
+
+			for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+				if ( (*it)->isVisible() )
+					(*it)->bufferUpdated(this, painter);
+			}
 		}
-
-		/*
-		if ( painter.device() == &_buffer )
-			drawGeoFeatures(painter);
 		else {
 			QPainter p(&_buffer);
-			p.setRenderHint(QPainter::Antialiasing,
-			                !_previewMode && SCScheme.map.vectorLayerAntiAlias);
-			drawGeoFeatures(p);
-		}
-		*/
 
-		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
-			if ( (*it)->isVisible() )
-				(*it)->bufferUpdated(this);
+			for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+				if ( (*it)->isVisible() )
+					(*it)->baseBufferUpdated(this, p);
+			}
+
+			for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+				if ( (*it)->isVisible() )
+					(*it)->bufferUpdated(this, p);
+			}
 		}
 
 		bufferUpdated();
-		_dirtyImage = false;
+		_dirtyRasterLayer = false;
 	}
 
-	painter.drawImage(0,0,_buffer);
+	if ( painter.device() != &_buffer )
+		painter.drawImage(0,0,_buffer);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1252,24 +1087,6 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 		                                  _filterMap && !_previewMode);
 	}
 
-	if ( _buffer.width() > 0 && _buffer.height() > 0 ) {
-		if ( _dirtyLayers || _mapSymbolCollection._dirty ) {
-			for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
-			      it != _mapSymbolCollection.end(); ++it )
-				(*it)->calculateMapPosition(this);
-			_mapSymbolCollection._dirty = false;
-		}
-
-		if ( _dirtyLayers ) {
-			for ( Layers::const_iterator it = _layers.begin();
-			      it != _layers.end(); ++it ) {
-				(*it)->calculateMapPosition(this);
-			}
-		}
-
-		_dirtyLayers = false;
-	}
-
 	painter.setRenderHint(QPainter::Antialiasing,
 	                      !_previewMode && SCScheme.map.vectorLayerAntiAlias);
 	drawLayers(painter);
@@ -1277,7 +1094,6 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 	painter.setRenderHint(QPainter::Antialiasing,
 	                      !_previewMode && SCScheme.map.vectorLayerAntiAlias);
 	customLayer(&painter);
-	drawDrawables(painter);
 
 	if ( _isDrawLegendsEnabled ) drawLegends(painter);
 }
@@ -1301,7 +1117,6 @@ void Canvas::drawLegends(QPainter& painter) {
 		Legend *legend;
 
 		if ( _stackLegends ) {
-
 			if ( area.currentIndex == -1 ) {
 				area.currentIndex = area.findNext();
 				if ( area.currentIndex == -1 ) continue;
@@ -1568,8 +1383,8 @@ void Canvas::translate(const QPoint &delta) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::translate(const QPointF &delta) {
-	_center += delta;
-	_projection->centerOn(_center);
+	_projection->centerOn(_center + delta);
+	_center = _projection->center();
 	updateBuffer();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1617,7 +1432,12 @@ void Canvas::onLegendRemoved(Legend *legend) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setupLayer(Layer *layer) {
+	// Take ownership of the layer if it does not have a parent yet
+	if ( layer->parent() == NULL )
+		layer->setParent(this);
+
 	layer->_canvas = this;
+	layer->setDirty();
 
 	if ( SCApp ) {
 		if ( !layer->name().isEmpty() ) {
@@ -1638,15 +1458,11 @@ void Canvas::setupLayer(Layer *layer) {
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
-
 	foreach ( Legend *legend, layer->legends() ) {
 		if ( legend != NULL ) {
 			onLegendAdded(legend);
 		}
 	}
-
-	if ( _buffer.width() > 0 && _buffer.height() > 0 )
-		layer->calculateMapPosition(this);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1797,33 +1613,19 @@ bool Canvas::filterKeyReleaseEvent(QKeyEvent *event) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
-	SymbolCollection::iterator it = _mapSymbolCollection.end();
-
 	// TODO: Check legend hit that will eat the event
 
 	QPointF geoPos;
 	if ( !_projection->unproject(geoPos, e->pos()) )
 		return false;
 
-	while ( it != _mapSymbolCollection.begin() ) {
-		--it;
-		if ( (*it)->isInside(geoPos.y(), geoPos.x()) ) {
-			if ( _hoverLayer ) {
-				_hoverLayer->handleLeaveEvent();
-				_hoverLayer = NULL;
-			}
-
-			return false;
-		}
-	}
-
-	Layers::iterator lit = _layers.end();
+	Layers::iterator it = _layers.end();
 	Layer *hoverLayer = NULL;
 
-	while ( lit != _layers.begin() ) {
-		--lit;
-		if ( (*lit)->isVisible() && (*lit)->isInside(e->pos().x(), e->pos().y()) ) {
-			hoverLayer = *lit;
+	while ( it != _layers.begin() ) {
+		--it;
+		if ( (*it)->isVisible() && (*it)->isInside(e, geoPos) ) {
+			hoverLayer = *it;
 			break;
 		}
 	}
@@ -2013,7 +1815,7 @@ void Canvas::updateLayer(const Layer::UpdateHints &hints) {
 	}
 
 	if ( hints.testFlag(Layer::RasterLayer) )
-		updateBuffer();
+		_dirtyRasterLayer = true;
 
 	updateRequested();
 }

@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 
 ################################################################################
 class HTTP:
@@ -51,24 +51,31 @@ Service Version:
 %s
 """
 
+		noContent = code == http.NO_CONTENT
+
 		# rewrite response code if requested and no data was found
-		if ro is not None and code == http.NO_CONTENT:
+		if noContent and ro is not None:
 			code = ro.noData
 
-		# status code 204 requires no message body
+		# set response code
 		request.setResponseCode(code)
+
+		# status code 204 requires no message body
 		if code == http.NO_CONTENT:
-			return None
+			response = ""
+		else:
+			request.setHeader('Content-Type', 'text/plain')
 
-		request.setHeader('Content-Type', 'text/plain')
+			reference = "%s/" % (request.path.rpartition('/')[0])
 
-		reference = "%s/" % (request.path.rpartition('/')[0])
+			codeStr = http.RESPONSES[code]
+			date = Core.Time.GMT().toString("%FT%T.%f")
+			response = resp % (code, codeStr, msg, reference, request.uri, date,
+			                   VERSION)
+			if not noContent:
+				Logging.warning("responding with error: %i (%s)" % (
+				                code, codeStr))
 
-		codeStr = http.RESPONSES[code]
-		Logging.warning("responding with error: %i (%s)" % (code, codeStr))
-		date = Core.Time.GMT().toString("%FT%T.%f")
-		response = resp % (code, codeStr, msg, reference, request.uri, date,
-		                   VERSION)
 		utils.accessLog(request, ro, code, len(response), msg)
 		return response
 
@@ -246,3 +253,5 @@ class Site(server.Site):
 		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)
 
+
+# vim: ts=4 noet

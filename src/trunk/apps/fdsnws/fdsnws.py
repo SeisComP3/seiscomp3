@@ -16,7 +16,7 @@
 ################################################################################
 
 
-import os, sys, time, fnmatch, base64, signal
+import os, sys, time, fnmatch, base64, signal, re
 
 try:
 	from twisted.cred import checkers, credentials, error, portal
@@ -28,15 +28,17 @@ except ImportError, e:
 	sys.exit("%s\nIs python twisted installed?" % str(e))
 
 try:
-	from seiscomp3 import Core, DataModel, Logging
+	from seiscomp3 import Core, DataModel, IO, Logging
 	from seiscomp3.Client import Application, Inventory
 	from seiscomp3.System import Environment
 except ImportError, e:
 	sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
 
+from seiscomp3.fdsnws import utils
 from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, FDSNDataSelectAuthRealm
 from seiscomp3.fdsnws.event import FDSNEvent
 from seiscomp3.fdsnws.station import FDSNStation
+from seiscomp3.fdsnws.availability import AvailabilityExtent, AvailabilityQuery
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
                                   Site, ServiceVersion, AuthResource
 from seiscomp3.fdsnws.log import Log
@@ -283,6 +285,75 @@ class Access(object):
 
 
 ################################################################################
+class DataAvailabilityCache(object):
+
+	#---------------------------------------------------------------------------
+	def __init__(self, app, da, validUntil):
+		self._da            = da
+		self._validUntil    = validUntil
+		self._extents       = {}
+		self._extentsSorted = []
+		self._extentsOID    = {}
+
+		for i in xrange(self._da.dataExtentCount()):
+			ext = self._da.dataExtent(i)
+			wid = ext.waveformID()
+			sid = "%s.%s.%s.%s" % (wid.networkCode(), wid.stationCode(),
+			                       wid.locationCode(), wid.channelCode())
+			restricted = app._openStreams is None or sid not in app._openStreams
+			if restricted and not app._allowRestricted:
+				continue
+			self._extents[sid] = (ext, restricted)
+			#Logging.debug("%s: %s ~ %s" % (sid, ext.start().iso(),
+			#                               ext.end().iso()))
+
+		if app._serveAvailability:
+			# load data attribute extents if availability is served
+			for i in xrange(da.dataExtentCount()):
+				extent = da.dataExtent(i)
+				app.query().loadDataAttributeExtents(extent)
+
+			# create a list of (extent, oid, restricted) tuples sorted by stream
+			self._extentsSorted = [ (e, app.query().getCachedId(e), res) \
+			        for wid, (e, res) in sorted(self._extents.iteritems(),
+			                                    key=lambda t: t[0]) ]
+
+			# create a dictionary of object ID to extents
+			self._extentsOID = dict((oid, (e, res)) \
+			        for (e, oid, res) in self._extentsSorted)
+
+		Logging.info("loaded %i extents" % len(self._extents))
+
+	#---------------------------------------------------------------------------
+	def validUntil(self):
+		return self._validUntil
+
+	#---------------------------------------------------------------------------
+	def extent(self, net, sta, loc, cha):
+		wid = "%s.%s.%s.%s" % (net, sta, loc, cha)
+		if wid in self._extents:
+			return self._extents[wid][0]
+
+		return None
+
+	#---------------------------------------------------------------------------
+	def extents(self):
+		return self._extents
+
+	#---------------------------------------------------------------------------
+	def extentsSorted(self):
+		return self._extentsSorted
+
+	#---------------------------------------------------------------------------
+	def extentsOID(self):
+		return self._extentsOID
+
+	#---------------------------------------------------------------------------
+	def dataAvailability(self):
+		return self._da
+
+
+################################################################################
 class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
@@ -309,6 +380,13 @@ class FDSNWS(Application):
 		self._serveDataSelect   = True
 		self._serveEvent        = True
 		self._serveStation      = True
+		self._serveAvailability = False
+		self._daEnabled         = True
+		self._daCacheDuration   = 300
+		self._daCache           = None
+		self._openStreams       = None
+		self._daRepositoryName  = 'primary'
+		self._daDCCName         = 'DCC'
 
 		self._hideAuthor            = False
 		self._evaluationMode        = None
@@ -401,6 +479,29 @@ class FDSNWS(Application):
 		except Exception: pass
 		try: self._serveStation = self.configGetBool('serveStation')
 		except Exception: pass
+		try: self._serveAvailability = self.configGetBool('serveAvailability')
+		except Exception: pass
+
+		# data availability
+		try: self._daEnabled = self.configGetBool('dataAvailability.enable')
+		except Exception: pass
+		try: self._daCacheDuration = self.configGetInt('dataAvailability.cacheDuration')
+		except Exception: pass
+		try: self._daRepositoryName = self.configGetString('dataAvailability.repositoryName')
+		except Exception: pass
+		try: self._daDCCName = self.configGetString('dataAvailability.dccName')
+		except Exception: pass
+
+		if self._serveAvailability and not self._daEnabled:
+			print >> sys.stderr, "can't serve availabilty without " \
+			                     "dataAvailability.enable set to true"
+			return False
+		if not bool(re.match(r'^[a-zA-Z0-9_\ -]*$', self._daRepositoryName)):
+			print >> sys.stderr, "invalid characters in dataAvailability.repositoryName"
+			return False
+		if not bool(re.match(r'^[a-zA-Z0-9_\ -]*$', self._daDCCName)):
+			print >> sys.stderr, "invalid characters in dataAvailability.dccName"
+			return False
 
 		# event filter
 		try: self._hideAuthor = self.configGetBool('hideAuthor')
@@ -475,15 +576,15 @@ class FDSNWS(Application):
 		# file then messaging is disabled. Messaging is only used to get
 		# the configured database connection URI.
 		if self.databaseURI() != "":
-			if not self._trackdbEnabled:
-				self.setMessagingEnabled(False)
+			self.setMessagingEnabled(self._trackdbEnabled)
 		else:
-			# Without the event service, even a database connection is not
-			# required if the inventory is loaded from file
-			if not self._serveEvent and not self._useArclinkAccess and not self.isInventoryDatabaseEnabled():
-				if not self._trackdbEnabled:
-					self.setMessagingEnabled(False)
-
+			# Without the event service, a database connection is not
+			# required if the inventory is loaded from file and no data
+			# availability is not enabled
+			if not self._serveEvent and not self._useArclinkAccess and \
+			   ( not self._serveStation or ( \
+			     not self.isInventoryDatabaseEnabled() and not self._daEnabled ) ):
+				self.setMessagingEnabled(self._trackdbEnabled)
 				self.setDatabaseEnabled(False, False)
 
 		return True
@@ -499,6 +600,32 @@ class FDSNWS(Application):
 		elif cp == 0: return True
 		elif cp > 0:
 			sys.exit(0)
+
+
+	#---------------------------------------------------------------------------
+	def getDACache(self):
+		if not self._daEnabled:
+			return None
+
+		now = Core.Time.GMT()
+		# check if cache is still valid
+		if self._daCache is None or now > self._daCache.validUntil():
+
+			if self.query() is None or \
+			   not self.query().driver().isConnected():
+				dbInt = IO.DatabaseInterface.Open(self.databaseURI())
+				if dbInt is None:
+					Logging.error('failed to connect to database')
+					return self._daCache
+				else:
+					self.setDatabase(dbInt)
+
+			da = DataModel.DataAvailability()
+			self.query().loadDataExtents(da)
+			validUntil = now + Core.TimeSpan(self._daCacheDuration, 0)
+			self._daCache = DataAvailabilityCache(self, da, validUntil)
+
+		return self._daCache
 
 
 	#---------------------------------------------------------------------------
@@ -524,6 +651,7 @@ class FDSNWS(Application):
 		               "    dataselect    : %s\n" \
 		               "    event         : %s\n" \
 		               "    station       : %s\n" \
+		               "    availability  : %s\n" \
 		               "  listenAddress   : %s\n" \
 		               "  port            : %i\n" \
 		               "  connections     : %i\n" \
@@ -537,6 +665,11 @@ class FDSNWS(Application):
 		               "  useArclinkAccess: %s\n" \
 		               "  hideAuthor      : %s\n" \
 		               "  evaluationMode  : %s\n" \
+		               "  data availability\n" \
+		               "    enabled       : %s\n" \
+		               "    cache duration: %i\n" \
+		               "    repo name     : %s\n" \
+		               "    dcc name      : %s\n" \
 		               "  eventType\n" \
 		               "    whitelist     : %s\n" \
 		               "    blacklist     : %s\n" \
@@ -551,15 +684,18 @@ class FDSNWS(Application):
 		               "    enabled       : %s\n" \
 		               "    gnupgHome     : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
-		               self._serveStation, self._listenAddress, self._port,
-		               self._connections, self._htpasswd, self._accessLogFile,
-		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._recordBulkSize, self._allowRestricted,
-		               self._useArclinkAccess, self._hideAuthor, modeStr,
-		               whitelistStr, blacklistStr, stationFilterStr,
-		               dataSelectFilterStr, self._debugFilter,
-		               self._trackdbEnabled, self._trackdbDefaultUser,
-		               self._authEnabled, self._authGnupgHome))
+		               self._serveStation, self._serveAvailability,
+		               self._listenAddress, self._port, self._connections,
+		               self._htpasswd, self._accessLogFile, self._queryObjects,
+		               self._realtimeGap, self._samplesM, self._recordBulkSize,
+		               self._allowRestricted, self._useArclinkAccess,
+		               self._hideAuthor, modeStr, self._daEnabled,
+		               self._daCacheDuration, self._daRepositoryName,
+		               self._daDCCName, whitelistStr, blacklistStr,
+		               stationFilterStr, dataSelectFilterStr,
+		               self._debugFilter, self._trackdbEnabled,
+		               self._trackdbDefaultUser, self._authEnabled,
+		               self._authGnupgHome))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
@@ -645,7 +781,7 @@ class FDSNWS(Application):
 
 			if self._authEnabled:
 				dataselect1.putChild('auth', AuthResource(self._authGnupgHome,
-									  self._userdb))
+				                     self._userdb))
 
 		# event
 		if self._serveEvent:
@@ -682,7 +818,8 @@ class FDSNWS(Application):
 
 			station1.putChild('query', FDSNStation(stationInv,
 			                                       self._allowRestricted,
-			                                       self._queryObjects))
+			                                       self._queryObjects,
+			                                       self._daEnabled))
 			station1.putChild('version', serviceVersion)
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
 			fileRes.childNotFound = NoResource()
@@ -690,6 +827,50 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
 			fileRes.childNotFound = NoResource()
 			station1.putChild('builder', fileRes)
+
+		# availability
+		if self._serveAvailability:
+
+			# create a set of waveformIDs which represent open channels
+			if self._serveDataSelect:
+				openStreams = set()
+				for iNet in xrange(dataSelectInv.networkCount()):
+					net = dataSelectInv.network(iNet)
+					if utils.isRestricted(net): continue
+					for iSta in xrange(net.stationCount()):
+						sta = net.station(iSta)
+						if utils.isRestricted(sta): continue
+						for iLoc in xrange(sta.sensorLocationCount()):
+							loc = sta.sensorLocation(iLoc)
+							for iCha in xrange(loc.streamCount()):
+								cha = loc.stream(iCha)
+								if utils.isRestricted(cha): continue
+								openStreams.add("{0}.{1}.{2}.{3}".format(
+								                net.code(), sta.code(),
+								                loc.code(), cha.code()))
+				self._openStreams = openStreams
+			else:
+				self._openStreams = None
+
+			ext = ListingResource()
+			prefix.putChild('ext', ext)
+			availability = ListingResource()
+			ext.putChild('availability', availability)
+			availability1 = DirectoryResource(os.path.join(shareDir, 'availability.html'))
+			availability.putChild('1', availability1)
+
+			availability1.putChild('extent', AvailabilityExtent())
+			availability1.putChild('query', AvailabilityQuery())
+			availability1.putChild('version', serviceVersion)
+			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
+			fileRes.childNotFound = NoResource()
+			availability1.putChild('availability.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'availability-extent-builder.html'))
+			fileRes.childNotFound = NoResource()
+			availability1.putChild('builder-extent', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'availability-builder.html'))
+			fileRes.childNotFound = NoResource()
+			availability1.putChild('builder', fileRes)
 
 
 		# static files
@@ -755,7 +936,7 @@ class FDSNWS(Application):
 			# setup signal handler
 			self.__sighup = False
 			signal.signal(signal.SIGHUP, self._sighupHandler)
-		        task.LoopingCall(self._reloadTask).start(60, False)
+			task.LoopingCall(self._reloadTask).start(60, False)
 
 			# start processing
 			Logging.info("start listening")
@@ -918,10 +1099,10 @@ class FDSNWS(Application):
 									if cha.restricted() != rule.restricted:
 										continue
 								except ValueError:
-									if staRestricted != None:
+									if staRestricted is not None:
 										if sta.Restricted != rule.Restricted:
 											continue
-									elif netRestricted == None or \
+									elif netRestricted is None or \
 									        netRestricted != rule.Restricted:
 										continue
 
@@ -931,10 +1112,10 @@ class FDSNWS(Application):
 									if cha.shared() != rule.shared:
 										continue
 								except ValueError:
-									if staShared != None:
+									if staShared is not None:
 										if sta.Shared != rule.Shared:
 											continue
-									elif netShared == None or \
+									elif netShared is None or \
 									     netShared != rule.Shared:
 										continue
 

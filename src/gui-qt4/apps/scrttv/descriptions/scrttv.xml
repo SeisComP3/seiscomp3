@@ -76,24 +76,46 @@
 						intersected with all channels configured in inventory.
 					</description>
 				</parameter>
+				<parameter name="blacklist" type="list:string">
+					<description>
+					If not empty then all stream patterns are part of the blacklist.
+					The blacklist is only active if &quot;streams.codes&quot;
+					is omitted and the default stream list according to the
+					bindings is to be shown. Each pattern can include wildcards
+					(either ? or *). The pattern is checked against the channel
+					id which is a concatenation of network code, station code,
+					location code and channel code separated with a dot,
+					e.g. &quot;GE.MORC..BHZ&quot;.
+					</description>
+				</parameter>
+				<parameter name="rows" type="integer">
+					<description>
+						Number of rows to show at once in one windows. If more traces
+						than rows are loaded, the are accessible by a scroll bar.
+					</description>
+				</parameter>
 				<group name="region">
 					<description>
 						Defines a region used for clipping requested stations.
 					</description>
 					<parameter name="lonmin" type="double" unit="deg">
 						<description>
+							Minimum longitude.
 						</description>
 					</parameter>
 					<parameter name="lonmax" type="double" unit="deg">
 						<description>
+							Maximum longitude.
 						</description>
 					</parameter>
 					<parameter name="latmin" type="double" unit="deg">
 						<description>
+							Minimum latitude.
 						</description>
 					</parameter>
 					<parameter name="latmax" type="double" unit="deg">
 						<description>
+							Maximum latitude.
 						</description>
 					</parameter>
 				</group>

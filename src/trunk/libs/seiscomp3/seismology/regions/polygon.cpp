@@ -32,16 +32,6 @@ namespace Geo
 {
 
 
-namespace {
-
-
-bool compareByRank(const GeoFeature* gf1, const GeoFeature* gf2 ) {
-	return gf1->rank() < gf2->rank();
-}
-
-
-}
-
 
 PolyRegions::PolyRegions()
 {
@@ -101,9 +91,6 @@ size_t PolyRegions::read(const std::string& location) {
 
 	info();
 
-	// Sort the features according to their rank
- 	std::sort(_regions.begin(), _regions.end(), compareByRank);
-
 	// store directory path the data was read from
 	_dataDir = directory.string();
 
@@ -116,7 +103,7 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 
 	std::ifstream infile(filename.c_str());
 
-	if (infile.bad())
+	if ( infile.bad() )
 		return false;
 
 	boost::regex vertexLine("^\\s*([-+]?[0-9]*\\.?[0-9]+)\\s+([-+]?[0-9]*\\.?[0-9]+)(?:\\s+([^\\d\\s].*)$|\\s*$)");
@@ -126,20 +113,19 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 	std::string line;
 	bool newPolygon = true;
 	GeoFeature *pr = NULL;
-	OPT(Vertex) last;
+	OPT(GeoCoordinate) last;
 
-	while(std::getline(infile, line)) {
-
-		if (newPolygon){
+	while ( std::getline(infile, line) ) {
+		if ( newPolygon ){
 			pr = new GeoFeature();
 			newPolygon = false;
 		}
 
 		if ( boost::regex_match(line, what, vertexLine) ) {
 			if ( last ) pr->addVertex(*last);
-			last = Vertex(atof(what.str(2).c_str()), atof(what.str(1).c_str()));
+			last = GeoCoordinate(atof(what.str(2).c_str()), atof(what.str(1).c_str())).normalize();
 		}
-		else if (boost::regex_match(line, what, LLine)) {
+		else if ( boost::regex_match(line, what, LLine) ) {
 			if ( last && pr->vertices().size() > 0 ) {
 				if ( *last != pr->vertices().back() )
 					pr->addVertex(*last);
@@ -150,10 +136,13 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 			else {
 				pr->setName(what.str(1));
 				pr->setClosedPolygon(true);
+				pr->updateBoundingBox();
 				addRegion(pr);
 
-				if ( pr->area() < 0 )
-					SEISCOMP_WARNING("Polygon %s is defined clockwise", pr->name().c_str());
+				if ( pr->area() < 0 ) {
+					SEISCOMP_WARNING("Polygon %s is defined counter-clockwise", pr->name().c_str());
+					pr->invertOrder();
+				}
 			}
 
 			last = Core::None;
@@ -166,7 +155,6 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 	}
 
 	return true;
-
 }
 
 
@@ -216,11 +204,8 @@ void PolyRegions::info(){
 
 
 GeoFeature *PolyRegions::findRegion(double lat, double lon) const {
-	while ( lon < -180 ) lon += 180;
-	while ( lon > 180 ) lon -= 180;
-
 	for ( size_t i = 0; i < regionCount(); ++i ) {
-		if ( region(i)->contains(Vertex(lat, lon)) )
+		if ( region(i)->contains(GeoCoordinate(lat, lon).normalize()) )
 			return region(i);
 	}
 

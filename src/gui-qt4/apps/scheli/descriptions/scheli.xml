@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scheli" category="GUI">
+		<description>Real-time helicorder view for one stream</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option long-flag="offline" argument="" publicID="mode#offline">
+					<description>
+					Do not connect to a messaging server and do not use the database.
+					</description>
+				</option>
+				<option long-flag="end-time" argument="arg" publicID="mode#end-time">
+					<description>
+					Set the acquisition end time, e.g. '2017-09-08 13:30:00', default: 'gmt'
+					</description>
+				</option>
+			</group>
+
+			<group name="Data">
+				<option long-flag="stream" argument="arg">
+					<description>
+						The record stream that should be displayed: stream=net.sta.loc.cha
+					</description>
+				</option>
+				<option long-flag="filter" argument="arg">
+					<description>
+						The filter to apply
+					</description>
+				</option>
+				<option long-flag="gain" argument="arg" unit="counts/unit">
+					<description>
+						Gain applied to the data before plotting. Units: counts/unit
+					</description>
+				</option>
+				<option long-flag="amp-range-min" argument="arg">
+					<description>
+						Lower bound of amplitude range per row
+					</description>
+				</option>
+				<option long-flag="amp-range-max" argument="arg">
+					<description>
+						Upper bound of amplitude range per row
+					</description>
+				</option>
+				<option long-flag="amp-range" argument="arg">
+					<description>
+						Arround zero bound of amplitude range per row
+					</description>
+				</option>
+				<option long-flag="record-time" argument="arg">
+					<description>
+						Does the last row always contain the last record received
+					</description>
+				</option>
+			</group>
+
+			<group name="Output">
+				<option long-flag="desc" argument="arg">
+					<description>
+						Enables/disables the display of a station description
+					</description>
+				</option>
+				<option long-flag="rows" argument="arg">
+					<description>
+						Configures the number of rows to display
+					</description>
+				</option>
+				<option long-flag="time-span" argument="arg" unit="s">
+					<description>
+						Configures the time-span (in secs) per row. Unit: seconds.
+					</description>
+				</option>
+				<option long-flag="aa" argument="arg">
+					<description>
+						Sets antialiasing for rendering the traces
+					</description>
+				</option>
+				<option long-flag="xres" argument="arg" unit="dpi">
+					<description>
+						Output x resolution when generating images. Unit: dpi.
+					</description>
+				</option>
+				<option long-flag="yres" argument="arg" unit="dpi">
+					<description>
+						Output y resolution when generating images. Unit: dpi.
+					</description>
+				</option>
+				<option long-flag="dpi" argument="arg" unit="dpi">
+					<description>
+						Output dpi when generating postscript. Unit: dpi.
+					</description>
+				</option>
+				<option flag="o" argument="arg">
+					<description>
+						Output filename (placeholders: %N,%S,%L,%C)
+					</description>
+				</option>
+				<option long-flag="interval" argument="arg" unit="s">
+					<description>
+						Snapshot interval (less than 0 disables timed snapshots).
+						Unit: seconds.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

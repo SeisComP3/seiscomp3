@@ -141,6 +141,34 @@ bool Exporter::put(std::streambuf* buf, Core::BaseObject *obj) {
 }
 
 
+bool Exporter::put(std::streambuf* buf, const ExportObjectList &objects) {
+	if ( buf == NULL ) return false;
+
+	_ostr.rdbuf(buf);
+
+	_ostr << xmlHeader;
+	if ( !_headerNode.empty() )
+		_ostr << "<" << _headerNode << ">";
+
+	for ( ExportObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it )
+		collectNamespaces(*it);
+
+	for ( ExportObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it ) {
+		_lastTagState = 0;
+		_tagOpen = false;
+		_firstElement = true;
+		_indent = 0;
+		handle(*it, "", "", NULL);
+	}
+
+	if ( !_headerNode.empty() )
+		_ostr << std::endl << "</" << _headerNode << ">";
+	_ostr << std::endl;
+
+	return true;
+}
+
+
 void Exporter::handle(Core::BaseObject *obj, const char *defaultTag, const char *ns, NodeHandler *handler) {
 	TypeMap::Tag defTag(
 			defaultTag?defaultTag:"",

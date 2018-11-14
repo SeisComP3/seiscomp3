@@ -106,9 +106,9 @@ def _datetime_fromxml(val = ""):
 		return None
 		
 	m = _rx_datetime.match(val)
-	if m == None:
+	if m is None:
 		m = _rx_date.match(val)
-		if m == None:
+		if m is None:
 			raise ValueError, "invalid datetime: " + val
 
 		(year, month, mday, tz, plusminus, tzhours, tzminutes) = m.groups()
@@ -198,7 +198,11 @@ class xml_Comment(object):
         self.id = src.id
         self.start = src.start
         self.end = src.end
-        self.creationInfo = src.creationInfo
+        # creationInfo is an XML attribute, but we are missing
+        # CreationInfo_fromxml() [string->object] and _CreationInfo_toxml()
+        # [object->string] serialization within the creationInfo() property.
+        # Could be JSON??? Ignore CreationInfo for now.
+        #self.creationInfo = src.creationInfo
 
     def _copy_to(self, dest):
         if self._element.get("text") is not None:

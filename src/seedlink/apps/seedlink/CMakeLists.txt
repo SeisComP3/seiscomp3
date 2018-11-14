@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES(../../libs/3rd-party/qlib2)
 
 SET(CONFIG_FILE ${SC3_PACKAGE_INSTALL_PREFIX}/acquisition/config/seedlink.ini)
 
-SET(OPTIONS -DSYSLOG_FACILITY=LOG_LOCAL0 -DCONFIG_FILE=\\\"${CONFIG_FILE}\\\" -DMSEED_ROUND_TENTH_MILLISEC)
+SET(OPTIONS -DSYSLOG_FACILITY=LOG_LOCAL0 -DCONFIG_FILE="${CONFIG_FILE}" -DMSEED_ROUND_TENTH_MILLISEC)
 
 # Uncomment the following to enable file descriptor reallocation.
 # This is needed for large servers (number of stations multiplied by

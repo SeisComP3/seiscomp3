@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module Communication
+%module(package="seiscomp3") Communication
 %{
 #include "seiscomp3/core/interruptible.h"
 #include "seiscomp3/core/record.h"

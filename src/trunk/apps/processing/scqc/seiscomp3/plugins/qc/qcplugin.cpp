@@ -33,11 +33,17 @@
 
 #include <seiscomp3/core/interfacefactory.ipp>
 
+
 IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Applications::Qc::QcPlugin, SC_QCPLUGIN_API);
+
 
 namespace Seiscomp {
 namespace Applications {
 namespace Qc {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /**
@@ -74,7 +80,12 @@ return waveformID;
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IMPLEMENT_SC_ABSTRACT_CLASS(QcPlugin, "QcPlugin");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QcPlugin::QcPlugin() {}
@@ -140,14 +151,11 @@ void QcPlugin::generateNullReport() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcPlugin::generateReport(const QcBuffer* buf) const {
+void QcPlugin::generateReport(const QcBuffer *buf) const {
+	if ( buf->empty() ) return;
 
-	if (buf->empty()) {
-		return;
-	}
-
-	double Mean = mean(buf);
-	double StdDev = stdDev(buf, Mean);
+	double mean_ = mean(buf);
+	double stdDev_ = stdDev(buf, mean_);
 
 	DataModel::WaveformQuality* obj = new DataModel::WaveformQuality();
 	obj->setWaveformID(getWaveformID(_streamID));
@@ -157,12 +165,12 @@ void QcPlugin::generateReport(const QcBuffer* buf) const {
 	obj->setEnd(buf->endTime());
 	obj->setType("report");
 	obj->setParameter(_parameterNames[0]);
-	obj->setValue(Mean);
-	obj->setLowerUncertainty(StdDev);
-	obj->setUpperUncertainty(StdDev);
+	obj->setValue(mean_);
+	obj->setLowerUncertainty(stdDev_);
+	obj->setUpperUncertainty(stdDev_);
 	obj->setWindowLength((double)buf->length());
 
-	pushObject(DataModel::Object::Cast(obj));
+	pushObject(obj);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -170,9 +178,9 @@ void QcPlugin::generateReport(const QcBuffer* buf) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcPlugin::generateAlert(const QcBuffer* shortBuffer, const QcBuffer* longBuffer) const {
-
-	if (shortBuffer->empty() || longBuffer->empty()) return;
+void QcPlugin::generateAlert(const QcBuffer *shortBuffer,
+                             const QcBuffer *longBuffer) const {
+	if ( shortBuffer->empty() || longBuffer->empty() ) return;
 
 	//shortBuffer->info(); Short Term buffer info
 	//lta->info(); Long Term buffer info
@@ -206,12 +214,11 @@ void QcPlugin::generateAlert(const QcBuffer* shortBuffer, const QcBuffer* longBu
 		obj->setUpperUncertainty(lta);
 		obj->setWindowLength((double)shortBuffer->length());
 
-		pushObject(DataModel::Object::Cast(obj));
+		pushObject(obj);
 	
 		f = "\033[31m"; // red colour
 		SEISCOMP_WARNING("%s %s %s %.0f%% \033[30m  %.3f %.3f", _streamID.c_str(), _parameterNames[0].c_str(), f.c_str(), relative, fabs(relative), lta);
 	}
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -219,8 +226,7 @@ void QcPlugin::generateAlert(const QcBuffer* shortBuffer, const QcBuffer* longBu
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcPlugin::pushObject(DataModel::Object* obj) const {
-
+void QcPlugin::pushObject(DataModel::Object *obj) const {
 	_objects.push(obj);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -232,12 +238,10 @@ void QcPlugin::pushObject(DataModel::Object* obj) const {
 //! pass Objects to qcMessenger
 // false = data messages; true = notifier messages
 void QcPlugin::sendObjects(bool notifier) {
-
-	while (!_objects.empty()) {
+	while ( !_objects.empty() ) {
 		_qcMessenger->attachObject(_objects.front().get(), notifier);
 		_objects.pop();
 	}
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -245,15 +249,13 @@ void QcPlugin::sendObjects(bool notifier) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double QcPlugin::mean(const QcBuffer* qcb) const {
-
-	if (qcb->size() < 1) return 0.0;
+double QcPlugin::mean(const QcBuffer *qcb) const {
+	if ( qcb->size() < 1 ) return 0.0;
 
 	double sum = 0.0;
 
-	for (QcBuffer::const_iterator p = qcb->begin(); p != qcb->end(); p++) {
+	for ( QcBuffer::const_iterator p = qcb->begin(); p != qcb->end(); ++p )
 		sum += boost::any_cast<double>((*p)->parameter);
-	}
 
 	return sum / qcb->size();
 }
@@ -264,14 +266,12 @@ double QcPlugin::mean(const QcBuffer* qcb) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double QcPlugin::stdDev(const QcBuffer* qcb, double mean) const {
-
-	if (qcb->size() < 2) return 0.0;
+	if ( qcb->size() < 2 ) return 0.0;
 
 	double sum = 0.0;
 
-	for (QcBuffer::const_iterator p = qcb->begin(); p != qcb->end(); p++) {
+	for ( QcBuffer::const_iterator p = qcb->begin(); p != qcb->end(); ++p )
 		sum += pow(boost::any_cast<double>((*p)->parameter) - mean, 2);
-	}
 
 	return sqrt(sum / (qcb->size() - 1));
 }
@@ -284,7 +284,7 @@ double QcPlugin::stdDev(const QcBuffer* qcb, double mean) const {
 void QcPlugin::update() {
 	QcParameter *qcp = _qcProcessor->getState();
 
-	if (_qcProcessor->isValid())
+	if ( _qcProcessor->isValid() )
 		_qcBuffer->push_back(qcp);
 
 	sendMessages(qcp->recordEndTime);
@@ -295,41 +295,44 @@ void QcPlugin::update() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QcPlugin::sendMessages(Core::Time &rectime) {
-_timer.restart();
+void QcPlugin::sendMessages(const Core::Time &rectime) {
+	_timer.restart();
 
-	if (_firstRecord) {
+	if ( _firstRecord ) {
 		_lastArchiveTime = rectime;
 		_lastReportTime = rectime;
 		_lastAlertTime = rectime;
 		_firstRecord = false;
 	}
 
-	if (_qcBuffer->empty()) 
+	if ( _qcBuffer->empty() )
 		return;
 
 	//! DEBUG
-	if (rectime == Core::Time()) {
+	if ( rectime == Core::Time() ) {
 		try {
 			SEISCOMP_DEBUG("%s: %d sec timeout reached for stream: %s.", _name.c_str(),  _qcConfig->reportTimeout(), _streamID.c_str());
-		} catch (QcConfigException) {}
+		}
+		catch ( QcConfigException ) {}
 	}
 
 	Core::TimeSpan diff;
 
 	//! A R C H I V E
-	if (_qcConfig->archiveInterval() >= 0 && rectime != Core::Time()) {
+	if ( _qcConfig->archiveInterval() >= 0 && rectime != Core::Time() ) {
 		diff = rectime - _lastArchiveTime;
 		if ( diff > Core::TimeSpan(_qcConfig->archiveInterval()) || _app->exitRequested() ) {
 			QcBufferCPtr archiveBuffer = _qcBuffer->qcParameter(_qcConfig->archiveBuffer());
-			generateReport(archiveBuffer.get());
-			sendObjects(true); // as notifier msg
-			_lastArchiveTime = rectime;
+			if ( !archiveBuffer->empty() ) {
+				generateReport(archiveBuffer.get());
+				sendObjects(true); // as notifier msg
+				_lastArchiveTime = rectime;
+			}
 		}
 	}
 
 	//! R E P O R T
-	if (_qcConfig->reportInterval() >= 0) {
+	if ( _qcConfig->reportInterval() >= 0 ) {
 		diff = rectime - _lastReportTime;
 		if ( diff > Core::TimeSpan(_qcConfig->reportInterval()) || rectime == Core::Time()) {
 			QcBufferCPtr reportBuffer = _qcBuffer->qcParameter(_qcConfig->reportBuffer());
@@ -341,7 +344,7 @@ _timer.restart();
 	
 	//! A L E R T
 	// in archive mode we don't want alert msg
-	if (!_app->archiveMode() && _qcConfig->alertInterval() >= 0) {
+	if ( !_app->archiveMode() && _qcConfig->alertInterval() >= 0 ) {
 		diff = rectime - _lastAlertTime;
 		if ( ( diff > Core::TimeSpan(_qcConfig->alertInterval()) && (int)_qcBuffer->length() >= _qcConfig->alertBuffer() ) || rectime == Core::Time()) {
 			QcBufferCPtr alertBuffer = _qcBuffer->qcParameter(_qcConfig->alertBuffer());
@@ -351,7 +354,6 @@ _timer.restart();
 			_lastAlertTime = rectime;
 		}
 	}
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -360,7 +362,6 @@ _timer.restart();
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QcProcessor* QcPlugin::qcProcessor() {
-
 	return _qcProcessor.get();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -370,7 +371,7 @@ QcProcessor* QcPlugin::qcProcessor() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcPlugin::onTimeout() {
-	if ((double)_timer.elapsed() > _qcConfig->reportTimeout()) {
+	if ( (double)_timer.elapsed() > _qcConfig->reportTimeout() ) {
 		timeoutTask();
 		_timer.restart();
 	}
@@ -393,13 +394,14 @@ void QcPlugin::timeoutTask() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcPlugin::done() {
-	Core::Time sendtime;
-	sendMessages(sendtime);
+	sendMessages(Core::Time());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

@@ -22,7 +22,7 @@
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/seismology/regions.h>
-#include <seiscomp3/geo/geofeatureset.h>
+#include <seiscomp3/geo/featureset.h>
 
 
 ADD_SC_PLUGIN("Region check for events that sets the event type to \"outside of network interest\" "
@@ -166,7 +166,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				return false;
 			}
 
-			Vertex location;
+			GeoCoordinate location;
 
 			try {
 				location.set(org->latitude().value(), org->longitude().value());

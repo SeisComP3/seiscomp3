@@ -24,6 +24,7 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 DEFINE_SMARTPOINTER(Comment);
+DEFINE_SMARTPOINTER(DataAvailability);
 
 
 
@@ -76,15 +77,15 @@ class BaseNode : public Core::BaseObject {
 
 		//! XML tag: startDate
 		void setStartDate(const OPT(DateTime)& startDate);
-		DateTime startDate() const throw(Seiscomp::Core::ValueException);
+		DateTime startDate() const;
 
 		//! XML tag: endDate
 		void setEndDate(const OPT(DateTime)& endDate);
-		DateTime endDate() const throw(Seiscomp::Core::ValueException);
+		DateTime endDate() const;
 
 		//! XML tag: restrictedStatus
 		void setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedStatus);
-		RestrictedStatusType restrictedStatus() const throw(Seiscomp::Core::ValueException);
+		RestrictedStatusType restrictedStatus() const;
 
 		//! A code used for display or association, alternate to the
 		//! SEED-compliant code.
@@ -111,6 +112,7 @@ class BaseNode : public Core::BaseObject {
 		 *               or it already has another parent
 		 */
 		bool addComment(Comment *obj);
+		bool addDataAvailability(DataAvailability *obj);
 
 		/**
 		 * Removes an object.
@@ -120,6 +122,7 @@ class BaseNode : public Core::BaseObject {
 		 *               because it does not exist in the list
 		 */
 		bool removeComment(Comment *obj);
+		bool removeDataAvailability(DataAvailability *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -128,13 +131,16 @@ class BaseNode : public Core::BaseObject {
 		 * @return false The index is out of bounds
 		 */
 		bool removeComment(size_t i);
+		bool removeDataAvailability(size_t i);
 
 		//! Retrieve the number of objects of a particular class
 		size_t commentCount() const;
+		size_t dataAvailabilityCount() const;
 
 		//! Index access
 		//! @return The object at index i
 		Comment* comment(size_t i) const;
+		DataAvailability* dataAvailability(size_t i) const;
 
 
 	// ------------------------------------------------------------------
@@ -152,6 +158,7 @@ class BaseNode : public Core::BaseObject {
 
 		// Aggregations
 		std::vector<CommentPtr> _comments;
+		std::vector<DataAvailabilityPtr> _dataAvailabilitys;
 };
 
 

@@ -260,6 +260,7 @@ class SC_GUI_API EventEdit : public QWidget, public DataModel::Observer {
 
 		Ui::EventEdit _ui;
 
+		QList<DataModel::EventType> _eventTypesWhitelist;
 		DataModel::DatabaseQuery* _reader;
 		Map::ImageTreePtr         _mapTreeOrigin;
 		Map::ImageTreePtr         _mapTreeFM;

@@ -12,7 +12,7 @@
 
 #define SEISCOMP_COMPONENT Gui::MapWidget
 
-#include <seiscomp3/geo/geofeatureset.h>
+#include <seiscomp3/geo/featureset.h>
 #include <seiscomp3/gui/map/mapwidget.h>
 #include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/gui/map/texturecache.h>
@@ -303,7 +303,7 @@ void MapWidget::draw(QPainter &painter) {
 #else
 			painter.drawEllipse(QRectF(p.x()-1.3f, p.y()-1.3f, 2.6f, 2.6f));
 #endif
-			dist += _canvas.drawGeoLine(painter, _measurePoints[i-1], _measurePoints[i]);
+			dist += _canvas.drawLine(painter, _measurePoints[i-1], _measurePoints[i]);
 		}
 
 		QString aziArea;
@@ -314,7 +314,7 @@ void MapWidget::draw(QPainter &painter) {
 			dashes << 3 << 7;
 			pen.setDashPattern(dashes);
 			painter.setPen(pen);
-			_canvas.drawGeoLine(painter, _measurePoints.last(), _measurePoints.first());
+			_canvas.drawLine(painter, _measurePoints.last(), _measurePoints.first());
 			painter.restore();
 			aziArea = QString("Area    : %1 km²").arg(polyArea(_measurePoints));
 		}
@@ -552,8 +552,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 			_measureText.clear();
 		}
 	}
-	else if ( _canvas.filterMousePressEvent(event) )
-		event->ignore();
+
+	_canvas.filterMousePressEvent(event);
 }
 
 

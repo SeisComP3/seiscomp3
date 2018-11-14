@@ -24,8 +24,14 @@
 
 
 namespace Seiscomp {
-
 namespace Processing {
+
+
+namespace {
+
+std::string ExpectedAmplitudeUnit = "um";
+
+}
 
 
 REGISTER_MAGNITUDEPROCESSOR(MagnitudeProcessor_Mjma, "Mjma");
@@ -44,13 +50,11 @@ MagnitudeProcessor_Mjma::MagnitudeProcessor_Mjma()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_Mjma::computeMagnitude(
-	double amplitude, // in micrometers per second
-	double period,    // in seconds
-	double delta,     // in degrees
-	double depth,     // in kilometers
+	double amplitude, const std::string &unit,
+	double, double, double delta, double depth,
 	const DataModel::Origin *, const DataModel::SensorLocation *,
-	double &value)
-{
+	const DataModel::Amplitude *,
+	double &value) {
 	if ( delta < DELTA_MIN || delta > DELTA_MAX )
 		return DistanceOutOfRange;
 
@@ -63,16 +67,21 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mjma::computeMagnitude(
 	if ( depth > DEPTH_MAX )
 		return DepthOutOfRange;
 
+	if ( !convertAmplitude(amplitude, unit, ExpectedAmplitudeUnit) )
+		return InvalidAmplitudeUnit;
+
 	double a1 = 1.73, a2 = 0., a3 = -0.83;
 	double r = Math::Geo::deg2km(delta);
 
-	// Convert amplitude unit from millimeters to micrometers
 	value = correctMagnitude(log10(amplitude) + a1*log10(r) + a2*r + a3 + 0.44);
 
 	return OK;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

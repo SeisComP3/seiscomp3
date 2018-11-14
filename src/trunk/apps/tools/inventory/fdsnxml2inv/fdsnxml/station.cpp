@@ -28,12 +28,12 @@ Station::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(objectProperty<Site>("site", "FDSNXML::Site", false, false, &Station::setSite, &Station::site));
 	addProperty(Core::simpleProperty("vault", "string", false, false, false, false, false, false, NULL, &Station::setVault, &Station::vault));
 	addProperty(Core::simpleProperty("geology", "string", false, false, false, false, false, false, NULL, &Station::setGeology, &Station::geology));
+	addProperty(arrayClassProperty<Equipment>("equipment", "FDSNXML::Equipment", &Station::equipmentCount, &Station::equipment, static_cast<bool (Station::*)(Equipment*)>(&Station::addEquipment), &Station::removeEquipment, static_cast<bool (Station::*)(Equipment*)>(&Station::removeEquipment)));
+	addProperty(arrayClassProperty<Operator>("operators", "FDSNXML::Operator", &Station::operatorsCount, &Station::operators, static_cast<bool (Station::*)(Operator*)>(&Station::addOperators), &Station::removeOperators, static_cast<bool (Station::*)(Operator*)>(&Station::removeOperators)));
 	addProperty(Core::simpleProperty("creationDate", "datetime", false, false, false, false, false, false, NULL, &Station::setCreationDate, &Station::creationDate));
 	addProperty(Core::simpleProperty("terminationDate", "datetime", false, false, false, false, true, false, NULL, &Station::setTerminationDate, &Station::terminationDate));
 	addProperty(objectProperty<CounterType>("totalNumberChannels", "FDSNXML::CounterType", false, true, &Station::setTotalNumberChannels, &Station::totalNumberChannels));
 	addProperty(objectProperty<CounterType>("selectedNumberChannels", "FDSNXML::CounterType", false, true, &Station::setSelectedNumberChannels, &Station::selectedNumberChannels));
-	addProperty(arrayClassProperty<Equipment>("equipment", "FDSNXML::Equipment", &Station::equipmentCount, &Station::equipment, static_cast<bool (Station::*)(Equipment*)>(&Station::addEquipment), &Station::removeEquipment, static_cast<bool (Station::*)(Equipment*)>(&Station::removeEquipment)));
-	addProperty(arrayClassProperty<Operator>("operators", "FDSNXML::Operator", &Station::operatorsCount, &Station::operators, static_cast<bool (Station::*)(Operator*)>(&Station::addOperators), &Station::removeOperators, static_cast<bool (Station::*)(Operator*)>(&Station::removeOperators)));
 	addProperty(arrayClassProperty<ExternalReference>("externalReference", "FDSNXML::ExternalReference", &Station::externalReferenceCount, &Station::externalReference, static_cast<bool (Station::*)(ExternalReference*)>(&Station::addExternalReference), &Station::removeExternalReference, static_cast<bool (Station::*)(ExternalReference*)>(&Station::removeExternalReference)));
 	addProperty(arrayClassProperty<Channel>("channel", "FDSNXML::Channel", &Station::channelCount, &Station::channel, static_cast<bool (Station::*)(Channel*)>(&Station::addChannel), &Station::removeChannel, static_cast<bool (Station::*)(Channel*)>(&Station::removeChannel)));
 }
@@ -269,7 +269,7 @@ void Station::setTerminationDate(const OPT(DateTime)& terminationDate) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DateTime Station::terminationDate() const throw(Seiscomp::Core::ValueException) {
+DateTime Station::terminationDate() const {
 	if ( _terminationDate )
 		return *_terminationDate;
 	throw Seiscomp::Core::ValueException("Station.terminationDate is not set");
@@ -289,7 +289,7 @@ void Station::setTotalNumberChannels(const OPT(CounterType)& totalNumberChannels
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Station::totalNumberChannels() throw(Seiscomp::Core::ValueException) {
+CounterType& Station::totalNumberChannels() {
 	if ( _totalNumberChannels )
 		return *_totalNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.totalNumberChannels is not set");
@@ -300,7 +300,7 @@ CounterType& Station::totalNumberChannels() throw(Seiscomp::Core::ValueException
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Station::totalNumberChannels() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Station::totalNumberChannels() const {
 	if ( _totalNumberChannels )
 		return *_totalNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.totalNumberChannels is not set");
@@ -320,7 +320,7 @@ void Station::setSelectedNumberChannels(const OPT(CounterType)& selectedNumberCh
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CounterType& Station::selectedNumberChannels() throw(Seiscomp::Core::ValueException) {
+CounterType& Station::selectedNumberChannels() {
 	if ( _selectedNumberChannels )
 		return *_selectedNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.selectedNumberChannels is not set");
@@ -331,7 +331,7 @@ CounterType& Station::selectedNumberChannels() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CounterType& Station::selectedNumberChannels() const throw(Seiscomp::Core::ValueException) {
+const CounterType& Station::selectedNumberChannels() const {
 	if ( _selectedNumberChannels )
 		return *_selectedNumberChannels;
 	throw Seiscomp::Core::ValueException("Station.selectedNumberChannels is not set");

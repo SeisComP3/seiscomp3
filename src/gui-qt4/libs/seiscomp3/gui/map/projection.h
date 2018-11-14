@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH and GFZ Potsdam                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -18,8 +18,11 @@
 
 
 #include <seiscomp3/core/interfacefactory.h>
+#include <seiscomp3/geo/boundingbox.h>
 #include <seiscomp3/gui/map/texturecache.h>
 #include <seiscomp3/gui/qt4.h>
+
+#include <QPainterPath>
 #include <QImage>
 
 
@@ -41,6 +44,23 @@ enum CompositionMode {
 	CompositionMode_Plus,        // Colors are added together
 	CompositionMode_Multiply     // Image pixels are multiplied with map pixels, alpha
 	                             // is ignored.
+};
+
+
+/**
+ * @brief The FilterMode enum define filter modes when drawing images and
+ *        map tiles.
+ */
+enum FilterMode {
+	FilterMode_Auto,     // Let the canvas decide how to filter the image
+	FilterMode_Nearest,  // The nearest image pixel for a subpixel is used
+	FilterMode_Bilinear  // The four neighbor pixels are interpolated for a subpixel
+};
+
+
+enum ClipHint {
+	NoClip, // Clipping not necessary, bounding box is completely contained
+	DoClip  // Clipping would help to reduce render time
 };
 
 
@@ -77,9 +97,24 @@ class SC_GUI_API Projection {
 		virtual bool isRectangular() const = 0;
 		virtual bool wantsGridAntialiasing() const = 0;
 
+		/**
+		 * @brief Updates the visible map bounding box. This function will be
+		 *        called *after* rendering, so after calling
+		 *        @render(QImage &, bool, TextureCache *).
+		 */
+		virtual void updateBoundingBox();
+
+		/**
+		 * @brief Returns the current visible map bounding box. Note that this
+		 *        bounding box will only be valid after the projection has
+		 *        been rendered otherwise it will be in an undefined state.
+		 * @return The bounding box currently visible.
+		 */
+		const Geo::GeoBoundingBox &boundingBox() const;
+
 		virtual bool project(QPoint &screenCoords, const QPointF &geoCoords) const = 0;
 		virtual bool unproject(QPointF &geoCoords, const QPoint &screenCoords) const = 0;
-	
+
 		virtual void centerOn(const QPointF &geoCoords) = 0;
 		virtual void displayRect(const QRectF& rect);
 
@@ -99,13 +134,49 @@ class SC_GUI_API Projection {
 
 		virtual bool drawLatCircle(QPainter &p, qreal lon);
 		virtual bool drawLonCircle(QPainter &p, qreal lat);
-		
+
 		/**
-		 * Returns true if the GUI object, represented by its bounding
-		 * box in geo coordinates, does not intersect the canvas.
+		 * Returns true if the GUI object, represented by its bounding box in geo
+		 * coordinates, does not intersect the canvas. Note: The default
+		 * implementation checks clipping against the map bounding box which is
+		 * perfectly OK in all situations given the bounding box is computed
+		 * correctly. If more complex checks needs to be implemented, then
+		 * override this method. The default implementation just calls
+		 * @isClipped(const Geo::GeoBoundingBox &).
+		 *
+		 * Warning: This method is deprecated. In future this virtual method
+		 * will be removed and the only clipping check will be against the map
+		 * bounding box. There is no need to delegate clipping to custom
+		 * projections as long as a correct bounding box is maintained.
 		 */
 		virtual bool isClipped(const QPointF &bboxLR, const QPointF &bboxUL) const;
 
+		bool isClipped(const Geo::GeoBoundingBox &bbox) const;
+
+		/**
+		 * @brief Projects a closed input geo polygon to a QPainterPath
+		 * @param screenPath The painter path in screen coordinates. That
+		 *                   path must represent the input polygon on screen.
+		 * @param n The number of input coordinates
+		 * @param poly The coordinates of the polygon. The polygon is assumed
+		 *             to be closed.
+		 * @param minPixelDist The minimum pixel distance two coordinates must
+		 *                     have to become two separate projections on screen.
+		 *                     If their distance is less then the coordinates
+		 *                     will collapse into a single pixel.
+		 * @return A flag that defines wether the returned path is valid.
+		 */
+		virtual bool project(QPainterPath &screenPath, size_t n,
+		                     const Geo::GeoCoordinate *poly, bool closed,
+		                     uint minPixelDist, ClipHint hint = NoClip) const;
+
+		/**
+		 *@brief Sets the number of grid lines for the largest screen dimension.
+		 *       The specified number is used in the grid distance calculation,
+		 *       @see gridDistance()
+		 *@since API Version 12.0.0
+		  */
+		void setGridLines(qreal numLines);
 
 	protected:
 		void setSize(int width, int height);
@@ -141,10 +212,19 @@ class SC_GUI_API Projection {
 		bool    _cursorVisible;
 
 		QRgb    _background;
+		qreal   _gridLines;
+
+		Geo::GeoBoundingBox _mapBoundingBox;
 };
 
 
 DEFINE_INTERFACE_FACTORY(Projection);
+
+
+inline const Geo::GeoBoundingBox &Projection::boundingBox() const {
+	return _mapBoundingBox;
+}
+
 
 #define REGISTER_PROJECTION_INTERFACE(Class, Service) \
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Gui::Map::Projection, Class> __##Class##InterfaceFactory__(Service)

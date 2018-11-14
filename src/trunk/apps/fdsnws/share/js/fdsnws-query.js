@@ -1,9 +1,9 @@
-function serialize(form) {
+function serialize(form, loc='query') {
 	if ( !form || form.nodeName !== "FORM" ) {
 		return;
 	}
 
-	var query = 'query';
+	var query = loc;
 	var element, option, i, j, q = [];
 	for ( i = 0; element = form.elements[i]; i++ ) {
 		if ( element.name === "" || element.disabled || element.offsetParent === null ) {
@@ -68,10 +68,20 @@ function serialize(form) {
 				break;
 
 			case 'select-multiple':
+				values = null
 				for ( j = 0; option = element.options[j]; j++ ) {
 					if ( option.selected ) {
-						q.push(element.name + "=" + encodeURIComponent(option.value));
+						v = encodeURIComponent(option.value)
+						if ( values === null ) {
+							values = v;
+						}
+						else {
+							values += "," + v;
+						}
 					}
+				}
+				if ( values !== null ) {
+					q.push(element.name + "=" + values);
 				}
 				break;
 			}
@@ -98,6 +108,10 @@ function serialize(form) {
 }
 
 function fdsnwsInitQueryForm() {
+	return fdsnwsInitQueryFormLocation('query')
+}
+
+function fdsnwsInitQueryFormLocation(loc) {
 	var queryForm = document.getElementById('query-form');
 	var queryURL = document.getElementById('query-url');
 
@@ -105,7 +119,7 @@ function fdsnwsInitQueryForm() {
 		var path = window.location.pathname.split('/');
 		path.pop();
 		var url = window.location.origin + path.join('/') + '/' +
-		          serialize(queryForm)
+		          serialize(queryForm, loc)
 		queryURL.setAttribute('href', url);
 		queryURL.innerHTML = url;
 	}

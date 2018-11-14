@@ -81,16 +81,16 @@ class Sensitivity : public Gain {
 
 		//! XML tag: FrequencyStart
 		void setFrequencyStart(const OPT(double)& frequencyStart);
-		double frequencyStart() const throw(Seiscomp::Core::ValueException);
+		double frequencyStart() const;
 
 		//! XML tag: FrequencyEnd
 		void setFrequencyEnd(const OPT(double)& frequencyEnd);
-		double frequencyEnd() const throw(Seiscomp::Core::ValueException);
+		double frequencyEnd() const;
 
 		//! Variation in decibels within the specified range.
 		//! XML tag: FrequencyDBVariation
 		void setFrequencyDBVariation(const OPT(double)& frequencyDBVariation);
-		double frequencyDBVariation() const throw(Seiscomp::Core::ValueException);
+		double frequencyDBVariation() const;
 
 
 	// ------------------------------------------------------------------
