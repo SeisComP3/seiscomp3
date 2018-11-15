@@ -82,6 +82,7 @@ namespace Core {
    - Added Seiscomp::Processing::MagnitudeProcessor::treatAsValidMagnitude()
    - Added Seiscomp::IO::Exporter::put(std::streambuf* buf, const ObjectList &objects);
    - Added Seiscomp::Gui::RecordMarker::drawBackground
+   - Made Seiscomp::Client::Application::version public
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
