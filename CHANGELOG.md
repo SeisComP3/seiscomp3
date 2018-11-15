@@ -150,6 +150,8 @@
     or displacement
   * Add travel time table selection, as default libtau (iasp91 and ak135) and
     LocSAT (iasp91, tab) can selected
+  * Fix synchronization of event type drop-down in event editor when the
+    event type was changed through "With additional options" commit dialog
 
 * scmm
 

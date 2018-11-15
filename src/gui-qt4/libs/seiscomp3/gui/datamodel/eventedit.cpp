@@ -1397,6 +1397,8 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 			if ( changePreferredFM )
 				updatePreferredFMIndex();
 
+			updateEvent();
+
 			return;
 		}
 	}
