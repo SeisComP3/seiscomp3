@@ -746,8 +746,11 @@ int RectangularProjection::lineSteps(const QPointF &p0, const QPointF &p1) {
 	// divide its manhattanLength by 20
 	double dist, azi1, azi2;
 	Math::Geo::delazi(p0.y(), p0.x(), p1.y(), p1.x(), &dist, &azi1, &azi2);
+	azi1 = fabs(azi1);
 
-	if ( azi1 > 359.0 && azi1 < 1.0 && azi1 > 179.0 && azi1 < 180.0 )
+	if ( (azi1 < 1)
+	  || (azi1 > 359.0 && azi1 < 361.0)
+	  || (azi1 > 179.0 && azi1 < 180.0) )
 		return 1;
 
 	//return dist * pixelPerDegree() * (1.0 / 20.0);
