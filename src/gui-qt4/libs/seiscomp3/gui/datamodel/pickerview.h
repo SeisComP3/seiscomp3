@@ -459,8 +459,6 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void zoom(float factor);
 		void applyTimeRange(double,double);
 
-		void scroll(int offset);
-
 		void sortByState();
 		void alignByState();
 		void componentByState();

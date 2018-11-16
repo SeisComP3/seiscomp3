@@ -4540,15 +4540,6 @@ void AmplitudeView::move(double offset) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeView::scroll(int offset) {
-	_currentRecord->setTracePaintOffset(-offset);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void AmplitudeView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 	float smin = 0;
 	float smax = 0;
