@@ -2656,6 +2656,8 @@ void PickerView::init() {
 	connect(_ui.actionSortByResidual, SIGNAL(triggered(bool)),
 	        this, SLOT(sortByResidual()));
 
+	connect(_ui.actionShowAllComponents, SIGNAL(triggered(bool)),
+	        this, SLOT(showAllComponents(bool)));
 	connect(_ui.actionShowZComponent, SIGNAL(triggered(bool)),
 	        this, SLOT(showZComponent()));
 	connect(_ui.actionShowNComponent, SIGNAL(triggered(bool)),
@@ -3215,6 +3217,13 @@ bool PickerView::setConfig(const Config &c, QString *error) {
 		}
 		else
 			_currentRecord->setDrawMode(RecordWidget::Single);
+
+		_ui.actionShowAllComponents->setEnabled(true);
+		_ui.actionShowAllComponents->setChecked(_currentRecord->drawMode() == RecordWidget::InRows);
+	}
+	else {
+		_ui.actionShowAllComponents->setChecked(false);
+		_ui.actionShowAllComponents->setEnabled(false);
 	}
 
 	/*
@@ -6255,6 +6264,9 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 	else
 		_currentRecord->setDrawMode(RecordWidget::Single);
 
+	_ui.actionShowAllComponents->setEnabled(true);
+	_ui.actionShowAllComponents->setChecked(_currentRecord->drawMode() == RecordWidget::InRows);
+
 	/*
 	_currentRecord->clearMarker();
 	for ( int i = 0; i < item->widget()->markerCount(); ++i )
@@ -6715,6 +6727,17 @@ void PickerView::sortByPhase(const QString& phase) {
 	_ui.actionSortByDistance->setChecked(false);
 	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(false);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::showAllComponents(bool showAll) {
+	if ( _currentRecord ) {
+		_currentRecord->setDrawMode(showAll ? RecordWidget::InRows : RecordWidget::Single);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
