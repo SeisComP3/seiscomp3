@@ -332,8 +332,6 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 		void zoom(float factor);
 		void applyTimeRange(double,double);
 
-		void scroll(int offset);
-
 		void sortByState();
 		void alignByState();
 		void componentByState();

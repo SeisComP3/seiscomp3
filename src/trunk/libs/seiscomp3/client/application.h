@@ -537,6 +537,10 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 */
 		void handleNotifier(DataModel::Notifier *notifier);
 
+		//! Returns the applications version. The default implementation
+		//! returns NULL and uses the global framework version instead.
+		virtual const char *version();
+
 
 	// ----------------------------------------------------------------------
 	//  Static public members
@@ -560,10 +564,6 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 	//  Protected functions
 	// ----------------------------------------------------------------------
 	protected:
-		//! Returns the applications version. The default implementation
-		//! returns NULL and uses the global framework version instead.
-		virtual const char *version();
-
 		//! Reimplement this method to add additional commandline groups
 		//! and/or options
 		virtual void createCommandLineDescription();

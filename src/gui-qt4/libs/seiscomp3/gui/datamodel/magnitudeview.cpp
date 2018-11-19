@@ -1418,8 +1418,9 @@ void MagnitudeView::recalculateMagnitude() {
 	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
 	if ( proc ) {
 		double Mw, MwError;
+		string type = proc->typeMw();
+
 		if ( proc->estimateMw(netmag, Mw, MwError) == Processing::MagnitudeProcessor::OK ) {
-			string type = proc->typeMw();
 			idx = findType(_tabMagnitudes, type.c_str());
 			//int idx = _ui.comboMagType->findText(type.c_str());
 			if ( idx != -1 ) {
@@ -1441,6 +1442,45 @@ void MagnitudeView::recalculateMagnitude() {
 
 				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(magMw->type().c_str()).arg(magMw->magnitude().value(), 0, 'f', 2));
 			}
+			else {
+				MagnitudePtr magMw;
+
+				CreationInfo ci;
+				ci.setAgencyID(SCApp->agencyID());
+				ci.setAuthor(SCApp->author());
+				ci.setCreationTime(Core::Time::GMT());
+				stdev = stdev > MwError ? stdev : MwError;
+
+				for ( size_t m = 0; m < _origin->magnitudeCount(); ++m ) {
+					if ( _origin->magnitude(m)->type() == proc->typeMw() ) {
+						magMw = _origin->magnitude(m);
+						break;
+					}
+				}
+
+				if ( !magMw ) {
+					magMw = Magnitude::Create();
+					_origin->add(magMw.get());
+				}
+
+				magMw->setCreationInfo(ci);
+				magMw->setType(proc->typeMw());
+				magMw->setMagnitude(RealQuantity(Mw, stdev, Core::None, Core::None, Core::None));
+
+				try {
+					magMw->setStationCount(_netMag->stationCount());
+				}
+				catch ( ... ) {
+					magMw->setStationCount(Core::None);
+				}
+
+				addMagnitude(magMw.get());
+			}
+		}
+		else {
+			idx = findType(_tabMagnitudes, type.c_str());
+			if ( idx != -1 )
+				_tabMagnitudes->removeTab(idx);
 		}
 	}
 

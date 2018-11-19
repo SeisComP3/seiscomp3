@@ -69,6 +69,8 @@
 %newobject Seiscomp::DataModel::NotifierMessage::get;
 %newobject Seiscomp::DataModel::DiffMerge::diff2Message;
 %newobject Seiscomp::DataModel::Diff::diff2Message;
+%newobject Seiscomp::DataModel::Notifier::GetMessage;
+%newobject Seiscomp::DataModel::Notifier::Create;
 %ignore Seiscomp::DataModel::Diff::diff;
 %ignore Seiscomp::DataModel::Diff2::diff;
 

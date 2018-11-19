@@ -67,7 +67,6 @@ bool AmplitudeProcessor_MLv::computeAmplitude(const DoubleArray &data,
 	amplitude->value *= 2.0;
 	return true;
 }
-
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

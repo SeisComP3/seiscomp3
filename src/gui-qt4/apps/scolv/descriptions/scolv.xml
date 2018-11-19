@@ -55,7 +55,10 @@
 				</parameter>
 				<parameter name="commonEventTypes" type="list:string">
 					<description>
-					A list of event types which are allowed to be assigned to an event.
+					A list of event types which are commonly set. This defines
+					a priority list which will be displayed on top of the event
+					type selection menu. Additionally the remaining (non-prioritized)
+					types are displayed with less contrast.
 					The order is preserved in the event editor as well as in the drop-down
 					list of the &quot;Commit with additional options&quot; dialog.
 					</description>

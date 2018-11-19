@@ -226,14 +226,19 @@ class SC_GUI_API RecordWidget : public QWidget {
 				reset();
 			}
 
-			float                     amplMin;
-			float                     amplMax;
-			float                     offset;
+			float                     dyMin;   // Data minimum value
+			float                     dyMax;   // Data maximum value
+			float                     dOffset; // Data offset
 			float                     absMax;
-			int                       yMin;
-			int                       yMax;
+			int                       pyMin;   //
+			int                       pyMax;
 			float                     fyMin;
 			float                     fyMax;
+
+			float                     yMin;
+			float                     yMax;
+			float                     yOffset; // The used offset
+
 			float                     timingQuality;
 			int                       timingQualityCount;
 			bool                      dirty;
@@ -241,8 +246,8 @@ class SC_GUI_API RecordWidget : public QWidget {
 			AbstractRecordPolylinePtr poly;
 
 			void reset() {
-				amplMin = amplMax = offset  = absMax = 0;
-				yMin = yMax = 0;
+				dyMin = dyMax = dOffset  = absMax = 0;
+				pyMin = pyMax = 0;
 				visible = false;
 				poly = NULL;
 			}
@@ -495,9 +500,6 @@ class SC_GUI_API RecordWidget : public QWidget {
 		//bool setGain(float);
 		//float gain() const;
 
-		void setTracePaintOffset(int offset);
-		int tracePaintOffset() const;
-
 		const DataModel::WaveformStreamID& streamID() const;
 
 		void setSlotCount(int);
@@ -704,8 +706,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		                       const Record*, const Record* = NULL) const;
 
 		void prepareRecords(Stream *s);
-		void drawRecords(Stream *s, int slot, int h);
-		void centerLine(int l, int h);
+		void drawRecords(Stream *s, int slot);
 
 		void drawAxis(QPainter &painter, const QPen &p);
 

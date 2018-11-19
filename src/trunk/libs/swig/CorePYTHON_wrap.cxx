@@ -3012,138 +3012,141 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_DataArray swig_types[3]
 #define SWIGTYPE_p_ImplType swig_types[4]
 #define SWIGTYPE_p_PackType swig_types[5]
-#define SWIGTYPE_p_ReferenceType swig_types[6]
-#define SWIGTYPE_p_RootType swig_types[7]
-#define SWIGTYPE_p_Seiscomp__Array swig_types[8]
-#define SWIGTYPE_p_Seiscomp__BitSet swig_types[9]
-#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[10]
-#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[11]
-#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[12]
-#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[13]
-#define SWIGTYPE_p_Seiscomp__Core__EGreensFunctionComponentNames swig_types[14]
-#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[15]
-#define SWIGTYPE_p_Seiscomp__Core__Enumeration swig_types[16]
-#define SWIGTYPE_p_Seiscomp__Core__FrameworkVersion swig_types[17]
-#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[18]
-#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[19]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[20]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[21]
-#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[22]
-#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[23]
-#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[24]
-#define SWIGTYPE_p_Seiscomp__Core__MessageIterator swig_types[25]
-#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[26]
-#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[75]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[76]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[77]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[78]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[81]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[83]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[84]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[85]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[86]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[87]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[88]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[89]
-#define SWIGTYPE_p_TagType swig_types[90]
-#define SWIGTYPE_p_Type swig_types[91]
-#define SWIGTYPE_p_bool swig_types[92]
-#define SWIGTYPE_p_boost__dynamic_bitsetT_t swig_types[93]
-#define SWIGTYPE_p_boost__none_t swig_types[94]
-#define SWIGTYPE_p_char swig_types[95]
-#define SWIGTYPE_p_const_iterator swig_types[96]
-#define SWIGTYPE_p_double swig_types[97]
-#define SWIGTYPE_p_float swig_types[98]
-#define SWIGTYPE_p_int swig_types[99]
-#define SWIGTYPE_p_iterator swig_types[100]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[101]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[102]
-#define SWIGTYPE_p_std__exception swig_types[103]
-#define SWIGTYPE_p_std__istream swig_types[104]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[105]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[106]
-#define SWIGTYPE_p_std__ostream swig_types[107]
-#define SWIGTYPE_p_std__string swig_types[108]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[109]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[110]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[111]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[112]
-#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[113]
-#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[114]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[115]
-#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[116]
-#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[117]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[118]
-#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[119]
-#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[120]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[121]
-#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[122]
-#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[123]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[124]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[125]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[126]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[127]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[128]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[129]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[130]
-#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[131]
-#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[132]
-#define SWIGTYPE_p_time_t swig_types[133]
-#define SWIGTYPE_p_timeval swig_types[134]
-#define SWIGTYPE_p_void swig_types[135]
-static swig_type_info *swig_types[137];
-static swig_module_info swig_module = {swig_types, 136, 0, 0, 0, 0};
+#define SWIGTYPE_p_Properties swig_types[6]
+#define SWIGTYPE_p_PropertyValue swig_types[7]
+#define SWIGTYPE_p_ReferenceType swig_types[8]
+#define SWIGTYPE_p_RootType swig_types[9]
+#define SWIGTYPE_p_Seiscomp__Array swig_types[10]
+#define SWIGTYPE_p_Seiscomp__BitSet swig_types[11]
+#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[12]
+#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[13]
+#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[14]
+#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[15]
+#define SWIGTYPE_p_Seiscomp__Core__EGreensFunctionComponentNames swig_types[16]
+#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[17]
+#define SWIGTYPE_p_Seiscomp__Core__Enumeration swig_types[18]
+#define SWIGTYPE_p_Seiscomp__Core__FrameworkVersion swig_types[19]
+#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[20]
+#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[21]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[22]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[23]
+#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[24]
+#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[25]
+#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[26]
+#define SWIGTYPE_p_Seiscomp__Core__MessageIterator swig_types[27]
+#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[77]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[78]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[79]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[80]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[81]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[83]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[85]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[87]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[89]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[90]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[91]
+#define SWIGTYPE_p_TagType swig_types[92]
+#define SWIGTYPE_p_Type swig_types[93]
+#define SWIGTYPE_p_bool swig_types[94]
+#define SWIGTYPE_p_boost__dynamic_bitsetT_t swig_types[95]
+#define SWIGTYPE_p_boost__none_t swig_types[96]
+#define SWIGTYPE_p_boost__variantT_int_double_std__string_t swig_types[97]
+#define SWIGTYPE_p_char swig_types[98]
+#define SWIGTYPE_p_const_iterator swig_types[99]
+#define SWIGTYPE_p_double swig_types[100]
+#define SWIGTYPE_p_float swig_types[101]
+#define SWIGTYPE_p_int swig_types[102]
+#define SWIGTYPE_p_iterator swig_types[103]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[104]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[105]
+#define SWIGTYPE_p_std__exception swig_types[106]
+#define SWIGTYPE_p_std__istream swig_types[107]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[108]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[109]
+#define SWIGTYPE_p_std__ostream swig_types[110]
+#define SWIGTYPE_p_std__string swig_types[111]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[112]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[113]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[114]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[115]
+#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[116]
+#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[117]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[118]
+#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[119]
+#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[120]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[121]
+#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[122]
+#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[123]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[124]
+#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[125]
+#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[126]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[127]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[128]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[129]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[130]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[131]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[132]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[133]
+#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[134]
+#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[135]
+#define SWIGTYPE_p_time_t swig_types[136]
+#define SWIGTYPE_p_timeval swig_types[137]
+#define SWIGTYPE_p_void swig_types[138]
+static swig_type_info *swig_types[140];
+static swig_module_info swig_module = {swig_types, 139, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3770,6 +3773,37 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+#endif
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else {
+    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
+    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
+  }
+#endif
+}
+
+
 /* Getting isfinite working pre C99 across multiple platforms is non-trivial. Users can provide SWIG_isfinite on older platforms. */
 #ifndef SWIG_isfinite
 /* isfinite() is a macro for C99 */
@@ -3905,11 +3939,6 @@ SWIGINTERN PyObject *Seiscomp_Array_setNumpy(Seiscomp::Array *self,PyObject *obj
 			Py_RETURN_NONE;
 	}
 
-#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
-#  define SWIG_LONG_LONG_AVAILABLE
-#endif
-
-
 #ifdef SWIG_LONG_LONG_AVAILABLE
 SWIGINTERN int
 SWIG_AsVal_unsigned_SS_long_SS_long (PyObject *obj, unsigned long long *val)
@@ -3969,32 +3998,6 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
   }
 #endif
   return res;
-}
-
-
-#ifdef SWIG_LONG_LONG_AVAILABLE
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
-}
-#endif
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  if (sizeof(size_t) <= sizeof(unsigned long)) {
-#endif
-    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  } else {
-    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
-    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
-  }
-#endif
 }
 
 SWIGINTERN void Seiscomp_Core_MessageIterator_step(Seiscomp::Core::MessageIterator *self){
@@ -12504,6 +12507,322 @@ SWIGINTERN PyObject *_wrap_GenericArchive_versionMinor(PyObject *SWIGUNUSEDPARM(
     }
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_propertyCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GenericArchive_propertyCount",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_propertyCount" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  {
+    try {
+      result = ((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->propertyCount();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_setProperty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  char *arg2 = (char *) 0 ;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:GenericArchive_setProperty",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_setProperty" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericArchive_setProperty" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_boost__variantT_int_double_std__string_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GenericArchive_setProperty" "', argument " "3"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GenericArchive_setProperty" "', argument " "3"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue * >(argp3);
+  {
+    try {
+      result = (bool)(arg1)->setProperty((char const *)arg2,(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue const &)*arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_property(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericArchive_property",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_property" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericArchive_property" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  {
+    try {
+      result = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue *)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->property((char const *)arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_boost__variantT_int_double_std__string_t, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_propertyInt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericArchive_propertyInt",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_propertyInt" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericArchive_propertyInt" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  {
+    try {
+      result = (int *)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->propertyInt((char const *)arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_int, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_propertyDouble(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericArchive_propertyDouble",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_propertyDouble" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericArchive_propertyDouble" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  {
+    try {
+      result = (double *)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->propertyDouble((char const *)arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_double, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_propertyString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericArchive_propertyString",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_propertyString" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericArchive_propertyString" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  {
+    try {
+      result = (std::string *)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->propertyString((char const *)arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__string, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_clearProperties(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GenericArchive_clearProperties",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_clearProperties" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  {
+    try {
+      (arg1)->clearProperties();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -46187,6 +46506,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GenericArchive_version", _wrap_GenericArchive_version, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_versionMajor", _wrap_GenericArchive_versionMajor, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_versionMinor", _wrap_GenericArchive_versionMinor, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_propertyCount", _wrap_GenericArchive_propertyCount, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_setProperty", _wrap_GenericArchive_setProperty, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_property", _wrap_GenericArchive_property, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_propertyInt", _wrap_GenericArchive_propertyInt, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_propertyDouble", _wrap_GenericArchive_propertyDouble, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_propertyString", _wrap_GenericArchive_propertyString, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_clearProperties", _wrap_GenericArchive_clearProperties, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_read", _wrap_GenericArchive_read, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_write", _wrap_GenericArchive_write, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_readObject", _wrap_GenericArchive_readObject, METH_VARARGS, NULL},
@@ -46914,6 +47240,8 @@ static swig_type_info _swigt__p_AttachementType = {"_p_AttachementType", "Attach
 static swig_type_info _swigt__p_DataArray = {"_p_DataArray", "DataArray *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ImplType = {"_p_ImplType", "ImplType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PackType = {"_p_PackType", "PackType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Properties = {"_p_Properties", "Properties *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_PropertyValue = {"_p_PropertyValue", "PropertyValue *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ReferenceType = {"_p_ReferenceType", "ReferenceType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_RootType = {"_p_RootType", "RootType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Array = {"_p_Seiscomp__Array", "Seiscomp::Array *", 0, 0, (void*)0, 0};
@@ -47003,6 +47331,7 @@ static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_bool = {"_p_bool", "bool *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__dynamic_bitsetT_t = {"_p_boost__dynamic_bitsetT_t", "Seiscomp::BitSet::ImplType *|boost::dynamic_bitset< > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__none_t = {"_p_boost__none_t", "::boost::none_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__variantT_int_double_std__string_t = {"_p_boost__variantT_int_double_std__string_t", "boost::variant< int,double,std::string > *|Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
@@ -47052,6 +47381,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_DataArray,
   &_swigt__p_ImplType,
   &_swigt__p_PackType,
+  &_swigt__p_Properties,
+  &_swigt__p_PropertyValue,
   &_swigt__p_ReferenceType,
   &_swigt__p_RootType,
   &_swigt__p_Seiscomp__Array,
@@ -47141,6 +47472,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_bool,
   &_swigt__p_boost__dynamic_bitsetT_t,
   &_swigt__p_boost__none_t,
+  &_swigt__p_boost__variantT_int_double_std__string_t,
   &_swigt__p_char,
   &_swigt__p_const_iterator,
   &_swigt__p_double,
@@ -47190,6 +47522,8 @@ static swig_cast_info _swigc__p_AttachementType[] = {  {&_swigt__p_AttachementTy
 static swig_cast_info _swigc__p_DataArray[] = {  {&_swigt__p_DataArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ImplType[] = {  {&_swigt__p_ImplType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackType[] = {  {&_swigt__p_PackType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Properties[] = {  {&_swigt__p_Properties, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_PropertyValue[] = {  {&_swigt__p_PropertyValue, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ReferenceType[] = {  {&_swigt__p_ReferenceType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_RootType[] = {  {&_swigt__p_RootType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Array[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__Array, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Array, 0, 0},{0, 0, 0, 0}};
@@ -47279,6 +47613,7 @@ static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_bool[] = {  {&_swigt__p_bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__dynamic_bitsetT_t[] = {  {&_swigt__p_boost__dynamic_bitsetT_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__none_t[] = {  {&_swigt__p_boost__none_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__variantT_int_double_std__string_t[] = {  {&_swigt__p_boost__variantT_int_double_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
@@ -47328,6 +47663,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_DataArray,
   _swigc__p_ImplType,
   _swigc__p_PackType,
+  _swigc__p_Properties,
+  _swigc__p_PropertyValue,
   _swigc__p_ReferenceType,
   _swigc__p_RootType,
   _swigc__p_Seiscomp__Array,
@@ -47417,6 +47754,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_bool,
   _swigc__p_boost__dynamic_bitsetT_t,
   _swigc__p_boost__none_t,
+  _swigc__p_boost__variantT_int_double_std__string_t,
   _swigc__p_char,
   _swigc__p_const_iterator,
   _swigc__p_double,

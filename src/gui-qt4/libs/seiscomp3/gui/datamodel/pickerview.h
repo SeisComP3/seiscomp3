@@ -414,6 +414,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void sortByResidual();
 		void sortByPhase(const QString&);
 
+		void showAllComponents(bool);
 		void showZComponent();
 		void showNComponent();
 		void showEComponent();
@@ -458,8 +459,6 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void move(double offset);
 		void zoom(float factor);
 		void applyTimeRange(double,double);
-
-		void scroll(int offset);
 
 		void sortByState();
 		void alignByState();

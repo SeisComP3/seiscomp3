@@ -985,6 +985,27 @@ class GenericArchive(_object):
     def versionMinor(self):
         return _Core.GenericArchive_versionMinor(self)
 
+    def propertyCount(self):
+        return _Core.GenericArchive_propertyCount(self)
+
+    def setProperty(self, name, v):
+        return _Core.GenericArchive_setProperty(self, name, v)
+
+    def property(self, name):
+        return _Core.GenericArchive_property(self, name)
+
+    def propertyInt(self, name):
+        return _Core.GenericArchive_propertyInt(self, name)
+
+    def propertyDouble(self, name):
+        return _Core.GenericArchive_propertyDouble(self, name)
+
+    def propertyString(self, name):
+        return _Core.GenericArchive_propertyString(self, name)
+
+    def clearProperties(self):
+        return _Core.GenericArchive_clearProperties(self)
+
     def read(self, *args):
         return _Core.GenericArchive_read(self, *args)
 

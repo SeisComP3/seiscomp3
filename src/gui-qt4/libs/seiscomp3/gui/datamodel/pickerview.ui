@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>910</width>
-    <height>692</height>
+    <width>945</width>
+    <height>738</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -406,8 +406,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>667</y>
-     <width>910</width>
+     <y>713</y>
+     <width>945</width>
      <height>25</height>
     </rect>
    </property>
@@ -610,7 +610,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>910</width>
+     <width>945</width>
      <height>25</height>
     </rect>
    </property>
@@ -709,6 +709,7 @@
      <addaction name="actionClipComponentsToViewport" />
     </widget>
     <addaction name="actionDefaultView" />
+    <addaction name="actionShowAllComponents" />
     <addaction name="actionShowUsedStations" />
     <addaction name="actionShowTraceValuesInNmS" />
     <addaction name="actionShowUnassociatedPicks" />
@@ -1560,6 +1561,23 @@
    </property>
    <property name="visible" >
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShowAllComponents" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show all components</string>
+   </property>
+   <property name="iconText" >
+    <string>Show all components</string>
+   </property>
+   <property name="toolTip" >
+    <string>Toggles between showing all three components or the active component only</string>
+   </property>
+   <property name="shortcut" >
+    <string>t</string>
    </property>
   </action>
  </widget>

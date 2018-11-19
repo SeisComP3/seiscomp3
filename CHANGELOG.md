@@ -5,6 +5,16 @@
 ```SC_API_VERSION 12.0.0```
 ```Schema version 0.11```
 
+----
+
+**The ML amplitude calculation has changed because of a bug that existed in
+previous versions.** This bug caused a scaling of two for the zero-to-peak
+amplitudes. This is fixed now and it results in ML magnitudes that are
+log10(2) ~= 0.3 lower. If you want to preserve the former behaviour, apply a
+magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
+
+----
+
 * scevtstreams
 
   * Remove duplicate lines in output
@@ -150,6 +160,10 @@
     or displacement
   * Add travel time table selection, as default libtau (iasp91 and ak135) and
     LocSAT (iasp91, tab) can selected
+  * Fix synchronization of event type drop-down in event editor when the
+    event type was changed through "With additional options" commit dialog
+  * Add hotkey 't' to toggle showing all three components in the current
+    trace widget or just the active component
 
 * scmm
 

@@ -46,6 +46,7 @@ namespace Core {
    - Added Seiscomp::Core::Time::localTimeZoneOffset()
    - Removed geo prefix of all headers under <seiscomp3/geo/>
    - Added Seiscomp::Util::UnitConverter
+   - Added Seiscomp::Processing::WaveformProcessor::Status enumeration TravelTimeEstimateFailed
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration InvalidAmplitudeUnit
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration ReceiverOutOfRegions
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration RayPathOutOfRegions
@@ -82,6 +83,7 @@ namespace Core {
    - Added Seiscomp::Processing::MagnitudeProcessor::treatAsValidMagnitude()
    - Added Seiscomp::IO::Exporter::put(std::streambuf* buf, const ObjectList &objects);
    - Added Seiscomp::Gui::RecordMarker::drawBackground
+   - Made Seiscomp::Client::Application::version public
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
