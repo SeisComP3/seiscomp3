@@ -46,6 +46,7 @@ namespace Core {
    - Added Seiscomp::Core::Time::localTimeZoneOffset()
    - Removed geo prefix of all headers under <seiscomp3/geo/>
    - Added Seiscomp::Util::UnitConverter
+   - Added Seiscomp::Processing::WaveformProcessor::Status enumeration TravelTimeEstimateFailed
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration InvalidAmplitudeUnit
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration ReceiverOutOfRegions
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration RayPathOutOfRegions

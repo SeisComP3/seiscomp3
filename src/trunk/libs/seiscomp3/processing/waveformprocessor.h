@@ -139,7 +139,9 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 				ReceiverOutOfRegions,
 				//! The entire raypath does not lie entirely in the supported
 				//! regions
-				RayPathOutOfRegions
+				RayPathOutOfRegions,
+				//! Travel time table lookup failed
+				TravelTimeEstimateFailed
 			),
 			ENAMES(
 				"waiting for data",
@@ -167,7 +169,8 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 				"incomplete metadata",
 				"epicenter out of regions",
 				"receiver out of regions",
-				"ray path out of regions"
+				"ray path out of regions",
+				"travel time estimate failed"
 			)
 		);
 
