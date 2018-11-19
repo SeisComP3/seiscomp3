@@ -1035,6 +1035,11 @@ class Application(seiscomp3.Core.InterruptibleObject):
         return _Client.Application_handleNotifier(self, notifier)
 
 
+    def version(self):
+        """version(Application self) -> char const *"""
+        return _Client.Application_version(self)
+
+
     def Instance():
         """Instance() -> Application"""
         return _Client.Application_Instance()
@@ -1046,11 +1051,6 @@ class Application(seiscomp3.Core.InterruptibleObject):
         return _Client.Application_HandleSignals(termination, crash)
 
     HandleSignals = staticmethod(HandleSignals)
-
-    def version(self):
-        """version(Application self) -> char const *"""
-        return _Client.Application_version(self)
-
 
     def createCommandLineDescription(self):
         """createCommandLineDescription(Application self)"""
@@ -1485,11 +1485,6 @@ class StreamApplication(Application):
     def handleAlarm(self):
         """handleAlarm(StreamApplication self)"""
         return _Client.StreamApplication_handleAlarm(self)
-
-
-    def version(self):
-        """version(StreamApplication self) -> char const *"""
-        return _Client.StreamApplication_version(self)
 
 
     def createCommandLineDescription(self):

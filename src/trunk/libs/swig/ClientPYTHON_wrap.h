@@ -35,9 +35,6 @@ public:
     }
     virtual void printUsage() const;
     virtual char const *version();
-    virtual char const *versionSwigPublic() {
-      return Seiscomp::Client::Application::version();
-    }
     virtual void createCommandLineDescription();
     virtual void createCommandLineDescriptionSwigPublic() {
       Seiscomp::Client::Application::createCommandLineDescription();
@@ -234,9 +231,6 @@ public:
     }
     virtual void printUsage() const;
     virtual char const *version();
-    virtual char const *versionSwigPublic() {
-      return Seiscomp::Client::Application::version();
-    }
     virtual void createCommandLineDescription();
     virtual void createCommandLineDescriptionSwigPublic() {
       Seiscomp::Client::Application::createCommandLineDescription();
