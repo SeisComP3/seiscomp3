@@ -531,6 +531,8 @@ class FDSNDataSelect(resource.Resource):
 		# Open record stream
 		rs = _MyRecordStream(self._rsURL, tracker, self.__bufferSize)
 
+		forbidden = None
+
 		# Add request streams
 		# iterate over inventory networks
 		for s in ro.streams:
@@ -555,7 +557,18 @@ class FDSNDataSelect(resource.Resource):
 							     not self.__access.authorize(self.__user,
 							         net.code(), sta.code(), loc.code(),
 							         cha.code(), start_time, end_time))):
+
+								if tracker:
+									net_class = 't' if net.code()[0] in "0123456789XYZ" else 'p'
+									tracker.line_status(start_time, end_time,
+									    net.code(), sta.code(), cha.code(), loc.code(),
+									    True, net_class, True, [],
+									    "fdsnws", "DENIED", 0, "")
+
+								forbidden = forbidden or (forbidden is None)
 								continue
+
+							forbidden = False
 
 							# enforce maximum sample per request restriction
 							if maxSamples is not None:
@@ -589,6 +602,22 @@ class FDSNDataSelect(resource.Resource):
 							             cha.code(), start_time, end_time,
 							             utils.isRestricted(cha),
 							             sta.archiveNetworkCode())
+
+		if forbidden:
+			if tracker:
+				tracker.volume_status("fdsnws", "NODATA", 0, "")
+				tracker.request_status("END", "")
+
+			msg = "access denied"
+			return HTTP.renderErrorPage(req, http.FORBIDDEN, msg, ro)
+
+		elif forbidden is None:
+			if tracker:
+				tracker.volume_status("fdsnws", "NODATA", 0, "")
+				tracker.request_status("END", "")
+
+			msg = "no metadata found"
+			return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix.replace("%time",
