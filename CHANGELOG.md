@@ -6,11 +6,13 @@
 ```Schema version 0.11```
 
 ----
+
 **The ML amplitude calculation has changed because of a bug that existed in
-  previous versions.** This bug caused a scaling of two for the zero-to-peak
-  amplitudes. This is fixed now and it results in ML magnitudes that are
-  log10(2) ~= 0.3 lower. If you want to preserve the former behaviour, apply a
-  magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
+previous versions.** This bug caused a scaling of two for the zero-to-peak
+amplitudes. This is fixed now and it results in ML magnitudes that are
+log10(2) ~= 0.3 lower. If you want to preserve the former behaviour, apply a
+magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
+
 ----
 
 * scevtstreams
