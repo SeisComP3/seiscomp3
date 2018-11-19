@@ -495,6 +495,12 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 			}
 			nptr = endptr;
 
+			while ( isspace(*nptr) ) ++nptr;
+
+			// Skip comments
+			if ( strncmp(nptr, "--", 2) == 0 )
+				nptr = NULL;
+
 			// increase number of succesfully read points
 			pi += 1;
 
@@ -530,14 +536,14 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 
 	if ( fileValid ) {
 		_features.insert(_features.end(), features.begin(), features.end());
+		return true;
 	}
 	else {
 		for ( size_t i = 0; i < features.size(); ++i ) {
 			delete features[i];
 		}
+		return false;
 	}
-
-	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
