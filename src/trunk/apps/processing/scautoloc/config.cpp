@@ -168,6 +168,7 @@ void Autoloc3::Config::dump() const
 	SEISCOMP_INFO("offline                          %s",     offline ? "true":"false");
 	SEISCOMP_INFO("test                             %s",     test ? "true":"false");
 	SEISCOMP_INFO("playback                         %s",     playback ? "true":"false");
+	SEISCOMP_INFO("useManualPicks                   %s",     useManualPicks ? "true":"false");
 	SEISCOMP_INFO("useManualOrigins                 %s",     useManualOrigins ? "true":"false");
 // This isn't used still so we don't want to confuse the user....
 //	SEISCOMP_INFO("useImportedOrigins               %s",     useImportedOrigins ? "true":"false");

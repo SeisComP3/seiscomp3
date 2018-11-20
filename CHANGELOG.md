@@ -36,6 +36,9 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
   * Fix bug that caused autoloc.useManualOrigins to always be treated
     as true
+  * Fix bug that caused autoloc.useManualPicks to not be used as specified in
+    config but rather always treated as false (causing this option to only work
+    when calling scautoloc from command line with --use-manual-picks)
 
 * scdumpcfg
 
