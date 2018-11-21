@@ -207,6 +207,11 @@ class AuthResource(resource.Resource):
 		try:
 			verified = self.__gpg.decrypt(request.content.getvalue())
 
+		except OSError, e:
+			msg = "gpg decrypt error"
+			Logging.warning("%s: %s" % (msg, str(e)))
+			return HTTP.renderErrorPage(request, http.INTERNAL_SERVER_ERROR, msg, None)
+		
 		except Exception, e:
 			msg = "invalid token"
 			Logging.warning("%s: %s" % (msg, str(e)))

@@ -36,6 +36,9 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
   * Fix bug that caused autoloc.useManualOrigins to always be treated
     as true
+  * Fix bug that caused autoloc.useManualPicks to not be used as specified in
+    config but rather always treated as false (causing this option to only work
+    when calling scautoloc from command line with --use-manual-picks)
 
 * scdumpcfg
 
@@ -87,6 +90,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Add data availability support according to the IRIS webservice
     availability http://service.iris.edu/irisws/availability/1/ under
     path ```ext/availability```
+  * Fix memory leak which was caused by active request tracking
 
 * fdsnxml2inv
 
@@ -164,6 +168,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     event type was changed through "With additional options" commit dialog
   * Add hotkey 't' to toggle showing all three components in the current
     trace widget or just the active component
+  * Add checkbox to toggle spectrogram display between smooth and nearest neighbor
 
 * scmm
 

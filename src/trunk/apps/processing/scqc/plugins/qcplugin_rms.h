@@ -25,12 +25,13 @@ namespace Qc {
 DEFINE_SMARTPOINTER(QcPluginRms);
 
 class QcPluginRms : public QcPlugin {
-    DECLARE_SC_CLASS(QcPluginRms);
+	DECLARE_SC_CLASS(QcPluginRms);
 
 public:
-    QcPluginRms();
-    std::string registeredName() const;
-    std::vector<std::string> parameterNames() const;
+	QcPluginRms();
+	bool init(QcApp* app, QcConfig *cfg, std::string streamID);
+	std::string registeredName() const;
+	std::vector<std::string> parameterNames() const;
 };
 
 

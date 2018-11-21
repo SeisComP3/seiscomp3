@@ -269,6 +269,7 @@ bool App::initConfiguration() {
 
 	try { _config.minStaCountIgnorePKP = configGetInt("autoloc.minStaCountIgnorePKP"); } catch (...) {}
 	try { _config.reportAllPhases = configGetBool("autoloc.reportAllPhases"); } catch (...) {}
+	try { _config.useManualPicks = configGetBool("autoloc.useManualPicks"); } catch (...) {}
 	try { _config.useManualOrigins = configGetBool("autoloc.useManualOrigins"); } catch (...) {}
 	try { _config.useImportedOrigins = configGetBool("autoloc.useImportedOrigins"); } catch (...) {}
 
