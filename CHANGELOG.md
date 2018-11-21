@@ -168,6 +168,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     event type was changed through "With additional options" commit dialog
   * Add hotkey 't' to toggle showing all three components in the current
     trace widget or just the active component
+  * Add checkbox to toggle spectrogram display between smooth and nearest neighbor
 
 * scmm
 

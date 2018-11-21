@@ -224,6 +224,12 @@ class ZoomRecordWidget : public RecordWidget {
 			update();
 		}
 
+		void setSmoothSpectrogram(bool enable) {
+			for ( int i = 0; i < 3; ++i )
+				spectrogram[i].setSmoothTransform(enable);
+			update();
+		}
+
 		void setMinSpectrogramRange(double v) {
 			for ( int i = 0; i < 3; ++i )
 				spectrogram[i].setGradientRange(v, spectrogram[i].gradientUpperBound());
@@ -2598,6 +2604,15 @@ void PickerView::init() {
 	cb->setChecked(false);
 	connect(cb, SIGNAL(toggled(bool)), this, SLOT(specLogToggled(bool)));
 	specLogToggled(cb->isChecked());
+
+	_ui.toolBarSpectrogram->addWidget(cb);
+
+	cb = new QCheckBox;
+	cb->setObjectName("spec.smooth");
+	cb->setText(tr("Smoothing"));
+	cb->setChecked(true);
+	connect(cb, SIGNAL(toggled(bool)), this, SLOT(specSmoothToggled(bool)));
+	specSmoothToggled(cb->isChecked());
 
 	_ui.toolBarSpectrogram->addWidget(cb);
 
@@ -8201,6 +8216,15 @@ void PickerView::activateFilter(int index) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::specLogToggled(bool e) {
 	static_cast<ZoomRecordWidget*>(_currentRecord)->setLogSpectrogram(e);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specSmoothToggled(bool e) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setSmoothSpectrogram(e);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

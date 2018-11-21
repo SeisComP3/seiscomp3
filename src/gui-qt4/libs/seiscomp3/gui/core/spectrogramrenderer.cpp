@@ -42,6 +42,7 @@ SpectrogramRenderer::SpectrogramRenderer() {
 
 	_normalize = false;
 	_logarithmic = false;
+	_smoothTransform = true;
 	_dirty = false;
 
 	_renderedFmin = _renderedFmax = -1;
@@ -288,6 +289,15 @@ void SpectrogramRenderer::setLogScale(bool f) {
 	if ( !_spectralizer ) return;
 
 	setDirty();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void SpectrogramRenderer::setSmoothTransform(bool st) {
+	_smoothTransform = st;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -593,7 +603,8 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 	double dx = 1.0/xlen;
 
 	p.save();
-	p.setRenderHint(QPainter::SmoothPixmapTransform);
+	if ( _smoothTransform )
+		p.setRenderHint(QPainter::SmoothPixmapTransform);
 
 	// Draw images
 	for ( it = _images.begin(); it != _images.end(); ++ it ) {

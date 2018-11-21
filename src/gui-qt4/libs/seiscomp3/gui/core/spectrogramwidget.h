@@ -90,6 +90,9 @@ class SC_GUI_API SpectrogramWidget : public QWidget {
 		void setLogScale(bool f);
 		bool logScale() const;
 
+		void setSmoothTransform(bool st);
+		bool smoothTransform() const;
+
 		//! Sets the transfer function for deconvolution
 		void setTransferFunction(Math::Restitution::FFT::TransferFunction *tf);
 
