@@ -90,7 +90,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Add data availability support according to the IRIS webservice
     availability http://service.iris.edu/irisws/availability/1/ under
     path ```ext/availability```
-  * Fix memory leak in combination with request tracking
+  * Fix memory leak which was caused by active request tracking
 
 * fdsnxml2inv
 
