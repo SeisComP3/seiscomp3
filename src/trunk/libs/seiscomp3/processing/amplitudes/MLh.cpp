@@ -386,19 +386,19 @@ void AmplitudeProcessor_ML2h::newAmplitude(const AmplitudeProcessor *proc,
 				newRes.component = Horizontal;
 				break;
 			case TakeMin:
-				if ( _results[0]->value.value >= _results[1]->value.value ) {
-					newRes.amplitude =  _results[0]->value;
+				if ( _results[0]->value.value <= _results[1]->value.value ) {
+					newRes.amplitude = _results[0]->value;
 					newRes.time = _results[0]->time;
 					newRes.component = _ampE.usedComponent();
 				}
 				else {
-					newRes.amplitude =  _results[1]->value;
+					newRes.amplitude = _results[1]->value;
 					newRes.time = _results[1]->time;
 					newRes.component = _ampN.usedComponent();
 				}
 				break;
 			case TakeMax:
-				if ( _results[0]->value.value <= _results[1]->value.value ) {
+				if ( _results[0]->value.value >= _results[1]->value.value ) {
 					newRes.amplitude =  _results[0]->value;
 					newRes.time = _results[0]->time;
 					newRes.component = _ampE.usedComponent();
