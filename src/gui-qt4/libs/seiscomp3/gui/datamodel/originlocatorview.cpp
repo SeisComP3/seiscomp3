@@ -5454,14 +5454,48 @@ void OriginLocatorView::editComment() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::commit(bool associate) {
 	if ( _newOriginStatus != EvaluationStatus::Quantity ) {
+		// In this case the commit has been triggered by the corresponding
+		// button and not by "With additional options ..."
+		OPT(EvaluationStatus) newStatus;
+
 		try {
 			if ( _currentOrigin->evaluationMode() == AUTOMATIC )
-				_currentOrigin->setEvaluationStatus(_newOriginStatus);
+				newStatus = _newOriginStatus;
 		}
 		catch ( ... ) {
 			// if evaluationMode isn't set yet we asume AUTOMATIC
-			_currentOrigin->setEvaluationStatus(_newOriginStatus);
+			newStatus = _newOriginStatus;
 		}
+
+		if ( !_localOrigin ) {
+			bool needConfirmation = false;
+
+			if ( newStatus ) {
+				try {
+					if ( _currentOrigin->evaluationStatus() == *newStatus )
+						needConfirmation = true;
+				}
+				catch ( ... ) {}
+			}
+			else
+				needConfirmation = true;
+
+			if ( needConfirmation ) {
+				// This origin has not been changed
+				int result = QMessageBox::question(
+					this,
+					tr("Confirm origin"),
+					tr("Confirming an origin without changing its status will cause its author to be changed.\nDo you want to continue?"),
+					QMessageBox::Yes, QMessageBox::No
+				);
+
+				if ( result != QMessageBox::Yes )
+					return;
+			}
+		}
+
+		if ( newStatus )
+			_currentOrigin->setEvaluationStatus(*newStatus);
 	}
 
 	try {
@@ -5535,6 +5569,7 @@ void OriginLocatorView::commit(bool associate) {
 		amplitudeCommitList.push_back(it->first);
 	}
 
+#if 0
 	std::cerr << "PickList for commit:" << std::endl;
 	for ( ObjectChangeList<DataModel::Pick>::iterator it = pickCommitList.begin();
 		it != pickCommitList.end(); ++it ) {
@@ -5553,6 +5588,7 @@ void OriginLocatorView::commit(bool associate) {
 	}
 	std::cerr << "--------------------" << std::endl;
 
+#endif
 	for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
 		std::string pickID = _currentOrigin->arrival(i)->pickID();
 

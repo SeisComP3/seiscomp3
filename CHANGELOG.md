@@ -146,12 +146,6 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Fix duplicate object bug which caused many error log messages in
     scmaster.log with respect to database insertions
 
-* scesv
-
-  * Add new script option ```exportMap``` that allows to export the current map to
-    file. The script has to take ownership of the file. This option is disabled by
-    default.
-
 * scolv
 
   * Allow to configure preferred event types which will be displayed first
@@ -180,6 +174,13 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
 
+## Release 2017.334 patch5
+
+* scesv
+
+  * Add new script option ```exportMap``` that allows to export the current map to
+    file. The script has to take ownership of the file. This option is disabled by
+    default.
 
 ## Release 2017.334 patch5
 

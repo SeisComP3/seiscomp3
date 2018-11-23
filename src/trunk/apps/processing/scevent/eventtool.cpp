@@ -215,8 +215,8 @@ void EventTool::createCommandLineDescription() {
 	commandline().addOption("Messaging", "clear-cache", "Send a clear cache message and quit");
 	commandline().addOption("Database", "db-disable", "Do not use the database at all");
 	commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
-	commandline().addOption("Generic", "origin-id,O", "Origin ID to associate (local only)", &_originID, true);
-	commandline().addOption("Generic", "event-id,E", "Event ID to update preferred objects (local only)", &_eventID, true);
+	commandline().addOption("Generic", "origin-id,O", "Origin ID to associate (test only, no event updates)", &_originID, true);
+	commandline().addOption("Generic", "event-id,E", "Event ID to update preferred objects (test only, no event updates)", &_eventID, true);
 
 	commandline().addGroup("Input");
 	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins", &_epFile);
