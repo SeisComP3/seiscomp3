@@ -108,10 +108,6 @@ QFont readFont(const Config::Config &cfg, const string& query, const QFont &base
 	return f;
 }
 
-bool compareByRank(const Geo::GeoFeature *f1, const Geo::GeoFeature *f2) {
-	return f1->rank() < f2->rank();
-}
-
 Qt::Orientation getOrientation(const std::string &name) {
 	if ( name == "horizontal" )
 		return Qt::Horizontal;
@@ -132,6 +128,78 @@ Qt::Alignment getAlignment(const std::string &name) {
 		return Qt::Alignment(Qt::AlignBottom | Qt::AlignRight);
 	else
 		return Qt::Alignment(Qt::AlignTop | Qt::AlignLeft);
+}
+
+
+QPainter::CompositionMode getCompositionMode(const std::string &name) {
+	if ( name == "src-over" )
+		return QPainter::CompositionMode_SourceOver;
+	else if ( name == "dst-over" )
+		return QPainter::CompositionMode_DestinationOver;
+	else if ( name == "clear" )
+		return QPainter::CompositionMode_Clear;
+	else if ( name == "src" )
+		return QPainter::CompositionMode_Source;
+	else if ( name == "dst" )
+		return QPainter::CompositionMode_Destination;
+	else if ( name == "src-in" )
+		return QPainter::CompositionMode_SourceIn;
+	else if ( name == "dst-in" )
+		return QPainter::CompositionMode_DestinationIn;
+	else if ( name == "src-out" )
+		return QPainter::CompositionMode_SourceOut;
+	else if ( name == "dst-out" )
+		return QPainter::CompositionMode_DestinationOut;
+	else if ( name == "src-atop" )
+		return QPainter::CompositionMode_SourceAtop;
+	else if ( name == "dst-atop" )
+		return QPainter::CompositionMode_DestinationAtop;
+	else if ( name == "xor" )
+		return QPainter::CompositionMode_Xor;
+	else if ( name == "plus" )
+		return QPainter::CompositionMode_Plus;
+	else if ( name == "multiply" )
+		return QPainter::CompositionMode_Multiply;
+	else if ( name == "screen" )
+		return QPainter::CompositionMode_Screen;
+	else if ( name == "overlay" )
+		return QPainter::CompositionMode_Overlay;
+	else if ( name == "darken" )
+		return QPainter::CompositionMode_Darken;
+	else if ( name == "lighten" )
+		return QPainter::CompositionMode_Lighten;
+	else if ( name == "color-dodge" )
+		return QPainter::CompositionMode_ColorDodge;
+	else if ( name == "color-burn" )
+		return QPainter::CompositionMode_ColorBurn;
+	else if ( name == "hard-light" )
+		return QPainter::CompositionMode_HardLight;
+	else if ( name == "soft-light" )
+		return QPainter::CompositionMode_SoftLight;
+	else if ( name == "difference" )
+		return QPainter::CompositionMode_Difference;
+	else if ( name == "exclusion" )
+		return QPainter::CompositionMode_Exclusion;
+	else if ( name == "src-or-dst" )
+		return QPainter::RasterOp_SourceOrDestination;
+	else if ( name == "src-and-dst" )
+		return QPainter::RasterOp_SourceAndDestination;
+	else if ( name == "src-xor-dst" )
+		return QPainter::RasterOp_SourceXorDestination;
+	else if ( name == "not-src-and-not-dst" )
+		return QPainter::RasterOp_NotSourceAndNotDestination;
+	else if ( name == "not-src-or-not-dst" )
+		return QPainter::RasterOp_NotSourceOrNotDestination;
+	else if ( name == "not-src-xor-dst" )
+		return QPainter::RasterOp_NotSourceXorDestination;
+	else if ( name == "not-src" )
+		return QPainter::RasterOp_NotSource;
+	else if ( name == "not-src-and-dst" )
+		return QPainter::RasterOp_NotSourceAndDestination;
+	else if ( name == "src-and-not-dst" )
+		return QPainter::RasterOp_SourceAndNotDestination;
+	else
+		return QPainter::CompositionMode_SourceOver;
 }
 
 
@@ -187,6 +255,7 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 	const static string cfgIndex = "index";
 	const static string cfgLegendArea = "legendArea";
 	const static string cfgLegendOrientation = "orientation";
+	const static string cfgCompositionMode = "composition";
 
 	// Read additional configuration file (e.g. map.cfg in BNA folder)
 	if ( !dataDir.empty() ) {
@@ -207,6 +276,7 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 			try { index = cfg.getInt(cfgIndex); } catch( ... ) {}
 			try { orientation = getOrientation(cfg.getString(cfgLegendOrientation)); } catch( ... ) {}
 			try { legendArea = getAlignment(cfg.getString(cfgLegendArea)); } catch( ... ) {}
+			try { compositionMode = getCompositionMode(cfg.getString(cfgCompositionMode)); } catch( ... ) {}
 		}
 	}
 
@@ -230,6 +300,7 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 		try { index = SCApp->configGetInt(query + cfgIndex); } catch( ... ) {}
 		try { orientation = getOrientation(SCApp->configGetString(query + cfgLegendOrientation)); } catch( ... ) {}
 		try { legendArea = getAlignment(SCApp->configGetString(query + cfgLegendArea)); } catch( ... ) {}
+		try { compositionMode = getCompositionMode(SCApp->configGetString(cfgCompositionMode)); } catch( ... ) {}
 	}
 
 	filled = brush.style() != Qt::NoBrush;
@@ -384,7 +455,9 @@ void GeoFeatureLayer::setVisible(bool flag) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void GeoFeatureLayer::bufferUpdated(Canvas *canvas, QPainter &painter) {
+	painter.save();
 	renderFeatures(canvas, painter);
+	painter.restore();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -435,6 +508,9 @@ bool GeoFeatureLayer::drawFeature(Canvas *canvas, QPainter *painter,
 	if ( rank > canvas->zoomLevel() ) return true;
 
 	Projection *proj = canvas->projection();
+
+	if ( props->compositionMode != painter->compositionMode() )
+		painter->setCompositionMode(props->compositionMode);
 
 	// There must be at least 2 verticies to draw something
 	if ( f->vertices().size() < 2 ) {
