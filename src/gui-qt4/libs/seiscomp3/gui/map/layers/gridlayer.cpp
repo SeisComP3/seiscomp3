@@ -43,27 +43,18 @@ GridLayer::~GridLayer() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void GridLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
-                     QPainter& painter) {
+void GridLayer::draw(const Seiscomp::Gui::Map::Canvas *canvas,
+                     QPainter &painter) {
 	if ( !isVisible() ) return;
 	if ( canvas == NULL ) return;
 
-	Seiscomp::Gui::Map::Projection* projection = canvas->projection();
+	Seiscomp::Gui::Map::Projection *projection = canvas->projection();
 	if ( projection == NULL ) return;
 
 	painter.save();
 
 	painter.setRenderHint(QPainter::Antialiasing, isAntiAliasingEnabled());
-
-	QPen gridPen(SCScheme.colors.map.grid);
-#ifdef Q_WS_MAC
-	// For unknown reasons OSX cannot display dotted lines
-	gridPen.setStyle(Qt::DashLine);
-#else
-	gridPen.setStyle(Qt::DotLine);
-#endif
-
-	painter.setPen(gridPen);
+	painter.setPen(SCScheme.colors.map.grid);
 
 #if 0
 	// Y gridlines
@@ -133,7 +124,7 @@ void GridLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void GridLayer::setGridDistance(const QPointF& p) {
+void GridLayer::setGridDistance(const QPointF &p) {
 	_gridDistance = p;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -142,7 +133,7 @@ void GridLayer::setGridDistance(const QPointF& p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const QPointF& GridLayer::gridDistance() const {
+const QPointF &GridLayer::gridDistance() const {
 	return _gridDistance;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
