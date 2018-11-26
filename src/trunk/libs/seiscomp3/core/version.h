@@ -84,6 +84,7 @@ namespace Core {
    - Added Seiscomp::IO::Exporter::put(std::streambuf* buf, const ObjectList &objects);
    - Added Seiscomp::Gui::RecordMarker::drawBackground
    - Made Seiscomp::Client::Application::version public
+   - Changed Seiscomp::Gui::Scheme::colors.map.grid from QColor to QPen
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike

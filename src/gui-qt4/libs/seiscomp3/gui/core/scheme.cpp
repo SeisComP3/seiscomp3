@@ -40,6 +40,9 @@
 #define READ_FONT_BY_NAME(var, location) \
 	var = SCApp->configGetFont("scheme."#location, var);
 
+#define READ_PEN(location) \
+	location = SCApp->configGetPen("scheme."#location, location);
+
 #define READ_INT(location) \
 	try { location = SCApp->configGetInt("scheme."#location); } \
 	catch ( ... ) {}
@@ -314,7 +317,7 @@ Scheme::Colors::RecordView::RecordView() :
 Scheme::Colors::Map::Map() :
 	lines(255, 255, 255, 64),
 	outlines(255, 255, 255),
-	grid(Qt::white),
+	grid(Qt::white, 1, Qt::DotLine),
 	stationAnnotations(Qt::red),
 	cityLabels(Qt::black),
 	cityOutlines(Qt::black),
@@ -561,7 +564,7 @@ void Scheme::fetch() {
 
 	READ_COLOR(colors.map.lines);
 	READ_COLOR(colors.map.outlines);
-	READ_COLOR(colors.map.grid);
+	READ_PEN(colors.map.grid);
 	READ_COLOR(colors.map.stationAnnotations);
 	READ_COLOR(colors.map.cityLabels);
 	READ_COLOR(colors.map.cityOutlines);

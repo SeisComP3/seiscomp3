@@ -17,6 +17,7 @@
 
 
 #include <QColor>
+#include <QPen>
 #include <QBrush>
 #include <QPoint>
 #include <QFont>
@@ -161,7 +162,7 @@ class SC_GUI_API Scheme {
 				Map();
 				QColor lines;
 				QColor outlines;
-				QColor grid;
+				QPen   grid;
 				QColor stationAnnotations;
 				QColor cityLabels;
 				QColor cityOutlines;

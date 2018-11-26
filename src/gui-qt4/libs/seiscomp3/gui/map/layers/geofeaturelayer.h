@@ -92,28 +92,30 @@ class SC_GUI_API GeoFeatureLayer : public Layer,
 				Circle
 			};
 
-			const LayerProperties *parent;
-			std::string            name;
-			std::string            title;
-			Qt::Orientation        orientation;
-			Qt::Alignment          legendArea;
-			std::string            label;
-			int                    index;
-			bool                   visible;
-			QPen                   pen;
-			QBrush                 brush;
-			QFont                  font;
-			bool                   drawName;
-			bool                   debug;
-			int                    rank;
-			int                    roughness;
-			bool                   filled;
-			int                    symbolSize;
-			SymbolShape            symbolShape;
+			const LayerProperties     *parent;
+			std::string                name;
+			std::string                title;
+			Qt::Orientation            orientation;
+			Qt::Alignment              legendArea;
+			QPainter::CompositionMode  compositionMode;
+			std::string                label;
+			int                        index;
+			bool                       visible;
+			QPen                       pen;
+			QBrush                     brush;
+			QFont                      font;
+			bool                       drawName;
+			bool                       debug;
+			int                        rank;
+			int                        roughness;
+			bool                       filled;
+			int                        symbolSize;
+			SymbolShape                symbolShape;
 
 			LayerProperties(const std::string &name)
 			: parent(NULL), name(name), orientation(Qt::Vertical)
 			, legendArea(Qt::AlignTop | Qt::AlignLeft)
+			, compositionMode(QPainter::CompositionMode_SourceOver)
 			, index(0), visible(true), drawName(false)
 			, debug(false), rank(-1), roughness(-1)
 			, filled(false), symbolSize(8), symbolShape(Circle) {}
@@ -121,6 +123,7 @@ class SC_GUI_API GeoFeatureLayer : public Layer,
 			LayerProperties(const std::string &name, const LayerProperties *parent)
 			: parent(parent), name(name), orientation(Qt::Vertical)
 			, legendArea(Qt::AlignTop | Qt::AlignLeft)
+			, compositionMode(QPainter::CompositionMode_SourceOver)
 			, index(0), visible(parent->visible), pen(parent->pen)
 			, brush(parent->brush), font(parent->font)
 			, drawName(parent->drawName), debug(parent->debug)
