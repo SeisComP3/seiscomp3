@@ -16,6 +16,7 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/map/canvas.h>
 #include <seiscomp3/gui/map/projection.h>
+#include <seiscomp3/geo/coordinate.h>
 
 
 namespace Seiscomp {
@@ -75,41 +76,44 @@ void GridLayer::draw(const Seiscomp::Gui::Map::Canvas *canvas,
 	qreal modX = fmod(c.x(), _gridDistance.x());
 	qreal modY = fmod(c.y(), _gridDistance.y());
 
-	QPointF start0 = QPointF(c.x() - modX, c.y() - modY);
-	QPointF start1;
+	Geo::GeoCoordinate start0(c.y() - modY, c.x() - modX);
+	Geo::GeoCoordinate start1;
 
 	if ( c.x() < 0 ) {
-		start1.setX(start0.x());
-		start0.setX(start0.x() - _gridDistance.x());
+		start1.lon = start0.lon;
+		start0.lon = start0.lon - _gridDistance.x();
 	}
 	else
-		start1.setX(start0.x() + _gridDistance.x());
+		start1.lon = start0.lon + _gridDistance.x();
 
 	if ( c.y() < 0 ) {
-		start1.setY(start0.y());
-		start0.setY(start0.y() - _gridDistance.y());
+		start1.lat = start0.lat;
+		start0.lat = start0.lat - _gridDistance.y();
 	}
 	else
-		start1.setY(start0.y() + _gridDistance.y());
+		start1.lat = start0.lat + _gridDistance.y();
 
-	qreal x = start1.x();
+	start0.normalize();
+	start1.normalize();
+
+	qreal x = start1.lon;
 	qreal toX = c.x() + 180;
 
 	while ( x < toX && projection->drawLatCircle(painter, x) )
 		x += _gridDistance.x();
 
-	x = start0.x();
+	x = start0.lon;
 	toX = c.x() - 180;
 	while ( x > toX && projection->drawLatCircle(painter, x) )
 		x -= _gridDistance.x();
 
-	qreal y = start1.y();
+	qreal y = start1.lat;
 	qreal toY = 90;
 
 	while ( y < toY && projection->drawLonCircle(painter, y) )
 		y += _gridDistance.y();
 
-	y = start0.y();
+	y = start0.lat;
 	toY = -90;
 
 	while ( y > toY && projection->drawLonCircle(painter, y) )
