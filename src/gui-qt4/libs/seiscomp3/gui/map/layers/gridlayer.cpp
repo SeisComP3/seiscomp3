@@ -79,6 +79,8 @@ void GridLayer::draw(const Seiscomp::Gui::Map::Canvas *canvas,
 	Geo::GeoCoordinate start0(c.y() - modY, c.x() - modX);
 	Geo::GeoCoordinate start1;
 
+	start0.normalize();
+
 	if ( c.x() < 0 ) {
 		start1.lon = start0.lon;
 		start0.lon = start0.lon - _gridDistance.x();
