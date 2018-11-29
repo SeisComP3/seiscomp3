@@ -715,7 +715,7 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SpectrogramRenderer::renderAxis(QPainter &p, const QRect &rect,
                                      bool leftAlign, int paddingOuter,
-                                     int paddingInner) {
+                                     int paddingInner, bool stretch) {
 	if ( (_renderedFmin < 0) || (_renderedFmax < 0) ) return;
 
 	int w = rect.width();
@@ -755,6 +755,9 @@ void SpectrogramRenderer::renderAxis(QPainter &p, const QRect &rect,
 	maxR.adjust(0,-1,0,1);
 
 	int wAxis = std::max(minR.width(), maxR.width()) + tickLength + tickSpacing + paddingInner;
+	if ( stretch )
+		wAxis = rect.width() - axisLabelR.height() - 2;
+
 	QRect axis(0,0,wAxis,h), area;
 
 	if ( leftAlign ) {

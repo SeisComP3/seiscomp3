@@ -85,6 +85,10 @@ namespace Core {
    - Added Seiscomp::Gui::RecordMarker::drawBackground
    - Made Seiscomp::Client::Application::version public
    - Changed Seiscomp::Gui::Scheme::colors.map.grid from QColor to QPen
+   - Added Seiscomp::Gui::SpectrogramRenderer::range
+   - Added parameter stretch to Seiscomp::Gui::SpectrogramRenderer::renderAxis
+   - Added overloaded methods to Seiscomp::Gui::Axis::sizeHint and
+     Seiscomp::Gui::Axis::updateLayer that only use QFontMetrics
 
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike

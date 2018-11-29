@@ -295,6 +295,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		const Filter *recordFilter(int slot) const;
 
 		QString recordID(int slot) const;
+		QString recordLabel(int slot) const;
 		bool recordStepFunction(int slot) const;
 		QColor recordColor(int slot) const;
 		const double *recordScale(int slot) const;

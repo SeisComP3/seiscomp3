@@ -1387,6 +1387,17 @@ QString RecordWidget::recordID(int slot) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QString RecordWidget::recordLabel(int slot) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return QString();
+	return stream->axisLabel;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RecordWidget::recordStepFunction(int slot) const {
 	const Stream *stream = getStream(slot);
 	if ( stream == NULL ) return false;
