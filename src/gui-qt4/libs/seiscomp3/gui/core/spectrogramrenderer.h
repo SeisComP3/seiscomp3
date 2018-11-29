@@ -109,7 +109,10 @@ class SC_GUI_API SpectrogramRenderer {
 		//! Renders the y axis. This call must precede a call to render otherwise
 		//! the frequency range can by out of sync.
 		void renderAxis(QPainter &p, const QRect &rect, bool leftAlign = true,
-		                int paddingOuter = 6, int paddingInner = 0);
+		                int paddingOuter = 6, int paddingInner = 0,
+		                bool stretch = false);
+
+		QPair<double,double> range() const;
 
 
 	// ----------------------------------------------------------------------
@@ -160,6 +163,11 @@ class SC_GUI_API SpectrogramRenderer {
 		double                    _renderedFmin;
 		double                    _renderedFmax;
 };
+
+
+inline QPair<double,double> SpectrogramRenderer::range() const {
+	return QPair<double,double>(_renderedFmin, _renderedFmax);
+}
 
 
 }

@@ -167,11 +167,11 @@ double Axis::unproject(double axisValue) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Axis::updateLayout(QPainter &painter, QRect &rect) {
+void Axis::updateLayout(const QFontMetrics &fm, QRect &rect) {
 #if QT_VERSION >= 0x040300
-	int fontHeight = painter.fontMetrics().ascent();
-	int fontWidth = painter.fontMetrics().boundingRect("-1.23E456").width();
-	int fontDescent = painter.fontMetrics().descent();
+	int fontHeight = fm.ascent();
+	int fontWidth = fm.boundingRect("-1.23E456").width();
+	int fontDescent = fm.descent();
 	bool isHorizontal = _position == Top || _position == Bottom;
 	int tickCount;
 	double lowerRange, upperRange;
@@ -231,9 +231,9 @@ void Axis::updateLayout(QPainter &painter, QRect &rect) {
 	double epsilon = _tickSpacing * 1E-2;
 
 	if ( isHorizontal ) {
-		_extent = _tickLength + _spacing + painter.fontMetrics().ascent();
+		_extent = _tickLength + _spacing + fm.ascent();
 		if ( !_label.isEmpty() )
-			_extent += _spacing + painter.fontMetrics().ascent() + painter.fontMetrics().descent();
+			_extent += _spacing + fm.ascent() + fm.descent();
 
 		bool allowModification = rect.height() == 0;
 		if ( allowModification )
@@ -267,7 +267,7 @@ void Axis::updateLayout(QPainter &painter, QRect &rect) {
 				if ( fabs(value) < epsilon )
 					value = 0;
 
-				int s0Width = painter.fontMetrics().width(QString::number(_logScale ? pow(_logBase, value) : value));
+				int s0Width = fm.width(QString::number(_logScale ? pow(_logBase, value) : value));
 				if ( s0Width > _extent )
 					_extent = s0Width;
 				s0i += _tickSpacing;
@@ -374,15 +374,33 @@ void Axis::updateLayout(QPainter &painter, QRect &rect) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Axis::sizeHint(QPainter &painter) const {
+void Axis::updateLayout(const QPainter &painter, QRect &rect) {
+	updateLayout(painter.fontMetrics(), rect);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int Axis::sizeHint(const QFontMetrics &fm) const {
 	if ( _position == Top || _position == Bottom ) {
-		int height = _tickLength + _spacing + painter.fontMetrics().ascent();
+		int height = _tickLength + _spacing + fm.ascent();
 		if ( !_label.isEmpty() )
-			height += _spacing + painter.fontMetrics().ascent() + painter.fontMetrics().descent();
+			height += _spacing + fm.ascent() + fm.descent();
 		return height;
 	}
 
 	return -1;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int Axis::sizeHint(const QPainter &painter) const {
+	return sizeHint(painter.fontMetrics());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
