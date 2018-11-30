@@ -72,23 +72,23 @@ void GridLayer::draw(const Seiscomp::Gui::Map::Canvas *canvas,
 	projection->drawLonCircle(p, -66.55);
 #else
 
-	QPointF c = projection->visibleCenter();
-	qreal modX = fmod(c.x(), _gridDistance.x());
-	qreal modY = fmod(c.y(), _gridDistance.y());
+	Geo::GeoCoordinate c(projection->visibleCenter().y(),
+	                     projection->visibleCenter().x());
+	c.normalize();
+	qreal modX = fmod(c.lon, _gridDistance.x());
+	qreal modY = fmod(c.lat, _gridDistance.y());
 
-	Geo::GeoCoordinate start0(c.y() - modY, c.x() - modX);
+	Geo::GeoCoordinate start0(c.lat - modY, c.lon - modX);
 	Geo::GeoCoordinate start1;
 
-	start0.normalize();
-
-	if ( c.x() < 0 ) {
+	if ( c.lon < 0 ) {
 		start1.lon = start0.lon;
 		start0.lon = start0.lon - _gridDistance.x();
 	}
 	else
 		start1.lon = start0.lon + _gridDistance.x();
 
-	if ( c.y() < 0 ) {
+	if ( c.lat < 0 ) {
 		start1.lat = start0.lat;
 		start0.lat = start0.lat - _gridDistance.y();
 	}
@@ -99,13 +99,13 @@ void GridLayer::draw(const Seiscomp::Gui::Map::Canvas *canvas,
 	start1.normalize();
 
 	qreal x = start1.lon;
-	qreal toX = c.x() + 180;
+	qreal toX = c.lon + 180;
 
 	while ( x < toX && projection->drawLatCircle(painter, x) )
 		x += _gridDistance.x();
 
 	x = start0.lon;
-	toX = c.x() - 180;
+	toX = c.lon - 180;
 	while ( x > toX && projection->drawLatCircle(painter, x) )
 		x -= _gridDistance.x();
 
