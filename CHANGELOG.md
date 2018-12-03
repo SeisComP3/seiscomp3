@@ -117,6 +117,8 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 * scheli
 
   * Add documentation and descriptions
+  * Add option to configure a post processing script that is called after an image has
+    been written to disc
 
 * scmv
 

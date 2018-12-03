@@ -10,6 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
 #define SEISCOMP_COMPONENT Helicorder
 #include <seiscomp3/logging/log.h>
 
@@ -196,6 +197,11 @@ bool HCApp::initConfiguration() {
 	try { _yRes = configGetInt("heli.dump.yres"); } catch ( ... ) {}
 	try { _dpi = configGetInt("heli.dump.dpi"); } catch ( ... ) {}
 	try { _snapshotTimeout = configGetInt("heli.dump.interval"); } catch ( ... ) {}
+
+	try {
+		_imagePostProcessingScript = Seiscomp::Environment::Instance()->absolutePath(configGetString("scripts.postprocessing"));
+	}
+	catch ( ... ) {}
 
 	return true;
 }
@@ -425,6 +431,7 @@ void HCApp::setupUi(MainWindow *w) {
 
 	w->setGain(findGain(streamID, _endTime.valid()?_endTime:Core::Time::GMT()));
 	w->setHeadline(findHeadline(streamID, _endTime.valid()?_endTime:Core::Time::GMT()));
+	w->setPostProcessingScript(_imagePostProcessingScript);
 
 	w->setLayout(_numberOfRows, _timeSpanPerRow);
 	w->setOutputResolution(_xRes, _yRes, _dpi);
@@ -489,6 +496,21 @@ void HCApp::saveSnapshots() {
 
 		it.value().canvas->save(it.key().c_str(), it.value().headline, dateline,
 		                        file, _xRes, _yRes, _dpi);
+
+		if ( !_imagePostProcessingScript.empty() ) {
+			QProcess proc;
+			proc.start(_imagePostProcessingScript.c_str(), QStringList() << file);
+			if ( !proc.waitForStarted() ) {
+				SEISCOMP_ERROR("Failed to start script: %s %s",
+				               _imagePostProcessingScript.c_str(),
+				               qPrintable(file));
+			}
+			else if ( !proc.waitForFinished() ) {
+				SEISCOMP_ERROR("Script exited with error: %s %s",
+				               _imagePostProcessingScript.c_str(),
+				               qPrintable(file));
+			}
+		}
 	}
 }
 

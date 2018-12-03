@@ -49,6 +49,8 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		void setGain(const float gain);
 		void setHeadline(const QString headline);
 
+		void setPostProcessingScript(const std::string &path);
+
 		void setReferenceTime(const Seiscomp::Core::Time &time);
 		void setStream(const std::string &networkCode,
 		const std::string &stationCode,
@@ -108,6 +110,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		std::string                           _timeFormat;
 		QTimer                                _timer;
 		QString                               _dumpFilename;
+		std::string                           _imagePostProcessingScript;
 		bool                                  _fixCurrentTimeToLastRecord;
 		bool                                  _showStationDescription;
 		int                                   _rowTimeSpan;
