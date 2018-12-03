@@ -2,6 +2,17 @@
 <seiscomp>
 	<module name="scheli" category="GUI">
 		<description>Real-time helicorder view for one stream</description>
+		<configuration>
+			<group name="scripts">
+				<parameter name="postprocessing" type="path">
+					<description>
+					Defines the path to a script that is called whenever an image
+					has been captured and written to disc. The only parameter is
+					the path to the generated image.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
 		<command-line>
 			<group name="Generic">
 				<optionReference>generic#help</optionReference>
