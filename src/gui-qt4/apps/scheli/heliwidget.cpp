@@ -366,7 +366,7 @@ int HeliCanvas::draw(QPainter &p, const QSize &size) {
 
 void HeliCanvas::save(QString streamID, QString headline, QString date,
                       QString filename, int xres, int yres, int dpi) {
-	std::cerr << "Printing..." << std::flush;
+	std::cerr << "Printing [" << qPrintable(filename) << "] ... " << std::flush;
 
 	QPainter *painter;
 	QFileInfo fi(filename);

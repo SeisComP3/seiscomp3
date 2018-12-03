@@ -10,6 +10,10 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
+#define SEISCOMP_COMPONENT Helicorder
+#include <seiscomp3/logging/log.h>
+
 #include "mainwindow.h"
 #include "heliwidget.h"
 
@@ -114,6 +118,10 @@ void MainWindow::setHeadline(const QString headline){
 	_ui.labelHeadline->setVisible(!headline.isEmpty());
 }
 
+void MainWindow::setPostProcessingScript(const std::string &path) {
+	_imagePostProcessingScript = path;
+}
+
 void MainWindow::setStream(Seiscomp::DataModel::WaveformStreamID streamID) {
 	_streamID = streamID;
 
@@ -215,6 +223,21 @@ void MainWindow::print(QString filename) {
 	_heliWidget->canvas().save(_ui.labelStreamID->text(), _ui.labelHeadline->text(),
 	                           _ui.labelDate->text(),
 	                           filename, _xRes, _yRes, _dpi);
+
+	if ( !_imagePostProcessingScript.empty() ) {
+		QProcess proc;
+		proc.start(_imagePostProcessingScript.c_str(), QStringList() << filename);
+		if ( !proc.waitForStarted() ) {
+			SEISCOMP_ERROR("Failed to start script: %s %s",
+			               _imagePostProcessingScript.c_str(),
+			               qPrintable(filename));
+		}
+		else if ( !proc.waitForFinished() ) {
+			SEISCOMP_ERROR("Script exited with error: %s %s",
+			               _imagePostProcessingScript.c_str(),
+			               qPrintable(filename));
+		}
+	}
 }
 
 
