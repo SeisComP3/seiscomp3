@@ -35,7 +35,7 @@ extern "C" {
 
 void distaz2_(double *lat1, double *lon1, double *lat2, double *lon2, double *delta, double *azi1, double *azi2);
 int setup_tttables_dir(const char *new_dir);
-double compute_ttime(double distance, double depth, char *phase, int extrapolate);
+double compute_ttime(double distance, double depth, char *phase, int extrapolate, int *errorflag);
 int num_phases();
 char **phase_types();
 
@@ -149,7 +149,10 @@ TravelTimeList *Locsat::compute(double delta, double depth) {
 
 	for ( int i = 0; i < nphases; ++i ) {
 		char *phase = phases[i];
-		double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE);
+		int errorflag = 0;
+		double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &errorflag);
+		if (errorflag != 0)
+			continue;
 		// This comparison is there to also skip NaN values
 		if ( !(ttime > 0) ) continue;
 
@@ -177,7 +180,9 @@ TravelTimeList *Locsat::compute(double delta, double depth) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TravelTime Locsat::compute(const char *phase, double delta, double depth) {
-	double ttime = compute_ttime(delta, depth, const_cast<char*>(phase), 0);
+	int errorflag=0;
+	double ttime = compute_ttime(delta, depth, const_cast<char*>(phase), 0, &errorflag);
+	if ( errorflag!=0 ) throw NoPhaseError();
 	if ( !(ttime > 0) ) throw NoPhaseError();
 
 	return TravelTime(phase, ttime, 0, 0, 0, 0);
@@ -247,8 +252,10 @@ TravelTime Locsat::compute(const char *phase,
 TravelTime Locsat::computeFirst(double delta, double depth) {
 	char **phases = phase_types();
 	char *phase = phases[_Pindex];
-	double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE);
+	int errorflag=0;
+	double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &errorflag);
 	if ( ttime < 0 ) throw NoPhaseError();
+	if ( errorflag!=0 ) throw NoPhaseError();
 
 	return TravelTime(phase, ttime, 0, 0, 0, 0);
 }
