@@ -61,6 +61,8 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		bool isGrayScale() const;
 
+		bool saveScreenshot();
+
 		virtual void draw(QPainter&);
 
 
