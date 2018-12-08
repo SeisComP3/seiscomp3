@@ -171,6 +171,7 @@ class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 		//! Fixes the depth in km:
 		void setFixedDepth(double depth, bool use=true);
 		void useFixedDepth(bool use=true);
+		double fixedDepth() const { return _fixedDepth; }
 		bool usingFixedDepth() const { return _usingFixedDepth; }
 		void releaseDepth();
 
