@@ -269,7 +269,7 @@
 					enable a detection again.
 				</description>
 			</parameter>
-			<parameter name="timeCorr" type="double" default="-0.8">
+			<parameter name="timeCorr" type="double" default="-0.8" unit="s">
 				<description>
 					The time correction applied to a detected pick.
 				</description>
