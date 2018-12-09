@@ -26,16 +26,16 @@
 					9 for a 1Hz eigen-frequency L4C seismometer
 					</description>
 				</parameter>
-				<parameter name="taper" type="double" default="5">
+				<parameter name="taper" type="double" default="5" unit="s">
 					<description>
-					taper applied to the signal (in seconds)
+					taper applied to the signal
 					</description>
-				</parameter>				
-				<parameter name="signal_length"  type="double" default="150">
+				</parameter>
+				<parameter name="signal_length"  type="double" default="150" unit="s">
 					<description>
-					signal length used to compute the duration magnitude (in seconds)
+					signal length used to compute the duration magnitude
 					</description>
-				</parameter>				 
+				</parameter>
 				<parameter name="butterworth" type="string" default="&quot;3,1.5&quot;">
 					<description>
 					Butterworth filter parameter applied to the signal
