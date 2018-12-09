@@ -41,20 +41,20 @@
 			</parameter>
 			<group name="plugins">
 				<group name="default">
-					<parameter name="reportInterval" type="int" default="60">
-						<description>Interval for sending the report messages in seconds.</description>
+					<parameter name="reportInterval" type="int" default="60" unit="s">
+						<description>Interval for sending the report messages.</description>
 					</parameter>
-					<parameter name="alertInterval" type="int" default="30">
-						<description>Interval for checking the alert thresholds in seconds.</description>
+					<parameter name="alertInterval" type="int" default="30" unit="s">
+						<description>Interval for checking the alert thresholds.</description>
 					</parameter>
-					<parameter name="staBufferLength" type="int" default="600">
-						<description>Short Term Average (STA) buffer length in seconds.</description>
+					<parameter name="staBufferLength" type="int" default="600" unit="s">
+						<description>Short Term Average (STA) buffer length.</description>
 					</parameter>
-					<parameter name="ltaBufferLength" type="int" default="600">
-						<description>Long Term Average (LTA) buffer length in seconds.</description>
+					<parameter name="ltaBufferLength" type="int" default="600" unit="s">
+						<description>Long Term Average (LTA) buffer length.</description>
 					</parameter>
-					<parameter name="timeout" type="int" default="0">
-						<description>Generate a report message in case no data is received since timeout in seconds.</description>
+					<parameter name="timeout" type="int" default="0" unit="s">
+						<description>Generate a report message in case no data is received since timeout.</description>
 					</parameter>
 					<parameter name="thresholds" type="int" default="100">
 						<description>Alert thresholds in percent, single value [or list 25,50,75 ... not yet implemented].</description>
