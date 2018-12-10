@@ -66,15 +66,15 @@ class HeliCanvas {
 
 
 	private:
-		typedef Seiscomp::Gui::RecordPolylinePtr RecordPolylinePtr;
+		typedef Seiscomp::Gui::AbstractRecordPolylinePtr AbstractRecordPolylinePtr;
 		typedef Seiscomp::Math::Filtering::InPlaceFilter<float> Filter;
 
 		struct Row {
 			Row() {}
 
-			Seiscomp::Core::Time time;
-			RecordPolylinePtr    polyline;
-			bool                 dirty;
+			Seiscomp::Core::Time      time;
+			AbstractRecordPolylinePtr polyline;
+			bool                      dirty;
 
 			void update();
 		};

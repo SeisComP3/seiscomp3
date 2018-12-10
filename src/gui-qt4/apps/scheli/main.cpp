@@ -66,7 +66,7 @@ HCApp::HCApp(int& argc, char** argv, int flags, Type type )
 	_fixCurrentTimeToLastRecord = false;
 	_numberOfRows = 48;
 	_timeSpanPerRow = 1800;
-	_antialiasing = false;
+	_antialiasing = SCScheme.records.antiAliasing;
 	_lineWidth = 1;
 	_stationDescription = true;
 	_xRes = 1024;

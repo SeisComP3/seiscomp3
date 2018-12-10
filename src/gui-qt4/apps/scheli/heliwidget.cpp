@@ -303,7 +303,7 @@ bool HeliCanvas::setCurrentTime(const Seiscomp::Core::Time &time) {
 
 		for ( int i = _rows.size() - shift; i < _rows.size(); ++i ) {
 			_rows[i].time = _rows[i-1].time + Core::TimeSpan(_rowTimeSpan);
-			_rows[i].polyline = RecordPolylinePtr();
+			_rows[i].polyline = AbstractRecordPolylinePtr();
 			_rows[i].update();
 		}
 	}
@@ -313,7 +313,7 @@ bool HeliCanvas::setCurrentTime(const Seiscomp::Core::Time &time) {
 
 		for ( int i = shift-1; i >= 0; --i ) {
 			_rows[i].time = _rows[i+1].time - Core::TimeSpan(_rowTimeSpan);
-			_rows[i].polyline = RecordPolylinePtr();
+			_rows[i].polyline = AbstractRecordPolylinePtr();
 			_rows[i].update();
 		}
 	}
@@ -479,33 +479,62 @@ void HeliCanvas::render(QPainter &p) {
 
 		// Create new sequence
 		if ( _rows[i].dirty ) {
-			if ( !_rows[i].polyline )
-				_rows[i].polyline = RecordPolylinePtr(new Gui::RecordPolyline);
+			if ( !_rows[i].polyline ) {
+				if ( _antialiasing )
+					_rows[i].polyline = new Gui::RecordPolylineF;
+				else
+					_rows[i].polyline = new Gui::RecordPolyline;
+			}
 
 			float ofs, min, max;
 			Core::TimeWindow tw(_rows[i].time, _rows[i].time + Core::TimeSpan(_rowTimeSpan));
 			minmax(_filteredRecords, tw, ofs, min, max);
 
-			_rows[i].polyline->create(_filteredRecords,
-			                          tw.startTime(), tw.endTime(),
-			                          (double)recordWidth / (double)_rowTimeSpan,
-			                          _amplitudeRange[0], _amplitudeRange[1], ofs, rowHeight);
+			if ( _antialiasing )
+				static_cast<Gui::RecordPolylineF*>(_rows[i].polyline.get())
+				->create(_filteredRecords,
+				         tw.startTime(), tw.endTime(),
+				         (double)recordWidth / (double)_rowTimeSpan,
+				         _amplitudeRange[0], _amplitudeRange[1], ofs, rowHeight);
+			else
+				static_cast<Gui::RecordPolyline*>(_rows[i].polyline.get())
+				->create(_filteredRecords,
+				         tw.startTime(), tw.endTime(),
+				         (double)recordWidth / (double)_rowTimeSpan,
+				         _amplitudeRange[0], _amplitudeRange[1], ofs, rowHeight);
 			_rows[i].dirty = false;
 		}
 
 		if ( _rows[i].polyline ) {
-			if ( !_rows[i].polyline->empty() ) {
+			if ( !_rows[i].polyline->isEmpty() ) {
 				// Draw front and back gaps
-				if ( _rows[i].polyline->front().first().x() > _labelMargin )
-					p.fillRect(_labelMargin, rowPos,
-					           _rows[i].polyline->front().first().x() - _labelMargin,
-					           rowHeight, gapBrush);
-
-				if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) ) {
-					if ( _rows[i].polyline->back().last().x() < _size.width()-2 )
-						p.fillRect(_rows[i].polyline->back().last().x(),
-						           rowPos, _size.width()-1 - _rows[i].polyline->back().last().x(),
+				if ( _antialiasing ) {
+					Gui::RecordPolylineF *polyline = static_cast<Gui::RecordPolylineF*>(_rows[i].polyline.get());
+					if ( polyline->front().first().x() > _labelMargin )
+						p.fillRect(_labelMargin, rowPos,
+						           polyline->front().first().x() - _labelMargin,
 						           rowHeight, gapBrush);
+
+					if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) ) {
+						if ( polyline->back().last().x() < _size.width()-2 )
+							p.fillRect(polyline->back().last().x(),
+							           rowPos, _size.width()-1 - polyline->back().last().x(),
+							           rowHeight, gapBrush);
+					}
+				}
+				else {
+					Gui::RecordPolyline *polyline = static_cast<Gui::RecordPolyline*>(_rows[i].polyline.get());
+					if ( polyline->front().first().x() > _labelMargin )
+						p.fillRect(_labelMargin, rowPos,
+						           polyline->front().first().x() - _labelMargin,
+						           rowHeight, gapBrush);
+
+					if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) ) {
+						if ( polyline->back().last().x() < _size.width()-2 )
+							p.fillRect(polyline->back().last().x(),
+							           rowPos, _size.width()-1 - polyline->back().last().x(),
+							           rowHeight, gapBrush);
+					}
 				}
 			}
 			else if ( (globalEnd - _rows[i].time) >= Core::TimeSpan(_rowTimeSpan) )
