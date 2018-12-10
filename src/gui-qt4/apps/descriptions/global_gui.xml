@@ -784,6 +784,17 @@
 							screen_width (km) * weight >= population
 						</description>
 					</parameter>
+					<parameter name="topPopulatedPlaces" type="int" default="-1">
+						<description>
+							Maximum number of cities to be rendered. If
+							cityPopulationWeight is less or equal than 0 then
+							all cities are rendered ordered by population count,
+							highest first.
+							To show the N most populated places in the visible
+							map region, set cityPopulationWeight to 0 and set
+							this parameter to N.
+						</description>
+					</parameter>
 					<parameter name="showLayers" type="boolean" default="true">
 						<description>
 							Should the map display the custom layers?
