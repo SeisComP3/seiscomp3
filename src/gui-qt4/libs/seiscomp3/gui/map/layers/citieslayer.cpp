@@ -33,6 +33,7 @@ namespace Map {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CitiesLayer::CitiesLayer(QObject* parent) : Layer(parent), _selectedCity(NULL) {
 	setName("cities");
+	_topPopulatedPlaces = -1;
 
 	StandardLegend *legend = new StandardLegend(this);
 	legend->setTitle(tr("Cities"));
@@ -55,6 +56,18 @@ CitiesLayer::CitiesLayer(QObject* parent) : Layer(parent), _selectedCity(NULL) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CitiesLayer::~CitiesLayer() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void CitiesLayer::init(const Config::Config &cfg) {
+	try {
+		_topPopulatedPlaces = cfg.getInt("map.layers." + name().toStdString() + ".topPopulatedPlaces");
+	}
+	catch ( ... ) {}
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -86,8 +99,15 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 
 	Grid grid(gridHeight);
 
-	double radius = Math::Geo::deg2km(width / projection->pixelPerDegree()) *
-	                SCScheme.map.cityPopulationWeight;
+	double radius = -1;
+
+	if ( SCScheme.map.cityPopulationWeight > 0 )
+		radius = Math::Geo::deg2km(width / projection->pixelPerDegree()) *
+		                           SCScheme.map.cityPopulationWeight;
+
+	size_t maxRenderedCitites = SCCoreApp->cities().size();
+	if ( _topPopulatedPlaces > 0 )
+		maxRenderedCitites = _topPopulatedPlaces;
 
 	bool lastUnderline = false;
 	bool lastBold = true;
@@ -95,12 +115,17 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 	if ( _selectedCity )
 		drawCity(painter, grid, font, lastUnderline, lastBold, projection,
 		         *_selectedCity, fontMetrics, width, fontHeight);
+
+	size_t citiesRendered = 0;
+
 	foreach ( const Math::Geo::CityD& city, SCCoreApp->cities() ) {
+		if ( citiesRendered >= maxRenderedCitites ) break;
 		if ( city.population() < radius ) break;
 		if ( &city == _selectedCity ) continue;
 
-		drawCity(painter, grid, font, lastUnderline, lastBold, projection,
-		         city, fontMetrics, width, fontHeight);
+		if ( drawCity(painter, grid, font, lastUnderline, lastBold, projection,
+		         city, fontMetrics, width, fontHeight) )
+			++citiesRendered;
 	}
 
 	painter.restore();
@@ -111,7 +136,7 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
+bool CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
                            bool &lastUnderline, bool &lastBold,
                            const Projection* projection,
                            const Math::Geo::CityD& city,
@@ -119,14 +144,14 @@ void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
                            int width, int rowHeight) {
 	QPoint p;
 	if ( !projection->project(p, QPointF(city.lon, city.lat)) )
-		return;
+		return false;
 
 	int gridY, gridPrevY, gridNextY;
 
 	gridY = p.y() / rowHeight;
 
-	if ( gridY < 0 || gridY >= grid.count() ) return;
-	if ( p.x() < 0 || p.x() >= width ) return;
+	if ( gridY < 0 || gridY >= grid.count() ) return false;
+	if ( p.x() < 0 || p.x() >= width ) return false;
 
 	QRect labelRect(fontMetrics.boundingRect(city.name().c_str()));
 
@@ -164,7 +189,7 @@ void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
 		}
 	}
 
-	if ( !foundPlace ) return;
+	if ( !foundPlace ) return false;
 
 	gridY = labelRect.top() / rowHeight;
 
@@ -203,6 +228,8 @@ void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
 
 	painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop |
 	                 Qt::TextSingleLine, city.name().c_str());
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

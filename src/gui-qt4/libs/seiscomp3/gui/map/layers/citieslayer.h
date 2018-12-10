@@ -31,6 +31,7 @@ class SC_GUI_API CitiesLayer : public Layer {
 		CitiesLayer(QObject* = NULL);
 		virtual ~CitiesLayer();
 
+		virtual void init(const Config::Config&);
 		virtual void draw(const Canvas*, QPainter&);
 
 		void setSelectedCity(const Math::Geo::CityD*);
@@ -41,12 +42,13 @@ class SC_GUI_API CitiesLayer : public Layer {
 		typedef QVector<Row> Grid;
 
 	private:
-		void drawCity(QPainter&, Grid&, QFont&, bool&, bool&,
+		bool drawCity(QPainter&, Grid&, QFont&, bool&, bool&,
 		              const Projection*, const Math::Geo::CityD&,
 		              const QFontMetrics&, int, int);
 
 	private:
-		const Math::Geo::CityD*         _selectedCity;
+		const Math::Geo::CityD *_selectedCity;
+		int _topPopulatedPlaces;
 };
 
 

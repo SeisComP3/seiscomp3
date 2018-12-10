@@ -111,6 +111,20 @@
 						<parameter name="visible" type="boolean" default="false">
 						</parameter>
 					</group>
+					<group name="cities">
+						<parameter name="topPopulatedPlaces" type="int" default="-1">
+							<description>
+							Maximum number of cities to be rendered. If
+							cityPopulationWeight is less or equal than 0 then
+							all cities are rendered ordered by population count,
+							highest first.
+							To show the N most populated places in the visible
+							map region, set
+							&quot;scheme.map.cityPopulationWeight&quot; to 0
+							and set this parameter to N.
+							</description>
+						</parameter>
+					</group>
 				</group>
 				<group name="zoom">
 					<parameter name="sensitivity" type="double" default="0.5">
