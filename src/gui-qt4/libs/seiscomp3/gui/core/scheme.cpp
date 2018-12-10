@@ -216,6 +216,9 @@ Scheme::Colors::Records::Records() {
 	foreground = QColor(128, 128, 128);
 	alternateForeground = foreground;
 	spectrogram = Qt::black;
+	offset = QColor(192,192,255);
+	gridPen = QPen(QColor(0,0,0,32), 1, Qt::DashLine);
+	subGridPen = QPen(QColor(0,0,0,0), 1, Qt::DotLine);
 	gaps = QColor(255, 255, 0, 64);
 	overlaps = QColor(255, 0, 255, 64);
 }
@@ -225,16 +228,16 @@ Scheme::Colors::Records::Records() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Scheme::Colors::Stations::Stations()
-: text(Qt::white),
-  associated(130, 173, 88),
-  selected(77, 77, 184),
-  triggering(Qt::red),
-  triggered0(0, 128, 255),
-  triggered1(0, 0, 255),
-  triggered2(0, 0, 128),
-  disabled(102, 102, 102, 100),
-  idle(102, 102, 102, 128) {
+Scheme::Colors::Stations::Stations() {
+	text = Qt::white;
+	associated = QColor(130, 173, 88);
+	selected = QColor(77, 77, 184);
+	triggering = QColor(Qt::red);
+	triggered0 = QColor(0, 128, 255);
+	triggered1 = QColor(0, 0, 255);
+	triggered2 = QColor(0, 0, 128);
+	disabled = QColor(102, 102, 102, 100);
+	idle = QColor(102, 102, 102, 128);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -502,6 +505,9 @@ void Scheme::fetch() {
 	READ_COLOR(colors.records.foreground);
 	READ_COLOR(colors.records.alternateForeground);
 	READ_COLOR(colors.records.spectrogram);
+	READ_PEN(colors.records.offset);
+	READ_PEN(colors.records.gridPen);
+	READ_PEN(colors.records.subGridPen);
 	READ_BRUSH_COLOR(colors.records.gaps);
 	READ_BRUSH_COLOR(colors.records.overlaps);
 	READ_COLOR(colors.records.states.unrequested);

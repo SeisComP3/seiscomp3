@@ -87,6 +87,9 @@ class SC_GUI_API Scheme {
 				QColor foreground;
 				QColor alternateForeground;
 				QColor spectrogram;
+				QPen offset;
+				QPen gridPen;
+				QPen subGridPen;
 				QBrush gaps;
 				QBrush overlaps;
 				RecordStates states;
