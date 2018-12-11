@@ -700,7 +700,7 @@ class FDSNEvent(resource.Resource):
 			if ro.mag and ro.mag.type:
 				# join magnitude table on oID of origin and magnitude type
 				q += "m._parent_oid = o._oid AND m.%s = '%s'" % (_T('type'),
-				                                                 ro.mag.type)
+				                                                 dbq.toString(ro.mag.type))
 			else:
 				# join magnitude table on preferred magnitude id of event
 				q += "pm.%s = e.%s" % (colPID, _T('preferredMagnitudeID'))
