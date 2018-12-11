@@ -1,5 +1,13 @@
 # Jakarta
 
+
+## Release 2017.334 patch7
+
+* fdsnws
+
+  * Fix potential security issue
+
+
 ## Release 2017.334 patch6
 
 * scesv
