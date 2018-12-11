@@ -87,6 +87,9 @@ class SC_GUI_API Scheme {
 				QColor foreground;
 				QColor alternateForeground;
 				QColor spectrogram;
+				QPen offset;
+				QPen gridPen;
+				QPen subGridPen;
 				QBrush gaps;
 				QBrush overlaps;
 				RecordStates states;
@@ -237,6 +240,7 @@ class SC_GUI_API Scheme {
 			bool showCities;
 			bool showLegends;
 			int cityPopulationWeight;
+			int topPopulatedPlaces;
 			bool toBGR;
 			int polygonRoughness;
 			std::string projection;

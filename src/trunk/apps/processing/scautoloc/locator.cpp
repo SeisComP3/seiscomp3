@@ -81,7 +81,7 @@ void Locator::setMinimumDepth(double depth)
 }
 
 
-static bool fixedDepth(const Origin *origin)
+static bool hasFixedDepth(const Origin *origin)
 {
 	switch(origin->depthType) {
 		case Origin::DepthManuallyFixed:
@@ -101,7 +101,7 @@ Origin *Locator::relocate(const Origin *origin)
 // vvvvvvvvvvvvvvvvv
 // FIXME: This is still needed, but it would be better to get rid of it!
 	// if the origin to relocate has a fixed depth, keep it fixed!
-	if (fixedDepth(origin)) {
+	if (hasFixedDepth(origin)) {
 		setFixedDepth(origin->dep);
 	}
 // ^^^^^^^^^^^^^^^^
@@ -154,7 +154,7 @@ Origin *Locator::relocate(const Origin *origin)
 }
 
 
-Origin* Locator::_sc3relocate(const Origin *origin, double fixedDepth)
+Origin* Locator::_sc3relocate(const Origin *origin)
 {
 	// convert origin to SC3, relocate, and convert the result back
 

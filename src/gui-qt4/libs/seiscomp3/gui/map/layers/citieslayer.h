@@ -41,7 +41,7 @@ class SC_GUI_API CitiesLayer : public Layer {
 		typedef QVector<Row> Grid;
 
 	private:
-		void drawCity(QPainter&, Grid&, QFont&, bool&, bool&,
+		bool drawCity(QPainter&, Grid&, QFont&, bool&, bool&,
 		              const Projection*, const Math::Geo::CityD&,
 		              const QFontMetrics&, int, int);
 

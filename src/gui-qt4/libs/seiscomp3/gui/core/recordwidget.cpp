@@ -53,14 +53,6 @@ namespace  sc = Seiscomp::Core;
 namespace {
 
 
-QPen gridTickPen(QColor(0,0,0,64), 1, Qt::DashLine);
-QPen gridSubtickPen(QColor(0,0,0,0), 1, Qt::DotLine);
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
             float &ofs, float &min, float &max, bool globalOffset = false,
             const Core::TimeWindow &ofsTw = Core::TimeWindow()) {
@@ -2360,7 +2352,7 @@ void RecordWidget::drawAxis(QPainter &painter, const QPen &fg) {
 
 					drawVerticalAxis(painter, axisLower, axisUpper, stream->axisSpacing,
 					                 rect, tickLength, stream->axisLabel,
-					                 _axisPosition == Left, fg, gridTickPen,
+					                 _axisPosition == Left, fg, SCScheme.colors.records.gridPen,
 					                 _canvasRect.left(), _canvasRect.right());
 				}
 			}
@@ -2413,7 +2405,7 @@ void RecordWidget::drawAxis(QPainter &painter, const QPen &fg) {
 
 					drawVerticalAxis(painter, axisLower, axisUpper, stream->axisSpacing,
 					                 rect, tickLength, stream->axisLabel,
-					                 _axisPosition == Left, fg, gridTickPen,
+					                 _axisPosition == Left, fg, SCScheme.colors.records.gridPen,
 					                 _canvasRect.left(), _canvasRect.right());
 				}
 			}
@@ -2881,7 +2873,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			break;
 	}
 
-	QPen gridPen[2] = {gridTickPen, gridSubtickPen};
+	QPen gridPen[2] = {SCScheme.colors.records.gridPen, SCScheme.colors.records.subGridPen};
 
 	if ( _gridHSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_pixelPerSecond) && !Math::isNaN(_tmin) ) {
 		//for ( int k = 1; k >= 0; --k ) {
@@ -2952,7 +2944,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 		activeMarker = _markerSourceWidget->_activeMarker;
 	}
 
-	QColor offsetColor = blend(palette().color(QPalette::Highlight), blend(bg, gridTickPen.color(), 75), 75);
+	QColor offsetColor = blend(bg, SCScheme.colors.records.offset.color(), 75);
 
 	foreach ( RecordMarker* m, *markerList ) {
 		if ( m->isHidden() ) continue;
@@ -3020,7 +3012,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 				int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 				if ( stream->traces[1-frontIndex].validTrace() && _showAllRecords ) {
-					painter.setPen(gridTickPen);
+					painter.setPen(SCScheme.colors.records.offset);
 					painter.translate(QPoint(x_tmin[1-frontIndex], _tracePaintOffset));
 					//_trace[1-frontIndex].poly.translate(x_tmin[1-frontIndex], _tracePaintOffset);
 					stream->traces[1-frontIndex].poly->draw(painter);
@@ -3029,8 +3021,11 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 				if ( stream->traces[frontIndex].validTrace() ) {
 					if ( _drawOffset ) {
-						if ( _drawAxis )
-							painter.setPen(QPen(offsetColor, 1, Qt::DashLine));
+						if ( _drawAxis ) {
+							QPen penOffset(SCScheme.colors.records.offset);
+							penOffset.setColor(offsetColor);
+							painter.setPen(penOffset);
+						}
 						else
 							painter.setPen(offsetColor);
 						painter.drawLine(0,_tracePaintOffset+stream->traces[frontIndex].poly->baseline(), _canvasRect.width(),_tracePaintOffset+stream->traces[frontIndex].poly->baseline());
@@ -3093,7 +3088,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 				int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 				if ( stream->traces[1-frontIndex].validTrace() && _showAllRecords ) {
-					painter.setPen(gridTickPen);
+					painter.setPen(SCScheme.colors.records.offset);
 					painter.translate(QPoint(x_tmin[1-frontIndex], _tracePaintOffset + stream->posY));
 					//_trace[1-frontIndex].poly.translate(x_tmin[1-frontIndex], _tracePaintOffset);
 					stream->traces[1-frontIndex].poly->draw(painter);
@@ -3169,7 +3164,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 					int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 					if ( stream->traces[1-frontIndex].validTrace() ) {
-						painter.setPen(gridTickPen);
+						painter.setPen(SCScheme.colors.records.offset);
 						painter.translate(QPoint(x_tmin[1-frontIndex], _tracePaintOffset));
 						stream->traces[1-frontIndex].poly->draw(painter);
 						painter.translate(QPoint(-x_tmin[1-frontIndex], -_tracePaintOffset));
