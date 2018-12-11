@@ -4,6 +4,11 @@ and :ref:`global_recordstream` source. Also it may be configured to serve data
 availability information similar to the `IRIS DMC IRISWS availability Web
 Service <https://service.iris.edu/irisws/availability/1/>`_
 
+.. caution::
+   If you expose the FDSN Web Service as a public service, make sure that
+   the database connection is read-only. fdsnws will never attempt to write
+   into the database.
+
 Service Overview
 ----------------
 
