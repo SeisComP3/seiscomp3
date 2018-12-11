@@ -1,5 +1,19 @@
 # Jakarta
 
+## Release 2018.327 patch1
+
+* fdsnws
+
+  * Fix potential security issue
+
+* scheli
+
+  * Improve anti-aliased trace rendering
+
+* GUI
+
+  * Add option to map context menu to save an image of the current view
+
 ## Release 2018.327
 
 ```SC_API_VERSION 12.0.0```
