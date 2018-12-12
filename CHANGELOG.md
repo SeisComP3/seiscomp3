@@ -176,6 +176,13 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
 
+## Release 2017.334 patch8
+ 
+ * gui
+ 
+   * Fix bug that caused a segfault when GUI application are run in TTY mode
+     and the database connection is configured in the configuration file
+
 ## Release 2017.334 patch7
 
 * fdsnws
