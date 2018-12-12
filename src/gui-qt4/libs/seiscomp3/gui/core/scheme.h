@@ -240,7 +240,6 @@ class SC_GUI_API Scheme {
 			bool showCities;
 			bool showLegends;
 			int cityPopulationWeight;
-			int topPopulatedPlaces;
 			bool toBGR;
 			int polygonRoughness;
 			std::string projection;

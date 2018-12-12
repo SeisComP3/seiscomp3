@@ -367,7 +367,6 @@ Scheme::Map::Map() {
 	showCities = true;
 	showLegends = false;
 	cityPopulationWeight = 150;
-	topPopulatedPlaces = -1;
 	toBGR = false;
 	polygonRoughness = 3;
 	projection = "";
@@ -623,7 +622,6 @@ void Scheme::fetch() {
 	READ_BOOL(map.showCities);
 	READ_BOOL(map.showLegends);
 	READ_INT(map.cityPopulationWeight);
-	READ_INT(map.topPopulatedPlaces);
 	READ_BOOL(map.toBGR);
 	READ_INT(map.polygonRoughness);
 	READ_STRING(map.projection);
