@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2017.334 patch8
+
+* gui
+
+  * Fix bug that caused a segfault when GUI application are run in TTY mode
+    and the database connection is configured in the configuration file
 
 ## Release 2017.334 patch7
 
