@@ -1,5 +1,36 @@
 # Jakarta
 
+## Release 2018.327.patch3
+
+* trunk
+
+  * Add MN magnitude plugin (still experimental)
+
+## Release 2018.327 patch2
+
+* GUI
+
+  * Allow to configure the N top populated places to be shown in the
+    cities map layer
+
+* trunk
+
+  * Fix infinite loop when building a quadtree of some geo region sets
+
+## Release 2018.327 patch1
+
+* fdsnws
+
+  * Fix potential security issue
+
+* scheli
+
+  * Improve anti-aliased trace rendering
+
+* GUI
+
+  * Add option to map context menu to save an image of the current view
+
 ## Release 2018.327
 
 ```SC_API_VERSION 12.0.0```
