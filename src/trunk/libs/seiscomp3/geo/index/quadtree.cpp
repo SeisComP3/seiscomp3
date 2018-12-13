@@ -31,7 +31,18 @@ inline bool validBox(const GeoBoundingBox &container, const GeoBoundingBox &chil
 	std::cerr << container << "  <  " << child << " = " << ok << std::endl;
 	return ok;
 	*/
-	return container.contains(child);
+	return (container.width()*container.height() > 0) && container.contains(child);
+}
+
+struct indent {
+	indent(int n) : nch(n) {}
+	int nch;
+};
+
+std::ostream &operator<<(std::ostream &os, const indent &ind) {
+	int i = ind.nch;
+	while ( i-- ) os << ' ';
+	return os;
 }
 
 }
@@ -108,9 +119,9 @@ QuadTree::NodeIndex QuadTree::Node::findAndCreateNode(const GeoFeature *f) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void QuadTree::Node::addItem(const GeoFeature *f) {
+void QuadTree::Node::addItem(const GeoFeature *f, int depth) {
 	if ( isLeaf ) {
-		if ( features.size() < 4 ) {
+		if ( (features.size() < 4) || (depth > 31) ) {
 			features.push_back(f);
 			return;
 		}
@@ -119,7 +130,7 @@ void QuadTree::Node::addItem(const GeoFeature *f) {
 			for ( size_t i = 0; i < features.size(); ) {
 				NodeIndex idx = findAndCreateNode(features[i]);
 				if ( idx != InvalidIndex ) {
-					children[idx]->addItem(features[i]);
+					children[idx]->addItem(features[i], depth+1);
 					features.erase(features.begin()+i);
 					isLeaf = false;
 				}
@@ -132,8 +143,10 @@ void QuadTree::Node::addItem(const GeoFeature *f) {
 	}
 
 	NodeIndex idx = findAndCreateNode(f);
-	if ( idx != InvalidIndex )
-		children[idx]->addItem(f);
+	if ( idx != InvalidIndex ) {
+		isLeaf = false;
+		children[idx]->addItem(f, depth+1);
+	}
 	else
 		features.push_back(f);
 }
@@ -143,22 +156,6 @@ void QuadTree::Node::addItem(const GeoFeature *f) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-namespace {
-
-struct indent {
-	indent(int n) : nch(n) {}
-	int nch;
-};
-
-std::ostream &operator<<(std::ostream &os, const indent &ind) {
-	int i = ind.nch;
-	while ( i-- ) os << " ";
-	return os;
-}
-
-}
-
-
 void QuadTree::Node::dump(std::ostream &os, int indent_) const {
 	os << indent(indent_) << "[" << bbox << "]" << std::endl;
 	for ( size_t i = 0; i < features.size(); ++i )
@@ -291,7 +288,7 @@ QuadTree::QuadTree() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QuadTree::addItem(const GeoFeature *f) {
-	_root.addItem(f);
+	_root.addItem(f, 0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

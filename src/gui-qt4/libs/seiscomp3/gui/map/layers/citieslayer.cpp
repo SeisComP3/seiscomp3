@@ -33,6 +33,7 @@ namespace Map {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CitiesLayer::CitiesLayer(QObject* parent) : Layer(parent), _selectedCity(NULL) {
 	setName("cities");
+	_topPopulatedPlaces = -1;
 
 	StandardLegend *legend = new StandardLegend(this);
 	legend->setTitle(tr("Cities"));
@@ -55,6 +56,18 @@ CitiesLayer::CitiesLayer(QObject* parent) : Layer(parent), _selectedCity(NULL) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CitiesLayer::~CitiesLayer() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void CitiesLayer::init(const Config::Config &cfg) {
+	try {
+		_topPopulatedPlaces = cfg.getInt("map.layers." + name().toStdString() + ".topPopulatedPlaces");
+	}
+	catch ( ... ) {}
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -93,8 +106,8 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 		                           SCScheme.map.cityPopulationWeight;
 
 	size_t maxRenderedCitites = SCCoreApp->cities().size();
-	if ( SCScheme.map.topPopulatedPlaces > 0 )
-		maxRenderedCitites = SCScheme.map.topPopulatedPlaces;
+	if ( _topPopulatedPlaces > 0 )
+		maxRenderedCitites = _topPopulatedPlaces;
 
 	bool lastUnderline = false;
 	bool lastBold = true;

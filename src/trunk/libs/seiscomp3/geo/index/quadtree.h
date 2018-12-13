@@ -89,7 +89,7 @@ class SC_SYSTEM_CORE_API QuadTree {
 			Node();
 
 			NodeIndex findAndCreateNode(const GeoFeature *f);
-			void addItem(const GeoFeature *f);
+			void addItem(const GeoFeature *f, int depth);
 			void dump(std::ostream &os, int indent) const;
 
 			void visit(const GeoCoordinate &gc, const VisitFunc &) const;
