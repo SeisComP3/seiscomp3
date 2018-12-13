@@ -1,5 +1,16 @@
 # Jakarta
 
+## Release 2018.327 patch2
+
+* GUI
+
+  * Allow to configure the N top populated places to be shown in the
+    cities map layer
+
+* trunk
+
+  * Fix infinite loop when building a quadtree of some geo region sets
+
 ## Release 2018.327 patch1
 
 * fdsnws
