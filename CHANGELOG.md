@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327.patch3
+
+* trunk
+
+  * Add MN magnitude plugin (still experimental)
+
 ## Release 2018.327 patch2
 
 * GUI
