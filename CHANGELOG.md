@@ -199,14 +199,6 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
 ## Release 2017.334 patch5
 
-* scesv
-
-  * Add new script option ```exportMap``` that allows to export the current map to
-    file. The script has to take ownership of the file. This option is disabled by
-    default.
-
-## Release 2017.334 patch5
-
 * scart
 
   * Support loading of plugins via scart.cfg
