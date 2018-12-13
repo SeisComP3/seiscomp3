@@ -434,11 +434,11 @@ const CityD* nearestCity(double lat, double lon,
 	const CityD* minCity = NULL;
 
 	for ( int i = 0; i < nCities; ++i, ++cityArray ) {
-		const CityD& city = *cityArray;
+		const CityD &city = *cityArray;
+		if ( city.population() < minPopulation ) continue;
+
 		double dist, azi1, azi2;
 		delazi(lat, lon, city.lat, city.lon, &dist, &azi1, &azi2);
-
-		if ( city.population() < minPopulation ) continue;
 
 		if ( dist < minDist ) {
 			minDist = dist;
