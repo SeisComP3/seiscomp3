@@ -211,6 +211,7 @@ struct OriginConnector : IO::XML::MemberHandler {
 		bool foundPreferredMagnitude = false;
 
 		std::set<std::string> orgRefs;
+		std::set<std::string> pickRefs;
 
 		// Collect origin references
 		for ( size_t oi = 0; oi < event->originReferenceCount(); ++oi )
@@ -235,14 +236,29 @@ struct OriginConnector : IO::XML::MemberHandler {
 					amplitude = findAmplitude(ep, staMag->amplitudeID());
 					if ( amplitude != NULL) {
 						output->handle(amplitude, "amplitude", "");
+						// include picks referenced by amplitude
+						std::pair<std::set<std::string>::const_iterator, bool> res =
+						        pickRefs.insert(amplitude->pickID());
+						if ( res.second ) {
+							pick = findPick(ep, *res.first);
+							if ( pick != NULL ) {
+								output->handle(pick, "pick", "");
+							}
+						}
 					}
 					output->handle(staMag, "stationMagnitude", "");
 				}
 				output->handle(origin, tag, ns);
+
+				// include picks referenced by origin arrivals
 				for ( size_t ai = 0; ai < origin->arrivalCount(); ++ai ) {
-					pick = findPick(ep, origin->arrival(ai)->index().pickID);
-					if ( pick != NULL ) {
-						output->handle(pick, "pick", "");
+					std::pair<std::set<std::string>::const_iterator, bool> res =
+					        pickRefs.insert(origin->arrival(ai)->index().pickID);
+					if ( res.second ) {
+						pick = findPick(ep, *res.first);
+						if ( pick != NULL ) {
+							output->handle(pick, "pick", "");
+						}
 					}
 				}
 			}
