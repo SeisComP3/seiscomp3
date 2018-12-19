@@ -1,10 +1,5 @@
-SET(TESTS
-	amplitudes.cpp
-)
-
 ADD_DEFINITIONS("-DTEST_BUILD_DIR=\"${CMAKE_CURRENT_BINARY_DIR}\"")
 
-SET(test_mn_amplitudes test_core_${testName})
 ADD_EXECUTABLE(test_mn_amplitudes amplitudes.cpp ../amplitude.cpp ../magnitude.cpp ../regions.cpp)
 SC_LINK_LIBRARIES_INTERNAL(test_mn_amplitudes client)
 
