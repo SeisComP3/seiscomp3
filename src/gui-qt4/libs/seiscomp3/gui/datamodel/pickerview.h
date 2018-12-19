@@ -69,8 +69,9 @@ class SC_GUI_API ThreeComponentTrace : public QObject {
 		~ThreeComponentTrace();
 
 	public:
-		void setTransformationEnabled(bool);
+		void setTransformationEnabled(bool enable);
 		void setL2Horizontals(bool);
+		void setPassThrough(int component, bool enable);
 		void setRecordWidget(RecordWidget *);
 		void reset();
 		void setFilter(RecordWidget::Filter *);
@@ -89,6 +90,7 @@ class SC_GUI_API ThreeComponentTrace : public QObject {
 			RecordSequence       *transformed;
 			Filter                filter;
 			RecordStreamThread   *thread;
+			bool                  passthrough;
 		};
 
 		Math::Matrix3f  transformation;
