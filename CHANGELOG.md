@@ -6,6 +6,13 @@
 
   * Add MN magnitude plugin (still experimental)
 
+* scolv
+
+  * Keep showing waveform components that do not depend on other components
+    for transformation. Vertical components which are the only components
+    of a station will still be visible with any rotation selected if they
+    are properly aligned upwards.
+
 ## Release 2018.327 patch2
 
 * GUI
