@@ -1261,7 +1261,7 @@ SensorLocation *findSensorLocation(Station *station, const std::string &code,
 }
 
 
-Stream* findStream(Station *station, const std::string &code,
+Stream *findStream(Station *station, const std::string &code,
                    const Seiscomp::Core::Time &time) {
 	for ( size_t i = 0; i < station->sensorLocationCount(); ++i ) {
 		SensorLocation *loc = station->sensorLocation(i);
@@ -1525,6 +1525,7 @@ ThreeComponentTrace::ThreeComponentTrace() {
 		traces[i].transformed = NULL;
 		traces[i].thread = NULL;
 		traces[i].filter = NULL;
+		traces[i].passthrough = false;
 	}
 }
 
@@ -1595,6 +1596,8 @@ void ThreeComponentTrace::widgetDestroyed(QObject *obj) {
 
 
 void ThreeComponentTrace::setTransformationEnabled(bool f) {
+	bool needTransformation = false;
+
 	enableTransformation = f;
 
 	for ( int i = 0; i < 3; ++i ) {
@@ -1607,7 +1610,33 @@ void ThreeComponentTrace::setTransformationEnabled(bool f) {
 
 			if ( widget ) widget->setRecords(i, NULL);
 		}
+
+		if ( enableTransformation ) {
+			Math::Vector3f r = transformation.row(2-i);
+			bool passthrough = true;
+
+			if ( enableL2Horizontals && i > 0 )
+				passthrough = false;
+			else {
+				for ( int j = 0; j < 3; ++j ) {
+					if ( j == 2-i ) {
+						if ( fabs(r[j]-1.0) > 1E-6 )
+							passthrough = false;
+					}
+					else {
+						if ( fabs(r[j]) > 1E-6 )
+							passthrough = false;
+					}
+				}
+			}
+
+			setPassThrough(i, passthrough);
+			if ( !passthrough )
+				needTransformation = true;
+		}
 	}
+
+	enableTransformation = needTransformation;
 
 	transform();
 }
@@ -1618,23 +1647,86 @@ void ThreeComponentTrace::setL2Horizontals(bool f) {
 }
 
 
+void ThreeComponentTrace::setPassThrough(int component, bool enable) {
+	traces[component].passthrough = enable;
+}
+
+
 bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
-	Core::Time minStartTime;
-	Core::Time maxStartTime;
-	Core::Time minEndTime;
 	bool gotRecords = false;
 
+	// Record passed that needs filtering?
+	if ( rec ) {
+		if ( traces[comp].passthrough || !enableTransformation ) {
+			if ( traces[comp].transformed == NULL ) {
+				traces[comp].transformed = new RingBuffer(0);
+				if ( widget ) widget->setRecords(comp, traces[comp].transformed, false);
+			}
+
+			RecordPtr grec = traces[comp].filter.feed(rec);
+
+			if ( grec ) {
+				traces[comp].transformed->feed(grec.get());
+				if ( widget ) widget->fed(comp, grec.get());
+				gotRecords = true;
+			}
+		}
+	}
+	else {
+		// Just copy the records and filter them if activated
+		for ( int i = 0; i < 3; ++i ) {
+			if ( enableTransformation && !traces[i].passthrough ) continue;
+			if ( traces[i].raw == NULL || traces[i].raw->empty() ) continue;
+
+			RecordSequence::iterator it;
+			if ( traces[i].transformed == NULL )
+				it = traces[i].raw->begin();
+			else {
+				Core::Time endTime = traces[i].transformed->back()->endTime();
+				for ( RecordSequence::iterator s_it = traces[i].raw->begin();
+				      s_it != traces[i].raw->end(); ++s_it ) {
+					if ( (*s_it)->startTime() >= endTime ) {
+						it = s_it;
+						break;
+					}
+				}
+			}
+
+			for ( RecordSequence::iterator s_it = it;
+			      s_it != traces[i].raw->end(); ++s_it ) {
+
+				const Record *s_rec = s_it->get();
+
+				if ( traces[i].transformed == NULL ) {
+					traces[i].transformed = new RingBuffer(0);
+					if ( widget ) widget->setRecords(i, traces[i].transformed, false);
+				}
+
+				RecordPtr grec = traces[i].filter.feed(s_rec);
+				if ( grec ) {
+					traces[i].transformed->feed(grec.get());
+					if ( widget ) widget->fed(i, grec.get());
+					gotRecords = true;
+				}
+			}
+		}
+	}
+
 	if ( enableTransformation ) {
+		Core::Time minStartTime;
+		Core::Time maxStartTime;
+		Core::Time minEndTime;
+
 		// Not all traces available, nothing to do
 		for ( int i = 0; i < 3; ++i ) {
-			if ( traces[i].transformed ) {
+			if ( !traces[i].passthrough && traces[i].transformed ) {
 				Core::Time endTime = traces[i].transformed->back()->endTime();
 				if ( endTime > minStartTime )
 					minStartTime = endTime;
 			}
 
 			if ( !traces[i].raw || traces[i].raw->empty() )
-				return false;
+				return gotRecords;
 		}
 
 		// Find common start time for all three components
@@ -1737,7 +1829,6 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 				if ( !i || minEndTime > (*it_end[i])->endTime() )
 					minEndTime = (*it_end[i])->endTime();
 			}
-
 
 			GenericRecordPtr comps[3];
 			int minLen = 0;
@@ -1854,6 +1945,8 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 
 			// Create record sequences
 			for ( int i = 0; i < 3; ++i ) {
+				if ( traces[i].passthrough ) continue;
+
 				// Create ring buffer without limit if needed
 				if ( traces[i].transformed == NULL ) {
 					traces[i].transformed = new RingBuffer(0);
@@ -1865,61 +1958,6 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 			}
 
 			minStartTime = minEndTime;
-		}
-	}
-	else {
-		// Record passed that needs filtering?
-		if ( rec ) {
-			if ( traces[comp].transformed == NULL ) {
-				traces[comp].transformed = new RingBuffer(0);
-				if ( widget ) widget->setRecords(comp, traces[comp].transformed, false);
-			}
-
-			RecordPtr grec = traces[comp].filter.feed(rec);
-
-			if ( grec ) {
-				traces[comp].transformed->feed(grec.get());
-				if ( widget ) widget->fed(comp, grec.get());
-				gotRecords = true;
-			}
-		}
-		else {
-			// Just copy the records and filter them if activated
-			for ( int i = 0; i < 3; ++i ) {
-				if ( traces[i].raw == NULL || traces[i].raw->empty() ) continue;
-
-				RecordSequence::iterator it;
-				if ( traces[i].transformed == NULL )
-					it = traces[i].raw->begin();
-				else {
-					Core::Time endTime = traces[i].transformed->back()->endTime();
-					for ( RecordSequence::iterator s_it = traces[i].raw->begin();
-					      s_it != traces[i].raw->end(); ++s_it ) {
-						if ( (*s_it)->startTime() >= endTime ) {
-							it = s_it;
-							break;
-						}
-					}
-				}
-
-				for ( RecordSequence::iterator s_it = it;
-				      s_it != traces[i].raw->end(); ++s_it ) {
-
-					const Record *s_rec = s_it->get();
-
-					if ( traces[i].transformed == NULL ) {
-						traces[i].transformed = new RingBuffer(0);
-						if ( widget ) widget->setRecords(i, traces[i].transformed, false);
-					}
-
-					RecordPtr grec = traces[i].filter.feed(s_rec);
-					if ( grec ) {
-						traces[i].transformed->feed(grec.get());
-						if ( widget ) widget->fed(i, grec.get());
-						gotRecords = true;
-					}
-				}
-			}
 		}
 	}
 
@@ -7881,6 +7919,10 @@ void PickerView::addStations() {
 
 		if ( stream == NULL )
 			stream = findStream(s, _origin->time(), Processing::WaveformProcessor::MeterPerSecond);
+		if ( stream == NULL )
+			stream = findStream(s, _origin->time(), Processing::WaveformProcessor::MeterPerSecondSquared);
+		if ( stream == NULL )
+			stream = findStream(s, _origin->time(), Processing::WaveformProcessor::Meter);
 
 		if ( stream ) {
 			WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
