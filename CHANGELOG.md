@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scevent
+
+  * The evrc plugin does not change the status of events with manual preferred origin
+
 ## Release 2018.327.patch3
 
 * trunk

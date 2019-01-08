@@ -166,6 +166,17 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				return false;
 			}
 
+			try {
+				if ( org->evaluationMode() == DataModel::MANUAL ){
+					SEISCOMP_DEBUG("evrc plugin found %s preferred origin %s: "
+					               "do not change the event status",
+					               org->evaluationMode().toString(),
+					               org->publicID().c_str());
+					return false;
+				}
+			}
+			catch ( ... ) {}
+
 			GeoCoordinate location;
 
 			try {
