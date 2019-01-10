@@ -11,6 +11,7 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
+import sys
 import re
 import json
 import datetime
@@ -684,16 +685,16 @@ class _Blockette50(object):
 
         error = False
         if not isinstance(self.__stat_code, str):
-            print "blockette 50 - station code not set or not of type string"
+            print >> sys.stderr, "blockette 50 - station code not set or not of type string"
             error = True
         if not isinstance(self.__latitude, float):
-            print "blockette 50 - latitude not set or not of type float"
+            print >> sys.stderr, "blockette 50 - latitude not set or not of type float"
             error = True
         if not isinstance(self.__longitude, float):
-            print "blockette 50 - longitude not set or not of type float"
+            print >> sys.stderr, "blockette 50 - longitude not set or not of type float"
             error = True
         if not isinstance(self.__elevation, float):
-            print "blockette 50 - elevation not set or not of type float"
+            print >> sys.stderr, "blockette 50 - elevation not set or not of type float"
             error = True
 
         if error:
@@ -754,55 +755,55 @@ class _Blockette52(object):
 
         error = False
         if not isinstance(self.__loc_id, str):
-            print "blockette 52 - location ID not set or not of type string"
+            print >> sys.stderr, "blockette 52 - location ID not set or not of type string"
             error = True
         if not isinstance(self.__chan_id, str):
-            print "blockette 52 - channel ID not set or not of type string"
+            print >> sys.stderr, "blockette 52 - channel ID not set or not of type string"
             error = True
         if not isinstance(self.__len, int):
-            print "blockette 52 - len not set or not of type int"
+            print >> sys.stderr, "blockette 52 - len not set or not of type int"
             error = True
         if not isinstance(self.__instr_id, int):
-            print "blockette 52 - instrument ID not set or not of type integer"
+            print >> sys.stderr, "blockette 52 - instrument ID not set or not of type integer"
             error = True
         if not isinstance(self.__comment, str):
-            print "blockette 52 - comment not set or not of type sting"
+            print >> sys.stderr, "blockette 52 - comment not set or not of type sting"
             error = True
         if not isinstance(self.__signal_units, int):
-            print "blockette 52 - signal_units not set or not of type integer"
+            print >> sys.stderr, "blockette 52 - signal_units not set or not of type integer"
             error = True
         if not isinstance(self.__calibration_units, int):
-            print "blockette 52 - calibration units not set or not of type integer"
+            print >> sys.stderr, "blockette 52 - calibration units not set or not of type integer"
             error = True
         if not isinstance(self.__latitude, float):
-            print "blockette 52 - latitude not set or not of type float"
+            print >> sys.stderr, "blockette 52 - latitude not set or not of type float"
             error = True
         if not isinstance(self.__longitude, float):
-            print "blockette 52 - longitude not set or not of type float"
+            print >> sys.stderr, "blockette 52 - longitude not set or not of type float"
             error = True
         if not isinstance(self.__elevation, float):
-            print "blockette 52 - elevation not set or not of type float"
+            print >> sys.stderr, "blockette 52 - elevation not set or not of type float"
             error = True
         if not isinstance(self.__local_depth, float):
-            print "Warning: blockette 52 - sensor depth not set or not of type float"
+            print >> sys.stderr, "Warning: blockette 52 - local depth not set or not of type float"
             error = True
         if not isinstance(self.__azimuth, float):
-            print "blockette 52 - sensor azimuth not set or not of type float"
+            print >> sys.stderr, "blockette 52 - azimuth not set or not of type float"
             error = True
         if not isinstance(self.__dip, float):
-            print "blockette 52 - sensor dip not set or not of type float"
+            print >> sys.stderr, "blockette 52 - dip not set or not of type float"
             error = True
         if not isinstance(self.__data_format, int):
-            print "blockette 52 - data format not set or not of type integer"
+            print >> sys.stderr, "blockette 52 - data format not set or not of type integer"
             error = True
         if not isinstance(self.__record_length, int):
-            print "blockette 52 - record length not set or not of type integer"
+            print >> sys.stderr, "blockette 52 - record length not set or not of type integer"
             error = True
         if not isinstance(self.__sample_rate, float):
-            print "blockette 52 - sample rate not set or not of type float"
+            print >> sys.stderr, "blockette 52 - sample rate not set or not of type float"
             error = True
         if not isinstance(self.__clock_drift, float):
-            print "Warning: blockette 52 - clock drift not set or not of type float"
+            print >> sys.stderr, "Warning: blockette 52 - clock drift not set or not of type float"
             error = True
 
         if error:
