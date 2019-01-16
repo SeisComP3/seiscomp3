@@ -1054,7 +1054,7 @@ class _Blockette61(object):
 
             blk = "061%4d%2d%s%s%3d%3d%4d%s" % (blen, self.__stage,
                 self.__name, self.__symmetry, self.__input_units,
-                self.__output_units, self.__ncoeff, self.__coeff[14*n:14*(n+nc)])
+                self.__output_units, nc, self.__coeff[14*n:14*(n+nc)])
 
             if len(blk) != blen:
                 raise SEEDError, "blockette 61 has invalid length: %d instead of %d" % (len(blk), self.__len)
