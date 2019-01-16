@@ -2060,6 +2060,12 @@ void AmplitudeView::init() {
 	_spinSNR->setSingleStep(1);
 	//_spinSNR->setPrefix("Min. SNR ");
 	_spinSNR->setSpecialValueText("Disabled");
+	_checkOverrideSNR = new QCheckBox;
+	_checkOverrideSNR->setToolTip(tr("Enable to override the minimum SNR"));
+	_checkOverrideSNR->setChecked(false);
+	_spinSNR->setEnabled(_checkOverrideSNR->isChecked());
+
+	connect(_checkOverrideSNR, SIGNAL(toggled(bool)), _spinSNR, SLOT(setEnabled(bool)));
 
 	_comboAmpType = new QComboBox;
 	_comboAmpType->setEnabled(false);
@@ -2073,6 +2079,7 @@ void AmplitudeView::init() {
 	        this, SLOT(recalculateAmplitudes()));
 
 	_ui.toolBarFilter->insertWidget(_ui.actionToggleFilter, _comboFilter);
+	_ui.toolBarSetup->insertWidget(_ui.actionRecalculateAmplitude, _checkOverrideSNR);
 	_ui.toolBarSetup->insertWidget(_ui.actionRecalculateAmplitude, new QLabel("Min SNR:"));
 	_ui.toolBarSetup->insertWidget(_ui.actionRecalculateAmplitude, _spinSNR);
 	_ui.toolBarSetup->insertSeparator(_ui.actionRecalculateAmplitude);
@@ -2517,7 +2524,10 @@ void AmplitudeView::onSelectedTimeRange(Seiscomp::Core::Time t1, Seiscomp::Core:
 	double smin = t1-label->processor->trigger();
 	double smax = t2-label->processor->trigger();
 
-	label->processor->setMinSNR(_spinSNR->value());
+	if ( _checkOverrideSNR->isChecked() )
+		label->processor->setMinSNR(_spinSNR->value());
+	else
+		label->processor->setMinSNR(label->initialMinSNR);
 
 	if ( _comboAmpType->isEnabled() )
 		label->processor->setParameter(Processing::AmplitudeProcessor::MeasureType, _comboAmpType->currentText().toStdString());
@@ -2586,7 +2596,10 @@ void AmplitudeView::setPhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 	double smin = double(time-label->processor->trigger())-0.5;
 	double smax = smin+1.0;
 
-	label->processor->setMinSNR(_spinSNR->value());
+	if ( _checkOverrideSNR->isChecked() )
+		label->processor->setMinSNR(_spinSNR->value());
+	else
+		label->processor->setMinSNR(label->initialMinSNR);
 
 	if ( _comboAmpType->isEnabled() )
 		label->processor->setParameter(Processing::AmplitudeProcessor::MeasureType, _comboAmpType->currentText().toStdString());
@@ -2935,7 +2948,11 @@ void AmplitudeView::recalculateAmplitude() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	l->processor->setMinSNR(_spinSNR->value());
+	if ( _checkOverrideSNR->isChecked() )
+		l->processor->setMinSNR(_spinSNR->value());
+	else
+		l->processor->setMinSNR(l->initialMinSNR);
+
 	resetAmplitude(item, _amplitudeType.c_str(), false);
 
 	if ( _comboAmpType->isEnabled() )
@@ -2999,7 +3016,11 @@ void AmplitudeView::recalculateAmplitudes() {
 			if ( !controllerLabel->isExpanded() ) continue;
 		}
 
-		l->processor->setMinSNR(_spinSNR->value());
+		if ( _checkOverrideSNR->isChecked() )
+			l->processor->setMinSNR(_spinSNR->value());
+		else
+			l->processor->setMinSNR(l->initialMinSNR);
+
 		resetAmplitude(item, _amplitudeType.c_str(), false);
 
 		if ( _comboAmpType->isEnabled() )
@@ -3899,6 +3920,7 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 	label->setText(QString("%1").arg(sid.networkCode().c_str()), 1);
 	label->processor = proc;
 	label->magnitudeProcessor = magProc;
+	label->initialMinSNR = proc->config().snrMin;
 
 	label->location = loc;
 	label->latitude = loc->latitude();

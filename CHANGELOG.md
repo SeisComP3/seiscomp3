@@ -1,5 +1,54 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scolv
+
+  * Add toggle to amplitude picker to either override the configured minimum
+    SNR per station or not. The default is now to use what is configured.
+
+* scevent
+
+  * The evrc plugin does not change the status of events with manual preferred origin
+
+## Release 2018.327.patch3
+
+* trunk
+
+  * Add MN magnitude plugin (still experimental)
+
+* scolv
+
+  * Keep showing waveform components that do not depend on other components
+    for transformation. Vertical components which are the only components
+    of a station will still be visible with any rotation selected if they
+    are properly aligned upwards.
+
+## Release 2018.327 patch2
+
+* GUI
+
+  * Allow to configure the N top populated places to be shown in the
+    cities map layer
+
+* trunk
+
+  * Fix infinite loop when building a quadtree of some geo region sets
+
+## Release 2018.327 patch1
+
+* fdsnws
+
+  * Fix potential security issue
+
+* scheli
+
+  * Improve anti-aliased trace rendering
+
+* GUI
+
+  * Add option to map context menu to save an image of the current view
+
 ## Release 2018.327
 
 ```SC_API_VERSION 12.0.0```
@@ -135,7 +184,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
 * scbulletin
 
-  * In enhanced mode all coordinates and distances have precisions 
+  * In enhanced mode all coordinates and distances have precisions
     of e-05 degree
 
 * scart
@@ -177,9 +226,15 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     the new availability database tables (read by fdsnws)
 
 ## Release 2017.334 patch8
+<<<<<<< HEAD
  
  * gui
  
+=======
+
+ * gui
+
+>>>>>>> f2cc747... Update changelog
    * Fix bug that caused a segfault when GUI application are run in TTY mode
      and the database connection is configured in the configuration file
 
@@ -344,7 +399,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 * GUI
 
   * Add StandardLegend class to create map legends in an easy way
-  * Add support for map legend descriptions in map layer configuration 
+  * Add support for map legend descriptions in map layer configuration
 
 ## Release 2017.334 patch1
 
@@ -1144,7 +1199,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
    ```
    annotations = true
    annotionsWithChannels = false
-   ``` 
+   ```
 
 * scrttv
 
@@ -1209,7 +1264,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
  * Added warning to trace if not metadata are available
  * Added option to cycle through filters with keyboard
  * Do not show acquisition error box if acquisition has been cancelled by user
- 
+
 * tabinvmodifier
 
  * Fixed Python return codes for event handlers

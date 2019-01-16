@@ -594,7 +594,7 @@ DatabaseIterator getComments4PrefOrigins(DatabaseArchive *ar, const EventListVie
 		<<       "POrigin." << _T("publicID") << " = Event." << _T("preferredOriginID") << " and "
 		<<       "Comment._parent_oid = Origin._oid";
 
-	 return ar->getObjectIterator( oss.str(), Comment::TypeInfo() );
+	return ar->getObjectIterator( oss.str(), Comment::TypeInfo() );
 }
 
 

@@ -34,6 +34,7 @@
 #include <QActionGroup>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QMovie>
 #include <QSet>
 #include <QLabel>
@@ -166,6 +167,8 @@ class SC_GUI_API AmplitudeRecordLabel : public StandardRecordLabel {
 
 		Processing::AmplitudeProcessorPtr processor;
 		Processing::MagnitudeProcessorPtr magnitudeProcessor;
+
+		double                            initialMinSNR;
 
 		QString                           infoText;
 		bool                              isError;
@@ -469,6 +472,7 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 		QLabel    *_labelAmpCombiner;
 		QComboBox *_comboAmpCombiner;
 		QDoubleSpinBox *_spinDistance;
+		QCheckBox      *_checkOverrideSNR;
 		QDoubleSpinBox *_spinSNR;
 
 		QLineEdit *_searchStation;

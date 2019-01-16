@@ -113,8 +113,8 @@ Brushes
 -------
 
 Brushes are also used in the vector layer configuration. Brushes are used to
-fill a polygon. They have two attributes: color and pattern. Color followes the
-described color definition and patterns are:
+fill a polygon. They have two attributes: color and style. Color follows the
+described color definition and styles are:
 
 .. figure:: media/gui/brush-patterns.png
 
@@ -124,7 +124,7 @@ Example:
 
    # Red solid brush
    brush.color = ff0000
-   brush.pattern = solid
+   brush.style = solid
 
 
 Map vector layers
@@ -254,7 +254,7 @@ Available configuration parameters are:
 
    Type: *string*
 
-   Fill pattern. Supported values are:
+   Fill style. Supported values are:
    nobrush, solid, dense1, dense2, dense3, dense4,
    dense5, dense6, dense7, horizontal, vertical,
    cross, bdiag, fdiag and diagcross.
