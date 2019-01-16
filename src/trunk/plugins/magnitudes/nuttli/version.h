@@ -16,8 +16,8 @@
 
 
 #define MN_VERSION_MAJOR 0
-#define MN_VERSION_MINOR 0
-#define MN_VERSION_PATCH 1
+#define MN_VERSION_MINOR 1
+#define MN_VERSION_PATCH 0
 
 #define MN_STR_HELPER(x) #x
 #define MN_STR(x) MN_STR_HELPER(x)

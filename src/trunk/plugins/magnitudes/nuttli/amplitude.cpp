@@ -435,6 +435,16 @@ OPT(double) MNAmplitude::getEarliestOnset(double lat0, double lon0, double depth
 
 		// Phase and location matches, use it
 		double onset = pick->time().value() - _environment.hypocenter->time().value();
+		try {
+			onset -= pick->time().lowerUncertainty();
+		}
+		catch ( ... ) {
+			try {
+				onset -= pick->time().uncertainty();
+			}
+			catch ( ... ) {}
+		}
+
 		if ( !minimumOnset || *minimumOnset > onset )
 			minimumOnset = onset;
 	}
@@ -760,6 +770,11 @@ bool MNAmplitude::computeAmplitude(const Seiscomp::DoubleArray &dataArray,
 	// Amplitude is now in SI
 	amplitude->value /= _streamConfig[_usedComponent].gain;
 
+	SEISCOMP_DEBUG("%s.%s.%s: amp = %f, period = %fs, snr = %f, time = %s",
+	               _networkCode.c_str(), _stationCode.c_str(), _locationCode.c_str(),
+	               amplitude->value, *period / _stream.fsamp, *snr,
+	               (dataTimeWindow().startTime() + Core::TimeSpan(dt->index / _stream.fsamp)).iso().c_str());
+
 	if ( (_config.snrMin > 0) && (*snr < _config.snrMin) ) {
 		setStatus(LowSNR, *snr);
 		return false;
@@ -776,12 +791,11 @@ bool MNAmplitude::computeAmplitude(const Seiscomp::DoubleArray &dataArray,
 		double scale = abs(sensorResponse) / abs(amplitudeResponse);
 		amplitude->value *= scale;
 
-		SEISCOMP_DEBUG("%s.%s.%s: amp = %f, snr = %f, period = %fs, "
-		               "value at period = %f, value at gain frequency = %f, "
+		SEISCOMP_DEBUG("%s.%s.%s: value at period = %f, value at gain frequency = %f, "
 		               "correction = %f, corr(amp) = %f",
 		               _networkCode.c_str(), _stationCode.c_str(), _locationCode.c_str(),
-		               amplitude->value, *snr, *period, abs(amplitudeResponse),
-		               abs(sensorResponse), scale, amplitude->value * scale);
+		               abs(amplitudeResponse), abs(sensorResponse), scale,
+		               amplitude->value * scale);
 	}
 
 	return true;
