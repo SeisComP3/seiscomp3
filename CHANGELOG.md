@@ -2,6 +2,11 @@
 
 ## Release YYYY.ddd
 
+* scolv
+
+  * Add toggle to amplitude picker to either override the configured minimum
+    SNR per station or not. The default is now to use what is configured.
+
 * scevent
 
   * The evrc plugin does not change the status of events with manual preferred origin
@@ -179,7 +184,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
 * scbulletin
 
-  * In enhanced mode all coordinates and distances have precisions 
+  * In enhanced mode all coordinates and distances have precisions
     of e-05 degree
 
 * scart
@@ -221,9 +226,15 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     the new availability database tables (read by fdsnws)
 
 ## Release 2017.334 patch8
+<<<<<<< HEAD
  
  * gui
  
+=======
+
+ * gui
+
+>>>>>>> f2cc747... Update changelog
    * Fix bug that caused a segfault when GUI application are run in TTY mode
      and the database connection is configured in the configuration file
 
@@ -388,7 +399,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 * GUI
 
   * Add StandardLegend class to create map legends in an easy way
-  * Add support for map legend descriptions in map layer configuration 
+  * Add support for map legend descriptions in map layer configuration
 
 ## Release 2017.334 patch1
 
@@ -1188,7 +1199,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
    ```
    annotations = true
    annotionsWithChannels = false
-   ``` 
+   ```
 
 * scrttv
 
@@ -1253,7 +1264,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
  * Added warning to trace if not metadata are available
  * Added option to cycle through filters with keyboard
  * Do not show acquisition error box if acquisition has been cancelled by user
- 
+
 * tabinvmodifier
 
  * Fixed Python return codes for event handlers
