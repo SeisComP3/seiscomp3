@@ -1381,7 +1381,28 @@ ArrivalModel::ArrivalModel(DataModel::Origin* origin, QObject *parent)
 			if ( SCScheme.unit.distanceInKM )
 				_header << QString("%1 (km)").arg(EArrivalListColumnsNames::name(i));
 			else
-				_header << QString("%1 (deg)").arg(EArrivalListColumnsNames::name(i));
+				_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == RESIDUAL ) {
+			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == UNCERTAINTY ) {
+			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == LATENCY ) {
+			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == SLOWNESS ) {
+			_header << QString("%1 (s/°)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == AZIMUTH ) {
+			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == TAKEOFF ) {
+			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+		}
+		else if ( i == BACKAZIMUTH ) {
+			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
 		}
 		else if ( i == TIME ) {
 			if ( SCScheme.dateTime.useLocalTime )
@@ -3000,7 +3021,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 		if ( SCScheme.unit.distanceInKM )
 			_residuals->setAbscissaName("Distance (km)");
 		else
-			_residuals->setAbscissaName("Distance (deg)");
+			_residuals->setAbscissaName("Distance (°)");
 		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Azimuth / Residual
@@ -3008,7 +3029,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 		_residuals->setMarkerDistance(10, 1);
 		_residuals->setType(DiagramWidget::Rectangular);
 		_residuals->setIndicies(PC_AZIMUTH,PC_RESIDUAL);
-		_residuals->setAbscissaName("Azimuth (deg)");
+		_residuals->setAbscissaName("Azimuth (°)");
 		_residuals->setOrdinateName("Residual (s)");
 	}
 	// Distance / TravelTime
@@ -3019,7 +3040,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 		if ( SCScheme.unit.distanceInKM )
 			_residuals->setAbscissaName("Distance (km)");
 		else
-			_residuals->setAbscissaName("Distance (deg)");
+			_residuals->setAbscissaName("Distance (°)");
 		_residuals->setOrdinateName("TravelTime (s)");
 	}
 	else if ( tab == PT_MOVEOUT ) {
@@ -3029,7 +3050,7 @@ void OriginLocatorView::plotTabChanged(int tab) {
 		if ( SCScheme.unit.distanceInKM )
 			_residuals->setAbscissaName("Distance (km)");
 		else
-			_residuals->setAbscissaName("Distance (deg)");
+			_residuals->setAbscissaName("Distance (°)");
 		_residuals->setOrdinateName(QString("Tred = T-d/%1 km/s (s)").arg(_config.reductionVelocityP));
 	}
 	else if ( tab == PT_POLAR ) {
