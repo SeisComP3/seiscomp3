@@ -399,7 +399,7 @@ StationMagnitudeModel::StationMagnitudeModel(DataModel::Origin* origin,
 			if ( SCScheme.unit.distanceInKM )
 				_header << QString("%1 (km)").arg(EStaMagsListColumnsNames::name(i));
 			else
-				_header << QString("%1 (deg)").arg(EStaMagsListColumnsNames::name(i));
+				_header << QString("%1 (°)").arg(EStaMagsListColumnsNames::name(i));
 		}
 		else
 			_header << EStaMagsListColumnsNames::name(i);
@@ -1157,7 +1157,7 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	if ( SCScheme.unit.distanceInKM )
 		_stamagnitudes->setAbscissaName("Distance (km)");
 	else
-		_stamagnitudes->setAbscissaName("Distance");
+		_stamagnitudes->setAbscissaName("Distance (°)");
 	_stamagnitudes->setOrdinateName("Residual");
 	_stamagnitudes->setMarkerDistance(10, 0.1);
 	_stamagnitudes->setDisplayRect(QRectF(0,-2,180,4));
