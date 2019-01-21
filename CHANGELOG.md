@@ -11,6 +11,11 @@
   * Fixed bug with hyp71sum2k and ims10 export that caused truncated strings.
     Many thanks to Luca Scarabello (ETHZ) for finding and fixing this bug.
 
+* seedlink
+
+  * Added caps\_plugin which allows to retrieve data from gempa's CAPS
+    server, for example to import RaspberryShake data
+
 * scolv
 
   * Added toggle to amplitude picker to either override the configured minimum
