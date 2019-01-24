@@ -17,35 +17,31 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/record.h>
 
+#include <seiscomp3/plugins/qc/qcmessenger.h>
+#include <seiscomp3/plugins/qc/qcplugin.h>
+#include <seiscomp3/plugins/qc/qcconfig.h>
+
 #include <boost/version.hpp>
 #include <boost/any.hpp>
-#if (BOOST_VERSION < 104000)
-#include <boost/signal.hpp>
-namespace bsig = boost;
-namespace boost_signals = boost::signals;
-#else
 #include <boost/signals2.hpp>
-namespace bsig = boost::signals2;
-namespace boost_signals = boost::signals2;
-#endif
 
 #include <string> 
 #include <set> 
 #include <map> 
 
-#include <seiscomp3/plugins/qc/qcmessenger.h>
-#include <seiscomp3/plugins/qc/qcplugin.h>
-#include <seiscomp3/plugins/qc/qcconfig.h>
+
+namespace bsig = boost::signals2;
+
 
 namespace Seiscomp {
 namespace Applications {
 namespace Qc {
 
-class QcBuffer;
+
 DEFINE_SMARTPOINTER(QcBuffer);
 
 
-class QcTool : public QcApp, public boost_signals::trackable {
+class QcTool : public QcApp, public bsig::trackable {
 	public:
 		QcTool(int argc, char **argv);
 		~QcTool();
@@ -111,12 +107,12 @@ class QcTool : public QcApp, public boost_signals::trackable {
 
 		mutable TimerSignal _emitTimeout;
 		Util::StopWatch _timer;
-
 };
 
 
 }
 }
 }
+
 
 #endif
