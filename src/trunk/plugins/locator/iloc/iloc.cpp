@@ -22,7 +22,6 @@
 #include <seiscomp3/core/version.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/system/environment.h>
-#include <seiscomp3/utils/timer.h>
 
 
 #if SC_API_VERSION >= SC_API_VERSION_CHECK(10,0,0)
@@ -94,7 +93,7 @@ void initConfig(ILOC_CONF &cfg) {
 	cfg.Verbose = 1;
 
 	// Travel time predictions
-	strcpy(cfg.TTmodel, "ak135");
+	strcpy(cfg.TTmodel, "iasp91");
 
 	strcpy(cfg.LocalVmodel, "");
 	cfg.MaxLocalTTDelta = 3.;
@@ -183,7 +182,6 @@ ILoc::AuxData::~AuxData() {
 void ILoc::AuxData::read(const iLocConfig *config) {
 	if ( valid ) free();
 
-	useRSTT = config->UseRSTT;
 	if ( iLoc_ReadAuxDataFiles(const_cast<iLocConfig*>(config), &infoPhaseId,
 	                           &fe, &defaultDepth, &variogram,
 	                           &infoTT, &tablesTT, &ec,
@@ -390,6 +388,19 @@ bool ILoc::setParameter(const string &name, const string &value) {
 	}
 	else INP_STRING(DoGridSearch, int)
 	else INP_STRING(DoNotRenamePhases, int)
+	if ( name == "UseRSTT" ) {
+		int v;
+		if ( !Core::fromString(v, value) )
+			return false;
+
+		v = v ? 1 : 0;
+
+		if ( _config.UseRSTT != v ) {
+			_config.UseRSTT = v;
+			// We need to re-read the aux files
+			_auxDirty = true;
+		}
+	}
 	else INP_STRING(UseRSTT, int)
 	else INP_STRING(MaxLocalTTDelta, double)
 	else INP_STRING(UseLocalTT, int)
@@ -743,14 +754,11 @@ throw(Seiscomp::Core::GeneralException)
 
 	int res;
 
-	Util::StopWatch stopWatch;
 	res = iLoc_Locator(&_config, &_aux.infoPhaseId, &_aux.fe, &_aux.defaultDepth,
 	                   &_aux.variogram, _aux.ec,
 	                   &_aux.infoTT, _aux.tablesTT,
 	                   &_aux.infoLocalTT, _aux.tablesLocalTT,
 	                   &hypoCenter, &assocs[0], &stalocs[0]);
-	double elapsed = stopWatch.elapsed();
-	SEISCOMP_DEBUG("Locator took %fms", elapsed*1E3);
 
 	if ( !res ) {
 		DataModel::Origin* origin = DataModel::Origin::Create();

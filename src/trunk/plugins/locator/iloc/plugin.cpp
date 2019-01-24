@@ -25,7 +25,7 @@
 ADD_SC_PLUGIN(
 	"Locator test implementation for iLoc",
 	"Jan Becker, gempa GmbH",
-	0, 4, 0
+	0, 4, 1
 )
 
 
