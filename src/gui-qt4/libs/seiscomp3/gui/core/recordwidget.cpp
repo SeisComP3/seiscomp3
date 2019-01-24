@@ -4257,17 +4257,26 @@ void RecordWidget::fed(int slot, const Seiscomp::Record *rec) {
 
 	_drawRecords = true;
 
-	if ( _shadowWidget  ) {
-		if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
-		      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
-			_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
-		}
-		_shadowWidget->fed(slot, rec);
-	}
-
-	if ( !(_shadowWidgetFlags & Filtered) && (s->filtering || s->filter != NULL) )
+	if ( !(_shadowWidgetFlags & Filtered) && (s->filtering || s->filter != NULL) ) {
 		newlyCreated = createFilter(slot);
+
+		if ( _shadowWidget  ) {
+			if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
+			      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
+				_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
+			}
+			_shadowWidget->fed(slot, rec);
+		}
+	}
 	else {
+		if ( _shadowWidget  ) {
+			if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
+			      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
+				_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
+			}
+			_shadowWidget->fed(slot, rec);
+		}
+
 		s->traces[Stream::Filtered].dirty = true;
 		return;
 	}
