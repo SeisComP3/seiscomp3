@@ -2,13 +2,15 @@
 <seiscomp>
 	<plugin name="RegionCheck">
 		<extends>scevent</extends>
-		<description>evrc plug-in for scevent</description>
+		<description>evrc plugin for scevent</description>
 		<configuration>
 			<group name="rc">
 				<description>
-				Region check for scevents setting the event type to &quot;outside of network interest&quot;
-				if the location is inside or outside preconfigured regions of rejection or acceptance,
-				respectively.
+				Set the event type to &quot;outside of network interest&quot;
+				if the location is inside or outside preconfigured regions of
+				rejection or acceptance, respectively. The regions are defined by
+				BNA polygons. Add the plugin &quot;evrc&quot; to the  plugins
+				parameter to make this feature available.
 				</description>
 				<parameter name="regions" type="list:string" default="reject">
 					<description>
