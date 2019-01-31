@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="sccnv" category="Utilities" standalone="true">
+		<description>Converts data in in different formats.</description>
+		<command-line>
+			<synopsis>
+				sccnv -i format:file -o format:file
+			</synopsis>
+			<description>
+				sccnv reads the input given in a supported format, converts the content
+				and write the output in another format. Use the option --format-list
+				for a list of supported formats.
+			</description>
+		</command-line>
+	</module>
+</seiscomp>
