@@ -5801,6 +5801,11 @@ void OriginLocatorView::commitWithOptions() {
 	}
 	catch ( ... ) {}
 
+	try {
+		dlg.ui.cbBackToEventList->setChecked(SCApp->configGetBool("olv.commit.returnToEventList"));
+	}
+	catch ( ... ) {}
+
 	if ( _defaultEventType ) {
 		int idx = dlg.ui.comboEventTypes->findText(_defaultEventType->toString());
 		if ( idx >= 0 ) dlg.ui.comboEventTypes->setCurrentIndex(idx);

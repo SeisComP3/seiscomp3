@@ -209,6 +209,12 @@
 						setting and can be changed manually when the dialog pops up.
 						</description>
 					</parameter>
+					<parameter name="returnToEventList" type="boolean" default="true">
+						<description>
+						Whether to return to the event list after committing with
+						additional options or not.
+						</description>
+					</parameter>
 				</group>
 			</group>
 			<group name="picker">
