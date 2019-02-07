@@ -185,9 +185,9 @@ void Stream::init(const DataModel::Stream *stream) {
 
 					SEISCOMP_DEBUG("%s.%s.%s.%s: correct gain by factor %f: %f -> %f",
 					               stream->sensorLocation()->station()->network()->code().c_str(),
-				                   stream->sensorLocation()->station()->code().c_str(),
-				                   stream->sensorLocation()->code().c_str(),
-				                   stream->code().c_str(),
+					               stream->sensorLocation()->station()->code().c_str(),
+					               stream->sensorLocation()->code().c_str(),
+					               stream->code().c_str(),
 					               scale, gain, gain*scale);
 
 					gain *= scale;
