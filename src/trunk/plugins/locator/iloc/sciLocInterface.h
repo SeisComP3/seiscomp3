@@ -422,20 +422,20 @@ typedef struct AssociatedPhase {
     double ArrivalTime;                            /* arrival epoch time [s] */
     double Deltim;           /* a priori time measurement error estimate [s] */
     double TimeRes;                                     /* time residual [s] */
-    int Timedef;                   /* 1 if used in the location, 0 otherwise */
+    int Timedef;                    /* user: do not use in the location if 0 */
     double BackAzimuth;           /* measured station-to-event azimuth [deg] */
     double Delaz;       /* a priori azimuth measurement error estimate [deg] */
     double AzimRes;                                /* azimuth residual [deg] */
-    int Azimdef;                   /* 1 if used in the location, 0 otherwise */
+    int Azimdef;                    /* user: do not use in the location if 0 */
     double Slowness;                 /* measured horizontal slowness [s/deg] */
     double Delslo;   /* a priori slowness measurement error estimate [s/deg] */
     double SlowRes;                             /* slowness residual [s/deg] */
-    int Slowdef;                   /* 1 if used in the location, 0 otherwise */
+    int Slowdef;                    /* user: do not use in the location if 0 */
     char Vmodel[ILOC_VALLEN];                         /* velocity model name */
     int rdid;                                                  /* reading id */
     int initialPhase;                    /* initial phase in a reading [0/1] */
     char prevPhase[ILOC_PHALEN];            /* phase from previous iteration */
-    int phaseFixed;                       /* 1 to stop reidentifying a phase */
+    int phaseFixed;                /* user: do not reidentify the phase if 1 */
     int prevTimedef;                      /* TimeDef from previous iteration */
     int prevAzimdef;                      /* AzimDef from previous iteration */
     int prevSlowdef;                      /* SlowDef from previous iteration */
@@ -871,7 +871,8 @@ int iLoc_ReIdentifyPhases(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         ILOC_ASSOC *Assocs, ILOC_STA *StaLocs, ILOC_READING *rdindx,
         ILOC_PHASEIDINFO *PhaseIdInfo, ILOC_EC_COEF *ec, ILOC_TTINFO *TTInfo,
         ILOC_TT_TABLE *TTtables, ILOC_TTINFO *LocalTTInfo,
-        ILOC_TT_TABLE *LocalTTtables, short int **topo, int is2nderiv);
+        ILOC_TT_TABLE *LocalTTtables, short int **topo, int is2nderiv,
+        int isreset);
 void iLoc_GetNumDef(ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs);
 void iLoc_SortAssocs(int numPhase, ILOC_ASSOC *Assocs);
 void iLoc_SortAssocsNN(int numPhase, int numSta, ILOC_ASSOC *Assocs,
@@ -899,7 +900,7 @@ int iLoc_SVDrank(int n, int m, double sv[], double thres);
 double iLoc_SVDnorm(int m, double sv[], double thres, double *cond);
 int iLoc_ProjectionMatrix(int numPhaDef, ILOC_PHADEF *PhaDef, int numPhase,
         ILOC_ASSOC *Assocs, int nd, double pctvar, double **cov, double **w,
-        int *nrank, int nunp, ILOC_PHASELIST *phundef, int ispchange);
+        int *nrank, int nunp, ILOC_PHASELIST *phundef, int ispchange, int Verbose);
 /*
  * sciLocTravelTimes.c
  */

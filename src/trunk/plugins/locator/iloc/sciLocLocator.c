@@ -72,9 +72,9 @@ static int GetResiduals(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         int ispchange, int *nunp, ILOC_PHASELIST *phundef, double **dcov,
         double **w);
 static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
-        int fixdepthfornow, double **g, double *d);
+        int fixdepthfornow, double **g, double *d, int verbose);
 static int ProjectGd(int ndef, int m, double **g, double *d, double **w,
-        double *dnorm, double *wrms);
+        double *dnorm, double *wrms, int verbose);
 static int WxG(int j, int ndef, double **w, double **g);
 static void WeightGd(int ndef, int m, int numPhase, ILOC_ASSOC *Assocs,
         double **g, double *d, double *dnorm, double *wrms);
@@ -284,6 +284,9 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
                                              DefaultDepth, fe, &isdefdep,
                                              iLocConfig->Verbose);
                 }
+                iszderiv = 1;
+                Hypocenter->FixDepth = 1;
+                Hypocenter->numUnknowns--;
 /*
  *              adjust origin time according to depth change if OT is not fixed
  */
@@ -381,7 +384,7 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
                     iLoc_ReIdentifyPhases(iLocConfig, Hypocenter, Assocs, StaLocs,
                                 rdindx, PhaseIdInfo, ec, TTInfo, TTtables,
                                 LocalTTInfo, LocalTTtables, DefaultDepth->Topo,
-                                is2nderiv);
+                                is2nderiv, 1);
                     if (iLocConfig->Verbose > 1) {
                         fprintf(stderr, "numTimedef=%d numAzimdef=%d numSlowdef=%d\n",
                                 Hypocenter->numTimedef, Hypocenter->numAzimdef,
@@ -977,7 +980,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 ispchange = iLoc_ReIdentifyPhases(iLocConfig, Hypocenter, Assocs,
                                     StaLocs, rdindx, PhaseIdInfo, ec, TTInfo,
                                     TTtables, LocalTTInfo, LocalTTtables,
-                                    topo, is2nderiv);
+                                    topo, is2nderiv, 0);
             }
         }
         else {
@@ -992,7 +995,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 ispchange = iLoc_ReIdentifyPhases(iLocConfig, Hypocenter, Assocs,
                                     StaLocs, rdindx, PhaseIdInfo, ec, TTInfo,
                                     TTtables, LocalTTInfo, LocalTTtables,
-                                    topo, is2nderiv);
+                                    topo, is2nderiv, 0);
             }
         }
 /*
@@ -1064,7 +1067,8 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 }
                 if (iLoc_ProjectionMatrix(TTInfo->numPhaseTT, PhaDef,
                                      Hypocenter->numPhase, Assocs, nd, 95.,
-                                     dcov, w, &nrank, nunp, phundef, 1)) {
+                                     dcov, w, &nrank, nunp, phundef, 1,
+                                     iLocConfig->Verbose)) {
                     retval = ILOC_MEMORY_ALLOCATION_ERROR;
                     break;
                 }
@@ -1116,7 +1120,8 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 }
                 if (iLoc_ProjectionMatrix(TTInfo->numPhaseTT, PhaDef,
                                     Hypocenter->numPhase, Assocs, nd, 95.,
-                                    dcov, w, &nrank, nunp, phundef, 1)) {
+                                    dcov, w, &nrank, nunp, phundef, 1,
+                                    iLocConfig->Verbose)) {
                     retval = ILOC_MEMORY_ALLOCATION_ERROR;
                     break;
                 }
@@ -1176,7 +1181,8 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 }
                 if (iLoc_ProjectionMatrix(TTInfo->numPhaseTT, PhaDef,
                                     Hypocenter->numPhase, Assocs, nd, 95.,
-                                    dcov, w, &nrank, nunp, phundef, ispchange)) {
+                                    dcov, w, &nrank, nunp, phundef, ispchange,
+                                    iLocConfig->Verbose)) {
                     retval = ILOC_MEMORY_ALLOCATION_ERROR;
                     break;
                 }
@@ -1194,12 +1200,13 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
 /*
  *      build G matrix and d vector
  */
-        urms = BuildGd(nd, Hypocenter, Assocs, fixdepthfornow, g, d);
+        urms = BuildGd(nd, Hypocenter, Assocs, fixdepthfornow, g, d,
+                       iLocConfig->Verbose);
         if (iLocConfig->DoCorrelatedErrors) {
 /*
  *          project Gm = d into eigensystem
  */
-            if (ProjectGd(nd, m, g, d, w, &dnorm, &wrms)) {
+            if (ProjectGd(nd, m, g, d, w, &dnorm, &wrms, iLocConfig->Verbose)) {
                 retval = ILOC_MEMORY_ALLOCATION_ERROR;
                 break;
             }
@@ -1842,7 +1849,7 @@ static int GetResiduals(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  *     LocateEvent
  */
 static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
-        int fixdepthfornow, double **g, double *d)
+        int fixdepthfornow, double **g, double *d, int verbose)
 {
     int i, j, k, im = 0;
     double urms = 0., depthcorr = 0., esaz = 0., acorr = 0., azcorr = 0.;
@@ -1851,6 +1858,8 @@ static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
 /*
  *  G matrix of partial derivates of travel-times
  */
+    if (verbose > 4)
+        fprintf(stderr, "G matrix and d vector:\n");
     for (k = 0, i = 0; i < Hypocenter->numPhase; i++) {
         if (Assocs[i].Timedef) {
             for (j = 0; j < 4; j++) g[k][j] = 0.;
@@ -1869,6 +1878,12 @@ static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
  */
             d[k] = Assocs[i].TimeRes;
             urms += d[k] * d[k];
+            if (verbose > 4) {
+                fprintf(stderr, "  %6d %6d %-9s (T) ",
+                        k, Assocs[i].StaInd, Assocs[i].Phase);
+                for (j = 0; j < im; j++) fprintf(stderr, "%10.3f ", g[k][j]);
+                fprintf(stderr, " , %10.3f\n", d[k]);
+            }
             k++;
         }
     }
@@ -1898,6 +1913,12 @@ static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
  */
             d[k] = ILOC_DEG2RAD * Assocs[i].AzimRes;
             urms += d[k] * d[k];
+            if (verbose > 4) {
+                fprintf(stderr, "  %6d %6d %-9s (A) ",
+                        k, Assocs[i].StaInd, Assocs[i].Phase);
+                for (j = 0; j < im; j++) fprintf(stderr, "%10.3f ", g[k][j]);
+                fprintf(stderr, " , %10.3f\n", d[k]);
+            }
             k++;
         }
     }
@@ -1922,10 +1943,17 @@ static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
  */
             d[k] = Assocs[i].SlowRes / ILOC_DEG2KM;
             urms += d[k] * d[k];
+            if (verbose > 4) {
+                fprintf(stderr, "  %6d %6d %-9s (S) ",
+                        k, Assocs[i].StaInd, Assocs[i].Phase);
+                for (j = 0; j < im; j++) fprintf(stderr, "%10.3f ", g[k][j]);
+                fprintf(stderr, " , %10.3f\n", d[k]);
+            }
             k++;
         }
     }
     urms = ILOC_SQRT(urms / (double)ndef);
+    if (verbose > 2) fprintf(stderr, "urms = %12.6f\n", urms);
     return urms;
 }
 
@@ -1953,7 +1981,7 @@ static double BuildGd(int ndef, ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs,
  *     WxG
  */
 static int ProjectGd(int ndef, int m, double **g, double *d, double **w,
-        double *dnorm, double *wrms)
+        double *dnorm, double *wrms, int verbose)
 {
     int i, j, k;
     double *temp = (double *)NULL;
@@ -1991,6 +2019,15 @@ static int ProjectGd(int ndef, int m, double **g, double *d, double **w,
     iLoc_Free(temp);
     *dnorm = wssq;
     *wrms = ILOC_SQRT(wssq / (double)ndef);
+    if (verbose > 4) {
+        fprintf(stderr, "WG(%d x %d) matrix and Wd vector:\n", ndef, m);
+        for (i = 0; i < ndef; i++) {
+            fprintf(stderr, " %6d ", i);
+            for (j = 0; j < m; j++) fprintf(stderr, "%10.3f ", g[i][j]);
+            fprintf(stderr, " , %10.3f\n", d[i]);
+        }
+        fprintf(stderr, "wrms = %10.3f\n", *wrms);
+    }
     return ILOC_SUCCESS;
 }
 

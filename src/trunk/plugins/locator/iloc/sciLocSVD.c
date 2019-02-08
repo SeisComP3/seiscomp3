@@ -606,7 +606,7 @@ double iLoc_SVDnorm(int m, double sv[], double thres, double *cond)
  */
 int iLoc_ProjectionMatrix(int numPhaDef, ILOC_PHADEF *PhaDef, int numPhase,
         ILOC_ASSOC *Assocs, int nd, double pctvar, double **cov, double **w,
-        int *nrank, int nunp, ILOC_PHASELIST *phundef, int ispchange)
+        int *nrank, int nunp, ILOC_PHASELIST *phundef, int ispchange, int Verbose)
 {
     int i, j, knull = 0, nphases = 0;
     double sum = 0., pct = 0.;
@@ -632,13 +632,22 @@ int iLoc_ProjectionMatrix(int numPhaDef, ILOC_PHADEF *PhaDef, int numPhase,
 /*
  *  calculate effective rank from projection matrix
  */
+    if (Verbose > 3) fprintf(stderr, "        Projection matrix and row sums\n");
     knull = 0;
     for (i = 0; i < nd; i++) {
         sum = 0.;
+        if (Verbose > 3) fprintf(stderr, "          %4d ", i);
         for (j = 0; j < nd; j++) {
             sum += w[i][j];
+            if (Verbose > 3) fprintf(stderr, "%13.4f ", w[i][j]);
         }
         if (fabs(sum) < 1.e-5) knull++;
+        if (Verbose > 3) fprintf(stderr, " | %12.4f %d\n", sum, knull);
+    }
+    if (Verbose > 1) {
+        fprintf(stderr, "  Projection matrix W(%d x %d):\n", nd, nd);
+        fprintf(stderr, "    %d observations are projected ", knull);
+        fprintf(stderr, "to the null space (rank = %d)\n", nd - knull);
     }
     *nrank = nd - knull;
     return ILOC_SUCCESS;

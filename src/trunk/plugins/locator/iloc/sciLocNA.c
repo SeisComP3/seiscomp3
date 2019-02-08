@@ -637,7 +637,7 @@ static double NAForwardProblem(ILOC_CONF *iLocConfig, ILOC_HYPO *grds,
  */
     iLoc_GetDeltaAzimuth(grds, pset, StaLocs);
     iLoc_ReIdentifyPhases(iLocConfig, grds, pset, StaLocs, rdindx, PhaseIdInfo,
-            ec, TTInfo, TTtables, LocalTTInfo, LocalTTtables, topo, is2nderiv);
+            ec, TTInfo, TTtables, LocalTTInfo, LocalTTtables, topo, is2nderiv, 0);
     ndef = grds->numDef;
     nrank = ndef;
     totnp = 2. * (double)grds->numPhase;
@@ -669,7 +669,8 @@ static double NAForwardProblem(ILOC_CONF *iLocConfig, ILOC_HYPO *grds,
             return misfit;
         }
         if (iLoc_ProjectionMatrix(TTInfo->numPhaseTT, PhaDef, grds->numPhase,
-                    pset, ndef, 95., dcov, w, &nrank, 0, (ILOC_PHASELIST *)NULL, 1)) {
+                    pset, ndef, 95., dcov, w, &nrank, 0, (ILOC_PHASELIST *)NULL,
+                    1, 0)) {
             iLoc_FreeFloatMatrix(dcov);
             iLoc_FreeFloatMatrix(w);
             iLoc_Free(d); iLoc_Free(temp);

@@ -249,6 +249,7 @@ void iLoc_IdentifyPhases(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  *                        1: ignore phaseid and use them
  *                        0: don't use but allow for fix at crossover distances
  *                       -1: don't use (used in phase id routines)
+ *     isreset       - start from original defining set
  *  Output Arguments:
  *     Assocs        - array of ILOC_ASSOC structures
  *  Return:
@@ -262,11 +263,18 @@ int iLoc_ReIdentifyPhases(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         ILOC_ASSOC *Assocs, ILOC_STA *StaLocs, ILOC_READING *rdindx,
         ILOC_PHASEIDINFO *PhaseIdInfo, ILOC_EC_COEF *ec, ILOC_TTINFO *TTInfo,
         ILOC_TT_TABLE *TTtables, ILOC_TTINFO *LocalTTInfo,
-        ILOC_TT_TABLE *LocalTTtables, short int **topo, int is2nderiv)
+        ILOC_TT_TABLE *LocalTTtables, short int **topo, int is2nderiv,
+        int isreset)
 {
     int i, j, np, isphasechange = 0, isfirst = -1;
-    for (i = 0; i < Hypocenter->numPhase; i++)
+    for (i = 0; i < Hypocenter->numPhase; i++) {
         Assocs[i].firstP = Assocs[i].firstS = Assocs[i].duplicate = 0;
+        if (isreset) {
+            Assocs[i].Timedef = Assocs[i].prevTimedef;
+            Assocs[i].Azimdef = Assocs[i].prevAzimdef;
+            Assocs[i].Slowdef = Assocs[i].prevSlowdef;
+        }
+    }
 /*
  *  identify first arriving P and S in a reading
  */
