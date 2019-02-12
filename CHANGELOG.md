@@ -6,6 +6,11 @@
 
   * The evrc plugin does not change the status of events with manual preferred origin
 
+* scautoloc
+
+  * Fixed a bug that sometimes caused manual origins not to be used with the correct depth.
+  * Minor cleanups.
+
 ## Release 2018.327.patch3
 
 * trunk
@@ -219,6 +224,13 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Initial version of the module which collect availability information
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
+
+## Release 2017.334 patch8
+
+ * gui
+
+   * Fix bug that caused a segfault when GUI application are run in TTY mode
+     and the database connection is configured in the configuration file
 
 ## Release 2017.334 patch7
 
