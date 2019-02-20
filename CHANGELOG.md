@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2017.334 patch10
+
+* trunk
+
+  * Fix bug in ims10 export if AgencyID contains white spaces
+
 ## Release 2017.334 patch9
 
 * trunk

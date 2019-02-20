@@ -28,6 +28,8 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
+#include <algorithm>
+
 
 using namespace Seiscomp::Core;
 
@@ -209,6 +211,7 @@ bool ExporterIMS10::put(std::streambuf* buf, BaseObject* obj) {
 			dMax = "      ";
 
 		std::string author = stringify("%-9s", o->creationInfo().agencyID().substr(0, 9).c_str());
+		std::replace(author.begin(), author.end(), ' ', '_');
 
 		// ** Event Title Block **
 		os << "Event " << e->publicID() << " ";
@@ -361,6 +364,7 @@ bool ExporterIMS10::put(std::streambuf* buf, BaseObject* obj) {
 					NmagSta = "    ";
 
 				std::string author = stringify("%-9s", m->creationInfo().agencyID().substr(0, 9).c_str());
+				std::replace(author.begin(), author.end(), ' ', '_');
 
 				// Magnitude code col 1-5
 				os << magType;
