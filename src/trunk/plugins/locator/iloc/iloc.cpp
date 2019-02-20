@@ -64,6 +64,7 @@ struct Assoc : ILOC_ASSOC {
 		arid = 0;
 		StaInd = 0;
 		PhaseHint[0] = '\0';
+		phaseFixed = 0;
 		Phase[0] = '\0';
 		Delta = ILOC_NULLVAL;
 		Esaz = ILOC_NULLVAL;
