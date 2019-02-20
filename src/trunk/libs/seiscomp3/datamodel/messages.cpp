@@ -24,6 +24,7 @@ namespace DataModel {
 IMPLEMENT_SC_CLASS_DERIVED(ConfigSyncMessage, Message, "config_sync_message");
 IMPLEMENT_SC_CLASS_DERIVED(InventorySyncMessage, Message, "inventory_sync_message");
 IMPLEMENT_SC_CLASS_DERIVED(ArtificialOriginMessage, Message, "artificial_origin_message");
+IMPLEMENT_SC_CLASS_DERIVED(ArtificialEventParametersMessage, Message, "artificial_ep_message");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -202,10 +203,62 @@ bool ArtificialOriginMessage::empty() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void ArtificialOriginMessage::serialize(Archive& ar) {
+void ArtificialOriginMessage::serialize(Archive &ar) {
 	ar & TAGGED_MEMBER(origin);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ArtificialEventParametersMessage::ArtificialEventParametersMessage() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ArtificialEventParametersMessage::ArtificialEventParametersMessage(DataModel::EventParameters *eventParameters)
+: _eventParameters(eventParameters) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::EventParameters *ArtificialEventParametersMessage::eventParameters() const {
+	return _eventParameters.get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArtificialEventParametersMessage::setEventParameters(DataModel::EventParameters *eventParameters) {
+	_eventParameters = eventParameters;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ArtificialEventParametersMessage::empty() const {
+	return _eventParameters == NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArtificialEventParametersMessage::serialize(Archive &ar) {
+	ar & TAGGED_MEMBER(eventParameters);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 
 
