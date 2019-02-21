@@ -319,7 +319,7 @@ std::string stringify(const char* fmt, ...) {
 	va_start(params, fmt);
 	nsize = vsnprintf(buffer, size, fmt, params);
 
-	while ( nsize > size ) { //fail -> create dynamic buffer with more space
+	while ( nsize >= size ) { //fail -> create dynamic buffer with more space
 		if ( dynamicBuffer != NULL )
 			delete [] dynamicBuffer;
 
