@@ -28,8 +28,10 @@
 					Example: &quot;30 nomag; 60 0.018 ; 700 0.0038 &quot;.
 					The first parameter set &quot;30 nomag&quot; means that up to 30km
 					from the sensor the magnitude should not be calculated.
-				 	A is used as Station Correction
-					"nomag" is used to disable station magnitudes 
+				 	A is used as station correction.
+					"nomag" is used to disable station magnitudes.
+
+					Note: No MLr computation if params is empty.
 					</description>
 				</parameter>
 			</group>
