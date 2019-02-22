@@ -3473,6 +3473,15 @@ const OriginLocatorView::Config &OriginLocatorView::config() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::addLocalPick(Seiscomp::DataModel::Pick *pick) {
+	_changedPicks.insert(std::pair<DataModel::PickPtr, bool>(pick, true));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::setPickerConfig(const PickerView::Config &c) {
 	_pickerConfig = c;
 
