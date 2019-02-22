@@ -65,6 +65,8 @@ class MainFrame : public MainWindow {
 	private slots:
 		void configureAcquisition();
 
+		void messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*);
+
 		void eventAdded(Seiscomp::DataModel::Event*, bool);
 		void setOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool, bool);
 		void updateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
@@ -93,7 +95,7 @@ class MainFrame : public MainWindow {
 #endif
 
 	private:
-		void populateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool);
+		bool populateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool);
 
 		// This creates an EventParameters instance containing copies
 		// of all event attributes relevant for publication incl.

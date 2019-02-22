@@ -15,6 +15,7 @@
 
 #include "mainframe.h"
 #include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/core/messages.h>
 #include <seiscomp3/gui/datamodel/eventsummary.h>
 #include <seiscomp3/gui/datamodel/eventsummaryview.h>
 #include <seiscomp3/gui/datamodel/originlocatorview.h>
@@ -40,6 +41,7 @@
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/datamodel/configstation.h>
 #include <seiscomp3/datamodel/journalentry.h>
+#include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/core/system.h>
@@ -733,6 +735,9 @@ MainFrame::MainFrame(){
 	}
 
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
+	        this, SLOT(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)));
+
+	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
 	        _eventList, SLOT(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)));
 
 	connect(SCApp, SIGNAL(notifierAvailable(Seiscomp::DataModel::Notifier*)),
@@ -1243,7 +1248,7 @@ void MainFrame::setArtificialOrigin(Seiscomp::DataModel::Origin *org) {
 }
 
 
-void MainFrame::populateOrigin(Seiscomp::DataModel::Origin *org, Seiscomp::DataModel::Event *ev, bool local) {
+bool MainFrame::populateOrigin(Seiscomp::DataModel::Origin *org, Seiscomp::DataModel::Event *ev, bool local) {
 	if ( _originLocator->setOrigin(org, ev, local) ) {
 		_currentOrigin = org;
 		if ( ev ) _eventID = ev->publicID();
@@ -1260,7 +1265,11 @@ void MainFrame::populateOrigin(Seiscomp::DataModel::Origin *org, Seiscomp::DataM
 #endif
 		if ( _expertMode )
 			_eventEdit->setEvent(ev, org);
+
+		return true;
 	}
+
+	return false;
 }
 
 void MainFrame::setData(Seiscomp::DataModel::Origin *org, Seiscomp::DataModel::Event *ev) {
@@ -1710,6 +1719,27 @@ void MainFrame::tabChanged(int tab) {
 
 	if ( source && target )
 		target->canvas().setView(source->canvas().mapCenter(), source->canvas().zoomLevel());
+}
+
+
+void MainFrame::messageAvailable(Seiscomp::Core::Message *msg, Seiscomp::Communication::NetworkMessage*) {
+	CommandMessage *cmsg = CommandMessage::Cast(msg);
+	if ( cmsg ) {
+		if ( cmsg->command() == CM_OBSERVE_LOCATION ) {
+			EventParameters *ep = EventParameters::Cast(cmsg->object());
+			/*
+			if ( ep->eventCount() > 0 ) {
+				Event *event = ep->event(0);
+			}
+			else */if ( ep->originCount() > 0 ) {
+				Origin *origin = ep->origin(0);
+				if ( populateOrigin(origin, NULL, true) ) {
+					for ( size_t i = 0; i < ep->pickCount(); ++i )
+						_originLocator->addLocalPick(ep->pick(i));
+				}
+			}
+		}
+	}
 }
 
 
