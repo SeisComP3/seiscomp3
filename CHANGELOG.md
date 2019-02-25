@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release 2017.334 patch9
+
+* trunk
+
+  * Fix bug in stringify functions which discards the last character if
+    the output length of a string should be exactly 64 charaters. This
+    affects the hyp71sum2k and ims10 output.
+
 ## Release 2017.334 patch8
 
 * gui
