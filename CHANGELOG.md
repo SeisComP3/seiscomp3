@@ -2,9 +2,18 @@
 
 ## Release YYYY.ddd
 
+* system
+
+  * Updated libmseed to 2.19.6
+
+* trunk
+
+  * Fixed bug with hyp71sum2k and ims10 export that caused truncated strings.
+    Many thanks to Luca Scarabello (ETHZ) for finding and fixing this bug.
+
 * scolv
 
-  * Add toggle to amplitude picker to either override the configured minimum
+  * Added toggle to amplitude picker to either override the configured minimum
     SNR per station or not. The default is now to use what is configured.
 
 * scevent
