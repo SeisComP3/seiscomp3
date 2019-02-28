@@ -22,6 +22,7 @@ public:
     virtual char const *className() const;
     virtual Seiscomp::Core::RTTI const &typeInfo() const;
     virtual void serialize(Seiscomp::Core::BaseObject::Archive &arg0);
+    virtual Seiscomp::Core::MetaObject const *meta() const;
     virtual ~SwigDirector_Application();
     virtual Seiscomp::Core::BaseObject *clone() const;
     virtual Seiscomp::Core::BaseObject &operator =(Seiscomp::Core::BaseObject const &arg0);
@@ -205,7 +206,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[41];
+    mutable swig::SwigVar_PyObject vtable[42];
 #endif
 
 };
@@ -218,6 +219,7 @@ public:
     virtual char const *className() const;
     virtual Seiscomp::Core::RTTI const &typeInfo() const;
     virtual void serialize(Seiscomp::Core::BaseObject::Archive &arg0);
+    virtual Seiscomp::Core::MetaObject const *meta() const;
     virtual ~SwigDirector_StreamApplication();
     virtual Seiscomp::Core::BaseObject *clone() const;
     virtual Seiscomp::Core::BaseObject &operator =(Seiscomp::Core::BaseObject const &arg0);
@@ -410,7 +412,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[42];
+    mutable swig::SwigVar_PyObject vtable[43];
 #endif
 
 };

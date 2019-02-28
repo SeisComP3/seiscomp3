@@ -131,6 +131,155 @@ class RTTI(_object):
 RTTI_swigregister = _Core.RTTI_swigregister
 RTTI_swigregister(RTTI)
 
+class PropertyNotFoundException(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PropertyNotFoundException, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PropertyNotFoundException, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _Core.new_PropertyNotFoundException(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _Core.delete_PropertyNotFoundException
+    __del__ = lambda self: None
+PropertyNotFoundException_swigregister = _Core.PropertyNotFoundException_swigregister
+PropertyNotFoundException_swigregister(PropertyNotFoundException)
+
+class MetaEnum(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MetaEnum, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MetaEnum, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _Core.delete_MetaEnum
+    __del__ = lambda self: None
+
+    def keyCount(self):
+        return _Core.MetaEnum_keyCount(self)
+
+    def key(self, index):
+        return _Core.MetaEnum_key(self, index)
+
+    def valueToKey(self, value):
+        return _Core.MetaEnum_valueToKey(self, value)
+
+    def keyToValue(self, key):
+        return _Core.MetaEnum_keyToValue(self, key)
+MetaEnum_swigregister = _Core.MetaEnum_swigregister
+MetaEnum_swigregister(MetaEnum)
+
+class MetaProperty(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MetaProperty, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MetaProperty, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _Core.new_MetaProperty(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _Core.delete_MetaProperty
+    __del__ = lambda self: None
+
+    def setInfo(self, name, type, isArray, isClass, isIndex, isReference, isOptional, isEnum, enumeration=None):
+        return _Core.MetaProperty_setInfo(self, name, type, isArray, isClass, isIndex, isReference, isOptional, isEnum, enumeration)
+
+    def name(self):
+        return _Core.MetaProperty_name(self)
+
+    def type(self):
+        return _Core.MetaProperty_type(self)
+
+    def enumerator(self):
+        return _Core.MetaProperty_enumerator(self)
+
+    def isArray(self):
+        return _Core.MetaProperty_isArray(self)
+
+    def isClass(self):
+        return _Core.MetaProperty_isClass(self)
+
+    def isIndex(self):
+        return _Core.MetaProperty_isIndex(self)
+
+    def isReference(self):
+        return _Core.MetaProperty_isReference(self)
+
+    def isEnum(self):
+        return _Core.MetaProperty_isEnum(self)
+
+    def isOptional(self):
+        return _Core.MetaProperty_isOptional(self)
+
+    def createClass(self):
+        return _Core.MetaProperty_createClass(self)
+
+    def arrayElementCount(self, object):
+        return _Core.MetaProperty_arrayElementCount(self, object)
+
+    def arrayObject(self, object, i):
+        return _Core.MetaProperty_arrayObject(self, object, i)
+
+    def arrayAddObject(self, object, child):
+        return _Core.MetaProperty_arrayAddObject(self, object, child)
+
+    def arrayRemoveObject(self, *args):
+        return _Core.MetaProperty_arrayRemoveObject(self, *args)
+
+    def write(self, object, value):
+        return _Core.MetaProperty_write(self, object, value)
+
+    def writeString(self, object, value):
+        return _Core.MetaProperty_writeString(self, object, value)
+
+    def read(self, object):
+        return _Core.MetaProperty_read(self, object)
+
+    def readString(self, object):
+        return _Core.MetaProperty_readString(self, object)
+MetaProperty_swigregister = _Core.MetaProperty_swigregister
+MetaProperty_swigregister(MetaProperty)
+
+class MetaObject(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MetaObject, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MetaObject, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, rtti, base=None):
+        this = _Core.new_MetaObject(rtti, base)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _Core.delete_MetaObject
+    __del__ = lambda self: None
+
+    def rtti(self):
+        return _Core.MetaObject_rtti(self)
+
+    def base(self):
+        return _Core.MetaObject_base(self)
+
+    def propertyCount(self):
+        return _Core.MetaObject_propertyCount(self)
+
+    def property(self, *args):
+        return _Core.MetaObject_property(self, *args)
+MetaObject_swigregister = _Core.MetaObject_swigregister
+MetaObject_swigregister(MetaObject)
+
 class TimeSpan(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, TimeSpan, name, value)
@@ -666,6 +815,13 @@ class BaseObject(_object):
 
     def serialize(self, arg2):
         return _Core.BaseObject_serialize(self, arg2)
+    if _newclass:
+        Meta = staticmethod(_Core.BaseObject_Meta)
+    else:
+        Meta = _Core.BaseObject_Meta
+
+    def meta(self):
+        return _Core.BaseObject_meta(self)
     __swig_destroy__ = _Core.delete_BaseObject
     __del__ = lambda self: None
 
@@ -702,6 +858,10 @@ BaseObject_Cast = _Core.BaseObject_Cast
 def BaseObject_ConstCast(*args):
     return _Core.BaseObject_ConstCast(*args)
 BaseObject_ConstCast = _Core.BaseObject_ConstCast
+
+def BaseObject_Meta():
+    return _Core.BaseObject_Meta()
+BaseObject_Meta = _Core.BaseObject_Meta
 
 def BaseObject_ObjectCount():
     return _Core.BaseObject_ObjectCount()

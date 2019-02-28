@@ -1464,6 +1464,17 @@ class Notifier(seiscomp3.Core.BaseObject):
         """serialize(Notifier self, GenericArchive ar)"""
         return _DataModel.Notifier_serialize(self, ar)
 
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Notifier_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Notifier self) -> MetaObject"""
+        return _DataModel.Notifier_meta(self)
+
     CR_DIFFERENT = _DataModel.Notifier_CR_DIFFERENT
     CR_EQUAL = _DataModel.Notifier_CR_EQUAL
     CR_OPPOSITE = _DataModel.Notifier_CR_OPPOSITE
@@ -1612,6 +1623,10 @@ def Notifier_ConstCast(*args):
     Notifier_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Notifier
     """
     return _DataModel.Notifier_ConstCast(*args)
+
+def Notifier_Meta():
+    """Notifier_Meta() -> MetaObject"""
+    return _DataModel.Notifier_Meta()
 
 def Notifier_Enable():
     """Notifier_Enable()"""
@@ -2573,6 +2588,17 @@ class RealArray(seiscomp3.Core.BaseObject):
         return _DataModel.RealArray_serialize(self, ar)
 
 
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.RealArray_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(RealArray self) -> MetaObject"""
+        return _DataModel.RealArray_meta(self)
+
+
     def __init__(self, *args):
         """
         __init__(Seiscomp::DataModel::RealArray self) -> RealArray
@@ -2638,6 +2664,10 @@ def RealArray_ConstCast(*args):
     """
     return _DataModel.RealArray_ConstCast(*args)
 
+def RealArray_Meta():
+    """RealArray_Meta() -> MetaObject"""
+    return _DataModel.RealArray_Meta()
+
 class TimeArray(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::TimeArray class."""
 
@@ -2694,6 +2724,17 @@ class TimeArray(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(TimeArray self, GenericArchive ar)"""
         return _DataModel.TimeArray_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.TimeArray_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(TimeArray self) -> MetaObject"""
+        return _DataModel.TimeArray_meta(self)
 
 
     def __init__(self, *args):
@@ -2761,6 +2802,10 @@ def TimeArray_ConstCast(*args):
     """
     return _DataModel.TimeArray_ConstCast(*args)
 
+def TimeArray_Meta():
+    """TimeArray_Meta() -> MetaObject"""
+    return _DataModel.TimeArray_Meta()
+
 class TimePDF1D(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::TimePDF1D class."""
 
@@ -2817,6 +2862,17 @@ class TimePDF1D(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(TimePDF1D self, GenericArchive ar)"""
         return _DataModel.TimePDF1D_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.TimePDF1D_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(TimePDF1D self) -> MetaObject"""
+        return _DataModel.TimePDF1D_meta(self)
 
 
     def __init__(self, *args):
@@ -2897,6 +2953,10 @@ def TimePDF1D_ConstCast(*args):
     """
     return _DataModel.TimePDF1D_ConstCast(*args)
 
+def TimePDF1D_Meta():
+    """TimePDF1D_Meta() -> MetaObject"""
+    return _DataModel.TimePDF1D_Meta()
+
 class TimeQuantity(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::TimeQuantity class."""
 
@@ -2953,6 +3013,17 @@ class TimeQuantity(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(TimeQuantity self, GenericArchive ar)"""
         return _DataModel.TimeQuantity_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.TimeQuantity_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(TimeQuantity self) -> MetaObject"""
+        return _DataModel.TimeQuantity_meta(self)
 
 
     def __init__(self, *args):
@@ -3076,6 +3147,10 @@ def TimeQuantity_ConstCast(*args):
     """
     return _DataModel.TimeQuantity_ConstCast(*args)
 
+def TimeQuantity_Meta():
+    """TimeQuantity_Meta() -> MetaObject"""
+    return _DataModel.TimeQuantity_Meta()
+
 class CreationInfo(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::CreationInfo class."""
 
@@ -3132,6 +3207,17 @@ class CreationInfo(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(CreationInfo self, GenericArchive ar)"""
         return _DataModel.CreationInfo_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.CreationInfo_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(CreationInfo self) -> MetaObject"""
+        return _DataModel.CreationInfo_meta(self)
 
 
     def __init__(self, *args):
@@ -3256,6 +3342,10 @@ def CreationInfo_ConstCast(*args):
     """
     return _DataModel.CreationInfo_ConstCast(*args)
 
+def CreationInfo_Meta():
+    """CreationInfo_Meta() -> MetaObject"""
+    return _DataModel.CreationInfo_Meta()
+
 class Phase(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::Phase class."""
 
@@ -3312,6 +3402,17 @@ class Phase(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(Phase self, GenericArchive ar)"""
         return _DataModel.Phase_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Phase_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Phase self) -> MetaObject"""
+        return _DataModel.Phase_meta(self)
 
 
     def __init__(self, *args):
@@ -3376,6 +3477,10 @@ def Phase_ConstCast(*args):
     Phase_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Phase
     """
     return _DataModel.Phase_ConstCast(*args)
+
+def Phase_Meta():
+    """Phase_Meta() -> MetaObject"""
+    return _DataModel.Phase_Meta()
 
 class CommentIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::CommentIndex class."""
@@ -3472,6 +3577,17 @@ class Comment(Object):
     def serialize(self, ar):
         """serialize(Comment self, GenericArchive ar)"""
         return _DataModel.Comment_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Comment_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Comment self) -> MetaObject"""
+        return _DataModel.Comment_meta(self)
 
 
     def __init__(self, *args):
@@ -3689,6 +3805,10 @@ def Comment_ConstCast(*args):
     """
     return _DataModel.Comment_ConstCast(*args)
 
+def Comment_Meta():
+    """Comment_Meta() -> MetaObject"""
+    return _DataModel.Comment_Meta()
+
 class ComplexArray(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::ComplexArray class."""
 
@@ -3745,6 +3865,17 @@ class ComplexArray(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(ComplexArray self, GenericArchive ar)"""
         return _DataModel.ComplexArray_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ComplexArray_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ComplexArray self) -> MetaObject"""
+        return _DataModel.ComplexArray_meta(self)
 
 
     def __init__(self, *args):
@@ -3812,6 +3943,10 @@ def ComplexArray_ConstCast(*args):
     """
     return _DataModel.ComplexArray_ConstCast(*args)
 
+def ComplexArray_Meta():
+    """ComplexArray_Meta() -> MetaObject"""
+    return _DataModel.ComplexArray_Meta()
+
 class RealPDF1D(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::RealPDF1D class."""
 
@@ -3868,6 +4003,17 @@ class RealPDF1D(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(RealPDF1D self, GenericArchive ar)"""
         return _DataModel.RealPDF1D_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.RealPDF1D_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(RealPDF1D self) -> MetaObject"""
+        return _DataModel.RealPDF1D_meta(self)
 
 
     def __init__(self, *args):
@@ -3948,6 +4094,10 @@ def RealPDF1D_ConstCast(*args):
     """
     return _DataModel.RealPDF1D_ConstCast(*args)
 
+def RealPDF1D_Meta():
+    """RealPDF1D_Meta() -> MetaObject"""
+    return _DataModel.RealPDF1D_Meta()
+
 class RealQuantity(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::RealQuantity class."""
 
@@ -4004,6 +4154,17 @@ class RealQuantity(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(RealQuantity self, GenericArchive ar)"""
         return _DataModel.RealQuantity_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.RealQuantity_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(RealQuantity self) -> MetaObject"""
+        return _DataModel.RealQuantity_meta(self)
 
 
     def __init__(self, *args):
@@ -4127,6 +4288,10 @@ def RealQuantity_ConstCast(*args):
     """
     return _DataModel.RealQuantity_ConstCast(*args)
 
+def RealQuantity_Meta():
+    """RealQuantity_Meta() -> MetaObject"""
+    return _DataModel.RealQuantity_Meta()
+
 class IntegerQuantity(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::IntegerQuantity class."""
 
@@ -4183,6 +4348,17 @@ class IntegerQuantity(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(IntegerQuantity self, GenericArchive ar)"""
         return _DataModel.IntegerQuantity_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.IntegerQuantity_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(IntegerQuantity self) -> MetaObject"""
+        return _DataModel.IntegerQuantity_meta(self)
 
 
     def __init__(self, *args):
@@ -4292,6 +4468,10 @@ def IntegerQuantity_ConstCast(*args):
     """
     return _DataModel.IntegerQuantity_ConstCast(*args)
 
+def IntegerQuantity_Meta():
+    """IntegerQuantity_Meta() -> MetaObject"""
+    return _DataModel.IntegerQuantity_Meta()
+
 class Axis(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::Axis class."""
 
@@ -4348,6 +4528,17 @@ class Axis(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(Axis self, GenericArchive ar)"""
         return _DataModel.Axis_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Axis_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Axis self) -> MetaObject"""
+        return _DataModel.Axis_meta(self)
 
 
     def __init__(self, *args):
@@ -4441,6 +4632,10 @@ def Axis_ConstCast(*args):
     """
     return _DataModel.Axis_ConstCast(*args)
 
+def Axis_Meta():
+    """Axis_Meta() -> MetaObject"""
+    return _DataModel.Axis_Meta()
+
 class PrincipalAxes(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::PrincipalAxes class."""
 
@@ -4497,6 +4692,17 @@ class PrincipalAxes(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(PrincipalAxes self, GenericArchive ar)"""
         return _DataModel.PrincipalAxes_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.PrincipalAxes_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(PrincipalAxes self) -> MetaObject"""
+        return _DataModel.PrincipalAxes_meta(self)
 
 
     def __init__(self, *args):
@@ -4590,6 +4796,10 @@ def PrincipalAxes_ConstCast(*args):
     """
     return _DataModel.PrincipalAxes_ConstCast(*args)
 
+def PrincipalAxes_Meta():
+    """PrincipalAxes_Meta() -> MetaObject"""
+    return _DataModel.PrincipalAxes_Meta()
+
 class Tensor(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::Tensor class."""
 
@@ -4646,6 +4856,17 @@ class Tensor(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(Tensor self, GenericArchive ar)"""
         return _DataModel.Tensor_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Tensor_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Tensor self) -> MetaObject"""
+        return _DataModel.Tensor_meta(self)
 
 
     def __init__(self, *args):
@@ -4778,6 +4999,10 @@ def Tensor_ConstCast(*args):
     """
     return _DataModel.Tensor_ConstCast(*args)
 
+def Tensor_Meta():
+    """Tensor_Meta() -> MetaObject"""
+    return _DataModel.Tensor_Meta()
+
 class OriginQuality(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::OriginQuality class."""
 
@@ -4834,6 +5059,17 @@ class OriginQuality(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(OriginQuality self, GenericArchive ar)"""
         return _DataModel.OriginQuality_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.OriginQuality_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(OriginQuality self) -> MetaObject"""
+        return _DataModel.OriginQuality_meta(self)
 
 
     def __init__(self, *args):
@@ -5008,6 +5244,10 @@ def OriginQuality_ConstCast(*args):
     """
     return _DataModel.OriginQuality_ConstCast(*args)
 
+def OriginQuality_Meta():
+    """OriginQuality_Meta() -> MetaObject"""
+    return _DataModel.OriginQuality_Meta()
+
 class NodalPlane(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::NodalPlane class."""
 
@@ -5064,6 +5304,17 @@ class NodalPlane(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(NodalPlane self, GenericArchive ar)"""
         return _DataModel.NodalPlane_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.NodalPlane_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(NodalPlane self) -> MetaObject"""
+        return _DataModel.NodalPlane_meta(self)
 
 
     def __init__(self, *args):
@@ -5157,6 +5408,10 @@ def NodalPlane_ConstCast(*args):
     """
     return _DataModel.NodalPlane_ConstCast(*args)
 
+def NodalPlane_Meta():
+    """NodalPlane_Meta() -> MetaObject"""
+    return _DataModel.NodalPlane_Meta()
+
 class TimeWindow(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::TimeWindow class."""
 
@@ -5213,6 +5468,17 @@ class TimeWindow(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(TimeWindow self, GenericArchive ar)"""
         return _DataModel.TimeWindow_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.TimeWindow_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(TimeWindow self) -> MetaObject"""
+        return _DataModel.TimeWindow_meta(self)
 
 
     def __init__(self, *args):
@@ -5299,6 +5565,10 @@ def TimeWindow_ConstCast(*args):
     """
     return _DataModel.TimeWindow_ConstCast(*args)
 
+def TimeWindow_Meta():
+    """TimeWindow_Meta() -> MetaObject"""
+    return _DataModel.TimeWindow_Meta()
+
 class WaveformStreamID(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::WaveformStreamID class."""
 
@@ -5355,6 +5625,17 @@ class WaveformStreamID(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(WaveformStreamID self, GenericArchive ar)"""
         return _DataModel.WaveformStreamID_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.WaveformStreamID_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(WaveformStreamID self) -> MetaObject"""
+        return _DataModel.WaveformStreamID_meta(self)
 
 
     def __init__(self, *args):
@@ -5461,6 +5742,10 @@ def WaveformStreamID_ConstCast(*args):
     """
     return _DataModel.WaveformStreamID_ConstCast(*args)
 
+def WaveformStreamID_Meta():
+    """WaveformStreamID_Meta() -> MetaObject"""
+    return _DataModel.WaveformStreamID_Meta()
+
 class SourceTimeFunction(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::SourceTimeFunction class."""
 
@@ -5517,6 +5802,17 @@ class SourceTimeFunction(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(SourceTimeFunction self, GenericArchive ar)"""
         return _DataModel.SourceTimeFunction_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.SourceTimeFunction_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(SourceTimeFunction self) -> MetaObject"""
+        return _DataModel.SourceTimeFunction_meta(self)
 
 
     def __init__(self, *args):
@@ -5611,6 +5907,10 @@ def SourceTimeFunction_ConstCast(*args):
     """
     return _DataModel.SourceTimeFunction_ConstCast(*args)
 
+def SourceTimeFunction_Meta():
+    """SourceTimeFunction_Meta() -> MetaObject"""
+    return _DataModel.SourceTimeFunction_Meta()
+
 class NodalPlanes(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::NodalPlanes class."""
 
@@ -5667,6 +5967,17 @@ class NodalPlanes(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(NodalPlanes self, GenericArchive ar)"""
         return _DataModel.NodalPlanes_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.NodalPlanes_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(NodalPlanes self) -> MetaObject"""
+        return _DataModel.NodalPlanes_meta(self)
 
 
     def __init__(self, *args):
@@ -5757,6 +6068,10 @@ def NodalPlanes_ConstCast(*args):
     """
     return _DataModel.NodalPlanes_ConstCast(*args)
 
+def NodalPlanes_Meta():
+    """NodalPlanes_Meta() -> MetaObject"""
+    return _DataModel.NodalPlanes_Meta()
+
 class ConfidenceEllipsoid(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::ConfidenceEllipsoid class."""
 
@@ -5813,6 +6128,17 @@ class ConfidenceEllipsoid(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(ConfidenceEllipsoid self, GenericArchive ar)"""
         return _DataModel.ConfidenceEllipsoid_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ConfidenceEllipsoid_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ConfidenceEllipsoid self) -> MetaObject"""
+        return _DataModel.ConfidenceEllipsoid_meta(self)
 
 
     def __init__(self, *args):
@@ -5927,6 +6253,10 @@ def ConfidenceEllipsoid_ConstCast(*args):
     """
     return _DataModel.ConfidenceEllipsoid_ConstCast(*args)
 
+def ConfidenceEllipsoid_Meta():
+    """ConfidenceEllipsoid_Meta() -> MetaObject"""
+    return _DataModel.ConfidenceEllipsoid_Meta()
+
 class OriginUncertainty(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::OriginUncertainty class."""
 
@@ -5983,6 +6313,17 @@ class OriginUncertainty(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(OriginUncertainty self, GenericArchive ar)"""
         return _DataModel.OriginUncertainty_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.OriginUncertainty_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(OriginUncertainty self) -> MetaObject"""
+        return _DataModel.OriginUncertainty_meta(self)
 
 
     def __init__(self, *args):
@@ -6100,6 +6441,10 @@ def OriginUncertainty_ConstCast(*args):
     """
     return _DataModel.OriginUncertainty_ConstCast(*args)
 
+def OriginUncertainty_Meta():
+    """OriginUncertainty_Meta() -> MetaObject"""
+    return _DataModel.OriginUncertainty_Meta()
+
 class Blob(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::Blob class."""
 
@@ -6156,6 +6501,17 @@ class Blob(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(Blob self, GenericArchive ar)"""
         return _DataModel.Blob_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Blob_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Blob self) -> MetaObject"""
+        return _DataModel.Blob_meta(self)
 
 
     def __init__(self, *args):
@@ -6220,6 +6576,10 @@ def Blob_ConstCast(*args):
     """
     return _DataModel.Blob_ConstCast(*args)
 
+def Blob_Meta():
+    """Blob_Meta() -> MetaObject"""
+    return _DataModel.Blob_Meta()
+
 class ArclinkRequestSummary(seiscomp3.Core.BaseObject):
     """Proxy of C++ Seiscomp::DataModel::ArclinkRequestSummary class."""
 
@@ -6276,6 +6636,17 @@ class ArclinkRequestSummary(seiscomp3.Core.BaseObject):
     def serialize(self, ar):
         """serialize(ArclinkRequestSummary self, GenericArchive ar)"""
         return _DataModel.ArclinkRequestSummary_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkRequestSummary_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkRequestSummary self) -> MetaObject"""
+        return _DataModel.ArclinkRequestSummary_meta(self)
 
 
     def __init__(self, *args):
@@ -6360,6 +6731,10 @@ def ArclinkRequestSummary_ConstCast(*args):
     """
     return _DataModel.ArclinkRequestSummary_ConstCast(*args)
 
+def ArclinkRequestSummary_Meta():
+    """ArclinkRequestSummary_Meta() -> MetaObject"""
+    return _DataModel.ArclinkRequestSummary_Meta()
+
 class JournalEntry(Object):
     """Proxy of C++ Seiscomp::DataModel::JournalEntry class."""
 
@@ -6416,6 +6791,17 @@ class JournalEntry(Object):
     def serialize(self, ar):
         """serialize(JournalEntry self, GenericArchive ar)"""
         return _DataModel.JournalEntry_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.JournalEntry_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(JournalEntry self) -> MetaObject"""
+        return _DataModel.JournalEntry_meta(self)
 
 
     def __init__(self, *args):
@@ -6555,6 +6941,10 @@ def JournalEntry_ConstCast(*args):
     """
     return _DataModel.JournalEntry_ConstCast(*args)
 
+def JournalEntry_Meta():
+    """JournalEntry_Meta() -> MetaObject"""
+    return _DataModel.JournalEntry_Meta()
+
 class Journaling(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Journaling class."""
 
@@ -6611,6 +7001,17 @@ class Journaling(PublicObject):
     def serialize(self, ar):
         """serialize(Journaling self, GenericArchive ar)"""
         return _DataModel.Journaling_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Journaling_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Journaling self) -> MetaObject"""
+        return _DataModel.Journaling_meta(self)
 
 
     def __init__(self, *args):
@@ -6730,6 +7131,10 @@ def Journaling_ConstCast(*args):
     """
     return _DataModel.Journaling_ConstCast(*args)
 
+def Journaling_Meta():
+    """Journaling_Meta() -> MetaObject"""
+    return _DataModel.Journaling_Meta()
+
 class ArclinkUserIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::ArclinkUserIndex class."""
 
@@ -6829,6 +7234,17 @@ class ArclinkUser(PublicObject):
     def serialize(self, ar):
         """serialize(ArclinkUser self, GenericArchive ar)"""
         return _DataModel.ArclinkUser_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkUser_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkUser self) -> MetaObject"""
+        return _DataModel.ArclinkUser_meta(self)
 
 
     def __init__(self, *args):
@@ -6978,6 +7394,10 @@ def ArclinkUser_ConstCast(*args):
     """
     return _DataModel.ArclinkUser_ConstCast(*args)
 
+def ArclinkUser_Meta():
+    """ArclinkUser_Meta() -> MetaObject"""
+    return _DataModel.ArclinkUser_Meta()
+
 def ArclinkUser_Create(*args):
     """
     Create() -> ArclinkUser
@@ -7092,6 +7512,17 @@ class ArclinkStatusLine(Object):
     def serialize(self, ar):
         """serialize(ArclinkStatusLine self, GenericArchive ar)"""
         return _DataModel.ArclinkStatusLine_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkStatusLine_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkStatusLine self) -> MetaObject"""
+        return _DataModel.ArclinkStatusLine_meta(self)
 
 
     def __init__(self, *args):
@@ -7241,6 +7672,10 @@ def ArclinkStatusLine_ConstCast(*args):
     """
     return _DataModel.ArclinkStatusLine_ConstCast(*args)
 
+def ArclinkStatusLine_Meta():
+    """ArclinkStatusLine_Meta() -> MetaObject"""
+    return _DataModel.ArclinkStatusLine_Meta()
+
 class ArclinkRequestLineIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::ArclinkRequestLineIndex class."""
 
@@ -7344,6 +7779,17 @@ class ArclinkRequestLine(Object):
     def serialize(self, ar):
         """serialize(ArclinkRequestLine self, GenericArchive ar)"""
         return _DataModel.ArclinkRequestLine_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkRequestLine_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkRequestLine self) -> MetaObject"""
+        return _DataModel.ArclinkRequestLine_meta(self)
 
 
     def __init__(self, *args):
@@ -7529,6 +7975,10 @@ def ArclinkRequestLine_ConstCast(*args):
     """
     return _DataModel.ArclinkRequestLine_ConstCast(*args)
 
+def ArclinkRequestLine_Meta():
+    """ArclinkRequestLine_Meta() -> MetaObject"""
+    return _DataModel.ArclinkRequestLine_Meta()
+
 class ArclinkRequestIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::ArclinkRequestIndex class."""
 
@@ -7632,6 +8082,17 @@ class ArclinkRequest(PublicObject):
     def serialize(self, ar):
         """serialize(ArclinkRequest self, GenericArchive ar)"""
         return _DataModel.ArclinkRequest_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkRequest_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkRequest self) -> MetaObject"""
+        return _DataModel.ArclinkRequest_meta(self)
 
 
     def __init__(self, *args):
@@ -7932,6 +8393,10 @@ def ArclinkRequest_ConstCast(*args):
     """
     return _DataModel.ArclinkRequest_ConstCast(*args)
 
+def ArclinkRequest_Meta():
+    """ArclinkRequest_Meta() -> MetaObject"""
+    return _DataModel.ArclinkRequest_Meta()
+
 def ArclinkRequest_Create(*args):
     """
     Create() -> ArclinkRequest
@@ -7999,6 +8464,17 @@ class ArclinkLog(PublicObject):
     def serialize(self, ar):
         """serialize(ArclinkLog self, GenericArchive ar)"""
         return _DataModel.ArclinkLog_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ArclinkLog_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ArclinkLog self) -> MetaObject"""
+        return _DataModel.ArclinkLog_meta(self)
 
 
     def __init__(self, *args):
@@ -8156,6 +8632,10 @@ def ArclinkLog_ConstCast(*args):
     """
     return _DataModel.ArclinkLog_ConstCast(*args)
 
+def ArclinkLog_Meta():
+    """ArclinkLog_Meta() -> MetaObject"""
+    return _DataModel.ArclinkLog_Meta()
+
 class QCLogIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::QCLogIndex class."""
 
@@ -8255,6 +8735,17 @@ class QCLog(PublicObject):
     def serialize(self, ar):
         """serialize(QCLog self, GenericArchive ar)"""
         return _DataModel.QCLog_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.QCLog_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(QCLog self) -> MetaObject"""
+        return _DataModel.QCLog_meta(self)
 
 
     def __init__(self, *args):
@@ -8437,6 +8928,10 @@ def QCLog_ConstCast(*args):
     """
     return _DataModel.QCLog_ConstCast(*args)
 
+def QCLog_Meta():
+    """QCLog_Meta() -> MetaObject"""
+    return _DataModel.QCLog_Meta()
+
 def QCLog_Create(*args):
     """
     Create() -> QCLog
@@ -8555,6 +9050,17 @@ class WaveformQuality(Object):
     def serialize(self, ar):
         """serialize(WaveformQuality self, GenericArchive ar)"""
         return _DataModel.WaveformQuality_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.WaveformQuality_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(WaveformQuality self) -> MetaObject"""
+        return _DataModel.WaveformQuality_meta(self)
 
 
     def __init__(self, *args):
@@ -8767,6 +9273,10 @@ def WaveformQuality_ConstCast(*args):
     """
     return _DataModel.WaveformQuality_ConstCast(*args)
 
+def WaveformQuality_Meta():
+    """WaveformQuality_Meta() -> MetaObject"""
+    return _DataModel.WaveformQuality_Meta()
+
 class OutageIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::OutageIndex class."""
 
@@ -8866,6 +9376,17 @@ class Outage(Object):
     def serialize(self, ar):
         """serialize(Outage self, GenericArchive ar)"""
         return _DataModel.Outage_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Outage_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Outage self) -> MetaObject"""
+        return _DataModel.Outage_meta(self)
 
 
     def __init__(self, *args):
@@ -9018,6 +9539,10 @@ def Outage_ConstCast(*args):
     """
     return _DataModel.Outage_ConstCast(*args)
 
+def Outage_Meta():
+    """Outage_Meta() -> MetaObject"""
+    return _DataModel.Outage_Meta()
+
 class QualityControl(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::QualityControl class."""
 
@@ -9074,6 +9599,17 @@ class QualityControl(PublicObject):
     def serialize(self, ar):
         """serialize(QualityControl self, GenericArchive ar)"""
         return _DataModel.QualityControl_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.QualityControl_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(QualityControl self) -> MetaObject"""
+        return _DataModel.QualityControl_meta(self)
 
 
     def __init__(self, *args):
@@ -9249,6 +9785,10 @@ def QualityControl_ConstCast(*args):
     """
     return _DataModel.QualityControl_ConstCast(*args)
 
+def QualityControl_Meta():
+    """QualityControl_Meta() -> MetaObject"""
+    return _DataModel.QualityControl_Meta()
+
 class StationReferenceIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::StationReferenceIndex class."""
 
@@ -9344,6 +9884,17 @@ class StationReference(Object):
     def serialize(self, ar):
         """serialize(StationReference self, GenericArchive ar)"""
         return _DataModel.StationReference_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.StationReference_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(StationReference self) -> MetaObject"""
+        return _DataModel.StationReference_meta(self)
 
 
     def __init__(self, *args):
@@ -9454,6 +10005,10 @@ def StationReference_ConstCast(*args):
     """
     return _DataModel.StationReference_ConstCast(*args)
 
+def StationReference_Meta():
+    """StationReference_Meta() -> MetaObject"""
+    return _DataModel.StationReference_Meta()
+
 class StationGroupIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::StationGroupIndex class."""
 
@@ -9549,6 +10104,17 @@ class StationGroup(PublicObject):
     def serialize(self, ar):
         """serialize(StationGroup self, GenericArchive ar)"""
         return _DataModel.StationGroup_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.StationGroup_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(StationGroup self) -> MetaObject"""
+        return _DataModel.StationGroup_meta(self)
 
 
     def __init__(self, *args):
@@ -9779,6 +10345,10 @@ def StationGroup_ConstCast(*args):
     """
     return _DataModel.StationGroup_ConstCast(*args)
 
+def StationGroup_Meta():
+    """StationGroup_Meta() -> MetaObject"""
+    return _DataModel.StationGroup_Meta()
+
 def StationGroup_Create(*args):
     """
     Create() -> StationGroup
@@ -9885,6 +10455,17 @@ class AuxSource(Object):
     def serialize(self, ar):
         """serialize(AuxSource self, GenericArchive ar)"""
         return _DataModel.AuxSource_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.AuxSource_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(AuxSource self) -> MetaObject"""
+        return _DataModel.AuxSource_meta(self)
 
 
     def __init__(self, *args):
@@ -10062,6 +10643,10 @@ def AuxSource_ConstCast(*args):
     """
     return _DataModel.AuxSource_ConstCast(*args)
 
+def AuxSource_Meta():
+    """AuxSource_Meta() -> MetaObject"""
+    return _DataModel.AuxSource_Meta()
+
 class AuxDeviceIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::AuxDeviceIndex class."""
 
@@ -10157,6 +10742,17 @@ class AuxDevice(PublicObject):
     def serialize(self, ar):
         """serialize(AuxDevice self, GenericArchive ar)"""
         return _DataModel.AuxDevice_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.AuxDevice_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(AuxDevice self) -> MetaObject"""
+        return _DataModel.AuxDevice_meta(self)
 
 
     def __init__(self, *args):
@@ -10360,6 +10956,10 @@ def AuxDevice_ConstCast(*args):
     """
     return _DataModel.AuxDevice_ConstCast(*args)
 
+def AuxDevice_Meta():
+    """AuxDevice_Meta() -> MetaObject"""
+    return _DataModel.AuxDevice_Meta()
+
 def AuxDevice_Create(*args):
     """
     Create() -> AuxDevice
@@ -10474,6 +11074,17 @@ class SensorCalibration(Object):
     def serialize(self, ar):
         """serialize(SensorCalibration self, GenericArchive ar)"""
         return _DataModel.SensorCalibration_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.SensorCalibration_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(SensorCalibration self) -> MetaObject"""
+        return _DataModel.SensorCalibration_meta(self)
 
 
     def __init__(self, *args):
@@ -10646,6 +11257,10 @@ def SensorCalibration_ConstCast(*args):
     """
     return _DataModel.SensorCalibration_ConstCast(*args)
 
+def SensorCalibration_Meta():
+    """SensorCalibration_Meta() -> MetaObject"""
+    return _DataModel.SensorCalibration_Meta()
+
 class SensorIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::SensorIndex class."""
 
@@ -10741,6 +11356,17 @@ class Sensor(PublicObject):
     def serialize(self, ar):
         """serialize(Sensor self, GenericArchive ar)"""
         return _DataModel.Sensor_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Sensor_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Sensor self) -> MetaObject"""
+        return _DataModel.Sensor_meta(self)
 
 
     def __init__(self, *args):
@@ -10994,6 +11620,10 @@ def Sensor_ConstCast(*args):
     """
     return _DataModel.Sensor_ConstCast(*args)
 
+def Sensor_Meta():
+    """Sensor_Meta() -> MetaObject"""
+    return _DataModel.Sensor_Meta()
+
 def Sensor_Create(*args):
     """
     Create() -> Sensor
@@ -11100,6 +11730,17 @@ class ResponsePAZ(PublicObject):
     def serialize(self, ar):
         """serialize(ResponsePAZ self, GenericArchive ar)"""
         return _DataModel.ResponsePAZ_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ResponsePAZ_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ResponsePAZ self) -> MetaObject"""
+        return _DataModel.ResponsePAZ_meta(self)
 
 
     def __init__(self, *args):
@@ -11368,6 +12009,10 @@ def ResponsePAZ_ConstCast(*args):
     """
     return _DataModel.ResponsePAZ_ConstCast(*args)
 
+def ResponsePAZ_Meta():
+    """ResponsePAZ_Meta() -> MetaObject"""
+    return _DataModel.ResponsePAZ_Meta()
+
 def ResponsePAZ_Create(*args):
     """
     Create() -> ResponsePAZ
@@ -11474,6 +12119,17 @@ class ResponsePolynomial(PublicObject):
     def serialize(self, ar):
         """serialize(ResponsePolynomial self, GenericArchive ar)"""
         return _DataModel.ResponsePolynomial_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ResponsePolynomial_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ResponsePolynomial self) -> MetaObject"""
+        return _DataModel.ResponsePolynomial_meta(self)
 
 
     def __init__(self, *args):
@@ -11709,6 +12365,10 @@ def ResponsePolynomial_ConstCast(*args):
     """
     return _DataModel.ResponsePolynomial_ConstCast(*args)
 
+def ResponsePolynomial_Meta():
+    """ResponsePolynomial_Meta() -> MetaObject"""
+    return _DataModel.ResponsePolynomial_Meta()
+
 def ResponsePolynomial_Create(*args):
     """
     Create() -> ResponsePolynomial
@@ -11815,6 +12475,17 @@ class ResponseFAP(PublicObject):
     def serialize(self, ar):
         """serialize(ResponseFAP self, GenericArchive ar)"""
         return _DataModel.ResponseFAP_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ResponseFAP_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ResponseFAP self) -> MetaObject"""
+        return _DataModel.ResponseFAP_meta(self)
 
 
     def __init__(self, *args):
@@ -12000,6 +12671,10 @@ def ResponseFAP_ConstCast(*args):
     """
     return _DataModel.ResponseFAP_ConstCast(*args)
 
+def ResponseFAP_Meta():
+    """ResponseFAP_Meta() -> MetaObject"""
+    return _DataModel.ResponseFAP_Meta()
+
 def ResponseFAP_Create(*args):
     """
     Create() -> ResponseFAP
@@ -12106,6 +12781,17 @@ class ResponseFIR(PublicObject):
     def serialize(self, ar):
         """serialize(ResponseFIR self, GenericArchive ar)"""
         return _DataModel.ResponseFIR_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ResponseFIR_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ResponseFIR self) -> MetaObject"""
+        return _DataModel.ResponseFIR_meta(self)
 
 
     def __init__(self, *args):
@@ -12331,6 +13017,10 @@ def ResponseFIR_ConstCast(*args):
     """
     return _DataModel.ResponseFIR_ConstCast(*args)
 
+def ResponseFIR_Meta():
+    """ResponseFIR_Meta() -> MetaObject"""
+    return _DataModel.ResponseFIR_Meta()
+
 def ResponseFIR_Create(*args):
     """
     Create() -> ResponseFIR
@@ -12437,6 +13127,17 @@ class ResponseIIR(PublicObject):
     def serialize(self, ar):
         """serialize(ResponseIIR self, GenericArchive ar)"""
         return _DataModel.ResponseIIR_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ResponseIIR_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ResponseIIR self) -> MetaObject"""
+        return _DataModel.ResponseIIR_meta(self)
 
 
     def __init__(self, *args):
@@ -12685,6 +13386,10 @@ def ResponseIIR_ConstCast(*args):
     """
     return _DataModel.ResponseIIR_ConstCast(*args)
 
+def ResponseIIR_Meta():
+    """ResponseIIR_Meta() -> MetaObject"""
+    return _DataModel.ResponseIIR_Meta()
+
 def ResponseIIR_Create(*args):
     """
     Create() -> ResponseIIR
@@ -12799,6 +13504,17 @@ class DataloggerCalibration(Object):
     def serialize(self, ar):
         """serialize(DataloggerCalibration self, GenericArchive ar)"""
         return _DataModel.DataloggerCalibration_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataloggerCalibration_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataloggerCalibration self) -> MetaObject"""
+        return _DataModel.DataloggerCalibration_meta(self)
 
 
     def __init__(self, *args):
@@ -12971,6 +13687,10 @@ def DataloggerCalibration_ConstCast(*args):
     """
     return _DataModel.DataloggerCalibration_ConstCast(*args)
 
+def DataloggerCalibration_Meta():
+    """DataloggerCalibration_Meta() -> MetaObject"""
+    return _DataModel.DataloggerCalibration_Meta()
+
 class DecimationIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DecimationIndex class."""
 
@@ -13070,6 +13790,17 @@ class Decimation(Object):
     def serialize(self, ar):
         """serialize(Decimation self, GenericArchive ar)"""
         return _DataModel.Decimation_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Decimation_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Decimation self) -> MetaObject"""
+        return _DataModel.Decimation_meta(self)
 
 
     def __init__(self, *args):
@@ -13215,6 +13946,10 @@ def Decimation_ConstCast(*args):
     """
     return _DataModel.Decimation_ConstCast(*args)
 
+def Decimation_Meta():
+    """Decimation_Meta() -> MetaObject"""
+    return _DataModel.Decimation_Meta()
+
 class DataloggerIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DataloggerIndex class."""
 
@@ -13310,6 +14045,17 @@ class Datalogger(PublicObject):
     def serialize(self, ar):
         """serialize(Datalogger self, GenericArchive ar)"""
         return _DataModel.Datalogger_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Datalogger_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Datalogger self) -> MetaObject"""
+        return _DataModel.Datalogger_meta(self)
 
 
     def __init__(self, *args):
@@ -13610,6 +14356,10 @@ def Datalogger_ConstCast(*args):
     """
     return _DataModel.Datalogger_ConstCast(*args)
 
+def Datalogger_Meta():
+    """Datalogger_Meta() -> MetaObject"""
+    return _DataModel.Datalogger_Meta()
+
 def Datalogger_Create(*args):
     """
     Create() -> Datalogger
@@ -13720,6 +14470,17 @@ class AuxStream(Object):
     def serialize(self, ar):
         """serialize(AuxStream self, GenericArchive ar)"""
         return _DataModel.AuxStream_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.AuxStream_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(AuxStream self) -> MetaObject"""
+        return _DataModel.AuxStream_meta(self)
 
 
     def __init__(self, *args):
@@ -13919,6 +14680,10 @@ def AuxStream_ConstCast(*args):
     """
     return _DataModel.AuxStream_ConstCast(*args)
 
+def AuxStream_Meta():
+    """AuxStream_Meta() -> MetaObject"""
+    return _DataModel.AuxStream_Meta()
+
 class StreamIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::StreamIndex class."""
 
@@ -14018,6 +14783,17 @@ class Stream(PublicObject):
     def serialize(self, ar):
         """serialize(Stream self, GenericArchive ar)"""
         return _DataModel.Stream_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Stream_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Stream self) -> MetaObject"""
+        return _DataModel.Stream_meta(self)
 
 
     def __init__(self, *args):
@@ -14388,6 +15164,10 @@ def Stream_ConstCast(*args):
     """
     return _DataModel.Stream_ConstCast(*args)
 
+def Stream_Meta():
+    """Stream_Meta() -> MetaObject"""
+    return _DataModel.Stream_Meta()
+
 def Stream_Create(*args):
     """
     Create() -> Stream
@@ -14498,6 +15278,17 @@ class SensorLocation(PublicObject):
     def serialize(self, ar):
         """serialize(SensorLocation self, GenericArchive ar)"""
         return _DataModel.SensorLocation_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.SensorLocation_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(SensorLocation self) -> MetaObject"""
+        return _DataModel.SensorLocation_meta(self)
 
 
     def __init__(self, *args):
@@ -14763,6 +15554,10 @@ def SensorLocation_ConstCast(*args):
     """
     return _DataModel.SensorLocation_ConstCast(*args)
 
+def SensorLocation_Meta():
+    """SensorLocation_Meta() -> MetaObject"""
+    return _DataModel.SensorLocation_Meta()
+
 def SensorLocation_Create(*args):
     """
     Create() -> SensorLocation
@@ -14873,6 +15668,17 @@ class Station(PublicObject):
     def serialize(self, ar):
         """serialize(Station self, GenericArchive ar)"""
         return _DataModel.Station_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Station_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Station self) -> MetaObject"""
+        return _DataModel.Station_meta(self)
 
 
     def __init__(self, *args):
@@ -15218,6 +16024,10 @@ def Station_ConstCast(*args):
     """
     return _DataModel.Station_ConstCast(*args)
 
+def Station_Meta():
+    """Station_Meta() -> MetaObject"""
+    return _DataModel.Station_Meta()
+
 def Station_Create(*args):
     """
     Create() -> Station
@@ -15328,6 +16138,17 @@ class Network(PublicObject):
     def serialize(self, ar):
         """serialize(Network self, GenericArchive ar)"""
         return _DataModel.Network_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Network_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Network self) -> MetaObject"""
+        return _DataModel.Network_meta(self)
 
 
     def __init__(self, *args):
@@ -15633,6 +16454,10 @@ def Network_ConstCast(*args):
     """
     return _DataModel.Network_ConstCast(*args)
 
+def Network_Meta():
+    """Network_Meta() -> MetaObject"""
+    return _DataModel.Network_Meta()
+
 def Network_Create(*args):
     """
     Create() -> Network
@@ -15700,6 +16525,17 @@ class Inventory(PublicObject):
     def serialize(self, ar):
         """serialize(Inventory self, GenericArchive ar)"""
         return _DataModel.Inventory_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Inventory_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Inventory self) -> MetaObject"""
+        return _DataModel.Inventory_meta(self)
 
 
     def __init__(self, *args):
@@ -16081,6 +16917,10 @@ def Inventory_ConstCast(*args):
     """
     return _DataModel.Inventory_ConstCast(*args)
 
+def Inventory_Meta():
+    """Inventory_Meta() -> MetaObject"""
+    return _DataModel.Inventory_Meta()
+
 class DataSegmentIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DataSegmentIndex class."""
 
@@ -16176,6 +17016,17 @@ class DataSegment(Object):
     def serialize(self, ar):
         """serialize(DataSegment self, GenericArchive ar)"""
         return _DataModel.DataSegment_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataSegment_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataSegment self) -> MetaObject"""
+        return _DataModel.DataSegment_meta(self)
 
 
     def __init__(self, *args):
@@ -16335,6 +17186,10 @@ def DataSegment_ConstCast(*args):
     """
     return _DataModel.DataSegment_ConstCast(*args)
 
+def DataSegment_Meta():
+    """DataSegment_Meta() -> MetaObject"""
+    return _DataModel.DataSegment_Meta()
+
 class DataAttributeExtentIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DataAttributeExtentIndex class."""
 
@@ -16434,6 +17289,17 @@ class DataAttributeExtent(Object):
     def serialize(self, ar):
         """serialize(DataAttributeExtent self, GenericArchive ar)"""
         return _DataModel.DataAttributeExtent_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataAttributeExtent_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataAttributeExtent self) -> MetaObject"""
+        return _DataModel.DataAttributeExtent_meta(self)
 
 
     def __init__(self, *args):
@@ -16593,6 +17459,10 @@ def DataAttributeExtent_ConstCast(*args):
     """
     return _DataModel.DataAttributeExtent_ConstCast(*args)
 
+def DataAttributeExtent_Meta():
+    """DataAttributeExtent_Meta() -> MetaObject"""
+    return _DataModel.DataAttributeExtent_Meta()
+
 class DataExtentIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DataExtentIndex class."""
 
@@ -16688,6 +17558,17 @@ class DataExtent(PublicObject):
     def serialize(self, ar):
         """serialize(DataExtent self, GenericArchive ar)"""
         return _DataModel.DataExtent_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataExtent_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataExtent self) -> MetaObject"""
+        return _DataModel.DataExtent_meta(self)
 
 
     def __init__(self, *args):
@@ -16928,6 +17809,10 @@ def DataExtent_ConstCast(*args):
     """
     return _DataModel.DataExtent_ConstCast(*args)
 
+def DataExtent_Meta():
+    """DataExtent_Meta() -> MetaObject"""
+    return _DataModel.DataExtent_Meta()
+
 def DataExtent_Create(*args):
     """
     Create() -> DataExtent
@@ -16995,6 +17880,17 @@ class DataAvailability(PublicObject):
     def serialize(self, ar):
         """serialize(DataAvailability self, GenericArchive ar)"""
         return _DataModel.DataAvailability_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataAvailability_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataAvailability self) -> MetaObject"""
+        return _DataModel.DataAvailability_meta(self)
 
 
     def __init__(self, *args):
@@ -17120,6 +18016,10 @@ def DataAvailability_ConstCast(*args):
     """
     return _DataModel.DataAvailability_ConstCast(*args)
 
+def DataAvailability_Meta():
+    """DataAvailability_Meta() -> MetaObject"""
+    return _DataModel.DataAvailability_Meta()
+
 class EventDescriptionIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::EventDescriptionIndex class."""
 
@@ -17215,6 +18115,17 @@ class EventDescription(Object):
     def serialize(self, ar):
         """serialize(EventDescription self, GenericArchive ar)"""
         return _DataModel.EventDescription_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.EventDescription_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(EventDescription self) -> MetaObject"""
+        return _DataModel.EventDescription_meta(self)
 
 
     def __init__(self, *args):
@@ -17336,6 +18247,10 @@ def EventDescription_ConstCast(*args):
     """
     return _DataModel.EventDescription_ConstCast(*args)
 
+def EventDescription_Meta():
+    """EventDescription_Meta() -> MetaObject"""
+    return _DataModel.EventDescription_Meta()
+
 class DataUsed(Object):
     """Proxy of C++ Seiscomp::DataModel::DataUsed class."""
 
@@ -17392,6 +18307,17 @@ class DataUsed(Object):
     def serialize(self, ar):
         """serialize(DataUsed self, GenericArchive ar)"""
         return _DataModel.DataUsed_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.DataUsed_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(DataUsed self) -> MetaObject"""
+        return _DataModel.DataUsed_meta(self)
 
 
     def __init__(self, *args):
@@ -17521,6 +18447,10 @@ def DataUsed_ConstCast(*args):
     """
     return _DataModel.DataUsed_ConstCast(*args)
 
+def DataUsed_Meta():
+    """DataUsed_Meta() -> MetaObject"""
+    return _DataModel.DataUsed_Meta()
+
 class CompositeTime(Object):
     """Proxy of C++ Seiscomp::DataModel::CompositeTime class."""
 
@@ -17577,6 +18507,17 @@ class CompositeTime(Object):
     def serialize(self, ar):
         """serialize(CompositeTime self, GenericArchive ar)"""
         return _DataModel.CompositeTime_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.CompositeTime_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(CompositeTime self) -> MetaObject"""
+        return _DataModel.CompositeTime_meta(self)
 
 
     def __init__(self, *args):
@@ -17744,6 +18685,10 @@ def CompositeTime_ConstCast(*args):
     """
     return _DataModel.CompositeTime_ConstCast(*args)
 
+def CompositeTime_Meta():
+    """CompositeTime_Meta() -> MetaObject"""
+    return _DataModel.CompositeTime_Meta()
+
 class PickReferenceIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::PickReferenceIndex class."""
 
@@ -17839,6 +18784,17 @@ class PickReference(Object):
     def serialize(self, ar):
         """serialize(PickReference self, GenericArchive ar)"""
         return _DataModel.PickReference_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.PickReference_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(PickReference self) -> MetaObject"""
+        return _DataModel.PickReference_meta(self)
 
 
     def __init__(self, *args):
@@ -17949,6 +18905,10 @@ def PickReference_ConstCast(*args):
     """
     return _DataModel.PickReference_ConstCast(*args)
 
+def PickReference_Meta():
+    """PickReference_Meta() -> MetaObject"""
+    return _DataModel.PickReference_Meta()
+
 class AmplitudeReferenceIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::AmplitudeReferenceIndex class."""
 
@@ -18044,6 +19004,17 @@ class AmplitudeReference(Object):
     def serialize(self, ar):
         """serialize(AmplitudeReference self, GenericArchive ar)"""
         return _DataModel.AmplitudeReference_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.AmplitudeReference_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(AmplitudeReference self) -> MetaObject"""
+        return _DataModel.AmplitudeReference_meta(self)
 
 
     def __init__(self, *args):
@@ -18154,6 +19125,10 @@ def AmplitudeReference_ConstCast(*args):
     """
     return _DataModel.AmplitudeReference_ConstCast(*args)
 
+def AmplitudeReference_Meta():
+    """AmplitudeReference_Meta() -> MetaObject"""
+    return _DataModel.AmplitudeReference_Meta()
+
 class Reading(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Reading class."""
 
@@ -18210,6 +19185,17 @@ class Reading(PublicObject):
     def serialize(self, ar):
         """serialize(Reading self, GenericArchive ar)"""
         return _DataModel.Reading_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Reading_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Reading self) -> MetaObject"""
+        return _DataModel.Reading_meta(self)
 
 
     def __init__(self, *args):
@@ -18377,6 +19363,10 @@ def Reading_ConstCast(*args):
     """
     return _DataModel.Reading_ConstCast(*args)
 
+def Reading_Meta():
+    """Reading_Meta() -> MetaObject"""
+    return _DataModel.Reading_Meta()
+
 def Reading_Create(*args):
     """
     Create() -> Reading
@@ -18487,6 +19477,17 @@ class MomentTensorComponentContribution(Object):
     def serialize(self, ar):
         """serialize(MomentTensorComponentContribution self, GenericArchive ar)"""
         return _DataModel.MomentTensorComponentContribution_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.MomentTensorComponentContribution_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(MomentTensorComponentContribution self) -> MetaObject"""
+        return _DataModel.MomentTensorComponentContribution_meta(self)
 
 
     def __init__(self, *args):
@@ -18673,6 +19674,10 @@ def MomentTensorComponentContribution_ConstCast(*args):
     """
     return _DataModel.MomentTensorComponentContribution_ConstCast(*args)
 
+def MomentTensorComponentContribution_Meta():
+    """MomentTensorComponentContribution_Meta() -> MetaObject"""
+    return _DataModel.MomentTensorComponentContribution_Meta()
+
 class MomentTensorStationContribution(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::MomentTensorStationContribution class."""
 
@@ -18729,6 +19734,17 @@ class MomentTensorStationContribution(PublicObject):
     def serialize(self, ar):
         """serialize(MomentTensorStationContribution self, GenericArchive ar)"""
         return _DataModel.MomentTensorStationContribution_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.MomentTensorStationContribution_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(MomentTensorStationContribution self) -> MetaObject"""
+        return _DataModel.MomentTensorStationContribution_meta(self)
 
 
     def __init__(self, *args):
@@ -18912,6 +19928,10 @@ def MomentTensorStationContribution_ConstCast(*args):
     """
     return _DataModel.MomentTensorStationContribution_ConstCast(*args)
 
+def MomentTensorStationContribution_Meta():
+    """MomentTensorStationContribution_Meta() -> MetaObject"""
+    return _DataModel.MomentTensorStationContribution_Meta()
+
 def MomentTensorStationContribution_Create(*args):
     """
     Create() -> MomentTensorStationContribution
@@ -19018,6 +20038,17 @@ class MomentTensorPhaseSetting(Object):
     def serialize(self, ar):
         """serialize(MomentTensorPhaseSetting self, GenericArchive ar)"""
         return _DataModel.MomentTensorPhaseSetting_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.MomentTensorPhaseSetting_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(MomentTensorPhaseSetting self) -> MetaObject"""
+        return _DataModel.MomentTensorPhaseSetting_meta(self)
 
 
     def __init__(self, *args):
@@ -19171,6 +20202,10 @@ def MomentTensorPhaseSetting_ConstCast(*args):
     """
     return _DataModel.MomentTensorPhaseSetting_ConstCast(*args)
 
+def MomentTensorPhaseSetting_Meta():
+    """MomentTensorPhaseSetting_Meta() -> MetaObject"""
+    return _DataModel.MomentTensorPhaseSetting_Meta()
+
 class MomentTensor(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::MomentTensor class."""
 
@@ -19227,6 +20262,17 @@ class MomentTensor(PublicObject):
     def serialize(self, ar):
         """serialize(MomentTensor self, GenericArchive ar)"""
         return _DataModel.MomentTensor_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.MomentTensor_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(MomentTensor self) -> MetaObject"""
+        return _DataModel.MomentTensor_meta(self)
 
 
     def __init__(self, *args):
@@ -19630,6 +20676,10 @@ def MomentTensor_ConstCast(*args):
     """
     return _DataModel.MomentTensor_ConstCast(*args)
 
+def MomentTensor_Meta():
+    """MomentTensor_Meta() -> MetaObject"""
+    return _DataModel.MomentTensor_Meta()
+
 def MomentTensor_Create(*args):
     """
     Create() -> MomentTensor
@@ -19697,6 +20747,17 @@ class FocalMechanism(PublicObject):
     def serialize(self, ar):
         """serialize(FocalMechanism self, GenericArchive ar)"""
         return _DataModel.FocalMechanism_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.FocalMechanism_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(FocalMechanism self) -> MetaObject"""
+        return _DataModel.FocalMechanism_meta(self)
 
 
     def __init__(self, *args):
@@ -19982,6 +21043,10 @@ def FocalMechanism_ConstCast(*args):
     """
     return _DataModel.FocalMechanism_ConstCast(*args)
 
+def FocalMechanism_Meta():
+    """FocalMechanism_Meta() -> MetaObject"""
+    return _DataModel.FocalMechanism_Meta()
+
 def FocalMechanism_Create(*args):
     """
     Create() -> FocalMechanism
@@ -20049,6 +21114,17 @@ class Amplitude(PublicObject):
     def serialize(self, ar):
         """serialize(Amplitude self, GenericArchive ar)"""
         return _DataModel.Amplitude_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Amplitude_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Amplitude self) -> MetaObject"""
+        return _DataModel.Amplitude_meta(self)
 
 
     def __init__(self, *args):
@@ -20347,6 +21423,10 @@ def Amplitude_ConstCast(*args):
     """
     return _DataModel.Amplitude_ConstCast(*args)
 
+def Amplitude_Meta():
+    """Amplitude_Meta() -> MetaObject"""
+    return _DataModel.Amplitude_Meta()
+
 def Amplitude_Create(*args):
     """
     Create() -> Amplitude
@@ -20453,6 +21533,17 @@ class StationMagnitudeContribution(Object):
     def serialize(self, ar):
         """serialize(StationMagnitudeContribution self, GenericArchive ar)"""
         return _DataModel.StationMagnitudeContribution_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.StationMagnitudeContribution_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(StationMagnitudeContribution self) -> MetaObject"""
+        return _DataModel.StationMagnitudeContribution_meta(self)
 
 
     def __init__(self, *args):
@@ -20585,6 +21676,10 @@ def StationMagnitudeContribution_ConstCast(*args):
     """
     return _DataModel.StationMagnitudeContribution_ConstCast(*args)
 
+def StationMagnitudeContribution_Meta():
+    """StationMagnitudeContribution_Meta() -> MetaObject"""
+    return _DataModel.StationMagnitudeContribution_Meta()
+
 class Magnitude(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Magnitude class."""
 
@@ -20641,6 +21736,17 @@ class Magnitude(PublicObject):
     def serialize(self, ar):
         """serialize(Magnitude self, GenericArchive ar)"""
         return _DataModel.Magnitude_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Magnitude_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Magnitude self) -> MetaObject"""
+        return _DataModel.Magnitude_meta(self)
 
 
     def __init__(self, *args):
@@ -20894,6 +22000,10 @@ def Magnitude_ConstCast(*args):
     """
     return _DataModel.Magnitude_ConstCast(*args)
 
+def Magnitude_Meta():
+    """Magnitude_Meta() -> MetaObject"""
+    return _DataModel.Magnitude_Meta()
+
 def Magnitude_Create(*args):
     """
     Create() -> Magnitude
@@ -20961,6 +22071,17 @@ class StationMagnitude(PublicObject):
     def serialize(self, ar):
         """serialize(StationMagnitude self, GenericArchive ar)"""
         return _DataModel.StationMagnitude_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.StationMagnitude_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(StationMagnitude self) -> MetaObject"""
+        return _DataModel.StationMagnitude_meta(self)
 
 
     def __init__(self, *args):
@@ -21190,6 +22311,10 @@ def StationMagnitude_ConstCast(*args):
     """
     return _DataModel.StationMagnitude_ConstCast(*args)
 
+def StationMagnitude_Meta():
+    """StationMagnitude_Meta() -> MetaObject"""
+    return _DataModel.StationMagnitude_Meta()
+
 def StationMagnitude_Create(*args):
     """
     Create() -> StationMagnitude
@@ -21257,6 +22382,17 @@ class Pick(PublicObject):
     def serialize(self, ar):
         """serialize(Pick self, GenericArchive ar)"""
         return _DataModel.Pick_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Pick_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Pick self) -> MetaObject"""
+        return _DataModel.Pick_meta(self)
 
 
     def __init__(self, *args):
@@ -21545,6 +22681,10 @@ def Pick_ConstCast(*args):
     """
     return _DataModel.Pick_ConstCast(*args)
 
+def Pick_Meta():
+    """Pick_Meta() -> MetaObject"""
+    return _DataModel.Pick_Meta()
+
 def Pick_Create(*args):
     """
     Create() -> Pick
@@ -21651,6 +22791,17 @@ class OriginReference(Object):
     def serialize(self, ar):
         """serialize(OriginReference self, GenericArchive ar)"""
         return _DataModel.OriginReference_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.OriginReference_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(OriginReference self) -> MetaObject"""
+        return _DataModel.OriginReference_meta(self)
 
 
     def __init__(self, *args):
@@ -21761,6 +22912,10 @@ def OriginReference_ConstCast(*args):
     """
     return _DataModel.OriginReference_ConstCast(*args)
 
+def OriginReference_Meta():
+    """OriginReference_Meta() -> MetaObject"""
+    return _DataModel.OriginReference_Meta()
+
 class FocalMechanismReferenceIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::FocalMechanismReferenceIndex class."""
 
@@ -21856,6 +23011,17 @@ class FocalMechanismReference(Object):
     def serialize(self, ar):
         """serialize(FocalMechanismReference self, GenericArchive ar)"""
         return _DataModel.FocalMechanismReference_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.FocalMechanismReference_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(FocalMechanismReference self) -> MetaObject"""
+        return _DataModel.FocalMechanismReference_meta(self)
 
 
     def __init__(self, *args):
@@ -21966,6 +23132,10 @@ def FocalMechanismReference_ConstCast(*args):
     """
     return _DataModel.FocalMechanismReference_ConstCast(*args)
 
+def FocalMechanismReference_Meta():
+    """FocalMechanismReference_Meta() -> MetaObject"""
+    return _DataModel.FocalMechanismReference_Meta()
+
 class Event(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Event class."""
 
@@ -22022,6 +23192,17 @@ class Event(PublicObject):
     def serialize(self, ar):
         """serialize(Event self, GenericArchive ar)"""
         return _DataModel.Event_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Event_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Event self) -> MetaObject"""
+        return _DataModel.Event_meta(self)
 
 
     def __init__(self, *args):
@@ -22298,6 +23479,10 @@ def Event_ConstCast(*args):
     """
     return _DataModel.Event_ConstCast(*args)
 
+def Event_Meta():
+    """Event_Meta() -> MetaObject"""
+    return _DataModel.Event_Meta()
+
 def Event_Create(*args):
     """
     Create() -> Event
@@ -22404,6 +23589,17 @@ class Arrival(Object):
     def serialize(self, ar):
         """serialize(Arrival self, GenericArchive ar)"""
         return _DataModel.Arrival_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Arrival_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Arrival self) -> MetaObject"""
+        return _DataModel.Arrival_meta(self)
 
 
     def __init__(self, *args):
@@ -22669,6 +23865,10 @@ def Arrival_ConstCast(*args):
     """
     return _DataModel.Arrival_ConstCast(*args)
 
+def Arrival_Meta():
+    """Arrival_Meta() -> MetaObject"""
+    return _DataModel.Arrival_Meta()
+
 class Origin(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Origin class."""
 
@@ -22725,6 +23925,17 @@ class Origin(PublicObject):
     def serialize(self, ar):
         """serialize(Origin self, GenericArchive ar)"""
         return _DataModel.Origin_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Origin_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Origin self) -> MetaObject"""
+        return _DataModel.Origin_meta(self)
 
 
     def __init__(self, *args):
@@ -23139,6 +24350,10 @@ def Origin_ConstCast(*args):
     """
     return _DataModel.Origin_ConstCast(*args)
 
+def Origin_Meta():
+    """Origin_Meta() -> MetaObject"""
+    return _DataModel.Origin_Meta()
+
 def Origin_Create(*args):
     """
     Create() -> Origin
@@ -23206,6 +24421,17 @@ class EventParameters(PublicObject):
     def serialize(self, ar):
         """serialize(EventParameters self, GenericArchive ar)"""
         return _DataModel.EventParameters_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.EventParameters_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(EventParameters self) -> MetaObject"""
+        return _DataModel.EventParameters_meta(self)
 
 
     def __init__(self, *args):
@@ -23439,6 +24665,10 @@ def EventParameters_ConstCast(*args):
     """
     return _DataModel.EventParameters_ConstCast(*args)
 
+def EventParameters_Meta():
+    """EventParameters_Meta() -> MetaObject"""
+    return _DataModel.EventParameters_Meta()
+
 class Parameter(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Parameter class."""
 
@@ -23495,6 +24725,17 @@ class Parameter(PublicObject):
     def serialize(self, ar):
         """serialize(Parameter self, GenericArchive ar)"""
         return _DataModel.Parameter_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Parameter_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Parameter self) -> MetaObject"""
+        return _DataModel.Parameter_meta(self)
 
 
     def __init__(self, *args):
@@ -23655,6 +24896,10 @@ def Parameter_ConstCast(*args):
     """
     return _DataModel.Parameter_ConstCast(*args)
 
+def Parameter_Meta():
+    """Parameter_Meta() -> MetaObject"""
+    return _DataModel.Parameter_Meta()
+
 def Parameter_Create(*args):
     """
     Create() -> Parameter
@@ -23722,6 +24967,17 @@ class ParameterSet(PublicObject):
     def serialize(self, ar):
         """serialize(ParameterSet self, GenericArchive ar)"""
         return _DataModel.ParameterSet_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ParameterSet_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ParameterSet self) -> MetaObject"""
+        return _DataModel.ParameterSet_meta(self)
 
 
     def __init__(self, *args):
@@ -23918,6 +25174,10 @@ def ParameterSet_ConstCast(*args):
     """
     return _DataModel.ParameterSet_ConstCast(*args)
 
+def ParameterSet_Meta():
+    """ParameterSet_Meta() -> MetaObject"""
+    return _DataModel.ParameterSet_Meta()
+
 def ParameterSet_Create(*args):
     """
     Create() -> ParameterSet
@@ -24024,6 +25284,17 @@ class Setup(Object):
     def serialize(self, ar):
         """serialize(Setup self, GenericArchive ar)"""
         return _DataModel.Setup_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Setup_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Setup self) -> MetaObject"""
+        return _DataModel.Setup_meta(self)
 
 
     def __init__(self, *args):
@@ -24153,6 +25424,10 @@ def Setup_ConstCast(*args):
     """
     return _DataModel.Setup_ConstCast(*args)
 
+def Setup_Meta():
+    """Setup_Meta() -> MetaObject"""
+    return _DataModel.Setup_Meta()
+
 class ConfigStationIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::ConfigStationIndex class."""
 
@@ -24252,6 +25527,17 @@ class ConfigStation(PublicObject):
     def serialize(self, ar):
         """serialize(ConfigStation self, GenericArchive ar)"""
         return _DataModel.ConfigStation_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ConfigStation_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ConfigStation self) -> MetaObject"""
+        return _DataModel.ConfigStation_meta(self)
 
 
     def __init__(self, *args):
@@ -24445,6 +25731,10 @@ def ConfigStation_ConstCast(*args):
     """
     return _DataModel.ConfigStation_ConstCast(*args)
 
+def ConfigStation_Meta():
+    """ConfigStation_Meta() -> MetaObject"""
+    return _DataModel.ConfigStation_Meta()
+
 def ConfigStation_Create(*args):
     """
     Create() -> ConfigStation
@@ -24512,6 +25802,17 @@ class ConfigModule(PublicObject):
     def serialize(self, ar):
         """serialize(ConfigModule self, GenericArchive ar)"""
         return _DataModel.ConfigModule_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.ConfigModule_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(ConfigModule self) -> MetaObject"""
+        return _DataModel.ConfigModule_meta(self)
 
 
     def __init__(self, *args):
@@ -24687,6 +25988,10 @@ def ConfigModule_ConstCast(*args):
     """
     return _DataModel.ConfigModule_ConstCast(*args)
 
+def ConfigModule_Meta():
+    """ConfigModule_Meta() -> MetaObject"""
+    return _DataModel.ConfigModule_Meta()
+
 def ConfigModule_Create(*args):
     """
     Create() -> ConfigModule
@@ -24754,6 +26059,17 @@ class Config(PublicObject):
     def serialize(self, ar):
         """serialize(Config self, GenericArchive ar)"""
         return _DataModel.Config_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Config_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Config self) -> MetaObject"""
+        return _DataModel.Config_meta(self)
 
 
     def __init__(self, *args):
@@ -24899,6 +26215,10 @@ def Config_ConstCast(*args):
     """
     return _DataModel.Config_ConstCast(*args)
 
+def Config_Meta():
+    """Config_Meta() -> MetaObject"""
+    return _DataModel.Config_Meta()
+
 class RouteArclinkIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::RouteArclinkIndex class."""
 
@@ -24998,6 +26318,17 @@ class RouteArclink(Object):
     def serialize(self, ar):
         """serialize(RouteArclink self, GenericArchive ar)"""
         return _DataModel.RouteArclink_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.RouteArclink_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(RouteArclink self) -> MetaObject"""
+        return _DataModel.RouteArclink_meta(self)
 
 
     def __init__(self, *args):
@@ -25137,6 +26468,10 @@ def RouteArclink_ConstCast(*args):
     """
     return _DataModel.RouteArclink_ConstCast(*args)
 
+def RouteArclink_Meta():
+    """RouteArclink_Meta() -> MetaObject"""
+    return _DataModel.RouteArclink_Meta()
+
 class RouteSeedlinkIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::RouteSeedlinkIndex class."""
 
@@ -25232,6 +26567,17 @@ class RouteSeedlink(Object):
     def serialize(self, ar):
         """serialize(RouteSeedlink self, GenericArchive ar)"""
         return _DataModel.RouteSeedlink_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.RouteSeedlink_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(RouteSeedlink self) -> MetaObject"""
+        return _DataModel.RouteSeedlink_meta(self)
 
 
     def __init__(self, *args):
@@ -25351,6 +26697,10 @@ def RouteSeedlink_ConstCast(*args):
     """
     return _DataModel.RouteSeedlink_ConstCast(*args)
 
+def RouteSeedlink_Meta():
+    """RouteSeedlink_Meta() -> MetaObject"""
+    return _DataModel.RouteSeedlink_Meta()
+
 class RouteIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::RouteIndex class."""
 
@@ -25458,6 +26808,17 @@ class Route(PublicObject):
     def serialize(self, ar):
         """serialize(Route self, GenericArchive ar)"""
         return _DataModel.Route_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Route_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Route self) -> MetaObject"""
+        return _DataModel.Route_meta(self)
 
 
     def __init__(self, *args):
@@ -25675,6 +27036,10 @@ def Route_ConstCast(*args):
     """
     return _DataModel.Route_ConstCast(*args)
 
+def Route_Meta():
+    """Route_Meta() -> MetaObject"""
+    return _DataModel.Route_Meta()
+
 def Route_Create(*args):
     """
     Create() -> Route
@@ -25801,6 +27166,17 @@ class Access(Object):
     def serialize(self, ar):
         """serialize(Access self, GenericArchive ar)"""
         return _DataModel.Access_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Access_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Access self) -> MetaObject"""
+        return _DataModel.Access_meta(self)
 
 
     def __init__(self, *args):
@@ -25970,6 +27346,10 @@ def Access_ConstCast(*args):
     """
     return _DataModel.Access_ConstCast(*args)
 
+def Access_Meta():
+    """Access_Meta() -> MetaObject"""
+    return _DataModel.Access_Meta()
+
 class Routing(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Routing class."""
 
@@ -26026,6 +27406,17 @@ class Routing(PublicObject):
     def serialize(self, ar):
         """serialize(Routing self, GenericArchive ar)"""
         return _DataModel.Routing_serialize(self, ar)
+
+
+    def Meta():
+        """Meta() -> MetaObject"""
+        return _DataModel.Routing_Meta()
+
+    Meta = staticmethod(Meta)
+
+    def meta(self):
+        """meta(Routing self) -> MetaObject"""
+        return _DataModel.Routing_meta(self)
 
 
     def __init__(self, *args):
@@ -26177,6 +27568,10 @@ def Routing_ConstCast(*args):
     Routing_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Routing
     """
     return _DataModel.Routing_ConstCast(*args)
+
+def Routing_Meta():
+    """Routing_Meta() -> MetaObject"""
+    return _DataModel.Routing_Meta()
 
 class DatabaseReader(DatabaseArchive):
     """Proxy of C++ Seiscomp::DataModel::DatabaseReader class."""
@@ -27166,6 +28561,113 @@ def ArtificialOriginMessage_ConstCast(*args):
     ArtificialOriginMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialOriginMessage
     """
     return _DataModel.ArtificialOriginMessage_ConstCast(*args)
+
+class ArtificialEventParametersMessage(seiscomp3.Core.Message):
+    """Proxy of C++ Seiscomp::DataModel::ArtificialEventParametersMessage class."""
+
+    __swig_setmethods__ = {}
+    for _s in [seiscomp3.Core.Message]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ArtificialEventParametersMessage, name, value)
+    __swig_getmethods__ = {}
+    for _s in [seiscomp3.Core.Message]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ArtificialEventParametersMessage, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.ArtificialEventParametersMessage_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.ArtificialEventParametersMessage_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(ArtificialEventParametersMessage self) -> char const *"""
+        return _DataModel.ArtificialEventParametersMessage_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(ArtificialEventParametersMessage self) -> RTTI"""
+        return _DataModel.ArtificialEventParametersMessage_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> ArtificialEventParametersMessage
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialEventParametersMessage
+        """
+        return _DataModel.ArtificialEventParametersMessage_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> ArtificialEventParametersMessage
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialEventParametersMessage
+        """
+        return _DataModel.ArtificialEventParametersMessage_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(ArtificialEventParametersMessage self, GenericArchive ar)"""
+        return _DataModel.ArtificialEventParametersMessage_serialize(self, ar)
+
+
+    def __init__(self, eventParameters):
+        """__init__(Seiscomp::DataModel::ArtificialEventParametersMessage self, EventParameters eventParameters) -> ArtificialEventParametersMessage"""
+        this = _DataModel.new_ArtificialEventParametersMessage(eventParameters)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def eventParameters(self):
+        """eventParameters(ArtificialEventParametersMessage self) -> EventParameters"""
+        return _DataModel.ArtificialEventParametersMessage_eventParameters(self)
+
+
+    def setEventParameters(self, eventParameters):
+        """setEventParameters(ArtificialEventParametersMessage self, EventParameters eventParameters)"""
+        return _DataModel.ArtificialEventParametersMessage_setEventParameters(self, eventParameters)
+
+
+    def empty(self):
+        """empty(ArtificialEventParametersMessage self) -> bool"""
+        return _DataModel.ArtificialEventParametersMessage_empty(self)
+
+    __swig_destroy__ = _DataModel.delete_ArtificialEventParametersMessage
+    __del__ = lambda self: None
+ArtificialEventParametersMessage_swigregister = _DataModel.ArtificialEventParametersMessage_swigregister
+ArtificialEventParametersMessage_swigregister(ArtificialEventParametersMessage)
+
+def ArtificialEventParametersMessage_ClassName():
+    """ArtificialEventParametersMessage_ClassName() -> char const *"""
+    return _DataModel.ArtificialEventParametersMessage_ClassName()
+
+def ArtificialEventParametersMessage_TypeInfo():
+    """ArtificialEventParametersMessage_TypeInfo() -> RTTI"""
+    return _DataModel.ArtificialEventParametersMessage_TypeInfo()
+
+def ArtificialEventParametersMessage_Cast(*args):
+    """
+    Cast(BaseObject o) -> ArtificialEventParametersMessage
+    ArtificialEventParametersMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialEventParametersMessage
+    """
+    return _DataModel.ArtificialEventParametersMessage_Cast(*args)
+
+def ArtificialEventParametersMessage_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> ArtificialEventParametersMessage
+    ArtificialEventParametersMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialEventParametersMessage
+    """
+    return _DataModel.ArtificialEventParametersMessage_ConstCast(*args)
 
 # This file is compatible with both classic and new-style classes.
 

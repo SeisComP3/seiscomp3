@@ -583,6 +583,11 @@ class LocatorInterface(seiscomp3.Core.BaseObject):
         return _Seismology.LocatorInterface_useFixedDepth(self, use)
 
 
+    def fixedDepth(self):
+        """fixedDepth(LocatorInterface self) -> double"""
+        return _Seismology.LocatorInterface_fixedDepth(self)
+
+
     def usingFixedDepth(self):
         """usingFixedDepth(LocatorInterface self) -> bool"""
         return _Seismology.LocatorInterface_usingFixedDepth(self)
