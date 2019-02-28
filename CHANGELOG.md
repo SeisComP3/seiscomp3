@@ -2,6 +2,15 @@
 
 ## Release YYYY.ddd
 
+* system
+
+  * Updated libmseed to 2.19.6
+
+* trunk
+
+  * Fixed bug with hyp71sum2k and ims10 export that caused truncated strings.
+    Many thanks to Luca Scarabello (ETHZ) for finding and fixing this bug.
+
 * scevent
 
   * The evrc plugin does not change the status of events with manual preferred origin
