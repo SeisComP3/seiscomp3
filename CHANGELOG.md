@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327.patch4
 
 * system
 
@@ -8,8 +8,14 @@
 
 * trunk
 
+  * Fix bug in ims10 export if AgencyID contains white spaces
   * Fixed bug with hyp71sum2k and ims10 export that caused truncated strings.
     Many thanks to Luca Scarabello (ETHZ) for finding and fixing this bug.
+
+* scolv
+
+  * Added toggle to amplitude picker to either override the configured minimum
+    SNR per station or not. The default is now to use what is configured.
 
 * scevent
 
@@ -233,6 +239,25 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Initial version of the module which collect availability information
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
+
+## Release 2017.334 patch10
+
+* trunk
+
+  * Fix bug in ims10 export if AgencyID contains white spaces
+
+* seedlink
+
+  * Added caps\_plugin which allows to retrieve data from gempa's CAPS
+    server, for example to import RaspberryShake data
+
+## Release 2017.334 patch9
+
+* trunk
+
+  * Fix bug in stringify functions which discards the last character if
+    the output length of a string should be exactly 64 charaters. This
+    affects the hyp71sum2k and ims10 output.
 
 ## Release 2017.334 patch8
 
