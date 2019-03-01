@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="caps_plugin" category="Acquisition">
+		<description>Transfers data from CAPS to SeedLink server</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#print-component</optionReference>
+				<optionReference>verbosity#print-context</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#trace</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Plugin">
+				<option flag="I" long-flag="input" argument="arg" publicID="plugin#input" param-ref="input.address"/>
+			</group>
+
+			<group name="Streams">
+				<option flag="f" long-flag="stream-file" argument="arg">
+					<description>Path to stream-file. The stream file may contain a list of streams IDs [net.sta.loc.cha]</description>
+				</option>
+			</group>
+
+			<group name="Mode">
+				<option flag="" long-flag="archive" argument="" publicID="mode#archive" param-ref="archive"/>
+			</group>
+
+			<group name="Output">
+				<option flag="j" long-flag="journal" argument="arg" publicID="output#journal" param-ref="journal"/>
+			</group>
+		</command-line>
+	</module>
+
+	<binding module="seedlink" name="caps" category="sources">
+		<description>Transfers data from CAPS to SeedLink server</description>
+		<configuration>
+			<parameter name="address" type="string" default="localhost:18002">
+				<description>
+					CAPS URL to fetch data from, format: [[caps|capss]://][user:pass@]host[:port]
+				</description>
+			</parameter>
+			<parameter name="streams" type="string" default="*.*">
+				<description>
+					Comma separated list of streams. Stream format is [LOC.CHA].
+					Streams may contain wildcards
+				</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

@@ -6,6 +6,11 @@
 
   * Fix bug in ims10 export if AgencyID contains white spaces
 
+* seedlink
+
+  * Added caps\_plugin which allows to retrieve data from gempa's CAPS
+    server, for example to import RaspberryShake data
+
 ## Release 2017.334 patch9
 
 * trunk
