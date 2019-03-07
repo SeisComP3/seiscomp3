@@ -524,7 +524,7 @@ bool App::run() {
 							continue;
 						}
 
-						if  ( storeMSEEDPacket(rec) ) {
+						if ( storeMSEEDPacket(rec) ) {
 							_currentItem->startTime = rec.endTime();
 							setStreamState(_currentItem->streamID, rec.endTime());
 						}
@@ -577,16 +577,34 @@ bool App::storeRawPacket(RawDataRecord &rec) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::storeMSEEDPacket(MSEEDDataRecord &rec) {
+	SessionTableItem *item = _currentItem;
+
 	if ( _dump ) {
+		if ( rec.data()->size() != PLUGIN_MSEED_SIZE ) {
+			LogWarning("%s.%s.%s.%s: invalid record size (%d != %d)",
+			           item->net.c_str(), item->sta.c_str(),
+			           item->loc.c_str(), item->cha.c_str(),
+			           int(rec.data()->size()),
+			           PLUGIN_MSEED_SIZE);
+		}
+
 		cout.write(rec.data()->data(), rec.data()->size());
 		cout.flush();
 		return true;
 	}
 
-	SessionTableItem *item = _currentItem;
+	if ( rec.data()->size() != PLUGIN_MSEED_SIZE ) {
+		LogWarning("%s.%s.%s.%s: invalid record size (%d != %d)",
+		           item->net.c_str(), item->sta.c_str(),
+		           item->loc.c_str(), item->cha.c_str(),
+		           int(rec.data()->size()),
+		           PLUGIN_MSEED_SIZE);
+		return true;
+	}
+
 	int r = send_mseed(item->sta.c_str(), rec.data()->data(), rec.data()->size());
 	if ( r <= 0 ) {
-		LogError("Link to SeedLink broken");
+		LogError("Link to SeedLink broken: %d: %s", r, strerror(r));
 		return false;
 	}
 
