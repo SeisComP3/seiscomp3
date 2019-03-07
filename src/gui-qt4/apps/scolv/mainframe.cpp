@@ -1727,15 +1727,17 @@ void MainFrame::messageAvailable(Seiscomp::Core::Message *msg, Seiscomp::Communi
 	if ( cmsg ) {
 		if ( cmsg->command() == CM_OBSERVE_LOCATION ) {
 			EventParameters *ep = EventParameters::Cast(cmsg->object());
-			/*
-			if ( ep->eventCount() > 0 ) {
-				Event *event = ep->event(0);
-			}
-			else */if ( ep->originCount() > 0 ) {
-				Origin *origin = ep->origin(0);
-				if ( populateOrigin(origin, NULL, true) ) {
-					for ( size_t i = 0; i < ep->pickCount(); ++i )
-						_originLocator->addLocalPick(ep->pick(i));
+			if ( ep ) {
+				/*
+				if ( ep->eventCount() > 0 ) {
+					Event *event = ep->event(0);
+				}
+				else */if ( ep->originCount() > 0 ) {
+					Origin *origin = ep->origin(0);
+					if ( populateOrigin(origin, NULL, true) ) {
+						for ( size_t i = 0; i < ep->pickCount(); ++i )
+							_originLocator->addLocalPick(ep->pick(i));
+					}
 				}
 			}
 		}
