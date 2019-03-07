@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scolv
+
+  * Fix crash when artificial origin is received sent from e.g. scrttv. This
+    is a regression from 2018.327.patch4.
+
 ## Release 2018.327.patch4
 
 * system
