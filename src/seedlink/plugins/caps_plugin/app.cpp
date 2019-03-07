@@ -604,7 +604,7 @@ bool App::storeMSEEDPacket(MSEEDDataRecord &rec) {
 
 	int r = send_mseed(item->sta.c_str(), rec.data()->data(), rec.data()->size());
 	if ( r <= 0 ) {
-		LogError("Link to SeedLink broken");
+		LogError("Link to SeedLink broken: %d: %s", r, strerror(r));
 		return false;
 	}
 
