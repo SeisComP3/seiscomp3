@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
+
 ## Release 2018.327.patch5
 
 * scolv
