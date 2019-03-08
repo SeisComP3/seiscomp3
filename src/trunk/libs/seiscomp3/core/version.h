@@ -38,6 +38,13 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "12.1.0"   0x0C0100
+   - Added ArtificialEventParametersMessage
+   - Fixed RecordWidget emitting of traceUpdated signal if the record slot to
+     be shown has changed
+   - Added non-const RecordWidget::traceInfo method
+   - Added RecordWidget::recordPen(int) method
+
  "12.0.0"   0x0C0000
    - Added Seiscomp::Core::Generic::Archive property interface
    - Added Seiscomp::DataModel::DatabaseQuery::getAmplitudes

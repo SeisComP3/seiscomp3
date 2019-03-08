@@ -298,7 +298,10 @@ class SC_GUI_API RecordWidget : public QWidget {
 		QString recordLabel(int slot) const;
 		bool recordStepFunction(int slot) const;
 		QColor recordColor(int slot) const;
+		QPen recordPen(int slot) const;
 		const double *recordScale(int slot) const;
+
+		Trace *traceInfo(int slot, bool filtered = false);
 		const Trace *traceInfo(int slot, bool filtered = false) const;
 
 		QVariant recordUserData(int slot);
@@ -695,7 +698,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		};
 
 
-	private:
+	protected:
 		Stream *getStream(int);
 		const Stream *getStream(int) const;
 

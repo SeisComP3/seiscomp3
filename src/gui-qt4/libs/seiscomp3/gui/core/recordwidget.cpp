@@ -1420,6 +1420,28 @@ QColor RecordWidget::recordColor(int slot) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QPen RecordWidget::recordPen(int slot) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return QPen();
+	return stream->pen;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordWidget::Trace *RecordWidget::traceInfo(int slot, bool filtered) {
+	if ( (slot < 0) || (slot >= _streams.size()) ) return NULL;
+	if ( _streams[slot] == NULL ) return NULL;
+	return &_streams[slot]->traces[filtered?Stream::Filtered:Stream::Raw];
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const RecordWidget::Trace *RecordWidget::traceInfo(int slot, bool filtered) const {
 	const Stream *stream = getStream(slot);
 	if ( stream == NULL ) return NULL;
