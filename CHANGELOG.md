@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2017.334 patch11
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
+
 ## Release 2017.334 patch10
 
 * trunk
