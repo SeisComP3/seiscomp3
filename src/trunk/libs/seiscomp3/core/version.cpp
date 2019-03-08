@@ -45,7 +45,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-	_text = "Jakarta 2018.327.p5";
+	_text = "Jakarta 2018.327.p6";
 }
 
 
