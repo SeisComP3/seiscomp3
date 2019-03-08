@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch6
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
+
 ## Release 2018.327.patch5
 
 * scolv
@@ -251,6 +257,12 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Initial version of the module which collect availability information
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
+
+## Release 2017.334 patch11
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
 
 ## Release 2017.334 patch10
 
