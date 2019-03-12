@@ -199,12 +199,13 @@ bool AbstractAmplitudeProcessor_ML::setup(const Settings &settings) {
 	if ( !AmplitudeProcessor::setup(settings) ) return false;
 
 	bool absMax = true;
-	if ( settings.getValue(absMax, "amplitudes.ML.absMax") ) {
+
+	if ( settings.getValue(absMax, "amplitudes." + _type + ".absMax") ) {
 		_amplitudeMeasureType = absMax ? AbsMax : MinMax;
 	}
 	else {
 		std::string measureType;
-		if ( settings.getValue(measureType, "amplitudes.ML.measureType") ) {
+		if ( settings.getValue(measureType, "amplitudes." + _type + ".measureType") ) {
 			if ( !setParameter(MeasureType, measureType) ) {
 				SEISCOMP_ERROR("%s.%s.%s.%s: invalid amplitude measure type: %s",
 				               settings.networkCode.c_str(),
