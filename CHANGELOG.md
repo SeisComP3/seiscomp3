@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch7
 
 ```SC_API_VERSION 12.1.0```
 
@@ -10,7 +10,7 @@
     with ```amplitudes.MLv.measureType```.
   * Added ```amplitudes.ML.combiner``` to configure how the amplitudes of either
     horizontal component are combined to the final amplitude.
-  * Added blockette 1001 when writing miniSEED with MSeedRecord
+  * Add blockette 1001 when writing miniSEED with MSeedRecord
   * Fixed Hypo71 bug that caused a crash if no phase was part of a solution
 
 ## Release 2018.327 patch6
