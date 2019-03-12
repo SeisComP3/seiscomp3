@@ -2,6 +2,8 @@
 
 ## Release YYYY.ddd
 
+```SC_API_VERSION 12.1.0```
+
 * trunk
 
   * Split ```amplitudes.ML.measureType``` for ML and MLv. MLv must be configured
