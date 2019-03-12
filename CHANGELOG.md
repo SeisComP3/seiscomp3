@@ -2,6 +2,15 @@
 
 ## Release YYYY.ddd
 
+* trunk
+
+  * Split ```amplitudes.ML.measureType``` for ML and MLv. MLv must be configured
+    with ```amplitudes.MLv.measureType```.
+  * Added ```amplitudes.ML.combiner``` to configure how the amplitudes of either
+    horizontal component are combined to the final amplitude.
+
+## Release 2018.327 patch6
+
 * seedlink
 
   * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
