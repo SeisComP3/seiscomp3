@@ -329,8 +329,8 @@ void MySQLDatabase::endQuery() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long MySQLDatabase::lastInsertId(const char*) {
-	return (unsigned long)mysql_insert_id(_handle);
+unsigned long long MySQLDatabase::lastInsertId(const char*) {
+	return (unsigned long long)mysql_insert_id(_handle);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

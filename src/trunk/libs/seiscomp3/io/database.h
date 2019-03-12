@@ -171,7 +171,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		    @return The last generated ID > 0 or 0 of there hasn't been
 		            created an ID yet.
 		  */
-		virtual unsigned long lastInsertId(const char* table) = 0;
+		virtual unsigned long long lastInsertId(const char* table) = 0;
 
 		/** Returns the number of rows affected by a SQL statement.
 		    This function should only be used after a UPDATE or DELETE

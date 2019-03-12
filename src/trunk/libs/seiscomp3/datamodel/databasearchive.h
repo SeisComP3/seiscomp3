@@ -98,8 +98,8 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 			throw Core::ValueException("DatabaseIterator.lastModified is not set");
 		}
 
-		int oid() const { return _oid; }
-		int parentOid() const { return _parent_oid; }
+		unsigned long long oid() const { return _oid; }
+		unsigned long long parentOid() const { return _parent_oid; }
 
 		//! Returns whether the object has been read from the database
 		//! directly (false) or fetched from the global object pool (true)
@@ -119,8 +119,8 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 		mutable size_t _count;
 		ObjectPtr _object;
 
-		mutable int _oid;
-		mutable int _parent_oid;
+		mutable unsigned long long _oid;
+		mutable unsigned long long _parent_oid;
 		mutable bool _cached;
 		mutable OPT(Core::Time) _lastModified;
 
@@ -312,8 +312,8 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 
 		//! Returns the database id for an object
-		//! @return The id or -1 of no id was cached for this object
-		int getCachedId(const Object*) const;
+		//! @return The id or 0 of no id was cached for this object
+		unsigned long long getCachedId(const Object*) const;
 
 		/**
 		 * Returns the publicID of the parent object if any.
@@ -403,6 +403,8 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 	protected:
 		//! Reads an integer
 		virtual void read(int& value);
+		//! Reads a long long integer
+		virtual void read(long long& value);
 		//! Reads a float
 		virtual void read(float& value);
 		//! Reads a double
@@ -439,6 +441,8 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 	protected:
 		//! Writes an integer
 		virtual void write(int value);
+		//! Writes a long long integer
+		virtual void write(long long value);
 		//! Writes a float
 		virtual void write(float value);
 		//! Writes a double
@@ -509,7 +513,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		//! Associates an objects with an id and caches
 		//! this information
-		void registerId(const Object*, int id);
+		void registerId(const Object*, unsigned long long id);
 
 		//! Returns the number of cached object
 		int getCacheSize() const;
@@ -525,7 +529,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 	//  Privates types
 	// ----------------------------------------------------------------------
     private:
-    	typedef std::map<const Object*, unsigned int> ObjectIdMap;
+	typedef std::map<const Object*, unsigned long long> ObjectIdMap;
 		typedef std::map<std::string, OPT(std::string)> AttributeMap;
 
 		typedef std::pair<std::string, AttributeMap> ChildTable;
@@ -567,22 +571,22 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		void renderValues(const AttributeMap&);
 
 		//! Returns an iterator for objects of a given type.
-		DatabaseIterator getObjectIterator(unsigned long parentID,
+		DatabaseIterator getObjectIterator(unsigned long long parentID,
 		                                   const Seiscomp::Core::RTTI& classType,
 		                                   bool ignorePublicObject = false);
 
 		//! Queries for the database id of a PublicObject for
 		//! a given publicID
-		unsigned long publicObjectId(const std::string& publicId);
+		unsigned long long publicObjectId(const std::string& publicId);
 
 		//! Queries for the database id of an Object
-		unsigned long objectId(Object*, const std::string& parentID);
+		unsigned long long objectId(Object*, const std::string& parentID);
 
 		//! Insert a base object column and return its database id
-		unsigned long insertObject();
+		unsigned long long insertObject();
 
 		//! Insert a PublicObject column and return its database id
-		unsigned long insertPublicObject(const std::string& publicId);
+		unsigned long long insertPublicObject(const std::string& publicId);
 
 		//! Insert a row into a table
 		bool insertRow(const std::string& table,
@@ -590,7 +594,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		               const std::string& parentId = "");
 
 		//! Delete an object with a given database id
-		bool deleteObject(unsigned long id);
+		bool deleteObject(unsigned long long id);
 
 	protected:
 		Seiscomp::IO::DatabaseInterfacePtr _db;

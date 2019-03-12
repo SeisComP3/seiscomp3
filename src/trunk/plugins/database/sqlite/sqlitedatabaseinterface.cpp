@@ -199,8 +199,8 @@ const char* SQLiteDatabase::defaultValue() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long SQLiteDatabase::lastInsertId(const char*) {
-	return (unsigned long)sqlite3_last_insert_rowid(_handle);
+unsigned long long SQLiteDatabase::lastInsertId(const char*) {
+	return (unsigned long long)sqlite3_last_insert_rowid(_handle);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
