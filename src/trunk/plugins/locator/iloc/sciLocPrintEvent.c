@@ -410,7 +410,32 @@ void iLoc_PrintIOstructures(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         fprintf(stderr, "    EtopoNlat=%d EtopoNlon=%d EtopoRes=%.1f\n",
                 iLocConfig->EtopoNlat, iLocConfig->EtopoNlon, iLocConfig->EtopoRes);
 
+        fprintf(stderr, "Station data\n");
+        for (i = 0; i < Hypocenter->numSta; i++)
+            fprintf(stderr, "  %d StaLat=%.3f StaLon=%.3f StaElevation=%.3f\n",
+                i, StaLocs[i].StaLat, StaLocs[i].StaLon, StaLocs[i].StaElevation);
+
+        fprintf(stderr, "Associated arrival data\n");
+        for (i = 0; i < Hypocenter->numPhase; i++) {
+            fprintf(stderr, "  arid=%d\n", Assocs[i].arid);
+            fprintf(stderr, "  StaInd=%d\n", Assocs[i].StaInd);
+            fprintf(stderr, "  PhaseHint=%s phaseFixed=%d Phase=%s\n",
+                    Assocs[i].PhaseHint, Assocs[i].phaseFixed, Assocs[i].Phase);
+            fprintf(stderr, "  Delta=%.2f Esaz=%.1f Seaz=%.1f Vmodel=%s\n",
+                    Assocs[i].Delta, Assocs[i].Esaz, Assocs[i].Seaz, Assocs[i].Vmodel);
+            fprintf(stderr, "  ArrivalTime=%.3f Timedef=%d TimeRes=%.3f Deltim=%.2f userDeltim=%d\n",
+                    Assocs[i].ArrivalTime, Assocs[i].Timedef,
+                    Assocs[i].TimeRes, Assocs[i].Deltim, Assocs[i].userDeltim);
+            fprintf(stderr, "  BackAzimuth=%.3f Azimdef=%d AzimRes=%.3f Delaz=%.2f\n",
+                    Assocs[i].BackAzimuth, Assocs[i].Azimdef,
+                    Assocs[i].AzimRes, Assocs[i].Delaz);
+            fprintf(stderr, "  Slowness=%.3f Slowdef=%d SlowRes=%.3f Delslo=%.2f\n",
+                    Assocs[i].Slowness, Assocs[i].Slowdef,
+                    Assocs[i].SlowRes, Assocs[i].Delslo);
+        }
+
         fprintf(stderr, "Hypocenter data\n");
+        fprintf(stderr, "  iLocInfo:\n%s\n", Hypocenter->iLocInfo);
         fprintf(stderr, "  isManMade=%d\n", Hypocenter->isManMade);
         fprintf(stderr, "  FixHypo=%d\n", Hypocenter->FixHypo);
         fprintf(stderr, "  numSta=%d\n", Hypocenter->numSta);
@@ -470,30 +495,6 @@ void iLoc_PrintIOstructures(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                     Hypocenter->numStaWithin10km, Hypocenter->localNumDefsta,
                     Hypocenter->localNumDef);
         }
-
-        fprintf(stderr, "Associated arrival data\n");
-        for (i = 0; i < Hypocenter->numPhase; i++) {
-            fprintf(stderr, "  arid=%d\n", Assocs[i].arid);
-            fprintf(stderr, "  StaInd=%d\n", Assocs[i].StaInd);
-            fprintf(stderr, "  PhaseHint=%s phaseFixed=%d Phase=%s\n",
-                    Assocs[i].PhaseHint, Assocs[i].phaseFixed, Assocs[i].Phase);
-            fprintf(stderr, "  Delta=%.2f Esaz=%.1f Seaz=%.1f Vmodel=%s\n",
-                    Assocs[i].Delta, Assocs[i].Esaz, Assocs[i].Seaz, Assocs[i].Vmodel);
-            fprintf(stderr, "  ArrivalTime=%.3f Timedef=%d TimeRes=%.3f Deltim=%.2f\n",
-                    Assocs[i].ArrivalTime, Assocs[i].Timedef,
-                    Assocs[i].TimeRes, Assocs[i].Deltim);
-            fprintf(stderr, "  BackAzimuth=%.3f Azimdef=%d AzimRes=%.3f Delaz=%.2f\n",
-                    Assocs[i].BackAzimuth, Assocs[i].Azimdef,
-                    Assocs[i].AzimRes, Assocs[i].Delaz);
-            fprintf(stderr, "  Slowness=%.3f Slowdef=%d SlowRes=%.3f Delslo=%.2f\n",
-                    Assocs[i].Slowness, Assocs[i].Slowdef,
-                    Assocs[i].SlowRes, Assocs[i].Delslo);
-        }
-
-        fprintf(stderr, "Station data\n");
-        for (i = 0; i < Hypocenter->numSta; i++)
-            fprintf(stderr, "  %d StaLat=%.3f StaLon=%.3f StaElevation=%.3f\n",
-                i, StaLocs[i].StaLat, StaLocs[i].StaLon, StaLocs[i].StaElevation);
         fprintf(stderr, "\n");
     }
 }

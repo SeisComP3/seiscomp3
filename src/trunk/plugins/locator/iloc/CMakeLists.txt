@@ -106,6 +106,7 @@ SET(ILOC_SOURCES
 	sciLocLocator.c
 	sciLocPrintEvent.c
 	sciLocTravelTimes.c
+	sciLocTravelTimeAPI.c
 )
 
 INCLUDE_DIRECTORIES(RSTT/GeoTessCPP/include)

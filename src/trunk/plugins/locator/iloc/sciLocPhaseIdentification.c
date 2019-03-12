@@ -911,14 +911,14 @@ void iLoc_GetNumDef(ILOC_HYPO *Hypocenter, ILOC_ASSOC *Assocs)
  *     For infrasound phases set the timedef flag to zero and use the azimuth
  *        instead.
  *  Input Arguments:
- *     Assocs      - pointer to ILOC_ASSOC structure
+ *     Assoc       - pointer to ILOC_ASSOC structure
  *     PhaseIdInfo - pointer to ILOC_PHASEIDINFO structure
  *  Output Arguments:
- *     Assocs      - pointer to ILOC_ASSOC structure
+ *     Assoc       - pointer to ILOC_ASSOC structure
  *  Called by:
  *     iLoc_IdentifyPhases, iLoc_ReIdentifyPhases
  */
-static void GetPriorMeasurementError(ILOC_ASSOC *Assocs,
+static void GetPriorMeasurementError(ILOC_ASSOC *Assoc,
         ILOC_PHASEIDINFO *PhaseIdInfo, double SigmaThreshold)
 {
     int j;
@@ -926,51 +926,54 @@ static void GetPriorMeasurementError(ILOC_ASSOC *Assocs,
 /*
  *  set timedef and azimdef flags and get measurement errors
  */
-    Assocs->Deltim = Assocs->Delaz = Assocs->Delslo = 0;
+    Assoc->Delaz = Assoc->Delslo = 0;
+    if (!Assoc->userDeltim)
+        Assoc->Deltim = 0.;
     for (j = 0; j < PhaseIdInfo->numPhaseWeight; j++) {
-        if (ILOC_STREQ(Assocs->Phase, PhaseIdInfo->PhaseWeight[j].Phase)) {
-            if (Assocs->Delta >= PhaseIdInfo->PhaseWeight[j].delta1 &&
-                Assocs->Delta <  PhaseIdInfo->PhaseWeight[j].delta2) {
-                if (Assocs->ArrivalTime != ILOC_NULLVAL) {
+        if (ILOC_STREQ(Assoc->Phase, PhaseIdInfo->PhaseWeight[j].Phase)) {
+            if (Assoc->Delta >= PhaseIdInfo->PhaseWeight[j].delta1 &&
+                Assoc->Delta <  PhaseIdInfo->PhaseWeight[j].delta2) {
+                if (Assoc->ArrivalTime != ILOC_NULLVAL) {
 /*
  *                  a priori time measurement error
  */
-                    Assocs->Deltim = PhaseIdInfo->PhaseWeight[j].deltim;
-                    if (Assocs->Timedef) {
+                    if (!Assoc->userDeltim)
+                        Assoc->Deltim = PhaseIdInfo->PhaseWeight[j].deltim;
+                    if (Assoc->Timedef) {
 /*
  *                      make time non-defining if its residual is large
  */
-                        threshold = SigmaThreshold * Assocs->Deltim;
-                        if (fabs(Assocs->TimeRes) > threshold)
-                            Assocs->Timedef = 0;
+                        threshold = SigmaThreshold * Assoc->Deltim;
+                        if (fabs(Assoc->TimeRes) > threshold)
+                            Assoc->Timedef = 0;
                     }
                 }
-                if (Assocs->BackAzimuth != ILOC_NULLVAL) {
+                if (Assoc->BackAzimuth != ILOC_NULLVAL) {
 /*
  *                  a priori azimuth measurement error
  */
-                    Assocs->Delaz = PhaseIdInfo->PhaseWeight[j].delaz;
-                    if (Assocs->Azimdef) {
+                    Assoc->Delaz = PhaseIdInfo->PhaseWeight[j].delaz;
+                    if (Assoc->Azimdef) {
 /*
  *                      make azimuth non-defining if its residual is large
  */
-                        threshold = SigmaThreshold * Assocs->Delaz;
-                        if (fabs(Assocs->AzimRes) > threshold)
-                            Assocs->Azimdef = 0;
+                        threshold = SigmaThreshold * Assoc->Delaz;
+                        if (fabs(Assoc->AzimRes) > threshold)
+                            Assoc->Azimdef = 0;
                     }
                 }
-                if (Assocs->Slowness != ILOC_NULLVAL) {
+                if (Assoc->Slowness != ILOC_NULLVAL) {
 /*
  *                  a priori slowness measurement error
  */
-                    Assocs->Delslo = PhaseIdInfo->PhaseWeight[j].delslo;
-                    if (Assocs->Slowdef) {
+                    Assoc->Delslo = PhaseIdInfo->PhaseWeight[j].delslo;
+                    if (Assoc->Slowdef) {
 /*
  *                      make slowness non-defining if its residual is large
  */
-                        threshold = SigmaThreshold * Assocs->Delslo;
-                        if (fabs(Assocs->SlowRes) > threshold)
-                            Assocs->Slowdef = 0;
+                        threshold = SigmaThreshold * Assoc->Delslo;
+                        if (fabs(Assoc->SlowRes) > threshold)
+                            Assoc->Slowdef = 0;
                     }
                 }
                 break;

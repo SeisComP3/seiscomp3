@@ -653,7 +653,7 @@ static double GetTravelTimeTableValue(double depth, double delta,
     int exactdelta = 0, exactdepth = 0, isbounce = 0;
     double ttim = -1., dydx = 0., d2ydx = 0., d2nd = 0.;
     double  x[ILOC_DELTASAMPLES],  z[ILOC_DEPTHSAMPLES], d2y[ILOC_DELTASAMPLES];
-    double tx[ILOC_DELTASAMPLES], tz[ILOC_DEPTHSAMPLES], t2z[ILOC_DEPTHSAMPLES];
+    double tx[ILOC_DELTASAMPLES], tz[ILOC_DEPTHSAMPLES];
     double dx[ILOC_DELTASAMPLES], dz[ILOC_DEPTHSAMPLES];
     double hx[ILOC_DELTASAMPLES], hz[ILOC_DEPTHSAMPLES];
     double px[ILOC_DELTASAMPLES], pz[ILOC_DEPTHSAMPLES], tmp[ILOC_DELTASAMPLES];
@@ -683,13 +683,23 @@ static double GetTravelTimeTableValue(double depth, double delta,
     iLoc_FloatBracket(delta, ndel, TTtable->deltas, &ilo, &ihi);
     if (fabs(delta - TTtable->deltas[ilo]) < ILOC_DEPSILON) {
         idel = ilo;
+        if (ilo > 0) ilo--;
         ihi = ilo + ILOC_DELTASAMPLES;
+        if (ihi > ndel - 1) {
+            ihi = ndel;
+            ilo = ihi - ILOC_DELTASAMPLES;
+        }
         exactdelta = 1;
     }
     else if (fabs(delta - TTtable->deltas[ihi]) < ILOC_DEPSILON) {
         idel = ihi;
-        ihi++;
+        if (ihi < ndel - 1) ihi++;
+        if (ihi < ndel - 1) ihi++;
         ilo = ihi - ILOC_DELTASAMPLES;
+        if (ilo < 0) {
+            ilo = 0;
+            ihi = ilo + ILOC_DELTASAMPLES;
+        }
         exactdelta = 1;
     }
     else if (ndel <= ILOC_DELTASAMPLES) {
@@ -716,13 +726,23 @@ static double GetTravelTimeTableValue(double depth, double delta,
     iLoc_FloatBracket(depth, ndep, TTtable->depths, &jlo, &jhi);
     if (fabs(depth - TTtable->depths[jlo]) < ILOC_DEPSILON) {
         jdep = jlo;
+        if (jlo > 0) jlo--;
         jhi = jlo + ILOC_DEPTHSAMPLES;
+        if (jhi > ndep - 1) {
+            jhi = ndep;
+            jlo = jhi - ILOC_DEPTHSAMPLES;
+        }
         exactdepth = 1;
     }
     else if (fabs(depth - TTtable->depths[jhi]) < ILOC_DEPSILON) {
         jdep = jhi;
-        jhi++;
+        if (jhi < ndep - 1) jhi++;
+        if (jhi < ndep - 1) jhi++;
         jlo = jhi - ILOC_DEPTHSAMPLES;
+        if (jlo < 0) {
+            jlo = 0;
+            jhi = jlo + ILOC_DEPTHSAMPLES;
+        }
         exactdepth = 1;
     }
     else if (ndep <= ILOC_DEPTHSAMPLES) {
@@ -762,7 +782,7 @@ static double GetTravelTimeTableValue(double depth, double delta,
  *      no need for spline interpolation if exact delta
  */
         if (exactdelta && (is2nderiv == 0)) {
-            if (TTtable->tt[idel][j] < 0)
+           if (TTtable->tt[idel][j] < 0)
                 continue;
             z[k] = TTtable->depths[j];
             tz[k] = TTtable->tt[idel][j];
@@ -795,7 +815,6 @@ static double GetTravelTimeTableValue(double depth, double delta,
             z[k] = TTtable->depths[j];
             tz[k] = iLoc_SplineInterpolation(delta, m, x, tx, d2y, 0,
                                              &dydx, &d2ydx);
-            if (is2nderiv) t2z[k] = d2ydx;
             if (isbounce) {
                 iLoc_SplineCoeffs(m, x, px, d2y, tmp);
                 pz[k] = iLoc_SplineInterpolation(delta, m, x, px, d2y, 0,
@@ -839,7 +858,7 @@ static double GetTravelTimeTableValue(double depth, double delta,
  *  Spline interpolation in depth
  */
     iLoc_SplineCoeffs(k, z, tz, d2y, tmp);
-    ttim = iLoc_SplineInterpolation(depth, k, z, tz, d2y, 0, &dydx, &d2ydx);
+    ttim = iLoc_SplineInterpolation(depth, k, z, tz, d2y, 1, &dydx, &d2ydx);
     if (is2nderiv && d2ydx > -999.)
         *d2tdh = d2ydx;
     if (isbounce) {
@@ -848,15 +867,41 @@ static double GetTravelTimeTableValue(double depth, double delta,
     }
     iLoc_SplineCoeffs(k, z, dz, d2y, tmp);
     *dtdd = iLoc_SplineInterpolation(depth, k, z, dz, d2y, 0, &dydx, &d2ydx);
-    if (is2nderiv) {
-        iLoc_SplineCoeffs(k, z, t2z, d2y, tmp);
-        d2nd = iLoc_SplineInterpolation(depth, k, z, t2z, d2y, 0, &dydx, &d2ydx);
-        if (d2nd > -999.)
-            *d2tdd = d2nd;
-    }
     if (iszderiv) {
         iLoc_SplineCoeffs(k, z, hz, d2y, tmp);
         *dtdh = iLoc_SplineInterpolation(depth, k, z, hz, d2y, 0, &dydx, &d2ydx);
+    }
+    if (is2nderiv) {
+/*
+ *      get d2t/dd2 from the transpose t matrix
+ */
+        for (k = 0, i = ilo; i < ihi; i++) {
+            for (m = 0, j = jlo; j < jhi; j++) {
+                if (TTtable->tt[i][j] < 0)
+                    continue;
+                z[m] = TTtable->depths[j];
+                dz[m] = TTtable->dtdd[i][j];
+                m++;
+            }
+            if (m < ILOC_MINSAMPLES)
+                continue;
+/*
+ *          Spline interpolation in depth
+ */
+            x[k] = TTtable->deltas[i];
+            iLoc_SplineCoeffs(m, z, dz, d2y, tmp);
+            dx[k] = iLoc_SplineInterpolation(delta, m, z, dz, d2y, 0, &dydx, &d2ydx);
+            k++;
+        }
+        if (k == 0) return ttim;
+        if (k < ILOC_MINSAMPLES) return ttim;
+/*
+ *      Spline interpolation in delta
+ */
+        iLoc_SplineCoeffs(k, x, dx, d2y, tmp);
+        iLoc_SplineInterpolation(delta, k, x, dx, d2y, 1, &dydx, &d2ydx);
+        if (dydx > -999.)
+            *d2tdd = dydx;
     }
     return ttim;
 }
@@ -866,9 +911,7 @@ static double GetTravelTimeTableValue(double depth, double delta,
  *     TravelTimeCorrections
  *  Synopsis:
  *     Applies travel-time corrections to a predicted TT table value.
- *     Approximate geoid correction is calculated for Jeffreys-Bullen;
- *     otherwise the ak135 (Kennett and Gudmundsson, 1996) ellipticity
- *         correction is used.
+ *     Ellipticity correction for ak135/iasp91 (Kennett and Gudmundsson, 1996).
  *     Bounce point correction is applied for depth phases, and for pwP,
  *        water depth correction is also calculated.
  *  Input Arguments:
@@ -907,7 +950,6 @@ static void TravelTimeCorrections(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         ellipcorr = GetEllipticityCorrection(ec, Assoc->Phase, ecolat,
                                 Assoc->Delta, Hypocenter->Depth, Assoc->Esaz);
         Assoc->ttime += ellipcorr;
-
     }
 /*
  *  elevation correction

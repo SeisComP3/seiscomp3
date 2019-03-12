@@ -246,20 +246,20 @@ typedef struct iLocConfig {
  *     NumSta is the number of StationInfo records passed to iLoc
  *   On output the structure contains the solution
  *   Input:
- *     isManMade        - anthropogenic event [0/1]
+ *     isManMade        - 1 if anthropogenic event, 0 otherwise
  *     numSta           - number of associated stations
  *     numPhase         - number of associated arrivals (N)
  *     Time             - initial origin epoch time [decimal seconds]
  *     Lat              - initial latitude [deg]
  *     Lon              - initial longitude [deg]
  *     Depth            - initial depth [km]
- *     FixOT            - fix origin time to initial origin time [0/1]
- *     FixLat           - fix latitude to initial latitude [0/1]
- *     FixLon           - fix longitude to initial longitude [0/1]
- *     FixDepth         - fix depth to initial depth [0/1]
- *     FixHypo          - fixed hypocenter [0/1]
+ *     FixOT            - 1 if fix origin time to initial origin time, 0 otherwise
+ *     FixLat           - 1 if fix latitude to initial latitude, 0 otherwise
+ *     FixLon           - 1 if fix longitude to initial longitude, 0 otherwise
+ *     FixDepth         - 1 if fix depth to initial depth, 0 otherwise
+ *     FixHypo          - 1 if fixed hypocenter, 0 otherwise
  *   Output:
- *     Converged        - convergent solution flag
+ *     Converged        - convergent solution flag, 1 if converged, 0 otherwise
  *     numUnknowns      - number of model parameters solved for (M)
  *     Time             - origin epoch time [decimal seconds]
  *     Lat              - latitude [deg]
@@ -297,13 +297,14 @@ typedef struct iLocConfig {
  *     maxDist          - distance to furthest station [deg]
  *     Gap              - azimuthal gap (entire network)
  *     Sgap             - secondary azimuthal gap (entire network)
- *     FixHypo          - fixed hypocenter [0/1]
+ *     FixHypo          - 1 if fixed hypocenter, 0 otherwise
  *     GT5candidate     - 1 if GT5 candidate, 0 otherwise
  *     localSgap        - local secondary azimuthal gap [deg]
  *     localDU          - local network quality metric
  *     numStaWithin10km - number of defining stations within 10 km
  *     localNumDefsta   - number of local defining stations
  *     localNumDef      - number of local defining observations
+ *     iLocInfo         - info on iLoc run to display
  *
  */
 typedef struct Hypocenter {
@@ -350,6 +351,7 @@ typedef struct Hypocenter {
     int numStaWithin10km;       /* number of defining stations within 10 km */
     int localNumDefsta;                /* number of local defining stations */
     int localNumDef;               /* number of local defining observations */
+    char iLocInfo[4096];                                       /* iLoc info */
 } ILOC_HYPO;
 
 /*
@@ -357,36 +359,37 @@ typedef struct Hypocenter {
  * Associated arrivals
  *   An array of Hypocenter->numPhase elements
  *   On input StaInd, PhaseHint, ArrivalTime, BackAzimuth, HorizontalSlowness,
- *     Timedef, Azimdef, Slowdef and phaseFixed values are expected
- *     ArrivalTime, BackAzimuth and HorizontalSlowness could be ILOC_NULLVAL
+ *     Deltim, Timedef, Azimdef, Slowdef and phaseFixed values are expected
+ *     ArrivalTime, Deltim, BackAzimuth and HorizontalSlowness can be ILOC_NULLVAL
  *   On output the structure contains the arrival info with respect to the
  *     solution
  *   Input:
- *     arid              - Arrival _oid
+ *     arid              - Arrival id (integer)
  *     StaInd            - index of station in ILOC_STA structure (integer)
  *     PhaseHint         - phase name hint
- *     phaseFixed        - 1 to stop reidentifying a phase
+ *     phaseFixed        - 1 to stop reidentifying a phase, 0 otherwise
  *     ArrivalTime       - observed arrival epoch time [s]
- *     Timedef           - time used in the location [0/1]
+ *     Timedef           - 1 if time used in the location, 0 otherwise
+ *     Deltim            - a priori time measurement error [s]
  *     BackAzimuth       - observed station-to-event azimuth [deg]
- *     Azimdef           - back azimuth used in the location [0/1]
+ *     Azimdef           - 1 if back azimuth used in the location, 0 otherwise
  *     Slowness          - observed horizontal slowness [s/deg]
- *     Slowdef           - slowness used in the location [0/1]
+ *     Slowdef           - 1 if slowness used in the location, 0 otherwise
  *   Output:
  *     Phase             - phase name
  *     Delta             - delta [deg]
  *     Esaz              - event-to-station azimuth [deg]
- *     Seaz              - tation-to-event azimuth [deg]
- *     Deltim            - a priori time measurement error [s]
+ *     Seaz              - station-to-event azimuth [deg]
  *     TimeRes           - time residual [s]
- *     Delaz             - a priori azimuth measurement error [deg]
  *     AzimRes           - back azimuth residual [deg]
- *     Delslo            - a priori slowness measurement error [s/deg]
  *     SlowRes           - slowness residual [s/deg]
  *     Vmodel            - velocity model
  *   Internal use:
  *     rdid              - reading id
- *     initialPhase      - initial phase in a reading [0/1]
+ *     initialPhase      - 1 if initial phase in a reading, 0 otherwise
+ *     userDeltim        - 1 if user provided time measurement error, 0 otherwise
+ *     Delaz             - a priori azimuth measurement error [deg]
+ *     Delslo            - a priori slowness measurement error [s/deg]
  *     prevPhase         - phase from previous iteration
  *     prevTimeDef       - TimeDef from previous iteration
  *     prevAzimDef       - AzimDef from previous iteration
@@ -421,6 +424,7 @@ typedef struct AssociatedPhase {
     double Seaz;                           /* station-to-event azimuth [deg] */
     double ArrivalTime;                            /* arrival epoch time [s] */
     double Deltim;           /* a priori time measurement error estimate [s] */
+    int userDeltim;                             /* user provided Deltim if 1 */
     double TimeRes;                                     /* time residual [s] */
     int Timedef;                    /* user: do not use in the location if 0 */
     double BackAzimuth;           /* measured station-to-event azimuth [deg] */
@@ -475,6 +479,28 @@ typedef struct StationInfo {
     double StaElevation;                            /* station elevation [m] */
 } ILOC_STA;
 
+
+/*
+ *
+ * Travel time prediction (output)
+ *   Travel time prediction for a phase-source-receiver triplet
+ *      elevation and ellipticity corrections are applied to all phases
+ *      bounce point corrections are applied to depth phases
+ *      water depth correction is applied to pwP
+ *   Output:
+ *     Phase  - phase name
+ *     Vmodel - velocity model
+ *     ttime  - travel time prediction with corrections [s]
+ *     dtdd   - horizontal slowness prediction [s/deg]
+ *     dtdh   - vertical slowness prediction [s/km]
+ */
+typedef struct TravelTime {
+    char Phase[ILOC_PHALEN];                                        /* phase */
+    char Vmodel[ILOC_VALLEN];                         /* velocity model name */
+    double ttime;             /* travel time prediction with corrections [s] */
+    double dtdd;                   /* horizontal slowness prediction [s/deg] */
+    double dtdh;                      /* vertical slowness prediction [s/km] */
+} ILOC_TT;
 
 
 /*
@@ -918,5 +944,15 @@ int iLoc_GetTravelTimePrediction(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
 double iLoc_GetEtopoCorrection(ILOC_CONF *iLocConfig, int ips, double rayp,
         double bplat, double bplon, short int **topo,
         double Psurfvel, double Ssurfvel, double *tcorw);
+
+/*
+ * sciLocTravelTimeAPI.c
+ */
+ILOC_TT *iLoc_TravelTimePredictions(ILOC_CONF *iLocConfig, ILOC_EC_COEF *ec,
+        short int **topo, ILOC_TTINFO *TTInfo, ILOC_TT_TABLE *TTtables,
+        ILOC_TTINFO *LocalTTInfo, ILOC_TT_TABLE *LocalTTtables,
+        char *phase, double lat, double lon, double depth,
+        double staLat, double staLon, double staElev,
+        double *Delta, double *Esaz, int *numPhase);
 
 #endif

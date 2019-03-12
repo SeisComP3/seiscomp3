@@ -202,6 +202,7 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
     if (Hypocenter->FixHypo) {
         if (iLocConfig->Verbose)
             fprintf(stderr, "Calculate residuals for fixed hypocentre\n");
+        strcat(Hypocenter->iLocInfo, "  Calculate residuals for fixed hypocentre\n");
         ResidualsForFixedHypocenter(iLocConfig, Hypocenter, Assocs, StaLocs,
                 rdindx, PhaseIdInfo, ec, TTInfo, TTtables, LocalTTInfo,
                 LocalTTtables, DefaultDepth->Topo);
@@ -275,8 +276,8 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
  *                  initial hypocentre and recalcaluate the default depth
  */
                 if (fabs((Hypocenter->Depth - mediandepth)) > 20.) {
-                    fprintf(stderr, "Large depth difference, ");
-                    fprintf(stderr, "fall back to median hypocentre\n");
+                    fprintf(stderr, "Large depth difference, fall back to initial hypocentre\n");
+                    strcat(Hypocenter->iLocInfo, "  Large depth difference, fall back to initial hypocentre\n");
                     Hypocenter->Time = medianot;
                     Hypocenter->Lat = medianlat;
                     Hypocenter->Lon = medianlon;
@@ -322,6 +323,8 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
             if (Hypocenter->numTimedef < Hypocenter->numUnknowns) {
                 fprintf(stderr, "%d time defining phase left, fixing origin time!\n",
                         Hypocenter->numTimedef);
+                sprintf(Hypocenter->iLocInfo, "%s  %d time defining phase left, fixing origin time\n",
+                        Hypocenter->iLocInfo, Hypocenter->numTimedef);
                 Hypocenter->FixOT = 1;
                 Hypocenter->numUnknowns--;
             }
@@ -376,6 +379,12 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
                         fprintf(stderr, "Distance from initial guess = %.1f km\n",
                                 epidist);
                         fprintf(stderr, "Reidentify phases after NA\n");
+                        strcat(Hypocenter->iLocInfo, "  Best fitting hypocentre from NA search:\n");
+                        sprintf(Hypocenter->iLocInfo, "%s    OT=%s Lat=%7.3f Lon=%8.3f Depth=%.1f\n",
+                                Hypocenter->iLocInfo, timestr, Hypocenter->Lat,
+                                Hypocenter->Lon, Hypocenter->Depth);
+                        sprintf(Hypocenter->iLocInfo, "%s    Distance from initial guess=%.1f km\n",
+                                Hypocenter->iLocInfo, epidist);
                     }
 /*
  *                  reidentify phases w.r.t. best hypocentre
@@ -453,6 +462,7 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
  */
             if (!hasDepthResolution) {
                 fprintf(stderr, "No depth resolution for free-depth solution!\n");
+                strcat(Hypocenter->iLocInfo, "  No depth resolution for free-depth solution\n");
                 if (fabs(Hypocenter->Depth - mediandepth) > 20.)
                     firstpass = 1;
                 continue;
@@ -465,6 +475,8 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
             if (Hypocenter->numTimedef < Hypocenter->numUnknowns) {
                 fprintf(stderr, "%d time defining phase left, fixing origin time!\n",
                         Hypocenter->numTimedef);
+                sprintf(Hypocenter->iLocInfo, "%s  %d time defining phase left, fixing origin time\n",
+                        Hypocenter->iLocInfo, Hypocenter->numTimedef);
                 Hypocenter->Time = medianot;
                 Hypocenter->FixOT = 1;
                 Hypocenter->numUnknowns--;
@@ -527,6 +539,7 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
                 fprintf(stderr, "Discard free-depth solution due to large errors!\n");
                 fprintf(stderr, "     depth = %5.1f depth error = %.1f\n",
                         Hypocenter->Depth, Hypocenter->Errors[3]);
+                strcat(Hypocenter->iLocInfo, "  Discard free-depth solution due to large depth error\n");
                 firstpass = 1;
                 continue;
             }
@@ -576,73 +589,84 @@ int iLoc_Locator(ILOC_CONF *iLocConfig, ILOC_PHASEIDINFO *PhaseIdInfo,
  *      Calculate location quality metrics
  */
         iLoc_LocationQuality(Hypocenter, Assocs);
-        if (iLocConfig->Verbose) {
 /*
- *          Print final solution, phases and residuals to log file.
+ *      Print final solution, phases and residuals
  */
-            grn = iLoc_GregionNumber(Hypocenter->Lat, Hypocenter->Lon, fe);
-            iLoc_Gregion(grn, gregname);
-            iLoc_PrintPhases(Hypocenter->numPhase, Assocs);
-            iLoc_PrintSolution(Hypocenter, grn);
-            fprintf(stderr, "nsta=%d ndefsta=%d nreading=%d nass=%d ",
-                    Hypocenter->numSta, Hypocenter->numDefsta,
-                    Hypocenter->numReading, Hypocenter->numPhase);
-            fprintf(stderr, "ndef=%d (T=%d A=%d S=%d) nrank=%d\n",
-                    Hypocenter->numDef, Hypocenter->numTimedef,
-                    Hypocenter->numAzimdef, Hypocenter->numSlowdef,
-                    Hypocenter->numRank);
-            fprintf(stderr, "sgap=%5.1f ", Hypocenter->Sgap);
-            if (Hypocenter->semiMajax != ILOC_NULLVAL)
-                fprintf(stderr, "smajax=%.1f sminax=%.1f strike=%.1f",
-                        Hypocenter->semiMajax, Hypocenter->semiMinax,
-                        Hypocenter->Strike);
-            if (Hypocenter->Errors[0] != ILOC_NULLVAL)
-                fprintf(stderr, " stime=%.3f", Hypocenter->Errors[0]);
-            if (Hypocenter->Errors[3] != ILOC_NULLVAL)
-                fprintf(stderr, " sdepth=%.1f", Hypocenter->Errors[3]);
-            if (Hypocenter->SdevObs != ILOC_NULLVAL)
-                fprintf(stderr, " sdobs=%.3f", Hypocenter->SdevObs);
-            fprintf(stderr, "\n");
-            if (Hypocenter->DepthDp != ILOC_NULLVAL)
-                fprintf(stderr, "depdp=%.2f +/- %.2f ndp=%d\n",
-                        Hypocenter->DepthDp, Hypocenter->DepthDpError,
-                        Hypocenter->numDepthDp);
-            if (Hypocenter->FixOT || Hypocenter->FixLat ||
-                Hypocenter->FixLon || Hypocenter->FixDepth) {
-                fprintf(stderr, "Fixed: ");
-                if (Hypocenter->FixOT) fprintf(stderr, "OT ");
-                if (Hypocenter->FixLat) fprintf(stderr, "Lat ");
-                if (Hypocenter->FixLon) fprintf(stderr, "Lon ");
-                if (Hypocenter->FixDepth) fprintf(stderr, "Depth");
+        grn = iLoc_GregionNumber(Hypocenter->Lat, Hypocenter->Lon, fe);
+        iLoc_Gregion(grn, gregname);
+        iLoc_PrintPhases(Hypocenter->numPhase, Assocs);
+        iLoc_PrintSolution(Hypocenter, grn);
+        fprintf(stderr, "nsta=%d ndefsta=%d nreading=%d nass=%d ",
+                Hypocenter->numSta, Hypocenter->numDefsta,
+                Hypocenter->numReading, Hypocenter->numPhase);
+        fprintf(stderr, "ndef=%d (T=%d A=%d S=%d) nrank=%d\n",
+                Hypocenter->numDef, Hypocenter->numTimedef,
+                Hypocenter->numAzimdef, Hypocenter->numSlowdef,
+                Hypocenter->numRank);
+        fprintf(stderr, "sgap=%5.1f ", Hypocenter->Sgap);
+        if (Hypocenter->semiMajax != ILOC_NULLVAL)
+            fprintf(stderr, "smajax=%.1f sminax=%.1f strike=%.1f",
+                    Hypocenter->semiMajax, Hypocenter->semiMinax,
+                    Hypocenter->Strike);
+        if (Hypocenter->Errors[0] != ILOC_NULLVAL)
+            fprintf(stderr, " stime=%.3f", Hypocenter->Errors[0]);
+        if (Hypocenter->Errors[3] != ILOC_NULLVAL)
+            fprintf(stderr, " sdepth=%.1f", Hypocenter->Errors[3]);
+        if (Hypocenter->SdevObs != ILOC_NULLVAL)
+            fprintf(stderr, " sdobs=%.3f", Hypocenter->SdevObs);
+        fprintf(stderr, "\n");
+        if (Hypocenter->DepthDp != ILOC_NULLVAL)
+            fprintf(stderr, "depdp=%.2f +/- %.2f ndp=%d\n",
+                    Hypocenter->DepthDp, Hypocenter->DepthDpError,
+                    Hypocenter->numDepthDp);
+        if (Hypocenter->FixOT || Hypocenter->FixLat ||
+            Hypocenter->FixLon || Hypocenter->FixDepth) {
+            fprintf(stderr, "Fixed: ");
+            if (Hypocenter->FixOT) fprintf(stderr, "OT ");
+            if (Hypocenter->FixLat) fprintf(stderr, "Lat ");
+            if (Hypocenter->FixLon) fprintf(stderr, "Lon ");
+            if (Hypocenter->FixDepth) fprintf(stderr, "Depth");
                 fprintf(stderr, "\n");
-            }
-            if (Hypocenter->FixedDepthType == 8)
-                fprintf(stderr, "depth fixed by user\n");
-            else if (Hypocenter->FixedDepthType == 1)
-                fprintf(stderr, "airquake/deepquake, depth fixed to surface/MaxHypocenterDepth\n");
-            else if (Hypocenter->FixedDepthType == 4)
-                fprintf(stderr, "anthropogenic event, depth fixed to surface\n");
-            else if (Hypocenter->FixedDepthType == 5)
-            fprintf(stderr, "depth fixed to default depth grid depth\n");
-            else if (Hypocenter->FixedDepthType == 6) {
-                if (!isdefdep) {
-                    fprintf(stderr, "no default depth grid point exists, ");
-                    fprintf(stderr, "depth fixed to median reported depth\n");
-                }
-                else {
-                    fprintf(stderr, "depth fixed to median reported depth\n");
-                }
-            }
-            else if (Hypocenter->FixedDepthType == 7) {
-                fprintf(stderr, "no default depth grid point exists, ");
-                fprintf(stderr, "depth fixed to GRN-dependent depth\n");
-            }
-            else
-                fprintf(stderr, "free-depth solution\n");
-            fprintf(stderr, "GT5cand=%d (dU=%5.3f sgap=%5.1f numStaWithin10km=%d)\n",
-                    Hypocenter->GT5candidate, Hypocenter->localDU,
-                    Hypocenter->localSgap, Hypocenter->numStaWithin10km);
         }
+        if (Hypocenter->FixedDepthType == 8) {
+            fprintf(stderr, "depth fixed by user\n");
+            strcat(Hypocenter->iLocInfo, "  depth fixed by user\n");
+        }
+        else if (Hypocenter->FixedDepthType == 1) {
+            fprintf(stderr, "airquake/deepquake, depth fixed to surface/MaxHypocenterDepth\n");
+            strcat(Hypocenter->iLocInfo, "  airquake/deepquake, depth fixed to surface/MaxHypocenterDepth\n");
+        }
+        else if (Hypocenter->FixedDepthType == 4) {
+            fprintf(stderr, "anthropogenic event, depth fixed to surface\n");
+            strcat(Hypocenter->iLocInfo, "  anthropogenic event, depth fixed to surface\n");
+        }
+        else if (Hypocenter->FixedDepthType == 5) {
+            fprintf(stderr, "depth fixed to default depth grid depth\n");
+            strcat(Hypocenter->iLocInfo, "  depth fixed to default depth grid depth\n");
+        }
+        else if (Hypocenter->FixedDepthType == 6) {
+            if (!isdefdep) {
+                fprintf(stderr, "no default depth grid point exists, depth fixed to median reported depth\n");
+                strcat(Hypocenter->iLocInfo, "  no default depth grid point exists, depth fixed to median reported depth\n");
+            }
+            else {
+                fprintf(stderr, "depth fixed to median reported depth\n");
+                strcat(Hypocenter->iLocInfo, "  depth fixed to median reported depth\n");
+            }
+        }
+        else if (Hypocenter->FixedDepthType == 7) {
+            fprintf(stderr, "no default depth grid point exists, depth fixed to GRN-dependent depth\n");
+            strcat(Hypocenter->iLocInfo, "  no default depth grid point exists, depth fixed to GRN-dependent depth\n");
+        }
+        else {
+            fprintf(stderr, "free-depth solution\n");
+            strcat(Hypocenter->iLocInfo, "  free-depth solution\n");
+        }
+        fprintf(stderr, "GT5cand=%d (dU=%5.3f sgap=%5.1f numStaWithin10km=%d)\n",
+                Hypocenter->GT5candidate, Hypocenter->localDU,
+                Hypocenter->localSgap, Hypocenter->numStaWithin10km);
+        if (Hypocenter->GT5candidate)
+            strcat(Hypocenter->iLocInfo, "  This event is a GT5 candidate!\n");
 /*
  *      print output structures
  */
@@ -1014,8 +1038,10 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
             if (Hypocenter->numTimedef < Hypocenter->numUnknowns) {
                 if (iLocConfig->Verbose)
-                    fprintf(stderr, "%d time defining phase left, fixing origin time!\n",
+                    fprintf(stderr, "%d time defining phases left, fixing origin time!\n",
                             Hypocenter->numTimedef);
+                sprintf(Hypocenter->iLocInfo, "%s  %d time defining phases left, fixing origin time\n",
+                        Hypocenter->iLocInfo, Hypocenter->numTimedef);
                 Hypocenter->FixOT = 1;
                 Hypocenter->numUnknowns--;
                 m--;
@@ -1025,6 +1051,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
             if (iLocConfig->Verbose)
                 fprintf(stderr, "Insufficient number (%d) of phases left; ",
                         ndef);
+            strcat(Hypocenter->iLocInfo, "  Insufficient number of phases left\n");
             retval = ILOC_INSUFFICIENT_NUMBER_OF_PHASES;
             break;
         }
@@ -1172,8 +1199,10 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
                     if (Hypocenter->numTimedef < Hypocenter->numUnknowns) {
                         if (iLocConfig->Verbose)
-                            fprintf(stderr, "%d time defining phase left, fixing origin time!\n",
+                            fprintf(stderr, "%d time defining phases left, fixing origin time!\n",
                                     Hypocenter->numTimedef);
+                        sprintf(Hypocenter->iLocInfo, "%s  %d time defining phases left, fixing origin time\n",
+                                Hypocenter->iLocInfo, Hypocenter->numTimedef);
                         Hypocenter->FixOT = 1;
                         Hypocenter->numUnknowns--;
                         m--;
@@ -1194,6 +1223,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         if (nrank < Hypocenter->numUnknowns) {
             fprintf(stderr, "Insufficient number of independent phases (%d, %d)!\n",
                     nrank, Hypocenter->numUnknowns);
+            strcat(Hypocenter->iLocInfo, "  Insufficient number of independent phases left\n");
             retval = ILOC_INSUFFICIENT_NUMBER_OF_INDEPENDENT_PHASES;
             break;
         }
@@ -1383,6 +1413,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
     if (iter >= iLocConfig->MaxIterations) {
         fprintf(stderr, "Maximum number of iterations is reached!\n");
+        strcat(Hypocenter->iLocInfo, "  Maximum number of iterations is reached\n");
         retval = ILOC_SLOW_CONVERGENCE;
         isdiv = 1;
     }
@@ -1393,6 +1424,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
     else if (isconv) {
         fprintf(stderr, "Convergent solution after %d iterations\n", iter);
+        strcat(Hypocenter->iLocInfo, "  Convergent solution\n");
         retval = ILOC_SUCCESS;
         Hypocenter->uRMS = urms;
         Hypocenter->wRMS = wrms;
@@ -1516,6 +1548,7 @@ static int LocateEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
     else if (isdiv) {
         fprintf(stderr, "Divergent solution\n");
+        strcat(Hypocenter->iLocInfo, "  Divergent solution\n");
         retval = ILOC_DIVERGING_SOLUTION;
     }
 /*

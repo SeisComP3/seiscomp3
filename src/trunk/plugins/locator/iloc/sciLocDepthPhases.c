@@ -137,6 +137,15 @@ int iLoc_DepthResolution(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 nsdef, iLocConfig->MaxSPDistDeg);
         fprintf(stderr, "  %d defining PcP/ScS phases\n", ncoredef);
     }
+    strcat(Hypocenter->iLocInfo, "  Depth resolution from:\n");
+    sprintf(Hypocenter->iLocInfo, "%s    %d defining depth phases\n",
+            Hypocenter->iLocInfo, Hypocenter->numDepthDp);
+    sprintf(Hypocenter->iLocInfo, "%s    %d stations within %.2f degrees\n",
+            Hypocenter->iLocInfo, nlocal, iLocConfig->MaxLocalDistDeg);
+    sprintf(Hypocenter->iLocInfo, "%s    %d defining S-P pairs within %.2f degrees\n",
+            Hypocenter->iLocInfo, nsdef, iLocConfig->MaxSPDistDeg);
+    sprintf(Hypocenter->iLocInfo, "%s    %d defining PcP/ScS phases\n",
+            Hypocenter->iLocInfo, ncoredef);
     return hasDepthResolution;
 }
 

@@ -93,6 +93,7 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
     Hypocenter->localDU = ILOC_NULLVAL;
     Hypocenter->numStaWithin10km = 0;
     Hypocenter->localNumDefsta = Hypocenter->localNumDef = 0;
+    strcpy(Hypocenter->iLocInfo, "");
 /*
  *  Check if there are sufficient number of observations
  */
@@ -105,6 +106,7 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         if (Hypocenter->numUnknowns == 0) {
             fprintf(stderr, "All hypocenter parameters are fixed, ");
             fprintf(stderr, "fixing the hypocentre\n");
+            strcat(Hypocenter->iLocInfo, "  All hypocenter parameters are fixed, fixing the hypocentre\n");
             Hypocenter->FixHypo = 1;
         }
         else {
@@ -112,6 +114,7 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 fprintf(stderr, "Insufficient number of phases (%d), ",
                         Hypocenter->numPhase);
                 fprintf(stderr, "fixing the hypocentre\n");
+                strcat(Hypocenter->iLocInfo, "  Insufficient number of phases, fixing the hypocentre\n");
                 Hypocenter->FixHypo = 1;
             }
         }
@@ -123,6 +126,7 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         Hypocenter->FixedDepthType = 8;
         if (iLocConfig->Verbose)
             fprintf(stderr, "Depth fixed to user provided depth\n");
+        strcat(Hypocenter->iLocInfo, "  Depth fixed to user provided depth\n");
     }
 /*
  *  Anthropogenic event:
@@ -136,6 +140,7 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
             Hypocenter->numUnknowns--;
             if (iLocConfig->Verbose)
                 fprintf(stderr, "Anthropogenic event, fix depth to zero\n");
+            strcat(Hypocenter->iLocInfo, "  Anthropogenic event, fix depth to zero\n");
         }
     }
 /*
@@ -174,6 +179,11 @@ int iLoc_InitializeEvent(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         Assocs[i].Delta = iLoc_DistAzimuth(StaLocs[j].StaLat, StaLocs[j].StaLon,
                                            Hypocenter->Lat, Hypocenter->Lon,
                                            &Assocs[i].Seaz, &Assocs[i].Esaz);
+/*
+ *      user provided picking error?
+ */
+        Assocs[i].userDeltim = 0;
+        if (Assocs[i].Deltim != ILOC_NULLVAL) Assocs[i].userDeltim = 1;
     }
 /*
  *  Sort phase structures by increasing Delta, StaInd, ArrivalTime
