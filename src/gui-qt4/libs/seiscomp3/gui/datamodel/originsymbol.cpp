@@ -75,7 +75,7 @@ void OriginSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
 			painter.setBrush(_fillColor.isValid() ? _fillColor : _color);
 	}
 	else
-		painter.setBrush(_fillColor.isValid() ? _fillColor : (isFilled() ? _color : QColor(_color.red(), _color.green(), _color.black(), 128)));
+		painter.setBrush(_fillColor.isValid() ? _fillColor : (isFilled() ? _color : QColor(_color.red(), _color.green(), _color.blue(), 128)));
 
 	int rx = size().width()/2;
 	int ry = size().height()/2;
