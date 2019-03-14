@@ -10,6 +10,7 @@
     with ```amplitudes.MLv.measureType```.
   * Added ```amplitudes.ML.combiner``` to configure how the amplitudes of either
     horizontal component are combined to the final amplitude.
+  * Add blockette 1001 when writing miniSEED with MSeedRecord
 
 ## Release 2018.327 patch6
 
