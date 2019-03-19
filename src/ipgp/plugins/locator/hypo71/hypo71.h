@@ -431,8 +431,6 @@ class Hypo71 : public LocatorInterface {
 		std::string _hypo71ScriptFile;
 		std::string _logFile;
 		std::string _currentOriginID;
-		std::string velocityModel;
-		std::string depthModel;
 
 		std::string _trialLatDeg;
 		std::string _trialLatMin;
