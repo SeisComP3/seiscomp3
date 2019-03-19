@@ -6,6 +6,11 @@
 
   * Set correct legend if started with ```--displaymode```
 
+* Hypo71
+
+  * Increase maximum phase number to 1001
+  * Raise an error if no velocity model is given for a profile
+
 ## Release 2018.327 patch7
 
 ```SC_API_VERSION 12.1.0```
