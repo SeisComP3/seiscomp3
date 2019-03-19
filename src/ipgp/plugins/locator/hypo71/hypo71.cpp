@@ -53,7 +53,7 @@
 #define MSG_HEADER "[plugin] [Hypo71]"
 
 
-ADD_SC_PLUGIN("HYPO71 seismic hypocenter locator plugin", "IPGP <www.ipgp.fr>", 0, 1, 2)
+ADD_SC_PLUGIN("HYPO71 seismic hypocenter locator plugin", "IPGP <www.ipgp.fr>", 0, 2, 0)
 
 
 using namespace std;
@@ -951,6 +951,9 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 
 	// Crustal model list
+	std::string velocityModel;
+	std::string depthModel;
+
 	pConfig.readInto(velocityModel, "CRUSTAL_VELOCITY_MODEL");
 	stringExplode(velocityModel, ",", &Tvelocity);
 
@@ -960,6 +963,11 @@ Origin* Hypo71::locate(PickList& pickList) {
 	if ( Tvelocity.size() != Tdepth.size() ) {
 		SEISCOMP_ERROR("%s Crustal velocity / depth doesn't match up, please correct that.", MSG_HEADER);
 		throw LocatorException("ERROR! Velocity model and Depth model doesn't match up in configuration file");
+	}
+
+	if ( Tvelocity.empty() ) {
+		SEISCOMP_ERROR("%s No crustal velocity / depth layers defined.", MSG_HEADER);
+		throw LocatorException("ERROR! Velocity model and Depth model empty");
 	}
 
 	// Control card parameters
@@ -2343,6 +2351,9 @@ Hypo71::getZTR(const PickList& pickList) {
 
 
 	// Crustal model list
+	std::string velocityModel;
+	std::string depthModel;
+
 	pConfig.readInto(velocityModel, "CRUSTAL_VELOCITY_MODEL");
 	stringExplode(velocityModel, ",", &Tvelocity);
 
@@ -2351,6 +2362,11 @@ Hypo71::getZTR(const PickList& pickList) {
 
 	if ( Tvelocity.size() != Tdepth.size() )
 		throw LocatorException("ERROR! Velocity model and Depth model doesn't match up in configuration file");
+
+	if ( Tvelocity.empty() ) {
+		SEISCOMP_ERROR("%s No crustal velocity / depth layers defined.", MSG_HEADER);
+		throw LocatorException("ERROR! Velocity model and Depth model empty");
+	}
 
 	// Control card parameters
 	pConfig.readInto(cCC.ztr, "ZTR", dCC.ztr);
