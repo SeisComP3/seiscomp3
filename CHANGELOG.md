@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* scmv
+
+  * Set correct legend if started with ```--displaymode```
+
 ## Release 2018.327 patch7
 
 ```SC_API_VERSION 12.1.0```
