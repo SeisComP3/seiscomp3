@@ -67,8 +67,19 @@ void RecordHandler::handle(StationData* stationData, Record* record) {
 	double* data = static_cast<double*>(const_cast<void*>(array->data()));
 	if ( !data ) return;
 
-	stationData->gmFilter->setSamplingFrequency(record->samplingFrequency());
-	stationData->gmFilter->apply(dataSize, data);
+	try {
+		stationData->gmFilter->setSamplingFrequency(record->samplingFrequency());
+		stationData->gmFilter->apply(dataSize, data);
+	}
+	catch (Core::GeneralException &e) {
+		SEISCOMP_WARNING("Could not filter record %s.%s.%s.%s (%fHz): %s",
+		                 record->networkCode().c_str(),
+		                 record->stationCode().c_str(),
+		                 record->locationCode().c_str(),
+		                 record->channelCode().c_str(),
+		                 record->samplingFrequency(), e.what());
+		return;
+	}
 
 	double* begin = data;
 	double* maximumSample = std::max_element(begin, data + dataSize,
