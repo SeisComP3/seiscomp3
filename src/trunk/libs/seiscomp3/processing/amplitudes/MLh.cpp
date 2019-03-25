@@ -15,7 +15,6 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/processing/amplitudes/MLh.h>
-#include <seiscomp3/math/filter/seismometers.h>
 
 #include <boost/bind.hpp>
 #include <cstdio>
