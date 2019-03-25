@@ -293,17 +293,30 @@ class Bulletin(object):
 
         txt += "\n"
 
-        netmag = {}
-        nmag = org.magnitudeCount()
+        networkMagnitudeCount = org.magnitudeCount()
+        networkMagnitudes = {}
+
+        # Each station magnitude contributes to the network
+        # magnitude of the same type.
+        #
+        # We save here the StationMagnitudeContribution objects
+        # by publicID of the corresponding StationMagnitude object.
+        stationMagnitudeContributions = {}
+
         tmptxt = txt
         txt = ""
         foundPrefMag = False
-        for i in xrange(nmag):
+        for i in xrange(networkMagnitudeCount):
             mag = org.magnitude(i)
             val = mag.magnitude().value()
             typ = mag.type()
-            netmag[typ] = mag
+            networkMagnitudes[typ] = mag
             err = ""
+
+            for k in xrange(mag.stationMagnitudeContributionCount()):
+                smc = mag.stationMagnitudeContribution(k)
+                smid = smc.stationMagnitudeID()
+                stationMagnitudeContributions[smid] = smc
 
             # FIXME vvv
             # This test is necessary because if lowerUncertainty/upperUncertainty
@@ -342,7 +355,7 @@ class Bulletin(object):
             if mag:
                 val = mag.magnitude().value()
                 typ = mag.type()
-                netmag[typ] = mag
+                networkMagnitudes[typ] = mag
                 err = ""
 
                 try:
@@ -361,9 +374,8 @@ class Bulletin(object):
                     agencyID = ""
                 txt += "    %-8s %5.2f %8s %3d %s  %s\n" % \
                         (typ, val, err, mag.stationCount(), preferredMarker, agencyID)
-                nmag = nmag + 1
 
-        txt = tmptxt + "%d Network magnitudes:\n" % nmag + txt
+        txt = tmptxt + "%d Network magnitudes:\n" % networkMagnitudeCount + txt
 
         if not self._long:
             return txt
@@ -440,18 +452,23 @@ class Bulletin(object):
             txt += line
         txt += "\n"
 
-        nmag = org.stationMagnitudeCount()
-        mags = {}
+        stationMagnitudeCount = org.stationMagnitudeCount()
+        stationMagnitudes = {}
 
-        for i in xrange(nmag):
+        for i in xrange(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
-            if typ not in netmag: continue
-            if typ not in mags:
-                mags[typ] = []
+            if typ not in networkMagnitudes: continue
+            if typ not in stationMagnitudes:
+                stationMagnitudes[typ] = []
 
-            mags[typ].append(mag)
-
+            # suppress unused station magnitudes
+            minWeight = 0.5
+            smid = mag.publicID()
+            w = stationMagnitudeContributions[smid].weight()
+            if w < minWeight:
+                continue
+            stationMagnitudes[typ].append(mag)
 
 
         lineFMT = "    %-5s %-2s  "
@@ -463,8 +480,8 @@ class Bulletin(object):
 
         lines = []
 
-        for typ in mags:
-            for mag in mags[typ]:
+        for typ in stationMagnitudes:
+            for mag in stationMagnitudes[typ]:
 
                 key = mag.amplitudeID()
                 amp = seiscomp3.DataModel.Amplitude.Find(key)
@@ -502,14 +519,14 @@ class Bulletin(object):
                 except: dist, azi = 0, "  N/A" if self.enhanced else "N/A"
 
                 val = mag.magnitude().value()
-                res = val - netmag[typ].magnitude().value()
+                res = val - networkMagnitudes[typ].magnitude().value()
 
                 line = lineFMT % (sta, net, dist, azi, typ, val, res, a, p)
                 lines.append( (dist, line ) )
 
         lines.sort()
 
-        txt += "%d Station magnitudes:\n" % nmag
+        txt += "%d Station magnitudes:\n" % stationMagnitudeCount
         if self.enhanced:
             txt += "    sta   net      dist   azi  type   value   res        amp  per\n"
         else:
@@ -570,8 +587,8 @@ class Bulletin(object):
         tmp["mval"] = 0.
 
         foundMag = False
-        nmag = org.magnitudeCount()
-        for i in xrange( org.magnitudeCount() ):
+        networkMagnitudeCount = org.magnitudeCount()
+        for i in xrange(networkMagnitudeCount):
             mag = org.magnitude(i)
             if mag.publicID() == prefMagID:
                 if mag.type() in ["mb","mB","Mwp","ML","MLv", "Mjma"]:
@@ -623,17 +640,17 @@ class Bulletin(object):
         pick = self._getPicks(org)
         ampl = self._getAmplitudes(org)
 
-        mags = {}
-        nmag = org.stationMagnitudeCount()
-        for i in xrange(nmag):
+        stationMagnitudeCount = org.stationMagnitudeCount()
+        stationMagnitudes = {}
+        for i in xrange(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
             if typ == "MLv": typ = "ML"
-            if typ not in mags:
-                mags[typ] = {}
+            if typ not in stationMagnitudes:
+                stationMagnitudes[typ] = {}
 
             sta = mag.waveformID().stationCode()
-            mags[typ][sta] = mag
+            stationMagnitudes[typ][sta] = mag
 
         lineFMT = "  %-5s %-2s  %s  %10.1f %4.1f %s "
         if self.enhanced:
@@ -672,7 +689,7 @@ class Bulletin(object):
             for typ in ["mb","ML","mB"]:
                 mag = 0.
                 try:
-                    m = mags[typ][sta]
+                    m = stationMagnitudes[typ][sta]
                     mag = m.magnitude().value()
                     if typ=="mb":
                         ampid = m.amplitudeID()
