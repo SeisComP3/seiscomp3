@@ -6,6 +6,14 @@
 
   * Set correct legend if started with ```--displaymode```
 
+* scolv
+
+  * If arrival state (active/inactive) is taken from the weight
+    then it now compares against 0 instead of < 0.5 (inactive)
+    and > 0.5 (active). It otherwise shows sometimes inconsistent
+    results in combination with locators that assign non binary
+    weight such as NonLinLoc.
+
 * Hypo71
 
   * Increase maximum phase number to 1001
