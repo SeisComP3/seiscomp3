@@ -1994,12 +1994,8 @@ bool ArrivalModel::useArrival(int row) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
-	bool used = false;
-	bool timeUsedSet = false;
-
 	try {
 		setBackazimuthUsed(row, arrival->backazimuthUsed());
-		used = true;
 	}
 	catch ( ... ) {
 		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
@@ -2018,7 +2014,6 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 
 	try {
 		setHorizontalSlownessUsed(row, arrival->horizontalSlownessUsed());
-		used = true;
 	}
 	catch ( ... ) {
 		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
@@ -2037,29 +2032,20 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 
 	try {
 		setTimeUsed(row, arrival->timeUsed());
-		timeUsedSet = true;
-		used = true;
 	}
 	catch ( ... ) {
-		setTimeUsed(row, true);
-	}
-
-	try {
 		// If the timeUsed attribute is not set then it looks like an origin
 		// created with an older version. So use the weight value to decide
 		// whether the pick is active or not.
-		if ( !timeUsedSet ) {
-			if ( fabs(arrival->weight()) < 1E-6 ) {
-				setBackazimuthUsed(row, false);
-				setHorizontalSlownessUsed(row, false);
-				setTimeUsed(row, false);
-			}
-			else {
-				setTimeUsed(row, true);
-			}
+		if ( fabs(arrival->weight()) < 1E-6 ) {
+			setBackazimuthUsed(row, false);
+			setHorizontalSlownessUsed(row, false);
+			setTimeUsed(row, false);
+		}
+		else {
+			setTimeUsed(row, true);
 		}
 	}
-	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
