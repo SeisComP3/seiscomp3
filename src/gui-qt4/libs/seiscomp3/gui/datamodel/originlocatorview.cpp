@@ -2821,6 +2821,9 @@ void OriginLocatorView::applyPlotFilter() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::runScript(const QString &script, const QString &name) {
 	QString cmd = QString("%1 %2").arg(script).arg(_currentOrigin->publicID().c_str());
+	if ( _baseEvent ) {
+		cmd += QString(" %1").arg(_baseEvent->publicID().c_str());
+	}
 
 	// start as background process w/o any communication channel
 	if ( !QProcess::startDetached(cmd) ) {
