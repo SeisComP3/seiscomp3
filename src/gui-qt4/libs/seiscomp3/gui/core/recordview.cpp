@@ -224,8 +224,9 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RecordView::RecordView(QWidget * parent, Qt::WFlags f)
- : QWidget(parent, f) {
+RecordView::RecordView(QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+ : QWidget(parent, f)
+, _timeScaleWidget(timeScale) {
 	setupUi();
 	setBufferSize(Seiscomp::Core::TimeSpan(30*60, 0));
 }
@@ -236,8 +237,9 @@ RecordView::RecordView(QWidget * parent, Qt::WFlags f)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
-                       QWidget * parent, Qt::WFlags f)
- : QWidget(parent, f) {
+                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+ : QWidget(parent, f)
+, _timeScaleWidget(timeScale) {
 	setupUi();
 	setTimeWindow(tw);
 }
@@ -248,8 +250,9 @@ RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeSpan& ts,
-                       QWidget * parent, Qt::WFlags f)
- : QWidget(parent, f) {
+                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+ : QWidget(parent, f)
+, _timeScaleWidget(timeScale) {
 	setupUi();
 	setBufferSize(ts);
 }
@@ -404,7 +407,8 @@ void RecordView::setupUi() {
 	QWidget* scrollWidget = new ItemWidget(this);
 
 	// Setting up timescale widget
-	_timeScaleWidget = new TimeScale;
+	if ( !_timeScaleWidget )
+		_timeScaleWidget = new TimeScale;
 	_timeScaleWidget->setRange(_tmin, 0);
 	_timeScaleWidget->setScale(_timeScale);
 	_timeScaleWidget->setSelected(0, 0);
