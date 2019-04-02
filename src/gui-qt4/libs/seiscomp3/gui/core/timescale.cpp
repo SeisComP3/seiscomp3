@@ -136,7 +136,10 @@ bool TimeScale::getTickText(double pos, double lastPos,
 		return Ruler::getTickText(pos, lastPos, line, str);
 
 	// Fixed floating point precision error
-	pos += 0.0005;
+	if ( pos > 0 )
+		pos += 5E-10;
+	else
+		pos -= 5E-10;
 
 	if ( line == 0 ) {
 		try {
