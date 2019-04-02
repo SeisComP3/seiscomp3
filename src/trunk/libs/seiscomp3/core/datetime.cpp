@@ -881,6 +881,10 @@ std::string Time::toString(const char* fmt) const {
 	char predata[BUFFER_SIZE];
 
 	time_t secs = (time_t)_timeval.tv_sec, usecs = _timeval.tv_usec;
+	while ( usecs < 0 ) {
+		secs -= 1;
+		usecs += MICROS;
+	}
 
 	tm t;
 	gmtime_r(&secs, &t);
