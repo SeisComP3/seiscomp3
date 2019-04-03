@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* scquery
+
+  * Add example to documentation. Thanks to Tiziana on https://forum.seiscomp3.org
+
 * scmv
 
   * Set correct legend if started with ```--displaymode```
