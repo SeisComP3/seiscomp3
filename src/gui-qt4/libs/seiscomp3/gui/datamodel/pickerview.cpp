@@ -827,6 +827,16 @@ class PickerMarker : public RecordMarker {
 						break;
 				}
 			}
+
+			const DataModel::Pick *p = pick();
+			if ( p ) {
+				try {
+					p->backazimuth();
+					int em = painter.fontMetrics().height();
+					painter.drawText(x-em-2, y1, em, em, Qt::AlignRight | Qt::AlignTop, "B");
+				}
+				catch ( ... ) {}
+			}
 		}
 
 		QString toolTip() const {
@@ -883,7 +893,7 @@ class PickerMarker : public RecordMarker {
 				text += QString("\nfilter: %1").arg(_referencedPick->filterID().c_str());
 			try {
 				double baz = _referencedPick->backazimuth().value();
-				text += QString("\nback azimuth: %1°").arg(baz);
+				text += QString("\nbackazimuth: %1°").arg(baz);
 			}
 			catch ( ... ) {}
 			try {
