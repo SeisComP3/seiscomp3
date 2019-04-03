@@ -90,7 +90,7 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 	font.setBold(true);
 	painter.setFont(font);
 
-	QFontMetrics fontMetrics(font);
+	QFontMetrics fontMetrics = painter.fontMetrics();
 
 	int height = canvas->height(),
 	    width = canvas->width(),
