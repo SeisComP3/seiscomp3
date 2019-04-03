@@ -220,7 +220,7 @@ void ILoc::AuxData::free() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ILoc::ILoc() {
 	_name = "iLoc";
-	_defaultPickUncertainty = 1.0;
+	_defaultPickUncertainty = ILOC_NULLVAL;
 
 	if ( _allowedParameters.empty() ) {
 		_allowedParameters.push_back("Verbose");
@@ -297,7 +297,7 @@ bool ILoc::init(const Seiscomp::Config::Config &config) {
 		_defaultPickUncertainty = config.getDouble("iLoc.defaultTimeError");
 	}
 	catch ( ... ) {
-		_defaultPickUncertainty = 1.0;
+		_defaultPickUncertainty = ILOC_NULLVAL;
 	}
 
 	return true;
@@ -908,6 +908,8 @@ throw(Seiscomp::Core::GeneralException)
 
 		originQuality.setUsedStationCount(stationsUsed.size());
 		originQuality.setAssociatedStationCount(stationsAssociated.size());
+
+		SEISCOMP_DEBUG("iLoc location info:\n%s", hypoCenter.iLocInfo);
 
 		return origin;
 	}
