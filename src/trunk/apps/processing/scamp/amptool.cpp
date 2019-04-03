@@ -392,7 +392,6 @@ bool AmpTool::run() {
 					dbAmps[amp->type()] = amp;
 					proc->setTrigger(pick->time().value());
 					proc->setReferencingPickID(pick->publicID());
-					proc->setEnvironment(NULL, NULL, pick.get());
 					proc->setPublishFunction(boost::bind(&AmpTool::storeLocalAmplitude, this, _1, _2));
 					_report << "     + Data" << std::endl;
 					addProcessor(proc.get(), NULL, pick.get(), None, None, None);
@@ -897,6 +896,8 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 		catch ( ... ) {}
 	}
 
+	DataModel::SensorLocation *receiver = NULL;
+
 	for ( int i = 0; i < componentCount; ++i ) {
 		cwids[i] = pick->waveformID();
 		if ( tc.comps[components[i]] == NULL ) {
@@ -931,15 +932,15 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 			proc->streamConfig(components[i]) = *stream;
 		}
 
+		if ( !i )
+			receiver = tc.comps[components[i]]->sensorLocation();
+
 		if ( proc->streamConfig(components[i]).gain == 0.0 ) {
 			SEISCOMP_LOG(_errorChannel, "no gain found for %s -> ignoring Arrival %s",
 			             streamIDs[i].c_str(), pick->publicID().c_str());
 			_report << "   - " << proc->type().c_str() << " [gain not found]" << std::endl;
 			return -1;
 		}
-
-		if ( !i )
-			proc->setEnvironment(origin, tc.comps[components[i]]->sensorLocation(), pick);
 	}
 
 
@@ -956,6 +957,7 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 		return -1;
 	}
 
+	proc->setEnvironment(origin, receiver, pick);
 
 	if ( depth ) {
 		proc->setHint(WaveformProcessor::Depth, *depth);
