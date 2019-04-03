@@ -1,8 +1,3 @@
-Reads objects from a SeisComP3 database and writes them to the command line.
-
-Setup
-=====
-
 *scquery* reads and writes objects from the SeisComP3 database configured in
 :ref:`scquery.cfg<scquery_config>`. It takes into account the query profiles
 defined in :ref:`queries.cfg<scquery_queries>`.
@@ -50,30 +45,33 @@ Parameter and query profile files
 .. _scquery_config:
 
 1. The configuration file **scquery.cfg** contains the database connection paraemters.
-   Copy the file to @CONFIGDIR@ or to @SYSTEMCONFIGDIR@.
+   Copy the file to @CONFIGDIR@ or to @SYSTEMCONFIGDIR@:
 
    .. code-block:: sh
 
       database.type = mysql
       database.parameters = sysop:sysop@localhost/seiscomp3
 
-If the database connection is configured, the database option :confval:`-d <database>` in the
-:ref:`Examples<scquery_examples>` can be omitted or used to overwrite the configuration.
+   If the database connection is configured, the database option :confval:`-d <database>` in the
+   :ref:`Examples<scquery_examples>` can be omitted or used to overwrite the configuration.
 
-.. _scquery_queries:
+   .. _scquery_queries:
 
-#. Profile file **queries.cfg** containing the database queries. Copy the file to
-   @CONFIGDIR@ or to @SYSTEMCONFIGDIR@
+#. Create the profile file **queries.cfg** containing the database queries. Copy the file to
+   @CONFIGDIR@ or to @SYSTEMCONFIGDIR@:
 
    .. code-block:: sh
 
-      queries = event_filter, eventByAuthor, eventWithStationCount, phaseCountPerAuthor, eventType
+      queries = eventFilter, eventUncertainty, eventByAuthor, eventWithStationCount, phaseCountPerAuthor, eventType
 
-      query.event_filter.description = "Returns all events (lat, lon, mag, time) that fall into a certain region and a magnitude range"
-      query.event_filter = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value,Origin.longitude_value, Origin.depth_value,Magnitude.magnitude_value, Magnitude.type from Origin,PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where Event._oid=PEvent._oid and Origin._oid=POrigin._oid and Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.latitude_value >= ##latMin## and Origin.latitude_value <= ##latMax## and Origin.longitude_value >= ##lonMin## and Origin.longitude_value <= ##lonMax## and Magnitude.magnitude_value >= ##minMag## and Magnitude.magnitude_value <= ##maxMag## and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
+      query.eventFilter.description = "Returns all events (lat, lon, mag, time) that fall into a certain region and a magnitude range"
+      query.eventFilter = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value,Origin.longitude_value, Origin.depth_value,Magnitude.magnitude_value, Magnitude.type from Origin,PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where Event._oid=PEvent._oid and Origin._oid=POrigin._oid and Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.latitude_value >= ##latMin## and Origin.latitude_value <= ##latMax## and Origin.longitude_value >= ##lonMin## and Origin.longitude_value <= ##lonMax## and Magnitude.magnitude_value >= ##minMag## and Magnitude.magnitude_value <= ##maxMag## and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
+
+      query.eventUncertainty.description = "Returns all events (eventsIDs, time, lat, lat error, lon, lon error, depth, depth error, magnitude, region name) in the form of an event catalog"
+      query.eventUncertainty = "select PEvent.publicID, Origin.time_value as OT, ROUND(Origin.latitude_value,3), ROUND(Origin.latitude_uncertainty,3), ROUND(Origin.longitude_value,3), ROUND(Origin.longitude_uncertainty,3), ROUND(Origin.depth_value,3), ROUND(Origin.depth_uncertainty,3), ROUND(Magnitude.magnitude_value,1), EventDescription.text from Event, PublicObject as PEvent, EventDescription, Origin, PublicObject as POrigin, Magnitude, PublicObject as PMagnitude where Event._oid=PEvent._oid and Origin._oid=POrigin._oid and Magnitude._oid=PMagnitude._oid and Event.preferredOriginID=POrigin.publicID and Event.preferredMagnitudeID=PMagnitude.publicID and Event._oid=EventDescription._parent_oid and EventDescription.type='region name' and Event.type = '##type##' and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
 
       query.eventByAuthor.description = "get events by prefered origin author etc"
-      query.eventByAuthor = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value as lat,Origin.longitude_value as lon, Origin.depth_value as dep, Magnitude.magnitude_value as mag, Magnitude.type as mtype, Origin.quality_usedPhaseCount as phases, Event.type as type, Event.typeCertainty as certainty, Origin.creationInfo_author from   Origin, PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where  Event._oid=PEvent._oid and Origin._oid=POrigin._oid and  Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.latitude_value >= ##latMin## and Origin.latitude_value <= ##latMax## and Origin.longitude_value >= ##lonMin## and Origin.longitude_value <= ##lonMax## and Origin.quality_usedPhaseCount >= ##minPhases## and Origin.quality_usedPhaseCount <= ##maxPhases## and Magnitude.magnitude_value >= ##minMag## and Magnitude.magnitude_value <= ##maxMag## and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##' and Origin.creationInfo_author like '##author##%';"
+      query.eventByAuthor = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value as lat,Origin.longitude_value as lon, Origin.depth_value as dep, Magnitude.magnitude_value as mag, Magnitude.type as mtype, Origin.quality_usedPhaseCount as phases, Event.type as type, Event.typeCertainty as certainty, Origin.creationInfo_author from   Origin, PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where  Event._oid=PEvent._oid and Origin._oid=POrigin._oid and  Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.latitude_value >= ##latMin## and Origin.latitude_value <= ##latMax## and Origin.longitude_value >= ##lonMin## and Origin.longitude_value <= ##lonMax## and Origin.quality_usedPhaseCount >= ##minPhases## and Origin.quality_usedPhaseCount <= ##maxPhases## and Magnitude.magnitude_value >= ##minMag## and Magnitude.magnitude_value <= ##maxMag## and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##' and Origin.creationInfo_author like '##author##';"
 
       query.eventWithStationCount.description = "get events by prefered origin author etc"
       query.eventWithStationCount = "select PEvent.publicID, Origin.time_value as OT, Origin.latitude_value as lat,Origin.longitude_value as lon, Origin.depth_value as dep, Magnitude.magnitude_value as mag, Magnitude.type as mtype, Origin.quality_usedStationCount as stations, Event.type as type, Event.typeCertainty as certainty, Origin.creationInfo_author from   Origin, PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where  Event._oid=PEvent._oid and Origin._oid=POrigin._oid and  Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"

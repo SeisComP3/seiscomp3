@@ -84,3 +84,7 @@ of SeisComP3 are:
 | 3.0     | Potsdam release September 2010 | New Inventory Schema and performance improvements,  |
 |         |                                | improved GUI functionality                          |
 +---------+--------------------------------+-----------------------------------------------------+
+| 3.0     | Seattle release 2012           | New user friendly configuration GUI scconfig        |
++---------+--------------------------------+-----------------------------------------------------+
+| 3.0     | Jakarta release 2014           | Completely OpenSource, including all GUIs           |
++---------+--------------------------------+-----------------------------------------------------+
