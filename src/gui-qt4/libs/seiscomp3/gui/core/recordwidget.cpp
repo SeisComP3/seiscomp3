@@ -1523,11 +1523,17 @@ const RecordWidget::Filter *RecordWidget::recordFilter(int slot) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int RecordWidget::setCurrentRecords(int slot) {
+	if ( _currentSlot == slot ) return _currentSlot;
+
 	_currentSlot = slot;
 
 	update();
 
 	if ( _shadowWidget ) _shadowWidget->setCurrentRecords(slot);
+
+	if ( _drawMode == Single ) {
+		emit traceUpdated(this);
+	}
 
 	return _currentSlot;
 }
