@@ -584,6 +584,7 @@ bool ArclinkRequest::updateChild(Object* child) {
 		ArclinkStatusLine* arclinkStatusLineElement = arclinkStatusLine(arclinkStatusLineChild->index());
 		if ( arclinkStatusLineElement != NULL ) {
 			*arclinkStatusLineElement = *arclinkStatusLineChild;
+			arclinkStatusLineElement->update();
 			return true;
 		}
 		return false;
@@ -594,6 +595,7 @@ bool ArclinkRequest::updateChild(Object* child) {
 		ArclinkRequestLine* arclinkRequestLineElement = arclinkRequestLine(arclinkRequestLineChild->index());
 		if ( arclinkRequestLineElement != NULL ) {
 			*arclinkRequestLineElement = *arclinkRequestLineChild;
+			arclinkRequestLineElement->update();
 			return true;
 		}
 		return false;

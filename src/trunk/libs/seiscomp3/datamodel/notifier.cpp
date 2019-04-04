@@ -325,6 +325,7 @@ bool Notifier::apply() const {
 					bool saveState = IsEnabled();
 					Disable();
 					publicObject->assign(po);
+					publicObject->update();
 					SetEnabled(saveState);
 					return true;
 				}

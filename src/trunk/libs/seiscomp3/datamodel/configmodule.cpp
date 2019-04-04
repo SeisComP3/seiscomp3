@@ -313,6 +313,7 @@ bool ConfigModule::updateChild(Object* child) {
 			= ConfigStation::Cast(PublicObject::Find(configStationChild->publicID()));
 		if ( configStationElement && configStationElement->parent() == this ) {
 			*configStationElement = *configStationChild;
+			configStationElement->update();
 			return true;
 		}
 		return false;

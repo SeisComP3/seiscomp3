@@ -319,6 +319,7 @@ bool ParameterSet::updateChild(Object* child) {
 			= Parameter::Cast(PublicObject::Find(parameterChild->publicID()));
 		if ( parameterElement && parameterElement->parent() == this ) {
 			*parameterElement = *parameterChild;
+			parameterElement->update();
 			return true;
 		}
 		return false;
@@ -329,6 +330,7 @@ bool ParameterSet::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;

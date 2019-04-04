@@ -678,6 +678,7 @@ bool Station::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -689,6 +690,7 @@ bool Station::updateChild(Object* child) {
 			= SensorLocation::Cast(PublicObject::Find(sensorLocationChild->publicID()));
 		if ( sensorLocationElement && sensorLocationElement->parent() == this ) {
 			*sensorLocationElement = *sensorLocationChild;
+			sensorLocationElement->update();
 			return true;
 		}
 		return false;

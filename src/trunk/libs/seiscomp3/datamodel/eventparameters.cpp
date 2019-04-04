@@ -191,6 +191,7 @@ bool EventParameters::updateChild(Object* child) {
 			= Pick::Cast(PublicObject::Find(pickChild->publicID()));
 		if ( pickElement && pickElement->parent() == this ) {
 			*pickElement = *pickChild;
+			pickElement->update();
 			return true;
 		}
 		return false;
@@ -202,6 +203,7 @@ bool EventParameters::updateChild(Object* child) {
 			= Amplitude::Cast(PublicObject::Find(amplitudeChild->publicID()));
 		if ( amplitudeElement && amplitudeElement->parent() == this ) {
 			*amplitudeElement = *amplitudeChild;
+			amplitudeElement->update();
 			return true;
 		}
 		return false;
@@ -213,6 +215,7 @@ bool EventParameters::updateChild(Object* child) {
 			= Reading::Cast(PublicObject::Find(readingChild->publicID()));
 		if ( readingElement && readingElement->parent() == this ) {
 			*readingElement = *readingChild;
+			readingElement->update();
 			return true;
 		}
 		return false;
@@ -224,6 +227,7 @@ bool EventParameters::updateChild(Object* child) {
 			= Origin::Cast(PublicObject::Find(originChild->publicID()));
 		if ( originElement && originElement->parent() == this ) {
 			*originElement = *originChild;
+			originElement->update();
 			return true;
 		}
 		return false;
@@ -235,6 +239,7 @@ bool EventParameters::updateChild(Object* child) {
 			= FocalMechanism::Cast(PublicObject::Find(focalMechanismChild->publicID()));
 		if ( focalMechanismElement && focalMechanismElement->parent() == this ) {
 			*focalMechanismElement = *focalMechanismChild;
+			focalMechanismElement->update();
 			return true;
 		}
 		return false;
@@ -246,6 +251,7 @@ bool EventParameters::updateChild(Object* child) {
 			= Event::Cast(PublicObject::Find(eventChild->publicID()));
 		if ( eventElement && eventElement->parent() == this ) {
 			*eventElement = *eventChild;
+			eventElement->update();
 			return true;
 		}
 		return false;

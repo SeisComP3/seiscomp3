@@ -411,6 +411,7 @@ bool Event::updateChild(Object* child) {
 		EventDescription* eventDescriptionElement = eventDescription(eventDescriptionChild->index());
 		if ( eventDescriptionElement != NULL ) {
 			*eventDescriptionElement = *eventDescriptionChild;
+			eventDescriptionElement->update();
 			return true;
 		}
 		return false;
@@ -421,6 +422,7 @@ bool Event::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -431,6 +433,7 @@ bool Event::updateChild(Object* child) {
 		OriginReference* originReferenceElement = originReference(originReferenceChild->index());
 		if ( originReferenceElement != NULL ) {
 			*originReferenceElement = *originReferenceChild;
+			originReferenceElement->update();
 			return true;
 		}
 		return false;
@@ -441,6 +444,7 @@ bool Event::updateChild(Object* child) {
 		FocalMechanismReference* focalMechanismReferenceElement = focalMechanismReference(focalMechanismReferenceChild->index());
 		if ( focalMechanismReferenceElement != NULL ) {
 			*focalMechanismReferenceElement = *focalMechanismReferenceChild;
+			focalMechanismReferenceElement->update();
 			return true;
 		}
 		return false;

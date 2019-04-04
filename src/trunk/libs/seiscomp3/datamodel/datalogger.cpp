@@ -584,6 +584,7 @@ bool Datalogger::updateChild(Object* child) {
 		DataloggerCalibration* dataloggerCalibrationElement = dataloggerCalibration(dataloggerCalibrationChild->index());
 		if ( dataloggerCalibrationElement != NULL ) {
 			*dataloggerCalibrationElement = *dataloggerCalibrationChild;
+			dataloggerCalibrationElement->update();
 			return true;
 		}
 		return false;
@@ -594,6 +595,7 @@ bool Datalogger::updateChild(Object* child) {
 		Decimation* decimationElement = decimation(decimationChild->index());
 		if ( decimationElement != NULL ) {
 			*decimationElement = *decimationChild;
+			decimationElement->update();
 			return true;
 		}
 		return false;

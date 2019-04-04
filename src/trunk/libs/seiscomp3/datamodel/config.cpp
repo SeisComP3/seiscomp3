@@ -167,6 +167,7 @@ bool Config::updateChild(Object* child) {
 			= ParameterSet::Cast(PublicObject::Find(parameterSetChild->publicID()));
 		if ( parameterSetElement && parameterSetElement->parent() == this ) {
 			*parameterSetElement = *parameterSetChild;
+			parameterSetElement->update();
 			return true;
 		}
 		return false;
@@ -178,6 +179,7 @@ bool Config::updateChild(Object* child) {
 			= ConfigModule::Cast(PublicObject::Find(configModuleChild->publicID()));
 		if ( configModuleElement && configModuleElement->parent() == this ) {
 			*configModuleElement = *configModuleChild;
+			configModuleElement->update();
 			return true;
 		}
 		return false;

@@ -165,6 +165,7 @@ bool Routing::updateChild(Object* child) {
 			= Route::Cast(PublicObject::Find(routeChild->publicID()));
 		if ( routeElement && routeElement->parent() == this ) {
 			*routeElement = *routeChild;
+			routeElement->update();
 			return true;
 		}
 		return false;
@@ -175,6 +176,7 @@ bool Routing::updateChild(Object* child) {
 		Access* accessElement = access(accessChild->index());
 		if ( accessElement != NULL ) {
 			*accessElement = *accessChild;
+			accessElement->update();
 			return true;
 		}
 		return false;
