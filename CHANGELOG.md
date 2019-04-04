@@ -1,10 +1,14 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch8
 
 * scquery
 
   * Add example to documentation. Thanks to Tiziana on https://forum.seiscomp3.org
+
+* scamp
+
+  * Fix order of processor setup calls to correctly enable e.g. AMN
 
 * scmv
 
