@@ -453,6 +453,7 @@ bool Magnitude::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -463,6 +464,7 @@ bool Magnitude::updateChild(Object* child) {
 		StationMagnitudeContribution* stationMagnitudeContributionElement = stationMagnitudeContribution(stationMagnitudeContributionChild->index());
 		if ( stationMagnitudeContributionElement != NULL ) {
 			*stationMagnitudeContributionElement = *stationMagnitudeContributionChild;
+			stationMagnitudeContributionElement->update();
 			return true;
 		}
 		return false;

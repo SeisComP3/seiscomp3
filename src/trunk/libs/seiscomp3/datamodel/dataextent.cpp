@@ -452,6 +452,7 @@ bool DataExtent::updateChild(Object* child) {
 		DataSegment* dataSegmentElement = dataSegment(dataSegmentChild->index());
 		if ( dataSegmentElement != NULL ) {
 			*dataSegmentElement = *dataSegmentChild;
+			dataSegmentElement->update();
 			return true;
 		}
 		return false;
@@ -462,6 +463,7 @@ bool DataExtent::updateChild(Object* child) {
 		DataAttributeExtent* dataAttributeExtentElement = dataAttributeExtent(dataAttributeExtentChild->index());
 		if ( dataAttributeExtentElement != NULL ) {
 			*dataAttributeExtentElement = *dataAttributeExtentChild;
+			dataAttributeExtentElement->update();
 			return true;
 		}
 		return false;

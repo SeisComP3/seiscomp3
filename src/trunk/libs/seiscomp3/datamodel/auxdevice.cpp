@@ -428,6 +428,7 @@ bool AuxDevice::updateChild(Object* child) {
 		AuxSource* auxSourceElement = auxSource(auxSourceChild->index());
 		if ( auxSourceElement != NULL ) {
 			*auxSourceElement = *auxSourceChild;
+			auxSourceElement->update();
 			return true;
 		}
 		return false;

@@ -170,6 +170,7 @@ bool QualityControl::updateChild(Object* child) {
 			= QCLog::Cast(PublicObject::Find(qCLogChild->publicID()));
 		if ( qCLogElement && qCLogElement->parent() == this ) {
 			*qCLogElement = *qCLogChild;
+			qCLogElement->update();
 			return true;
 		}
 		return false;
@@ -180,6 +181,7 @@ bool QualityControl::updateChild(Object* child) {
 		WaveformQuality* waveformQualityElement = waveformQuality(waveformQualityChild->index());
 		if ( waveformQualityElement != NULL ) {
 			*waveformQualityElement = *waveformQualityChild;
+			waveformQualityElement->update();
 			return true;
 		}
 		return false;
@@ -190,6 +192,7 @@ bool QualityControl::updateChild(Object* child) {
 		Outage* outageElement = outage(outageChild->index());
 		if ( outageElement != NULL ) {
 			*outageElement = *outageChild;
+			outageElement->update();
 			return true;
 		}
 		return false;

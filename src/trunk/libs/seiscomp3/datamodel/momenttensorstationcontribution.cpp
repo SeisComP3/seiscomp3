@@ -350,6 +350,7 @@ bool MomentTensorStationContribution::updateChild(Object* child) {
 		MomentTensorComponentContribution* momentTensorComponentContributionElement = momentTensorComponentContribution(momentTensorComponentContributionChild->index());
 		if ( momentTensorComponentContributionElement != NULL ) {
 			*momentTensorComponentContributionElement = *momentTensorComponentContributionChild;
+			momentTensorComponentContributionElement->update();
 			return true;
 		}
 		return false;

@@ -205,6 +205,7 @@ bool Inventory::updateChild(Object* child) {
 			= StationGroup::Cast(PublicObject::Find(stationGroupChild->publicID()));
 		if ( stationGroupElement && stationGroupElement->parent() == this ) {
 			*stationGroupElement = *stationGroupChild;
+			stationGroupElement->update();
 			return true;
 		}
 		return false;
@@ -216,6 +217,7 @@ bool Inventory::updateChild(Object* child) {
 			= AuxDevice::Cast(PublicObject::Find(auxDeviceChild->publicID()));
 		if ( auxDeviceElement && auxDeviceElement->parent() == this ) {
 			*auxDeviceElement = *auxDeviceChild;
+			auxDeviceElement->update();
 			return true;
 		}
 		return false;
@@ -227,6 +229,7 @@ bool Inventory::updateChild(Object* child) {
 			= Sensor::Cast(PublicObject::Find(sensorChild->publicID()));
 		if ( sensorElement && sensorElement->parent() == this ) {
 			*sensorElement = *sensorChild;
+			sensorElement->update();
 			return true;
 		}
 		return false;
@@ -238,6 +241,7 @@ bool Inventory::updateChild(Object* child) {
 			= Datalogger::Cast(PublicObject::Find(dataloggerChild->publicID()));
 		if ( dataloggerElement && dataloggerElement->parent() == this ) {
 			*dataloggerElement = *dataloggerChild;
+			dataloggerElement->update();
 			return true;
 		}
 		return false;
@@ -249,6 +253,7 @@ bool Inventory::updateChild(Object* child) {
 			= ResponsePAZ::Cast(PublicObject::Find(responsePAZChild->publicID()));
 		if ( responsePAZElement && responsePAZElement->parent() == this ) {
 			*responsePAZElement = *responsePAZChild;
+			responsePAZElement->update();
 			return true;
 		}
 		return false;
@@ -260,6 +265,7 @@ bool Inventory::updateChild(Object* child) {
 			= ResponseFIR::Cast(PublicObject::Find(responseFIRChild->publicID()));
 		if ( responseFIRElement && responseFIRElement->parent() == this ) {
 			*responseFIRElement = *responseFIRChild;
+			responseFIRElement->update();
 			return true;
 		}
 		return false;
@@ -271,6 +277,7 @@ bool Inventory::updateChild(Object* child) {
 			= ResponseIIR::Cast(PublicObject::Find(responseIIRChild->publicID()));
 		if ( responseIIRElement && responseIIRElement->parent() == this ) {
 			*responseIIRElement = *responseIIRChild;
+			responseIIRElement->update();
 			return true;
 		}
 		return false;
@@ -282,6 +289,7 @@ bool Inventory::updateChild(Object* child) {
 			= ResponsePolynomial::Cast(PublicObject::Find(responsePolynomialChild->publicID()));
 		if ( responsePolynomialElement && responsePolynomialElement->parent() == this ) {
 			*responsePolynomialElement = *responsePolynomialChild;
+			responsePolynomialElement->update();
 			return true;
 		}
 		return false;
@@ -293,6 +301,7 @@ bool Inventory::updateChild(Object* child) {
 			= ResponseFAP::Cast(PublicObject::Find(responseFAPChild->publicID()));
 		if ( responseFAPElement && responseFAPElement->parent() == this ) {
 			*responseFAPElement = *responseFAPChild;
+			responseFAPElement->update();
 			return true;
 		}
 		return false;
@@ -304,6 +313,7 @@ bool Inventory::updateChild(Object* child) {
 			= Network::Cast(PublicObject::Find(networkChild->publicID()));
 		if ( networkElement && networkElement->parent() == this ) {
 			*networkElement = *networkChild;
+			networkElement->update();
 			return true;
 		}
 		return false;

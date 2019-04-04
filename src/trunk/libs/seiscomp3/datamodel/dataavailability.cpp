@@ -160,6 +160,7 @@ bool DataAvailability::updateChild(Object* child) {
 			= DataExtent::Cast(PublicObject::Find(dataExtentChild->publicID()));
 		if ( dataExtentElement && dataExtentElement->parent() == this ) {
 			*dataExtentElement = *dataExtentChild;
+			dataExtentElement->update();
 			return true;
 		}
 		return false;

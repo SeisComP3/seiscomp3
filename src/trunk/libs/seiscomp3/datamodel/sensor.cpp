@@ -537,6 +537,7 @@ bool Sensor::updateChild(Object* child) {
 		SensorCalibration* sensorCalibrationElement = sensorCalibration(sensorCalibrationChild->index());
 		if ( sensorCalibrationElement != NULL ) {
 			*sensorCalibrationElement = *sensorCalibrationChild;
+			sensorCalibrationElement->update();
 			return true;
 		}
 		return false;
