@@ -39,3 +39,16 @@ amplitude is measured in millimeters.
 
 Several distance-value pairs can be configured for different ranges of
 epicenter distance.
+
+
+* Amplitude unit in SeisComP3: **millimeter** (mm)
+* Time window: 150 s by :ref:`scautopick` or distance dependent
+* Default distance range: 0 - 8 deg
+* Depth range: no limitation
+
+Configuration
+-------------
+
+Set the calibration parameters in the global bindings. Add ML to the list of
+magnitudes in the configuration of :ref:`scamp` and :ref:`scmag` for computation
+and in :ref:`scesv` for visibility.

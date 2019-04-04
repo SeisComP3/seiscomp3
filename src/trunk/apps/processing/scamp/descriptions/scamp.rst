@@ -17,20 +17,42 @@ Picks with weight smaller than 0.5 in the corresponding Origin are discarded.
 
 Amplitudes for the following magnitudes are currently computed:
 
-MLv
-   Local magnitude calculated on the vertical component using a correction term to fit with the standard ML.
 
-MLh
-   Local amplitude calculated on the horizontals.
+:term:`MLh <magnitude, local (ML)>`
+   Local magnitude calculated on the vertical component using a correction term
+   to fit with the standard ML
 
-mb
-   Narrow band body wave magnitude using a third order Butterworth filter with corner frequencies of 0.7 and 2.0 Hz. Note that this amplitude is also computed by scautopick for all automatic picks.
+:term:`MLv <magnitude, local vertical (MLv)>`
+   Local magnitude calculated on the vertical component using a correction term
+   to fit with the standard ML
 
-mB
-   Broad band body wave magnitude.
+:term:`MLh <magnitude, local horizontal (MLh)>`
+   Local magnitude calculated on the horizontal components to SED specifications.
 
-Mw(mB)
-   Estimation of the moment magnitude Mw based on mB.
+:term:`MLr <magnitude, local GNS/GEONET (MLr)>`
+   Local magnitude calculated from MLv amplitudes based on GNS/GEONET specifications
+   for New Zealand.
+
+:term:`MN <magnitude, Nuttli (MN)>`
+   Canadian Nuttli magnitude.
+
+:term:`mb <magnitude, body-wave (mb)>`
+   Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
+
+:term:`mB <magnitude, broadband body-wave (mB)>`
+   Broad band body wave magnitude
+
+:term:`Mwp <magnitude, broadband P-wave moment (Mwp)>`
+   The body wave magnitude of Tsuboi et al. (1995)
+
+:term:`Mjma <magnitude, JMA (M_JMA)>`
+   Mjma is computed on displacement data using body waves of period < 30s
+
+:term:`Ms(BB) <magnitude, surface wave (Ms)>`
+   Broad band surface-wave magnitude
+
+:term:`Md <magnitude, duration (Md)>`
+   Duration magnitude as described in https://earthquake.usgs.gov/research/software/#HYPOINVERSE
 
 Note that in order to be used by scmag, the input amplitude names for the
 various magnitude types must match exactly.
