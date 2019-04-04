@@ -35,6 +35,11 @@ distance the magnitude would be
 which is according to the original Richter (1935) formula if the
 amplitude is measured in millimeters.
 
+* Amplitude unit in SeisComP3: **millimeter** (mm)
+* Time window: 150 s by :ref:`scautopick` or distance dependent
+* Default distance range: 0 - 8 deg
+* Depth range: no limitation
+
 Configuration
 -------------
 
@@ -54,3 +59,5 @@ per network or per station using the configuration variables, e.g.
 | or per station:
 | module.trunk.GR.MOX.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
 | module.trunk.GR.MOX.MLv.maxDistanceKm = -1
+
+Set the calibration parameters in the global bindings. MLv is computed by default.

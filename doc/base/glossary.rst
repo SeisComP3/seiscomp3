@@ -302,6 +302,8 @@ is taken from Modern Global Seismology.
       this expectation has proven to be only approximately true, thus the magnitude type as well as its value
       is needed to be specified.
 
+      Additional or modified magnitudes can be computed by providing plugins.
+
    magnitude, local (ML)
       Magnitude scale introduced by Richter in the early 1930s (Richter, 1935) to have a common scale for the
       strength of earthquakes. The basic observation is the systematic decay of the logarithm of the maximum
@@ -327,10 +329,40 @@ is taken from Modern Global Seismology.
       magnitudes around 7 because the maximum amplitudes of larger earthquakes occur at longer periods than
       the bandpass of 0.1 s and 3 s for the magnitude calculation.
 
-      In SeisComP3 a modified local magnitude Mlv is determined by simulation of a Wood-Anderson instrument and then measuring
+      In SeisComP3 a modified local magnitude :term:`MLv <magnitude, local vertical (MLv)>` is determined by simulation of a Wood-Anderson instrument and then measuring
       the amplitude in a 150 s time window on the vertical component of station with distances smaller than 8°.
 
       The amplitude unit in SeisComP3 is **millimeter** (mm).
+
+      Read the :ref:`technical documentation <global_ml>` for the configuration.
+
+   magnitude, local vertical (MLv)
+     The :term:`ML <magnitude, local (ML)>` magnitude with amplitudes measured on
+     the vertical component instead of the horizontals.
+
+     The amplitude unit in SeisComP3 is **millimeter** (mm).
+
+     Read the :ref:`technical documentation <global_mlv>` for the configuration.
+
+   magnitude, local horizontal (MLh)
+      The local magnitude measured on the horizontal components with
+      a modified calibration functions as compared to :term:`ML <magnitude, local (ML)>`.
+
+      The amplitude unit in SeisComP3 is **millimeter** (mm).
+
+      Read the :ref:`technical documentation <global_mlh>` for the configuration.
+
+   magnitude, local GNS/GEONET (MLr)
+      Local magnitude calculated from MLv amplitudes based on GNS/GEONET specifications for New Zealand.
+
+      Read the :ref:`technical documentation <global_mlr>` for the configuration.
+
+   magnitude, Nuttli (MN)
+      Canadian Nuttli magnitude.
+
+      The amplitude unit in SeisComP3 is **meter/second** (m/s).
+
+      Read the :ref:`technical documentation <global_mn>` for the configuration.
 
    magnitude, body-wave (mb)
       Magnitude developed for teleseismic body waves. mb is defined on the amplitude of the first few cycles of the P-wave,
@@ -399,6 +431,11 @@ is taken from Modern Global Seismology.
 
       The amplitude unit in SeisComP3 is **meter per second** (m/s).
 
+   magnitude, duration (Md)
+      The duration magnitude measured on the coda wave train.
+
+      Read the :ref:`technical documentation <global_md>` for the configuration.
+
    magnitude, JMA (M_JMA)
       M(JMA) is a magnitude similar to the Ms, but the formula is calibrated for instruments
       with 5 s period at local distances. The data set for the calibration was gained by the
@@ -434,6 +471,18 @@ is taken from Modern Global Seismology.
       for the source mechanism (Tsuboi et al., 1995).
 
       The amplitude unit in SeisComP3 is **nanometer times second** (nm*s).
+
+   magnitude, derived mB (Mw(mB))
+      Moment magnitude derived from :term:`mB <magnitude, broadband body-wave (mB)>`
+      magnitudes.
+
+      Mw(mB) = 1.30 mB - 2.18
+
+   magnitude, derived Mwp (Mw(Mwp))
+      Moment magnitude derived from :term:`Mwp <magnitude, broadband P-wave moment (Mwp)>`
+      magnitudes.
+
+      Mw(Mwp) = 1.31 Mwp - 1.91
 
    mainshock
       The largest earthquake in a sequence, sometimes preceded by one or more foreshocks,
