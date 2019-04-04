@@ -108,6 +108,13 @@ AmplitudeProcessor_MLh::AmplitudeProcessor_MLh()
 
 AmplitudeProcessor_ML2h::AmplitudeProcessor_ML2h()
 : Processing::AmplitudeProcessor("ML") {
+	setSignalEnd(150.);
+	setMinSNR(0);
+	// Maximum distance is 8 degrees
+	setMaxDist(8);
+	// Maximum depth is 80 km
+	setMaxDepth(80);
+
 	setUsedComponent(Horizontal);
 
 	_combiner = TakeAverage;
