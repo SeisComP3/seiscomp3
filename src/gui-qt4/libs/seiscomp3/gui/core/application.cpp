@@ -1550,17 +1550,37 @@ void Application::messagesAvailable() {
 		emit messageAvailable(msg.get(), nmsg.get());
 
 		NotifierMessage* nm = NotifierMessage::Cast(msg);
-		if ( nm == NULL ) continue;
 
 		if ( isAutoApplyNotifierEnabled() ) {
-			for ( NotifierMessage::iterator it = nm->begin(); it != nm->end(); ++it ) {
-				SEISCOMP_DEBUG("Notifier for '%s'", (*it)->parentID().c_str());
-				(*it)->apply();
+			if ( !nm ) {
+				for ( Core::MessageIterator it = msg->iter(); *it; ++it ) {
+					DataModel::Notifier* n = DataModel::Notifier::Cast(*it);
+					if ( n ) {
+						SEISCOMP_DEBUG("Non persistent notifier for '%s'", n->parentID().c_str());
+						n->apply();
+					}
+				}
+			}
+			else {
+				for ( NotifierMessage::iterator it = nm->begin(); it != nm->end(); ++it ) {
+					SEISCOMP_DEBUG("Notifier for '%s'", (*it)->parentID().c_str());
+					(*it)->apply();
+				}
 			}
 		}
 
-		for ( NotifierMessage::iterator it = nm->begin(); it != nm->end(); ++it )
-			emitNotifier(it->get());
+		if ( !nm ) {
+			for ( Core::MessageIterator it = msg->iter(); *it; ++it ) {
+				DataModel::Notifier* n = DataModel::Notifier::Cast(*it);
+				if ( n ) {
+					emitNotifier(n);
+				}
+			}
+		}
+		else {
+			for ( NotifierMessage::iterator it = nm->begin(); it != nm->end(); ++it )
+				emitNotifier(it->get());
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
