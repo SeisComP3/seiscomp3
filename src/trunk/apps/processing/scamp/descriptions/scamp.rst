@@ -13,7 +13,9 @@ time windows. If there already exists an amplitude, e.g. a previously determined
 one by scautopick, scamp will not measure it again for the respective stream.
 
 Amplitudes are also needed, however, for manual picks. scamp does this as well.
-Picks with weight smaller than 0.5 in the corresponding Origin are discarded.
+Arrivals with weight smaller than 0.5 (default) in the corresponding Origin are
+discarded. This minimum weight can be configured with
+:confval:`amptool.minimumPickWeight`.
 
 Amplitudes for the following magnitudes are currently computed:
 

@@ -7,6 +7,9 @@
 				<description>Definition of magnitude types for which amplitudes are to be calculated.</description>
 			</parameter>
 			<group name="amptool">
+				<parameter name="minimumPickWeight" type="double" default="0.5">
+					<description>The minimum arrival weight within an origin to compute amplitudes for the associated pick.</description>
+				</parameter>
 				<parameter name="initialAcquisitionTimeout" type="double" default="30" unit="s">
 					<description>Timeout in seconds of the first data packet of waveform data acquisition.</description>
 				</parameter>
