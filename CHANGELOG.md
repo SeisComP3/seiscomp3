@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* Seedlink Q330 plugin
+
+  * Reverted upgrade to revision 99 which caused a segmentation fault. We
+    will investigate into the issue and contact the authors of the library.
+    For the time being we downgrade to the last working version.
+
 ## Release 2018.327 patch8
 
 * scquery
