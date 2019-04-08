@@ -187,34 +187,21 @@ end
 void getbuf (pq330 q330, pointer *p, integer size)
 begin
   pbyte newblock ;
-  pmem_manager pm ;
-
-  pm = q330->cur_memory ;
 
   size = (size + 3) and 0xFFFFFFFC ; /* make multiple of longword */
-  if ((pm->sofar + size) > pm->alloc_size)
+  if ((q330->cur_memory->sofar + size) > q330->cur_memory->alloc_size)
     then
       begin /* need a new block of memory */
-        if (q330->cur_memory->next)
+        q330->cur_memory->next = malloc (sizeof(tmem_manager)) ;
+        q330->cur_memory = q330->cur_memory->next ;
+        q330->cur_memory->next = NIL ;
+        if (size > DEFAULT_MEM_INC)
           then
-            begin /* already available from before */
-              q330->cur_memory = q330->cur_memory->next ;
-              q330->cur_memory->sofar = 0 ;
-            end
+            q330->cur_memory->alloc_size = size ;
           else
-            begin /* need new allocation */
-              pm->next = malloc (sizeof(tmem_manager)) ;
-              pm = pm->next ;
-              pm->next = NIL ;
-              if (size > DEFAULT_MEM_INC)
-                then
-                  pm->alloc_size = size ;
-                else
-                  pm->alloc_size = DEFAULT_MEM_INC ;
-              pm->sofar = 0 ;
-              pm->base = malloc (pm->alloc_size) ;
-              q330->cur_memory = pm ;
-            end
+            q330->cur_memory->alloc_size = DEFAULT_MEM_INC ;
+        q330->cur_memory->sofar = 0 ;
+        q330->cur_memory->base = malloc (q330->cur_memory->alloc_size) ;
       end
   newblock = q330->cur_memory->base ;
   incn(newblock, q330->cur_memory->sofar) ;
@@ -716,8 +703,8 @@ begin
   q330->status_timeout = DEFAULT_STATUS_TIMEOUT ;
   q330->status_timeout_retry = DEFAULT_STATUS_TIMEOUT_RETRY ;
   q330->piu_retry = DEFAULT_PIU_RETRY ;
-  getthrbuf (q330, (pointer *)addr(q330->cfgbuf), sizeof(tcfgbuf)) ;
-  getthrbuf (q330, (pointer *)addr(q330->cbuf), sizeof(tcbuf)) ;
+  getthrbuf (q330, addr(q330->cfgbuf), sizeof(tcfgbuf)) ;
+  getthrbuf (q330, addr(q330->cbuf), sizeof(tcbuf)) ;
   init_md5_buffer (q330) ;
   q330->aqstruc = allocate_aqstruc (q330) ;
   allocate_packetbuffers (q330) ;
@@ -787,9 +774,9 @@ end
 enum tliberr lib_register_330 (pq330 q330, tpar_register *rpar)
 begin
 
-  memset (addr(q330->first_clear), 0, (pntrint)addr(q330->last_clear) - (pntrint)addr(q330->first_clear)) ;
+  memset (addr(q330->first_clear), 0, (longint)addr(q330->last_clear) - (longint)addr(q330->first_clear)) ;
   memset (addr(q330->share.first_share_clear), 0,
-       (pntrint)addr(q330->share.last_share_clear) - (pntrint)addr(q330->share.first_share_clear)) ;
+       (longint)addr(q330->share.last_share_clear) - (longint)addr(q330->share.first_share_clear)) ;
   memcpy (addr(q330->par_register), rpar, sizeof(tpar_register)) ;
   q330->share.opstat.gps_age = -1 ;
   q330->tcp = (q330->par_register.host_mode == HOST_TCP) ;
@@ -812,9 +799,9 @@ enum tliberr lib_unregping_330 (pq330 q330, tpar_register *rpar)
 begin
 
   lock (q330) ;
-  memset (addr(q330->first_clear), 0, (pntrint)addr(q330->last_clear) - (pntrint)addr(q330->first_clear)) ;
+  memset (addr(q330->first_clear), 0, (longint)addr(q330->last_clear) - (longint)addr(q330->first_clear)) ;
   memset (addr(q330->share.first_share_clear), 0,
-       (pntrint)addr(q330->share.last_share_clear) - (pntrint)addr(q330->share.first_share_clear)) ;
+       (longint)addr(q330->share.last_share_clear) - (longint)addr(q330->share.first_share_clear)) ;
   memcpy (addr(q330->par_register), rpar, sizeof(tpar_register)) ;
   q330->share.opstat.gps_age = -1 ;
   q330->usesock = (q330->par_register.host_mode == HOST_ETH) ;

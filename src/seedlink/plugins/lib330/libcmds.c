@@ -293,7 +293,7 @@ begin
                 unlock (q330) ;
                 break ;
             end
-        lth = (integer)((pntrint)p - (pntrint)pref) ; /* length of data */
+        lth = (longint)p - (longint)pref ; /* length of data */
         p = addr(pc->cmsgout.qdp) ;
         plth = p ;
         incn(plth, 6) ; /* point at length */
@@ -361,7 +361,7 @@ begin
         end
         msglth = QDP_HDR_LTH + lth ;
         p = addr(pc->cmsgout.qdp) ;
-        storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((pntrint)p + 4), msglth - 4)) ;
+        storelongint (addr(p), gcrccalc (addr(q330->crc_table), (pointer)((integer)p + 4), msglth - 4)) ;
         if (q330->cur_verbosity and VERB_PACKET)
           then
             begin /* log the message sent */
@@ -385,7 +385,7 @@ begin
               if (q330->tcp)
                 then
                   begin
-                    p = (pointer)((pntrint)addr(pc->cmsgout.qdp) - 4) ;
+                    p = (pointer)((integer)addr(pc->cmsgout.qdp) - 4) ;
                     pref = p ; /* save start of tcp packet */
                     storeword (addr(p), 0) ; /* control port */
                     storeword (addr(p), msglth) ; /* qdp length */
