@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch9
 
 * Seedlink Q330 plugin
 
