@@ -94,9 +94,11 @@ MAKEENUM(
 		DISTANCE,
 		AZIMUTH,
 		TIME,
-		SLOWNESS,
-		BACKAZIMUTH,
 		UNCERTAINTY,
+		SLOWNESS,
+		SLOWNESS_RESIDUAL,
+		BACKAZIMUTH,
+		BACKAZIMUTH_RESIDUAL,
 		CREATED,
 		LATENCY
 	),
@@ -111,13 +113,15 @@ MAKEENUM(
 		"Net",
 		"Sta",
 		"Loc/Cha",
-		"Res",
+		"Timeres",
 		"Dis",
 		"Az",
 		"Time",
-		"Slo",
-		"Baz",
 		"+/-",
+		"Slo",
+		"Slores",
+		"Baz",
+		"Bazres",
 		"Created",
 		"Latency"
 	)
@@ -186,7 +190,6 @@ QVariant colAligns[ArrivalListColumns::Quantity] = {
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter),
-	int(Qt::AlignLeft | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter)
 };
 
@@ -207,6 +210,10 @@ bool colVisibility[ArrivalListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	false,
+	false,
+	false,
+	false,
 	false,
 	false
 };
@@ -1376,42 +1383,40 @@ ArrivalModel::ArrivalModel(DataModel::Origin* origin, QObject *parent)
 
 	_disabledForeground = Qt::gray;
 
-	for ( int i = 0; i < ArrivalListColumns::Quantity; ++i )
-		if ( i == DISTANCE ) {
-			if ( SCScheme.unit.distanceInKM )
-				_header << QString("%1 (km)").arg(EArrivalListColumnsNames::name(i));
-			else
+	for ( int i = 0; i < ArrivalListColumns::Quantity; ++i ) {
+		switch ( i ) {
+			case DISTANCE:
+				if ( SCScheme.unit.distanceInKM )
+					_header << QString("%1 (km)").arg(EArrivalListColumnsNames::name(i));
+				else
+					_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case RESIDUAL:
+			case UNCERTAINTY:
+			case LATENCY:
+				_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case SLOWNESS:
+			case SLOWNESS_RESIDUAL:
+				_header << QString("%1 (s/°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case AZIMUTH:
+			case TAKEOFF:
+			case BACKAZIMUTH:
+			case BACKAZIMUTH_RESIDUAL:
 				_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case TIME:
+				if ( SCScheme.dateTime.useLocalTime )
+					_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+				else
+					_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			default:
+				_header << EArrivalListColumnsNames::name(i);
+				break;
 		}
-		else if ( i == RESIDUAL ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == UNCERTAINTY ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == LATENCY ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == SLOWNESS ) {
-			_header << QString("%1 (s/°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == AZIMUTH ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == TAKEOFF ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == BACKAZIMUTH ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == TIME ) {
-			if ( SCScheme.dateTime.useLocalTime )
-				_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
-			else
-				_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else
-			_header << EArrivalListColumnsNames::name(i);
+	}
 
 	setOrigin(origin);
 }
@@ -1588,25 +1593,6 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return timeToString(pick->time().value(), _pickTimeFormat.c_str());
 				break;
 
-			case BACKAZIMUTH:
-				pick = Pick::Cast(PublicObject::Find(a->pickID()));
-				try {
-					if ( pick )
-						return pick->backazimuth().value();
-				}
-				catch ( ValueException& ) {}
-				break;
-
-			case SLOWNESS:
-				pick = Pick::Cast(PublicObject::Find(a->pickID()));
-				try {
-					if ( pick )
-						return pick->horizontalSlowness().value();
-				}
-				catch ( ValueException& ) {}
-				break;
-
-			// Picktime
 			case UNCERTAINTY:
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick ) {
@@ -1631,6 +1617,40 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 			case RESIDUAL:
 				try {
 					snprintf(buf, 10, "%.2f", a->timeResidual());
+					return buf;
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case BACKAZIMUTH:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->backazimuth().value();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case BACKAZIMUTH_RESIDUAL:
+				try {
+					snprintf(buf, 10, "%.1f", a->backazimuthResidual());
+					return buf;
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case SLOWNESS:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->horizontalSlowness().value();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case SLOWNESS_RESIDUAL:
+				try {
+					snprintf(buf, 10, "%.2f", a->horizontalSlownessResidual());
 					return buf;
 				}
 				catch ( ValueException& ) {}
