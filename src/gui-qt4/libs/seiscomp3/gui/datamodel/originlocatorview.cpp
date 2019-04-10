@@ -369,6 +369,10 @@ class CommitOptions : public QDialog {
 			ui.comboOriginStates->addItem("- unset -");
 			for ( int i = (int)EvaluationStatus::First; i < (int)EvaluationStatus::Quantity; ++i )
 				ui.comboOriginStates->addItem(EvaluationStatus::NameDispatcher::name(i));
+
+			ui.comboEQComment->addItem("");
+			ui.comboEQComment->setEditable(true);
+			ui.comboEQComment->setVisible(false);
 		}
 
 	public:
@@ -5829,6 +5833,21 @@ void OriginLocatorView::commitWithOptions() {
 	}
 	catch ( ... ) {}
 
+	vector<string> commentOptions;
+	try {
+		commentOptions = SCApp->configGetStrings("olv.commit.eventCommentOptions");
+		if ( !commentOptions.empty() ) {
+			dlg.ui.editEQComment->setVisible(false);
+			dlg.ui.comboEQComment->setVisible(true);
+
+			for ( vector<string>::const_iterator it = commentOptions.begin();
+			      it != commentOptions.end(); ++it ) {
+				dlg.ui.comboEQComment->addItem(it->c_str());
+			}
+		}
+	}
+	catch ( ... ) {}
+
 	try {
 		dlg.ui.cbBackToEventList->setChecked(SCApp->configGetBool("olv.commit.returnToEventList"));
 	}
@@ -5883,7 +5902,27 @@ void OriginLocatorView::commitWithOptions() {
 		for ( size_t i = 0; i < _baseEvent->commentCount(); ++i ) {
 			if ( _baseEvent->comment(i)->id() == "Operator" ) {
 				eqComment = _baseEvent->comment(i)->text();
-				dlg.ui.editEQComment->setText(eqComment.c_str());
+				if ( commentOptions.empty() ) {
+					dlg.ui.editEQComment->setText(eqComment.c_str());
+				}
+				else if ( !eqComment.empty() ) {
+					// search for current comment in list of available options,
+					// add and select it in case it is not present
+					int idx = -1, i = 1;
+					for ( vector<string>::const_iterator it = commentOptions.begin();
+					      it != commentOptions.end(); ++it, ++i ) {
+						if ( *it == eqComment ) {
+							idx = i;
+							break;
+						}
+					}
+					if ( idx < 0 ) {
+						dlg.ui.comboEQComment->insertItem(1, eqComment.c_str());
+						idx = 1;
+					}
+					dlg.ui.comboEQComment->setCurrentIndex(idx);
+				}
+
 				break;
 			}
 		}
@@ -5947,9 +5986,11 @@ void OriginLocatorView::commitWithOptions() {
 
 		bool ok = true;
 
-		if ( ok && eqComment != dlg.ui.editEQComment->text().toStdString() ) {
-			eqComment = dlg.ui.editEQComment->text().toStdString();
-			ok = sendJournal(_baseEvent->publicID(), "EvOpComment", eqComment);
+		string newEQComment = commentOptions.empty()?
+		                      dlg.ui.editEQComment->text().toStdString() :
+		                      dlg.ui.comboEQComment->currentText().toStdString();
+		if ( ok && eqComment != newEQComment ) {
+			ok = sendJournal(_baseEvent->publicID(), "EvOpComment", newEQComment);
 		}
 
 		if ( ok && eqName != dlg.ui.editEQName->text().toStdString() ) {

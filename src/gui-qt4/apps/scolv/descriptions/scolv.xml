@@ -216,6 +216,13 @@
 						additional options or not.
 						</description>
 					</parameter>
+					<parameter name="eventCommentOptions" type="list:string">
+						<description>
+							Turns the event comment input field into a drop down box
+							allowing the user to select from a list a predefined comment
+							values which may be changed if required.
+						</description>
+					</parameter>
 				</group>
 			</group>
 			<group name="picker">

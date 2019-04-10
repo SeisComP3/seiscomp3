@@ -202,7 +202,7 @@
       <item>
        <widget class="QLabel" name="labelEQComment" >
         <property name="text" >
-         <string>Comment:</string>
+         <string>Event comment 'Operator':</string>
         </property>
        </widget>
       </item>
@@ -212,6 +212,9 @@
          <number>160</number>
         </property>
        </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboEQComment" />
       </item>
      </layout>
     </widget>
