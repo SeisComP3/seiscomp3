@@ -8,6 +8,10 @@
     will investigate into the issue and contact the authors of the library.
     For the time being we downgrade to the last working version.
 
+* scautoloc
+
+  * Fixed a bug that occasionally caused scautoloc to segfault.
+
 ## Release 2018.327 patch8
 
 * scquery
