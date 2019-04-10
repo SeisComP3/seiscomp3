@@ -329,11 +329,18 @@ void Origin::geoProperties(double &min, double &max, double &gap) const
 			azi.push_back(arrivals[i].azimuth);
 		}
 	}
+	if (azi.size() == 0) {
+		// This may happen if for whatever reason all arrivals
+		// are excluded.
+		gap = 360.;
+		min = max = 0.;
+		return;
+	}
 
 	std::sort(azi.begin(), azi.end());
-	azi.push_back(azi.front()+360.0);
+	azi.push_back(azi.front()+360.);
 
-	gap = 0.0;
+	gap = 0.;
 
 	for ( size_t i = 0; i < azi.size()-1; ++i ) {
 		double azGap = azi[i+1]-azi[i];
