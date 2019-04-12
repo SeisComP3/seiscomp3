@@ -11,6 +11,10 @@
 
   * Fixed a bug that occasionally caused scautoloc to segfault.
 
+* scautopick
+
+  * Add playback option to module configuration
+
 * scolv
 
   * Fixed a bug that caused scolv to crash if the weight of an arrival is not set
@@ -44,14 +48,17 @@
 * scbulletin
 
   * Fix evaluation of command line option ```--weight```
+  * Show only station magnitudes associated with network magnitudes
+  * Remove amplitude type filter and output all amplitudes which are associated with printed
+    station magnitudes
+
+* scxmldump
+
+  * Export all pick amplitudes if station magnitudes should be omitted
 
 * msrtsimul
 
   * Add documentation
-
-* scautopick
-
-  * Add playback option to module configuration
 
 ## Release 2018.327 patch9
 
@@ -60,10 +67,6 @@
   * Reverted upgrade to revision 99 which caused a segmentation fault. We
     will investigate into the issue and contact the authors of the library.
     For the time being we downgrade to the last working version.
-
-* scautoloc
-
-  * Fixed a bug that occasionally caused scautoloc to segfault.
 
 ## Release 2018.327 patch8
 
@@ -102,7 +105,7 @@
     with ```amplitudes.MLv.measureType```.
   * Added ```amplitudes.ML.combiner``` to configure how the amplitudes of either
     horizontal component are combined to the final amplitude.
-  * Added blockette 1001 when writing miniSEED with MSeedRecord
+  * Add blockette 1001 when writing miniSEED with MSeedRecord
   * Fixed Hypo71 bug that caused a crash if no phase was part of a solution
 
 ## Release 2018.327 patch6
@@ -322,7 +325,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 
 * scbulletin
 
-  * In enhanced mode all coordinates and distances have precisions 
+  * In enhanced mode all coordinates and distances have precisions
     of e-05 degree
 
 * scart
@@ -402,14 +405,6 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Fix potential security issue
 
 ## Release 2017.334 patch6
-
-* scesv
-
-  * Add new script option ```exportMap``` that allows to export the current map to
-    file. The script has to take ownership of the file. This option is disabled by
-    default.
-
-## Release 2017.334 patch5
 
 * scesv
 
@@ -564,7 +559,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
 * GUI
 
   * Add StandardLegend class to create map legends in an easy way
-  * Add support for map legend descriptions in map layer configuration 
+  * Add support for map legend descriptions in map layer configuration
 
 ## Release 2017.334 patch1
 
@@ -1364,7 +1359,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
    ```
    annotations = true
    annotionsWithChannels = false
-   ``` 
+   ```
 
 * scrttv
 
@@ -1429,7 +1424,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
  * Added warning to trace if not metadata are available
  * Added option to cycle through filters with keyboard
  * Do not show acquisition error box if acquisition has been cancelled by user
- 
+
 * tabinvmodifier
 
  * Fixed Python return codes for event handlers
