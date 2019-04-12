@@ -2065,7 +2065,13 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 		// If the timeUsed attribute is not set then it looks like an origin
 		// created with an older version. So use the weight value to decide
 		// whether the pick is active or not.
-		if ( fabs(arrival->weight()) < 1E-6 ) {
+		double weight = 0.0;
+		try {
+			weight = fabs(arrival->weight());
+		}
+		catch ( ... ) {}
+
+		if ( weight < 1E-6 ) {
 			setBackazimuthUsed(row, false);
 			setHorizontalSlownessUsed(row, false);
 			setTimeUsed(row, false);
