@@ -12,6 +12,14 @@
 
   * Fixed a bug that occasionally caused scautoloc to segfault.
 
+* scolv
+
+  * Fixed a bug that caused scolv to crash if the weight of an arrival is not set
+  * Added two new optional columns to arrival table: slowness residual and back azimuth residual
+  * Added option ```olv.commit.eventCommentOptions``` to defined predefined event comment values
+    which can be selected from a drop-down list
+  * Allow to sort the "Used" column in arrival table
+
 ## Release 2018.327 patch8
 
 * scquery
