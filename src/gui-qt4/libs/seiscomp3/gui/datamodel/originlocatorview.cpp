@@ -272,6 +272,10 @@ class ArrivalsSortFilterProxyModel : public QSortFilterProxyModel {
 			     (left.column() == WEIGHT && right.column() == WEIGHT) )
 				return sourceModel()->data(left, Qt::UserRole).toDouble() <
 				       sourceModel()->data(right, Qt::UserRole).toDouble();
+			else if ( left.column() == USED && right.column() == USED ) {
+				return sourceModel()->data(left, UsedRole).toInt() <
+				       sourceModel()->data(right, UsedRole).toInt();
+			}
 			else
 				return QSortFilterProxyModel::lessThan(left, right);
 		}
