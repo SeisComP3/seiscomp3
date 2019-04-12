@@ -19,6 +19,7 @@
   * Added option ```olv.commit.eventCommentOptions``` to defined predefined event comment values
     which can be selected from a drop-down list
   * Allow to sort the "Used" column in arrival table
+  * Update map residual colors and residual plot rect if the magnitude was recomputed
 
 ## Release 2018.327 patch8
 
