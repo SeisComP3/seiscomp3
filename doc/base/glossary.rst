@@ -387,7 +387,9 @@ is taken from Modern Global Seismology.
       In SeisComP3 mb is determined by simulation of a WWSSN short-period seismometer and then measuring the amplitudes in
       a 30 s time window at stations in the distance range of 5° to 105°.
 
-      The amplitude unit in SeisComP3 is **nanometer** (nm).
+      * Amplitude unit in SeisComP3 is **nanometer** (nm)
+      * Distance range: 5 - 105°
+      * Time window: 30 s
 
    magnitude, broadband body-wave (mB)
       mB is a magnitude based on body waves like mb, but the amplitude is measured in a broad
@@ -405,9 +407,11 @@ is taken from Modern Global Seismology.
 
       .. math::
 
-         l = min(11.5 \Delta, 60)
+         t = min(11.5 \Delta, 60)
 
-      The amplitude unit in SeisComP3 is **nanometer per second** (nm/s).
+      * Amplitude unit in SeisComP3 is **nanometer per second** (nm/s)
+      * Distance range: 5 - 105°
+      * Time window: 60 s if set by :ref:`scautopick`, otherwise the minimum of 60 s and 11.5 s/° * distance in degree
 
    magnitude, surface wave (Ms)
       Ms is a magnitude scale based on teleseismic surface waves. Ms is based on measurements of
@@ -428,9 +432,12 @@ is taken from Modern Global Seismology.
 
       Here the maximum ground particle velocity (A/T)max is used instead of the AHmax to
       allow a broader spectrum of dominant periods. This formula is valid for distances of
-      2° to 160° and source depth smaller than 50 km.
+      2° to 160° and source depths smaller than 50 km.
 
-      The amplitude unit in SeisComP3 is **meter per second** (m/s).
+      * Amplitude unit in SeisComP3 is **meter per second** (m/s)
+      * Distance range: 2 - 160°
+      * Depth range: 0 - 100 km
+      * Time window: distance (km) / 3.5 km/s + 30 s
 
    magnitude, duration (Md)
       The duration magnitude measured on the coda wave train.
@@ -449,13 +456,17 @@ is taken from Modern Global Seismology.
       This equation is valid for local (< 2000 km) and shallow (< 80 km) earthquakes. For
       deeper earthquakes additional correction functions have to be applied (Katsumata, 1996).
 
-      The amplitude unit in SeisComP3 is **micrometer** (um).
+      * Amplitude unit in SeisComP3 is **micrometer** (um)
+      * Time window: 150 s
+      * Epicentral distance range: 0 - 20°
+      * Depth range: 0 - 80 km
 
    magnitude, moment (Mw)
       The moment magnitude is a magnitude scale related to the seismic moment M\ :sub:`0` and
       thus to the released seismic energy.
-      To obtain the Mw the seismic moment is first determined, e.g. by a moment tensor inversion.
-      Then the Mw is gained by the following relationship between seismic moment and the moment magnitude (units in cgs):
+      To obtain Mw the seismic moment is first determined, e.g. by a moment tensor inversion.
+      Then the Mw is gained by the following standard relationship between seismic moment
+      and the moment magnitude (M\ :sub:`0` in cgs units of dyn*cm):
 
       .. math::
 
@@ -471,17 +482,19 @@ is taken from Modern Global Seismology.
       of multiple records results in an estimation of the moment magnitude without correction
       for the source mechanism (Tsuboi et al., 1995).
 
-      The amplitude unit in SeisComP3 is **nanometer times second** (nm*s).
+      * Amplitude unit in SeisComP3 is **nanometer times second** (nm*s)
+      * Time window: 95 s
+      * Epicentral distance range: 5 - 105°
 
    magnitude, derived mB (Mw(mB))
       Moment magnitude derived from :term:`mB <magnitude, broadband body-wave (mB)>`
-      magnitudes.
+      magnitudes using linear conversion:
 
       Mw(mB) = 1.30 mB - 2.18
 
    magnitude, derived Mwp (Mw(Mwp))
       Moment magnitude derived from :term:`Mwp <magnitude, broadband P-wave moment (Mwp)>`
-      magnitudes.
+      magnitudes using linear conversion after Whitmore et al. (2002):
 
       Mw(Mwp) = 1.31 Mwp - 1.91
 
@@ -841,7 +854,7 @@ is taken from Modern Global Seismology.
       horizontal offset of geologic markers.
 
    slowness
-      The inverse of velocity, given in the unit seconds/degree or s/km; a large
+      The inverse of velocity, given in the unit seconds/° or s/km; a large
       slowness corresponds to a low velocity.
 
    SNR
