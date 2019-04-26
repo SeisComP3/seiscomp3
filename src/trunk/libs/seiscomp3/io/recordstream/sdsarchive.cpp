@@ -415,7 +415,6 @@ bool SDSArchive::isEnd() {
 	char buffer[sizeof(struct fsdh_s)];
 	struct fsdh_s *fsdh = (struct fsdh_s *)buffer;
 	Time rectime;
-	int year, month, day;
 	Time etime = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
 
 	if ( !istr.read(buffer, sizeof(struct fsdh_s)) ) {
@@ -427,18 +426,34 @@ bool SDSArchive::isEnd() {
 	istr.seekg(strpos);
 
 	/* Check to see if byte swapping is needed (bogus year makes good test) */
-	if ((fsdh->start_time.year < 1900) || (fsdh->start_time.year > 2050)) {
+	if ( (fsdh->start_time.year < 1900) || (fsdh->start_time.year > 2050) ) {
 		ms_gswap2(&fsdh->start_time.year);
 		ms_gswap2(&fsdh->start_time.day);
 		ms_gswap2(&fsdh->start_time.fract);
+		ms_gswap4(&fsdh->time_correct);
 	}
 
-	rectime = Time::FromYearDay(fsdh->start_time.year,fsdh->start_time.day);
-	rectime.get(&year,&month,&day);
-	rectime.set(year,month,day,(int)fsdh->start_time.hour,(int)fsdh->start_time.min,
-	            (int)fsdh->start_time.sec,(int)fsdh->start_time.fract);
+	hptime_t starttime = ms_btime2hptime(&fsdh->start_time);
 
-	if (rectime > etime) {
+	/* Check if a correction is included and if it has been applied,
+	   bit 1 of activity flags indicates if it has been applied */
+	if ( fsdh->time_correct != 0 && !(fsdh->act_flags & 0x02) ) {
+		starttime += (hptime_t) fsdh->time_correct * (HPTMODULUS / 10000);
+	}
+
+	/* Reduce to Unix/POSIX epoch time and fractional seconds */
+	int64_t isec = MS_HPTIME2EPOCH(starttime);
+	int ifract = (int) (starttime - (isec * HPTMODULUS));
+
+	/* Adjust for negative epoch times */
+	if ( starttime < 0 && ifract != 0 ) {
+		isec -= 1;
+		ifract = HPTMODULUS - (-ifract);
+	}
+
+	rectime = Time(isec, ifract);
+
+	if ( rectime > etime ) {
 		SEISCOMP_DEBUG("- after endtime");
 		istr.clear(ios::eofbit);
 		return true;
