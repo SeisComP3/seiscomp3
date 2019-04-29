@@ -317,7 +317,7 @@ double RecordSequence::availability(const Core::TimeWindow &tw) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-GenericRecord *RecordSequence::continuousRecord(const Core::TimeWindow *tw, bool interpolate) const {
+GenericRecord *RecordSequence::contiguousRecord(const Core::TimeWindow *tw, bool interpolate) const {
 	if ( empty() ) return NULL;
 
 	RecordCPtr lastRec;
@@ -403,6 +403,16 @@ GenericRecord *RecordSequence::continuousRecord(const Core::TimeWindow *tw, bool
 		rawRecord->setData(rawData.get());
 
 	return rawRecord;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename T>
+GenericRecord *RecordSequence::continuousRecord(const Core::TimeWindow *tw, bool interpolate) const {
+	return contiguousRecord<T>(tw, interpolate);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -634,6 +644,16 @@ RecordSequence *RingBuffer::clone() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Specialize contiguousRecord for int, float and double
+template
+GenericRecord *RecordSequence::contiguousRecord<int>(const Core::TimeWindow *tw, bool interpolate) const;
+
+template
+GenericRecord *RecordSequence::contiguousRecord<float>(const Core::TimeWindow *tw, bool interpolate) const;
+
+template
+GenericRecord *RecordSequence::contiguousRecord<double>(const Core::TimeWindow *tw, bool interpolate) const;
+
 // Specialize continuousRecord for int, float and double
 template
 GenericRecord *RecordSequence::continuousRecord<int>(const Core::TimeWindow *tw, bool interpolate) const;
