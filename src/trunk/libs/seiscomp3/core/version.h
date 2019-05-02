@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(12, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(12, 1, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x0C0000
+#define SC_API_VERSION 0x0C0100
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -39,7 +39,6 @@ namespace Core {
  API Changelog
  ******************************************************************************
  "12.1.0"   0x0C0100
-   - Added ArtificialEventParametersMessage
    - Fixed RecordWidget emitting of traceUpdated signal if the record slot to
      be shown has changed
    - Added non-const RecordWidget::traceInfo method
