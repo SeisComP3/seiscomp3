@@ -2,11 +2,10 @@
 
 ## Release YYYY.ddd
 
-* Seedlink Q330 plugin
+* trunk
 
-  * Reverted upgrade to revision 99 which caused a segmentation fault. We
-    will investigate into the issue and contact the authors of the library.
-    For the time being we downgrade to the last working version.
+  * Fixed SDS archive bug (recordstream sdsarchive://) which caused incomplete data retrieval
+    under some circumstances
 
 * scautoloc
 
@@ -20,6 +19,27 @@
     which can be selected from a drop-down list
   * Allow to sort the "Used" column in arrival table
   * Update map residual colors and residual plot rect if the magnitude was recomputed
+
+* scquery
+
+  * Add more examples to query events and some statistics from the database 
+
+* scmag
+
+  * Load inventory which is necessary for magnitude implementation which require access to
+    station meta data
+
+* nuttli plugin
+
+  * Fixed magnitude computation which caused invalid values being treated as valid values
+
+## Release 2018.327 patch9
+
+* Seedlink Q330 plugin
+
+  * Reverted upgrade to revision 99 which caused a segmentation fault. We
+    will investigate into the issue and contact the authors of the library.
+    For the time being we downgrade to the last working version.
 
 ## Release 2018.327 patch8
 
