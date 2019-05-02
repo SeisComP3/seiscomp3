@@ -76,16 +76,6 @@ MNMagnitude::computeMagnitude(double amplitude,
 	// forward the magnitude for association with weight 0.
 	_validValue = false;
 
-	if ( period <= 0.01 || period >= 1.3 ) {
-		status = PeriodOutOfRange;
-		_validValue = true;
-	}
-
-	if ( snr <= 2 ) {
-		status = SNROutOfRange;
-		_validValue = true;
-	}
-
 	// Both objects are required to make sure that they both lie inside the
 	// configured region.
 	if ( hypocenter == NULL || receiver == NULL )
@@ -115,13 +105,6 @@ MNMagnitude::computeMagnitude(double amplitude,
 		return MetaDataRequired;
 	}
 
-	if ( dist <= 0.5 ) {
-		// Forward close magnitudes but associate
-		// them with zero weight
-		status = DistanceOutOfRange;
-		_validValue = true;
-	}
-
 	if ( dist >= 30 )
 		return DistanceOutOfRange;
 
@@ -140,6 +123,23 @@ MNMagnitude::computeMagnitude(double amplitude,
 	         receiver->latitude(), receiver->longitude()
 	      ) )
 		return RayPathOutOfRegions;
+
+	if ( period <= 0.01 || period >= 1.3 ) {
+		status = PeriodOutOfRange;
+		_validValue = true;
+	}
+
+	if ( snr <= 2 ) {
+		status = SNROutOfRange;
+		_validValue = true;
+	}
+
+	if ( dist <= 0.5 ) {
+		// Forward close magnitudes but associate
+		// them with zero weight
+		status = DistanceOutOfRange;
+		_validValue = true;
+	}
 
 	// Convert m/s to um/s
 	amplitude *= 1E6;
