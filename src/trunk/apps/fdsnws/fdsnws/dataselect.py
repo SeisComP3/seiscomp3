@@ -537,7 +537,13 @@ class FDSNDataSelect(resource.Resource):
 		# iterate over inventory networks
 		for s in ro.streams:
 			for net in self._networkIter(s):
+				netRestricted = utils.isRestricted(net)
+				if not tracker and netRestricted and not self.__user:
+					continue
 				for sta in self._stationIter(net, s):
+					staRestricted = utils.isRestricted(sta)
+					if not tracker and staRestricted and not self.__user:
+						continue
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
 							try:
@@ -552,7 +558,8 @@ class FDSNDataSelect(resource.Resource):
 							except Exception:
 								end_time = s.time.end
 
-							if utils.isRestricted(cha) and \
+							if ( netRestricted or staRestricted or \
+							     utils.isRestricted(cha) ) and \
 							    (not self.__user or (self.__access and
 							     not self.__access.authorize(self.__user,
 							         net.code(), sta.code(), loc.code(),
