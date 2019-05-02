@@ -534,6 +534,12 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 		bool passedQC = true;
 
 		if ( status != MagnitudeProcessor::OK ) {
+			SEISCOMP_DEBUG("Magnitude failed: sid=%s.%s.%s.%s, type=%s, error=%s",
+			                 ampl->waveformID().networkCode().c_str(),
+			                 ampl->waveformID().stationCode().c_str(),
+			                 ampl->waveformID().locationCode().c_str(),
+			                 ampl->waveformID().channelCode().c_str(),
+			                 ampl->type().c_str(), status.toString());
 			if ( !it->second->treatAsValidMagnitude() )
 				continue;
 			passedQC = false;
@@ -984,9 +990,7 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 	PickStreamMap pickStreamMap;
 
 	// find associated picks and amplitudes:
-	for (int i=0, arrivalCount = origin->arrivalCount();
-	     i < arrivalCount; i++) {
-
+	for ( int i = 0, arrivalCount = origin->arrivalCount(); i < arrivalCount; ++i ) {
 		const DataModel::Arrival *arr = origin->arrival(i);
 
 		const string &pickID = arr->pickID();
@@ -1032,7 +1036,9 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 		try {
 			sloc = Client::Inventory::Instance()->getSensorLocation(pick.get());
 		}
-		catch ( ... ) {
+		catch ( ... ) {}
+
+		if ( !sloc ) {
 			SEISCOMP_WARNING("No sensor location meta data for pick %s",
 			                 pick->publicID().c_str());
 		}

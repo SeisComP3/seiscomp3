@@ -35,9 +35,7 @@ using namespace Seiscomp::IO;
 class MagToolApp : public Seiscomp::Client::Application {
 	public:
 		MagToolApp(int argc, char **argv)
-		 : Application(argc, argv),
-		   _expiry(3*3600.) {
-
+		: Application(argc, argv), _expiry(3*3600.) {
 			_fExpiry = 1.0;
 			_interval = 1;
 
@@ -49,6 +47,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 			setAutoApplyNotifierEnabled(true);
 			setInterpretNotifierEnabled(true);
 
+			setLoadStationsEnabled(true);
 			setLoadConfigModuleEnabled(true);
 
 			setPrimaryMessagingGroup("MAGNITUDE");
