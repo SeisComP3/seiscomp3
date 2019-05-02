@@ -25,13 +25,10 @@
 #include <queue>
 #include <boost/version.hpp>
 #include <boost/thread.hpp>
-#if (BOOST_VERSION < 104000)
-#include <boost/signal.hpp>
-namespace bsig = boost;
-#else
 #include <boost/signals2.hpp>
+
+
 namespace bsig = boost::signals2;
-#endif
 
 
 namespace Seiscomp {

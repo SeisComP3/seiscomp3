@@ -183,7 +183,7 @@ begin
     then
       begin
         p = addr(pocstr->pkt.qdp) ;
-        thiscrc = gcrccalc (addr(pocstr->crc_table), (pointer)((pntrint)p + 4), err - 4) ;
+        thiscrc = gcrccalc (addr(pocstr->crc_table), (pointer)((integer)p + 4), err - 4) ;
         loadqdphdr (addr(p), addr(pocstr->recvhdr)) ;
         if ((thiscrc == pocstr->recvhdr.crc) land (pocstr->recvhdr.command == C2_POC))
           then

@@ -17,7 +17,7 @@
 # minimum weight is now configurable and not fixed to 0.5 that remains the default value.
 # If assigning --weight 0.0, scbulletin will count and write out all the picks that where
 # associated to the corresponding location
-# By default minweight = 0.5 and scbulletin reports only picks with small residuals.
+# By default minArrivalWeight = 0.5 and scbulletin reports only picks with small residuals.
 #
 # 2017/11/02 Dirk Roessler
 # enhanced option: High-precision output for bulletins with precisions given in
@@ -31,9 +31,6 @@
 
 import sys, traceback
 import seiscomp3.Client, seiscomp3.Seismology
-
-minDepthPhaseCount = 3
-minweight = 0.5
 
 def time2str(time):
     """
@@ -67,9 +64,22 @@ def stationCount(org):
     for i in xrange(org.arrivalCount()):
         arr = org.arrival(i)
         #   if arr.weight()> 0.5:
-        if arr.weight()> minweight:
+        if arr.weight()> minArrivalWeight:
             count += 1
     return count
+
+
+def uncertainty(quantity):
+    # for convenience/readability: get uncertainty from a quantity
+    try:
+        err = 0.5*(quantity.lowerUncertainty()+quantity.upperUncertainty())
+    except:
+        try:
+            err = quantity.uncertainty()
+        except:
+            err = None
+
+    return err
 
 
 
@@ -84,6 +94,10 @@ class Bulletin(object):
         self.polarities = False
         self.useEventAgencyID = False
         self.distInKM = False
+        self.minDepthPhaseCount = 3
+        self.minArrivalWeight = 0.5
+        self.minStationMagnitudeWeight = 0.5
+
 
     def _getDistancesArrivalsSorted(self, org):
         # sort arrival list by distance
@@ -138,7 +152,7 @@ class Bulletin(object):
                 wt  = arr.weight()
                 pha = arr.phase().code()
                 #  if (pha[0] in ["p","s"] and wt >= 0.5 ):
-                if (pha[0] in ["p","s"] and wt >= minweight ):
+                if (pha[0] in ["p","s"] and wt >= self.minArrivalWeight ):
                     depthPhaseCount += 1
 
         txt = ""
@@ -175,22 +189,10 @@ class Bulletin(object):
         lat = org.latitude().value()
         lon = org.longitude().value()
         dep = org.depth().value()
-        try: timerr = 0.5*(org.time().lowerUncertainty()+org.time().upperUncertainty())
-        except:
-            try: timerr = org.time().uncertainty()
-            except: timerr = None
-        try: laterr = 0.5*(org.latitude().lowerUncertainty()+org.latitude().upperUncertainty())
-        except:
-            try: laterr = org.latitude().uncertainty()
-            except: laterr = None
-        try: lonerr = 0.5*(org.longitude().lowerUncertainty()+org.longitude().upperUncertainty())
-        except:
-            try: lonerr = org.longitude().uncertainty()
-            except: lonerr = None
-        try: deperr = 0.5*(org.depth().lowerUncertainty()+org.depth().upperUncertainty())
-        except:
-            try: deperr = org.depth().uncertainty()
-            except: deperr = None
+        timerr = uncertainty(org.time())
+        laterr = uncertainty(org.latitude())
+        lonerr = uncertainty(org.longitude())
+        deperr = uncertainty(org.depth())
         tstr = time2str(tim)
 
         originHeader = "Origin:\n"
@@ -242,7 +244,7 @@ class Bulletin(object):
         elif deperr==0:
             txt +="   (fixed)\n"
         else:
-            if depthPhaseCount >= minDepthPhaseCount:
+            if depthPhaseCount >= self.minDepthPhaseCount:
                 if self.enhanced:
                     txt += "   +/- %8.3f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
                 else:
@@ -293,34 +295,36 @@ class Bulletin(object):
 
         txt += "\n"
 
-        netmag = {}
-        nmag = org.magnitudeCount()
+        networkMagnitudeCount = org.magnitudeCount()
+        networkMagnitudes = {}
+
+        # Each station magnitude contributes to the network
+        # magnitude of the same type.
+        #
+        # We save here the StationMagnitudeContribution objects
+        # by publicID of the corresponding StationMagnitude object.
+        stationMagnitudeContributions = {}
+
         tmptxt = txt
         txt = ""
         foundPrefMag = False
-        for i in xrange(nmag):
+        for i in xrange(networkMagnitudeCount):
             mag = org.magnitude(i)
             val = mag.magnitude().value()
             typ = mag.type()
-            netmag[typ] = mag
-            err = ""
+            networkMagnitudes[typ] = mag
 
-            # FIXME vvv
-            # This test is necessary because if lowerUncertainty/upperUncertainty
-            # are not set, the resulting C++ exception is currently not propagated
-            # to Python and therefore cannot be caught, resulting in a crash.
-            if mag.stationCount() >= 4:
-                # This only works as long as 4 is the minimum magnitude count for
-                # which errors are computed by scmag.
-                # FIXME ^^^
-                try:
-                    m = mag.magnitude()
-                    try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
-                    except: err = "+/- %.2f" % m.uncertainty()
-                except ValueError:
-                    pass # just don't write any error, that's it
-                except Exception, e:
-                    sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
+            for k in xrange(mag.stationMagnitudeContributionCount()):
+                smc = mag.stationMagnitudeContribution(k)
+                smid = smc.stationMagnitudeID()
+                stationMagnitudeContributions[smid] = smc
+
+            err = uncertainty(mag.magnitude())
+            if err is not None:
+                err = "+/- %.2f" % err
+            else:
+                err = ""
+
             if mag.publicID() == preferredMagnitudeID:
                     preferredMarker = "preferred"
                     foundPrefMag = True
@@ -342,17 +346,14 @@ class Bulletin(object):
             if mag:
                 val = mag.magnitude().value()
                 typ = mag.type()
-                netmag[typ] = mag
-                err = ""
+                networkMagnitudes[typ] = mag
 
-                try:
-                    m = mag.magnitude()
-                    try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
-                    except: err = "+/- %.2f" % m.uncertainty()
-                except ValueError:
-                    pass # just don't write any error, that's it
-                except Exception, e:
-                    sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
+                err = uncertainty(mag.magnitude())
+                if err is not None:
+                    err = "+/- %.2f" % err
+                else:
+                    err = ""
+
                 preferredMarker = "preferred"
                 if extra:
                     try: agencyID = mag.creationInfo().agencyID()
@@ -361,9 +362,8 @@ class Bulletin(object):
                     agencyID = ""
                 txt += "    %-8s %5.2f %8s %3d %s  %s\n" % \
                         (typ, val, err, mag.stationCount(), preferredMarker, agencyID)
-                nmag = nmag + 1
 
-        txt = tmptxt + "%d Network magnitudes:\n" % nmag + txt
+        txt = tmptxt + "%d Network magnitudes:\n" % networkMagnitudeCount + txt
 
         if not self._long:
             return txt
@@ -440,18 +440,23 @@ class Bulletin(object):
             txt += line
         txt += "\n"
 
-        nmag = org.stationMagnitudeCount()
-        mags = {}
+        stationMagnitudeCount = org.stationMagnitudeCount()
+        stationMagnitudes = {}
 
-        for i in xrange(nmag):
+        for i in xrange(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
-            if typ not in netmag: continue
-            if typ not in mags:
-                mags[typ] = []
+            if typ not in networkMagnitudes:
+                continue
+            if typ not in stationMagnitudes:
+                stationMagnitudes[typ] = []
 
-            mags[typ].append(mag)
-
+            # suppress unused station magnitudes
+            smid = mag.publicID()
+            w = stationMagnitudeContributions[smid].weight()
+            if w < self.minStationMagnitudeWeight:
+                continue
+            stationMagnitudes[typ].append(mag)
 
 
         lineFMT = "    %-5s %-2s  "
@@ -463,18 +468,12 @@ class Bulletin(object):
 
         lines = []
 
-        for typ in mags:
-            for mag in mags[typ]:
+        for typ in stationMagnitudes:
+            for mag in stationMagnitudes[typ]:
 
                 key = mag.amplitudeID()
                 amp = seiscomp3.DataModel.Amplitude.Find(key)
                 if amp is None and self._dbq:
-                    # Bei einem manuellen Pick muss eine gefundene, automatische
-                    # Amplitude in eine neue, "manuelle" Amplitude gefaked werden,
-                    # die dann auf den manuellen Pick verweist. -> MagTool
-                    #
-                    # Oder man verzichtet auf das Faken und gibt die Amplitude
-                    # einfach als N/A an.
                     seiscomp3.Logging.debug("missing station amplitude '%s'" % key)
 
                     # FIXME really slow!!!
@@ -502,14 +501,14 @@ class Bulletin(object):
                 except: dist, azi = 0, "  N/A" if self.enhanced else "N/A"
 
                 val = mag.magnitude().value()
-                res = val - netmag[typ].magnitude().value()
+                res = val - networkMagnitudes[typ].magnitude().value()
 
                 line = lineFMT % (sta, net, dist, azi, typ, val, res, a, p)
                 lines.append( (dist, line ) )
 
         lines.sort()
 
-        txt += "%d Station magnitudes:\n" % nmag
+        txt += "%d Station magnitudes:\n" % stationMagnitudeCount
         if self.enhanced:
             txt += "    sta   net      dist   azi  type   value   res        amp  per\n"
         else:
@@ -570,8 +569,8 @@ class Bulletin(object):
         tmp["mval"] = 0.
 
         foundMag = False
-        nmag = org.magnitudeCount()
-        for i in xrange( org.magnitudeCount() ):
+        networkMagnitudeCount = org.magnitudeCount()
+        for i in xrange(networkMagnitudeCount):
             mag = org.magnitude(i)
             if mag.publicID() == prefMagID:
                 if mag.type() in ["mb","mB","Mwp","ML","MLv", "Mjma"]:
@@ -623,17 +622,17 @@ class Bulletin(object):
         pick = self._getPicks(org)
         ampl = self._getAmplitudes(org)
 
-        mags = {}
-        nmag = org.stationMagnitudeCount()
-        for i in xrange(nmag):
+        stationMagnitudeCount = org.stationMagnitudeCount()
+        stationMagnitudes = {}
+        for i in xrange(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
             if typ == "MLv": typ = "ML"
-            if typ not in mags:
-                mags[typ] = {}
+            if typ not in stationMagnitudes:
+                stationMagnitudes[typ] = {}
 
             sta = mag.waveformID().stationCode()
-            mags[typ][sta] = mag
+            stationMagnitudes[typ][sta] = mag
 
         lineFMT = "  %-5s %-2s  %s  %10.1f %4.1f %s "
         if self.enhanced:
@@ -643,7 +642,7 @@ class Bulletin(object):
         lineFMT += " %s%s\n"
 
         for dist, arr in dist_arr:
-            if arr.weight() < minweight :
+            if arr.weight() < self.minArrivalWeight:
                 continue
 
             p = seiscomp3.DataModel.Pick.Find(arr.pickID())
@@ -672,7 +671,7 @@ class Bulletin(object):
             for typ in ["mb","ML","mB"]:
                 mag = 0.
                 try:
-                    m = mags[typ][sta]
+                    m = stationMagnitudes[typ][sta]
                     mag = m.magnitude().value()
                     if typ=="mb":
                         ampid = m.amplitudeID()
@@ -839,13 +838,11 @@ class BulletinApp(seiscomp3.Client.Application):
             else:
                 dbq = None
 
-
             try: mw = self.commandline().optionString("weight")
             except: pass
 
             if mw != "" and mw is not None:
-                global minweight
-                minweight = float(mw)
+                self.minArrivalWeight = float(mw)
 
             bulletin = Bulletin(dbq)
             bulletin.format = "autoloc1"

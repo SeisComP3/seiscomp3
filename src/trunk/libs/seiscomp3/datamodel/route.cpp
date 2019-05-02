@@ -405,6 +405,7 @@ bool Route::updateChild(Object* child) {
 		RouteArclink* routeArclinkElement = routeArclink(routeArclinkChild->index());
 		if ( routeArclinkElement != NULL ) {
 			*routeArclinkElement = *routeArclinkChild;
+			routeArclinkElement->update();
 			return true;
 		}
 		return false;
@@ -415,6 +416,7 @@ bool Route::updateChild(Object* child) {
 		RouteSeedlink* routeSeedlinkElement = routeSeedlink(routeSeedlinkChild->index());
 		if ( routeSeedlinkElement != NULL ) {
 			*routeSeedlinkElement = *routeSeedlinkChild;
+			routeSeedlinkElement->update();
 			return true;
 		}
 		return false;

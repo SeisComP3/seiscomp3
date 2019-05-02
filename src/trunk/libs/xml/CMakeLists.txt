@@ -79,3 +79,13 @@ FILES
 DESTINATION
 	${SC3_PACKAGE_SHARE_DIR}/xml/0.10
 )
+
+# 0.11
+INSTALL(
+FILES
+	0.11/sc3ml_0.11.xsd
+	0.11/sc3ml_0.11__quakeml_1.2.xsl
+	0.11/sc3ml_0.11__quakeml_1.2-RT.xsl
+DESTINATION
+	${SC3_PACKAGE_SHARE_DIR}/xml/0.11
+)

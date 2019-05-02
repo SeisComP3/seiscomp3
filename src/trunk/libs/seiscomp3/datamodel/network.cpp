@@ -588,6 +588,7 @@ bool Network::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -599,6 +600,7 @@ bool Network::updateChild(Object* child) {
 			= Station::Cast(PublicObject::Find(stationChild->publicID()));
 		if ( stationElement && stationElement->parent() == this ) {
 			*stationElement = *stationChild;
+			stationElement->update();
 			return true;
 		}
 		return false;

@@ -18,6 +18,9 @@
 %ignore *::operator++;
 %ignore *::operator[];
 
+%newobject Seiscomp::Core::MetaProperty::createClass;
+%newobject Seiscomp::Core::MetaProperty::arrayObject;
+
 %include "seiscomp3/core.h"
 %import "seiscomp3/core/factory.h"
 %include std_string.i
@@ -25,6 +28,7 @@
 %include "seiscomp3/core/archive.h"
 %include "seiscomp3/core/io.h"
 %include "seiscomp3/core/rtti.h"
+%include "seiscomp3/core/metaobject.h"
 %include "seiscomp3/core/defs.h"
 
 %apply int *OUTPUT { int *year, int *month, int *day,

@@ -3115,17 +3115,20 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[106]
 #define SWIGTYPE_p_TagType swig_types[107]
 #define SWIGTYPE_p_Type swig_types[108]
-#define SWIGTYPE_p_char swig_types[109]
-#define SWIGTYPE_p_const_iterator swig_types[110]
-#define SWIGTYPE_p_int swig_types[111]
-#define SWIGTYPE_p_int64_t swig_types[112]
-#define SWIGTYPE_p_iterator swig_types[113]
-#define SWIGTYPE_p_long swig_types[114]
-#define SWIGTYPE_p_p_Seiscomp__Communication__NetworkMessage swig_types[115]
-#define SWIGTYPE_p_p_Seiscomp__Communication__ServiceMessage swig_types[116]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[117]
-static swig_type_info *swig_types[119];
-static swig_module_info swig_module = {swig_types, 118, 0, 0, 0, 0};
+#define SWIGTYPE_p_boost__any swig_types[109]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[110]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[111]
+#define SWIGTYPE_p_char swig_types[112]
+#define SWIGTYPE_p_const_iterator swig_types[113]
+#define SWIGTYPE_p_int swig_types[114]
+#define SWIGTYPE_p_int64_t swig_types[115]
+#define SWIGTYPE_p_iterator swig_types[116]
+#define SWIGTYPE_p_long swig_types[117]
+#define SWIGTYPE_p_p_Seiscomp__Communication__NetworkMessage swig_types[118]
+#define SWIGTYPE_p_p_Seiscomp__Communication__ServiceMessage swig_types[119]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[120]
+static swig_type_info *swig_types[122];
+static swig_module_info swig_module = {swig_types, 121, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -16591,6 +16594,9 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t = 
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__string_t = {"_p_Seiscomp__TypedArrayT_std__string_t", "Seiscomp::StringArray *|Seiscomp::TypedArray< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__any = {"_p_boost__any", "Seiscomp::Core::MetaValue *|boost::any *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t = {"_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t", "boost::shared_ptr< Seiscomp::Core::MetaObject > *|Seiscomp::Core::MetaObjectHandle *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t = {"_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t", "Seiscomp::Core::MetaPropertyHandle *|boost::shared_ptr< Seiscomp::Core::MetaProperty > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
@@ -16711,6 +16717,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__TypedArrayT_std__string_t,
   &_swigt__p_TagType,
   &_swigt__p_Type,
+  &_swigt__p_boost__any,
+  &_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t,
+  &_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t,
   &_swigt__p_char,
   &_swigt__p_const_iterator,
   &_swigt__p_int,
@@ -16831,6 +16840,9 @@ static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__complexT_float_t_t[] 
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__string_t[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TagType[] = {  {&_swigt__p_TagType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__any[] = {  {&_swigt__p_boost__any, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t[] = {  {&_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t[] = {  {&_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
@@ -16951,6 +16963,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__TypedArrayT_std__string_t,
   _swigc__p_TagType,
   _swigc__p_Type,
+  _swigc__p_boost__any,
+  _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t,
+  _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t,
   _swigc__p_char,
   _swigc__p_const_iterator,
   _swigc__p_int,

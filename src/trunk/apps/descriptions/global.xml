@@ -656,11 +656,38 @@
 				<group name="ML">
 					<parameter name="absMax" type="boolean" default="true">
 						<description>
-						Whether to use the absolute maximum of the filtered trace
-						for ML amplitudes, such as MLv, MLh and ML or the
-						difference of the maximum and minimum value of the
-						signal window. Basically this parameter is valid for all
-						amplitudes that use the MLv processing component.
+						Whether to use the absolute maximum of the filtered WA
+						trace or the difference of the maximum and minimum value
+						of the signal window.
+						</description>
+					</parameter>
+					<parameter name="measureType" type="string" default="AbsMax">
+						<description>
+						This parameter allows to set how the amplitude is measured.
+						Either by finding the absolute maximum of the demeaned
+						trace (AbsMax), the difference of maximum and minimum of
+						the signal window (MinMax) or the maximum peak-trough
+						of one cycle (PeakTrough).
+
+						Note that if absMax is already explicitly configured, this
+						parameter has no effect.
+						</description>
+					</parameter>
+					<parameter name="combiner" type="string" default="average">
+						<description>
+						Defines the combiner operation for the amplitudes measured
+						on either both horizontal component. The default is to
+						use the average. Allowed values are: &quot;average&quot;,
+						&quot;min&quot; and &quot;max&quot;.
+						</description>
+					</parameter>
+				</group>
+				<group name="MLv">
+					<parameter name="absMax" type="boolean" default="true">
+						<description>
+						Whether to use the absolute maximum of the filtered WA
+						trace or the difference of the maximum and minimum value
+						of the signal window.
 						</description>
 					</parameter>
 					<parameter name="measureType" type="string" default="AbsMax">
@@ -876,10 +903,10 @@
 					<parameter name="filterPoles" type="int" default="2">
 						<description>Number of poles.</description>
 					</parameter>
-					<parameter name="f1" type="double" default="5">
+					<parameter name="f1" type="double" default="5" unit="Hz">
 						<description>Bandpass lower cutoff freq. in Hz.</description>
 					</parameter>
-					<parameter name="f2" type="double" default="20">
+					<parameter name="f2" type="double" default="20" unit="Hz">
 						<description>Bandpass upper cutoff freq. in Hz.</description>
 					</parameter>
 					<parameter name="thrshl1" type="double" default="10">
@@ -931,7 +958,9 @@
 			<group name="spicker">
 				<group name="L2">
 					<description>
-					L2 is a algorithm to pick S-phases.
+					L2 is an algorithm to pick S-phases based on existing P-phases. The
+					picker interface name to be used in configuration files is
+					&quot;S-L2&quot;.
 					</description>
 					<parameter name="noiseBegin" type="double" default="-10" unit="s">
 						<description>

@@ -11,10 +11,13 @@
  ***************************************************************************/
 
 
+#define SEISCOMP_COMPONENT Locator
 
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/gui/core/locator.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/client/inventory.h>
+#include <seiscomp3/utils/timer.h>
 #include <seiscomp3/seismology/locsat.h>
 
 
@@ -43,7 +46,10 @@ DataModel::Origin* relocate(Seismology::LocatorInterface *locator, DataModel::Or
 	std::string errorMsg;
 
 	try {
+		Util::StopWatch stopWatch;
 		newOrg = locator->relocate(origin);
+		double elapsed = stopWatch.elapsed();
+		SEISCOMP_DEBUG("Locator took %fms", elapsed*1E3);
 		if ( newOrg )
 			return newOrg;
 
@@ -95,7 +101,10 @@ DataModel::Origin* relocate(Seismology::LocatorInterface *locator, DataModel::Or
 	tmp->setDepth(DataModel::RealQuantity(11.0));
 	tmp->setTime(picks.front().pick->time());
 
+	Util::StopWatch stopWatch;
 	newOrg = locator->relocate(tmp.get());
+	double elapsed = stopWatch.elapsed();
+	SEISCOMP_DEBUG("Locator took %fms", elapsed*1E3);
 
 	if ( newOrg )
 		return newOrg;

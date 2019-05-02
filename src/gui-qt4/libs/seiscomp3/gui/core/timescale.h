@@ -50,7 +50,7 @@ class SC_GUI_API TimeScale : public Ruler {
 		                 int line, QString &str) const;
 		void updateIntervals();
 
-	private:
+	protected:
 		Core::Time  _alignment;
 		bool        _showAbsoluteValues;
 		bool        _showAbsoluteDate;

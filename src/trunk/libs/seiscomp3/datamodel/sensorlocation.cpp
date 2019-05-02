@@ -456,6 +456,7 @@ bool SensorLocation::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -466,6 +467,7 @@ bool SensorLocation::updateChild(Object* child) {
 		AuxStream* auxStreamElement = auxStream(auxStreamChild->index());
 		if ( auxStreamElement != NULL ) {
 			*auxStreamElement = *auxStreamChild;
+			auxStreamElement->update();
 			return true;
 		}
 		return false;
@@ -477,6 +479,7 @@ bool SensorLocation::updateChild(Object* child) {
 			= Stream::Cast(PublicObject::Find(streamChild->publicID()));
 		if ( streamElement && streamElement->parent() == this ) {
 			*streamElement = *streamChild;
+			streamElement->update();
 			return true;
 		}
 		return false;

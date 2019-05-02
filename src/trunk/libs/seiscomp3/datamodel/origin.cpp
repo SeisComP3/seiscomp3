@@ -705,6 +705,7 @@ bool Origin::updateChild(Object* child) {
 		Comment* commentElement = comment(commentChild->index());
 		if ( commentElement != NULL ) {
 			*commentElement = *commentChild;
+			commentElement->update();
 			return true;
 		}
 		return false;
@@ -717,6 +718,7 @@ bool Origin::updateChild(Object* child) {
 		Arrival* arrivalElement = arrival(arrivalChild->index());
 		if ( arrivalElement != NULL ) {
 			*arrivalElement = *arrivalChild;
+			arrivalElement->update();
 			return true;
 		}
 		return false;
@@ -728,6 +730,7 @@ bool Origin::updateChild(Object* child) {
 			= StationMagnitude::Cast(PublicObject::Find(stationMagnitudeChild->publicID()));
 		if ( stationMagnitudeElement && stationMagnitudeElement->parent() == this ) {
 			*stationMagnitudeElement = *stationMagnitudeChild;
+			stationMagnitudeElement->update();
 			return true;
 		}
 		return false;
@@ -739,6 +742,7 @@ bool Origin::updateChild(Object* child) {
 			= Magnitude::Cast(PublicObject::Find(magnitudeChild->publicID()));
 		if ( magnitudeElement && magnitudeElement->parent() == this ) {
 			*magnitudeElement = *magnitudeChild;
+			magnitudeElement->update();
 			return true;
 		}
 		return false;

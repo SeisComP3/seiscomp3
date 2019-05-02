@@ -207,7 +207,8 @@ void Autoloc3::_flush()
 				B  = _config.publicationIntervalTimeIntercept,
 				dt = A*N + B;
 
-			if (dt < 0 || _config.playback) {
+//			if (dt < 0 || _config.playback) {
+			if (dt < 0) {
 				_nextDue[id] = 0;
 				SEISCOMP_INFO("Autoloc3::_flush() origin=%ld  next due IMMEDIATELY", id);
 			}
@@ -237,8 +238,12 @@ bool Autoloc3::_blacklisted(const Pick *pick) const
 
 void Autoloc3::_setBlacklisted(const Pick *pick, bool yes)
 {
-	if (yes)
+	if (yes) {
+		SEISCOMP_INFO_S("process pick BLACKLISTING " + pick->id + " (manual pick)");
+		// FIXME: memory leak!
 		_blacklist.insert(pick);
+		return;
+	}
 	// TODO else
 }
 
@@ -424,32 +429,31 @@ bool Autoloc3::feed(Origin *origin)
 		return true;
 	}
 
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	// At this point, any origin that was not imported is expected to be manual.
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// At this point, any origin that was NOT IMPORTED is expected to be MANUAL.
 
-	// If the origin comes without arrivals, we cannot use it for anything
-	if ( origin->arrivals.size() == 0 ) {
+	const Origin *manualOrigin = origin;
+
+	if ( manualOrigin->arrivals.size() == 0 ) {
 		SEISCOMP_WARNING("Ignoring manual origin without arrivals");
 		return false;
 	}
 
-	SEISCOMP_INFO("processing manual origin z=%g   dtype=%d", origin->dep, origin->depthType);
+	SEISCOMP_INFO("processing manual origin z=%.3fkm   dtype=%d", manualOrigin->dep, manualOrigin->depthType);
 
 	// Look for a matching (autoloc) origin. Our intention is to find the
 	// best-matching origin and merge it with the just received manual
 	// origin (adopt picks, fixed focal depth etc.)
-	Origin *found = _findMatchingOrigin(origin);
+	Origin *found = _findMatchingOrigin(manualOrigin);
 
 	if (found) {
-		SEISCOMP_DEBUG("found matching origin with id=%ld", found->id);
+		SEISCOMP_DEBUG("found matching origin with id=%ld  z=%.3fkm", found->id, found->dep);
 
 		// update existing origin with information from received origin
-		unsigned long id = found->id;
+		OriginID id = found->id;
 		ArrivalVector arrivals;
 
-		for(unsigned int i=0; i<origin->arrivals.size(); i++) {
-			Arrival arr = origin->arrivals[i];
+		for(unsigned int i=0; i<manualOrigin->arrivals.size(); i++) {
+			Arrival arr = manualOrigin->arrivals[i];
 			if ( ! arr.pick->station())
 				continue;
 			arrivals.push_back(arr);
@@ -458,15 +462,18 @@ bool Autoloc3::feed(Origin *origin)
 		// merge origin
 		for(unsigned int i=0; i<found->arrivals.size(); i++) {
 			Arrival arr = found->arrivals[i];
-			if ( ! arr.pick->station())
+			if ( ! arr.pick->station()) {
+				// This should actually NEVER happen at this point...
+				SEISCOMP_ERROR("Arrival referencing a pick without station information");
 				continue;
+			}
 
 			// Do we have an arrival for this station already?
 			// We have to look for arrivals that either reference the same pick
 			// or arrivals for the same station/phase combination. The latter
 			// is still risky if two nearby picks of the same onset are assigned
 			// different phase codes, e.g. P/Pn or P/PKP; in that case we end up
-			// both picks forming part of the solution.
+			// with both picks forming part of the solution.
 			bool have=false;
 			for(unsigned int k=0; k<arrivals.size(); k++) {
 				Arrival _arr = arrivals[k];
@@ -487,23 +494,27 @@ bool Autoloc3::feed(Origin *origin)
 		}
 		arrivals.sort();
 
-		*found = *origin;
+		*found = *manualOrigin;
 		found->arrivals = arrivals;
 		found->id = id;
 
-		// TODO: consider making this relocation optional
-		if (origin->depthType == Origin::DepthManuallyFixed) {
-			bool fixedDepth = true;
-			_relocator.useFixedDepth(fixedDepth);
+		switch (manualOrigin->depthType) {
+		case Origin::DepthManuallyFixed:
+			_relocator.useFixedDepth(true);
+			break;
+		case Origin::DepthPhases:
+		case Origin::DepthFree:
+		default:
+			_relocator.useFixedDepth(false);
 		}
 
+		// TODO: consider making this relocation optional
 		OriginPtr relo = _relocator.relocate(found);
 		if (relo) {
 			found->updateFrom(relo.get());
 		}
 		else
 			SEISCOMP_WARNING("RELOCATION FAILED @Autoloc3::feed(Origin*) (not critical)");
-
 
 		_store(found);
 		report();
@@ -684,6 +695,9 @@ Origin *Autoloc3::merge(const Origin *origin1, const Origin *origin2)
 #ifdef LOG_RELOCATOR_CALLS
 	SEISCOMP_DEBUG("RELOCATE autoloc.cpp line %d", __LINE__);
 #endif
+	// This was previously missing:
+	_relocator.useFixedDepth(false);  // TODO: extensive testing!
+
 	OriginPtr relo = _relocator.relocate(combined);
 	if ( ! relo) {
 		// Actually we expect the relocation to always succeed,
@@ -1204,7 +1218,7 @@ bool Autoloc3::_process(const Pick *pick)
 {
 	// process a pick
 
-	if ( !valid(pick) ) {
+	if ( ! valid(pick) ) {
 		SEISCOMP_DEBUG("invalid pick %-35s", pick->id.c_str());
 		return false;
 	}
@@ -1218,7 +1232,7 @@ bool Autoloc3::_process(const Pick *pick)
 		const_cast<Pick*>(pick)->xxl = true;
 	}
 
-	double normalizationAmplitude = 2000.; // rather arbitrary choice
+	double normalizationAmplitude = 2000.; // arbitrary choice: TODO: review, perhaps make configurable
 	if ( _config.xxlEnabled )
 		normalizationAmplitude = _config.xxlMinAmplitude;
 	const_cast<Pick*>(pick)->normamp = pick->amp/normalizationAmplitude;
@@ -1237,18 +1251,22 @@ bool Autoloc3::_process(const Pick *pick)
 		return false;
 	}
 
-	if ( !_config.useManualPicks && manual(pick) && ! _config.useManualOrigins ) {
-		SEISCOMP_INFO_S("process pick BLACKLISTING " + pick->id + " (manual pick)");
-		_setBlacklisted(pick);
-		return false;
+	if ( manual(pick) ) {
+
+		if ( ! _config.useManualPicks) {
+			if ( _config.useManualOrigins ) {
+				// If we want to consider only associated manual picks,
+				// i.e. picks that come along with a manual origin that
+				// uses them, we stop here because we don't want to feed
+				// it into the associator/nucleator.
+				return true;
+			}
+			else {
+				_setBlacklisted(pick);
+				return false;
+			}
+		}
 	}
-
-	if ( !_config.useManualPicks && manual(pick))
-		// If we want to consider only associated manual picks,
-		// i.e. picks that come along with an origin that uses them,
-		// we stop here because we don't want to feed it into the associator/nucleator
-		return true;
-
 
 	SEISCOMP_INFO("process pick %-35s %s", pick->id.c_str(), (pick->xxl ? " XXL":""));
 
@@ -1260,7 +1278,7 @@ bool Autoloc3::_process(const Pick *pick)
 
 
 
-	// try to associate pick to some existing origin
+	// try to associate this pick to some existing origin
 
 	OriginPtr origin;
 	origin = _tryAssociate(pick);
@@ -1279,11 +1297,9 @@ bool Autoloc3::_process(const Pick *pick)
 			origin = NULL;
 	}
 
-//	if (associatedOriginLargestScore > _config.mi_reworknScoreBypassNucleator)
 	if ( origin && origin->score >= _config.minScoreBypassNucleator )
 		return true;  // bypass the nucleator
 
-	//
 	// The following will only be executed if the association with an
 	// existing origin failed or if the score of the best associated
 	// origin s too small.
@@ -1291,11 +1307,11 @@ bool Autoloc3::_process(const Pick *pick)
 	// In that case, feed the new pick to the nucleator.
 	// The result may be several candidate origins; in a loop we examine
 	// each of them until the result is satisfactory.
-	//
 
 	if ( origin ) {
-		// feed the pick to the Nucleator but ignore result
-// XXX XXX XXX		_tryNucleate(pick);
+		// Feed the pick to the Nucleator but ignore result
+		// TODO: Review!
+		// _tryNucleate(pick);
 		return true;
 	}
 
@@ -1308,21 +1324,24 @@ bool Autoloc3::_process(const Pick *pick)
 		}
 	}
 
-	// if up to now we haven't successfully procesed the new pick,
-	// finally try the XXL hack
+	// If up to now we haven't successfully procesed the new pick,
+	// finally try the XXL hack (if enabled).
 
-	origin = _xxlPreliminaryOrigin(pick);
-	if ( origin ) {
-		OriginPtr equivalent = _findEquivalent(origin.get());
-		if (equivalent) {
-			equivalent->updateFrom(origin.get());
-			origin = equivalent;
-		}
+	if (_config.xxlEnabled) {
 
-		_rework(origin.get());
-		if ( _passedFilter(origin.get()) ) {
-			_store(origin.get());
-			return true;
+		OriginPtr origin = _xxlPreliminaryOrigin(pick);
+		if ( origin ) {
+			OriginPtr equivalent = _findEquivalent(origin.get());
+			if (equivalent) {
+				equivalent->updateFrom(origin.get());
+				origin = equivalent;
+			}
+
+			_rework(origin.get());
+			if ( _passedFilter(origin.get()) ) {
+				_store(origin.get());
+				return true;
+			}
 		}
 	}
 
@@ -1555,8 +1574,7 @@ bool Autoloc3::_rework(Origin *origin)
 	bool enforceDefaultDepth = false;
 	bool adoptManualDepth = false;
 
-// TODO TODO TODO TODO TODO
-// put all this depth related stuff into _setTheRightDepth()
+	// TODO: put all this depth related stuff into _setTheRightDepth()
 	if (_config.adoptManualDepth && (
 			origin->depthType == Origin::DepthManuallyFixed ||
 			origin->depthType == Origin::DepthPhases ) ) {
@@ -1820,13 +1838,6 @@ bool Autoloc3::_passedFilter(Origin *origin)
 		return false;
 	}
 
-/*
-	if ( ! origin->preliminary) {
-
-		if ( ! _rework(origin))
-			return false;
-	}
-*/
 	if ( ! _passedFinalCheck(origin))
 		return false;
 

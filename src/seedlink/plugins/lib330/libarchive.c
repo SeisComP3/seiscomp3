@@ -198,7 +198,7 @@ begin
               then /* won't fit or time gap */
                 flush_archive (paqs, q) ;
           end
-      psrc = (pointer)((pntrint)addr(pbuf->rec) + FRAME_SIZE) ;
+      psrc = (pointer)((integer)addr(pbuf->rec) + FRAME_SIZE) ;
       if (parc->total_frames > 1)
         then
           begin /* append to existing record */
@@ -208,14 +208,14 @@ begin
                   if (parc->total_frames > (dbcnt + 1))
                     then
                       begin /* need to move some data to further in record */
-                        psrc = (pointer)((pntrint)parc->pcfr + FRAME_SIZE * (dbcnt + 1)) ;
-                        pdest = (pointer)((pntrint)parc->pcfr + FRAME_SIZE * (dbcnt + bcnt + 1)) ;
+                        psrc = (pointer)((integer)parc->pcfr + FRAME_SIZE * (dbcnt + 1)) ;
+                        pdest = (pointer)((integer)parc->pcfr + FRAME_SIZE * (dbcnt + bcnt + 1)) ;
                         memmove (pdest, psrc, FRAME_SIZE * (parc->total_frames - dbcnt - 1)) ;
                         incn(parc->hdr_buf.first_data_byte, bcnt * FRAME_SIZE) ;
                       end
                   /* copy new blockettes in archive record */
-                  psrc = (pointer)((pntrint)addr(pbuf->rec) + FRAME_SIZE) ;
-                  pdest = (pointer)((pntrint)parc->pcfr + FRAME_SIZE * (dbcnt + 1)) ;
+                  psrc = (pointer)((integer)addr(pbuf->rec) + FRAME_SIZE) ;
+                  pdest = (pointer)((integer)parc->pcfr + FRAME_SIZE * (dbcnt + 1)) ;
                   memcpy(pdest, psrc, bcnt * FRAME_SIZE) ;
                   incn(psrc, bcnt * FRAME_SIZE) ;
                   incn(dbcnt, bcnt) ;
@@ -225,7 +225,7 @@ begin
                       if (i)
                         then
                           begin /* extend link */
-                            plink = (pointer)((pntrint)parc->pcfr + FRAME_SIZE * i + 2) ;
+                            plink = (pointer)((integer)parc->pcfr + FRAME_SIZE * i + 2) ;
                             storeword (addr(plink), FRAME_SIZE * (i + 1)) ;
                           end
                         else
@@ -236,7 +236,7 @@ begin
             if (fcnt > 0)
               then
                 begin
-                  pdest = (pointer)((pntrint)parc->pcfr + parc->total_frames * FRAME_SIZE) ; /* add to end */
+                  pdest = (pointer)((integer)parc->pcfr + parc->total_frames * FRAME_SIZE) ; /* add to end */
                   memcpy(pdest, psrc, fcnt * FRAME_SIZE) ;
                   incn(parc->total_frames, fcnt) ;
                 end
@@ -259,8 +259,8 @@ begin
             incn(parc->hdr_buf.samples_in_record, pbuf->hdr_buf.samples_in_record) ;
             incn(parc->hdr_buf.number_of_following_blockettes, bcnt) ;
             incn(parc->hdr_buf.deb.frame_count, fcnt) ;
-            psrc = (pointer)((pntrint)addr(pbuf->rec) + (bcnt + 1) * FRAME_SIZE + 8) ;
-            pdest = (pointer)((pntrint)parc->pcfr + (dbcnt + 1) * FRAME_SIZE + 8) ;
+            psrc = (pointer)((integer)addr(pbuf->rec) + (bcnt + 1) * FRAME_SIZE + 8) ;
+            pdest = (pointer)((integer)parc->pcfr + (dbcnt + 1) * FRAME_SIZE + 8) ;
             memcpy (pdest, psrc, 4) ; /* update last sample value */
             if (parc->total_frames >= paqs->arc_frames)
               then
@@ -278,8 +278,8 @@ begin
             parc->hdr_buf.dob.rec_length = q330->par_create.amini_exponent ;
             parc->hdr_buf.sequence.seed_num = parc->records_written + 1 ;
             inc(parc->records_written) ;
-            psrc = (pointer)((pntrint)addr(pbuf->rec) + FRAME_SIZE) ;
-            pdest = (pointer)((pntrint)parc->pcfr + FRAME_SIZE) ;
+            psrc = (pointer)((integer)addr(pbuf->rec) + FRAME_SIZE) ;
+            pdest = (pointer)((integer)parc->pcfr + FRAME_SIZE) ;
             if ((bcnt + fcnt) > 0)
               then
                 memcpy(pdest, psrc, (bcnt + fcnt) * FRAME_SIZE) ;
@@ -302,8 +302,8 @@ begin
            (pbuf->hdr_buf.starting_time.seed_fpt > (parc->hdr_buf.starting_time.seed_fpt + 60)))
         then /* won't fit or not the same time */
           flush_archive (paqs, q) ;
-      psrc = (pointer)((pntrint)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
-      pdest = (pointer)((pntrint)parc->pcfr + NONDATA_OVERHEAD + parc->hdr_buf.samples_in_record) ;
+      psrc = (pointer)((integer)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
+      pdest = (pointer)((integer)parc->pcfr + NONDATA_OVERHEAD + parc->hdr_buf.samples_in_record) ;
       if (parc->hdr_buf.samples_in_record == 0)
         then
           begin /* new record */
@@ -331,13 +331,13 @@ begin
               then
                 flush_archive (paqs, q) ; /* different hour, start new record */
           end
-      psrc = (pointer)((pntrint)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
+      psrc = (pointer)((integer)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
       if (parc->total_frames > 0)
         then
           begin /* append to existing record, put data starting at total_frames */
-            pdest = (pointer)((pntrint)parc->pcfr + parc->total_frames) ;
+            pdest = (pointer)((integer)parc->pcfr + parc->total_frames) ;
             memcpy (pdest, psrc, TIMING_BLOCKETTE_SIZE) ;
-            psrc = (pointer)((pntrint)parc->pcfr + parc->total_frames - TIMING_BLOCKETTE_SIZE + 2) ; /* previous blockette */
+            psrc = (pointer)((integer)parc->pcfr + parc->total_frames - TIMING_BLOCKETTE_SIZE + 2) ; /* previous blockette */
             storeword (addr(psrc), parc->total_frames) ; /* extend link */
             incn(parc->total_frames, TIMING_BLOCKETTE_SIZE) ;
             inc(parc->hdr_buf.number_of_following_blockettes) ; /* a blockette was added */
@@ -349,7 +349,7 @@ begin
             parc->hdr_buf.dob.rec_length = q330->par_create.amini_exponent ;
             parc->hdr_buf.sequence.seed_num = parc->records_written + 1 ;
             inc(parc->records_written) ;
-            pdest = (pointer)((pntrint)parc->pcfr + NONDATA_OVERHEAD) ;
+            pdest = (pointer)((integer)parc->pcfr + NONDATA_OVERHEAD) ;
             memcpy (pdest, psrc, TIMING_BLOCKETTE_SIZE) ;
             parc->total_frames = NONDATA_OVERHEAD + TIMING_BLOCKETTE_SIZE ;
             parc->appended = TRUE ;
@@ -373,7 +373,7 @@ begin
               then
                 flush_archive (paqs, q) ; /* different hour, start new record */
           end
-      psrc = (pointer)((pntrint)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
+      psrc = (pointer)((integer)addr(pbuf->rec) + NONDATA_OVERHEAD) ;
       if (parc->total_frames == 0)
         then
           begin /* new record */
@@ -381,7 +381,7 @@ begin
             parc->hdr_buf.dob.rec_length = q330->par_create.amini_exponent ;
             parc->hdr_buf.sequence.seed_num = parc->records_written + 1 ;
             inc(parc->records_written) ;
-            pdest = (pointer)((pntrint)parc->pcfr + NONDATA_OVERHEAD) ;
+            pdest = (pointer)((integer)parc->pcfr + NONDATA_OVERHEAD) ;
             memcpy (pdest, psrc, size) ; /* copy blockettes in as they are */
             parc->total_frames = q->com->blockette_index ;
             parc->appended = TRUE ;
@@ -394,21 +394,21 @@ begin
             dest = parc->hdr_buf.dob.next_blockette ;
             while (dest) /* find the last blockette, plast will have it's link address */
               begin
-                plink = (pointer)((pntrint)parc->pcfr + dest + 2) ;
+                plink = (pointer)((integer)parc->pcfr + dest + 2) ;
                 plast = plink ;
                 dest = loadword (addr(plink)) ;
               end
-            pdest = (pointer)((pntrint)parc->pcfr + parc->total_frames) ;
+            pdest = (pointer)((integer)parc->pcfr + parc->total_frames) ;
             memcpy (pdest, psrc, size) ; /* move in blockettes */
             storeword (addr(plast), parc->total_frames) ; /* adding to the list, need to rebuild links */
             src = NONDATA_OVERHEAD ;
             dest = parc->total_frames ; /* where we currently are */
             for (i = 1 ; i <= bcnt - 1 ; i++)
               begin
-                plink = (pointer)((pntrint)addr(pbuf->rec) + src + 2) ;
+                plink = (pointer)((integer)addr(pbuf->rec) + src + 2) ;
                 next = loadword (addr(plink)) ; /* get old starting offset of next frame */
                 offset = next - src ; /* amount to jump to get to next frame */
-                pdest = (pointer)((pntrint)parc->pcfr + dest + 2) ;
+                pdest = (pointer)((integer)parc->pcfr + dest + 2) ;
                 storeword (addr(pdest), dest + offset) ; /* new starting offset of next blockette */
                 src = next ;
                 dest = dest + offset ;

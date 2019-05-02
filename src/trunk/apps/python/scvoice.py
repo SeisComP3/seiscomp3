@@ -125,9 +125,11 @@ class VoiceAlert(seiscomp3.Client.Application):
             try:
                 self._eventScript = self.configGetString("scripts.event")
                 seiscomp3.Logging.info("Using event script: %s" % self._eventScript)
-            except: seiscomp3.Logging.warning("No event script defined")
+            except:
+                seiscomp3.Logging.warning("No event script defined")
 
-        self._eventScript = seiscomp3.System.Environment.Instance().absolutePath(self._eventScript)
+        if self._eventScript:
+            self._eventScript = seiscomp3.System.Environment.Instance().absolutePath(self._eventScript)
 
         seiscomp3.Logging.info("Creating ringbuffer for 100 objects")
         if not self.query():

@@ -841,6 +841,7 @@ void MvMainWindow::modifyUiSetupForDisplayMode() {
 	else if ( _displayMode == QUALITY_CONTROL )
 		ApplicationStatus::Instance()->setMode(ApplicationStatus::QC);
 
+	_mapWidget->setMode(ApplicationStatus::Instance()->mode());
 	_mapWidget->showMapLegend(_ui.showMapLegendAction->isChecked());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

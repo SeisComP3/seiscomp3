@@ -363,7 +363,7 @@ GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record
 			double mod = fmod((double)firstNewSampleStart, targetDt);
 			double skip = targetDt - mod;
 			stage->samplesToSkip = int(skip*stage->sampleRate+0.5);
-			stage->startTime = rec->startTime() + Core::TimeSpan(stage->samplesToSkip*stage->dt+5E-7);
+			stage->startTime = rec->startTime() + Core::TimeSpan((int(stage->missingSamples+stage->samplesToSkip)-stage->N2-1)*stage->dt+5E-7);
 			// To be discussed: should we round to the next mulitple of stage->targetRate?
 		}
 
@@ -394,6 +394,10 @@ GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record
 		// Resampling can start now
 		stage->samplesToSkip = 0;
 	}
+	else
+		stage->startTime = rec->startTime() + Core::TimeSpan((int(stage->samplesToSkip)-stage->N2-1)*stage->dt+5E-7);
+
+	if ( !data_len ) return NULL;
 
 	// Ring buffer is filled at this point.
 	typename Core::SmartPointer< TypedArray<T> >::Impl resampled_data;
@@ -411,7 +415,7 @@ GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record
 				weightedSum += buffer[i] * *(coeff++);
 
 			if ( !resampled_data ) {
-				startTime = stage->startTime + Core::TimeSpan(stage->dt*stage->N2);
+				startTime = stage->startTime;
 				resampled_data = new TypedArray<T>;
 			}
 
@@ -447,7 +451,6 @@ GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record
 				stage->front -= stage->buffer.size();
 		}
 
-		stage->startTime += Core::TimeSpan(stage->dt*num_samples);
 		stage->samplesToSkip -= num_samples;
 		data_len -= num_samples;
 	}
@@ -521,6 +524,7 @@ GenericRecord *RecordResampler<T>::resample(UpsampleStage *stage, const Record *
 
 	const T *data = ar->typedData();
 	T *buffer = &stage->buffer[0];
+	Core::Time startTime;
 
 	if ( stage->missingSamples > 0 ) {
 		size_t toCopy = std::min(stage->missingSamples, data_len);
@@ -533,21 +537,27 @@ GenericRecord *RecordResampler<T>::resample(UpsampleStage *stage, const Record *
 		if ( !stage->startTime.valid() )
 			stage->startTime = rec->startTime();
 
+		startTime = stage->startTime + Core::TimeSpan(stage->dt * stage->N2);
+
+		stage->startTime -= Core::TimeSpan(toCopy * stage->dt);
+
 		// Still samples missing and no more data available, return
 		if ( stage->missingSamples > 0 ) return NULL;
 	}
+	else
+		startTime = stage->startTime + Core::TimeSpan(stage->dt * stage->N2);
 
 	// Ring buffer is filled at this point.
 	typename Core::SmartPointer< TypedArray<T> >::Impl resampled_data;
-	Core::Time startTime;
+
+	if ( !data_len ) return NULL;
+
+	stage->startTime += endTime - rec->startTime();
+
+	resampled_data = new TypedArray<T>;
 
 	while ( data_len > 0 ) {
 		double xi = 0.0;
-
-		if ( !resampled_data ) {
-			startTime = stage->startTime + Core::TimeSpan(stage->dt*stage->N2);
-			resampled_data = new TypedArray<T>;
-		}
 
 		// Generate N new samples (upsampling)
 		for ( int n = 0; n < stage->N; ++n ) {
@@ -586,22 +596,17 @@ GenericRecord *RecordResampler<T>::resample(UpsampleStage *stage, const Record *
 				stage->front -= stage->buffer.size();
 		}
 
-		stage->startTime += Core::TimeSpan(stage->dt);
 		--data_len;
 	}
 
 	// Create the record and push it
-	if ( resampled_data ) {
-		GenericRecord *grec;
-		grec = new GenericRecord(rec->networkCode(), rec->stationCode(),
-		                         rec->locationCode(), rec->channelCode(),
-		                         startTime, stage->targetRate);
-		grec->setData(resampled_data.get());
+	GenericRecord *grec;
+	grec = new GenericRecord(rec->networkCode(), rec->stationCode(),
+	                         rec->locationCode(), rec->channelCode(),
+	                         startTime, stage->targetRate);
+	grec->setData(resampled_data.get());
 
-		return grec;
-	}
-
-	return NULL;
+	return grec;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -648,7 +653,7 @@ Record *RecordResampler<T>::feed(const Record *record) {
 		}
 
 		// We need to downsample the data
-		if ( den > 1 ) {
+		if ( num > 1 || den > 1 ) {
 			//SEISCOMP_DEBUG("[resample] create downscaling of factor %d", den);
 
 			if ( _downsampler == NULL )

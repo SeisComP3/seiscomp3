@@ -2,14 +2,128 @@
 
 ## Release YYYY.ddd
 
+* trunk
+
+  * Fixed SDS archive bug (recordstream sdsarchive://) which caused incomplete data retrieval
+    under some circumstances
+
+* scautoloc
+
+  * Fixed a bug that occasionally caused scautoloc to segfault.
+
 * scolv
 
-  * Add toggle to amplitude picker to either override the configured minimum
+  * Fixed a bug that caused scolv to crash if the weight of an arrival is not set
+  * Added two new optional columns to arrival table: slowness residual and back azimuth residual
+  * Added option ```olv.commit.eventCommentOptions``` to defined predefined event comment values
+    which can be selected from a drop-down list
+  * Allow to sort the "Used" column in arrival table
+  * Update map residual colors and residual plot rect if the magnitude was recomputed
+
+* scquery
+
+  * Add more examples to query events and some statistics from the database 
+
+* scmag
+
+  * Load inventory which is necessary for magnitude implementation which require access to
+    station meta data
+
+* nuttli plugin
+
+  * Fixed magnitude computation which caused invalid values being treated as valid values
+
+## Release 2018.327 patch9
+
+* Seedlink Q330 plugin
+
+  * Reverted upgrade to revision 99 which caused a segmentation fault. We
+    will investigate into the issue and contact the authors of the library.
+    For the time being we downgrade to the last working version.
+
+## Release 2018.327 patch8
+
+* scquery
+
+  * Add example to documentation. Thanks to Tiziana on https://forum.seiscomp3.org
+
+* scamp
+
+  * Fix order of processor setup calls to correctly enable e.g. AMN
+
+* scmv
+
+  * Set correct legend if started with ```--displaymode```
+
+* scolv
+
+  * If arrival state (active/inactive) is taken from the weight
+    then it now compares against 0 instead of < 0.5 (inactive)
+    and > 0.5 (active). It otherwise shows sometimes inconsistent
+    results in combination with locators that assign non binary
+    weight such as NonLinLoc.
+
+* Hypo71
+
+  * Increase maximum phase number to 1001
+  * Raise an error if no velocity model is given for a profile
+
+## Release 2018.327 patch7
+
+```SC_API_VERSION 12.1.0```
+
+* trunk
+
+  * Split ```amplitudes.ML.measureType``` for ML and MLv. MLv must be configured
+    with ```amplitudes.MLv.measureType```.
+  * Added ```amplitudes.ML.combiner``` to configure how the amplitudes of either
+    horizontal component are combined to the final amplitude.
+  * Add blockette 1001 when writing miniSEED with MSeedRecord
+  * Fixed Hypo71 bug that caused a crash if no phase was part of a solution
+
+## Release 2018.327 patch6
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
+
+## Release 2018.327.patch5
+
+* scolv
+
+  * Fix crash when artificial origin is received sent from e.g. scrttv. This
+    is a regression from 2018.327.patch4.
+
+## Release 2018.327.patch4
+
+* system
+
+  * Updated libmseed to 2.19.6
+
+* trunk
+
+  * Fix bug in ims10 export if AgencyID contains white spaces
+  * Fixed bug with hyp71sum2k and ims10 export that caused truncated strings.
+    Many thanks to Luca Scarabello (ETHZ) for finding and fixing this bug.
+
+* seedlink
+
+  * Added caps\_plugin which allows to retrieve data from gempa's CAPS
+    server, for example to import RaspberryShake data
+
+* scolv
+
+  * Added toggle to amplitude picker to either override the configured minimum
     SNR per station or not. The default is now to use what is configured.
 
 * scevent
 
   * The evrc plugin does not change the status of events with manual preferred origin
+
+* scautoloc
+
+  * Fixed a bug that sometimes caused manual origins not to be used with the correct depth.
+  * Minor cleanups.
 
 ## Release 2018.327.patch3
 
@@ -225,16 +339,29 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
 
+## Release 2017.334 patch10
+
+* trunk
+
+  * Fix bug in ims10 export if AgencyID contains white spaces
+
+* seedlink
+
+  * Added caps\_plugin which allows to retrieve data from gempa's CAPS
+    server, for example to import RaspberryShake data
+
+## Release 2017.334 patch9
+
+* trunk
+
+  * Fix bug in stringify functions which discards the last character if
+    the output length of a string should be exactly 64 charaters. This
+    affects the hyp71sum2k and ims10 output.
+
 ## Release 2017.334 patch8
-<<<<<<< HEAD
- 
- * gui
- 
-=======
 
  * gui
 
->>>>>>> f2cc747... Update changelog
    * Fix bug that caused a segfault when GUI application are run in TTY mode
      and the database connection is configured in the configuration file
 

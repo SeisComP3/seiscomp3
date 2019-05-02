@@ -3034,119 +3034,126 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[25]
 #define SWIGTYPE_p_Seiscomp__Core__Message swig_types[26]
 #define SWIGTYPE_p_Seiscomp__Core__MessageIterator swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[77]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[78]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[80]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[81]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[83]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[84]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[85]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[86]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[87]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[88]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[89]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[90]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[91]
-#define SWIGTYPE_p_TagType swig_types[92]
-#define SWIGTYPE_p_Type swig_types[93]
-#define SWIGTYPE_p_bool swig_types[94]
-#define SWIGTYPE_p_boost__dynamic_bitsetT_t swig_types[95]
-#define SWIGTYPE_p_boost__none_t swig_types[96]
-#define SWIGTYPE_p_boost__variantT_int_double_std__string_t swig_types[97]
-#define SWIGTYPE_p_char swig_types[98]
-#define SWIGTYPE_p_const_iterator swig_types[99]
-#define SWIGTYPE_p_double swig_types[100]
-#define SWIGTYPE_p_float swig_types[101]
-#define SWIGTYPE_p_int swig_types[102]
-#define SWIGTYPE_p_iterator swig_types[103]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[104]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[105]
-#define SWIGTYPE_p_std__exception swig_types[106]
-#define SWIGTYPE_p_std__istream swig_types[107]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[108]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[109]
-#define SWIGTYPE_p_std__ostream swig_types[110]
-#define SWIGTYPE_p_std__string swig_types[111]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[112]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[113]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[114]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[115]
-#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[116]
-#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[117]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[118]
-#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[119]
-#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[120]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[121]
-#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[122]
-#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[123]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[124]
-#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[125]
-#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[126]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[127]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[128]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[129]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[130]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[131]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[132]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[133]
-#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[134]
-#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[135]
-#define SWIGTYPE_p_time_t swig_types[136]
-#define SWIGTYPE_p_timeval swig_types[137]
-#define SWIGTYPE_p_void swig_types[138]
-static swig_type_info *swig_types[140];
-static swig_module_info swig_module = {swig_types, 139, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__Core__MetaEnum swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__MetaObject swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__MetaProperty swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__PropertyNotFoundException swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[81]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[82]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[83]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[85]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[87]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[89]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[90]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[91]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[92]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[93]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[94]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[95]
+#define SWIGTYPE_p_TagType swig_types[96]
+#define SWIGTYPE_p_Type swig_types[97]
+#define SWIGTYPE_p_bool swig_types[98]
+#define SWIGTYPE_p_boost__any swig_types[99]
+#define SWIGTYPE_p_boost__dynamic_bitsetT_t swig_types[100]
+#define SWIGTYPE_p_boost__none_t swig_types[101]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[102]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[103]
+#define SWIGTYPE_p_boost__variantT_int_double_std__string_t swig_types[104]
+#define SWIGTYPE_p_char swig_types[105]
+#define SWIGTYPE_p_const_iterator swig_types[106]
+#define SWIGTYPE_p_double swig_types[107]
+#define SWIGTYPE_p_float swig_types[108]
+#define SWIGTYPE_p_int swig_types[109]
+#define SWIGTYPE_p_iterator swig_types[110]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[111]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[112]
+#define SWIGTYPE_p_std__exception swig_types[113]
+#define SWIGTYPE_p_std__istream swig_types[114]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[115]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[116]
+#define SWIGTYPE_p_std__ostream swig_types[117]
+#define SWIGTYPE_p_std__string swig_types[118]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[119]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[120]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[121]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[122]
+#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[123]
+#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[124]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[125]
+#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[126]
+#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[127]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[128]
+#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[129]
+#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[130]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[131]
+#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[132]
+#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[133]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[134]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[135]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[136]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[137]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[138]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[139]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[140]
+#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[141]
+#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[142]
+#define SWIGTYPE_p_time_t swig_types[143]
+#define SWIGTYPE_p_timeval swig_types[144]
+#define SWIGTYPE_p_void swig_types[145]
+static swig_type_info *swig_types[147];
+static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3452,7 +3459,52 @@ SWIG_FromCharPtr(const char *cptr)
 }
 
 
-  #define SWIG_From_double   PyFloat_FromDouble 
+SWIGINTERN int
+SWIG_AsPtr_std_string (PyObject * obj, std::string **val) 
+{
+  char* buf = 0 ; size_t size = 0; int alloc = SWIG_OLDOBJ;
+  if (SWIG_IsOK((SWIG_AsCharPtrAndSize(obj, &buf, &size, &alloc)))) {
+    if (buf) {
+      if (val) *val = new std::string(buf, size - 1);
+      if (alloc == SWIG_NEWOBJ) delete[] buf;
+      return SWIG_NEWOBJ;
+    } else {
+      if (val) *val = 0;
+      return SWIG_OLDOBJ;
+    }
+  } else {
+    static int init = 0;
+    static swig_type_info* descriptor = 0;
+    if (!init) {
+      descriptor = SWIG_TypeQuery("std::string" " *");
+      init = 1;
+    }
+    if (descriptor) {
+      std::string *vptr;
+      int res = SWIG_ConvertPtr(obj, (void**)&vptr, descriptor, 0);
+      if (SWIG_IsOK(res) && val) *val = vptr;
+      return res;
+    }
+  }
+  return SWIG_ERROR;
+}
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_int  (int value)
+{
+  return PyInt_FromLong((long) value);
+}
+
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
 
 
 SWIGINTERN int
@@ -3580,22 +3632,6 @@ SWIG_AsVal_long (PyObject *obj, long* val)
 }
 
 
-  #define SWIG_From_long   PyInt_FromLong 
-
-SWIGINTERN double Seiscomp_Core_TimeSpan_toDouble(Seiscomp::Core::TimeSpan const *self){
-    return (double)(*self);
-  }
-
-#include <limits.h>
-#if !defined(SWIG_NO_LLONG_MAX)
-# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
-#   define LLONG_MAX __LONG_LONG_MAX__
-#   define LLONG_MIN (-LLONG_MAX - 1LL)
-#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
-# endif
-#endif
-
-
 SWIGINTERN int
 SWIG_AsVal_int (PyObject * obj, int *val)
 {
@@ -3612,10 +3648,17 @@ SWIG_AsVal_int (PyObject * obj, int *val)
 }
 
 
-SWIGINTERNINLINE PyObject*
-  SWIG_From_int  (int value)
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
 {
-  return PyInt_FromLong((long) value);
+  int r;
+  if (!PyBool_Check(obj))
+    return SWIG_ERROR;
+  r = PyObject_IsTrue(obj);
+  if (r == -1)
+    return SWIG_ERROR;
+  if (val) *val = r ? true : false;
+  return SWIG_OK;
 }
 
 
@@ -3626,41 +3669,45 @@ SWIG_From_std_string  (const std::string& s)
 }
 
 
-SWIGINTERN int
-SWIG_AsPtr_std_string (PyObject * obj, std::string **val) 
+  #define SWIG_From_long   PyInt_FromLong 
+
+
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
 {
-  char* buf = 0 ; size_t size = 0; int alloc = SWIG_OLDOBJ;
-  if (SWIG_IsOK((SWIG_AsCharPtrAndSize(obj, &buf, &size, &alloc)))) {
-    if (buf) {
-      if (val) *val = new std::string(buf, size - 1);
-      if (alloc == SWIG_NEWOBJ) delete[] buf;
-      return SWIG_NEWOBJ;
-    } else {
-      if (val) *val = 0;
-      return SWIG_OLDOBJ;
-    }
-  } else {
-    static int init = 0;
-    static swig_type_info* descriptor = 0;
-    if (!init) {
-      descriptor = SWIG_TypeQuery("std::string" " *");
-      init = 1;
-    }
-    if (descriptor) {
-      std::string *vptr;
-      int res = SWIG_ConvertPtr(obj, (void**)&vptr, descriptor, 0);
-      if (SWIG_IsOK(res) && val) *val = vptr;
-      return res;
-    }
-  }
-  return SWIG_ERROR;
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value));
 }
 
 
-SWIGINTERNINLINE PyObject*
-  SWIG_From_unsigned_SS_int  (unsigned int value)
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
 {
-  return PyInt_FromSize_t((size_t) value);
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+#endif
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else {
+    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
+    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
+  }
+#endif
 }
 
 
@@ -3712,6 +3759,81 @@ SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val)
 }
 
 
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_long_SS_long (PyObject *obj, unsigned long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    unsigned long long v = PyLong_AsUnsignedLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+      res = SWIG_OverflowError;
+    }
+  } else {
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && !SWIG_CanCastAsInteger(&d, 0, mant_max))
+      return SWIG_OverflowError;
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, mant_max)) {
+      if (val) *val = (unsigned long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
+#endif
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  int res = SWIG_TypeError;
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  if (sizeof(size_t) <= sizeof(unsigned long)) {
+#endif
+    unsigned long v;
+    res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+#ifdef SWIG_LONG_LONG_AVAILABLE
+  } else if (sizeof(size_t) <= sizeof(unsigned long long)) {
+    unsigned long long v;
+    res = SWIG_AsVal_unsigned_SS_long_SS_long (obj, val ? &v : 0);
+    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  }
+#endif
+  return res;
+}
+
+
+  #define SWIG_From_double   PyFloat_FromDouble 
+
+SWIGINTERN double Seiscomp_Core_TimeSpan_toDouble(Seiscomp::Core::TimeSpan const *self){
+    return (double)(*self);
+  }
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_unsigned_SS_int  (unsigned int value)
+{
+  return PyInt_FromSize_t((size_t) value);
+}
+
+
 SWIGINTERN int
 SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 {
@@ -3744,63 +3866,10 @@ SWIG_AsVal_unsigned_SS_short (PyObject * obj, unsigned short *val)
 }
 
 
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value));
-}
-
-
 SWIGINTERNINLINE PyObject *
 SWIG_From_unsigned_SS_short  (unsigned short value)
 {    
   return SWIG_From_unsigned_SS_long  (value);
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  int r;
-  if (!PyBool_Check(obj))
-    return SWIG_ERROR;
-  r = PyObject_IsTrue(obj);
-  if (r == -1)
-    return SWIG_ERROR;
-  if (val) *val = r ? true : false;
-  return SWIG_OK;
-}
-
-
-#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
-#  define SWIG_LONG_LONG_AVAILABLE
-#endif
-
-
-#ifdef SWIG_LONG_LONG_AVAILABLE
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong(static_cast< long >(value));
-}
-#endif
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  if (sizeof(size_t) <= sizeof(unsigned long)) {
-#endif
-    return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  } else {
-    /* assume sizeof(size_t) <= sizeof(unsigned long long) */
-    return SWIG_From_unsigned_SS_long_SS_long  (static_cast< unsigned long long >(value));
-  }
-#endif
 }
 
 
@@ -3938,68 +4007,6 @@ SWIGINTERN PyObject *Seiscomp_Array_setNumpy(Seiscomp::Array *self,PyObject *obj
 		fail:
 			Py_RETURN_NONE;
 	}
-
-#ifdef SWIG_LONG_LONG_AVAILABLE
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long_SS_long (PyObject *obj, unsigned long long *val)
-{
-  int res = SWIG_TypeError;
-  if (PyLong_Check(obj)) {
-    unsigned long long v = PyLong_AsUnsignedLongLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-      res = SWIG_OverflowError;
-    }
-  } else {
-    unsigned long v;
-    res = SWIG_AsVal_unsigned_SS_long (obj,&v);
-    if (SWIG_IsOK(res)) {
-      if (val) *val = v;
-      return res;
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    const double mant_max = 1LL << DBL_MANT_DIG;
-    double d;
-    res = SWIG_AsVal_double (obj,&d);
-    if (SWIG_IsOK(res) && !SWIG_CanCastAsInteger(&d, 0, mant_max))
-      return SWIG_OverflowError;
-    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, mant_max)) {
-      if (val) *val = (unsigned long long)(d);
-      return SWIG_AddCast(res);
-    }
-    res = SWIG_TypeError;
-  }
-#endif
-  return res;
-}
-#endif
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  int res = SWIG_TypeError;
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  if (sizeof(size_t) <= sizeof(unsigned long)) {
-#endif
-    unsigned long v;
-    res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-#ifdef SWIG_LONG_LONG_AVAILABLE
-  } else if (sizeof(size_t) <= sizeof(unsigned long long)) {
-    unsigned long long v;
-    res = SWIG_AsVal_unsigned_SS_long_SS_long (obj, val ? &v : 0);
-    if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  }
-#endif
-  return res;
-}
-
 SWIGINTERN void Seiscomp_Core_MessageIterator_step(Seiscomp::Core::MessageIterator *self){
 		++(*self);
 	}
@@ -4453,6 +4460,1941 @@ SWIGINTERN PyObject *RTTI_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject 
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Core__RTTI, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_PropertyNotFoundException__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::PropertyNotFoundException *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_PropertyNotFoundException")) SWIG_fail;
+  result = (Seiscomp::Core::PropertyNotFoundException *)new Seiscomp::Core::PropertyNotFoundException();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__PropertyNotFoundException, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PropertyNotFoundException__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::PropertyNotFoundException *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_PropertyNotFoundException",&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PropertyNotFoundException" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PropertyNotFoundException" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  result = (Seiscomp::Core::PropertyNotFoundException *)new Seiscomp::Core::PropertyNotFoundException((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__PropertyNotFoundException, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PropertyNotFoundException(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[2] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_PropertyNotFoundException__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_PropertyNotFoundException__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_PropertyNotFoundException'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::PropertyNotFoundException::PropertyNotFoundException()\n"
+    "    Seiscomp::Core::PropertyNotFoundException::PropertyNotFoundException(std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PropertyNotFoundException(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::PropertyNotFoundException *arg1 = (Seiscomp::Core::PropertyNotFoundException *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_PropertyNotFoundException",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__PropertyNotFoundException, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PropertyNotFoundException" "', argument " "1"" of type '" "Seiscomp::Core::PropertyNotFoundException *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::PropertyNotFoundException * >(argp1);
+  {
+    try {
+      delete arg1;
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *PropertyNotFoundException_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Core__PropertyNotFoundException, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_delete_MetaEnum(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaEnum *arg1 = (Seiscomp::Core::MetaEnum *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetaEnum",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaEnum, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetaEnum" "', argument " "1"" of type '" "Seiscomp::Core::MetaEnum *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaEnum_keyCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaEnum *arg1 = (Seiscomp::Core::MetaEnum *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaEnum_keyCount",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaEnum_keyCount" "', argument " "1"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp1);
+  result = (int)((Seiscomp::Core::MetaEnum const *)arg1)->keyCount();
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaEnum_key(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaEnum *arg1 = (Seiscomp::Core::MetaEnum *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaEnum_key",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaEnum_key" "', argument " "1"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetaEnum_key" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (char *)((Seiscomp::Core::MetaEnum const *)arg1)->key(arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaEnum_valueToKey(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaEnum *arg1 = (Seiscomp::Core::MetaEnum *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaEnum_valueToKey",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaEnum_valueToKey" "', argument " "1"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetaEnum_valueToKey" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (char *)((Seiscomp::Core::MetaEnum const *)arg1)->valueToKey(arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaEnum_keyToValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaEnum *arg1 = (Seiscomp::Core::MetaEnum *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaEnum_keyToValue",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaEnum_keyToValue" "', argument " "1"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaEnum_keyToValue" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (int)((Seiscomp::Core::MetaEnum const *)arg1)->keyToValue((char const *)arg2);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MetaEnum_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Core__MetaEnum, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_MetaProperty__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_MetaProperty")) SWIG_fail;
+  result = (Seiscomp::Core::MetaProperty *)new Seiscomp::Core::MetaProperty();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaProperty, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MetaProperty__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
+  bool arg4 ;
+  bool arg5 ;
+  bool arg6 ;
+  bool arg7 ;
+  bool arg8 ;
+  Seiscomp::Core::MetaEnum *arg9 = (Seiscomp::Core::MetaEnum *) 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
+  void *argp9 = 0 ;
+  int res9 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  Seiscomp::Core::MetaProperty *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:new_MetaProperty",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MetaProperty" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MetaProperty" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_MetaProperty" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MetaProperty" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_MetaProperty" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_MetaProperty" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_MetaProperty" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  ecode6 = SWIG_AsVal_bool(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_MetaProperty" "', argument " "6"" of type '" "bool""'");
+  } 
+  arg6 = static_cast< bool >(val6);
+  ecode7 = SWIG_AsVal_bool(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_MetaProperty" "', argument " "7"" of type '" "bool""'");
+  } 
+  arg7 = static_cast< bool >(val7);
+  ecode8 = SWIG_AsVal_bool(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_MetaProperty" "', argument " "8"" of type '" "bool""'");
+  } 
+  arg8 = static_cast< bool >(val8);
+  res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res9)) {
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "new_MetaProperty" "', argument " "9"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg9 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp9);
+  result = (Seiscomp::Core::MetaProperty *)new Seiscomp::Core::MetaProperty((std::string const &)*arg1,(std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,(Seiscomp::Core::MetaEnum const *)arg9);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaProperty, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MetaProperty__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
+  bool arg4 ;
+  bool arg5 ;
+  bool arg6 ;
+  bool arg7 ;
+  bool arg8 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  Seiscomp::Core::MetaProperty *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOO:new_MetaProperty",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MetaProperty" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MetaProperty" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_MetaProperty" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_MetaProperty" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_MetaProperty" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_MetaProperty" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_MetaProperty" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  ecode6 = SWIG_AsVal_bool(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_MetaProperty" "', argument " "6"" of type '" "bool""'");
+  } 
+  arg6 = static_cast< bool >(val6);
+  ecode7 = SWIG_AsVal_bool(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_MetaProperty" "', argument " "7"" of type '" "bool""'");
+  } 
+  arg7 = static_cast< bool >(val7);
+  ecode8 = SWIG_AsVal_bool(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_MetaProperty" "', argument " "8"" of type '" "bool""'");
+  } 
+  arg8 = static_cast< bool >(val8);
+  result = (Seiscomp::Core::MetaProperty *)new Seiscomp::Core::MetaProperty((std::string const &)*arg1,(std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaProperty, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MetaProperty(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[10] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 9) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_MetaProperty__SWIG_0(self, args);
+  }
+  if (argc == 8) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_bool(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_bool(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  {
+                    int res = SWIG_AsVal_bool(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    return _wrap_new_MetaProperty__SWIG_2(self, args);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 9) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_bool(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_bool(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  {
+                    int res = SWIG_AsVal_bool(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    void *vptr = 0;
+                    int res = SWIG_ConvertPtr(argv[8], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0);
+                    _v = SWIG_CheckState(res);
+                    if (_v) {
+                      return _wrap_new_MetaProperty__SWIG_1(self, args);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_MetaProperty'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::MetaProperty::MetaProperty()\n"
+    "    Seiscomp::Core::MetaProperty::MetaProperty(std::string const &,std::string const &,bool,bool,bool,bool,bool,bool,Seiscomp::Core::MetaEnum const *)\n"
+    "    Seiscomp::Core::MetaProperty::MetaProperty(std::string const &,std::string const &,bool,bool,bool,bool,bool,bool)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MetaProperty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetaProperty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetaProperty" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_setInfo__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  bool arg4 ;
+  bool arg5 ;
+  bool arg6 ;
+  bool arg7 ;
+  bool arg8 ;
+  bool arg9 ;
+  Seiscomp::Core::MetaEnum *arg10 = (Seiscomp::Core::MetaEnum *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
+  bool val9 ;
+  int ecode9 = 0 ;
+  void *argp10 = 0 ;
+  int res10 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  PyObject * obj9 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOO:MetaProperty_setInfo",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_setInfo" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_setInfo" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_setInfo" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_setInfo" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_setInfo" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "MetaProperty_setInfo" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "MetaProperty_setInfo" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  ecode6 = SWIG_AsVal_bool(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "MetaProperty_setInfo" "', argument " "6"" of type '" "bool""'");
+  } 
+  arg6 = static_cast< bool >(val6);
+  ecode7 = SWIG_AsVal_bool(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "MetaProperty_setInfo" "', argument " "7"" of type '" "bool""'");
+  } 
+  arg7 = static_cast< bool >(val7);
+  ecode8 = SWIG_AsVal_bool(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "MetaProperty_setInfo" "', argument " "8"" of type '" "bool""'");
+  } 
+  arg8 = static_cast< bool >(val8);
+  ecode9 = SWIG_AsVal_bool(obj8, &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "MetaProperty_setInfo" "', argument " "9"" of type '" "bool""'");
+  } 
+  arg9 = static_cast< bool >(val9);
+  res10 = SWIG_ConvertPtr(obj9, &argp10,SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  if (!SWIG_IsOK(res10)) {
+    SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "MetaProperty_setInfo" "', argument " "10"" of type '" "Seiscomp::Core::MetaEnum const *""'"); 
+  }
+  arg10 = reinterpret_cast< Seiscomp::Core::MetaEnum * >(argp10);
+  (arg1)->setInfo((std::string const &)*arg2,(std::string const &)*arg3,arg4,arg5,arg6,arg7,arg8,arg9,(Seiscomp::Core::MetaEnum const *)arg10);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_setInfo__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  bool arg4 ;
+  bool arg5 ;
+  bool arg6 ;
+  bool arg7 ;
+  bool arg8 ;
+  bool arg9 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
+  bool val7 ;
+  int ecode7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
+  bool val9 ;
+  int ecode9 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOO:MetaProperty_setInfo",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_setInfo" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_setInfo" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_setInfo" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_setInfo" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_setInfo" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "MetaProperty_setInfo" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "MetaProperty_setInfo" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  ecode6 = SWIG_AsVal_bool(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "MetaProperty_setInfo" "', argument " "6"" of type '" "bool""'");
+  } 
+  arg6 = static_cast< bool >(val6);
+  ecode7 = SWIG_AsVal_bool(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "MetaProperty_setInfo" "', argument " "7"" of type '" "bool""'");
+  } 
+  arg7 = static_cast< bool >(val7);
+  ecode8 = SWIG_AsVal_bool(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "MetaProperty_setInfo" "', argument " "8"" of type '" "bool""'");
+  } 
+  arg8 = static_cast< bool >(val8);
+  ecode9 = SWIG_AsVal_bool(obj8, &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "MetaProperty_setInfo" "', argument " "9"" of type '" "bool""'");
+  } 
+  arg9 = static_cast< bool >(val9);
+  (arg1)->setInfo((std::string const &)*arg2,(std::string const &)*arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_setInfo(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[11] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 10) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 9) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_bool(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_bool(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  {
+                    int res = SWIG_AsVal_bool(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    {
+                      int res = SWIG_AsVal_bool(argv[8], NULL);
+                      _v = SWIG_CheckState(res);
+                    }
+                    if (_v) {
+                      return _wrap_MetaProperty_setInfo__SWIG_1(self, args);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 10) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_bool(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_bool(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  {
+                    int res = SWIG_AsVal_bool(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    {
+                      int res = SWIG_AsVal_bool(argv[8], NULL);
+                      _v = SWIG_CheckState(res);
+                    }
+                    if (_v) {
+                      void *vptr = 0;
+                      int res = SWIG_ConvertPtr(argv[9], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0);
+                      _v = SWIG_CheckState(res);
+                      if (_v) {
+                        return _wrap_MetaProperty_setInfo__SWIG_0(self, args);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MetaProperty_setInfo'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::MetaProperty::setInfo(std::string const &,std::string const &,bool,bool,bool,bool,bool,bool,Seiscomp::Core::MetaEnum const *)\n"
+    "    Seiscomp::Core::MetaProperty::setInfo(std::string const &,std::string const &,bool,bool,bool,bool,bool,bool)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_name(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_name",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_name" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (std::string *) &((Seiscomp::Core::MetaProperty const *)arg1)->name();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_type(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_type",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_type" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (std::string *) &((Seiscomp::Core::MetaProperty const *)arg1)->type();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_enumerator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::MetaEnum *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_enumerator",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_enumerator" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (Seiscomp::Core::MetaEnum *)((Seiscomp::Core::MetaProperty const *)arg1)->enumerator();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaEnum, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isArray",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isArray" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isArray();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isClass(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isClass",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isClass" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isClass();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isIndex(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isIndex",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isIndex" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isIndex();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isReference(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isReference",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isReference" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isReference();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isEnum(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isEnum",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isEnum" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isEnum();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_isOptional(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_isOptional",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_isOptional" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->isOptional();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_createClass(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::BaseObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaProperty_createClass",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_createClass" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  result = (Seiscomp::Core::BaseObject *)((Seiscomp::Core::MetaProperty const *)arg1)->createClass();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayElementCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaProperty_arrayElementCount",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_arrayElementCount" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_arrayElementCount" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  result = ((Seiscomp::Core::MetaProperty const *)arg1)->arrayElementCount((Seiscomp::Core::BaseObject const *)arg2);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Core::BaseObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_arrayObject",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_arrayObject" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_arrayObject" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "MetaProperty_arrayObject" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (Seiscomp::Core::BaseObject *)((Seiscomp::Core::MetaProperty const *)arg1)->arrayObject(arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__BaseObject, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayAddObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  Seiscomp::Core::BaseObject *arg3 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_arrayAddObject",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_arrayAddObject" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_arrayAddObject" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_arrayAddObject" "', argument " "3"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp3);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->arrayAddObject(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayRemoveObject__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_arrayRemoveObject",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->arrayRemoveObject(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayRemoveObject__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  Seiscomp::Core::BaseObject *arg3 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_arrayRemoveObject",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_arrayRemoveObject" "', argument " "3"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp3);
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->arrayRemoveObject(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_arrayRemoveObject(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[4] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_MetaProperty_arrayRemoveObject__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_MetaProperty_arrayRemoveObject__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MetaProperty_arrayRemoveObject'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::MetaProperty::arrayRemoveObject(Seiscomp::Core::BaseObject *,int) const\n"
+    "    Seiscomp::Core::MetaProperty::arrayRemoveObject(Seiscomp::Core::BaseObject *,Seiscomp::Core::BaseObject *) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  Seiscomp::Core::MetaValue arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_write",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_write" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_write" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_boost__any,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_write" "', argument " "3"" of type '" "Seiscomp::Core::MetaValue""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_write" "', argument " "3"" of type '" "Seiscomp::Core::MetaValue""'");
+    } else {
+      Seiscomp::Core::MetaValue * temp = reinterpret_cast< Seiscomp::Core::MetaValue * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->write(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_writeString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:MetaProperty_writeString",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_writeString" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_writeString" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "MetaProperty_writeString" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaProperty_writeString" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  result = (bool)((Seiscomp::Core::MetaProperty const *)arg1)->writeString(arg2,(std::string const &)*arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Core::MetaValue result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaProperty_read",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_read" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_read" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  result = ((Seiscomp::Core::MetaProperty const *)arg1)->read((Seiscomp::Core::BaseObject const *)arg2);
+  resultobj = SWIG_NewPointerObj((new Seiscomp::Core::MetaValue(static_cast< const Seiscomp::Core::MetaValue& >(result))), SWIGTYPE_p_boost__any, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaProperty_readString(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaProperty *arg1 = (Seiscomp::Core::MetaProperty *) 0 ;
+  Seiscomp::Core::BaseObject *arg2 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaProperty_readString",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaProperty_readString" "', argument " "1"" of type '" "Seiscomp::Core::MetaProperty const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaProperty * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaProperty_readString" "', argument " "2"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp2);
+  result = ((Seiscomp::Core::MetaProperty const *)arg1)->readString((Seiscomp::Core::BaseObject const *)arg2);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *MetaProperty_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Core__MetaProperty, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_MetaObject__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::RTTI *arg1 = (Seiscomp::Core::RTTI *) 0 ;
+  Seiscomp::Core::MetaObject *arg2 = (Seiscomp::Core::MetaObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Core::MetaObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_MetaObject",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MetaObject" "', argument " "1"" of type '" "Seiscomp::Core::RTTI const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::RTTI * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_MetaObject" "', argument " "2"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp2);
+  result = (Seiscomp::Core::MetaObject *)new Seiscomp::Core::MetaObject((Seiscomp::Core::RTTI const *)arg1,(Seiscomp::Core::MetaObject const *)arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaObject, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MetaObject__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::RTTI *arg1 = (Seiscomp::Core::RTTI *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::MetaObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_MetaObject",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_MetaObject" "', argument " "1"" of type '" "Seiscomp::Core::RTTI const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::RTTI * >(argp1);
+  result = (Seiscomp::Core::MetaObject *)new Seiscomp::Core::MetaObject((Seiscomp::Core::RTTI const *)arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaObject, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_MetaObject(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__RTTI, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_MetaObject__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__RTTI, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaObject, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_MetaObject__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_MetaObject'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::MetaObject::MetaObject(Seiscomp::Core::RTTI const *,Seiscomp::Core::MetaObject const *)\n"
+    "    Seiscomp::Core::MetaObject::MetaObject(Seiscomp::Core::RTTI const *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_MetaObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_MetaObject",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_MetaObject" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_rtti(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::RTTI *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaObject_rtti",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaObject_rtti" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  result = (Seiscomp::Core::RTTI *)((Seiscomp::Core::MetaObject const *)arg1)->rtti();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_base(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::MetaObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaObject_base",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaObject_base" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  result = (Seiscomp::Core::MetaObject *)((Seiscomp::Core::MetaObject const *)arg1)->base();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_propertyCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:MetaObject_propertyCount",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaObject_propertyCount" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  result = ((Seiscomp::Core::MetaObject const *)arg1)->propertyCount();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_property__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Core::MetaProperty *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaObject_property",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaObject_property" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MetaObject_property" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::Core::MetaProperty *)((Seiscomp::Core::MetaObject const *)arg1)->property(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_property__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *arg1 = (Seiscomp::Core::MetaObject *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Core::MetaProperty *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:MetaObject_property",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MetaObject_property" "', argument " "1"" of type '" "Seiscomp::Core::MetaObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::MetaObject * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "MetaObject_property" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "MetaObject_property" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  result = (Seiscomp::Core::MetaProperty *)((Seiscomp::Core::MetaObject const *)arg1)->property((std::string const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaProperty, 0 |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MetaObject_property(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_MetaObject_property__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__MetaObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_MetaObject_property__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'MetaObject_property'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Core::MetaObject::property(size_t) const\n"
+    "    Seiscomp::Core::MetaObject::property(std::string const &) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *MetaObject_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Core__MetaObject, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -10035,6 +11977,67 @@ SWIGINTERN PyObject *_wrap_BaseObject_serialize(PyObject *SWIGUNUSEDPARM(self), 
     }
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BaseObject_Meta(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::MetaObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":BaseObject_Meta")) SWIG_fail;
+  {
+    try {
+      result = (Seiscomp::Core::MetaObject *)Seiscomp::Core::BaseObject::Meta();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BaseObject_meta(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::MetaObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BaseObject_meta",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BaseObject_meta" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Core::MetaObject *)((Seiscomp::Core::BaseObject const *)arg1)->meta();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__MetaObject, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -46344,6 +48347,44 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RTTI_isTypeOf", _wrap_RTTI_isTypeOf, METH_VARARGS, NULL},
 	 { (char *)"delete_RTTI", _wrap_delete_RTTI, METH_VARARGS, NULL},
 	 { (char *)"RTTI_swigregister", RTTI_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_PropertyNotFoundException", _wrap_new_PropertyNotFoundException, METH_VARARGS, NULL},
+	 { (char *)"delete_PropertyNotFoundException", _wrap_delete_PropertyNotFoundException, METH_VARARGS, NULL},
+	 { (char *)"PropertyNotFoundException_swigregister", PropertyNotFoundException_swigregister, METH_VARARGS, NULL},
+	 { (char *)"delete_MetaEnum", _wrap_delete_MetaEnum, METH_VARARGS, NULL},
+	 { (char *)"MetaEnum_keyCount", _wrap_MetaEnum_keyCount, METH_VARARGS, NULL},
+	 { (char *)"MetaEnum_key", _wrap_MetaEnum_key, METH_VARARGS, NULL},
+	 { (char *)"MetaEnum_valueToKey", _wrap_MetaEnum_valueToKey, METH_VARARGS, NULL},
+	 { (char *)"MetaEnum_keyToValue", _wrap_MetaEnum_keyToValue, METH_VARARGS, NULL},
+	 { (char *)"MetaEnum_swigregister", MetaEnum_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MetaProperty", _wrap_new_MetaProperty, METH_VARARGS, NULL},
+	 { (char *)"delete_MetaProperty", _wrap_delete_MetaProperty, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_setInfo", _wrap_MetaProperty_setInfo, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_name", _wrap_MetaProperty_name, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_type", _wrap_MetaProperty_type, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_enumerator", _wrap_MetaProperty_enumerator, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isArray", _wrap_MetaProperty_isArray, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isClass", _wrap_MetaProperty_isClass, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isIndex", _wrap_MetaProperty_isIndex, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isReference", _wrap_MetaProperty_isReference, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isEnum", _wrap_MetaProperty_isEnum, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_isOptional", _wrap_MetaProperty_isOptional, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_createClass", _wrap_MetaProperty_createClass, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_arrayElementCount", _wrap_MetaProperty_arrayElementCount, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_arrayObject", _wrap_MetaProperty_arrayObject, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_arrayAddObject", _wrap_MetaProperty_arrayAddObject, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_arrayRemoveObject", _wrap_MetaProperty_arrayRemoveObject, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_write", _wrap_MetaProperty_write, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_writeString", _wrap_MetaProperty_writeString, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_read", _wrap_MetaProperty_read, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_readString", _wrap_MetaProperty_readString, METH_VARARGS, NULL},
+	 { (char *)"MetaProperty_swigregister", MetaProperty_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_MetaObject", _wrap_new_MetaObject, METH_VARARGS, NULL},
+	 { (char *)"delete_MetaObject", _wrap_delete_MetaObject, METH_VARARGS, NULL},
+	 { (char *)"MetaObject_rtti", _wrap_MetaObject_rtti, METH_VARARGS, NULL},
+	 { (char *)"MetaObject_base", _wrap_MetaObject_base, METH_VARARGS, NULL},
+	 { (char *)"MetaObject_propertyCount", _wrap_MetaObject_propertyCount, METH_VARARGS, NULL},
+	 { (char *)"MetaObject_property", _wrap_MetaObject_property, METH_VARARGS, NULL},
+	 { (char *)"MetaObject_swigregister", MetaObject_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_TimeSpan", _wrap_new_TimeSpan, METH_VARARGS, NULL},
 	 { (char *)"TimeSpan___eq__", _wrap_TimeSpan___eq__, METH_VARARGS, NULL},
 	 { (char *)"TimeSpan___ne__", _wrap_TimeSpan___ne__, METH_VARARGS, NULL},
@@ -46443,6 +48484,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BaseObject_Cast", _wrap_BaseObject_Cast, METH_VARARGS, NULL},
 	 { (char *)"BaseObject_ConstCast", _wrap_BaseObject_ConstCast, METH_VARARGS, NULL},
 	 { (char *)"BaseObject_serialize", _wrap_BaseObject_serialize, METH_VARARGS, NULL},
+	 { (char *)"BaseObject_Meta", _wrap_BaseObject_Meta, METH_VARARGS, NULL},
+	 { (char *)"BaseObject_meta", _wrap_BaseObject_meta, METH_VARARGS, NULL},
 	 { (char *)"delete_BaseObject", _wrap_delete_BaseObject, METH_VARARGS, NULL},
 	 { (char *)"BaseObject_clone", _wrap_BaseObject_clone, METH_VARARGS, NULL},
 	 { (char *)"BaseObject_incrementReferenceCount", _wrap_BaseObject_incrementReferenceCount, METH_VARARGS, NULL},
@@ -47262,7 +49305,11 @@ static swig_type_info _swigt__p_Seiscomp__Core__GreensFunction = {"_p_Seiscomp__
 static swig_type_info _swigt__p_Seiscomp__Core__MemoryException = {"_p_Seiscomp__Core__MemoryException", "Seiscomp::Core::MemoryException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__Message = {"_p_Seiscomp__Core__Message", "Seiscomp::Core::Message *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__MessageIterator = {"_p_Seiscomp__Core__MessageIterator", "Seiscomp::Core::MessageIterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__MetaEnum = {"_p_Seiscomp__Core__MetaEnum", "Seiscomp::Core::MetaEnum *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__MetaObject = {"_p_Seiscomp__Core__MetaObject", "Seiscomp::Core::MetaObject *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__MetaProperty = {"_p_Seiscomp__Core__MetaProperty", "Seiscomp::Core::MetaProperty *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__OverflowException = {"_p_Seiscomp__Core__OverflowException", "Seiscomp::Core::OverflowException *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__PropertyNotFoundException = {"_p_Seiscomp__Core__PropertyNotFoundException", "Seiscomp::Core::PropertyNotFoundException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__RTTI = {"_p_Seiscomp__Core__RTTI", "Seiscomp::Core::RTTI *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl", "Seiscomp::ArrayCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl", "Seiscomp::ArrayPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array >::Impl *", 0, 0, (void*)0, 0};
@@ -47329,8 +49376,11 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__string_t = {"_p_Seisc
 static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_bool = {"_p_bool", "bool *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__any = {"_p_boost__any", "Seiscomp::Core::MetaValue *|boost::any *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__dynamic_bitsetT_t = {"_p_boost__dynamic_bitsetT_t", "Seiscomp::BitSet::ImplType *|boost::dynamic_bitset< > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__none_t = {"_p_boost__none_t", "::boost::none_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t = {"_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t", "boost::shared_ptr< Seiscomp::Core::MetaObject > *|Seiscomp::Core::MetaObjectHandle *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t = {"_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t", "Seiscomp::Core::MetaPropertyHandle *|boost::shared_ptr< Seiscomp::Core::MetaProperty > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__variantT_int_double_std__string_t = {"_p_boost__variantT_int_double_std__string_t", "boost::variant< int,double,std::string > *|Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::PropertyValue *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
@@ -47403,7 +49453,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core__MemoryException,
   &_swigt__p_Seiscomp__Core__Message,
   &_swigt__p_Seiscomp__Core__MessageIterator,
+  &_swigt__p_Seiscomp__Core__MetaEnum,
+  &_swigt__p_Seiscomp__Core__MetaObject,
+  &_swigt__p_Seiscomp__Core__MetaProperty,
   &_swigt__p_Seiscomp__Core__OverflowException,
+  &_swigt__p_Seiscomp__Core__PropertyNotFoundException,
   &_swigt__p_Seiscomp__Core__RTTI,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
@@ -47470,8 +49524,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_TagType,
   &_swigt__p_Type,
   &_swigt__p_bool,
+  &_swigt__p_boost__any,
   &_swigt__p_boost__dynamic_bitsetT_t,
   &_swigt__p_boost__none_t,
+  &_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t,
+  &_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t,
   &_swigt__p_boost__variantT_int_double_std__string_t,
   &_swigt__p_char,
   &_swigt__p_const_iterator,
@@ -47544,7 +49601,11 @@ static swig_cast_info _swigc__p_Seiscomp__Core__GreensFunction[] = {  {&_swigt__
 static swig_cast_info _swigc__p_Seiscomp__Core__MemoryException[] = {  {&_swigt__p_Seiscomp__Core__MemoryException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Message[] = {  {&_swigt__p_Seiscomp__Core__Message, 0, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__Message, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__Message, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__MessageIterator[] = {  {&_swigt__p_Seiscomp__Core__MessageIterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__MetaEnum[] = {  {&_swigt__p_Seiscomp__Core__MetaEnum, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__MetaObject[] = {  {&_swigt__p_Seiscomp__Core__MetaObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__MetaProperty[] = {  {&_swigt__p_Seiscomp__Core__MetaProperty, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__OverflowException[] = {  {&_swigt__p_Seiscomp__Core__OverflowException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__PropertyNotFoundException[] = {  {&_swigt__p_Seiscomp__Core__PropertyNotFoundException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__RTTI[] = {  {&_swigt__p_Seiscomp__Core__RTTI, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -47611,8 +49672,11 @@ static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__string_t[] = {  {&_sw
 static swig_cast_info _swigc__p_TagType[] = {  {&_swigt__p_TagType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_bool[] = {  {&_swigt__p_bool, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__any[] = {  {&_swigt__p_boost__any, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__dynamic_bitsetT_t[] = {  {&_swigt__p_boost__dynamic_bitsetT_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__none_t[] = {  {&_swigt__p_boost__none_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t[] = {  {&_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t[] = {  {&_swigt__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__variantT_int_double_std__string_t[] = {  {&_swigt__p_boost__variantT_int_double_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
@@ -47685,7 +49749,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core__MemoryException,
   _swigc__p_Seiscomp__Core__Message,
   _swigc__p_Seiscomp__Core__MessageIterator,
+  _swigc__p_Seiscomp__Core__MetaEnum,
+  _swigc__p_Seiscomp__Core__MetaObject,
+  _swigc__p_Seiscomp__Core__MetaProperty,
   _swigc__p_Seiscomp__Core__OverflowException,
+  _swigc__p_Seiscomp__Core__PropertyNotFoundException,
   _swigc__p_Seiscomp__Core__RTTI,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
@@ -47752,8 +49820,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_TagType,
   _swigc__p_Type,
   _swigc__p_bool,
+  _swigc__p_boost__any,
   _swigc__p_boost__dynamic_bitsetT_t,
   _swigc__p_boost__none_t,
+  _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t,
+  _swigc__p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t,
   _swigc__p_boost__variantT_int_double_std__string_t,
   _swigc__p_char,
   _swigc__p_const_iterator,
@@ -48496,7 +50567,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"TimeSpan_MaxTime",Swig_var_TimeSpan_MaxTime_get, Swig_var_TimeSpan_MaxTime_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Time_Null",Swig_var_Time_Null_get, Swig_var_Time_Null_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0C0000)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0C0100)));
   SWIG_addvarlink(SWIG_globals(),(char *)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));

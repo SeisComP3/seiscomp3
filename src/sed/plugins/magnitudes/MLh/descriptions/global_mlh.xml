@@ -34,6 +34,8 @@
 					Example: &quot;30 nomag; 60 0.018 2.17; 700 0.0038 3.02&quot;.
 					The first parameter set &quot;30 nomag&quot; means that up to 30km
 					from the sensor the magnitude should not be calculated.
+
+					Note: No MLh computation if params is empty.
 					</description>
 				</parameter>
 			</group>

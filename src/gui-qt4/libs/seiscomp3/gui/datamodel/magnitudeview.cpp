@@ -493,9 +493,7 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 			return QVariant();
 
 		char buf[10];
-		double smval = sm->magnitude().value(),
-		       nmval = _magnitude ? _magnitude->magnitude().value() : 0;
-
+		double smval = sm->magnitude().value();
 
 		switch ( index.column() ) {
 			case USED:
@@ -528,8 +526,11 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 
 			case RESIDUAL:
 				if ( _magnitude ) {
-					snprintf(buf, 10, "%.2f", smval-nmval);
-					return buf;
+					try {
+						snprintf(buf, 10, "%.2f", _magnitude->stationMagnitudeContribution(index.row())->residual());
+						return buf;
+					}
+					catch ( ... ) {}
 				}
 				break;
 
@@ -620,9 +621,7 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 			// Residual
 			case RESIDUAL:
 				try {
-					double smval = sm->magnitude().value(),
-					nmval = _magnitude ? _magnitude->magnitude().value() : 0;
-					return fabs(smval - nmval);
+					return fabs(_magnitude->stationMagnitudeContribution(index.row())->residual());
 				}
 				catch ( ValueException& ) {}
 				break;
@@ -1502,6 +1501,15 @@ void MagnitudeView::recalculateMagnitude() {
 		}
 		else
 			_netMag->stationMagnitudeContribution(i)->setWeight(0.);
+	}
+
+	for ( int i = 0; i < _modelStationMagnitudes.rowCount(); ++i ) {
+		if ( staCount ) {
+			StationMagnitude* sm = StationMagnitude::Find(_netMag->stationMagnitudeContribution(i)->stationMagnitudeID());
+			_netMag->stationMagnitudeContribution(i)->setResidual(sm->magnitude().value() - netmag);
+		}
+		else
+			_netMag->stationMagnitudeContribution(i)->setResidual(Core::None);
 	}
 
 	_netMag->setStationCount(staCount);
@@ -2465,10 +2473,10 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 		StationMagnitude *sm = StationMagnitude::Find(ref->stationMagnitudeID());
 
 		ref->setWeight(0.0);
-		try {
+		if ( staCount )
 			ref->setResidual(sm->magnitude().value()-netmag);
-		}
-		catch ( ... ) {}
+		else
+			ref->setResidual(Core::None);
 	}
 
 	magnitude->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
@@ -3261,7 +3269,18 @@ void MagnitudeView::updateMagnitudeLabels() {
 					changeMagnitudeState(i, _stamagnitudes->isValueSelected(i));
 				}
 			}
+
+			_stamagnitudes->updateBoundingRect();
+			QRectF rect(_stamagnitudes->boundingRect());
+			QRectF newRect(rect);
+			adjustMagnitudeRect(newRect);
+			newRect.setLeft(max(0.0, double(rect.left())));
+
+			_stamagnitudes->setDisplayRect(newRect);
 			_stamagnitudes->setUpdatesEnabled(true);
+
+			_map->setMagnitude(_netMag.get());
+			_map->update();
 		}
 	}
 	else {

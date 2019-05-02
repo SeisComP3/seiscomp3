@@ -443,7 +443,7 @@ begin
               lib_file_delete (q330->par_create.file_owner, fname) ;
               return ;
             end
-        if (statstor.crc != gcrccalc (addr(q330->crc_table), (pointer)((pntrint)addr(statstor) + 4), sizeof(tstatic) - 4))
+        if (statstor.crc != gcrccalc (addr(q330->crc_table), (pointer)((integer)addr(statstor) + 4), sizeof(tstatic) - 4))
           then
             begin
               if (result)
@@ -477,7 +477,7 @@ begin
               break ;
           pdlsrc = (pointer)q330->cbuf ;
           next = next + pdlsrc->size ; /* next record */
-          if (pdlsrc->crc != gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pdlsrc + 4), pdlsrc->size - 4))
+          if (pdlsrc->crc != gcrccalc (addr(q330->crc_table), (pointer)((integer)pdlsrc + 4), pdlsrc->size - 4))
             then
               begin
                 libmsgadd (q330, LIBMSG_CONCRC, "Thread") ;
@@ -636,7 +636,7 @@ begin
     end
   mem = (mem + 0xFFFF) and 0xFFFF0000 ; /* lib_round up to nearest 64KB */
   pstat->thrmem_required = mem ;
-  pstat->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pstat + 4), sizeof(tstatic) - 4) ;
+  pstat->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pstat + 4), sizeof(tstatic) - 4) ;
   lib_file_write (q330->par_create.file_owner, cf, pstat, sizeof(tstatic)) ;
   q = paqs->dplcqs ;
   while (q)
@@ -665,7 +665,7 @@ begin
             pdldest->nextrec_tag = q->backup_tag ;
             pdldest->lastrec_tag = q->last_timetag ;
 #endif
-            pdldest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pdldest + 4), pdldest->size - 4) ;
+            pdldest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pdldest + 4), pdldest->size - 4) ;
             lib_file_write (q330->par_create.file_owner, cf, pdldest, pdldest->size) ;
           end
       q = q->link ;
@@ -715,14 +715,14 @@ begin
     pcc->size = sz ;
     pcc->allocsize = sz ; /* initially both of these are the same */
     pcc->next = NIL ;
-    pcc->payload = (pointer)((pntrint)pcc + sizeof(tcont_cache)) ; /* skip cache header */
+    pcc->payload = (pointer)((integer)pcc + sizeof(tcont_cache)) ; /* skip cache header */
     p = pcc->payload ;
     memcpy (p, addr(hdr), sizeof(tctyhdr)) ; /* copy header in */
     incn(p, sizeof(tctyhdr)) ; /* skip part we already read */
     if (lib_file_read (q330->par_create.file_owner, cf, p, sz - sizeof(tctyhdr)))
       then
         break ;
-    if (hdr.crc != gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pcc->payload + 4), sz - 4))
+    if (hdr.crc != gcrccalc (addr(q330->crc_table), (pointer)((integer)pcc->payload + 4), sz - 4))
       then
         begin
           libmsgadd (q330, LIBMSG_CONCRC, "Q330") ;
@@ -767,7 +767,7 @@ begin
         libmsgadd (q330, LIBMSG_CONTIN, addr(s)) ;
         return ;
       end
-  if (system.crc != gcrccalc (addr(q330->crc_table), (pointer)((pntrint)addr(system) + 4), sizeof(tsystem) - 4))
+  if (system.crc != gcrccalc (addr(q330->crc_table), (pointer)((integer)addr(system) + 4), sizeof(tsystem) - 4))
     then
       begin
         libmsgadd (q330, LIBMSG_CONCRC, "Q330") ;
@@ -911,7 +911,7 @@ begin
               then
                 begin
                   q->fir->fcount = pfsrc->fcnt ;
-                  q->fir->f = (pointer)((pntrint)q->fir->fbuf + pfsrc->foff) ;
+                  q->fir->f = (pointer)((integer)q->fir->fbuf + pfsrc->foff) ;
                   memcpy (q->fir->fbuf, addr(pfsrc->fbuffer), q->fir->flen * sizeof(tfloat)) ;
                   q->com->charging = FALSE ; /* not any more */
                   break ;
@@ -1010,11 +1010,11 @@ begin
               then
                 begin
                   pmc = pdp->cont ;
-                  memcpy (pmc, addr(pmsrc->mh_cont), (pntrint)addr(pmc->onsetdata) - (pntrint)pmc) ;
+                  memcpy (pmc, addr(pmsrc->mh_cont), (integer)addr(pmc->onsetdata) - (integer)pmc) ;
                   if ((pdp->insamps) land (pmsrc->size > sizeof(tctymh)))
                     then
                       begin
-                        pl = (pointer)((pntrint)pmsrc + sizeof(tctymh)) ;
+                        pl = (pointer)((integer)pmsrc + sizeof(tctymh)) ;
                         memcpy (pdp->insamps, pl, pdp->insamps_size) ;
                       end
                   if ((pmc->default_enabled) != (pdp->det_options and DO_RUN))
@@ -1046,7 +1046,7 @@ begin
               then
                 begin
                   pmt = pdp->cont ;
-                  memcpy (pmt, addr(ptsrc->thr_cont), (pntrint)addr(pmt->onsetdata) - (pntrint)pmt) ;
+                  memcpy (pmt, addr(ptsrc->thr_cont), (integer)addr(pmt->onsetdata) - (integer)pmt) ;
                   if ((pmt->default_enabled) != (pdp->det_options and DO_RUN))
                     then
                       begin
@@ -1111,7 +1111,7 @@ begin
         getthrbuf (q330, addr(pcc), size + sizeof(tcont_cache)) ;
         pcc->size = size ;
         pcc->allocsize = size ;
-        pcc->payload = (pointer)((pntrint)pcc + sizeof(tcont_cache)) ; /* skip cache header */
+        pcc->payload = (pointer)((integer)pcc + sizeof(tcont_cache)) ; /* skip cache header */
       end
   pcc->next = NIL ; /* new end of list */
   if (q330->contlast)
@@ -1189,7 +1189,7 @@ begin
   psystem->reboot_counter = q330->share.fixed.reboots ;
   psystem->high_freq = q330->share.fixed.freq7 ;
   unlock (q330) ;
-  psystem->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)psystem + 4), sizeof(tsystem) - 4) ;
+  psystem->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)psystem + 4), sizeof(tsystem) - 4) ;
   q330cont_write (q330, psystem, sizeof(tsystem)) ;
   q = paqs->lcqs ;
   while (q)
@@ -1234,7 +1234,7 @@ begin
       pldest->backup_timetag = q->backup_tag ;
       pldest->backup_timequal = q->backup_qual ;
 #endif
-      pldest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pldest + 4), pldest->size - 4) ;
+      pldest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pldest + 4), pldest->size - 4) ;
       q330cont_write (q330, pldest, pldest->size) ;
 #ifndef OMIT_SEED
       if ((q->fir) land (q->source_fir))
@@ -1247,10 +1247,10 @@ begin
             strcpy(addr(pfdest->fn), addr(q->source_fir->fname)) ;
             pfdest->lpad = 0 ;
             pfdest->fcnt = q->fir->fcount ;
-            pfdest->foff = (longint)((pntrint)q->fir->f - (pntrint)q->fir->fbuf) ;
+            pfdest->foff = (integer)q->fir->f - (integer)q->fir->fbuf ;
             memcpy (addr(pfdest->fbuffer), q->fir->fbuf, q->fir->flen * sizeof (tfloat)) ;
             pfdest->size = pfdest->size + sizeof(tfloat) * q->fir->flen ;
-            pfdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pfdest + 4), pfdest->size - 4) ;
+            pfdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pfdest + 4), pfdest->size - 4) ;
             q330cont_write (q330, pfdest, pfdest->size) ;
           end
       if (q->avg)
@@ -1262,7 +1262,7 @@ begin
             memcpy(addr(padest->name), addr(q->seedname), sizeof(tseed_name)) ;
             padest->lpad = 0 ;
             memcpy(addr(padest->average), q->avg, sizeof(tavg_packet)) ;
-            padest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)padest + 4), padest->size - 4) ;
+            padest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)padest + 4), padest->size - 4) ;
             q330cont_write (q330, padest, padest->size) ;
           end
       psrc = q->stream_iir ;
@@ -1287,7 +1287,7 @@ begin
             end
           memcpy (addr(pdest->outbuf), addr(psrc->out), sizeof(tfloat) * points) ;
           pdest->size = pdest->size + sizeof(tfloat) * points ;
-          pdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pdest + 4), pdest->size - 4) ;
+          pdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pdest + 4), pdest->size - 4) ;
           q330cont_write (q330, pdest, pdest->size) ;
           psrc = psrc->link ;
         end
@@ -1309,10 +1309,10 @@ begin
                   then
                     begin /* append contents of insamps array for low frequency stuff */
                       pmdest->size = pmdest->size + pdp->insamps_size ;
-                      pl = (pointer)((pntrint)pmdest + sizeof(tctymh)) ;
+                      pl = (pointer)((integer)pmdest + sizeof(tctymh)) ;
                       memcpy (pl, pdp->insamps, pdp->insamps_size) ;
                     end
-                pmdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pmdest + 4), pmdest->size - 4) ;
+                pmdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pmdest + 4), pmdest->size - 4) ;
                 q330cont_write (q330, pmdest, pmdest->size) ;
               end
             else
@@ -1325,7 +1325,7 @@ begin
                 ptdest->lpad = 0 ;
                 pmt = pdp->cont ;
                 memcpy (addr(ptdest->thr_cont), pmt, sizeof(threshold_control_struc)) ;
-                ptdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)ptdest + 4), ptdest->size - 4) ;
+                ptdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)ptdest + 4), ptdest->size - 4) ;
                 q330cont_write (q330, ptdest, ptdest->size) ;
               end
           pdp = pdp->link ;
@@ -1346,7 +1346,7 @@ begin
                       prdest->lpad = 0 ;
                       prdest->spare = 0 ;
                       memcpy (addr(prdest->comprec), addr(pr->rec), LIB_REC_SIZE) ;
-                      prdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)prdest + 4), prdest->size - 4) ;
+                      prdest->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)prdest + 4), prdest->size - 4) ;
                       q330cont_write (q330, prdest, prdest->size) ;
                     end
                 pr = pr->link ;
@@ -1381,7 +1381,7 @@ begin
           then
             return ; /* already done? */
         psystem->id = CTY_PURGED ;
-        psystem->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)psystem + 4), sizeof(tsystem) - 4) ;
+        psystem->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)psystem + 4), sizeof(tsystem) - 4) ;
         memcpy(pcc->payload, psystem, sizeof(tsystem)) ; /* secretly replace with Folgers Crystals */
       end
 end
@@ -1414,7 +1414,7 @@ begin
         return ;
       end
   pdlsrc->id = CTY_PURGED ;
-  pdlsrc->crc = gcrccalc (addr(q330->crc_table), (pointer)((pntrint)pdlsrc + 4), sizeof(tctydplcq) - 4) ;
+  pdlsrc->crc = gcrccalc (addr(q330->crc_table), (pointer)((integer)pdlsrc + 4), sizeof(tctydplcq) - 4) ;
   lib_file_seek (q330->par_create.file_owner, cf, sizeof(tstatic)) ;
   lib_file_write (q330->par_create.file_owner, cf, pdlsrc, sizeof(tctydplcq)) ;
   lib_file_close (q330->par_create.file_owner, cf) ;

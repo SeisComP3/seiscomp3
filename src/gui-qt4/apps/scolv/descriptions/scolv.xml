@@ -171,7 +171,8 @@
 						<description>
 							Defines the visible columns in the arrival table. Valid tokens are:
 							Used, Status, Phase, Weight, Method, Polarity, Takeoff,
-							Net, Sta, Loc/Cha, Res, Dis, Az, Time, +/-, Created, Latency.
+							Net, Sta, Loc/Cha, Timeres, Dis, Az, Time, +/-,
+							Slo, Slores, Baz, Bazres, Created, Latency
 						</description>
 					</parameter>
 				</group>
@@ -207,6 +208,19 @@
 						Activates the button &quot;Fix this origin as preferred solution&quot; when
 						committing with additional options. This is just the default
 						setting and can be changed manually when the dialog pops up.
+						</description>
+					</parameter>
+					<parameter name="returnToEventList" type="boolean" default="true">
+						<description>
+						Whether to return to the event list after committing with
+						additional options or not.
+						</description>
+					</parameter>
+					<parameter name="eventCommentOptions" type="list:string">
+						<description>
+							Turns the event comment input field into a drop down box
+							allowing the user to select from a list a predefined comment
+							values which may be changed if required.
 						</description>
 					</parameter>
 				</group>

@@ -22,7 +22,6 @@
 using namespace Seiscomp;
 using namespace Seiscomp::IO;
 
-
 struct MSEEDLogger {
 	MSEEDLogger() {
 		ms_loginit(MSEEDLogger::print, "[libmseed] ", MSEEDLogger::diag, "[libmseed] ERR: ");
@@ -478,7 +477,17 @@ void MSeedRecord::write(std::ostream& out) {
 	pmsr->samprate = _fsamp;
 	pmsr->byteorder = 1;
 	pmsr->numsamples = _data->size();
-	ArrayPtr data = 0;
+	ArrayPtr data;
+
+	struct blkt_1001_s blkt1001;
+	memset(&blkt1001, 0, sizeof (struct blkt_1001_s));
+
+	if ( _timequal >= 0 )
+		blkt1001.timing_qual = _timequal <= 100 ? _timequal : 100;
+
+	if ( !msr_addblockette(pmsr, (char *)&blkt1001, sizeof(struct blkt_1001_s), 1001, 0) ) {
+		throw LibmseedException("Error adding 1001 blockette.");
+	}
 
 	if (_encodingFlag) {
 		switch (_encoding) {
@@ -557,6 +566,7 @@ void MSeedRecord::write(std::ostream& out) {
 	/* Pack the record(s) */
 	CharArray packed;
 	int64_t psamples;
+
 	msr_pack(pmsr, &_Record_Handler, &packed, &psamples, 1, 0);
 	pmsr->datasamples = 0;
 	msr_free(&pmsr);

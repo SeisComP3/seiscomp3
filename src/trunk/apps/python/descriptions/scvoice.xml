@@ -28,7 +28,7 @@
 						Example: &quot;@region@, @dist@ kilometers from @poi@ away&quot;.
 					</description>
 				</parameter>
-				<parameter name="maxDist" type="double" default="20">
+				<parameter name="maxDist" type="double" default="20" unit="deg">
 					<description>
 						When using the nearest point of interest (city) as part of the
 						message string, specify the maximum distance in degrees from the

@@ -243,74 +243,6 @@ GridPoint::feed(const Pick* pick)
 		ptime[i] = pps[i].projectedTime();
 	}
 
-	// estimate origin time from the median projected times
-	// because the projected times are in order
-//	double mtime = pps[npick/2].projectedTime(); // median time
-
-//	mtime = 0.;
-//	for (int i=0; i<npick; i++) {
-//		mtime += ptime[i] / npick;
-//	}
-
-// X	double l1 = 0;
-// X
-// X	i=0;
-// X	std::vector<double> dtx(npick), dty(npick);
-// X	for (it=lower; it!=upper; ++it) {
-// X		string code = (*it).p->station->code;
-// X
-// X		StationWrapper &sw = _wrappers[code];
-// X		if ( ! sw.station ) {
-// X			SEISCOMP_WARNING("No StationWrapper for " + code);
-// X			continue;
-// X		}
-// X
-// X		double az =  sw.azimuth*M_PI/180;
-// X		double px = -sw.hslow * sin(az);
-// X		double py = -sw.hslow * cos(az);
-// X
-// X		double dx=0.01,dy=0.01;
-// X
-// X		dtx[i] = px*dx;
-// X		dty[i] = py*dy;
-// X
-// X		l1 += fabs( (*it).projectedTime() - mtime );
-// X	}
-// X
-// X	double mtx = 0, mty = 0;
-// X	for (i=0;i<npick;i++) {
-// X		mtx += dtx[i];
-// X		mty += dty[i];
-// X	}
-// X	mtx = mtx/(npick*0.01);
-// X	mty = mty/(npick*0.01);
-// X
-// X	SEISCOMP_DEBUG("dmtx = %f  dmty = %f", mtx, mty);
-
-//	mtx += mtime;
-//	mty += mtime;
-
-// X	double l1x = 0, l1y = 0;
-// X
-// X	for (it=lower,i=0; it!=upper; ++it) {
-// X		string code = (*it).p->station->code;
-// X		StationWrapper &sw = _wrappers[code];
-// X		if ( ! sw.station ) {
-// X			continue;
-// X		}
-// X		l1x += fabs( (*it).projectedTime()+dtx[i]/0.01 - (mtime+mtx) );
-// X		l1y += fabs( (*it).projectedTime()+dty[i]/0.01 - (mtime+mty) );
-// X	}
-// X	SEISCOMP_DEBUG("dl1x = %f  dl2y = %f", (l1x-l1)/npick, (l1y-l1)/npick);
-// X
-// X	for (i=0;i<npick;i++) {
-// X		l1x += dtx[i]/0.01;
-// X		l1y += dty[i]/0.01;
-// X	}
-
-//	double meandev = l1/npick;
-	
-
 //	Origin* origin = new Origin(lat, lon, dep, otime);
 	_origin->arrivals.clear();
 	// add Picks/Arrivals to that newly created Origin
@@ -357,21 +289,6 @@ int GridPoint::cleanup(const Time& minTime)
 	return count;
 }
 
-/*
-void GridPoint::setStations(const StationMap *stations)
-{
-	_wrappers.clear();
-
-	if ( stations == NULL ) return;
-
-	for (StationMap::const_iterator
-	     it = stations->begin(); it != stations->end(); ++it) {
-
-		const Station *station = (*it).second.get();
-		setupStation(station);
-	}
-}
-*/
 
 bool GridPoint::setupStation(const Station *station)
 {
@@ -395,31 +312,6 @@ bool GridPoint::setupStation(const Station *station)
 	return true;
 }
 
-
-/*
-static double avgfn2(double x)
-{
-	if (x<-1 || x>1)
-		return 0;
-
-	x *= M_PI*0.5;
-	x = cos(x);
-	return x*x;
-}
-
-static double avgfn2(double x)
-{
-	if (x<-0.75 || x>0.75)
-		return 0;
-	if (x>-0.25 || x<0.25)
-		return 1;
-
-	x = 2*(x + (x>0 ? -0.25 : 0.25));
-	x *= M_PI*0.5;
-	x = cos(x);
-	return x*x;
-}
-*/
 
 static double avgfn2(double x)
 {
@@ -468,10 +360,9 @@ double originScore(const Origin *origin, double maxRMS, double networkSizeKm)
 		double phaseScore = 1; // 1 for P / 0.3 for PKP
 		Arrival &arr = ((Origin*)origin)->arrivals[i];
 		PickCPtr pick = arr.pick;
-		if ( ! pick->station()) {
-// XXX			SEISCOMP_WARNING("originScore: missing station info for pick '%s'", pick->id.c_str());
+		if ( ! pick->station())
 			continue;
-		}
+
 		arr.score = 0;
 		arr.ascore = arr.dscore = arr.tscore = 0;
 
@@ -534,8 +425,6 @@ double originScore(const Origin *origin, double maxRMS, double networkSizeKm)
 		// are more susceptible to outliers, so we allow a somewhat
 		// higher residual. XXX Note that this may increase the score
 		// for origins with less arrivals, which might be harmful.
-		//double q = 20;
-		//double x = q*q/(n*n+q*q);
 
 		double timeScore = avgfn2(arr.residual/(2*maxRMS));
 
@@ -588,8 +477,8 @@ static Origin* bestOrigin(OriginVector &origins)
 	double maxScore = 0;
 	Origin* best = 0;
 
-	for (OriginVector::iterator it=origins.begin();
-	     it != origins.end(); ++it) {
+	for (OriginVector::iterator
+	     it = origins.begin(); it != origins.end(); ++it) {
 
 		Origin* origin = (*it).get();
 		double score = originScore(origin);
@@ -608,14 +497,6 @@ static Origin* bestOrigin(OriginVector &origins)
 bool GridSearch::feed(const Pick *pick)
 {
 	_newOrigins.clear();
-
-	// see if pick is a duplicate
-//	if (_pa.count( pick->id ) )
-//		// TODO: Check if pick needs to be updated, e.g.
-//		// if the pick was blacklisted, it must be removed
-//		return false;
-//
-//	_pa[ pick->id ] = pa;
 
 	if (_stations.size() == 0) {
 		SEISCOMP_ERROR("\nGridSearch::feed() NO STATIONS SET\n");
@@ -653,14 +534,18 @@ bool GridSearch::feed(const Pick *pick)
 	// Feed the new pick into the individual grid points
 	// and save all "candidate" origins in originVector
 
+	// XXX
+	bool track = false;
+	if (pick->id == "20181211.023135.99-AIC-C1.MG02..BHZ")
+		track = true;
+
 	double maxScore = 0;
 	for (Grid::iterator it=_grid.begin(); it!=_grid.end(); ++it) {
 
 		GridPoint *gp = it->get();
 
-		if (stationSetupNeeded) {
+		if (stationSetupNeeded)
 			gp->setupStation(pick->station());
-		}
 
 		const Origin *origin = gp->feed(pick);
 		if ( ! origin)
@@ -677,6 +562,9 @@ bool GridSearch::feed(const Pick *pick)
 		if (origin->findArrival(pick) == -1)
 			// this is actually an unexpected condition!
 			continue;
+
+		if(track)
+		SEISCOMP_ERROR_S("GGG "+printOneliner(origin));
 
 		const PickSet pickSet = originPickSet(origin);
 		// test if we already have an origin with this particular pick set
@@ -696,7 +584,6 @@ bool GridSearch::feed(const Pick *pick)
 
 /*
 		_relocator.useFixedDepth(true);
-SEISCOMP_DEBUG("RELOCATE nucleator.cpp 692");
 		OriginPtr relo = _relocator.relocate(origin);
 		if ( ! relo)
 			continue;
@@ -725,7 +612,7 @@ SEISCOMP_DEBUG("RELOCATE nucleator.cpp 692");
 // Hier nur jene Origins aus Gridsearch zulassen, die nicht mehrheitlich aus assoziierten Picks bestehen.
 // XXX XXX XXX XXX XXX
 
-		_relocator.useFixedDepth(true);
+		_relocator.useFixedDepth(true); // XXX vorher true
 //SEISCOMP_DEBUG("RELOCATE nucleator.cpp 724");
 		OriginPtr relo = _relocator.relocate(origin);
 		if ( ! relo)
@@ -742,6 +629,19 @@ SEISCOMP_DEBUG("RELOCATE nucleator.cpp 692");
 
 		tempOrigins.push_back(relo);
 	}
+
+	if (track) {
+		for (OriginVector::iterator
+			it=tempOrigins.begin(); it!=tempOrigins.end(); ++it) {
+			const Origin *org = it->get();
+			SEISCOMP_ERROR_S("XXX "+printOneliner(org));
+			for (ArrivalVector::const_iterator
+				it=org->arrivals.begin(); it!=org->arrivals.end(); ++it) {
+					SEISCOMP_ERROR_S("XXX   "+it->pick->id);
+			}
+		}
+	}
+	
 
 	// Now for all "candidate" origins in tempOrigins try to find the
 	// "best" one. This is a bit problematic as we don't go back and retry

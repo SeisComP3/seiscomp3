@@ -275,7 +275,7 @@ void checkPAZ(DataModel::ResponsePAZ *rp) {
 
 
 void checkFAP(DataModel::ResponseFAP *rp) {
-	if ( rp->numberOfTuples() != (int)(rp->tuples().content().size()*3) ) {
+	if ( rp->numberOfTuples() != (int)(rp->tuples().content().size()/3) ) {
 		SEISCOMP_WARNING("expected %d tuples, found %lu", rp->numberOfTuples(),
 		                 (unsigned long)(rp->tuples().content().size()/3));
 		rp->setNumberOfTuples(rp->tuples().content().size()/3);

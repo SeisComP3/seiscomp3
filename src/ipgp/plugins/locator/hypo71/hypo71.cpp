@@ -53,7 +53,7 @@
 #define MSG_HEADER "[plugin] [Hypo71]"
 
 
-ADD_SC_PLUGIN("HYPO71 seismic hypocenter locator plugin", "IPGP <www.ipgp.fr>", 0, 1, 1)
+ADD_SC_PLUGIN("HYPO71 seismic hypocenter locator plugin", "IPGP <www.ipgp.fr>", 0, 2, 0)
 
 
 using namespace std;
@@ -951,6 +951,9 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 
 	// Crustal model list
+	std::string velocityModel;
+	std::string depthModel;
+
 	pConfig.readInto(velocityModel, "CRUSTAL_VELOCITY_MODEL");
 	stringExplode(velocityModel, ",", &Tvelocity);
 
@@ -960,6 +963,11 @@ Origin* Hypo71::locate(PickList& pickList) {
 	if ( Tvelocity.size() != Tdepth.size() ) {
 		SEISCOMP_ERROR("%s Crustal velocity / depth doesn't match up, please correct that.", MSG_HEADER);
 		throw LocatorException("ERROR! Velocity model and Depth model doesn't match up in configuration file");
+	}
+
+	if ( Tvelocity.empty() ) {
+		SEISCOMP_ERROR("%s No crustal velocity / depth layers defined.", MSG_HEADER);
+		throw LocatorException("ERROR! Velocity model and Depth model empty");
 	}
 
 	// Control card parameters
@@ -1771,7 +1779,6 @@ Origin* Hypo71::locate(PickList& pickList) {
 	double rms = 0;
 	double hrms = -1;
 	vector<double> Tdist;
-	vector<double> Tazi;
 	string gap;
 
 	// We now know were informations we need to create Origin, Picks, Arrivals
@@ -1993,7 +2000,6 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 
 		if ( (loop >= staStart) && (loop < staEnd) ) {
-
 			string networkCode, staName, dist, azimuth, takeOffAngle, hour,
 			        minute, psec, pres, pwt, ssec, sres, swt;
 			try {
@@ -2178,7 +2184,6 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 			// Saving station arrival info
 			Tdist.push_back(toDouble(dist));
-			Tazi.push_back(toDouble(azimuth));
 			rms += toDouble(pres) * toDouble(sres);
 			++usedAssocCount;
 
@@ -2218,18 +2223,13 @@ Origin* Hypo71::locate(PickList& pickList) {
 	if ( hrms >= 0 )
 		oq.setStandardError(hrms);
 
-	sort(Tazi.begin(), Tazi.end());
-	Tazi.push_back(Tazi.front() + 360.);
+	if ( !Tdist.empty() ) {
+		sort(Tdist.begin(), Tdist.end());
+		oq.setMinimumDistance(Math::Geo::km2deg(Tdist.front()));
+		oq.setMaximumDistance(Math::Geo::km2deg(Tdist.back()));
+		oq.setMedianDistance(Tdist[Tdist.size() / 2]);
+	}
 
-	double azGap = 0.;
-	if ( Tazi.size() > 2 )
-		for (size_t i = 0; i < Tazi.size() - 1; ++i)
-			azGap = (Tazi[i + 1] - Tazi[i]) > azGap ? (Tazi[i + 1] - Tazi[i]) : azGap;
-
-	sort(Tdist.begin(), Tdist.end());
-	oq.setMinimumDistance(Math::Geo::km2deg(Tdist.front()));
-	oq.setMaximumDistance(Math::Geo::km2deg(Tdist.back()));
-	oq.setMedianDistance(Tdist[Tdist.size() / 2]);
 	origin->setQuality(oq);
 
 	log.close();
@@ -2351,6 +2351,9 @@ Hypo71::getZTR(const PickList& pickList) {
 
 
 	// Crustal model list
+	std::string velocityModel;
+	std::string depthModel;
+
 	pConfig.readInto(velocityModel, "CRUSTAL_VELOCITY_MODEL");
 	stringExplode(velocityModel, ",", &Tvelocity);
 
@@ -2359,6 +2362,11 @@ Hypo71::getZTR(const PickList& pickList) {
 
 	if ( Tvelocity.size() != Tdepth.size() )
 		throw LocatorException("ERROR! Velocity model and Depth model doesn't match up in configuration file");
+
+	if ( Tvelocity.empty() ) {
+		SEISCOMP_ERROR("%s No crustal velocity / depth layers defined.", MSG_HEADER);
+		throw LocatorException("ERROR! Velocity model and Depth model empty");
+	}
 
 	// Control card parameters
 	pConfig.readInto(cCC.ztr, "ZTR", dCC.ztr);

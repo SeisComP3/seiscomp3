@@ -326,7 +326,7 @@ begin
         mscan = dssstr->free ;
         while (mscan) /* check for contiguous with other free memory */
           begin
-            mend = (pointer)((pntrint)mscan + mscan->size) ;
+            mend = (pointer)((uninteger)mscan + mscan->size) ;
             if (mend == mpt)
               then
                 begin /* mpt follows mscan */
@@ -334,7 +334,7 @@ begin
                   mpt = NIL ; /* used up */
                   break ;
                 end
-            else if ((pointer)((pntrint)mpt + msize) == mscan)
+            else if ((pointer)((uninteger)mpt + msize) == mscan)
               then
                 begin /* mpt preceeds mscan */
                   if (mscan->prev)
@@ -380,7 +380,7 @@ begin
     then
       begin /* keep leftover fragment */
         smallpt->size = sz ; /* new size of this segment */
-        smallpt = (pointer)((pntrint)smallpt + sz) ; /* memory left over */
+        smallpt = (pointer)((uninteger)smallpt + sz) ; /* memory left over */
         smallpt->size = oldsize - sz ;
         smallpt->next = oldnext ;
         smallpt->prev = oldprev ;
@@ -448,7 +448,7 @@ begin
       pt->next->prev = pt->prev ;
   previous = NIL ;
  /* see if adjoins existing segment */
-  mend = (pointer)((pntrint)pt + pt->size) ; /* end of this segment */
+  mend = (pointer)((uninteger)pt + pt->size) ; /* end of this segment */
   mscan = dssstr->free ;
   while (mscan)
     begin
@@ -468,13 +468,13 @@ begin
             pt->prev = mscan->prev ;
             return ;
           end
-      else if ((pointer)((pntrint)mscan + mscan->size) == pt)
+      else if ((pointer)((uninteger)mscan + mscan->size) == pt)
         then
           begin /* returned segment follows scanned segment */
             mscan->size = mscan->size + pt->size ;
             return ;
           end
-      else if ((pntrint)mscan < (pntrint)pt)
+      else if ((uninteger)mscan < (uninteger)pt)
         then
           previous = mscan ;
       mscan = mscan->next ;
@@ -516,7 +516,7 @@ begin
   mscan = dssstr->free ;
   while ((mscan) land (mscan->next))
     begin
-      mend = (pointer)((pntrint)mscan + mscan->size) ;
+      mend = (pointer)((uninteger)mscan + mscan->size) ;
       mnext = mscan->next ;
       if (mend == mnext)
         then
@@ -655,7 +655,7 @@ begin
   if (dssstr->verbosity >= RPT_CLIENTS)
     then
       begin
-        sprintf(s, "Removing Client ""%s""", (char *)addr(pcli->name)) ;
+        sprintf(s, "Removing Client ""%s""", addr(pcli->name)) ;
         lib_msg_add(dssstr->q330, AUXMSG_DSS, 0, addr(s)) ;
       end
   /* if head of list, change head */
@@ -736,7 +736,7 @@ begin
   msglth = 12 + dssstr->sendhdr.datalength ;
   p = addr(dssstr->msgout) ;
   storedsshdr (addr(p), addr(dssstr->sendhdr)) ;
-  dssstr->sendhdr.crc = gcrccalc (addr(dssstr->q330->crc_table), (pointer)((pntrint)addr(dssstr->msgout) + 4), msglth - 4) ;
+  dssstr->sendhdr.crc = gcrccalc (addr(dssstr->q330->crc_table), (pointer)((integer)addr(dssstr->msgout) + 4), msglth - 4) ;
   p = addr(dssstr->msgout) ;
   storelongint (addr(p), dssstr->sendhdr.crc) ;
   incn(dssstr->bytecount, (longint)msglth) ;
@@ -1402,7 +1402,7 @@ begin
               strcat(s, ":") ;
               strcat(s, addr(dssstr->detname)) ;
             end
-        sprintf(s2, "Adding %s for client %s", s, (char *)addr(pcli->name)) ;
+        sprintf(s2, "Adding %s for client %s", s, addr(pcli->name)) ;
         lib_msg_add(dssstr->q330, AUXMSG_DSS, 0, addr(s2)) ;
       end
   /* try to reconnect now */
@@ -1647,7 +1647,7 @@ begin
     then
       begin
         p = addr(dssstr->msgin.qdp) ;
-        expcrc = gcrccalc (addr(dssstr->q330->crc_table), (pointer)((pntrint)addr(dssstr->msgin) + 4), err - 4) ;
+        expcrc = gcrccalc (addr(dssstr->q330->crc_table), (pointer)((integer)addr(dssstr->msgin) + 4), err - 4) ;
         loaddsshdr (addr(p), addr(dssstr->recvhdr)) ; /* handle both formats */
         if (expcrc != dssstr->recvhdr.crc)
           then
@@ -1694,16 +1694,16 @@ begin
   pbyte p, pbeg ;
 
   incn(dssstr->sendhdr.datalength, size) ;
-  pbeg = (pointer)((pntrint)(dssstr->pb) - size) ; /* back to beginning of record */
+  pbeg = (pointer)((uninteger)(dssstr->pb) - size) ; /* back to beginning of record */
   if (dssstr->lastp)
     then
       begin
         p = dssstr->lastp ;
         w = loadword (addr(p)) ; /* current flags */
         p = dssstr->lastp ;
-        storeword (addr(p), w or (word)((pntrint)pbeg - (pntrint)(addr(dssstr->msgout.buffer)))) ;
+        storeword (addr(p), w or (word)((uninteger)pbeg - (uninteger)(addr(dssstr->msgout.buffer)))) ;
       end
-  dssstr->lastp = (pointer)((pntrint)pbeg + 2) ; /* point at offset */
+  dssstr->lastp = (pointer)((uninteger)pbeg + 2) ; /* point at offset */
 end
 
 static void checksize (pdssstr dssstr, longint size)
@@ -1967,7 +1967,7 @@ begin
                           case REQ_MMA : offline (dssstr, prep) ; break ;
                           case REQ_SQR : offline (dssstr, prep) ; break ;
                         end
-                        dssstr->pb = (pbyte)((pntrint)(addr(dssstr->msgout.buffer)) + dssstr->sendhdr.datalength) ;
+                        dssstr->pb = (pbyte)((integer)(addr(dssstr->msgout.buffer)) + dssstr->sendhdr.datalength) ;
                       end
                   if (prep->interval)
                     then
@@ -2034,7 +2034,7 @@ begin
                 if (dssstr->verbosity >= RPT_CLIENTS)
                   then
                     begin
-                      sprintf(s, "Timeout on Client ""%s""", (char *)addr(pcli->name)) ;
+                      sprintf(s, "Timeout on Client ""%s""", addr(pcli->name)) ;
                       lib_msg_add(dssstr->q330, AUXMSG_DSS, 0, addr(s)) ;
                     end
                 dssstr->cur_client = (pdss_client)(pcli->memory.next) ;
@@ -2263,7 +2263,7 @@ begin
                       case REQ_MMA : rep_mma (dssstr, prep) ; break ;
                       case REQ_SQR : rep_sqr (dssstr, prep) ; break ;
                     end
-                    dssstr->pb = (pbyte)((pntrint)(addr(dssstr->msgout.buffer)) + dssstr->sendhdr.datalength) ;
+                    dssstr->pb = (pbyte)((integer)(addr(dssstr->msgout.buffer)) + dssstr->sendhdr.datalength) ;
                   end
               prep = (pdss_report)(prep->memory.next) ;
             end
@@ -2347,4 +2347,3 @@ end
 
 #endif
 #endif
-

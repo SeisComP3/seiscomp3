@@ -66,7 +66,7 @@
 				fdsnws-event to limit main memory consumption.
 				</description>
 			</parameter>
-			<parameter name="realtimeGap" type="int">
+			<parameter name="realtimeGap" type="int" unit="s">
 				<description>
 				Restricts end time of requests to current time - realtimeGap
 				seconds. Negative values allowed. Used in fdsnws-dataselect.

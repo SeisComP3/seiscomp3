@@ -94,9 +94,11 @@ MAKEENUM(
 		DISTANCE,
 		AZIMUTH,
 		TIME,
-		SLOWNESS,
-		BACKAZIMUTH,
 		UNCERTAINTY,
+		SLOWNESS,
+		SLOWNESS_RESIDUAL,
+		BACKAZIMUTH,
+		BACKAZIMUTH_RESIDUAL,
 		CREATED,
 		LATENCY
 	),
@@ -111,13 +113,15 @@ MAKEENUM(
 		"Net",
 		"Sta",
 		"Loc/Cha",
-		"Res",
+		"Timeres",
 		"Dis",
 		"Az",
 		"Time",
-		"Slo",
-		"Baz",
 		"+/-",
+		"Slo",
+		"Slores",
+		"Baz",
+		"Bazres",
 		"Created",
 		"Latency"
 	)
@@ -186,7 +190,6 @@ QVariant colAligns[ArrivalListColumns::Quantity] = {
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter),
-	int(Qt::AlignLeft | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter)
 };
 
@@ -207,6 +210,10 @@ bool colVisibility[ArrivalListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	false,
+	false,
+	false,
+	false,
 	false,
 	false
 };
@@ -265,6 +272,10 @@ class ArrivalsSortFilterProxyModel : public QSortFilterProxyModel {
 			     (left.column() == WEIGHT && right.column() == WEIGHT) )
 				return sourceModel()->data(left, Qt::UserRole).toDouble() <
 				       sourceModel()->data(right, Qt::UserRole).toDouble();
+			else if ( left.column() == USED && right.column() == USED ) {
+				return sourceModel()->data(left, UsedRole).toInt() <
+				       sourceModel()->data(right, UsedRole).toInt();
+			}
 			else
 				return QSortFilterProxyModel::lessThan(left, right);
 		}
@@ -362,6 +373,10 @@ class CommitOptions : public QDialog {
 			ui.comboOriginStates->addItem("- unset -");
 			for ( int i = (int)EvaluationStatus::First; i < (int)EvaluationStatus::Quantity; ++i )
 				ui.comboOriginStates->addItem(EvaluationStatus::NameDispatcher::name(i));
+
+			ui.comboEQComment->addItem("");
+			ui.comboEQComment->setEditable(true);
+			ui.comboEQComment->setVisible(false);
 		}
 
 	public:
@@ -1376,42 +1391,40 @@ ArrivalModel::ArrivalModel(DataModel::Origin* origin, QObject *parent)
 
 	_disabledForeground = Qt::gray;
 
-	for ( int i = 0; i < ArrivalListColumns::Quantity; ++i )
-		if ( i == DISTANCE ) {
-			if ( SCScheme.unit.distanceInKM )
-				_header << QString("%1 (km)").arg(EArrivalListColumnsNames::name(i));
-			else
+	for ( int i = 0; i < ArrivalListColumns::Quantity; ++i ) {
+		switch ( i ) {
+			case DISTANCE:
+				if ( SCScheme.unit.distanceInKM )
+					_header << QString("%1 (km)").arg(EArrivalListColumnsNames::name(i));
+				else
+					_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case RESIDUAL:
+			case UNCERTAINTY:
+			case LATENCY:
+				_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case SLOWNESS:
+			case SLOWNESS_RESIDUAL:
+				_header << QString("%1 (s/°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case AZIMUTH:
+			case TAKEOFF:
+			case BACKAZIMUTH:
+			case BACKAZIMUTH_RESIDUAL:
 				_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			case TIME:
+				if ( SCScheme.dateTime.useLocalTime )
+					_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+				else
+					_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
+				break;
+			default:
+				_header << EArrivalListColumnsNames::name(i);
+				break;
 		}
-		else if ( i == RESIDUAL ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == UNCERTAINTY ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == LATENCY ) {
-			_header << QString("%1 (s)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == SLOWNESS ) {
-			_header << QString("%1 (s/°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == AZIMUTH ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == TAKEOFF ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == BACKAZIMUTH ) {
-			_header << QString("%1 (°)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else if ( i == TIME ) {
-			if ( SCScheme.dateTime.useLocalTime )
-				_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
-			else
-				_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
-		}
-		else
-			_header << EArrivalListColumnsNames::name(i);
+	}
 
 	setOrigin(origin);
 }
@@ -1588,25 +1601,6 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return timeToString(pick->time().value(), _pickTimeFormat.c_str());
 				break;
 
-			case BACKAZIMUTH:
-				pick = Pick::Cast(PublicObject::Find(a->pickID()));
-				try {
-					if ( pick )
-						return pick->backazimuth().value();
-				}
-				catch ( ValueException& ) {}
-				break;
-
-			case SLOWNESS:
-				pick = Pick::Cast(PublicObject::Find(a->pickID()));
-				try {
-					if ( pick )
-						return pick->horizontalSlowness().value();
-				}
-				catch ( ValueException& ) {}
-				break;
-
-			// Picktime
 			case UNCERTAINTY:
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick ) {
@@ -1631,6 +1625,40 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 			case RESIDUAL:
 				try {
 					snprintf(buf, 10, "%.2f", a->timeResidual());
+					return buf;
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case BACKAZIMUTH:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->backazimuth().value();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case BACKAZIMUTH_RESIDUAL:
+				try {
+					snprintf(buf, 10, "%.1f", a->backazimuthResidual());
+					return buf;
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case SLOWNESS:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->horizontalSlowness().value();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case SLOWNESS_RESIDUAL:
+				try {
+					snprintf(buf, 10, "%.2f", a->horizontalSlownessResidual());
 					return buf;
 				}
 				catch ( ValueException& ) {}
@@ -1994,10 +2022,8 @@ bool ArrivalModel::useArrival(int row) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
-	bool used = false;
 	try {
 		setBackazimuthUsed(row, arrival->backazimuthUsed());
-		used = true;
 	}
 	catch ( ... ) {
 		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
@@ -2016,7 +2042,6 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 
 	try {
 		setHorizontalSlownessUsed(row, arrival->horizontalSlownessUsed());
-		used = true;
 	}
 	catch ( ... ) {
 		Pick *pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
@@ -2035,21 +2060,26 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 
 	try {
 		setTimeUsed(row, arrival->timeUsed());
-		used = true;
 	}
 	catch ( ... ) {
-		setTimeUsed(row, true);
-	}
+		// If the timeUsed attribute is not set then it looks like an origin
+		// created with an older version. So use the weight value to decide
+		// whether the pick is active or not.
+		double weight = 0.0;
+		try {
+			weight = fabs(arrival->weight());
+		}
+		catch ( ... ) {}
 
-	// TODO check if this is really required for backward compatibility
-	try {
-		if ( !used && arrival->weight() < 0.5 ) {
+		if ( weight < 1E-6 ) {
 			setBackazimuthUsed(row, false);
 			setHorizontalSlownessUsed(row, false);
 			setTimeUsed(row, false);
 		}
+		else {
+			setTimeUsed(row, true);
+		}
 	}
-	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2811,6 +2841,9 @@ void OriginLocatorView::applyPlotFilter() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::runScript(const QString &script, const QString &name) {
 	QString cmd = QString("%1 %2").arg(script).arg(_currentOrigin->publicID().c_str());
+	if ( _baseEvent ) {
+		cmd += QString(" %1").arg(_baseEvent->publicID().c_str());
+	}
 
 	// start as background process w/o any communication channel
 	if ( !QProcess::startDetached(cmd) ) {
@@ -3466,6 +3499,15 @@ void OriginLocatorView::setConfig(const Config &c) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const OriginLocatorView::Config &OriginLocatorView::config() const {
 	return _config;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::addLocalPick(Seiscomp::DataModel::Pick *pick) {
+	_changedPicks.insert(std::pair<DataModel::PickPtr, bool>(pick, true));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -5801,6 +5843,26 @@ void OriginLocatorView::commitWithOptions() {
 	}
 	catch ( ... ) {}
 
+	vector<string> commentOptions;
+	try {
+		commentOptions = SCApp->configGetStrings("olv.commit.eventCommentOptions");
+		if ( !commentOptions.empty() ) {
+			dlg.ui.editEQComment->setVisible(false);
+			dlg.ui.comboEQComment->setVisible(true);
+
+			for ( vector<string>::const_iterator it = commentOptions.begin();
+			      it != commentOptions.end(); ++it ) {
+				dlg.ui.comboEQComment->addItem(it->c_str());
+			}
+		}
+	}
+	catch ( ... ) {}
+
+	try {
+		dlg.ui.cbBackToEventList->setChecked(SCApp->configGetBool("olv.commit.returnToEventList"));
+	}
+	catch ( ... ) {}
+
 	if ( _defaultEventType ) {
 		int idx = dlg.ui.comboEventTypes->findText(_defaultEventType->toString());
 		if ( idx >= 0 ) dlg.ui.comboEventTypes->setCurrentIndex(idx);
@@ -5850,7 +5912,27 @@ void OriginLocatorView::commitWithOptions() {
 		for ( size_t i = 0; i < _baseEvent->commentCount(); ++i ) {
 			if ( _baseEvent->comment(i)->id() == "Operator" ) {
 				eqComment = _baseEvent->comment(i)->text();
-				dlg.ui.editEQComment->setText(eqComment.c_str());
+				if ( commentOptions.empty() ) {
+					dlg.ui.editEQComment->setText(eqComment.c_str());
+				}
+				else if ( !eqComment.empty() ) {
+					// search for current comment in list of available options,
+					// add and select it in case it is not present
+					int idx = -1, i = 1;
+					for ( vector<string>::const_iterator it = commentOptions.begin();
+					      it != commentOptions.end(); ++it, ++i ) {
+						if ( *it == eqComment ) {
+							idx = i;
+							break;
+						}
+					}
+					if ( idx < 0 ) {
+						dlg.ui.comboEQComment->insertItem(1, eqComment.c_str());
+						idx = 1;
+					}
+					dlg.ui.comboEQComment->setCurrentIndex(idx);
+				}
+
 				break;
 			}
 		}
@@ -5914,9 +5996,11 @@ void OriginLocatorView::commitWithOptions() {
 
 		bool ok = true;
 
-		if ( ok && eqComment != dlg.ui.editEQComment->text().toStdString() ) {
-			eqComment = dlg.ui.editEQComment->text().toStdString();
-			ok = sendJournal(_baseEvent->publicID(), "EvOpComment", eqComment);
+		string newEQComment = commentOptions.empty()?
+		                      dlg.ui.editEQComment->text().toStdString() :
+		                      dlg.ui.comboEQComment->currentText().toStdString();
+		if ( ok && eqComment != newEQComment ) {
+			ok = sendJournal(_baseEvent->publicID(), "EvOpComment", newEQComment);
 		}
 
 		if ( ok && eqName != dlg.ui.editEQName->text().toStdString() ) {

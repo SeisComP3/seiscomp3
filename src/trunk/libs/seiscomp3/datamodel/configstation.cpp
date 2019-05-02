@@ -411,6 +411,7 @@ bool ConfigStation::updateChild(Object* child) {
 		Setup* setupElement = setup(setupChild->index());
 		if ( setupElement != NULL ) {
 			*setupElement = *setupChild;
+			setupElement->update();
 			return true;
 		}
 		return false;

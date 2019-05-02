@@ -272,27 +272,30 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void createArtificialOrigin(const QPointF &epicenter,
 		                            const QPoint &dialogPos);
 
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
 	public:
+		// Scripts
 		void setScript0(const std::string&);
 		void setScript1(const std::string&);
 
-
-	// ----------------------------------------------------------------------
-	//  Configuration
-	// ----------------------------------------------------------------------
-	public:
+		// Configuration
 		void setConfig(const Config&);
-		const Config& config() const;
+		const Config &config() const;
 
-	// ----------------------------------------------------------------------
-	//  Manual picker configuration
-	// ----------------------------------------------------------------------
-	public:
+		/**
+		 * @brief Adds a pick to the internal pick list which will be
+		 *        sent along with the origin at commit.
+		 * @param pick The pick to be managed with a smart pointer.
+		 */
+		void addLocalPick(Seiscomp::DataModel::Pick *pick);
+
+		// Manual picker configuration
 		void setPickerConfig(const PickerView::Config&);
 		const PickerView::Config& pickerConfig() const;
 
-
-	public:
+		// Misc
 		void setDatabase(Seiscomp::DataModel::DatabaseQuery*);
 		void setPickerView(PickerView*);
 

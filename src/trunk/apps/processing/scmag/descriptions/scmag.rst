@@ -2,55 +2,75 @@ The purpose of scmag is to compute magnitudes from pre-computed amplitudes.
 Instead it takes amplitudes and origins as input and produces StationMagnitudes
 and (network) Magnitudes as output. It does not access waveforms.
 The resulting magnitudes are sent to the "MAGNITUDE" group. scmag doesn’t access
-any waveforms. It only uses amplitudes previously calculated, e.g. by :ref:`scamp`.
+any waveforms. It only uses amplitudes previously calculated.
+
 The purpose of scmag is the decoupling of magnitude computation from amplitude
 measurements. This allows several modules to generate amplitudes concurrently,
-like scautopick and scamp. As soon as an origin comes in, the amplitudes related
+like :ref:`scautopick` or :ref:`scamp`. As soon as an origin comes in, the amplitudes related
 to the picks are taken either from the memory buffer or the database to compute
-the magnitudes. Currently the following magnitude types are implemented:
+the magnitudes.
 
-MLv
+Primary magnitudes
+------------------
+
+Currently the following magnitude types are implemented:
+
+:term:`MLh <magnitude, local (ML)>`
    Local magnitude calculated on the vertical component using a correction term
    to fit with the standard ML
 
-MLh
+:term:`MLv <magnitude, local vertical (MLv)>`
+   Local magnitude calculated on the vertical component using a correction term
+   to fit with the standard ML
+
+:term:`MLh <magnitude, local horizontal (MLh)>`
    Local magnitude calculated on the horizontal components to SED specifications.
 
-mb
+:term:`MLr <magnitude, local GNS/GEONET (MLr)>`
+   Local magnitude calculated from MLv amplitudes based on GNS/GEONET specifications
+   for New Zealand.
+
+:term:`MN <magnitude, Nuttli (MN)>`
+   Canadian Nuttli magnitude.
+
+:term:`mb <magnitude, body-wave (mb)>`
    Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
 
-mB
+:term:`mB <magnitude, broadband body-wave (mB)>`
    Broad band body wave magnitude
 
-Mwp
+:term:`Mwp <magnitude, broadband P-wave moment (Mwp)>`
    The body wave magnitude of Tsuboi et al. (1995)
 
-Mjma
+:term:`Mjma <magnitude, JMA (M_JMA)>`
    Mjma is computed on displacement data using body waves of period < 30s
 
-Ms(BB)
+:term:`Ms(BB) <magnitude, surface wave (Ms)>`
    Broad band surface-wave magnitude
 
-Md
+:term:`Md <magnitude, duration (Md)>`
    Duration magnitude as described in https://earthquake.usgs.gov/research/software/#HYPOINVERSE
 
-Additionally, scmag computes the following derived magnitudes: 
+Derived magnitudes
+------------------
 
-Mw(mB)
+Additionally, scmag derives the following magnitudes from primary magnitudes:
+
+:term:`Mw(mB) <magnitude, derived mB (Mw(mB))>`
    Estimation of the moment magnitude Mw based on mB using the Mw vs. mB
    regression of Bormann and Saul (2008)
 
-Mw(Mwp)
+:term:`Mw(Mwp) <magnitude, derived Mwp (Mw(Mwp))>`
    Estimation of the moment magnitude Mw based on Mwp using the Mw vs. Mwp
-   regression of Whitmore et al. (2002).
+   regression of Whitmore et al. (2002)
 
-M(summary)
+:term:`M(summary)`
    Summary magnitude, which consists of a weighted average of the individual
    magnitudes and attempts to be a best possible compromise between all magnitudes.
    See below for configuration and also scevent for how to add the summary magnitude
    to the list of possible preferred magnitudes or how to make it always preferred.
 
-Mw(avg)
+:term:`Mw(avg)`
    Estimation of the moment magnitude Mw based on a weighted average of other
    magnitudes, currently MLv, mb and Mw(mB), in future possibly other magnitudes as
    well, especially those suitable for very large events. The purpose of Mw(avg) is

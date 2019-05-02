@@ -62,16 +62,19 @@ class SC_GUI_API RecordView : public QWidget {
 		//! Default c'tor
 		//! The mode defaults to ringbuffer with a buffer
 		//! size of 30 minutes
-		RecordView(QWidget *parent = 0, Qt::WFlags f = 0);
+		RecordView(QWidget *parent = 0, Qt::WFlags f = 0,
+		           TimeScale *timeScale = 0);
 
 		//! Creates a RecordView using a time window
 		RecordView(const Seiscomp::Core::TimeWindow&,
-		           QWidget *parent = 0, Qt::WFlags f = 0);
+		           QWidget *parent = 0, Qt::WFlags f = 0,
+		           TimeScale *timeScale = 0);
 
 		//! Creates a RecordView using a timespan and
 		//! a ringbuffer
 		RecordView(const Seiscomp::Core::TimeSpan&,
-		           QWidget *parent = 0, Qt::WFlags f = 0);
+		           QWidget *parent = 0, Qt::WFlags f = 0,
+		           TimeScale *timeScale = 0);
 
 		~RecordView();
 

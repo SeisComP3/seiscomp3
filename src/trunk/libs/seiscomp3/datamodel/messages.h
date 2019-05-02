@@ -17,6 +17,7 @@
 
 
 #include <seiscomp3/core/genericmessage.h>
+#include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/creationinfo.h>
 
@@ -120,18 +121,18 @@ class SC_SYSTEM_CORE_API ArtificialOriginMessage : public Seiscomp::Core::Messag
 		ArtificialOriginMessage();
 
 	public:
-		ArtificialOriginMessage(DataModel::Origin* origin);
+		ArtificialOriginMessage(DataModel::Origin *origin);
 
 		
 	// ------------------------------------------------------------------
 	//  Message interface
 	// ------------------------------------------------------------------
 	public:
-		DataModel::Origin* origin() const;
-		void setOrigin(DataModel::Origin* origin);
+		DataModel::Origin *origin() const;
+		void setOrigin(DataModel::Origin *origin);
 		
 		virtual bool empty() const;
-		
+
 	// ------------------------------------------------------------------
 	//  Implementation
 	// ------------------------------------------------------------------
@@ -139,6 +140,41 @@ class SC_SYSTEM_CORE_API ArtificialOriginMessage : public Seiscomp::Core::Messag
 		DataModel::OriginPtr _origin;
 		
 		DECLARE_SC_CLASSFACTORY_FRIEND(ArtificialOriginMessage);
+};
+
+
+DEFINE_SMARTPOINTER(ArtificialEventParametersMessage);
+
+class SC_SYSTEM_CORE_API ArtificialEventParametersMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(ArtificialEventParametersMessage);
+	DECLARE_SERIALIZATION;
+
+	// ------------------------------------------------------------------
+	//  Xstruction
+	// ------------------------------------------------------------------
+	protected:
+		ArtificialEventParametersMessage();
+
+	public:
+		ArtificialEventParametersMessage(DataModel::EventParameters *eventParameters);
+
+
+	// ------------------------------------------------------------------
+	//  Message interface
+	// ------------------------------------------------------------------
+	public:
+		DataModel::EventParameters *eventParameters() const;
+		void setEventParameters(DataModel::EventParameters *eventParameters);
+
+		virtual bool empty() const;
+
+	// ------------------------------------------------------------------
+	//  Implementation
+	// ------------------------------------------------------------------
+	private:
+		DataModel::EventParametersPtr _eventParameters;
+
+		DECLARE_SC_CLASSFACTORY_FRIEND(ArtificialEventParametersMessage);
 };
 
 

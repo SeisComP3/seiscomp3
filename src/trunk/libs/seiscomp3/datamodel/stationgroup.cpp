@@ -495,6 +495,7 @@ bool StationGroup::updateChild(Object* child) {
 		StationReference* stationReferenceElement = stationReference(stationReferenceChild->index());
 		if ( stationReferenceElement != NULL ) {
 			*stationReferenceElement = *stationReferenceChild;
+			stationReferenceElement->update();
 			return true;
 		}
 		return false;

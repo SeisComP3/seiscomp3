@@ -11,9 +11,10 @@
  ***************************************************************************/
 
 
+#define SEISCOMP_COMPONENT MLh
 
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/processing/amplitudes/MLh.h>
-#include <seiscomp3/math/filter/seismometers.h>
 
 #include <boost/bind.hpp>
 #include <cstdio>
@@ -251,6 +252,26 @@ bool AmplitudeProcessor_ML2h::setup(const Settings &settings) {
 	// the horizontal processors
 	_ampN.streamConfig(FirstHorizontalComponent) = streamConfig(FirstHorizontalComponent);
 	_ampE.streamConfig(SecondHorizontalComponent) = streamConfig(SecondHorizontalComponent);
+
+	_combiner = TakeAverage;
+
+	try {
+		std::string s = settings.getString("amplitudes." + _type + ".combiner");
+		if ( s == "average" )
+			_combiner = TakeAverage;
+		else if ( s == "max" )
+			_combiner = TakeMax;
+		else if ( s == "min" )
+			_combiner = TakeMin;
+		else {
+			SEISCOMP_ERROR("%s: invalid combiner type for station %s.%s: %s",
+			               _type.c_str(),
+			               settings.networkCode.c_str(), settings.stationCode.c_str(),
+			               s.c_str());
+			return false;
+		}
+	}
+	catch ( ... ) {}
 
 	if ( !AmplitudeProcessor::setup(settings) ) return false;
 

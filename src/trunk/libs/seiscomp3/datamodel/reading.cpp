@@ -252,6 +252,7 @@ bool Reading::updateChild(Object* child) {
 		PickReference* pickReferenceElement = pickReference(pickReferenceChild->index());
 		if ( pickReferenceElement != NULL ) {
 			*pickReferenceElement = *pickReferenceChild;
+			pickReferenceElement->update();
 			return true;
 		}
 		return false;
@@ -262,6 +263,7 @@ bool Reading::updateChild(Object* child) {
 		AmplitudeReference* amplitudeReferenceElement = amplitudeReference(amplitudeReferenceChild->index());
 		if ( amplitudeReferenceElement != NULL ) {
 			*amplitudeReferenceElement = *amplitudeReferenceChild;
+			amplitudeReferenceElement->update();
 			return true;
 		}
 		return false;

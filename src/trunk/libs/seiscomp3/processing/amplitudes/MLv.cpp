@@ -15,9 +15,6 @@
 #define SEISCOMP_COMPONENT AmplitudeMLv
 
 #include <seiscomp3/processing/amplitudes/MLv.h>
-#include <seiscomp3/math/mean.h>
-#include <seiscomp3/math/filter/seismometers.h>
-#include <seiscomp3/math/restitution/fft.h>
 
 
 using namespace Seiscomp::Math;

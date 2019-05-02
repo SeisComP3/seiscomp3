@@ -43,25 +43,21 @@ const qreal ooLat = 1.0 / 90.0;
 const qreal ooLon = 1.0 / 180.0;
 
 
-bool checkPrecision(double val, int scale) {
-	double sval = val*scale;
-	return fabs(sval-round(sval)) < 1E-8;
-}
-
-
 QString lat2String(qreal lat) {
-	if ( checkPrecision(lat, 1) )
-		return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
-	else if ( checkPrecision(lat, 10) )
-		return QString("%1%2").arg(fabs(lat), 0, 'f', 1).arg(lat < 0?" S":lat > 0?" N":"");
-	else if ( checkPrecision(lat, 100) )
-		return QString("%1%2").arg(fabs(lat), 0, 'f', 2).arg(lat < 0?" S":lat > 0?" N":"");
-	else if ( checkPrecision(lat, 1000) )
-		return QString("%1%2").arg(fabs(lat), 0, 'f', 3).arg(lat < 0?" S":lat > 0?" N":"");
-	else if ( checkPrecision(lat, 10000) )
-		return QString("%1%2").arg(fabs(lat), 0, 'f', 4).arg(lat < 0?" S":lat > 0?" N":"");
-	else
+	int nlat = (lat * 100000) + (lat < 0 ? - 0.5 : + 0.5);
+
+	if ( nlat % 10 )
 		return QString("%1%2").arg(fabs(lat), 0, 'f', 5).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( nlat % 100 )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 4).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( nlat % 1000 )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 3).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( nlat % 10000 )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 2).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( nlat % 100000 )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 1).arg(lat < 0?" S":lat > 0?" N":"");
+	else
+		return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
 }
 
 
@@ -70,18 +66,20 @@ QString lon2String(qreal lon) {
 	if ( lon < 0 ) lon += 360.0;
 	if ( lon > 180.0 ) lon -= 360.0;
 
-	if ( checkPrecision(lon, 1) )
-		return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
-	else if ( checkPrecision(lon, 10) )
-		return QString("%1%2").arg(fabs(lon), 0, 'f', 1).arg(lon < 0?" W":lon > 0?" E":"");
-	else if ( checkPrecision(lon, 100) )
-		return QString("%1%2").arg(fabs(lon), 0, 'f', 2).arg(lon < 0?" W":lon > 0?" E":"");
-	else if ( checkPrecision(lon, 1000) )
-		return QString("%1%2").arg(fabs(lon), 0, 'f', 3).arg(lon < 0?" W":lon > 0?" E":"");
-	else if ( checkPrecision(lon, 10000) )
-		return QString("%1%2").arg(fabs(lon), 0, 'f', 4).arg(lon < 0?" W":lon > 0?" E":"");
-	else
+	int nlon = (lon * 100000) + (lon < 0 ? - 0.5 : + 0.5);
+
+	if ( nlon % 10 )
 		return QString("%1%2").arg(fabs(lon), 0, 'f', 5).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( nlon % 100 )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 4).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( nlon % 1000 )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 3).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( nlon % 10000 )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 2).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( nlon % 100000 )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 1).arg(lon < 0?" W":lon > 0?" E":"");
+	else
+		return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
 }
 
 
@@ -942,7 +940,11 @@ bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 			int bottom = std::min(_height-1, pp.y() + (int)_halfMapWidth);
 
 			p.drawLine(pp.x(), top, pp.x(), bottom);
-			p.drawText(QRect((int)pp.x() + 2, top, _width, _height), Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, lon2String(lon));
+			p.drawText(
+				QRect((int)pp.x() + p.fontMetrics().height()/4, top, _width, _height),
+				Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine,
+				lon2String(lon)
+			);
 
 			return true;
 		}
@@ -965,7 +967,10 @@ bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 			int right = std::min(_width-1, _halfWidth + (int)(_scale*2));
 
 			p.drawLine(left, pp.y(), right, pp.y());
-			p.drawText(QRect(left, pp.y(), _width, _height), Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, lat2String(lat));
+			p.drawText(
+				QRect(left + p.fontMetrics().height()/4, pp.y(), _width, _height),
+				Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, lat2String(lat)
+			);
 
 			return true;
 		}

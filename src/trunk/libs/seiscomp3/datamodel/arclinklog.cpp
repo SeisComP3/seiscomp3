@@ -165,6 +165,7 @@ bool ArclinkLog::updateChild(Object* child) {
 			= ArclinkRequest::Cast(PublicObject::Find(arclinkRequestChild->publicID()));
 		if ( arclinkRequestElement && arclinkRequestElement->parent() == this ) {
 			*arclinkRequestElement = *arclinkRequestChild;
+			arclinkRequestElement->update();
 			return true;
 		}
 		return false;
@@ -176,6 +177,7 @@ bool ArclinkLog::updateChild(Object* child) {
 			= ArclinkUser::Cast(PublicObject::Find(arclinkUserChild->publicID()));
 		if ( arclinkUserElement && arclinkUserElement->parent() == this ) {
 			*arclinkUserElement = *arclinkUserChild;
+			arclinkUserElement->update();
 			return true;
 		}
 		return false;

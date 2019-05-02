@@ -1412,6 +1412,28 @@ QColor RecordWidget::recordColor(int slot) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QPen RecordWidget::recordPen(int slot) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return QPen();
+	return stream->pen;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordWidget::Trace *RecordWidget::traceInfo(int slot, bool filtered) {
+	if ( (slot < 0) || (slot >= _streams.size()) ) return NULL;
+	if ( _streams[slot] == NULL ) return NULL;
+	return &_streams[slot]->traces[filtered?Stream::Filtered:Stream::Raw];
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const RecordWidget::Trace *RecordWidget::traceInfo(int slot, bool filtered) const {
 	const Stream *stream = getStream(slot);
 	if ( stream == NULL ) return NULL;
@@ -1493,11 +1515,17 @@ const RecordWidget::Filter *RecordWidget::recordFilter(int slot) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int RecordWidget::setCurrentRecords(int slot) {
+	if ( _currentSlot == slot ) return _currentSlot;
+
 	_currentSlot = slot;
 
 	update();
 
 	if ( _shadowWidget ) _shadowWidget->setCurrentRecords(slot);
+
+	if ( _drawMode == Single ) {
+		emit traceUpdated(this);
+	}
 
 	return _currentSlot;
 }
@@ -4252,17 +4280,26 @@ void RecordWidget::fed(int slot, const Seiscomp::Record *rec) {
 
 	_drawRecords = true;
 
-	if ( _shadowWidget  ) {
-		if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
-		      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
-			_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
-		}
-		_shadowWidget->fed(slot, rec);
-	}
-
-	if ( !(_shadowWidgetFlags & Filtered) && (s->filtering || s->filter != NULL) )
+	if ( !(_shadowWidgetFlags & Filtered) && (s->filtering || s->filter != NULL) ) {
 		newlyCreated = createFilter(slot);
+
+		if ( _shadowWidget  ) {
+			if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
+			      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
+				_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
+			}
+			_shadowWidget->fed(slot, rec);
+		}
+	}
 	else {
+		if ( _shadowWidget  ) {
+			if ( (_shadowWidget->_shadowWidgetFlags & Filtered) &&
+			      _shadowWidget->_streams[slot]->records[Stream::Filtered]== NULL) {
+				_shadowWidget->setFilteredRecords(slot, s->records[Stream::Filtered], false);
+			}
+			_shadowWidget->fed(slot, rec);
+		}
+
 		s->traces[Stream::Filtered].dirty = true;
 		return;
 	}
