@@ -109,6 +109,7 @@ typedef multimap<string, NetMagPtr> NetMagMap;
 
 MagTool::MagTool() {
 	_dbAccesses = 0;
+	_allowReprocessing = false;
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
@@ -175,13 +176,15 @@ void MagTool::setMinimumArrivalWeight(double w) {
 }
 
 
-bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry) {
+bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
+                   bool allowReprocessing) {
 	_cacheSize = expiry;
 	_objectCache.setDatabaseArchive(SCCoreApp->query());
 	_objectCache.setTimeSpan(_cacheSize);
 	_objectCache.setPopCallback(std::bind1st(std::mem_fun(&MagTool::publicObjectRemoved), this));
 
 	_dbAccesses = 0;
+	_allowReprocessing = allowReprocessing;
 
 	cerr << "Setting object expiry to " << toString(expiry) << " seconds" << std::endl;
 
@@ -405,12 +408,14 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin* origin,
 		if ( newInstance ) *newInstance = true;
 	}
 	else {
-		try {
-			// Check if evaluation status is set
-			mag->evaluationStatus();
-			return NULL;
+		if ( !_allowReprocessing ) {
+			try {
+				// Check if evaluation status is set
+				mag->evaluationStatus();
+				return NULL;
+			}
+			catch ( ... ) {}
 		}
-		catch ( ... ) {}
 
 		if ( newInstance ) *newInstance = false;
 	}
@@ -563,13 +568,70 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::string &mtype, DataModel::MagnitudePtr netMag) {
 	using namespace DataModel;
 
+	try {
+		netMag->evaluationStatus();
+		if ( !_allowReprocessing ) return false;
+
+		// Update network magnitude
+		double val, stdev;
+
+		vector<double> weights, vals;
+		set<string> usedStationMagnitudes;
+
+		for ( size_t i = 0; i < netMag->stationMagnitudeContributionCount(); ++i ) {
+			StationMagnitudeContribution *contrib = netMag->stationMagnitudeContribution(i);
+			StationMagnitude *staMag = origin->findStationMagnitude(contrib->stationMagnitudeID());
+			if ( !staMag ) {
+				SEISCOMP_ERROR("Origin %s: station magnitude '%s' not found referenced from magnitude '%s' at index %d",
+				               origin->publicID().c_str(),
+				               contrib->stationMagnitudeID().c_str(),
+				               netMag->publicID().c_str(), int(i));
+				return false;
+			}
+
+			double weight;
+			try {
+				weight = contrib->weight();
+			}
+			catch ( ... ) {
+				weight = 1.0;
+			}
+
+			weights.push_back(weight);
+			vals.push_back(staMag->magnitude().value());
+			usedStationMagnitudes.insert(staMag->publicID());
+		}
+
+		Math::Statistics::computeTrimmedMean(vals, 0, val, stdev, &weights);
+		netMag->setMagnitude(RealQuantity(val, stdev, Core::None, Core::None, Core::None));
+
+		for ( size_t i = 0; i < origin->stationMagnitudeCount(); ++i ) {
+			StationMagnitude *mag = origin->stationMagnitude(i);
+			if ( mag->type() != mtype ) continue;
+
+			if ( usedStationMagnitudes.find(mag->publicID()) != usedStationMagnitudes.end() )
+				continue;
+
+			StationMagnitudeContributionPtr contrib = new StationMagnitudeContribution;
+			contrib->setStationMagnitudeID(mag->publicID());
+			contrib->setWeight(0.0);
+			contrib->setResidual(mag->magnitude().value()-val);
+
+			netMag->add(contrib.get());
+		}
+
+		return true;
+	}
+	catch ( ... ) {}
+
+
 	StaMagArray stationMagnitudes;
 	StaMagArray stationMagnitudesZeroWeight;
 
 	vector<double> mv; // vector of station magnitude values
 
 	// retrieve from the origin all station magnitudes of specified type
-	for ( int i = 0, nmag = origin->stationMagnitudeCount(); i < nmag; ++i ) {
+	for ( size_t i = 0, nmag = origin->stationMagnitudeCount(); i < nmag; ++i ) {
 		const DataModel::StationMagnitude *mag = origin->stationMagnitude(i);
 
 		if ( mag->type() != mtype ) continue;
@@ -673,17 +735,26 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		if ( !magRef ) {
 			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
 			magRef->setWeight(weights[weightIndex]);
+			magRef->setResidual(stationMagnitude->magnitude().value() - value);
 			netMag->add(magRef.get());
 		}
 		else {
-			double oldWeight = -1;
+			double oldWeight = -1, oldResidual = 0;
+			double residual = stationMagnitude->magnitude().value() - value;
+
 			try {
 				oldWeight = magRef->weight();
 			}
-			catch ( Core::ValueException & ) {}
+			catch ( ... ) {}
 
-			if ( oldWeight != weights[weightIndex] ) {
+			try {
+				oldResidual = magRef->residual();
+			}
+			catch ( ... ) {}
+
+			if ( oldWeight != weights[weightIndex] || oldResidual != residual ) {
 				magRef->setWeight(weights[weightIndex]);
+				magRef->setResidual(residual);
 				magRef->update();
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}
@@ -706,17 +777,26 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		if ( !magRef ) {
 			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
 			magRef->setWeight(0.0);
+			magRef->setResidual(stationMagnitude->magnitude().value() - value);
 			netMag->add(magRef.get());
 		}
 		else {
-			double oldWeight = -1;
+			double oldWeight = -1, oldResidual = 0;
+			double residual = stationMagnitude->magnitude().value() - value;
+
 			try {
 				oldWeight = magRef->weight();
 			}
-			catch ( Core::ValueException & ) {}
+			catch ( ... ) {}
 
-			if ( oldWeight != 0 ) {
+			try {
+				oldResidual = magRef->residual();
+			}
+			catch ( ... ) {}
+
+			if ( oldWeight != 0 || oldResidual != residual ) {
 				magRef->setWeight(0.0);
+				magRef->setResidual(residual);
 				magRef->update();
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}

@@ -65,6 +65,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 			commandline().addGroup("Input");
 			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
 			                        &_epFile);
+			commandline().addOption("Input", "reprocess", "Reprocess also network magnitudes with an evaluation status set but do not change weights or add new contributions.");
 		}
 
 		bool validateParameters() {
@@ -330,7 +331,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 			_expiry = _fExpiry * 3600.;
 
-			_magtool.init(_magTypes, _expiry);
+			_magtool.init(_magTypes, _expiry, commandline().hasOption("reprocess"));
 
 			if ( _interval > 0 )
 				enableTimer(_interval);

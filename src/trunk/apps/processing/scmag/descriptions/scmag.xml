@@ -115,6 +115,13 @@
 					file that additionally contains station- and network magnitudes.
 					</description>
 				</option>
+				<option long-flag="reprocess">
+					<description>
+					Reprocess also network magnitudes with an evaluation status set
+					but do not change weights and just add new contributions with
+					weight 0.
+					</description>
+				</option>
 			</group>
 		</command-line>
 	</module>
