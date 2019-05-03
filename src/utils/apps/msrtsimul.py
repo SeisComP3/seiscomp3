@@ -110,7 +110,7 @@ msrtsimul - read sorted (and possibly multiplexed) MiniSEED files and
         e.g. for testing and simulating data acquisition. Output
         is $SEISCOMP_ROOT/var/run/seedlink/mseedfifo unless -c is used.
 
-Usage: msrtsimul.py [options] [file]
+Usage: msrtsimul [options] [file]
 
 Options:
     -c, --stdout        write on standard output

@@ -1,5 +1,56 @@
 # Jakarta
 
+## Release 2018.327 patch10
+
+* trunk
+
+  * Fixed SDS archive bug (recordstream sdsarchive://) which caused incomplete data retrieval
+    under some circumstances
+
+* scautoloc
+
+  * Fixed a bug that occasionally caused scautoloc to segfault.
+
+* scolv
+
+  * Fixed a bug that caused scolv to crash if the weight of an arrival is not set
+  * Added two new optional columns to arrival table: slowness residual and back azimuth residual
+  * Added option ```olv.commit.eventCommentOptions``` to defined predefined event comment values
+    which can be selected from a drop-down list
+  * Allow to sort the "Used" column in arrival table
+  * Update map residual colors and residual plot rect if the magnitude was recomputed
+  * Show amplitude values in amplitude picker if only QC fails
+  * Compute magnitudes
+
+* scquery
+
+  * Add more examples to query events and some statistics from the database 
+
+* scmag
+
+  * Load inventory which is necessary for magnitude implementation which require access to
+    station meta data
+  * Added command line option ```--reprocess``` to re-process magnitudes which have been
+    created manually. This is in particular important for XML processing.
+  * Fixed magnitude calculation if only zero-weight station magnitudes were associated
+    e.g. due to failed QC
+
+* nuttli plugin
+
+  * Fixed magnitude computation which caused invalid values being treated as valid values
+
+* scbulletin
+
+  * Fix evaluation of command line option ```--weight```
+
+* msrtsimul
+
+  * Add documentation
+
+* scautopick
+
+  * Add playback option to module configuration
+
 ## Release 2018.327 patch9
 
 * Seedlink Q330 plugin
