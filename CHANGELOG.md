@@ -1,5 +1,13 @@
 # Jakarta
 
+* msrtsimul
+
+  * Add documentation
+
+* scautopick
+
+  * Add playback option to module configuration
+
 ## Release 2018.327 patch10
 
 * trunk

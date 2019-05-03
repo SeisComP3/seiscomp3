@@ -78,10 +78,20 @@
 			</parameter>
 			<parameter name="sendDetections" type="boolean" default="false">
 				<description>
-					If enabled and a :confval:`picker` is configured then detections are sent as well.
+					If enabled and :confval:`picker` is configured, then detections are sent as well.
 					To distinguish between detections and picks the evaluation mode of the pick is set
 					to manual. This is meant to be a debug option which can be used to compare detections
 					and picks by their evaluation mode.
+				</description>
+			</parameter>
+			<parameter name="playback" type="boolean" default="false">
+				<description>
+					If enabled, picks can be made on waveforms which are older than
+					current time - :confval:`leadTime`. Current time is the time
+					when the module was started. This allows to pick
+					historic data in real-time playbacks which are preserving the
+					record times. See e.g. the :ref:`msrtsimul` module.
+					This option deactivates :confval:`leadTime`. Activate only for playbacks.
 				</description>
 			</parameter>
 			<group name="thresholds">

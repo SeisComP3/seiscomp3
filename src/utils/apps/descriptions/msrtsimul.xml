@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="msrtsimul" category="Acquisition">
+		<description>MiniSEED real time simulation</description>
+		<command-line>
+			<synopsis>
+				msrtsimul [OPTION] miniSEED-file
+			</synopsis>
+			<description>
+			</description>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+			</group>
+			<group name="Options">
+				<option flag="c" long-flag="stdout" argument="">
+					<description>
+					write on standard output
+					</description>
+				</option>
+				<option flag="d" long-flag="delays" argument="" unit="">
+					<description>
+					add artificial delays
+					</description>
+				</option>
+				<option flag="s" long-flag="speed" argument="float" unit="">
+					<description>
+					speed factor
+					</description>
+				</option>
+				<option flag="j" long-flag="jump" argument="float" unit="minutes">
+					<description>
+					minutes to skip at the beginning
+					</description>
+				</option>
+				<option flag="" long-flag="test" argument="" unit="">
+					<description>
+					test mode
+					</description>
+				</option>
+				<option flag="m" long-flag="mode" argument="string" unit="">
+					<description>
+					playback mode: choose between 'realtime' and 'historic'
+					</description>
+				</option>
+				<option flag="v" long-flag="verbose" argument="" unit="">
+					<description>
+					verbose mode
+					</description>
+				</option>
+				<option flag="h" long-flag="help" argument="" unit="">
+					<description>
+					display this help message
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

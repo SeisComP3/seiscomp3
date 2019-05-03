@@ -145,6 +145,9 @@ class Config {
 		// Send detections as well if a picker is configured?
 		bool        sendDetections;
 
+		// Accept historic data in real-time playbacks?
+		bool        playback;
+
 	public:
 		void dump() const;
 };

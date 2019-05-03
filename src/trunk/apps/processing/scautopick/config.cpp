@@ -58,6 +58,7 @@ Picker::Config::Config() {
 	pickerType = "";
 	killPendingSecondaryProcessors = true;
 	sendDetections = false;
+	playback = false;
 
 	amplitudeList.insert("MLv");
 	amplitudeList.insert("mb");
@@ -140,6 +141,9 @@ void Picker::Config::init(const Client::Application *app) {
 	catch ( ... ) {}
 
 	try { sendDetections = app->configGetBool("sendDetections"); }
+	catch ( ... ) {}
+
+	try { playback = app->configGetBool("playback"); }
 	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
