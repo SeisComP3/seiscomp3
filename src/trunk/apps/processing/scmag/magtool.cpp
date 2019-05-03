@@ -659,67 +659,74 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		averageMethod = am_it->second;
 
 	int count = mv.size();
-	double value = 0, stdev = 0;
-	double cumw = 0;
-	double trimPercentage = 0;
+	double value = 0.0;
+	OPT(double) stdev = 0.0;
+	double cumw = 0.0;
+	double trimPercentage = 0.0;
 	string methodID = "mean";
 	std::vector<double> weights;
 
-	if ( !count ) return false;
+	if ( count ) {
+		weights.resize(mv.size(), 1);
 
-	weights.resize(mv.size(), 1);
+		switch( averageMethod.type ) {
+			case Default:
+				if ( count > 3 ) {
+					trimPercentage = 25.;
+					methodID = "trimmed mean(25)";
+				}
 
-	switch( averageMethod.type ) {
-		case Default:
-			if ( count > 3 ) {
-				trimPercentage = 25.;
-				methodID = "trimmed mean(25)";
-			}
+				// compute the trimmed mean and the corresponding weights
+				Math::Statistics::computeTrimmedMean(mv, trimPercentage, value, *stdev, &weights);
+				break;
 
-			// compute the trimmed mean and the corresponding weights
-			Math::Statistics::computeTrimmedMean(mv, trimPercentage, value, stdev, &weights);
-			break;
+			case Mean:
+				Math::Statistics::computeTrimmedMean(mv, 0, value, *stdev, &weights);
+				break;
 
-		case Mean:
-			Math::Statistics::computeTrimmedMean(mv, 0, value, stdev, &weights);
-			break;
+			case TrimmedMean:
+				methodID = "trimmed mean(" + Core::toString(averageMethod.parameter) + ")";
+				Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, *stdev, &weights);
+				break;
 
-		case TrimmedMean:
-			methodID = "trimmed mean(" + Core::toString(averageMethod.parameter) + ")";
-			Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
-			break;
+			case Median:
+				methodID = "median";
+				value = Math::Statistics::median(mv);
+				if ( mv.size() > 1 ) {
+					stdev = 0;
+					for ( size_t i = 0; i < mv.size(); ++i )
+						*stdev += (mv[i] - value) * (mv[i] - value);
+					*stdev /= mv.size()-1;
+					*stdev = sqrt(*stdev);
+				}
+				break;
 
-		case Median:
-			methodID = "median";
-			value = Math::Statistics::median(mv);
-			if ( mv.size() > 1 ) {
+			case TrimmedMedian:
+				methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
+				Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, *stdev, &weights);
+				value = Math::Statistics::median(mv);
 				stdev = 0;
-				for ( size_t i = 0; i < mv.size(); ++i )
-					stdev += (mv[i] - value) * (mv[i] - value);
-				stdev /= mv.size()-1;
-				stdev = sqrt(stdev);
-			}
-			break;
+				for ( size_t i = 0; i < mv.size(); ++i ) {
+					*stdev += (mv[i] - value) * (mv[i] - value) * weights[i];
+					cumw += weights[i];
+				}
 
-		case TrimmedMedian:
-			methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
-			Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, stdev, &weights);
-			value = Math::Statistics::median(mv);
-			stdev = 0;
-			for ( size_t i = 0; i < mv.size(); ++i ) {
-				stdev += (mv[i] - value) * (mv[i] - value) * weights[i];
-				cumw += weights[i];
-			}
+				if ( cumw > 1 )
+					*stdev = sqrt(*stdev/(cumw-1));
+				else
+					*stdev = 0;
 
-			if ( cumw > 1 )
-				stdev = sqrt(stdev/(cumw-1));
-			else
-				stdev = 0;
+				break;
 
-			break;
-
-		default:
-			return false;
+			default:
+				return false;
+		}
+	}
+	else if ( stationMagnitudesZeroWeight.empty() )
+		return false;
+	else {
+		stdev = Core::None;
+		value = std::numeric_limits<double>::quiet_NaN();
 	}
 
 	// adding stamag referencomputeStationMagnitudeces and set the weights
@@ -735,12 +742,14 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		if ( !magRef ) {
 			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
 			magRef->setWeight(weights[weightIndex]);
-			magRef->setResidual(stationMagnitude->magnitude().value() - value);
+			if ( staCount )
+				magRef->setResidual(stationMagnitude->magnitude().value() - value);
 			netMag->add(magRef.get());
 		}
 		else {
 			double oldWeight = -1, oldResidual = 0;
 			double residual = stationMagnitude->magnitude().value() - value;
+			bool hasResidual = false;
 
 			try {
 				oldWeight = magRef->weight();
@@ -749,12 +758,18 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 
 			try {
 				oldResidual = magRef->residual();
+				hasResidual = true;
 			}
 			catch ( ... ) {}
 
-			if ( oldWeight != weights[weightIndex] || oldResidual != residual ) {
+			if ( oldWeight != weights[weightIndex]
+			  || oldResidual != residual
+			  || bool(staCount > 0) != hasResidual ) {
 				magRef->setWeight(weights[weightIndex]);
-				magRef->setResidual(residual);
+				if ( staCount )
+					magRef->setResidual(residual);
+				else
+					magRef->setResidual(Core::None);
 				magRef->update();
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}
@@ -777,12 +792,14 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		if ( !magRef ) {
 			magRef = new StationMagnitudeContribution(stationMagnitude->publicID());
 			magRef->setWeight(0.0);
-			magRef->setResidual(stationMagnitude->magnitude().value() - value);
+			if ( staCount )
+				magRef->setResidual(stationMagnitude->magnitude().value() - value);
 			netMag->add(magRef.get());
 		}
 		else {
 			double oldWeight = -1, oldResidual = 0;
 			double residual = stationMagnitude->magnitude().value() - value;
+			bool hasResidual = false;
 
 			try {
 				oldWeight = magRef->weight();
@@ -791,12 +808,18 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 
 			try {
 				oldResidual = magRef->residual();
+				hasResidual = true;
 			}
 			catch ( ... ) {}
 
-			if ( oldWeight != 0 || oldResidual != residual ) {
+			if ( oldWeight != 0
+			  || oldResidual != residual
+			  || bool(staCount > 0) != hasResidual ) {
 				magRef->setWeight(0.0);
-				magRef->setResidual(residual);
+				if ( staCount )
+					magRef->setResidual(residual);
+				else
+					magRef->setResidual(Core::None);
 				magRef->update();
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}
@@ -812,21 +835,23 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 	ProcessorList::iterator it = _processors.find(mtype);
 	if ( it == _processors.end() ) return false;
 
-	double Mw;
-	double MwStdev;
-	MagnitudeProcessor::Status res = it->second->estimateMw(value, Mw, MwStdev);
-	if ( res == MagnitudeProcessor::OK ) {
-		MwStdev = stdev > MwStdev ? stdev : MwStdev;
-		//MwStdev = stdev;
-		netMag = getMagnitude(origin, it->second->typeMw(), Mw);
-		if ( netMag ) {
-			netMag->setStationCount(staCount);
+	if ( staCount ) {
+		double Mw;
+		double MwStdev;
+		MagnitudeProcessor::Status res = it->second->estimateMw(value, Mw, MwStdev);
+		if ( res == MagnitudeProcessor::OK ) {
+			MwStdev = *stdev > MwStdev ? *stdev : MwStdev;
+			//MwStdev = stdev;
+			netMag = getMagnitude(origin, it->second->typeMw(), Mw);
+			if ( netMag ) {
+				netMag->setStationCount(staCount);
 
-			netMag->setEvaluationStatus(Core::None);
-			netMag->magnitude().setUncertainty(MwStdev);
-			netMag->magnitude().setLowerUncertainty(Core::None);
-			netMag->magnitude().setUpperUncertainty(Core::None);
-			netMag->magnitude().setConfidenceLevel(Core::None);
+				netMag->setEvaluationStatus(Core::None);
+				netMag->magnitude().setUncertainty(MwStdev);
+				netMag->magnitude().setLowerUncertainty(Core::None);
+				netMag->magnitude().setUpperUncertainty(Core::None);
+				netMag->magnitude().setConfidenceLevel(Core::None);
+			}
 		}
 	}
 
