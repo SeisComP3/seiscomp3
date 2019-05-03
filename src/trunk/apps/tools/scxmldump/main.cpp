@@ -504,7 +504,7 @@ class EventDump : public Seiscomp::Client::Application {
 				}
 			}
 
-			if ( commandline().hasOption("with-amplitudes") ) {
+			if ( commandline().hasOption("with-amplitudes") && staMags ) {
 				for ( size_t m = 0; m < org->magnitudeCount(); ++m ) {
 					Magnitude* netmag = org->magnitude(m);
 					for ( size_t s = 0; s < netmag->stationMagnitudeContributionCount(); ++s ) {
@@ -523,6 +523,19 @@ class EventDump : public Seiscomp::Client::Application {
 
 						if ( !staamp->eventParameters() )
 							ep->add(staamp.get());
+					}
+				}
+			}
+
+			if ( commandline().hasOption("with-amplitudes") && !staMags ) {
+				// Extract all amplitudes for all picks
+				for ( size_t p = 0; p < ep->pickCount(); ++p ) {
+					Pick *pick = ep->pick(p);
+					DatabaseIterator it = query()->getAmplitudesForPick(pick->publicID());
+					for ( ; *it; ++it ) {
+						Amplitude *amp = Amplitude::Cast(*it);
+						if ( amp )
+							ep->add(amp);
 					}
 				}
 			}
@@ -621,7 +634,7 @@ class EventDump : public Seiscomp::Client::Application {
 					}
 				}
 
-				if ( commandline().hasOption("with-amplitudes") ) {
+				if ( commandline().hasOption("with-amplitudes") && staMags ) {
 					for ( size_t m = 0; m < origin->magnitudeCount(); ++m ) {
 						Magnitude* netmag = origin->magnitude(m);
 						for ( size_t s = 0; s < netmag->stationMagnitudeContributionCount(); ++s ) {
@@ -641,6 +654,19 @@ class EventDump : public Seiscomp::Client::Application {
 							if ( !staamp->eventParameters() )
 								ep->add(staamp.get());
 						}
+					}
+				}
+			}
+
+			if ( commandline().hasOption("with-amplitudes") && !staMags ) {
+				// Extract all amplitudes for all picks
+				for ( size_t p = 0; p < ep->pickCount(); ++p ) {
+					Pick *pick = ep->pick(p);
+					DatabaseIterator it = query()->getAmplitudesForPick(pick->publicID());
+					for ( ; *it; ++it ) {
+						Amplitude *amp = Amplitude::Cast(*it);
+						if ( amp )
+							ep->add(amp);
 					}
 				}
 			}
