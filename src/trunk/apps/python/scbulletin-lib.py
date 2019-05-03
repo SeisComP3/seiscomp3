@@ -59,12 +59,12 @@ def lon2str(lon, enhanced = False):
     return s
 
 
-def stationCount(org):
+def stationCount(org, minArrivalWeight):
     count = 0
     for i in xrange(org.arrivalCount()):
         arr = org.arrival(i)
         #   if arr.weight()> 0.5:
-        if arr.weight()> minArrivalWeight:
+        if arr.weight()>= minArrivalWeight:
             count += 1
     return count
 
@@ -441,6 +441,7 @@ class Bulletin(object):
         txt += "\n"
 
         stationMagnitudeCount = org.stationMagnitudeCount()
+        activeStationMagnitudeCount = 0
         stationMagnitudes = {}
 
         for i in xrange(stationMagnitudeCount):
@@ -457,6 +458,7 @@ class Bulletin(object):
             if w < self.minStationMagnitudeWeight:
                 continue
             stationMagnitudes[typ].append(mag)
+            activeStationMagnitudeCount += 1
 
 
         lineFMT = "    %-5s %-2s  "
@@ -508,13 +510,16 @@ class Bulletin(object):
 
         lines.sort()
 
-        txt += "%d Station magnitudes:\n" % stationMagnitudeCount
-        if self.enhanced:
-            txt += "    sta   net      dist   azi  type   value   res        amp  per\n"
+        if activeStationMagnitudeCount:
+            txt += "%d Station magnitudes:\n" % activeStationMagnitudeCount
+            if self.enhanced:
+                txt += "    sta   net      dist   azi  type   value   res        amp  per\n"
+            else:
+                txt += "    sta   net  dist azi  type   value   res        amp  per\n"
+            for dist,line in lines:
+                txt += line
         else:
-            txt += "    sta   net  dist azi  type   value   res        amp  per\n"
-        for dist,line in lines:
-            txt += line
+            txt += "No station magnitudes\n"
 
         return txt
 
@@ -546,7 +551,7 @@ class Bulletin(object):
 
         tmp = {
             "evid":evid,
-            "nsta":stationCount(org),
+            "nsta":stationCount(org, self.minArrivalWeight),
             "time":sTime,
             "lat":lat2str(org.latitude().value(), self.enhanced),
             "lon":lon2str(org.longitude().value(), self.enhanced),
@@ -838,14 +843,14 @@ class BulletinApp(seiscomp3.Client.Application):
             else:
                 dbq = None
 
+            bulletin = Bulletin(dbq)
+            bulletin.format = "autoloc1"
+
             try: mw = self.commandline().optionString("weight")
             except: pass
 
             if mw != "" and mw is not None:
-                self.minArrivalWeight = float(mw)
-
-            bulletin = Bulletin(dbq)
-            bulletin.format = "autoloc1"
+                bulletin.minArrivalWeight = float(mw)
 
             if self.commandline().hasOption("autoloc1"):
                 bulletin.format = "autoloc1"
