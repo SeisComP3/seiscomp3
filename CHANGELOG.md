@@ -1,13 +1,5 @@
 # Jakarta
 
-* msrtsimul
-
-  * Add documentation
-
-* scautopick
-
-  * Add playback option to module configuration
-
 ## Release 2018.327 patch10
 
 * trunk
@@ -18,6 +10,10 @@
 * scautoloc
 
   * Fixed a bug that occasionally caused scautoloc to segfault.
+
+* scautopick
+
+  * Add playback option to module configuration
 
 * scolv
 
@@ -50,6 +46,14 @@
 * scbulletin
 
   * Fix evaluation of command line option ```--weight```
+
+* scxmldump
+
+  * Export all pick amplitudes if station magnitudes should be omitted
+
+* msrtsimul
+
+  * Add documentation
 
 ## Release 2018.327 patch9
 
