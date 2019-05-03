@@ -19,6 +19,8 @@
     which can be selected from a drop-down list
   * Allow to sort the "Used" column in arrival table
   * Update map residual colors and residual plot rect if the magnitude was recomputed
+  * Show amplitude values in amplitude picker if only QC fails
+  * Compute magnitudes
 
 * scquery
 
@@ -28,10 +30,18 @@
 
   * Load inventory which is necessary for magnitude implementation which require access to
     station meta data
+  * Added command line option ```--reprocess``` to re-process magnitudes which have been
+    created manually. This is in particular important for XML processing.
+  * Fixed magnitude calculation if only zero-weight station magnitudes were associated
+    e.g. due to failed QC
 
 * nuttli plugin
 
   * Fixed magnitude computation which caused invalid values being treated as valid values
+
+* scbulletin
+
+  * Fix evaluation of command line option ```--weight```
 
 ## Release 2018.327 patch9
 
