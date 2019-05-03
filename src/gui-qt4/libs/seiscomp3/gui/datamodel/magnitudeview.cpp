@@ -2417,56 +2417,63 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 		mags.push_back(sm->magnitude().value());
 	}
 
-	double netmag, stdev;
-	bool fallback = true;
+	int staCount = 0;
+	double netmag = std::numeric_limits<double>::quiet_NaN();
+	OPT(double) stdev = 0.0;
 
-	if ( aggType == "mean" ) {
-		Math::Statistics::computeMean(mags, netmag, stdev);
-		weights.resize(mags.size(), 1.);
-		magnitude->setMethodID("mean");
-		fallback = false;
-	}
-	else if ( aggType == "trimmed mean" ) {
-		Math::Statistics::computeTrimmedMean(mags, 25.0, netmag, stdev, &weights);
-		magnitude->setMethodID("trimmed mean");
-		fallback = false;
-	}
-	else if ( aggType == "median" ) {
-		netmag = Math::Statistics::median(mags);
-		if ( mags.size() > 1 ) {
-			stdev = 0;
-			for ( size_t i = 0; i < mags.size(); ++i )
-				stdev += (mags[i] - netmag) * (mags[i] - netmag);
-			stdev /= mags.size()-1;
-			stdev = sqrt(stdev);
-		}
+	if ( !stamags.empty() ) {
+		bool fallback = true;
 
-		weights.resize(mags.size(), 1.);
-		magnitude->setMethodID("median");
-		fallback = false;
-	}
-
-	if ( fallback ) {
-		if ( mags.size() < 4 ) {
-			Math::Statistics::computeMean(mags, netmag, stdev);
+		if ( aggType == "mean" ) {
+			Math::Statistics::computeMean(mags, netmag, *stdev);
 			weights.resize(mags.size(), 1.);
 			magnitude->setMethodID("mean");
+			fallback = false;
 		}
-		else {
-			Math::Statistics::computeTrimmedMean(mags, 25.0, netmag, stdev, &weights);
+		else if ( aggType == "trimmed mean" ) {
+			Math::Statistics::computeTrimmedMean(mags, 25.0, netmag, *stdev, &weights);
 			magnitude->setMethodID("trimmed mean");
+			fallback = false;
+		}
+		else if ( aggType == "median" ) {
+			netmag = Math::Statistics::median(mags);
+			if ( mags.size() > 1 ) {
+				*stdev = 0;
+				for ( size_t i = 0; i < mags.size(); ++i )
+					*stdev += (mags[i] - netmag) * (mags[i] - netmag);
+				*stdev /= mags.size()-1;
+				*stdev = sqrt(*stdev);
+			}
+
+			weights.resize(mags.size(), 1.);
+			magnitude->setMethodID("median");
+			fallback = false;
+		}
+
+		if ( fallback ) {
+			if ( mags.size() < 4 ) {
+				Math::Statistics::computeMean(mags, netmag, *stdev);
+				weights.resize(mags.size(), 1.);
+				magnitude->setMethodID("mean");
+			}
+			else {
+				Math::Statistics::computeTrimmedMean(mags, 25.0, netmag, *stdev, &weights);
+				magnitude->setMethodID("trimmed mean");
+			}
+		}
+
+		for ( size_t i = 0; i < stamags.size(); ++i ) {
+			StationMagnitudeContribution *ref = stamags[i];
+			ref->setWeight(weights[i]);
+			ref->setResidual(mags[i]-netmag);
+
+			if ( weights[i] > 0.0 )
+				++staCount;
 		}
 	}
 
-	int staCount = 0;
-	for ( size_t i = 0; i < stamags.size(); ++i ) {
-		StationMagnitudeContribution *ref = stamags[i];
-		ref->setWeight(weights[i]);
-		ref->setResidual(mags[i]-netmag);
-
-		if ( weights[i] > 0.0 )
-			++staCount;
-	}
+	magnitude->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
+	magnitude->setStationCount(staCount);
 
 	for ( size_t i = 0; i < stamagsZeroWeight.size(); ++i ) {
 		StationMagnitudeContribution *ref = stamagsZeroWeight[i];
@@ -2478,9 +2485,6 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 		else
 			ref->setResidual(Core::None);
 	}
-
-	magnitude->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
-	magnitude->setStationCount(staCount);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

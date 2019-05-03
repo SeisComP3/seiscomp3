@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch10
 
 * trunk
 
@@ -19,6 +19,8 @@
     which can be selected from a drop-down list
   * Allow to sort the "Used" column in arrival table
   * Update map residual colors and residual plot rect if the magnitude was recomputed
+  * Show amplitude values in amplitude picker if only QC fails
+  * Compute magnitudes
 
 * scquery
 
@@ -28,10 +30,18 @@
 
   * Load inventory which is necessary for magnitude implementation which require access to
     station meta data
+  * Added command line option ```--reprocess``` to re-process magnitudes which have been
+    created manually. This is in particular important for XML processing.
+  * Fixed magnitude calculation if only zero-weight station magnitudes were associated
+    e.g. due to failed QC
 
 * nuttli plugin
 
   * Fixed magnitude computation which caused invalid values being treated as valid values
+
+* scbulletin
+
+  * Fix evaluation of command line option ```--weight```
 
 ## Release 2018.327 patch9
 
@@ -338,6 +348,12 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
   * Initial version of the module which collect availability information
     from an SDS archive by scanning its content repeatedly and populating
     the new availability database tables (read by fdsnws)
+
+## Release 2017.334 patch11
+
+* seedlink
+
+  * Fix caps\_plugin to not send incompatible miniSEED records (!= 512)
 
 ## Release 2017.334 patch10
 

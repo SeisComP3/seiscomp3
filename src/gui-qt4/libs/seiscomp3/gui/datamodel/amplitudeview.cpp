@@ -2684,8 +2684,11 @@ RecordMarker* AmplitudeView::updatePhaseMarker(Seiscomp::Gui::RecordViewItem *it
 			_origin->depth(), _origin.get(), label->location, a.get(), m);
 		if ( status == Processing::MagnitudeProcessor::OK )
 			mag = m;
-		else
+		else {
+			if ( label->magnitudeProcessor->treatAsValidMagnitude() )
+				mag = m;
 			magError = status.toString();
+		}
 	}
 
 	AmplitudeViewMarker *marker = (AmplitudeViewMarker*)widget->marker(proc->type().c_str(), true);
@@ -3280,8 +3283,12 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 				_origin->depth(), _origin.get(), label->location, amp, m);
 			if ( stat == Processing::MagnitudeProcessor::OK )
 				marker->setMagnitude(m, QString());
-			else
-				marker->setMagnitude(Core::None, stat.toString());
+			else {
+				if ( label->magnitudeProcessor->treatAsValidMagnitude() )
+					marker->setMagnitude(m, stat.toString());
+				else
+					marker->setMagnitude(Core::None, stat.toString());
+			}
 		}
 	}
 }

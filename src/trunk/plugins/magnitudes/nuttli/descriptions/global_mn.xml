@@ -15,6 +15,27 @@
 						are located in &quot;share/locsat/tables/[vmodel].*&quot;.
 						</description>
 					</parameter>
+				</group>
+			</group>
+			<group name="magnitudes">
+				<group name="MN">
+					<parameter name="region" type="path" default="@DATADIR@/magnitudes/MN/MN.bna">
+						<description>
+						The path to the BNA file which defines the valid region
+						for the MN magnitude. Note that the entire path from
+						source to receiver must lie entirely within the polygon(s).
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+	<binding name="MN" module="global">
+		<description>
+		</description>
+		<configuration>
+			<group name="amplitudes">
+				<group name="MN">
 					<parameter name="rms" type="boolean" default="false">
 						<description>
 						Whether to use RMS ratio of signal and noise window for
@@ -24,8 +45,12 @@
 					</parameter>
 					<parameter name="filter" type="string">
 						<description>
-						A filter to be applied prio to amplitude measuring. By
-						default no filter is being used.
+						The configurable filter such that the V measurement is
+						made on a filtered trace. By default, filtering is not
+						enabled.
+
+						See https://docs.gempa.de/seiscomp3/current/base/filter-grammar.html
+						for how to specify the filter.
 						</description>
 					</parameter>
 					<parameter name="Vmin" type="double" default="3.2" unit="km/s">
@@ -76,37 +101,6 @@
 						retrieved or computed, is selected.
 
 						Allowed tokens: Pg, Pn, P, Sg, Sn, S, Lg, Rg, Vmin, Vmax
-						</description>
-					</parameter>
-				</group>
-			</group>
-			<group name="magnitudes">
-				<group name="MN">
-					<parameter name="region" type="path">
-						<description>
-						The path to the BNA file which defines the valid region
-						for the MN magnitude. Note that the entire path from
-						source to receiver must lie entirely within the polygon(s).
-						</description>
-					</parameter>
-				</group>
-			</group>
-		</configuration>
-	</plugin>
-	<binding name="MN" module="global">
-		<description>
-		</description>
-		<configuration>
-			<group name="amplitudes">
-				<group name="MN">
-					<parameter name="filter" type="string">
-						<description>
-						The configurable filter such that the V measurement is
-						made on a filtered trace. By default, filtering is not
-						enabled.
-
-						See https://docs.gempa.de/seiscomp3/current/base/filter-grammar.html
-						for how to specify the filter.
 						</description>
 					</parameter>
 				</group>
