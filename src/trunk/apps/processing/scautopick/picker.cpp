@@ -300,13 +300,18 @@ bool App::init() {
 
 	streamBuffer().setTimeSpan(_config.ringBufferSize);
 
-	_playbackMode = commandline().hasOption("playback");
+	if ( commandline().hasOption("playback") )
+		_config.playback = true;
 
 	// Only set start time if playback option is not set. Without a time window
 	// set, a file source will forward all records to the application otherwise
 	// they are filtered according to the time window.
-	if ( !_playbackMode )
+	if ( _config.playback) {
+		SEISCOMP_DEBUG("Starting in playback mode");
+	}
+	else {
 		recordStream()->setStartTime(Core::Time::GMT() - Core::TimeSpan(_config.leadTime));
+	}
 
 	if ( configModule() != NULL ) {
 		_config.useAllStreams = false;
@@ -443,7 +448,7 @@ bool App::init() {
 				recordStream()->addStream(it->first.first, it->first.second, it->second.locationCode, compE->code());
 		}
 
-		if ( _playbackMode ) {
+		if ( _config.playback ) {
 			// Figure out all historic epochs for locations and channels and
 			// subscribe to all channels covering all epochs. This is only
 			// required in playback mode if historic data is fed into the picker

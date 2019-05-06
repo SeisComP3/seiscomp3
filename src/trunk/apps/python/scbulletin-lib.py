@@ -454,7 +454,10 @@ class Bulletin(object):
 
             # suppress unused station magnitudes
             smid = mag.publicID()
-            w = stationMagnitudeContributions[smid].weight()
+            try:
+                w = stationMagnitudeContributions[smid].weight()
+            except:
+                w = self.minStationMagnitudeWeight
             if w < self.minStationMagnitudeWeight:
                 continue
             stationMagnitudes[typ].append(mag)

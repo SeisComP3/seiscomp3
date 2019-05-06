@@ -11,6 +11,10 @@
 
   * Fixed a bug that occasionally caused scautoloc to segfault.
 
+* scautopick
+
+  * Add playback option to module configuration
+
 * scolv
 
   * Fixed a bug that caused scolv to crash if the weight of an arrival is not set
@@ -42,6 +46,14 @@
 * scbulletin
 
   * Fix evaluation of command line option ```--weight```
+
+* scxmldump
+
+  * Export all pick amplitudes if station magnitudes should be omitted
+
+* msrtsimul
+
+  * Add documentation
 
 ## Release 2018.327 patch9
 
