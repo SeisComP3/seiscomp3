@@ -46,6 +46,9 @@
 * scbulletin
 
   * Fix evaluation of command line option ```--weight```
+  * Show only station magnitudes associated with network magnitudes
+  * Remove amplitude type filter and output all amplitudes which are associated with printed
+    station magnitudes
 
 * scxmldump
 
