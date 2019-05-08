@@ -5091,7 +5091,6 @@ void PickerView::setPickPolarity() {
 		m->convertToManualPick();
 		old->setType(PickerMarker::Pick);
 		old->parent()->setCurrentMarker(m);
-		std::cerr << old->slot() << "  " << m->slot() << std::endl;
 	}
 
 	if ( sender() == _ui.actionSetPolarityPositive ) {
