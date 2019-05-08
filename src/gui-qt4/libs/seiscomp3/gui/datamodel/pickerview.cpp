@@ -487,9 +487,9 @@ class PickerMarker : public RecordMarker {
 		PickerMarker(RecordWidget *parent,
 		             const Seiscomp::Core::Time& pos,
 		             Type type, bool newPick)
-		: RecordMarker(parent, pos),
-		  _type(type),
-		  _slot(-1), _rot(RT_123) {
+		: RecordMarker(parent, pos)
+		, _type(type)
+		, _slot(-1), _rot(RT_123) {
 			setMovable(newPick);
 			init();
 		}
@@ -498,21 +498,22 @@ class PickerMarker : public RecordMarker {
 		             const Seiscomp::Core::Time& pos,
 		             const QString& text,
 		             Type type, bool newPick)
-		: RecordMarker(parent, pos, text),
-		  _type(type),
-		  _slot(-1), _rot(RT_123) {
+		: RecordMarker(parent, pos, text)
+		, _type(type)
+		, _slot(-1), _rot(RT_123) {
 			setMovable(newPick);
 			init();
 		}
 
 		PickerMarker(RecordWidget *parent,
 		             const PickerMarker& m)
-		: RecordMarker(parent, m),
-		  _referencedPick(m._referencedPick),
-		  _polarity(m._polarity),
-		  _type(m._type),
-		  _slot(m._slot),
-		  _rot(m._rot)
+		: RecordMarker(parent, m)
+		, _referencedPick(m._referencedPick)
+		, _polarity(m._polarity)
+		, _type(m._type)
+		, _slot(m._slot)
+		, _rot(m._rot)
+		, _channelCode(m._channelCode)
 		{
 			init();
 			_time = m._time;
@@ -561,6 +562,7 @@ class PickerMarker : public RecordMarker {
 		}
 
 		void setSlot(int s) {
+			_channelCode = std::string();
 			_slot = s;
 		}
 
@@ -569,6 +571,7 @@ class PickerMarker : public RecordMarker {
 		}
 
 		void setRotation(int r) {
+			_channelCode = std::string();
 			_rot = r;
 		}
 
@@ -601,8 +604,9 @@ class PickerMarker : public RecordMarker {
 			return id() >= 0;
 		}
 
-		void setPick(DataModel::Pick* p) {
+		void setPick(DataModel::Pick *p) {
 			_referencedPick = p;
+			_channelCode = std::string();
 			try { _polarity = p->polarity(); }
 			catch ( ... ) { _polarity = Core::None; }
 
@@ -613,13 +617,14 @@ class PickerMarker : public RecordMarker {
 
 		void convertToManualPick() {
 			if ( !_referencedPick ) return;
+			_channelCode = _referencedPick->waveformID().channelCode();
 			_referencedPick = NULL;
 			setMovable(true);
 			setDescription("");
 			updateVisual();
 		}
 
-		DataModel::Pick* pick() const {
+		DataModel::Pick *pick() const {
 			return _referencedPick.get();
 		}
 
@@ -636,6 +641,10 @@ class PickerMarker : public RecordMarker {
 			if ( _time != pick->time() ) return false;
 
 			return true;
+		}
+
+		const std::string &channelCode() const {
+			return _channelCode;
 		}
 
 		void setPolarity(OPT(PickPolarity) p) {
@@ -981,6 +990,7 @@ class PickerMarker : public RecordMarker {
 		int               _slot;
 		int               _rot;
 		bool              _drawUncertaintyValues;
+		std::string       _channelCode;
 };
 
 
@@ -7369,6 +7379,8 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 
 					p->waveformID().setChannelCode(p->waveformID().channelCode() + comp);
 				}
+				else if ( !marker->channelCode().empty() )
+					p->waveformID().setChannelCode(marker->channelCode());
 #endif
 
 				p->setTime(marker->correctedTime());

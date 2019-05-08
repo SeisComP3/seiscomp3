@@ -454,6 +454,9 @@ class Bulletin(object):
 
             # suppress unused station magnitudes
             smid = mag.publicID()
+            if not smid in stationMagnitudeContributions:
+                continue
+
             try:
                 w = stationMagnitudeContributions[smid].weight()
             except:
@@ -487,16 +490,14 @@ class Bulletin(object):
 
                 p = a = "N/A"
                 if amp:
-                    #if typ in ["mb", "mB", "Ms", "ML"]:
-                    if typ in ["mb", "mB", "Ms", "Ms(BB)", "ML", "MLv", "Mwp"]:
-                        try:    a = "%g" % amp.amplitude().value()
-                        except: a = "N/A"
+                    try:    a = "%g" % amp.amplitude().value()
+                    except: a = "N/A"
 
-                        if typ in ["mb", "Ms", "Ms(BB)"]:
-                            try:    p = "%.2f" % amp.period().value()
-                            except: p = "N/A"
-                        else:
-                            p = ""
+                    if typ in ["mb", "Ms", "Ms(BB)"]:
+                        try:    p = "%.2f" % amp.period().value()
+                        except: p = "N/A"
+                    else:
+                        p = ""
 
                 wfid = mag.waveformID()
                 net = wfid.networkCode()
@@ -581,8 +582,7 @@ class Bulletin(object):
         for i in xrange(networkMagnitudeCount):
             mag = org.magnitude(i)
             if mag.publicID() == prefMagID:
-                if mag.type() in ["mb","mB","Mwp","ML","MLv", "Mjma"]:
-                    tmp["mtyp"] = mag.type()
+                tmp["mtyp"] = mag.type()
                 tmp["mval"] = mag.magnitude().value()
                 foundMag = True
                 break;
@@ -635,7 +635,7 @@ class Bulletin(object):
         for i in xrange(stationMagnitudeCount):
             mag = org.stationMagnitude(i)
             typ = mag.type()
-            if typ == "MLv": typ = "ML"
+            if typ == "MLv" or typ == "MLh": typ = "ML"
             if typ not in stationMagnitudes:
                 stationMagnitudes[typ] = {}
 

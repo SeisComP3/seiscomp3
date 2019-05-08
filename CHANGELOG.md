@@ -25,6 +25,8 @@
   * Update map residual colors and residual plot rect if the magnitude was recomputed
   * Show amplitude values in amplitude picker if only QC fails
   * Compute magnitudes
+  * Preserve channel code in picker if only the polarity or uncertainy of an existing pick
+    was changed
 
 * scquery
 
@@ -46,6 +48,9 @@
 * scbulletin
 
   * Fix evaluation of command line option ```--weight```
+  * Show only station magnitudes associated with network magnitudes
+  * Remove amplitude type filter and output all amplitudes which are associated with printed
+    station magnitudes
 
 * scxmldump
 
