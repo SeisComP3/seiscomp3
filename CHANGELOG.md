@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release 2018.327 patch11
+
+* scmag
+
+  * Update existing station magnitudes with ```--reprocess```
+
+
 ## Release 2018.327 patch10
 
 * trunk
