@@ -1196,7 +1196,7 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 				continue;
 
 			for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
-				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->proc->type(), it->value, false);
+				StaMagPtr stationMagnitude = getStationMagnitude(origin, ampl->waveformID(), it->proc->type(), it->value, _allowReprocessing);
 				if ( stationMagnitude ) {
 					it->proc->finalizeMagnitude(stationMagnitude.get());
 					stationMagnitude->setAmplitudeID(aid);
