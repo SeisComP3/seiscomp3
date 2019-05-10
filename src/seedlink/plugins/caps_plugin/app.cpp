@@ -168,10 +168,12 @@ App::App(int argc, char** argv) : Application(argc, argv) {
 	_ssl = false;
 	_dump = false;
 	_archive = false;
+	_allowOutOfOrder = true;
 	_currentID = -1;
 	_currentItem = NULL;
 	_exitRequested = false;
 	_verbosity = 0;
+	_pMaximumTimeDiff = 86400;
 
 	_sessionTable.setItemAddedFunc(boost::bind(&App::itemAdded, this, _1));
 	_sessionTable.setItemAboutToBeRemovedFunc(boost::bind(&App::itemAboutToBeRemoved, this, _1));
@@ -210,6 +212,8 @@ App::Request *App::findRequest(const string &streamID) {
 bool App::init() {
 	if ( !Application::init() ) return false;
 	if ( !validateParameters() ) return false;
+
+	_maximumTimeDiff = TimeSpan(_pMaximumTimeDiff);
 
 	if ( _verbosity > 0 ) {
 		vector<LogChannel> channels;
@@ -320,7 +324,9 @@ bool App::initCommandLine() {
 	options_description mode("Mode");
 	mode.add_options()
 	    ("archive", "Disable realtime mode")
-	    ("dump", "Dump all received data to stdout and don't use the output port");
+	    ("dump", "Dump all received data to stdout and don't use the output port")
+	    ("in-order", "Request all records in-order. Out-of-order records will be skipped")
+	    ("max-time-diff", value(&_pMaximumTimeDiff), "The maxmimum time difference with respect to current time of the end time of a received record. If exceeded then the end time will not be logged into the state file.");
 
 	options_description streams("Streams");
 	streams.add_options()
@@ -548,6 +554,17 @@ bool App::run() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::setStreamState(const string &streamID, const Time &time) {
+	Time now = Time::GMT();
+
+	if ( time > now ) {
+		TimeSpan diff = time - now;
+		if ( diff > _maximumTimeDiff ) {
+			LogWarning("%s: end time offset threshold reached: %s",
+			           streamID.c_str(), time.iso().c_str());
+			return;
+		}
+	}
+
 	_states[streamID] = time;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -659,7 +676,7 @@ bool App::validateParameters() {
 
 	if ( _vm.count("dump") ) _dump = true;
 	if ( _vm.count("archive") ) _archive = true;
-
+	if ( _vm.count("in-order") ) _allowOutOfOrder = false;
 
 	return true;
 }
@@ -829,6 +846,11 @@ bool App::handshake() {
 
 		if ( _archive )
 			_socket->write("REALTIME OFF\n", 13);
+
+		if ( _allowOutOfOrder )
+			_socket->write("OUTOFORDER ON\n", 14);
+		else
+			_socket->write("OUTOFORDER OFF\n", 15);
 
 		// First pass: continue all previous streams
 		for ( RequestByID::iterator it = _requestByID.begin();

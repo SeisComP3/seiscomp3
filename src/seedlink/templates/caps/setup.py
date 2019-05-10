@@ -21,6 +21,18 @@ class SeedlinkPluginHandler:
         self.profiles = {}
 
     def push(self, seedlink):
+        try:
+            maxTimeDiff = float(seedlink._get('plugins.caps.maxTimeDiff', False))
+        except:
+            maxTimeDiff = 86400
+
+        inOrder = ""
+        try:
+            if seedlink._get('plugins.caps.inOrder', False):
+                inOrder = " --in-order"
+        except:
+            pass
+
         # Check and set defaults
         try:
             address = seedlink.param('sources.caps.address')
@@ -90,6 +102,8 @@ class SeedlinkPluginHandler:
         seedlink.setParam('sources.caps.address', address)
         seedlink.setParam('sources.caps.log', log)
         seedlink.setParam('sources.caps.streamsFile', streamsFile)
+        seedlink.setParam('sources.caps.maxTimeDiff', maxTimeDiff)
+        seedlink.setParam('sources.caps.inOrder', inOrder)
         seedlink.setParam('seedlink.caps.id', capsId)
 
         return capsId
