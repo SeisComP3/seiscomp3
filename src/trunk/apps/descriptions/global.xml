@@ -635,7 +635,7 @@
 						Gutenberg (1935). The newer version by Uhrhammer and
 						Collins (1990) is part of the IASPEI Magnitude
 						Working Group recommendations of 2011 September 9. This
-						version uses gain=2080, T0=0.8, h=0.7.
+						version uses gain=2800, T0=0.8, h=0.8.
 					</description>
 					<parameter name="gain" type="double" default="2800">
 						<description>
