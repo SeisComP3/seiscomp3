@@ -156,6 +156,7 @@ class App : public Application {
 		Requests                  _requests;
 		bool                      _dump;
 		bool                      _archive;
+		bool                      _allowOutOfOrder;
 		socketbuf<Socket,512>     _socketBuf;
 		char                      _lineBuf[201];
 		int                       _currentID;
@@ -168,6 +169,8 @@ class App : public Application {
 		std::string               _strStartTime;
 		std::string               _strEndTime;
 		unsigned int              _verbosity;
+		float                     _pMaximumTimeDiff;
+		TimeSpan                  _maximumTimeDiff;
 
 		typedef boost::shared_ptr<boost::program_options::options_description> OptionsPtr;
 		OptionsPtr                              _options;

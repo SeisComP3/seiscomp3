@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
+	<plugin name="caps">
+		<extends>seedlink</extends>
+		<description>Global options for the CAPS plugin</description>
+		<configuration>
+			<group name="plugins">
+				<group name="caps">
+					<parameter name="maxTimeDiff" type="float" default="86400">
+						<description>
+						The maxmimum time difference with respect to current
+						time of the end time of a received record. If
+						exceeded then the end time will not be logged into
+						the state file.
+						</description>
+					</parameter>
+					<parameter name="inOrder" type="boolean" default="false">
+						<description>
+						Request all records in-order. Out-of-order records will
+						be skipped.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+
 	<module name="caps_plugin" category="Acquisition">
 		<description>Transfers data from CAPS to SeedLink server</description>
 		<command-line>
@@ -56,8 +81,8 @@
 			</parameter>
 			<parameter name="streams" type="string" default="*.*">
 				<description>
-					Comma separated list of streams. Stream format is [LOC.CHA].
-					Streams may contain wildcards
+				Comma separated list of streams. Stream format is [LOC.CHA].
+				Streams may contain wildcards
 				</description>
 			</parameter>
 			<parameter name="proc" type="string">

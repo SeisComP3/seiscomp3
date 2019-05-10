@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* seedlink
+
+  * caps\_plugin does not enforce in-order data by default and discards
+    records with timestamps too far in future from being added to the
+    state file (both parameters are configurable)
+
 ## Release 2018.327 patch11
 
 * scmag
