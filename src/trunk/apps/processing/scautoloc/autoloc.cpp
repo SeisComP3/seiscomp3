@@ -512,13 +512,12 @@ bool Autoloc3::feed(Origin *origin)
 		OriginPtr relo = _relocator.relocate(found);
 		if (relo) {
 			found->updateFrom(relo.get());
+			_store(found);
+			report();
+			cleanup();
 		}
 		else
 			SEISCOMP_WARNING("RELOCATION FAILED @Autoloc3::feed(Origin*) (not critical)");
-
-		_store(found);
-		report();
-		cleanup();
 	}
 	else {
 		SEISCOMP_DEBUG("no matching origin found");

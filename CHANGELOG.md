@@ -6,6 +6,11 @@
 
   * Update existing station magnitudes with ```--reprocess```
 
+* scautoloc
+
+  * Fixed a bug that occasionally caused scautoloc to merge events
+    incorrectly only in case autoloc.useManualOrigins is active.
+
 
 ## Release 2018.327 patch10
 
