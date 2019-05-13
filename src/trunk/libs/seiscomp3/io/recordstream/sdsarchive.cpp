@@ -506,7 +506,7 @@ bool SDSArchive::stepStream() {
 			_recstream.clear();
 			_recstream.open(_currentFilename.c_str(), ios_base::in | ios_base::binary);
 			if ( !_recstream.is_open() ) {
-				SEISCOMP_DEBUG("+ %s (not found)", _currentFilename.c_str());
+				SEISCOMP_WARNING("+ %s (not found)", _currentFilename.c_str());
 			}
 			else {
 				SEISCOMP_DEBUG("+ %s (init:%d)", _currentFilename.c_str(), first?1:0);
