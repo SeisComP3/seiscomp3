@@ -104,7 +104,7 @@ class MagTool {
 		void setMinimumArrivalWeight(double);
 
 		bool init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
-		          bool allowReprocessing);
+		          bool allowReprocessing, bool staticUpdate = false);
 		void done();
 
 		bool feed(DataModel::Origin*);
@@ -165,6 +165,8 @@ class MagTool {
 		//! process new or updated Origin
 		// if something changed, returns true, false otherwise
 		bool processOrigin(DataModel::Origin*);
+
+		bool processOriginUpdateOnly(DataModel::Origin*);
 	
 		//! process new or updated Pick
 		// if something changed, returns true, false otherwise
@@ -178,6 +180,13 @@ class MagTool {
 		OriginList *originsForPick(const std::string &pickID);
 
 		bool isTypeEnabledForSummaryMagnitude(const std::string &) const;
+
+		Util::KeyValues *fetchParams(const DataModel::Amplitude *);
+
+		bool computeAverage(AverageDescription &avg,
+		                    const std::vector<double> &values,
+		                    std::vector<double> &weights,
+		                    std::string &method, double &value, double &stdev);
 
 	private:
 		typedef Processing::MagnitudeProcessorFactory::ServiceNames MagnitudeTypeList;
@@ -203,6 +212,7 @@ class MagTool {
 		AverageMethods     _magnitudeAverageMethods;
 
 		bool               _allowReprocessing;
+		bool               _staticUpdate;
 		size_t             _dbAccesses;
 
 	public:

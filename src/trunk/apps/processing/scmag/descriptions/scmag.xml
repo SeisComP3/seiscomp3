@@ -110,18 +110,39 @@
 					<description>
 					Defines an event parameters XML file to be read and processed. This
 					implies offline mode and only processes all origins contained
-					in that file. It computes magnitudes for all picks associated
-					with an origin where amplitudes are available and outputs an XML
-					file that additionally contains station- and network magnitudes.
+					in that file. It computes station magnitudes for all picks associated
+					with an origin where amplitudes are available and the corresponding
+					network magnitudes. Station and network magnitudes having the
+					evaluation status set are ignored. Use the --force to include those
+					magnitudes. It outputs an XML text adding the station-
+					and network magnitudes to the input XML file.
 					</description>
 				</option>
 				<option long-flag="reprocess">
 					<description>
-					Reprocess also network magnitudes with an evaluation status set
-					but do not change weights and just add new contributions with
-					weight 0.
+					Reprocess also station and network magnitudes with an evaluation
+					status set but do not change weights and just add new
+					contributions with weight 0.
 					</description>
 				</option>
+			</group>
+			<group name="Reprocess">
+			<option long-flag="static">
+				<description>
+				With that flag all existing station magnitudes are recomputed
+				based on their associated amplitudes. If an amplitude cannot
+				be accessed, no station magnitude is updated.
+				Network magnitudes are recomputed based on their station
+				magnitude contributions. No new objects will
+				be created in this mode, it only updates values and weights.
+				The method to accumulate the station magnitudes to form the network
+				magnitude will be read from the existing object and replicated.
+				If it cannot be interpreted then the configured default for this
+				magnitude type will be used instead. Weights of station magnitudes
+				will be changed according to the accumulation method of the
+				network magnitude..
+				</description>
+			</option>
 			</group>
 		</command-line>
 	</module>
