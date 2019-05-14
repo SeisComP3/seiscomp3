@@ -7,6 +7,11 @@
   * Do not reprocess manual amplitudes with ```--reprocess``` by default
   * Add ```--force``` flag to reprocess also manual amplitudes
 
+* scmag
+
+  * Add ```--static``` flag which only updates existing magnitudes based
+    on their associated amplitudes
+
 * seedlink
 
   * caps\_plugin does not enforce in-order data by default and discards
