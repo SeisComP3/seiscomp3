@@ -94,6 +94,7 @@
 				<option long-flag="reprocess">
 					<description>
 					Reprocess and update existing amplitudes in combination with --ep.
+					Manual amplitudes will be skipped.
 					This option can be used, e.g. for reprocessing amplitudes with
 					new inventory information. Waveform access is required.
 					</description>
@@ -109,6 +110,11 @@
 					updated amplitudes to the messaging system. Waveform access is
 					required.
 				</description>
+				<option long-flag="force">
+					<description>
+					Forces reprocessing of all amplitudes, even manual ones.
+					</description>
+				</option>
 				<option long-flag="start-time" argument="time">
 					<description>
 					</description>

@@ -2,6 +2,11 @@
 
 ## Release YYYY.ddd
 
+* scamp
+
+  * Do not reprocess manual amplitudes with ```--reprocess``` by default
+  * Add ```--force``` flag to reprocess also manual amplitudes
+
 * seedlink
 
   * caps\_plugin does not enforce in-order data by default and discards
