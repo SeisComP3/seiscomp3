@@ -229,6 +229,7 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void selectStation(const std::string &net, const std::string &code);
 		void adjustMagnitudeRect(QRectF&);
 		void tableStationMagnitudesContextMenuRequested(const QPoint &pos);
+		void tableStationMagnitudesHeaderContextMenuRequested(const QPoint &pos);
 		void changeMagnitudeState(int id, bool state);
 		void changeStationState(int id, bool state);
 		void dataChanged(const QModelIndex&, const QModelIndex&);
