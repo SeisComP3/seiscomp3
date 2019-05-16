@@ -27,7 +27,7 @@
 
 #define SEISCOMP_COMPONENT Gui::DiagramWidget
 #include <seiscomp3/logging/log.h>
-#include <seiscomp3/gui/core/scheme.h>
+#include <seiscomp3/gui/core/application.h>
 
 
 #define LOW_BORDER  60.0
@@ -54,6 +54,10 @@ double getSpacing(double width, int steps) {
 }
 
 }
+
+
+static int symbolSize = -1;
+static int halfSymbolSize = 0;
 
 
 namespace Seiscomp {
@@ -247,6 +251,11 @@ void DiagramWidget::resizeEvent(QResizeEvent *) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DiagramWidget::paintEvent(QPaintEvent *e) {
+	if ( symbolSize < 0 ) {
+		symbolSize = fontMetrics().height()/2;
+		halfSymbolSize = symbolSize / 2;
+	}
+
 	QPainter painter(this);
 
 	if ( !_textHeight ) {
@@ -1088,51 +1097,76 @@ void DiagramWidget::diagramAreaUpdated(const QRect &) {}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DiagramWidget::drawValue(int id, QPainter& painter, const QPoint& p,
                               SymbolType type, bool valid) const {
-	static QPolygon triangle = QPolygon() << QPoint(-3,3) << QPoint(3,3) << QPoint(0,-3);
-	static QPolygon triangle2 = QPolygon() << QPoint(3,-3) << QPoint(-3,-3) << QPoint(0,3);
-	static QPolygon diamond = QPolygon() << QPoint(-3,0) << QPoint(0,-3) << QPoint(3,0) << QPoint(0,3);
+	static QPolygon triangle = QPolygon() << QPoint(-halfSymbolSize,halfSymbolSize)
+	                                      << QPoint( halfSymbolSize,halfSymbolSize)
+	                                      << QPoint(0,-halfSymbolSize);
+	static QPolygon triangle2 = QPolygon() << QPoint( halfSymbolSize,-halfSymbolSize)
+	                                       << QPoint(-halfSymbolSize,-halfSymbolSize)
+	                                       << QPoint(0,halfSymbolSize);
+	static QPolygon diamond = QPolygon() << QPoint(-halfSymbolSize,0)
+	                                     << QPoint(0,-halfSymbolSize)
+	                                     << QPoint(halfSymbolSize,0)
+	                                     << QPoint(0,halfSymbolSize);
 
 	switch ( type ) {
 		case Circle:
-			painter.drawEllipse(p.x()-3, p.y()-3, 6, 6);
+			painter.setRenderHint(QPainter::Antialiasing);
+			painter.drawEllipse(p.x()-halfSymbolSize, p.y()-halfSymbolSize, symbolSize, symbolSize);
 			if ( !valid ) {
-				painter.drawLine(p.x()-2,p.y()-2,p.x()+2,p.y()+2);
-				painter.drawLine(p.x()+2,p.y()-2,p.x()-2,p.y()+2);
+				painter.drawLine(p.x()-halfSymbolSize-1,p.y()-halfSymbolSize-1,
+				                 p.x()+halfSymbolSize-1,p.y()+halfSymbolSize-1);
+				painter.drawLine(p.x()+halfSymbolSize-1,p.y()-halfSymbolSize-1,
+				                 p.x()-halfSymbolSize-1,p.y()+halfSymbolSize-1);
 			}
+			painter.setRenderHint(QPainter::Antialiasing, false);
 			break;
 		case Triangle:
+			painter.setRenderHint(QPainter::Antialiasing);
 			painter.translate(p.x(), p.y());
 			painter.drawPolygon(triangle);
 			painter.translate(-p.x(), -p.y());
 			if ( !valid ) {
-				painter.drawLine(p.x()-1,p.y(),p.x()+3,p.y()+3);
-				painter.drawLine(p.x()+1,p.y(),p.x()-3,p.y()+3);
+				painter.drawLine(p.x()-1,p.y(),
+				                 p.x()+halfSymbolSize,p.y()+halfSymbolSize);
+				painter.drawLine(p.x()+1,p.y(),
+				                 p.x()-halfSymbolSize,p.y()+halfSymbolSize);
 			}
+			painter.setRenderHint(QPainter::Antialiasing, false);
 			break;
 		case TriangleUpsideDown:
+			painter.setRenderHint(QPainter::Antialiasing);
 			painter.translate(p.x(), p.y());
 			painter.drawPolygon(triangle2);
 			painter.translate(-p.x(), -p.y());
 			if ( !valid ) {
-				painter.drawLine(p.x()-1,p.y()+3,p.x()+3,p.y());
-				painter.drawLine(p.x()+1,p.y()+3,p.x()-3,p.y());
+				painter.drawLine(p.x()-1,p.y()+halfSymbolSize,
+				                 p.x()+halfSymbolSize,p.y());
+				painter.drawLine(p.x()+1,p.y()+halfSymbolSize,
+				                 p.x()-halfSymbolSize,p.y());
 			}
+			painter.setRenderHint(QPainter::Antialiasing, false);
 			break;
 		case Rectangle:
-			painter.drawRect(p.x()-3, p.y()-3, 6, 6);
+			painter.drawRect(p.x()-halfSymbolSize, p.y()-halfSymbolSize, symbolSize, symbolSize);
 			if ( !valid ) {
-				painter.drawLine(p.x()-3,p.y()-3,p.x()+3,p.y()+3);
-				painter.drawLine(p.x()+3,p.y()-3,p.x()-3,p.y()+3);
+				painter.drawLine(p.x()-halfSymbolSize,p.y()-halfSymbolSize,
+				                 p.x()+halfSymbolSize,p.y()+halfSymbolSize);
+				painter.drawLine(p.x()+halfSymbolSize,p.y()-halfSymbolSize,
+				                 p.x()-halfSymbolSize,p.y()+halfSymbolSize);
 			}
 			break;
 		case Diamond:
+			painter.setRenderHint(QPainter::Antialiasing);
 			painter.translate(p.x(), p.y());
 			painter.drawPolygon(diamond);
 			painter.translate(-p.x(), -p.y());
 			if ( !valid ) {
-				painter.drawLine(p.x()-3,p.y()-3,p.x()+3,p.y()+3);
-				painter.drawLine(p.x()+3,p.y()-3,p.x()-3,p.y()+3);
+				painter.drawLine(p.x()-halfSymbolSize,p.y()-halfSymbolSize,
+				                 p.x()+halfSymbolSize,p.y()+halfSymbolSize);
+				painter.drawLine(p.x()+halfSymbolSize,p.y()-halfSymbolSize,
+				                 p.x()-halfSymbolSize,p.y()+halfSymbolSize);
 			}
+			painter.setRenderHint(QPainter::Antialiasing, false);
 			break;
 	}
 }
@@ -2003,7 +2037,7 @@ int DiagramWidget::findValue(const QPoint& p) const {
 		}
 	}
 
-	if ( mindist >= 0 && mindist < 5 )
+	if ( mindist >= 0 && mindist < symbolSize )
 		return minid;
 
 	return -1;
