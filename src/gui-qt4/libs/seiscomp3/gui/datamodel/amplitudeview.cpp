@@ -366,6 +366,9 @@ class AmplitudeViewMarker : public RecordMarker {
 
 			// Time + uncertainties do not match: not equal
 			if ( correctedTime() != amp->timeWindow().reference() ) return false;
+
+			if ( _manualAmplitude == NULL ) return false;
+
 			try {
 				if ( _manualAmplitude->amplitude().value() != amp->amplitude().value() ) return false;
 			}
