@@ -3463,8 +3463,8 @@ void MagnitudeView::addStationMagnitude(Seiscomp::DataModel::StationMagnitude* s
 //! add StationMag to distance-MagResidual diagram
 //! returns the distance: origin-station
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
-                                          DataModel::StationMagnitude* stationMagnitude,
+double MagnitudeView::addStationMagnitude(DataModel::Magnitude *magnitude,
+                                          DataModel::StationMagnitude *stationMagnitude,
                                           double weight) {
 	double distance = -999;
 
@@ -3494,10 +3494,20 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 
 	double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
 
+	QColor c = SCScheme.colors.arrivals.automatic;
+	AmplitudePtr amp = _objCache.get<Amplitude>(stationMagnitude->amplitudeID());
+	if ( amp ) {
+		try {
+			if ( amp->evaluationMode() == DataModel::MANUAL )
+				c = SCScheme.colors.arrivals.manual;
+		}
+		catch ( ... ) {}
+	}
+
 	if ( SCScheme.unit.distanceInKM )
-		_stamagnitudes->addValue(QPointF(Math::Geo::deg2km(distance), residual), SCScheme.colors.magnitudes.set);
+		_stamagnitudes->addValue(QPointF(Math::Geo::deg2km(distance), residual), c);
 	else
-		_stamagnitudes->addValue(QPointF(distance, residual), SCScheme.colors.magnitudes.set);
+		_stamagnitudes->addValue(QPointF(distance, residual), c);
 
 	_stamagnitudes->setValueSelected(_stamagnitudes->count()-1, weight > 0.0);
 	changeMagnitudeState(_stamagnitudes->count()-1, _stamagnitudes->isValueSelected(_stamagnitudes->count()-1));

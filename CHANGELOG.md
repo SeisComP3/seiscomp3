@@ -18,6 +18,11 @@
     records with timestamps too far in future from being added to the
     state file (both parameters are configurable)
 
+* scolv
+
+  * Color station magnitude symbols with respect to evaluation mode of its
+    associated amplitude
+
 ## Release 2018.327 patch11
 
 * scmag
