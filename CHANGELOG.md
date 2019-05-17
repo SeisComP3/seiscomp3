@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch12
 
 * scamp
 
@@ -20,20 +20,21 @@
 
 * scolv
 
+  * Add amplitude, created and updated columns to station magnitude table
   * Color station magnitude symbols with respect to evaluation mode of its
     associated amplitude
-
-## Release 2018.327 patch11
-
-* scmag
-
-  * Update existing station magnitudes with ```--reprocess```
+  * Increase plot symbol sizes to 50% of the applications base font size
 
 * scautoloc
 
   * Fixed a bug that occasionally caused scautoloc to merge events
     incorrectly only in case autoloc.useManualOrigins is active.
 
+## Release 2018.327 patch11
+
+* scmag
+
+  * Update existing station magnitudes with ```--reprocess```
 
 ## Release 2018.327 patch10
 
