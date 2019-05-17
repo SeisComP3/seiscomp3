@@ -75,6 +75,7 @@ AmpTool::AmpTool(int argc, char **argv) : StreamApplication(argc, argv) {
 	_fExpiry = 1.0; // one hour cache initially
 	_fetchMissingAmplitudes = true;
 	_minWeight = 0.5;
+	_forceReprocessing = false;
 
 	setAutoApplyNotifierEnabled(true);
 	setInterpretNotifierEnabled(true);
@@ -130,9 +131,10 @@ void AmpTool::createCommandLineDescription() {
 	commandline().addGroup("Input");
 	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
 	                        &_epFile);
-	commandline().addOption("Input", "reprocess", "Reprocess and update existing amplitudes in combination with --ep");
+	commandline().addOption("Input", "reprocess", "Reprocess and update existing (non manual) amplitudes in combination with --ep");
 
 	commandline().addGroup("Reprocess");
+	commandline().addOption("Reprocess", "force", "Force reprocessing of amplitudes even if they are manual");
 	commandline().addOption("Reprocess", "start-time", "Start time for amplitude request window", &_strTimeWindowStartTime);
 	commandline().addOption("Reprocess", "end-time", "End time for amplitude request window", &_strTimeWindowEndTime);
 	commandline().addOption("Reprocess", "commit", "Send amplitude updates to the messaging otherwise an XML document will be output");
@@ -151,6 +153,8 @@ bool AmpTool::validateParameters() {
 
 	if ( !_epFile.empty() ) {
 		setMessagingEnabled(false);
+		setLoggingToStdErr(true);
+
 		if ( !isInventoryDatabaseEnabled() && !isConfigDatabaseEnabled() )
 			setDatabaseEnabled(false, false);
 	}
@@ -185,6 +189,7 @@ bool AmpTool::initConfiguration() {
 
 	_dumpRecords = commandline().hasOption("dump-records");
 	_reprocessAmplitudes = commandline().hasOption("reprocess");
+	_forceReprocessing = commandline().hasOption("force");
 
 	return true;
 }
@@ -524,6 +529,7 @@ bool AmpTool::run() {
 			OriginPtr org = _ep->origin(i);
 			SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
 			process(org.get());
+			if ( isExitRequested() ) break;
 		}
 
 		ar.create("-");
@@ -748,6 +754,18 @@ void AmpTool::process(Origin *origin) {
 					_report << "     - " << *ait << " [amplitude exists already]" << std::endl;
 					continue;
 				}
+
+				try {
+					if ( existingAmp->evaluationMode() == DataModel::MANUAL ) {
+						if ( !_forceReprocessing ) {
+							SEISCOMP_INFO("Skipping %s calculation for pick %s, amplitude exists already and is manual (use --force)",
+							              ait->c_str(), pickID.c_str());
+							_report << "     - " << *ait << " [manual amplitude exists already]" << std::endl;
+							continue;
+						}
+					}
+				}
+				catch ( ... ) {}
 			}
 
 			AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(ait->c_str());

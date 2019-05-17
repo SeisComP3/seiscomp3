@@ -11,10 +11,10 @@
  ***************************************************************************/
 
 
-
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/origin.h>
+
 
 bool dumpOrigin(const Seiscomp::DataModel::Origin *origin);
 
@@ -27,4 +27,3 @@ bool validArrival(const Seiscomp::DataModel::Arrival *arr, double minWeight = 0.
 
 Seiscomp::DataModel::EvaluationStatus
 status(const Seiscomp::DataModel::Origin *origin);
-

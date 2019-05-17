@@ -155,6 +155,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		bool                       _firstRecord;
 		bool                       _dumpRecords;
 		bool                       _reprocessAmplitudes;
+		bool                       _forceReprocessing;
 		std::string                _epFile;
 		EventParametersPtr         _ep;
 

@@ -58,10 +58,11 @@ MAKEENUM(
 		MAGNITUDE,
 		RESIDUAL,
 		DISTANCE,
+		AMP,
 		SNR,
 		PERIOD,
-		MISC
-		//SNR
+		CREATED,
+		UPDATED
 	),
 	ENAMES(
 		"Sel",
@@ -71,12 +72,29 @@ MAKEENUM(
 		"Mag",
 		"Res",
 		"Dist",
+		"Amp",
 		"SNR",
 		"Per (s)",
-		""
-		//"SNR"
+		"Created",
+		"Updated"
 	)
 );
+
+
+bool colVisibility[StaMagsListColumns::Quantity] = {
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	false,
+	true,
+	true,
+	false,
+	false
+};
 
 
 QVariant colAligns[StaMagsListColumns::Quantity] = {
@@ -89,6 +107,8 @@ QVariant colAligns[StaMagsListColumns::Quantity] = {
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignRight | Qt::AlignVCenter),
 	int(Qt::AlignRight | Qt::AlignVCenter),
+	int(Qt::AlignRight| Qt::AlignVCenter),
+	int(Qt::AlignLeft | Qt::AlignVCenter),
 	int(Qt::AlignLeft | Qt::AlignVCenter)
 };
 
@@ -548,6 +568,18 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 				}
 				break;
 
+			case AMP:
+			{
+				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
+				if ( amp ) {
+					try {
+						return QString("%1").arg(amp->amplitude().value());
+					}
+					catch ( ... ) {}
+				}
+				break;
+			}
+
 			case SNR:
 			{
 				AmplitudePtr amp = _cache->get<Amplitude>(sm->amplitudeID());
@@ -572,10 +604,19 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 				break;
 			}
 
-			case MISC:
+			case CREATED:
+				try {
+					return timeToString(sm->creationInfo().creationTime(), "%T.%1f");
+				}
+				catch ( ValueException& ) {}
 				break;
 
-			//case SNR: // SNR
+			case UPDATED:
+				try {
+					return timeToString(sm->creationInfo().modificationTime(), "%T.%1f");
+				}
+				catch ( ValueException& ) {}
+				break;
 
 			default:
 				break;
@@ -679,6 +720,23 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 	*/
 	else if ( role == Qt::TextAlignmentRole ) {
 		return colAligns[index.column()];
+	}
+	else if ( role == Qt::ToolTipRole ) {
+		switch ( index.column() ) {
+			case CREATED:
+				try {
+					return sm->creationInfo().creationTime().toString("%F %T.%f").c_str();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case UPDATED:
+				try {
+					return sm->creationInfo().modificationTime().toString("%F %T.%f").c_str();
+				}
+				catch ( ValueException& ) {}
+				break;
+		}
 	}
 
 	return QVariant();
@@ -1207,6 +1265,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	//_ui.tableStationMagnitudes->horizontalHeader()->setStretchLastSection(true);
 	_ui.tableStationMagnitudes->setContextMenuPolicy(Qt::CustomContextMenu);
 	_ui.tableStationMagnitudes->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	_ui.tableStationMagnitudes->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+	connect(_ui.tableStationMagnitudes->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)),
+	        this, SLOT(tableStationMagnitudesHeaderContextMenuRequested(const QPoint &)));
 
 	connect(_ui.tableStationMagnitudes->horizontalHeader(), SIGNAL(sectionClicked(int)),
 	        _ui.tableStationMagnitudes, SLOT(sortByColumn(int)));
@@ -2623,6 +2685,37 @@ void MagnitudeView::tableStationMagnitudesContextMenuRequested(const QPoint &pos
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::tableStationMagnitudesHeaderContextMenuRequested(const QPoint &pos) {
+	int count = _ui.tableStationMagnitudes->horizontalHeader()->count();
+	QAbstractItemModel *model = _ui.tableStationMagnitudes->horizontalHeader()->model();
+
+	QMenu menu;
+
+	QVector<QAction*> actions(count);
+
+	for ( int i = 0; i < count; ++i ) {
+		actions[i] = menu.addAction(model->headerData(i, Qt::Horizontal).toString());
+		actions[i]->setCheckable(true);
+		actions[i]->setChecked(!_ui.tableStationMagnitudes->horizontalHeader()->isSectionHidden(i));
+	}
+
+	QAction *result = menu.exec(_ui.tableStationMagnitudes->horizontalHeader()->mapToGlobal(pos));
+	if ( result == NULL ) return;
+
+	int section = actions.indexOf(result);
+	if ( section == -1 ) return;
+
+	for ( int i = 0; i < count; ++i )
+		colVisibility[i] = actions[i]->isChecked();
+
+	_ui.tableStationMagnitudes->horizontalHeader()->setSectionHidden(section, !colVisibility[section]);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::changeMagnitudeState(int id, bool state) {
 	_modelStationMagnitudes.setData(_modelStationMagnitudes.index(id, USED), state?Qt::Checked:Qt::Unchecked, Qt::CheckStateRole);
 }
@@ -3157,7 +3250,9 @@ void MagnitudeView::updateContent() {
 
 	SEISCOMP_DEBUG("selected magnitude: %s with %lu magRefs ", _netMag->publicID().c_str(), (unsigned long)_netMag->stationMagnitudeContributionCount() );
 	SEISCOMP_DEBUG("selected Origin          : %s with %lu arrivals", _origin->publicID().c_str(), (unsigned long)_origin->arrivalCount() );
-	// fill table with model
+
+	for ( int i = 0; i < StaMagsListColumns::Quantity; ++i )
+		_ui.tableStationMagnitudes->setColumnHidden(i, !colVisibility[i]);
 
 	// update column width in table view
 	_ui.tableStationMagnitudes->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -3368,8 +3463,8 @@ void MagnitudeView::addStationMagnitude(Seiscomp::DataModel::StationMagnitude* s
 //! add StationMag to distance-MagResidual diagram
 //! returns the distance: origin-station
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
-                                          DataModel::StationMagnitude* stationMagnitude,
+double MagnitudeView::addStationMagnitude(DataModel::Magnitude *magnitude,
+                                          DataModel::StationMagnitude *stationMagnitude,
                                           double weight) {
 	double distance = -999;
 
@@ -3399,10 +3494,20 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 
 	double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
 
+	QColor c = SCScheme.colors.arrivals.automatic;
+	AmplitudePtr amp = _objCache.get<Amplitude>(stationMagnitude->amplitudeID());
+	if ( amp ) {
+		try {
+			if ( amp->evaluationMode() == DataModel::MANUAL )
+				c = SCScheme.colors.arrivals.manual;
+		}
+		catch ( ... ) {}
+	}
+
 	if ( SCScheme.unit.distanceInKM )
-		_stamagnitudes->addValue(QPointF(Math::Geo::deg2km(distance), residual), SCScheme.colors.magnitudes.set);
+		_stamagnitudes->addValue(QPointF(Math::Geo::deg2km(distance), residual), c);
 	else
-		_stamagnitudes->addValue(QPointF(distance, residual), SCScheme.colors.magnitudes.set);
+		_stamagnitudes->addValue(QPointF(distance, residual), c);
 
 	_stamagnitudes->setValueSelected(_stamagnitudes->count()-1, weight > 0.0);
 	changeMagnitudeState(_stamagnitudes->count()-1, _stamagnitudes->isValueSelected(_stamagnitudes->count()-1));

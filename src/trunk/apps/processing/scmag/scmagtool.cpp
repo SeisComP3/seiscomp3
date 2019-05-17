@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #include "component.h"
 #include "magtool.h"
 #include "dmutil.h"
@@ -63,17 +61,21 @@ class MagToolApp : public Seiscomp::Client::Application {
 			commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
 
 			commandline().addGroup("Input");
-			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
+			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins. This option implies the computation of all station and network magnitudes not having an evaluation status set.",
 			                        &_epFile);
-			commandline().addOption("Input", "reprocess", "Reprocess also network magnitudes with an evaluation status set but do not change weights or add new contributions.");
+			commandline().addOption("Input", "reprocess", "Reprocess also station and network magnitudes with an evaluation status. Only used with --ep.");
+
+			commandline().addGroup("Reprocess");
+			commandline().addOption("Reprocess", "static", "Do not create new station or new network magnitudes just update them. Considers the associated amplitudes. Weights of station magnitudes will be changed according to the accumulation function of the network magnitude.");
 		}
 
 		bool validateParameters() {
-			if ( !_epFile.empty() ) {
-				if ( !isConfigDatabaseEnabled() )
-					setDatabaseEnabled(false, false);
+			if ( !isInventoryDatabaseEnabled() && !isConfigDatabaseEnabled() )
+				setDatabaseEnabled(false, false);
 
+			if ( !_epFile.empty() ) {
 				setMessagingEnabled(false);
+				setLoggingToStdErr(true);
 			}
 
 			return Client::Application::validateParameters();
@@ -305,7 +307,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 					else {
 						SEISCOMP_ERROR("summaryMagnitude.coefficients.a syntax error: '%s' -> using default values",
 						               coeff[c][i].c_str());
-						
+
 						return true;
 					}
 				}
@@ -331,7 +333,9 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 			_expiry = _fExpiry * 3600.;
 
-			_magtool.init(_magTypes, _expiry, commandline().hasOption("reprocess"));
+			_magtool.init(_magTypes, _expiry,
+			              commandline().hasOption("reprocess"),
+			              commandline().hasOption("static"));
 
 			if ( _interval > 0 )
 				enableTimer(_interval);
@@ -414,7 +418,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 						connection()->send(xmsg.get());
 				}
 			}
-	
+
 			_sendImmediately = false;
 		}
 
@@ -500,4 +504,3 @@ int main(int argc, char *argv[]) {
 
 	return retCode;
 }
-

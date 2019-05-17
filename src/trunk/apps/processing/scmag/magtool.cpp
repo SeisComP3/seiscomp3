@@ -16,6 +16,7 @@
 #include "dmutil.h"
 
 #include <seiscomp3/math/mean.h>
+#include <seiscomp3/math/geo.h>
 #include <seiscomp3/logging/log.h>
 
 #include <seiscomp3/datamodel/databasequery.h>
@@ -39,21 +40,30 @@
 #include <map>
 #include <vector>
 #include <set>
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 using namespace std;
 using namespace Seiscomp;
 using namespace Seiscomp::Core;
 using namespace Seiscomp::Processing;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace Seiscomp {
-
 namespace Magnitudes {
+
 
 namespace {
 
-static std::string averageMethodToString(const MagTool::AverageDescription &desc) {
+
+std::string averageMethodToString(const MagTool::AverageDescription &desc) {
 	if ( desc.type == MagTool::Default )
 		return "default";
 	else if ( desc.type == MagTool::Mean )
@@ -66,6 +76,52 @@ static std::string averageMethodToString(const MagTool::AverageDescription &desc
 		return "trimmed median(" + Core::toString(desc.parameter) + ")";
 
 	return "unknown";
+}
+
+
+bool averageMethodFromString(MagTool::AverageDescription &desc, const std::string &method) {
+	if ( method.empty() )
+		return false;
+
+	if ( method == "mean" ) {
+		desc.type = MagTool::Mean;
+		return true;
+	}
+
+	if ( method == "median" ) {
+		desc.type = MagTool::Median;
+		return true;
+	}
+
+	if ( method.compare(0, 13, "trimmed mean(") == 0 ) {
+		size_t p = method.find_last_of(')', 13);
+		if ( p == string::npos )
+			return false;
+
+		double percent;
+		if ( !Core::fromString(percent, method.substr(13, p-13)) )
+			return false;
+
+		desc.type = MagTool::TrimmedMean;
+		desc.parameter = percent;
+		return true;
+	}
+
+	if ( method.compare(0, 13, "trimmed median(") == 0 ) {
+		size_t p = method.find_last_of(')', 15);
+		if ( p == string::npos )
+			return false;
+
+		double percent;
+		if ( !Core::fromString(percent, method.substr(15, p-15)) )
+			return false;
+
+		desc.type = MagTool::TrimmedMedian;
+		desc.parameter = percent;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -97,19 +153,28 @@ bool hasHigherPriority(const DataModel::Amplitude *candidate,
 
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 typedef vector<DataModel::StationMagnitudeCPtr> StaMagArray;
 typedef DataModel::StationMagnitude    StaMag;
 typedef DataModel::StationMagnitudePtr StaMagPtr;
 typedef DataModel::Magnitude    NetMag;
 typedef DataModel::MagnitudePtr NetMagPtr;
 typedef multimap<string, NetMagPtr> NetMagMap;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagTool::MagTool() {
 	_dbAccesses = 0;
 	_allowReprocessing = false;
+	_staticUpdate = false;
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
@@ -124,60 +189,104 @@ MagTool::MagTool() {
 
 	_minimumArrivalWeight = 0.5;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagTool::~MagTool() {
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeEnabled(bool e) {
 	_summaryMagnitudeEnabled = e;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeMinStationCount(int n) {
 	_summaryMagnitudeMinStationCount = n;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeType(const std::string &type) {
 	_summaryMagnitudeType = type;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeBlacklist(const std::vector<std::string> &list) {
 	std::copy(list.begin(), list.end(), std::inserter(_summaryMagnitudeBlacklist, _summaryMagnitudeBlacklist.end()));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeWhitelist(const std::vector<std::string> &list) {
 	std::copy(list.begin(), list.end(), std::inserter(_summaryMagnitudeWhitelist, _summaryMagnitudeWhitelist.end()));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeDefaultCoefficients(const SummaryMagnitudeCoefficients &c) {
 	if ( c.a ) _defaultCoefficients.a = c.a;
 	if ( c.b ) _defaultCoefficients.b = c.b;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setSummaryMagnitudeCoefficients(const Coefficients &c) {
 	_magnitudeCoefficients = c;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setAverageMethods(const AverageMethods &m) {
 	_magnitudeAverageMethods = m;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::setMinimumArrivalWeight(double w) {
 	_minimumArrivalWeight = w;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
-                   bool allowReprocessing) {
+                   bool allowReprocessing, bool staticUpdate) {
 	_cacheSize = expiry;
 	_objectCache.setDatabaseArchive(SCCoreApp->query());
 	_objectCache.setTimeSpan(_cacheSize);
@@ -185,8 +294,7 @@ bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
 
 	_dbAccesses = 0;
 	_allowReprocessing = allowReprocessing;
-
-	cerr << "Setting object expiry to " << toString(expiry) << " seconds" << std::endl;
+	_staticUpdate = staticUpdate;
 
 	MagnitudeTypeList *services = MagnitudeProcessorFactory::Services();
 
@@ -275,13 +383,21 @@ bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::done() {
 	SEISCOMP_INFO("Shutting down MagTool\n - database accesses while runtime: %lu", (unsigned long)_dbAccesses);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::StationMagnitude *MagTool::getStationMagnitude(
         DataModel::Origin *origin,
         const DataModel::WaveformStreamID &wfid,
@@ -367,8 +483,12 @@ DataModel::StationMagnitude *MagTool::getStationMagnitude(
 
 	return mag;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin* origin,
                                             const std::string &type,
                                             bool* newInstance) const {
@@ -422,8 +542,12 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin* origin,
 
 	return mag;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin *origin,
                                             const string &type,
                                             double value,
@@ -449,8 +573,12 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin *origin,
 
 	return mag;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
                                       const DataModel::Origin *origin,
                                       const DataModel::SensorLocation *loc,
@@ -467,42 +595,7 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 	double snr = 0;
 	try { snr = ampl->snr(); } catch ( ... ) {}
 
-	Util::KeyValues *params = NULL;
-	std::string stationID = ampl->waveformID().networkCode() + "." +
-	                        ampl->waveformID().stationCode();
-	ParameterMap::iterator it = _parameters.find(stationID);
-
-	if ( it != _parameters.end() )
-		params = it->second.get();
-	else if ( SCCoreApp->configModule() != NULL ) {
-		for ( size_t i = 0; i < SCCoreApp->configModule()->configStationCount(); ++i ) {
-			DataModel::ConfigStation *station = SCCoreApp->configModule()->configStation(i);
-
-			if ( station->networkCode() != ampl->waveformID().networkCode() ) continue;
-			if ( station->stationCode() != ampl->waveformID().stationCode() ) continue;
-
-			DataModel::Setup *setup = DataModel::findSetup(station, SCCoreApp->name());
-			if ( setup ) {
-				DataModel::ParameterSet* ps = NULL;
-				try {
-					ps = DataModel::ParameterSet::Find(setup->parameterSetID());
-				}
-				catch ( Core::ValueException ) {
-					continue;
-				}
-
-				if ( !ps ) {
-					SEISCOMP_ERROR("Cannot find parameter set %s", setup->parameterSetID().c_str());
-					continue;
-				}
-
-				Util::KeyValuesPtr keys = new Util::KeyValues;
-				keys->init(ps);
-				_parameters[stationID] = keys;
-				params = keys.get();
-			}
-		}
-	}
+	Util::KeyValues *params = fetchParams(ampl);
 
 	for ( ProcessorList::iterator it = itp.first; it != itp.second; ++it ) {
 		Settings settings(
@@ -563,72 +656,37 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 
 	return !mags.empty();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::string &mtype, DataModel::MagnitudePtr netMag) {
 	using namespace DataModel;
 
 	try {
 		netMag->evaluationStatus();
 		if ( !_allowReprocessing ) return false;
-
-		// Update network magnitude
-		double val, stdev;
-
-		vector<double> weights, vals;
-		set<string> usedStationMagnitudes;
-
-		for ( size_t i = 0; i < netMag->stationMagnitudeContributionCount(); ++i ) {
-			StationMagnitudeContribution *contrib = netMag->stationMagnitudeContribution(i);
-			StationMagnitude *staMag = origin->findStationMagnitude(contrib->stationMagnitudeID());
-			if ( !staMag ) {
-				SEISCOMP_ERROR("Origin %s: station magnitude '%s' not found referenced from magnitude '%s' at index %d",
-				               origin->publicID().c_str(),
-				               contrib->stationMagnitudeID().c_str(),
-				               netMag->publicID().c_str(), int(i));
-				return false;
-			}
-
-			double weight;
-			try {
-				weight = contrib->weight();
-			}
-			catch ( ... ) {
-				weight = 1.0;
-			}
-
-			weights.push_back(weight);
-			vals.push_back(staMag->magnitude().value());
-			usedStationMagnitudes.insert(staMag->publicID());
-		}
-
-		Math::Statistics::computeTrimmedMean(vals, 0, val, stdev, &weights);
-		netMag->setMagnitude(RealQuantity(val, stdev, Core::None, Core::None, Core::None));
-
-		for ( size_t i = 0; i < origin->stationMagnitudeCount(); ++i ) {
-			StationMagnitude *mag = origin->stationMagnitude(i);
-			if ( mag->type() != mtype ) continue;
-
-			if ( usedStationMagnitudes.find(mag->publicID()) != usedStationMagnitudes.end() )
-				continue;
-
-			StationMagnitudeContributionPtr contrib = new StationMagnitudeContribution;
-			contrib->setStationMagnitudeID(mag->publicID());
-			contrib->setWeight(0.0);
-			contrib->setResidual(mag->magnitude().value()-val);
-
-			netMag->add(contrib.get());
-		}
-
-		return true;
 	}
 	catch ( ... ) {}
 
-
-	StaMagArray stationMagnitudes;
-	StaMagArray stationMagnitudesZeroWeight;
+	// Set configured average method
+	AverageDescription averageMethod;
+	AverageMethods::iterator am_it = _magnitudeAverageMethods.find(mtype);
+	if ( am_it == _magnitudeAverageMethods.end() )
+		averageMethod.type = Default;
+	else
+		averageMethod = am_it->second;
 
 	vector<double> mv; // vector of station magnitude values
+	double value = 0.0;
+	OPT(double) stdev = 0.0;
+	string methodID;
+	std::vector<double> weights;
+
+	StaMagArray stationMagnitudesZeroWeight;
+	StaMagArray stationMagnitudes;
 
 	// retrieve from the origin all station magnitudes of specified type
 	for ( size_t i = 0, nmag = origin->stationMagnitudeCount(); i < nmag; ++i ) {
@@ -650,77 +708,13 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		mv.push_back(m);
 	}
 
-	// Set configured average method
-	AverageDescription averageMethod;
-	AverageMethods::iterator am_it = _magnitudeAverageMethods.find(mtype);
-	if ( am_it == _magnitudeAverageMethods.end() )
-		averageMethod.type = Default;
-	else
-		averageMethod = am_it->second;
-
 	int count = mv.size();
-	double value = 0.0;
-	OPT(double) stdev = 0.0;
-	double cumw = 0.0;
-	double trimPercentage = 0.0;
-	string methodID = "mean";
-	std::vector<double> weights;
 
 	if ( count ) {
 		weights.resize(mv.size(), 1);
 
-		switch( averageMethod.type ) {
-			case Default:
-				if ( count > 3 ) {
-					trimPercentage = 25.;
-					methodID = "trimmed mean(25)";
-				}
-
-				// compute the trimmed mean and the corresponding weights
-				Math::Statistics::computeTrimmedMean(mv, trimPercentage, value, *stdev, &weights);
-				break;
-
-			case Mean:
-				Math::Statistics::computeTrimmedMean(mv, 0, value, *stdev, &weights);
-				break;
-
-			case TrimmedMean:
-				methodID = "trimmed mean(" + Core::toString(averageMethod.parameter) + ")";
-				Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, *stdev, &weights);
-				break;
-
-			case Median:
-				methodID = "median";
-				value = Math::Statistics::median(mv);
-				if ( mv.size() > 1 ) {
-					stdev = 0;
-					for ( size_t i = 0; i < mv.size(); ++i )
-						*stdev += (mv[i] - value) * (mv[i] - value);
-					*stdev /= mv.size()-1;
-					*stdev = sqrt(*stdev);
-				}
-				break;
-
-			case TrimmedMedian:
-				methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
-				Math::Statistics::computeTrimmedMean(mv, averageMethod.parameter, value, *stdev, &weights);
-				value = Math::Statistics::median(mv);
-				stdev = 0;
-				for ( size_t i = 0; i < mv.size(); ++i ) {
-					*stdev += (mv[i] - value) * (mv[i] - value) * weights[i];
-					cumw += weights[i];
-				}
-
-				if ( cumw > 1 )
-					*stdev = sqrt(*stdev/(cumw-1));
-				else
-					*stdev = 0;
-
-				break;
-
-			default:
-				return false;
-		}
+		if ( !computeAverage(averageMethod, mv, weights, methodID, value, *stdev) )
+			return false;
 	}
 	else if ( stationMagnitudesZeroWeight.empty() )
 		return false;
@@ -857,8 +851,12 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 	if ( !_summaryMagnitudeEnabled ) return false;
 	if ( _summaryMagnitudeType.empty() ) return false;
@@ -950,8 +948,12 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MagTool::retrieveMissingPicksAndArrivalsFromDB(const DataModel::Origin *origin) {
 	int count = 0;
 
@@ -1005,10 +1007,7 @@ int MagTool::retrieveMissingPicksAndArrivalsFromDB(const DataModel::Origin *orig
 		if (missingPicks.find(id) == missingPicks.end())
 			continue;
 
-//		SEISCOMP_INFO("got pick id=%s from DB", pick->publicID().c_str());
-
-		// XXX avoid recursion!
-		if ( ! feed(pick.get()))
+		if ( !feed(pick.get()))
 			continue;
 
 		count++;
@@ -1027,8 +1026,6 @@ int MagTool::retrieveMissingPicksAndArrivalsFromDB(const DataModel::Origin *orig
 		if ( missingPicks.find(id) == missingPicks.end() )
 			continue;
 
-//		SEISCOMP_INFO("got ampl id=%s from DB", ampl->publicID().c_str());
-
 		if ( !_feed(ampl.get(), false) )
 			continue;
 
@@ -1040,16 +1037,24 @@ int MagTool::retrieveMissingPicksAndArrivalsFromDB(const DataModel::Origin *orig
 
 	return count;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagTool::OriginList *MagTool::createBinding(const std::string &pickID) {
 	std::pair<OriginMap::iterator, bool>
 		itp = _orgs.insert(OriginMap::value_type(pickID, OriginList()));
 
 	return &itp.first->second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::bind(const std::string &pickID, DataModel::Origin *origin) {
 	OriginList *origins = originsForPick(pickID);
 	if ( origins )
@@ -1057,8 +1062,12 @@ void MagTool::bind(const std::string &pickID, DataModel::Origin *origin) {
 	else
 		SEISCOMP_DEBUG("No complete binding for pick %s yet", pickID.c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagTool::OriginList *MagTool::originsForPick(const std::string &pickID) {
 	OriginMap::iterator it = _orgs.find(pickID);
 
@@ -1066,18 +1075,145 @@ MagTool::OriginList *MagTool::originsForPick(const std::string &pickID) {
 
 	return &it->second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::isTypeEnabledForSummaryMagnitude(const std::string &type) const {
 	return (_summaryMagnitudeWhitelist.empty()?true:_summaryMagnitudeWhitelist.find(type) != _summaryMagnitudeWhitelist.end())
 	    && (_summaryMagnitudeBlacklist.empty()?true:_summaryMagnitudeBlacklist.find(type) == _summaryMagnitudeBlacklist.end());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Util::KeyValues *MagTool::fetchParams(const DataModel::Amplitude *amp) {
+	std::string stationID = amp->waveformID().networkCode() + "." +
+	                        amp->waveformID().stationCode();
+	ParameterMap::const_iterator it = _parameters.find(stationID);
+
+	if ( it != _parameters.end() )
+		return it->second.get();
+	else if ( SCCoreApp->configModule() != NULL ) {
+		for ( size_t i = 0; i < SCCoreApp->configModule()->configStationCount(); ++i ) {
+			DataModel::ConfigStation *station = SCCoreApp->configModule()->configStation(i);
+
+			if ( station->networkCode() != amp->waveformID().networkCode() ) continue;
+			if ( station->stationCode() != amp->waveformID().stationCode() ) continue;
+
+			DataModel::Setup *setup = DataModel::findSetup(station, SCCoreApp->name());
+			if ( setup ) {
+				DataModel::ParameterSet* ps = NULL;
+				try {
+					ps = DataModel::ParameterSet::Find(setup->parameterSetID());
+				}
+				catch ( Core::ValueException ) {
+					continue;
+				}
+
+				if ( !ps ) {
+					SEISCOMP_ERROR("Cannot find parameter set %s", setup->parameterSetID().c_str());
+					continue;
+				}
+
+				Util::KeyValuesPtr keys = new Util::KeyValues;
+				keys->init(ps);
+				_parameters[stationID] = keys;
+				return keys.get();
+			}
+		}
+	}
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool MagTool::computeAverage(AverageDescription &avg,
+                             const std::vector<double> &values,
+                             std::vector<double> &weights,
+                             std::string &methodID, double &value, double &stdev) {
+	double trimPercentage = 0;
+	double cumw = 0.0;
+
+	switch( avg.type ) {
+		case Default:
+			if ( values.size() > 3 ) {
+				trimPercentage = 25.;
+				methodID = "trimmed mean(25)";
+			}
+			else
+				methodID = "mean";
+
+			// compute the trimmed mean and the corresponding weights
+			Math::Statistics::computeTrimmedMean(values, trimPercentage, value, stdev, &weights);
+			break;
+
+		case Mean:
+			methodID = "mean";
+			Math::Statistics::computeTrimmedMean(values, 0, value, stdev, &weights);
+			break;
+
+		case TrimmedMean:
+			methodID = "trimmed mean(" + Core::toString(avg.parameter) + ")";
+			Math::Statistics::computeTrimmedMean(values, avg.parameter, value, stdev, &weights);
+			break;
+
+		case Median:
+			methodID = "median";
+			value = Math::Statistics::median(values);
+			if ( values.size() > 1 ) {
+				stdev = 0;
+				for ( size_t i = 0; i < values.size(); ++i )
+					stdev += (values[i] - value) * (values[i] - value);
+				stdev /= values.size()-1;
+				stdev = sqrt(stdev);
+			}
+			break;
+
+		case TrimmedMedian:
+			methodID = "trimmed median(" + Core::toString(avg.parameter) + ")";
+			Math::Statistics::computeTrimmedMean(values, avg.parameter, value, stdev, &weights);
+			value = Math::Statistics::median(values);
+			stdev = 0;
+			for ( size_t i = 0; i < values.size(); ++i ) {
+				stdev += (values[i] - value) * (values[i] - value) * weights[i];
+				cumw += weights[i];
+			}
+
+			if ( cumw > 1 )
+				stdev = sqrt(stdev/(cumw-1));
+			else
+				stdev = 0;
+
+			break;
+
+		default:
+			return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::processOrigin(DataModel::Origin* origin) {
 	SEISCOMP_INFO("working on origin %s", origin->publicID().c_str());
 
 	retrieveMissingPicksAndArrivalsFromDB(origin);
+
+	if ( _staticUpdate )
+		return processOriginUpdateOnly(origin);
 
 	double depth;
 
@@ -1182,6 +1318,24 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 				if ( hasHigherPriority(ampl, stored_ampl) )
 					amp_it->second = ampl;
 			}
+
+			// Highest priority has the amplitude which is already associated
+			// if reprocessing is active
+			if ( _allowReprocessing ) {
+				bool ok = false;
+
+				for ( size_t i = 0; i < origin->stationMagnitudeCount(); ++i ) {
+					StaMag *stamag = origin->stationMagnitude(i);
+					if ( stamag->type() == ampl->type()
+					  && stamag->amplitudeID() == ampl->publicID() ) {
+						amp_it->second = ampl;
+						ok = true;
+						break;
+					}
+				}
+
+				if ( ok ) break;
+			}
 		}
 
 		// Compute magnitudes of used amplitudes
@@ -1232,20 +1386,307 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 	}
 
 	computeSummaryMagnitude(origin);
-
 	dumpOrigin(origin);
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
+	DataModel::Magnitude *netMag;
+	DataModel::StationMagnitudeContribution *contrib;
+	DataModel::StationMagnitude *staMag;
+	DataModel::Amplitude *amp;
+	DataModel::SensorLocation *sloc;
+	DataModel::Arrival *arrival;
+
+	bool consistent;
+	double depth;
+	double distance, az, baz;
+
+	vector<double> mv, weights;
+
+	Time now = Time::GMT();
+
+	try { depth = origin->depth().value(); }
+	catch ( ... ) {
+		SEISCOMP_WARNING("%s: depth not set, ignoring origin",
+		                 origin->publicID().c_str());
+		return false;
+	}
+
+	for ( size_t i = 0; i < origin->magnitudeCount(); ++i ) {
+		netMag = origin->magnitude(i);
+		if ( _magTypes.find(netMag->type()) == _magTypes.end() )
+			continue;
+
+		if ( !_allowReprocessing ) {
+			try {
+				// Check if evaluation status is set
+				netMag->evaluationStatus();
+				SEISCOMP_INFO("Magnitude %s with type %s skipped as it has an evaluation status set",
+				              netMag->publicID().c_str(), netMag->type().c_str());
+				return NULL;
+			}
+			catch ( ... ) {}
+		}
+
+		AverageDescription averageMethod;
+		AverageMethods::iterator am_it = _magnitudeAverageMethods.find(netMag->type());
+		if ( am_it == _magnitudeAverageMethods.end() )
+			averageMethod.type = Default;
+		else
+			averageMethod = am_it->second;
+
+		// Parse the average method from the network magnitude
+		averageMethodFromString(averageMethod, netMag->methodID());
+
+		consistent = true;
+
+		set<string> usedStationMagnitudes;
+
+		// Check consistency
+		for ( size_t j = 0; j < netMag->stationMagnitudeContributionCount(); ++j ) {
+			contrib = netMag->stationMagnitudeContribution(j);
+			staMag = DataModel::StationMagnitude::Find(contrib->stationMagnitudeID());
+			if ( staMag == NULL ) {
+				// Cannot update network magnitude
+				SEISCOMP_WARNING("Station magnitude %s not found",
+				                 contrib->stationMagnitudeID().c_str());
+				consistent = false;
+				break;
+			}
+
+			try {
+				if ( !staMag->passedQC() )
+					continue;
+			}
+			catch ( ... ) {}
+
+			usedStationMagnitudes.insert(staMag->publicID());
+		}
+
+		if ( !consistent ) {
+			SEISCOMP_ERROR("Incomplete information for magnitude %s: skipping update",
+			               netMag->publicID().c_str());
+			continue;
+		}
+
+		ProcessorList::iterator it = _processors.find(netMag->type());
+		if ( it == _processors.end() ) {
+			SEISCOMP_ERROR("No magnitude processor for type %s available: skipping update",
+			               netMag->type().c_str());
+			continue;
+		}
+
+		for ( size_t j = 0; j < netMag->stationMagnitudeContributionCount(); ++j ) {
+			contrib = netMag->stationMagnitudeContribution(j);
+
+			if ( usedStationMagnitudes.find(contrib->stationMagnitudeID()) == usedStationMagnitudes.end() )
+				continue;
+
+			staMag = DataModel::StationMagnitude::Find(contrib->stationMagnitudeID());
+
+			amp = DataModel::Amplitude::Find(staMag->amplitudeID());
+			if ( amp != NULL ) {
+				// Figure out distance
+				arrival = origin->arrival(amp->pickID());
+				distance = -1;
+
+				if ( arrival ) {
+					try {
+						distance = arrival->distance();
+					}
+					catch ( ... ) {}
+				}
+
+				Util::KeyValues *params = fetchParams(amp);
+
+				Settings settings(
+					SCCoreApp->configModuleName(),
+					amp->waveformID().networkCode(),
+					amp->waveformID().stationCode(),
+					amp->waveformID().locationCode(),
+					amp->waveformID().channelCode(),
+					&SCCoreApp->configuration(),
+					params);
+
+				if ( !it->second->setup(settings))
+					continue;
+
+				try {
+					sloc = Client::Inventory::Instance()->getSensorLocation(
+						amp->waveformID().networkCode(),
+						amp->waveformID().stationCode(),
+						amp->waveformID().locationCode(),
+						amp->timeWindow().reference());
+				}
+				catch ( ... ) {
+					sloc = NULL;
+				}
+
+				if ( !sloc ) {
+					SEISCOMP_WARNING("No sensor location meta data for amplitude %s",
+					                 amp->publicID().c_str());
+					continue;
+				}
+
+				if ( distance < 0 ) {
+					try {
+						// Compute distance
+						Math::Geo::delazi(origin->latitude().value(), origin->longitude().value(),
+						                  sloc->latitude(), sloc->longitude(),
+						                  &distance, &az, &baz);
+					}
+					catch ( ... ) {
+						continue;
+					}
+				}
+
+				double period = 0;
+				try { period = amp->period().value(); } catch ( ... ) {}
+
+				double snr = 0;
+				try { snr = amp->snr(); } catch ( ... ) {}
+
+				double mag;
+				MagnitudeProcessor::Status status =
+					it->second->computeMagnitude(amp->amplitude().value(),
+					                             amp->unit(),
+					                             period, snr, distance, depth,
+					                             origin, sloc, amp, mag);
+
+				bool passedQC = true;
+
+				if ( status != MagnitudeProcessor::OK ) {
+					SEISCOMP_DEBUG("Magnitude failed: sid=%s.%s.%s.%s, type=%s, error=%s",
+					                 amp->waveformID().networkCode().c_str(),
+					                 amp->waveformID().stationCode().c_str(),
+					                 amp->waveformID().locationCode().c_str(),
+					                 amp->waveformID().channelCode().c_str(),
+					                 amp->type().c_str(), status.toString());
+					if ( !it->second->treatAsValidMagnitude() )
+						continue;
+
+					passedQC = false;
+				}
+
+				staMag->setMagnitude(mag);
+				staMag->setPassedQC(passedQC);
+
+				try { staMag->creationInfo().setModificationTime(now); }
+				catch ( ... ) {
+					DataModel::CreationInfo ci;
+					ci.setModificationTime(now);
+					staMag->setCreationInfo(ci);
+				}
+
+				staMag->update();
+				SCCoreApp->logObject(outputMagLog, now);
+			}
+
+			mv.push_back(staMag->magnitude().value());
+		}
+
+
+		if ( !mv.empty() ) {
+			string methodID;
+			double val, stdev;
+
+			if ( !computeAverage(averageMethod, mv, weights, methodID, val, stdev) )
+				return false;
+
+			netMag->setMagnitude(DataModel::RealQuantity(val, stdev, Core::None, Core::None, Core::None));
+			netMag->setMethodID(methodID);
+
+			// Update residuals
+			size_t idx = 0;
+			for ( size_t i = 0; i < netMag->stationMagnitudeContributionCount(); ++i ) {
+				contrib = netMag->stationMagnitudeContribution(i);
+				staMag = origin->findStationMagnitude(contrib->stationMagnitudeID());
+
+				double oldWeight = -1, oldResidual = 0;
+				double weight;
+				double residual = staMag->magnitude().value() - val;
+				bool hasResidual = false;
+
+				try {
+					oldWeight = contrib->weight();
+				}
+				catch ( ... ) {}
+
+				try {
+					oldResidual = contrib->residual();
+					hasResidual = true;
+				}
+				catch ( ... ) {}
+
+				if ( usedStationMagnitudes.find(contrib->stationMagnitudeID()) == usedStationMagnitudes.end() )
+					weight = 0.0;
+				else
+					weight = weights[idx++];
+
+				if ( oldWeight != weight
+				  || oldResidual != residual
+				  || !hasResidual ) {
+					contrib->setWeight(weight);
+					contrib->setResidual(residual);
+					contrib->update();
+					SEISCOMP_DEBUG("Updating magnitude reference for %s", staMag->publicID().c_str());
+				}
+			}
+		}
+		else if ( netMag->stationMagnitudeContributionCount() == 0 ) {
+			// That does not work
+			return false;
+		}
+		else {
+			netMag->setMagnitude(DataModel::RealQuantity(std::numeric_limits<double>::quiet_NaN()));
+			netMag->setMethodID(std::string());
+
+			for ( size_t i = 0; i < netMag->stationMagnitudeContributionCount(); ++i ) {
+				contrib = netMag->stationMagnitudeContribution(i);
+				try {
+					contrib->residual();
+					contrib->setResidual(Core::None);
+					contrib->update();
+				}
+				catch ( ... ) {}
+			}
+		}
+
+		try { netMag->creationInfo().setModificationTime(now); }
+		catch ( ... ) {
+			DataModel::CreationInfo ci;
+			ci.setModificationTime(now);
+			netMag->setCreationInfo(ci);
+		}
+
+		netMag->update();
+		SCCoreApp->logObject(outputMagLog, now);
+	}
+
+	computeSummaryMagnitude(origin);
+	dumpOrigin(origin);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 	if ( SCCoreApp->isAgencyIDBlocked(objectAgencyID(ampl)) )
 		return false;
 
 	// Has a magnitude processor for this type been configured?
 	if ( _processors.find(ampl->type()) == _processors.end() ) {
-//		SEISCOMP_INFO("Ignoring unknown amplitude type '%s'", ampl->type().c_str());
 		return false;
 	}
 
@@ -1454,12 +1895,14 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 			computeSummaryMagnitude(origin);
 	}
 
-//	SEISCOMP_DEBUG("***** spend %0.6f secs with historical update *****", (float)updateTime.elapsed());
-
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::feed(DataModel::Origin *origin) {
 	// This is the entry point for a new or updated Origin.
 	// The Origin may be incomplete and if that is the case, we
@@ -1516,8 +1959,12 @@ bool MagTool::feed(DataModel::Origin *origin) {
 
 	return processOrigin(origin);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::feed(DataModel::Pick *pick) {
 	if ( SCCoreApp->isAgencyIDBlocked(objectAgencyID(pick)) )
 		return false;
@@ -1529,42 +1976,34 @@ bool MagTool::feed(DataModel::Pick *pick) {
 	// Create initial pick origin association
 	createBinding(pickID);
 
-//	SEISCOMP_DEBUG("Inserted pick %s, cache size = %lu", pickID.c_str(), (unsigned long)_objectCache.size());
-
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagTool::publicObjectRemoved(DataModel::PublicObject* po) {
 	bool saveState = DataModel::Notifier::IsEnabled();
 	DataModel::Notifier::Disable();
 
-//	SEISCOMP_DEBUG("Removed object %s from cache", po->publicID().c_str());
-
-//	SEISCOMP_DEBUG("AmplCache size before = %lu", (unsigned long)_ampl.size());
 	_ampl.erase(po->publicID());
-//	SEISCOMP_DEBUG("AmplCache size after = %lu", (unsigned long)_ampl.size());
 
 	// Remove all pick - origin associations when a pick leaves the cache
 	// to avoid incomplete cache
-//	SEISCOMP_DEBUG("OriginPickCache size before = %lu", (unsigned long)_orgs.size());
 	OriginMap::iterator it = _orgs.find(po->publicID());
 	if ( it != _orgs.end() ) _orgs.erase(it);
-//	SEISCOMP_DEBUG("OriginPickCache size after = %lu", (unsigned long)_orgs.size());
-
-//	SEISCOMP_DEBUG("BaseObject count = %d", Core::BaseObject::ObjectCount());
 
 	DataModel::Notifier::SetEnabled(saveState);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::_feed(DataModel::Amplitude *ampl, bool update) {
-	// Feed an amplitude
-	//
-	// [*] See if this amplitude is an update of an existing one
-	//     -> possibly requiring an update of the magnitude
-	// [*] Store the amplitude
-	// [ ] See if this amplitude belongs to an origin
 	const string &pickID = ampl->pickID();
 
 	if ( pickID.empty() ) return false;
@@ -1572,9 +2011,6 @@ bool MagTool::_feed(DataModel::Amplitude *ampl, bool update) {
 	DataModel::AmplitudePtr cached_ampl = _objectCache.get<DataModel::Amplitude>(ampl->publicID());
 	if ( cached_ampl ) ampl = cached_ampl.get();
 
-	// loop over amplitudes and look if we have that amplitude already
-	// TODO: If we find it, we have to check if the amplitude has been
-	//       updated in the meantime
 	pair<StaAmpMap::iterator, StaAmpMap::iterator>
 		itp = _ampl.equal_range(pickID);
 
@@ -1592,15 +2028,19 @@ bool MagTool::_feed(DataModel::Amplitude *ampl, bool update) {
 	}
 
 	_ampl.insert(StaAmpMap::value_type(pickID, ampl));
+
 	// Make sure the referenced pick will be stored as well to be able to
 	// remove the associated Amplitudes when the Pick is going to be removed from
 	// the cache.
 	_objectCache.get<DataModel::Pick>(pickID);
-//	SEISCOMP_DEBUG("got amplitude '%s', AmplCache size = %lu", ampl->publicID().c_str(), (unsigned long)_ampl.size());
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

@@ -1,11 +1,40 @@
 # Jakarta
 
+## Release 2018.327 patch12
+
+* scamp
+
+  * Do not reprocess manual amplitudes with ```--reprocess``` by default
+  * Add ```--force``` flag to reprocess also manual amplitudes
+
+* scmag
+
+  * Add ```--static``` flag which only updates existing magnitudes based
+    on their associated amplitudes
+
+* seedlink
+
+  * caps\_plugin does not enforce in-order data by default and discards
+    records with timestamps too far in future from being added to the
+    state file (both parameters are configurable)
+
+* scolv
+
+  * Add amplitude, created and updated columns to station magnitude table
+  * Color station magnitude symbols with respect to evaluation mode of its
+    associated amplitude
+  * Increase plot symbol sizes to 50% of the applications base font size
+
+* scautoloc
+
+  * Fixed a bug that occasionally caused scautoloc to merge events
+    incorrectly only in case autoloc.useManualOrigins is active.
+
 ## Release 2018.327 patch11
 
 * scmag
 
   * Update existing station magnitudes with ```--reprocess```
-
 
 ## Release 2018.327 patch10
 

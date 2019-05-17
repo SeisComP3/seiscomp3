@@ -17,7 +17,9 @@
 #include <map>
 #include <set>
 
+
 using namespace std;
+
 
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/logging/log.h>
@@ -30,8 +32,12 @@ using namespace std;
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/publicobject.h>
 #include <seiscomp3/datamodel/utils.h>
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool dumpOrigin(const Seiscomp::DataModel::Origin *origin) {
 	using namespace Seiscomp::DataModel;
 	using namespace Seiscomp::Core;
@@ -86,8 +92,12 @@ bool dumpOrigin(const Seiscomp::DataModel::Origin *origin) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool equivalent(const Seiscomp::DataModel::WaveformStreamID &wfid1,
                 const Seiscomp::DataModel::WaveformStreamID &wfid2) {
 	if (wfid1.networkCode() != wfid2.networkCode()) return false;
@@ -97,8 +107,12 @@ bool equivalent(const Seiscomp::DataModel::WaveformStreamID &wfid1,
 	// here we consider different location codes to be irrelevant
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double arrivalWeight(const Seiscomp::DataModel::Arrival *arr, double defaultWeight=1.) {
 	try {
 		return arr->weight();
@@ -107,8 +121,12 @@ double arrivalWeight(const Seiscomp::DataModel::Arrival *arr, double defaultWeig
 		return defaultWeight;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 char getShortPhaseName(const string &phase) {
 	for ( string::const_reverse_iterator it = phase.rbegin();
 	      it != phase.rend(); ++it ) {
@@ -118,14 +136,22 @@ char getShortPhaseName(const string &phase) {
 
 	return phase[0];
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool validArrival(const Seiscomp::DataModel::Arrival *arr, double minWeight) {
 	return arrivalWeight(arr) >= minWeight
 	       && getShortPhaseName(arr->phase().code()) == 'P';
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::DataModel::EvaluationStatus status(const Seiscomp::DataModel::Origin *origin) {
 	Seiscomp::DataModel::EvaluationStatus status = Seiscomp::DataModel::PRELIMINARY;
 
@@ -137,3 +163,9 @@ Seiscomp::DataModel::EvaluationStatus status(const Seiscomp::DataModel::Origin *
 	}
 	return status;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
