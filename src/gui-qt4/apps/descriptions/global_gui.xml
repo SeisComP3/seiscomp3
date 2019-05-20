@@ -163,7 +163,7 @@
 				<group name="colors">
 					<parameter name="background" type="color">
 						<description>
-							A general application background color. Can be uses to give
+							A general application background color. Can be used to give
 							each application a different background color. An unset value
 							lets Qt decide.
 						</description>
@@ -194,6 +194,34 @@
 						<parameter name="alignment" type="color" default="FF0000">
 							<description>The color of the alignment marker in trace views.</description>
 						</parameter>
+						<group name="offset">
+							<description>
+								Defines the pen of the record offset line.
+							</description>
+							<parameter name="color" type="color" default="C0C0FF">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="SolidLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="0.0">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
+						<group name="gridPen">
+							<description>
+								Defines the pen of the record grid.
+							</description>
+							<parameter name="color" type="color" default="00000020">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="DashLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="1.0">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
 						<group name="states">
 							<description>
 								Defines the background color of records depending on their state.
@@ -285,9 +313,6 @@
 					<group name="stations">
 						<parameter name="text" type="color" default="ffffff">
 							<description>The color of the station name.</description>
-						</parameter>
-						<parameter name="selected" type="color" default="4D4DB8">
-							<description>The color of a selected station.</description>
 						</parameter>
 						<parameter name="associated" type="color" default="82AD58">
 							<description>The color of associated stations (e.g. in scmv).</description>
@@ -413,11 +438,20 @@
 								The color of station outlines in the map.
 							</description>
 						</parameter>
-						<parameter name="grid" type="color">
+						<group name="grid">
 							<description>
-								The color grid line color of the map.
+								Defines the pen of the latitude/longitude grid of the map.
 							</description>
-						</parameter>
+							<parameter name="color" type="color" default="FFFFFF">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="DotLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="1">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
 						<parameter name="stationAnnotations" type="color">
 							<description>
 								The color of station annotations.
@@ -821,6 +855,11 @@
 							Converts map colors from RGB color scheme to BGR.
 						</description>
 					</parameter>
+					<parameter name="polygonRoughness" type="int" default="3" unit="px">
+						<description>
+							Minimum screen distance to plot a polygon or polyline line segment.
+						</description>
+					</parameter>
 				</group>
 				<group name="precision">
 					<parameter name="depth" type="int" default="0">
@@ -877,11 +916,6 @@
 					<description>
 					Defines the appearance of the splash screen shown at application startup.
 					</description>
-					<parameter name="image" type="path" default="@DATADIR/splash.png">
-						<description>
-						Path of an alternative backgroud image for the splash screen.
-						</description>
-					</parameter>
 					<group name="message">
 						<description>
 						Position of the message text.
