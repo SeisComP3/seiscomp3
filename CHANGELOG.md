@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* trunk
+
+  * Fix PostgreSQL database plugin to unescape bytea encoded data
+
 ## Release 2018.327 patch12
 
 * scamp

@@ -542,7 +542,9 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		void removeId(Object*);
 		
 		//! Returns the current field content
-		const char* field() const { return _field; }
+		const char* cfield() const { return _field; }
+
+		std::string sfield() const { return std::string(_field, _fieldSize); }
 
 		//! Returns the current field size
 		size_t fieldSize() const { return _fieldSize; }

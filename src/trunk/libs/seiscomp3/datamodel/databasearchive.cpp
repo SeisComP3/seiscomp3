@@ -1031,7 +1031,7 @@ std::string DatabaseArchive::toString(const char *value) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(int &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1040,7 +1040,7 @@ void DatabaseArchive::read(int &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(float &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1049,7 +1049,7 @@ void DatabaseArchive::read(float &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(double &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1058,7 +1058,7 @@ void DatabaseArchive::read(double &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::complex<float> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1067,7 +1067,7 @@ void DatabaseArchive::read(std::complex<float> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::complex<double> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1076,9 +1076,9 @@ void DatabaseArchive::read(std::complex<double> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(bool &value) {
-	if ( !strtobool(value, field()) ) {
+	if ( !strtobool(value, cfield()) ) {
 		SEISCOMP_ERROR("DB: error in result field %d: could not cast '%s' to bool",
-		               _fieldIndex, field());
+		               _fieldIndex, cfield());
 		setValidity(false);
 	}
 }
@@ -1089,7 +1089,7 @@ void DatabaseArchive::read(bool &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<char> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1098,7 +1098,7 @@ void DatabaseArchive::read(std::vector<char> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<int> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1107,7 +1107,7 @@ void DatabaseArchive::read(std::vector<int> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<float> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1116,7 +1116,7 @@ void DatabaseArchive::read(std::vector<float> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<double> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1125,7 +1125,7 @@ void DatabaseArchive::read(std::vector<double> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<std::string> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1134,7 +1134,7 @@ void DatabaseArchive::read(std::vector<std::string> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<Core::Time> &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1143,7 +1143,7 @@ void DatabaseArchive::read(std::vector<Core::Time> &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<std::complex<double> > &value) {
-	fromString(value, field());
+	fromString(value, sfield());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1152,7 +1152,7 @@ void DatabaseArchive::read(std::vector<std::complex<double> > &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::string &value) {
-	value = field();
+	value.assign(cfield(), fieldSize());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1161,7 +1161,7 @@ void DatabaseArchive::read(std::string &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(time_t &value) {
-	Time t = _db->stringToTime(field());
+	Time t = _db->stringToTime(cfield());
 	value = t.seconds();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1171,13 +1171,13 @@ void DatabaseArchive::read(time_t &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(Time &value) {
-	value = _db->stringToTime(field());
+	value = _db->stringToTime(cfield());
 	if ( hint() & SPLIT_TIME ) {
 		int microSeconds;
 		_currentAttributeName += MICROSECONDS_POSTFIX;
 		readAttrib();
-		if ( field() != NULL ) {
-			if ( fromString(microSeconds, field()) )
+		if ( cfield() != NULL ) {
+			if ( fromString(microSeconds, cfield()) )
 				value.setUSecs(microSeconds);
 		}
 	}
