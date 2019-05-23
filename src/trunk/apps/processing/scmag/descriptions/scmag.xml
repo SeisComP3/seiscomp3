@@ -127,22 +127,27 @@
 				</option>
 			</group>
 			<group name="Reprocess">
-			<option long-flag="static">
-				<description>
-				With that flag all existing station magnitudes are recomputed
-				based on their associated amplitudes. If an amplitude cannot
-				be accessed, no station magnitude is updated.
-				Network magnitudes are recomputed based on their station
-				magnitude contributions. No new objects will
-				be created in this mode, it only updates values and weights.
-				The method to accumulate the station magnitudes to form the network
-				magnitude will be read from the existing object and replicated.
-				If it cannot be interpreted then the configured default for this
-				magnitude type will be used instead. Weights of station magnitudes
-				will be changed according to the accumulation method of the
-				network magnitude..
-				</description>
-			</option>
+				<option long-flag="static">
+					<description>
+					With that flag all existing station magnitudes are recomputed
+					based on their associated amplitudes. If an amplitude cannot
+					be accessed, no station magnitude is updated.
+					Network magnitudes are recomputed based on their station
+					magnitude contributions. No new objects will
+					be created in this mode, it only updates values and weights.
+					The method to accumulate the station magnitudes to form the network
+					magnitude will be read from the existing object and replicated.
+					If it cannot be interpreted then the configured default for this
+					magnitude type will be used instead. Weights of station magnitudes
+					will be changed according to the accumulation method of the
+					network magnitude.
+					</description>
+				</option>
+				<option long-flag="keep-weights">
+					<description>
+					Reuses the original weights in combination with --static.
+					</description>
+				</option>
 			</group>
 		</command-line>
 	</module>
