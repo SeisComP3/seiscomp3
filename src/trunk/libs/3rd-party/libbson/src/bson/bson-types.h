@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
+#include "bson/bson-prelude.h"
+
 
 #ifndef BSON_TYPES_H
 #define BSON_TYPES_H
 
 
-#if !defined(BSON_INSIDE) && !defined(BSON_COMPILATION)
-#error "Only <bson.h> can be included directly."
-#endif
-
-
 #include <stdlib.h>
 #include <sys/types.h>
 
-#include "bson-macros.h"
-#include "bson-config.h"
-#include "bson-compat.h"
-#include "bson-endian.h"
+#include "bson/bson-macros.h"
+#include "bson/bson-config.h"
+#include "bson/bson-compat.h"
+#include "bson/bson-endian.h"
 
 BSON_BEGIN_DECLS
 
@@ -95,7 +92,7 @@ typedef enum {
  * Many functions will require that you provide a bson_context_t such as OID
  * generation.
  *
- * This structure is oqaque in that you cannot see the contents of the
+ * This structure is opaque in that you cannot see the contents of the
  * structure. However, it is stack allocatable in that enough padding is
  * provided in _bson_context_t to hold the structure.
  */
@@ -119,12 +116,22 @@ typedef struct _bson_context_t bson_context_t;
  *
  * This structure is meant to fit in two sequential 64-byte cachelines.
  */
+#ifdef BSON_MEMCHECK
+BSON_ALIGNED_BEGIN (128)
+typedef struct _bson_t {
+   uint32_t flags;       /* Internal flags for the bson_t. */
+   uint32_t len;         /* Length of BSON data. */
+   char *canary;         /* For valgrind check */
+   uint8_t padding[120 - sizeof (char*)];
+} bson_t BSON_ALIGNED_END (128);
+#else
 BSON_ALIGNED_BEGIN (128)
 typedef struct _bson_t {
    uint32_t flags;       /* Internal flags for the bson_t. */
    uint32_t len;         /* Length of BSON data. */
    uint8_t padding[120]; /* Padding for stack allocation. */
 } bson_t BSON_ALIGNED_END (128);
+#endif
 
 
 /**
@@ -137,6 +144,16 @@ typedef struct _bson_t {
  * bson_t b = BSON_INITIALIZER;
  * ]|
  */
+#ifdef BSON_MEMCHECK
+#define BSON_INITIALIZER \
+   {                     \
+      3, 5,              \
+      bson_malloc (1),   \
+      {                  \
+         5               \
+      },                 \
+   }
+#else
 #define BSON_INITIALIZER \
    {                     \
       3, 5,              \
@@ -144,9 +161,10 @@ typedef struct _bson_t {
          5               \
       }                  \
    }
+#endif
 
 
-BSON_STATIC_ASSERT (sizeof (bson_t) == 128);
+BSON_STATIC_ASSERT2 (bson_t, sizeof (bson_t) == 128);
 
 
 /**
@@ -160,7 +178,7 @@ typedef struct {
    uint8_t bytes[12];
 } bson_oid_t;
 
-BSON_STATIC_ASSERT (sizeof (bson_oid_t) == 12);
+BSON_STATIC_ASSERT2 (oid_t, sizeof (bson_oid_t) == 12);
 
 /**
  * bson_decimal128_t:
@@ -501,7 +519,7 @@ typedef struct _bson_error_t {
 } bson_error_t BSON_ALIGNED_END (8);
 
 
-BSON_STATIC_ASSERT (sizeof (bson_error_t) == 512);
+BSON_STATIC_ASSERT2 (error_t, sizeof (bson_error_t) == 512);
 
 
 /**

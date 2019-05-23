@@ -4,7 +4,7 @@
  */
 
 #include "jsonsl.h"
-#include "bson-memory.h"
+#include "bson/bson-memory.h"
 
 #include <limits.h>
 #include <ctype.h>
@@ -924,7 +924,7 @@ jsonsl_jpr_new(const char *path, jsonsl_error_t *errp)
         char *cur = my_copy;
         int pathret = JSONSL_PATH_STRING;
         curidx = 1;
-        while (pathret > 0 && curidx < count) {
+        while (curidx < count) {
             pathret = populate_component(cur, components + curidx, &cur, errp);
             if (pathret > 0) {
                 curidx++;
@@ -1165,7 +1165,7 @@ void jsonsl_jpr_match_state_cleanup(jsonsl_t jsn)
 /**
  * This function should be called exactly once on each element...
  * This should also be called in recursive order, since we rely
- * on the parent having been initalized for a match.
+ * on the parent having been initialized for a match.
  *
  * Since the parent is checked for a match as well, we maintain a 'serial' counter.
  * Whenever we traverse an element, we expect the serial to be the same as a global
@@ -1361,8 +1361,7 @@ size_t jsonsl_util_unescape_ex(const char *in,
                 c[1] != '\\' && c[1] != '"')) {
             /* if we don't want to unescape this string, write the escape sequence to the output */
             *out++ = *c++;
-            if (--len == 0)
-                break;
+            --len;
             goto GT_ASSIGN;
         }
 
@@ -1414,6 +1413,7 @@ size_t jsonsl_util_unescape_ex(const char *in,
         } else if (uescval < 0xD800 || uescval > 0xDFFF) {
             *oflags |= JSONSL_SPECIALf_NONASCII;
             out = jsonsl__writeutf8(uescval, out) - 1;
+
         } else if (uescval < 0xDC00) {
             *oflags |= JSONSL_SPECIALf_NONASCII;
             last_codepoint = (uint16_t)uescval;

@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
+#include "bson/bson-prelude.h"
+
 
 #ifndef BSON_ENDIAN_H
 #define BSON_ENDIAN_H
-
-
-#if !defined(BSON_INSIDE) && !defined(BSON_COMPILATION)
-#error "Only <bson.h> can be included directly."
-#endif
 
 
 #if defined(__sun)
 #include <sys/byteorder.h>
 #endif
 
-#include "bson-config.h"
-#include "bson-macros.h"
-#include "bson-compat.h"
+#include "bson/bson-config.h"
+#include "bson/bson-macros.h"
+#include "bson/bson-compat.h"
 
 
 BSON_BEGIN_DECLS
@@ -210,7 +207,7 @@ __bson_uint64_swap_slow (uint64_t v) /* IN */
  *--------------------------------------------------------------------------
  */
 
-BSON_STATIC_ASSERT (sizeof (double) == sizeof (uint64_t));
+BSON_STATIC_ASSERT2 (sizeof_uint64_t, sizeof (double) == sizeof (uint64_t));
 
 static BSON_INLINE double
 __bson_double_swap_slow (double v) /* IN */
