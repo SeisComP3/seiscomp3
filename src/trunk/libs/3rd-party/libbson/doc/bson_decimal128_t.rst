@@ -10,7 +10,7 @@ Synopsis
 
 .. code-block:: c
 
-  #include <bson.h>
+  #include <bson/bson.h>
 
   #define BSON_DECIMAL128_STRING 43
   #define BSON_DECIMAL128_INF "Infinity"
@@ -42,6 +42,7 @@ represents the IEEE-754 Decimal128 data type.
     :maxdepth: 1
 
     bson_decimal128_from_string
+    bson_decimal128_from_string_w_len
     bson_decimal128_to_string
 
 Example
@@ -49,7 +50,7 @@ Example
 
 .. code-block:: c
 
-  #include <bson.h>
+  #include <bson/bson.h>
   #include <stdio.h>
 
   int

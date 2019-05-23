@@ -10,7 +10,7 @@ Synopsis
 
 .. code-block:: c
 
-  #include <bson.h>
+  #include <bson/bson.h>
 
   #define BSON_ITER_HOLDS_DOUBLE(iter) /* ... */
 
@@ -100,20 +100,28 @@ The :symbol:`bson_t` *MUST* be valid for the lifetime of the iter and it is an e
     bson_iter_find
     bson_iter_find_case
     bson_iter_find_descendant
+    bson_iter_find_w_len
     bson_iter_init
     bson_iter_init_find
     bson_iter_init_find_case
+    bson_iter_init_find_w_len
     bson_iter_init_from_data
+    bson_iter_init_from_data_at_offset
     bson_iter_int32
     bson_iter_int64
     bson_iter_key
+    bson_iter_key_len
     bson_iter_next
+    bson_iter_offset
     bson_iter_oid
     bson_iter_overwrite_bool
+    bson_iter_overwrite_date_time
     bson_iter_overwrite_decimal128
     bson_iter_overwrite_double
     bson_iter_overwrite_int32
     bson_iter_overwrite_int64
+    bson_iter_overwrite_oid
+    bson_iter_overwrite_timestamp
     bson_iter_recurse
     bson_iter_regex
     bson_iter_symbol

@@ -25,7 +25,10 @@ THE SOFTWARE.
 
 from docutils import nodes, utils
 from sphinx.environment import NoUri
-from sphinx.util.compat import Directive
+try:
+    from sphinx.util.compat import Directive
+except ImportError:
+    from docutils.parsers.rst import Directive
 
 
 def get_tags(s):
@@ -144,3 +147,5 @@ def setup(app):
     app.connect('doctree-read', process_tags)
     app.connect('doctree-resolved', process_taglist_nodes)
     app.connect('env-purge-doc', purge_tags)
+
+    return {'parallel_write_safe': True, 'parallel_read_safe': False}

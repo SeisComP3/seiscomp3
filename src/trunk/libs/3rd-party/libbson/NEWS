@@ -1,7 +1,335 @@
-Libbson-1.7.0
+libbson 1.14.0
+==============
+
+It is my pleasure to announce libbson 1.14.0.
+
+Features:
+
+  * ObjectIDs are generated in compliance with the driver ObjectID spec.
+  * Add a bson_copy_to_excluding_noinit variant taking a va_list.
+  * Add example of validating BSON nesting depth with bson_visitor_t.
+
+Bug fixes:
+
+  * Relaxed JSON pads datetime milliseconds with spaces instead of zeroes.
+
+
+Thanks to everyone who contributed to the development of this release.
+
+  * Kevin Albertson
+  * Roberto C. Sánchez
+  * A. Jesse Jiryu Davis
+  * Henrik Edin
+  * Jeroen
+  * Gustaf Neumann
+  * Scott Gayou
+  * Spencer McKenney
+  * Samantha Ritter
+
+Peace,
+
+    Samantha Ritter
+
+
+libbson 1.13.1
+==============
+
+It is my pleasure to announce libbson 1.13.1.
+
+Bug fixes:
+
+  * Separate libmongoc and libbson uninstall scripts so they do not overwrite
+    each other.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * Kevin Albertson
+  * Henrik Edin
+
+Peace,
+
+    Kevin Albertson
+
+
+libbson 1.13.0
+==============
+
+It is my pleasure to announce libbson 1.13.0.
+
+Features:
+
+  * New functions to save and restore progress of a bson_iter_t:
+    bson_iter_key_len, bson_iter_offset, and bson_iter_init_from_data_at_offset
+  * Additional functions bson_iter_overwrite_date_time, bson_iter_overwrite_oid,
+    and bson_iter_overwrite_timestamp. All fixed-length BSON values can now be
+    updated in place.
+
+Bug fixes:
+
+  * Fix crash when iterating corrupt BSON.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Roberto C. Sánchez
+  * Kevin Albertson
+  * Henrik Edin
+  * Gustaf Neumann
+  * Scott Gayou
+  * Spencer McKenney
+
+Peace,
+
+    Kevin Albertson
+
+
+libbson 1.12.0
+==============
+
+It is my pleasure to announce libbson 1.12.0. This release deprecates all
+MD5-related public APIs; they will be removed in the next major release.
+
+Bug fixes:
+
+  * Properly handle zero-length BSON binary values
+  * Fix crash parsing Base64-encoded data in JSON when using libbson without
+    libmongoc
+
+Thanks to everyone who contributed to the development of this release.
+
+  * Roberto C. Sánchez
+  * A. Jesse Jiryu Davis
+  * Kevin Albertson
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+libbson 1.11.0
+==============
+
+It is my pleasure to announce libbson 1.11.0. This version adds the following
+features and improvements:
+
+  * All "destroy" functions such as bson_destroy or bson_reader_destroy now
+    ignore a NULL argument.
+  * Replace MD5 with FNV-1a hash to generate ObjectIds (for FIPS compliance).
+
+Bug fixes:
+
+  * Functions incorrectly marked with the "const" compiler attribute are now
+    marked as "pure", fixes build error when link-time optimization is enabled.
+
+Thanks to everyone who contributed to the development of this release.
+
+  *  A. Jesse Jiryu Davis
+  *  Kevin Albertson
+  *  Roberto C. Sánchez
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+libbson 1.10.3
+==============
+
+It is my pleasure to announce libbson 1.10.3. This release fixes a crash when
+parsing binary data from JSON if using libbson as a standalone library, without
+calling mongoc_init.
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+libbson 1.10.2
+==============
+
+No change since 1.10.1; released to keep pace with libmongoc's version.
+
+-- A. Jesse Jiryu Davis
+
+
+libbson 1.10.1
+==============
+
+No change since 1.10.0; released to keep pace with libmongoc's version.
+
+-- A. Jesse Jiryu Davis
+
+
+libbson 1.10.0
+==============
+
+It is my pleasure to announce libbson 1.10.0. This version adds the following
+features:
+
+  * libbson and libmongoc are now maintained in the mongo-c-driver repository,
+    although they are still built as separate libraries, and libbson can still
+    be used without libmongoc.
+  * Building libbson and libmongoc now requires CMake on all platforms. The
+    Autotools build scripts ("configure" and related scripts) have been deleted.
+    See the "installing" page for updated instructions.
+  * Additional functions for strings of known length (not necessarily null-
+    terminated):
+      bson_iter_find_w_len
+      bson_iter_init_find_w_len
+      bson_append_regex_w_len
+      bson_decimal128_from_string_w_len
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Roberto C. Sánchez
+  * Xiangyu Yao
+  * Kevin Albertson
+  * Mansuro
+  * Petr Písař
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.9.5
 =============
 
-It is my pleasure to announce libbson 1.7.0.
+No change since 1.9.4; released to keep pace with libmongoc's version.
+
+-- A. Jesse Jiryu Davis
+
+
+Libbson-1.9.4
+=============
+
+It is my pleasure to announce Libbson-1.9.4. This release offers compatibility
+with Sphinx 1.7.0 and later.
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.9.3
+=============
+
+No change since 1.9.2; released to keep pace with libmongoc's version.
+
+-- A. Jesse Jiryu Davis
+
+
+Libbson-1.9.2
+=============
+
+It is my pleasure to announce Libbson-1.9.2. This release completes reverting a
+changed macro definition that broke API compatibility. The revert in 1.9.1 did
+not completely fix the BC break. Thanks to Petr Písař for finding and fixing the
+mistake.
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.9.1
+=============
+
+It is my pleasure to announce Libbson-1.9.1. This release reverts a changed
+macro definition that broke API compatibility, and fixes an off-by-one error
+in bson_append_regex that resulted in corrupt BSON.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Derick Rethans
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.9.0
+=============
+
+It is my pleasure to announce Libbson-1.9.0.
+
+New features and bugfixes:
+
+  * Fix Autotools syntax for OpenBSD and any platform lacking stdint.h.
+  * Fix Android NDK incompatibilities.
+  * Fix a one-byte write past the end of a buffer in bson_decimal128_to_string.
+  * Avoid reading past the end of a string that contains UTF-8 multibyte NIL.
+  * Fix some pedantic warnings in C99 mode.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Kevin Albertson
+  * Jean-Marc Le Roux
+  * Jeremy Mikola
+  * Dimitri Gence
+  * Hannes Magnusson
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.8.2
+=============
+
+No change since 1.8.1; released to keep pace with libmongoc's version.
+
+-- A. Jesse Jiryu Davis
+
+
+Libbson-1.8.1
+=============
+
+It is my pleasure to announce libbson-1.8.1. This release removes a syntax
+error in the configure script that affects some shells, and fixes the encoding
+of this NEWS file.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Jeremy Mikola
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.8.0
+=============
+
+It is my pleasure to announce Libbson-1.8.0.
+
+New features and bugfixes:
+
+  * Make symbols bson_get_major_version, bson_get_minor_version,
+    bson_get_micro_version, bson_get_version, and bson_check_version available
+    to C++ programs.
+  * New CMake option ENABLE_MAINTAINER_FLAGS.
+  * Crash iterating over invalid code with scope.
+
+Thanks to everyone who contributed to the development of this release.
+
+  * A. Jesse Jiryu Davis
+  * Hannes Magnusson
+  * Jeremy Mikola
+  * Kevin Albertson
+  * Michael Kuhn
+
+Peace,
+
+    A. Jesse Jiryu Davis
+
+
+Libbson-1.7.0
+=============
 
   * Changes to JSON encoding and decoding:
     * New functions bson_as_canonical_extended_json and
@@ -43,24 +371,6 @@ It is my pleasure to announce libbson 1.7.0.
     * BSON_ITER_HOLDS_NUMBER, checks if iterator holds int32, int64 or double
   * Raised BSON recursion limit to 200
 
-Thanks to everyone who contributed to the development of this release.
-
-  * A. Jesse Jiryu Davis
-  * Hannes Magnusson
-  * David Golden
-  * Jeremy Mikola
-  * gael Magnan
-  * Hannes Magn?sson
-  * David Carlier
-  * Paul Melnikow
-  * Petr Písař
-  * Shane Harvey
-  * alexeyvo
-  * Greg Rowe
-
-Peace,
-
-    A. Jesse Jiryu Davis
 
 Libbson-1.6.0
 =============
@@ -190,7 +500,6 @@ New features and bug fixes:
     contains zero-length field names.
   * The configure option "--enable-hardening" had had no effect. It is removed
     in favor of system-wide compiler configuration.
-  * Additional validation of
 
 Thanks to everyone who contributed to the development of this release.
 
