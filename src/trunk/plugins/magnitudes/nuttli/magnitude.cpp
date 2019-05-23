@@ -41,7 +41,13 @@ namespace {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MNMagnitude::MNMagnitude() : MagnitudeProcessor(MAG_TYPE) {}
+MNMagnitude::MNMagnitude()
+: MagnitudeProcessor(MAG_TYPE)
+, _minSNR(2)
+, _minPeriod(0.01)
+, _maxPeriod(1.3)
+, _minDistance(0.5)
+, _maxDistance(30) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -51,6 +57,23 @@ MNMagnitude::MNMagnitude() : MagnitudeProcessor(MAG_TYPE) {}
 bool MNMagnitude::setup(const Settings &settings) {
 	if ( !MagnitudeProcessor::setup(settings) )
 		return false;
+
+	_minSNR = 2;
+	_minPeriod = 0.01;
+	_maxPeriod = 1.3;
+	_minDistance = 0.5;
+	_maxDistance = 30;
+
+	try { _minSNR = settings.getDouble("magnitudes." MAG_TYPE ".minSNR"); }
+	catch ( ... ) {}
+	try { _minPeriod = settings.getDouble("magnitudes." MAG_TYPE ".minPeriod"); }
+	catch ( ... ) {}
+	try { _maxPeriod = settings.getDouble("magnitudes." MAG_TYPE ".maxPeriod"); }
+	catch ( ... ) {}
+	try { _minDistance = settings.getDouble("magnitudes." MAG_TYPE ".minDist"); }
+	catch ( ... ) {}
+	try { _maxDistance = settings.getDouble("magnitudes." MAG_TYPE ".maxDist"); }
+	catch ( ... ) {}
 
 	return Seiscomp::Magnitudes::MN::initialize(settings.localConfiguration);
 }
@@ -105,7 +128,7 @@ MNMagnitude::computeMagnitude(double amplitude,
 		return MetaDataRequired;
 	}
 
-	if ( dist >= 30 )
+	if ( dist > _maxDistance )
 		return DistanceOutOfRange;
 
 	if ( !Seiscomp::Magnitudes::MN::isInsideRegion(
@@ -124,17 +147,17 @@ MNMagnitude::computeMagnitude(double amplitude,
 	      ) )
 		return RayPathOutOfRegions;
 
-	if ( period <= 0.01 || period >= 1.3 ) {
+	if ( period < _minPeriod || period > _maxPeriod ) {
 		status = PeriodOutOfRange;
 		_validValue = true;
 	}
 
-	if ( snr <= 2 ) {
+	if ( snr < _minSNR ) {
 		status = SNROutOfRange;
 		_validValue = true;
 	}
 
-	if ( dist <= 0.5 ) {
+	if ( dist < _minDistance ) {
 		// Forward close magnitudes but associate
 		// them with zero weight
 		status = DistanceOutOfRange;
