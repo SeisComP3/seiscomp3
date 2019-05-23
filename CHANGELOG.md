@@ -11,6 +11,11 @@
   * Add ```--keep-weights``` flag to retain station magnitude weights
     when reprocessing with ```--static```
 
+* scmergexml
+
+  * New module: Merge the content of multiple XML files in SC3ML format. Currently only
+    event parameters are supported.
+
 ## Release 2018.327 patch12
 
 * scamp
