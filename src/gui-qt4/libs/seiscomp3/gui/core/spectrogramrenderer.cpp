@@ -341,17 +341,27 @@ void SpectrogramRenderer::renderSpectrogram() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 	Seiscomp::ComplexDoubleArray *data = spec->data();
+	int offset = 0;
+
+	double minFreq = spec->minimumFrequency();
+	int nSamples = data->size();
+
+	if ( _logarithmic ) {
+		++offset;
+		--nSamples;
+		minFreq = spec->maximumFrequency() / nSamples;
+	}
 
 	if ( _images.empty() ) {
 		SpecImage img;
-		img.minimumFrequency = spec->minimumFrequency();
+		img.minimumFrequency = minFreq;
 		img.maximumFrequency = spec->maximumFrequency();
 		img.startTime = spec->center();
 		img.dt = spec->dt();
 
-		img.data = QImage(1, data->size(), _imageFormat);
+		img.data = QImage(1, nSamples, _imageFormat);
 
-		fillRow(img.data, data, spec->maximumFrequency(), 0);
+		fillRow(img.data, data, spec->maximumFrequency(), 0, offset);
 
 		_images.append(img);
 	}
@@ -365,21 +375,21 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 		Core::Time currentEndTime = img.startTime + Core::TimeSpan(img.data.width()*dt);
 
 		bool needNewImage = (fabs((double)(newTime - currentEndTime)) > dt*0.5)
-		                 || (img.data.height() != data->size())
-		                 || (img.minimumFrequency != spec->minimumFrequency())
+		                 || (img.data.height() != nSamples)
+		                 || (img.minimumFrequency != minFreq)
 		                 || (img.maximumFrequency != spec->maximumFrequency())
 		                 || (img.dt != spec->dt());
 
 		// Gap, overlap or different meta data -> start new image
 		if ( needNewImage ) {
 			SpecImage newImg;
-			newImg.minimumFrequency = spec->minimumFrequency();
+			newImg.minimumFrequency = minFreq;
 			newImg.maximumFrequency = spec->maximumFrequency();
 			newImg.startTime = spec->center();
 			newImg.dt = spec->dt();
 
-			newImg.data = QImage(1, data->size(), _imageFormat);
-			fillRow(newImg.data, data, spec->maximumFrequency(), 0);
+			newImg.data = QImage(1, nSamples, _imageFormat);
+			fillRow(newImg.data, data, spec->maximumFrequency(), 0, offset);
 
 			_images.append(newImg);
 		}
@@ -389,7 +399,7 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 			img.data = img.data.copy(0,0,col+1,img.data.height());
 
 			// Fill colors for column
-			fillRow(img.data, data, spec->maximumFrequency(), col);
+			fillRow(img.data, data, spec->maximumFrequency(), col, offset);
 		}
 	}
 }
@@ -400,7 +410,7 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spec,
-                                  double maxFreq, int column) {
+                                  double maxFreq, int column, int offset) {
 	QRgb *rgb = (QRgb*)img.bits();
 	int ofs = img.width();
 	int n = spec->size();
@@ -418,7 +428,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 		double f = maxFreq;
 		double df = maxFreq / (spec->size()-1);
 
-		for ( int i = n; i; --i, f -= df ) {
+		for ( int i = n; i > offset; --i, f -= df ) {
 			if ( f < fmin || f > fmax ) continue;
 
 			Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
@@ -454,21 +464,32 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			double logFrom = 0;
 			double logRange = logTo - logFrom;
 
-			for ( int i = n; i; --i ) {
+			for ( int i = n; i > offset; --i ) {
 				double li = pow(10.0, (i-1)*logRange/(n-1) + logFrom) - 1;
 				int i0 = (int)li;
 				double t = li-i0;
+				double sr, si, ps;
 
-				Seiscomp::ComplexDoubleArray::Type v;
+				if ( i0 >= n-1 ) {
+					sr = (*spec)[n-1].real()*_scale;
+					si = (*spec)[n-1].imag()*_scale;
+					ps = sr*sr + si*si;
+				}
+				else if ( t == 0 ) {
+					sr = (*spec)[i0].real()*_scale;
+					si = (*spec)[i0].imag()*_scale;
+					ps = sr*sr + si*si;
+				}
+				else {
+					sr = (*spec)[i0].real()*_scale;
+					si = (*spec)[i0].imag()*_scale;
+					ps = sr*sr + si*si;
 
-				if ( t == 0 )
-					v = (*spec)[i0];
-				else
-					v = (*spec)[i0]*(1-t)+(*spec)[i0+1]*t;
+					sr = (*spec)[i0+1].real()*_scale;
+					si = (*spec)[i0+1].imag()*_scale;
+					ps = ps * (1-t) + (sr*sr + si*si) * t;
+				}
 
-				double sr = v.real()*_scale;
-				double si = v.imag()*_scale;
-				double ps = sr*sr + si*si;
 				double amp = ps > 0?log10(ps):_gradient.lowerBound();
 				amp = (amp-amin)*ascale;
 
@@ -477,7 +498,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			}
 		}
 		else {
-			for ( int i = n; i; --i ) {
+			for ( int i = n; i > offset; --i ) {
 				Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
 
 				double sr = v.real()*_scale;
@@ -498,21 +519,32 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			double logFrom = 0;
 			double logRange = logTo - logFrom;
 
-			for ( int i = n; i; --i ) {
+			for ( int i = n; i > offset; --i ) {
 				double li = pow(10.0, (i-1)*logRange/(n-1) + logFrom) - 1;
 				int i0 = (int)li;
 				double t = li-i0;
+				double sr, si, ps;
 
-				Seiscomp::ComplexDoubleArray::Type v;
+				if ( i0 >= n-1 ) {
+					sr = (*spec)[n-1].real()*_scale;
+					si = (*spec)[n-1].imag()*_scale;
+					ps = sr*sr + si*si;
+				}
+				else if ( t == 0 ) {
+					sr = (*spec)[i0].real()*_scale;
+					si = (*spec)[i0].imag()*_scale;
+					ps = sr*sr + si*si;
+				}
+				else {
+					sr = (*spec)[i0].real()*_scale;
+					si = (*spec)[i0].imag()*_scale;
+					ps = sr*sr + si*si;
 
-				if ( t == 0 )
-					v = (*spec)[i0];
-				else
-					v = (*spec)[i0]*(1-t)+(*spec)[i0+1]*t;
+					sr = (*spec)[i0+1].real()*_scale;
+					si = (*spec)[i0+1].imag()*_scale;
+					ps = ps * (1-t) + (sr*sr + si*si) * t;
+				}
 
-				double sr = v.real()*_scale;
-				double si = v.imag()*_scale;
-				double ps = sr*sr + si*si;
 				double amp = ps > 0?log10(ps):_gradient.lowerBound();
 
 				*rgb = _gradient.valueAt(amp);
@@ -520,7 +552,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			}
 		}
 		else {
-			for ( int i = n; i; --i ) {
+			for ( int i = n; i > offset; --i ) {
 				Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
 
 				double sr = v.real()*_scale;

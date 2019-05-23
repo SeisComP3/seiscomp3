@@ -122,7 +122,7 @@ class SC_GUI_API SpectrogramRenderer {
 		void setDirty();
 		void addSpectrum(IO::Spectrum *);
 		void fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spec,
-		             double maxFreq, int column);
+		             double maxFreq, int column, int offset);
 
 
 	// ----------------------------------------------------------------------
