@@ -145,9 +145,6 @@ void App::createCommandLineDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::validateParameters() {
-	if ( !isInventoryDatabaseEnabled() )
-		setDatabaseEnabled(false, false);
-
 	if ( commandline().hasOption("offline") ) {
 		_config.offline = true;
 		_config.playback = true;
@@ -169,13 +166,17 @@ bool App::validateParameters() {
 	}
 
 	// Load inventory from database only if no station location file was specified.
-	if ( ! _stationLocationFile.empty()) {
+	if ( !_stationLocationFile.empty() ) {
 		setLoadStationsEnabled(false);
 		setDatabaseEnabled(false, false);
 	}
 	else {
 		setLoadStationsEnabled(true);
-		setDatabaseEnabled(true, true);
+
+		if ( !isInventoryDatabaseEnabled() )
+			setDatabaseEnabled(false, false);
+		else
+			setDatabaseEnabled(true, true);
 	}
 
 	// Maybe we do want to allow sending of origins in offline mode?
@@ -473,7 +474,7 @@ bool App::initOneStation(const DataModel::WaveformStreamID &wfid, const Core::Ti
 	}
 
 	if ( !found ) {
-		SEISCOMP_WARNING_S(key+" not found in station inventory");
+		SEISCOMP_WARNING("%s not found in station inventory", key.c_str());
 		return false;
 	}
 
