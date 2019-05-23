@@ -814,6 +814,42 @@
 						changed if you know what you are doing.
 						</description>
 					</parameter>
+					<parameter name="minDist" type="double" unit="deg">
+						<description>
+						The minimum distance required to compute an amplitude.
+						This settings has no effect with e.g. scautopick as there
+						is no information about the source of the event to compute
+						the distance. The default value is implementation
+						specific.
+						</description>
+					</parameter>
+					<parameter name="maxDist" type="double" unit="deg">
+						<description>
+						The maximum distance allowed to compute an amplitude.
+						This settings has no effect with e.g. scautopick as there
+						is no information about the source of the event to compute
+						the distance. The default value is implementation
+						specific.
+						</description>
+					</parameter>
+					<parameter name="minDepth" type="double" unit="km">
+						<description>
+						The minimum depth required to compute an amplitude.
+						This settings has no effect with e.g. scautopick as there
+						is no information about the source of the event to
+						retrieve the depth. The default value is implementation
+						specific.
+						</description>
+					</parameter>
+					<parameter name="maxDepth" type="double" unit="km">
+						<description>
+						The maximum depth allowed to compute an amplitude.
+						This settings has no effect with e.g. scautopick as there
+						is no information about the source of the event to
+						retrieve the depth. The default value is implementation
+						specific.
+						</description>
+					</parameter>
 					<group name="resp">
 						<description>
 						Several parameters if usage of full responses is enabled.

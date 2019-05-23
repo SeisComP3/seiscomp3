@@ -4,6 +4,8 @@
 
 * trunk
 
+  * Add distance and depth range confguration to amplitude profiles
+    in scconfig
   * Fix PostgreSQL database plugin to unescape bytea encoded data
 
 * scmag
