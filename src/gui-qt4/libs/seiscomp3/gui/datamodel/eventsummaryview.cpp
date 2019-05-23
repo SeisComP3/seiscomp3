@@ -735,10 +735,10 @@ void EventSummaryView::init() {
 	double latmin = -90;
 	double latmax = 90;
 
-	try { lonmin = SCApp->configGetDouble("display.lonmin"); } catch (Config::Exception) {}
-	try { lonmax = SCApp->configGetDouble("display.lonmax"); } catch (Config::Exception) {}
-	try { latmin = SCApp->configGetDouble("display.latmin"); } catch (Config::Exception) {}
-	try { latmax = SCApp->configGetDouble("display.latmax"); } catch (Config::Exception) {}
+	try { lonmin = SCApp->configGetDouble("display.lonmin"); } catch (Config::Exception &) {}
+	try { lonmax = SCApp->configGetDouble("display.lonmax"); } catch (Config::Exception &) {}
+	try { latmin = SCApp->configGetDouble("display.latmin"); } catch (Config::Exception &) {}
+	try { latmax = SCApp->configGetDouble("display.latmax"); } catch (Config::Exception &) {}
 
 	QRectF displayRect;
 	displayRect.setRect(lonmin, latmin, lonmax-lonmin, latmax-latmin);

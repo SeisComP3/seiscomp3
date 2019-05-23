@@ -313,7 +313,7 @@ void QcPlugin::sendMessages(const Core::Time &rectime) {
 		try {
 			SEISCOMP_DEBUG("%s: %d sec timeout reached for stream: %s.", _name.c_str(),  _qcConfig->reportTimeout(), _streamID.c_str());
 		}
-		catch ( QcConfigException ) {}
+		catch ( QcConfigException & ) {}
 	}
 
 	Core::TimeSpan diff;

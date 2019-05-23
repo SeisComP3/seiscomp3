@@ -5729,7 +5729,7 @@ void OriginLocatorView::commitFocalMechanism(bool withMT, QPoint pos) {
 		OriginDialog dialog(_currentOrigin->longitude().value(),
 		                    _currentOrigin->latitude().value(), this);
 		try { dialog.setDepth(_currentOrigin->depth().value()); }
-		catch ( ValueException e ) {}
+		catch ( ValueException &e ) {}
 		dialog.setTime(_currentOrigin->time().value());
 
 		dialog.enableAdvancedOptions(true, false);
@@ -5760,7 +5760,7 @@ void OriginLocatorView::commitFocalMechanism(bool withMT, QPoint pos) {
 		derived->setEvaluationMode(EvaluationMode(MANUAL));
 
 		try { derived->quality(); } // ensure existing quality object
-		catch ( ValueException e ) { derived->setQuality(OriginQuality()); }
+		catch ( ValueException &e ) { derived->setQuality(OriginQuality()); }
 
 		derived->setTime(Time(dialog.getTime_t()));
 		derived->setLatitude(dialog.latitude());
