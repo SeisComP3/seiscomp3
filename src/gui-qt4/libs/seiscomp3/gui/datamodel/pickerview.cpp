@@ -24,6 +24,7 @@
 #include <seiscomp3/gui/core/uncertainties.h>
 #include <seiscomp3/gui/core/spectrogramrenderer.h>
 #include <seiscomp3/gui/core/spectrumwidget.h>
+#include <seiscomp3/gui/plot/axis.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -175,6 +176,9 @@ class ZoomRecordWidget : public RecordWidget {
 				spectrogram[i].setOptions(spectrogram[i].options());
 				spectrogram[i].setGradient(gradient);
 			}
+
+			spectrogramAxis.setLabel(tr("f [1/T] in Hz"));
+			spectrogramAxis.setPosition(Seiscomp::Gui::Axis::Right);
 		}
 
 		void setUncertainties(const PickerView::Config::UncertaintyList &list) {
@@ -221,6 +225,7 @@ class ZoomRecordWidget : public RecordWidget {
 		void setLogSpectrogram(bool enable) {
 			for ( int i = 0; i < 3; ++i )
 				spectrogram[i].setLogScale(enable);
+			spectrogramAxis.setLogScale(enable);
 			update();
 		}
 
@@ -297,10 +302,20 @@ class ZoomRecordWidget : public RecordWidget {
 			QRect r(canvasRect());
 			r.setHeight(streamHeight(slot));
 			r.moveTop(streamYPos(slot));
-			painter.setBrush(palette().color(backgroundRole()));
-			spectrogram[slot].setAlignment(alignment());
-			spectrogram[slot].setTimeRange(tmin(), tmax());
-			spectrogram[slot].renderAxis(painter, r, false, 6, 6);
+
+			painter.save();
+
+			QPair<double, double> range = spectrogram[slot].range();
+			spectrogramAxis.setRange(Seiscomp::Gui::Range(range.first, range.second));
+
+			r.setLeft(r.right());
+			r.setWidth(0);
+			spectrogramAxis.updateLayout(painter, r);
+			r.setRight(canvasRect().right());
+			painter.fillRect(r.adjusted(-axisSpacing(),0,0,0), palette().color(backgroundRole()));
+			spectrogramAxis.draw(painter, r, true);
+
+			painter.restore();
 		}
 
 		void updateTraceColor() {
@@ -412,6 +427,7 @@ class ZoomRecordWidget : public RecordWidget {
 		int                             currentIndex;
 		SpectrogramRenderer             spectrogram[3];
 		bool                            showSpectrogram;
+		Seiscomp::Gui::Axis             spectrogramAxis;
 		ThreeComponentTrace::Component *traces;
 };
 
