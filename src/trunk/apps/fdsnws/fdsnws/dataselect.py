@@ -539,10 +539,12 @@ class FDSNDataSelect(resource.Resource):
 			for net in self._networkIter(s):
 				netRestricted = utils.isRestricted(net)
 				if not tracker and netRestricted and not self.__user:
+					forbidden = forbidden or (forbidden is None)
 					continue
 				for sta in self._stationIter(net, s):
 					staRestricted = utils.isRestricted(sta)
 					if not tracker and staRestricted and not self.__user:
+						forbidden = forbidden or (forbidden is None)
 						continue
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
