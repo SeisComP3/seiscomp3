@@ -67,6 +67,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 			commandline().addGroup("Reprocess");
 			commandline().addOption("Reprocess", "static", "Do not create new station or new network magnitudes just update them. Considers the associated amplitudes. Weights of station magnitudes will be changed according to the accumulation function of the network magnitude.");
+			commandline().addOption("Reprocess", "keep-weights", "Reuse the original weights in combintation with --static.");
 		}
 
 		bool validateParameters() {
@@ -335,7 +336,8 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 			_magtool.init(_magTypes, _expiry,
 			              commandline().hasOption("reprocess"),
-			              commandline().hasOption("static"));
+			              commandline().hasOption("static"),
+			              commandline().hasOption("keep-weights"));
 
 			if ( _interval > 0 )
 				enableTimer(_interval);

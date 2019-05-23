@@ -6,6 +6,11 @@
 
   * Fix PostgreSQL database plugin to unescape bytea encoded data
 
+* scmag
+
+  * Add ```--keep-weights``` flag to retain station magnitude weights
+    when reprocessing with ```--static```
+
 ## Release 2018.327 patch12
 
 * scamp

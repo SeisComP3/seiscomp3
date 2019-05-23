@@ -43,6 +43,9 @@ SC_SYSTEM_CORE_API bool computeTrimmedMean(const std::vector<double> &v, double 
 
 SC_SYSTEM_CORE_API bool computeMean(const std::vector<double> &v, double &value, double &stdev);
 
+SC_SYSTEM_CORE_API bool average(int n, const double *values, const double *weights, double &value, double &stdev);
+SC_SYSTEM_CORE_API bool average(const std::vector<double> &values, const std::vector<double> &weights, double &value, double &stdev);
+
 SC_SYSTEM_CORE_API void computeLinearTrend(const std::vector<float> &data, double &m, double &n);
 SC_SYSTEM_CORE_API void computeLinearTrend(const std::vector<double> &data, double &m, double &n);
 SC_SYSTEM_CORE_API void computeLinearTrend(int cnt, const float *data, double &m, double &n);
