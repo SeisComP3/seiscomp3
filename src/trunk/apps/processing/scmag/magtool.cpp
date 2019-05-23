@@ -1113,7 +1113,7 @@ Util::KeyValues *MagTool::fetchParams(const DataModel::Amplitude *amp) {
 				try {
 					ps = DataModel::ParameterSet::Find(setup->parameterSetID());
 				}
-				catch ( Core::ValueException ) {
+				catch ( Core::ValueException & ) {
 					continue;
 				}
 

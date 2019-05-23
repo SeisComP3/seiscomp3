@@ -274,7 +274,7 @@ bool CalculateAmplitudes::process() {
 		Arrival *ar = _origin->arrival(i);
 
 		double weight = 1.;
-		try { weight = ar->weight(); } catch (Seiscomp::Core::ValueException) {}
+		try { weight = ar->weight(); } catch (Seiscomp::Core::ValueException &) {}
 
 		if ( Util::getShortPhaseName(ar->phase().code()) != 'P' || weight < 0.5 ) {
 			continue;
