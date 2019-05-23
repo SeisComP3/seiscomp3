@@ -18,6 +18,11 @@
   * New module: Merge the content of multiple XML files in SC3ML format. Currently only
     event parameters are supported.
 
+* scautoloc
+
+  * Fix station lookup with inventories with overlapping network epochs
+  * Do not use database if inventory should be read from a file
+
 ## Release 2018.327 patch12
 
 * scamp
