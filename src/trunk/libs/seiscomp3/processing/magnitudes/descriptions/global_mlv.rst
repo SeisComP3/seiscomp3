@@ -60,4 +60,5 @@ per network or per station using the configuration variables, e.g.
 | module.trunk.GR.MOX.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
 | module.trunk.GR.MOX.MLv.maxDistanceKm = -1
 
-Set the calibration parameters in the global bindings. MLv is computed by default.
+Set the calibration parameters in the global bindings. By deault MLv is computed
+by :ref:`scautopick` and is visible in the GUI.
