@@ -44,11 +44,11 @@ epicenter distance.
 * Amplitude unit in SeisComP3: **millimeter** (mm)
 * Time window: 150 s by :ref:`scautopick` or distance dependent
 * Default distance range: 0 - 8 deg
-* Depth range: no limitation
+* Depth range: 0 - 80 km
 
 Configuration
 -------------
 
 Set the calibration parameters in the global bindings. Add ML to the list of
-magnitudes in the configuration of :ref:`scamp` and :ref:`scmag` for computation
+computed amplitudes and magnitudes in the configuration of :ref:`scamp` and :ref:`scmag`
 and in :ref:`scesv` for visibility.

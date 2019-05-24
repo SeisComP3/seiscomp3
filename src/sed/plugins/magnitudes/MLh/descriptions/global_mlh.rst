@@ -39,8 +39,8 @@ by computing the median value of all contributing station magnitudes without any
 Configuration
 -------------
 
-Add the mlh plugin to the existing plugins in the global configuration.
+Add the *mlh* plugin to the existing plugins in the global configuration.
 Set the calibration parameters in the global bindings to compute MLh.
 There exist no default configuration. Add MLh to the list of
-magnitudes in the configuration of :ref:`scamp` and :ref:`scmag` for computation
+amplitudes and magnitudes in the configuration of :ref:`scamp` and :ref:`scmag` for computation
 and in :ref:`scesv` for visibility.
