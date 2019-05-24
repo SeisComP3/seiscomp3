@@ -217,6 +217,7 @@ class FDSNEvent(resource.Resource):
 	def __init__(self, hideAuthor = False, evaluationMode = None,
 	             eventTypeWhitelist = None, eventTypeBlacklist = None,
 	             formatList = None):
+		resource.Resource.__init__(self)
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
 		self._eventTypeWhitelist = eventTypeWhitelist
