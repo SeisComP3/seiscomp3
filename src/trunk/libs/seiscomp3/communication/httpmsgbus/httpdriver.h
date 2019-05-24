@@ -17,7 +17,7 @@
 #include <seiscomp3/communication/systemmessages.h>
 #include <seiscomp3/io/httpsocket.h>
 
-#include "bson.h"
+#include "bson/bson.h"
 
 namespace Seiscomp {
 namespace Communication {

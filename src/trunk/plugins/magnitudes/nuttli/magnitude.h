@@ -60,6 +60,11 @@ class MNMagnitude : public Seiscomp::Processing::MagnitudeProcessor {
 
 	private:
 		bool _validValue;
+		double _minSNR;
+		double _minPeriod;
+		double _maxPeriod;
+		double _minDistance;
+		double _maxDistance;
 };
 
 

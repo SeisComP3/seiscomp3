@@ -75,12 +75,14 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
-		PGconn   *_handle;
-		PGresult *_result;
-		bool      _debug;
-		int       _row;
-		int       _nRows;
-		int       _fieldCount;
+		PGconn        *_handle;
+		PGresult      *_result;
+		bool           _debug;
+		int            _row;
+		int            _nRows;
+		int            _fieldCount;
+		void          *_unescapeBuffer;
+		size_t         _unescapeBufferSize;
 };
 
 

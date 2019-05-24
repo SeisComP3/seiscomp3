@@ -202,6 +202,40 @@ computeMean(const std::vector<double> &v, double &value, double &stdev)
 	return computeTrimmedMean(v.size(), &v[0], 0., value, stdev);
 }
 
+bool
+average(int n, const double *values, const double *weights, double &value, double &stdev) {
+	double cumd = 0, cumw = 0., cumv = 0;
+
+	// set weights and compute (weighted) mean
+	for ( int i = 0; i < n; ++i ) {
+		cumv += weights[i] * values[i];
+		cumw += weights[i];
+	}
+
+	value = cumv / cumw;
+
+	// compute (weighted) standard deviation
+	for ( int i = 0; i < n; ++i ) {
+		double dv = values[i] - value;
+		cumd += weights[i] * dv * dv;
+	}
+
+	if ( cumw > 1 )
+		stdev = sqrt(cumd/(cumw-1));
+	else
+		stdev = -1;
+
+	return true;
+}
+
+bool
+average(const std::vector<double> &values, const std::vector<double> &weights, double &value, double &stdev) {
+	if ( values.size() != weights.size() )
+		return false;
+
+	return average((int)values.size(), &values[0], &weights[0], value, stdev);
+}
+
 double
 trimmedMean(int n, const double *f, double percent)
 {

@@ -145,9 +145,6 @@ void App::createCommandLineDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::validateParameters() {
-	if ( !isInventoryDatabaseEnabled() )
-		setDatabaseEnabled(false, false);
-
 	if ( commandline().hasOption("offline") ) {
 		_config.offline = true;
 		_config.playback = true;
@@ -169,13 +166,17 @@ bool App::validateParameters() {
 	}
 
 	// Load inventory from database only if no station location file was specified.
-	if ( ! _stationLocationFile.empty()) {
+	if ( !_stationLocationFile.empty() ) {
 		setLoadStationsEnabled(false);
 		setDatabaseEnabled(false, false);
 	}
 	else {
 		setLoadStationsEnabled(true);
-		setDatabaseEnabled(true, true);
+
+		if ( !isInventoryDatabaseEnabled() )
+			setDatabaseEnabled(false, false);
+		else
+			setDatabaseEnabled(true, true);
 	}
 
 	// Maybe we do want to allow sending of origins in offline mode?
@@ -398,17 +399,17 @@ bool App::initInventory() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::initOneStation(const DataModel::WaveformStreamID &wfid, const Core::Time &time) {
-
 	bool found = false;
 	static std::set<std::string> configuredStreams;
 	std::string key = wfid.networkCode() + "." + wfid.stationCode();
-	if (configuredStreams.find(key) != configuredStreams.end())
+
+	if ( configuredStreams.find(key) != configuredStreams.end() )
 		return false;
 
-	for ( size_t n = 0; n < inventory->networkCount(); ++n ) {
+	for ( size_t n = 0; n < inventory->networkCount() && !found; ++n ) {
 		DataModel::Network *network = inventory->network(n);
 
-		if (network->code() != wfid.networkCode())
+		if ( network->code() != wfid.networkCode() )
 			continue;
 
 		try {
@@ -445,8 +446,11 @@ bool App::initOneStation(const DataModel::WaveformStreamID &wfid, const Core::Ti
 			}
 			catch ( ... ) { } 
 
-			SEISCOMP_DEBUG_S("Station "+network->code()+" "+station->code()+
-					 "  epoch "+epochStart+" ... "+epochEnd); 
+			SEISCOMP_DEBUG("Station %s %s epoch %s ... %s",
+			               network->code().c_str(),
+			               station->code().c_str(),
+			               epochStart.c_str(),
+			               epochEnd.c_str());
 
 			double elev = 0;
 			try { elev = station->elevation(); }
@@ -467,11 +471,10 @@ bool App::initOneStation(const DataModel::WaveformStreamID &wfid, const Core::Ti
 
 			break;
 		}
-		break;
 	}
 
-	if ( ! found) {
-		SEISCOMP_WARNING_S(key+" not found in station inventory");
+	if ( !found ) {
+		SEISCOMP_WARNING("%s not found in station inventory", key.c_str());
 		return false;
 	}
 

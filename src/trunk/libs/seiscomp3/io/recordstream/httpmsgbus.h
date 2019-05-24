@@ -25,7 +25,7 @@
 #include <seiscomp3/io/httpsocket.h>
 #include <seiscomp3/io/recordstream/streamidx.h>
 
-#include "bson.h"
+#include "bson/bson.h"
 
 namespace Seiscomp {
 namespace RecordStream {

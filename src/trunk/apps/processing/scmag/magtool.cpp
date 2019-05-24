@@ -175,6 +175,7 @@ MagTool::MagTool() {
 	_dbAccesses = 0;
 	_allowReprocessing = false;
 	_staticUpdate = false;
+	_keepWeights = false;
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
@@ -286,7 +287,7 @@ void MagTool::setMinimumArrivalWeight(double w) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
-                   bool allowReprocessing, bool staticUpdate) {
+                   bool allowReprocessing, bool staticUpdate, bool keepWeights) {
 	_cacheSize = expiry;
 	_objectCache.setDatabaseArchive(SCCoreApp->query());
 	_objectCache.setTimeSpan(_cacheSize);
@@ -295,6 +296,7 @@ bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
 	_dbAccesses = 0;
 	_allowReprocessing = allowReprocessing;
 	_staticUpdate = staticUpdate;
+	_keepWeights = keepWeights;
 
 	MagnitudeTypeList *services = MagnitudeProcessorFactory::Services();
 
@@ -1111,7 +1113,7 @@ Util::KeyValues *MagTool::fetchParams(const DataModel::Amplitude *amp) {
 				try {
 					ps = DataModel::ParameterSet::Find(setup->parameterSetID());
 				}
-				catch ( Core::ValueException ) {
+				catch ( Core::ValueException & ) {
 					continue;
 				}
 
@@ -1590,6 +1592,13 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			}
 
 			mv.push_back(staMag->magnitude().value());
+
+			try {
+				weights.push_back(contrib->weight());
+			}
+			catch ( ... ) {
+				weights.push_back(1.0);
+			}
 		}
 
 
@@ -1597,7 +1606,12 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			string methodID;
 			double val, stdev;
 
-			if ( !computeAverage(averageMethod, mv, weights, methodID, val, stdev) )
+			if ( _keepWeights ) {
+				// Use preset weights
+				if ( !Math::Statistics::average(mv, weights, val, stdev) )
+					return false;
+			}
+			else if ( !computeAverage(averageMethod, mv, weights, methodID, val, stdev) )
 				return false;
 
 			netMag->setMagnitude(DataModel::RealQuantity(val, stdev, Core::None, Core::None, Core::None));

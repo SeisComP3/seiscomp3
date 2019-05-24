@@ -88,16 +88,16 @@ bool QcViewConfig::init() {
 			_configMap.insert(cfgName, readConfig(cfgName.toAscii().data(), _configMap["default"]));
 		}
 	}
-	catch (Seiscomp::Config::Exception) {
+	catch (Seiscomp::Config::Exception &) {
 		SEISCOMP_ERROR("QcViewConfig: no 'parameter' defined in cfg file!");
 		return false;
 	}
 
 	try { _streamWidgetLength = _app->configGetDouble("streamWidget.length");}
-	catch (Seiscomp::Config::Exception) {_streamWidgetLength = 600.0;}
+	catch (Seiscomp::Config::Exception &) {_streamWidgetLength = 600.0;}
 
 	try { _cumulative = _app->configGetBool("streams.cumulative");}
-	catch (Seiscomp::Config::Exception) {_cumulative = true;}
+	catch (Seiscomp::Config::Exception &) {_cumulative = true;}
 
 	return true;
 }
@@ -110,16 +110,16 @@ bool QcViewConfig::init() {
 QcViewConfig::Config QcViewConfig::readConfig(const std::string& name, QcViewConfig::Config config) {
 
 	try { config.expire = _app->configGetInt(name+".expire");}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	try { config.useAbsoluteValue = _app->configGetBool(name+".useAbsoluteValue");}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	try { config.format = QString(_app->configGetString(name+".format").c_str());}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	try { config.color = QString(_app->configGetString(name+".color").c_str());}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	try {
 		Strings ranges = _app->configGetStrings(name+".ranges");
@@ -128,7 +128,7 @@ QcViewConfig::Config QcViewConfig::readConfig(const std::string& name, QcViewCon
 			config.rangeMap.insert(QString(it->c_str()), readRange(*it, Range()));
 		}
 	}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 	
 	RangeMap::iterator it;
 	for (it = config.rangeMap.begin(); it != config.rangeMap.end(); ++it) {
@@ -146,22 +146,22 @@ QcViewConfig::Config QcViewConfig::readConfig(const std::string& name, QcViewCon
 QcViewConfig::Range QcViewConfig::readRange(const std::string& name, QcViewConfig::Range range, std::string pre) {
 
 	try { range.count = _app->configGetInt(pre+"range."+name+".count");}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 	
 	try { range.action = QString( _app->configGetString(pre+"range."+name+".action").c_str());}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 	
 	try { range.color = QString(_app->configGetString(pre+"range."+name+".color").c_str());
 		readColor(range.color.toAscii().data());
 	}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	try {
 		Doubles dv = _app->configGetDoubles(pre+"range."+name);
 		range.min = dv[0];
 		range.max = dv[1];
 	}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	return range;
 }
@@ -176,7 +176,7 @@ void QcViewConfig::readColor(const std::string& name) {
 	std::vector<int> cv;
 
 	try { cv = _app->configGetInts("color."+name);}
-	catch (Seiscomp::Config::Exception) {}
+	catch (Seiscomp::Config::Exception &) {}
 
 	_colorMap.insert(QString(name.c_str()), QColor(cv[0], cv[1], cv[2], cv[3]));
 
@@ -194,7 +194,7 @@ void QcViewConfig::readScore(const std::string& name) {
 
 	Strings ranges;
 	try { ranges = _app->configGetStrings("score."+name+".ranges");}
-	catch (Seiscomp::Config::Exception) {}
+	catch ( Seiscomp::Config::Exception & ) {}
 
 	for (Strings::iterator it = ranges.begin(); it != ranges.end(); ++it) {
 		score.rangeMap.insert(QString(it->c_str()), readRange(*it, Range()));

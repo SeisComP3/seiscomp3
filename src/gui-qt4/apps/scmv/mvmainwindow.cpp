@@ -297,7 +297,7 @@ void setInfoWidgetContent(OriginInfoWidget* infoWidget, const std::string &event
 
 	QString maximumDistance;
 	try { maximumDistance = QString("%1").arg(origin->quality().maximumDistance()); }
-	catch ( Core::ValueException ) {}
+	catch ( Core::ValueException & ) {}
 	infoWidget->setMaximumDistance(maximumDistance);
 }
 
@@ -736,10 +736,10 @@ void MvMainWindow::setupStandardUi() {
 	_mapWidget->installEventFilter(this);
 
 	double lonmin = -180, lonmax = 180, latmin = -90, latmax = 90;
-	try { lonmin = SCApp->configGetDouble("display.lonmin"); } catch (Config::Exception) {}
-	try { lonmax = SCApp->configGetDouble("display.lonmax"); } catch (Config::Exception) {}
-	try { latmin = SCApp->configGetDouble("display.latmin"); } catch (Config::Exception) {}
-	try { latmax = SCApp->configGetDouble("display.latmax"); } catch (Config::Exception) {}
+	try { lonmin = SCApp->configGetDouble("display.lonmin"); } catch (Config::Exception &) {}
+	try { lonmax = SCApp->configGetDouble("display.lonmax"); } catch (Config::Exception &) {}
+	try { latmin = SCApp->configGetDouble("display.latmin"); } catch (Config::Exception &) {}
+	try { latmax = SCApp->configGetDouble("display.latmax"); } catch (Config::Exception &) {}
 
 	QRectF displayRect;
 	displayRect.setRect(lonmin, latmin, lonmax-lonmin, latmax-latmin);

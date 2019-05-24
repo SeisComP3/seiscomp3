@@ -2245,7 +2245,7 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			Arrival *ar = _origin->arrival(i);
 
 			double weight = 1.;
-			try { weight = ar->weight(); } catch (Seiscomp::Core::ValueException) {}
+			try { weight = ar->weight(); } catch (Seiscomp::Core::ValueException &) {}
 
 			if ( Util::getShortPhaseName(ar->phase().code()) != 'P' || weight < 0.5 )
 				continue;
@@ -3310,7 +3310,7 @@ void MagnitudeView::updateMagnitudeLabels() {
 			_ui.labelAgencyID->setText(_netMag->creationInfo().agencyID().c_str());
 			_ui.labelAgencyID->setToolTip(_netMag->creationInfo().agencyID().c_str());
 		}
-		catch(Core::ValueException) {
+		catch(Core::ValueException &) {
 			_ui.labelAgencyID->setText("");
 			_ui.labelAgencyID->setToolTip("");
 		}
@@ -3319,7 +3319,7 @@ void MagnitudeView::updateMagnitudeLabels() {
 			_ui.labelAuthor->setText(_netMag->creationInfo().author().c_str());
 			_ui.labelAuthor->setToolTip(_netMag->creationInfo().author().c_str());
 		}
-		catch(Core::ValueException) {
+		catch(Core::ValueException &) {
 			_ui.labelAuthor->setText("");
 			_ui.labelAuthor->setToolTip("");
 		}
@@ -3327,7 +3327,7 @@ void MagnitudeView::updateMagnitudeLabels() {
 		try {
 			_ui.labelEvaluation->setText(_netMag->evaluationStatus().toString());
 		}
-		catch(Core::ValueException) {
+		catch(Core::ValueException &) {
 			_ui.labelEvaluation->setText("-");
 		}
 
@@ -3335,7 +3335,7 @@ void MagnitudeView::updateMagnitudeLabels() {
 		try {
 			_ui.labelNumStaMags->setText(QString("%1 (%2)").arg(_netMag->stationCount()).arg(_netMag->stationMagnitudeContributionCount()));
 		}
-		catch(Core::ValueException) {
+		catch(Core::ValueException &) {
 			_ui.labelNumStaMags->setText(QString("-"));
 		}
 

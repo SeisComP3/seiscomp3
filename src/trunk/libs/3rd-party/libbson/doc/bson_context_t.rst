@@ -10,15 +10,15 @@ Synopsis
 
 .. code-block:: c
 
-  #include <bson.h>
+  #include <bson/bson.h>
 
   typedef enum {
-     BSON_CONTEXT_NONE = 0,
-     BSON_CONTEXT_THREAD_SAFE = (1 << 0),
-     BSON_CONTEXT_DISABLE_HOST_CACHE = (1 << 1),
-     BSON_CONTEXT_DISABLE_PID_CACHE = (1 << 2),
+    BSON_CONTEXT_NONE = 0,
+    BSON_CONTEXT_THREAD_SAFE = (1 << 0),
+    BSON_CONTEXT_DISABLE_HOST_CACHE = (1 << 1),
+    BSON_CONTEXT_DISABLE_PID_CACHE = (1 << 2),
   #ifdef BSON_HAVE_SYSCALL_TID
-     BSON_CONTEXT_USE_TASK_ID = (1 << 3),
+    BSON_CONTEXT_USE_TASK_ID = (1 << 3),
   #endif
   } bson_context_flags_t;
 
@@ -34,7 +34,10 @@ Synopsis
 Description
 -----------
 
-The :symbol:`bson_context_t` structure is context for generation of BSON Object IDs. This context allows for specialized overriding of how ObjectIDs are generated based on the applications requirements. For example, disabling of PID caching can be configured if the application cannot detect when a call to ``fork()`` has occurred.
+The :symbol:`bson_context_t` structure is context for generation of BSON Object
+IDs. This context allows overriding behavior of generating ObjectIDs. The flags
+``BSON_CONTEXT_NONE``, ``BSON_CONTEXT_THREAD_SAFE``, and ``BSON_CONTEXT_DISABLE_HOST_CACHE``
+are the only ones used. The others have no effect.
 
 .. only:: html
 
@@ -54,7 +57,7 @@ Example
 
 .. code-block:: c
 
-  #include <bson.h>
+  #include <bson/bson.h>
 
   int
   main (int argc, char *argv[])
@@ -66,8 +69,7 @@ Example
      bson_oid_init (&oid, NULL);
 
      /* specify a local context for additional control */
-     ctx = bson_context_new (BSON_CONTEXT_DISABLE_PID_CACHE |
-                             BSON_CONTEXT_THREAD_SAFE);
+     ctx = bson_context_new (BSON_CONTEXT_THREAD_SAFE);
      bson_oid_init (&oid, ctx);
 
      bson_context_destroy (ctx);

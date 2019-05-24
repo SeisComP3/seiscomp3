@@ -25,7 +25,7 @@
 #include <fstream>
 #include <string.h>
 
-#include "bson.h"
+#include "bson/bson.h"
 
 
 namespace Seiscomp {

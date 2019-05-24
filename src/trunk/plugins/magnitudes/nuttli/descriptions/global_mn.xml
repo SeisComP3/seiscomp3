@@ -105,6 +105,55 @@
 					</parameter>
 				</group>
 			</group>
+			<group name="magnitudes">
+				<group name="MN">
+					<parameter name="minSNR" type="double" default="2">
+						<description>
+						The minimum SNR required for a magnitude to pass
+						the QC check. The station magnitude will be computed
+						anyway but if the SNR is below this threshold it will
+						be associated with weight zero and will not contribute
+						to the network magnitude.
+						</description>
+					</parameter>
+					<parameter name="minPeriod" type="double" default="0.01" unit="s">
+						<description>
+						The minimum period required for a magnitude to pass
+						the QC check. The station magnitude will be computed
+						anyway but if the period is below this threshold it will
+						be associated with weight zero and will not contribute
+						to the network magnitude.
+						</description>
+					</parameter>
+					<parameter name="maxPeriod" type="double" default="1.3" unit="s">
+						<description>
+						The maximum period allowed for a magnitude to pass
+						the QC check. The station magnitude will be computed
+						anyway but if the period is above this threshold it will
+						be associated with weight zero and will not contribute
+						to the network magnitude.
+						</description>
+					</parameter>
+					<parameter name="minDist" type="double" default="0.5" unit="deg">
+						<description>
+						The minimum distance required for a magnitude to pass
+						the QC check. The station magnitude will be computed
+						anyway but if the distance is below this threshold it
+						will be associated with weight zero and will not contribute
+						to the network magnitude.
+						</description>
+					</parameter>
+					<parameter name="maxDist" type="double" default="30" unit="deg">
+						<description>
+						The maximum distance allowed for a magnitude to be
+						computed. If the distance exceeds this threshold then
+						the computation will be canceled and no station
+						magnitude will be available at all.
+						</description>
+					</parameter>
+				</group>
+			</group>
 		</configuration>
 	</binding>
 </seiscomp>
+

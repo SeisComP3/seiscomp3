@@ -17,6 +17,7 @@
 #include "postgresqldatabaseinterface.h"
 
 #include <stdlib.h>
+#include <iostream>
 
 
 namespace Seiscomp {
@@ -28,10 +29,26 @@ IMPLEMENT_SC_CLASS_DERIVED(PostgreSQLDatabase,
                            "postgresql_database_interface");
 
 REGISTER_DB_INTERFACE(PostgreSQLDatabase, "postgresql");
-ADD_SC_PLUGIN("PostgreSQL database driver", "GFZ Potsdam <seiscomp-devel@gfz-potsdam.de>", 0, 10, 0)
+ADD_SC_PLUGIN("PostgreSQL database driver", "GFZ Potsdam <seiscomp-devel@gfz-potsdam.de>", 0, 11, 0)
+
+
+#define XFREE(ptr) \
+	do {\
+		if ( ptr ) {\
+			PQfreemem(ptr);\
+			ptr = NULL;\
+			ptr##Size = 0;\
+		}\
+	} while (0)
+
 
 PostgreSQLDatabase::PostgreSQLDatabase()
- : _handle(NULL), _result(NULL), _debug(false) {}
+: _handle(NULL)
+, _result(NULL)
+, _debug(false)
+, _unescapeBuffer(NULL)
+, _unescapeBufferSize(0)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -120,6 +137,8 @@ void PostgreSQLDatabase::disconnect() {
 
 	PQfinish(_handle);
 	_handle = NULL;
+
+	XFREE(_unescapeBuffer);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -246,6 +265,7 @@ void PostgreSQLDatabase::endQuery() {
 	if ( _result ) {
 		PQclear(_result);
 		_result = NULL;
+		XFREE(_unescapeBuffer);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -288,6 +308,8 @@ uint64_t PostgreSQLDatabase::numberOfAffectedRows() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PostgreSQLDatabase::fetchRow() {
+	XFREE(_unescapeBuffer);
+
 	++_row;
 
 	if ( _row < _nRows ) return true;
@@ -329,10 +351,22 @@ const char *PostgreSQLDatabase::getRowFieldName(int index) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const void* PostgreSQLDatabase::getRowField(int index) {
+	const void *value;
+
 	if ( PQgetisnull(_result, _row, index) )
 		return NULL;
 
-	return PQgetvalue(_result, _row, index);
+	value = PQgetvalue(_result, _row, index);
+
+	if ( PQftype(_result, index) == 17 ) {
+		// bytea
+		XFREE(_unescapeBuffer);
+
+		_unescapeBuffer = PQunescapeBytea(reinterpret_cast<const unsigned char *>(value), &_unescapeBufferSize);
+		value = _unescapeBuffer;
+	}
+
+	return value;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -341,6 +375,11 @@ const void* PostgreSQLDatabase::getRowField(int index) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t PostgreSQLDatabase::getRowFieldSize(int index) {
+	if ( PQftype(_result, index) == 17 ) {
+		// bytea
+		return _unescapeBufferSize;
+	}
+
 	return PQgetlength(_result, _row, index);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -34,6 +34,7 @@ from http import HTTP
 from request import RequestOptions
 import utils
 
+VERSION = "1.1.0"
 
 ################################################################################
 class _StationRequestOptions(RequestOptions):
@@ -226,6 +227,7 @@ class _StationRequestOptions(RequestOptions):
 ################################################################################
 class FDSNStation(resource.Resource):
 	isLeaf = True
+	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, inv, restricted, maxObj, daEnabled):

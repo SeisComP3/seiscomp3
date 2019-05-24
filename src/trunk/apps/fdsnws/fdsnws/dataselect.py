@@ -36,6 +36,8 @@ from reqtrack import RequestTrackerDB
 from fastsds import SDS
 from seiscomp import mseedlite
 
+VERSION = "1.1.0"
+
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
 
@@ -359,6 +361,7 @@ class FDSNDataSelectAuthRealm(object):
 class FDSNDataSelect(resource.Resource):
 
 	isLeaf = True
+	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, inv, bufferSize, access=None, user=None):
@@ -539,10 +542,12 @@ class FDSNDataSelect(resource.Resource):
 			for net in self._networkIter(s):
 				netRestricted = utils.isRestricted(net)
 				if not tracker and netRestricted and not self.__user:
+					forbidden = forbidden or (forbidden is None)
 					continue
 				for sta in self._stationIter(net, s):
 					staRestricted = utils.isRestricted(sta)
 					if not tracker and staRestricted and not self.__user:
+						forbidden = forbidden or (forbidden is None)
 						continue
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):

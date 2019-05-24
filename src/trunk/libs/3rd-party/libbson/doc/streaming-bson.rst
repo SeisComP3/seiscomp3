@@ -8,12 +8,12 @@ Streaming BSON
 Reading from a BSON Stream
 --------------------------
 
-:symbol:`bson_reader_t` provides a convenient API to read sequential BSON documents from a file-descriptor or memory buffer. The :symbol:`bson_reader_read()` function will read forward in the underlying stream and returna :symbol:`bson_t` that can be inspected and iterated upon.
+:symbol:`bson_reader_t` provides a convenient API to read sequential BSON documents from a file-descriptor or memory buffer. The :symbol:`bson_reader_read()` function will read forward in the underlying stream and return a :symbol:`bson_t` that can be inspected and iterated upon.
 
 .. code-block:: c
 
   #include <stdio.h>
-  #include <bson.h>
+  #include <bson/bson.h>
 
   int
   main (int argc, char *argv[])
@@ -59,7 +59,7 @@ This could also be useful if you want to write to a network packet while seriali
 .. code-block:: c
 
   #include <stdio.h>
-  #include <bson.h>
+  #include <bson/bson.h>
   #include <assert.h>
 
   int

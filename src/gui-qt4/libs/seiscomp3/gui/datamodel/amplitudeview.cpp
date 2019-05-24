@@ -768,7 +768,7 @@ Stream* findConfiguredStream(Station *station, const Seiscomp::Core::Time &time)
 					try {
 						ps = DataModel::ParameterSet::Find(setup->parameterSetID());
 					}
-					catch ( Core::ValueException ) {
+					catch ( Core::ValueException & ) {
 						continue;
 					}
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scxmlmerge" category="Utilities">
+		<description>Merge the content of multiple XML files in SC3ML format.
+		</description>
+		<command-line>
+			<synopsis>
+				scxmlmerge [options] inputFiles
+			</synopsis>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+			</group>
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#print-component</optionReference>
+				<optionReference>verbosity#print-context</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#trace</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			<group name="Options">
+				<option long-flag="event" argument="E">
+					<description>
+					Include Event Parameters
+					</description>
+				</option>
+				<option long-flag="inventory" argument="I">
+					<description>
+					Include Inventory
+					</description>
+				</option>
+				<option long-flag="config" argument="C">
+					<description>
+					Include Config
+					</description>
+				</option>
+				<option long-flag="routing" argument="R">
+					<description>
+					Include Routing
+					</description>
+				</option>
+				<option long-flag="quality" argument="Q">
+					<description>
+					Include QualityControl
+					</description>
+				</option>
+				<option long-flag="availability" argument="Y">
+					<description>
+					Include DataAvailability
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>
