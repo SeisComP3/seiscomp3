@@ -36,6 +36,7 @@ import utils
 
 
 DBMaxUInt = 18446744073709551615 # 2^64 - 1
+VERSION = "0.1.0"
 
 ################################################################################
 class _AvailabilityRequestOptions(RequestOptions):
@@ -143,6 +144,7 @@ class _AvailabilityRequestOptions(RequestOptions):
 ################################################################################
 class _Availability(resource.Resource):
 	isLeaf = True
+	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self):

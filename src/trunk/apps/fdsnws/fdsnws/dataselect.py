@@ -36,6 +36,8 @@ from reqtrack import RequestTrackerDB
 from fastsds import SDS
 from seiscomp import mseedlite
 
+VERSION = "1.1.0"
+
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
 
@@ -359,6 +361,7 @@ class FDSNDataSelectAuthRealm(object):
 class FDSNDataSelect(resource.Resource):
 
 	isLeaf = True
+	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, inv, bufferSize, access=None, user=None):
