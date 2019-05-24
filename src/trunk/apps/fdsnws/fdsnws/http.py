@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 
 ################################################################################
 class HTTP:
@@ -108,8 +108,13 @@ class ServiceVersion(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
+	def __init__(self, version):
+		self.version = version
+
+
+	#---------------------------------------------------------------------------
 	def render(self, request):
-		return VERSION
+		return self.version
 
 
 ################################################################################

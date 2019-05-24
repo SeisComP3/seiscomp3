@@ -757,9 +757,6 @@ class FDSNWS(Application):
 		prefix = ListingResource()
 		root.putChild('fdsnws', prefix)
 
-		# right now service version is shared by all services
-		serviceVersion = ServiceVersion()
-
 		# dataselect
 		if self._serveDataSelect:
 			dataselect = ListingResource()
@@ -771,7 +768,7 @@ class FDSNWS(Application):
 			msg = 'authorization for restricted time series data required'
 			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
-			dataselect1.putChild('version', serviceVersion)
+			dataselect1.putChild('version', ServiceVersion(FDSNDataSelect.version))
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
 			fileRes.childNotFound = NoResource()
 			dataselect1.putChild('application.wadl', fileRes)
@@ -801,7 +798,7 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'contributors.xml'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('contributors', fileRes)
-			event1.putChild('version', serviceVersion)
+			event1.putChild('version', ServiceVersion(FDSNEvent.version))
 			fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('application.wadl', fileRes)
@@ -820,7 +817,7 @@ class FDSNWS(Application):
 			                                       self._allowRestricted,
 			                                       self._queryObjects,
 			                                       self._daEnabled))
-			station1.putChild('version', serviceVersion)
+			station1.putChild('version', ServiceVersion(FDSNStation.version))
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
 			fileRes.childNotFound = NoResource()
 			station1.putChild('application.wadl', fileRes)
@@ -861,7 +858,7 @@ class FDSNWS(Application):
 
 			availability1.putChild('extent', AvailabilityExtent())
 			availability1.putChild('query', AvailabilityQuery())
-			availability1.putChild('version', serviceVersion)
+			availability1.putChild('version', ServiceVersion(AvailabilityExtent.version))
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
 			fileRes.childNotFound = NoResource()
 			availability1.putChild('availability.wadl', fileRes)

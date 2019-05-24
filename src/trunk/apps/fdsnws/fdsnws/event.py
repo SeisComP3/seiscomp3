@@ -40,6 +40,8 @@ import utils
 
 DBMaxUInt = 18446744073709551615 # 2^64 - 1
 
+VERSION = "1.2.0"
+
 ################################################################################
 class _EventRequestOptions(RequestOptions):
 
@@ -209,11 +211,13 @@ class _EventRequestOptions(RequestOptions):
 ################################################################################
 class FDSNEvent(resource.Resource):
 	isLeaf = True
+	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, hideAuthor = False, evaluationMode = None,
 	             eventTypeWhitelist = None, eventTypeBlacklist = None,
 	             formatList = None):
+		resource.Resource.__init__(self)
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
 		self._eventTypeWhitelist = eventTypeWhitelist
