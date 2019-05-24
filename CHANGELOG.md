@@ -23,6 +23,24 @@
   * Fix station lookup with inventories with overlapping network epochs
   * Do not use database if inventory should be read from a file
 
+* fdsnws
+
+  * Fix dataselect restricted handling with respect to station service
+
+    * Require valid user if network or station is restricted
+    * Stop iteration at network or station level if restricted flag but
+      no user is present 
+
+* fdsnws
+
+  * Fix dataselect restricted handling with respect to station service
+
+    * Require valid user if network or station is restricted
+    * Stop iteration at network or station level if restricted flag but
+      no user is present
+
+  * Implement service specific version numbers 
+
 ## Release 2018.327 patch12
 
 * scamp
