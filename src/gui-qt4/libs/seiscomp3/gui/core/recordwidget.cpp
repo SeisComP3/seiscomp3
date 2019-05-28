@@ -4718,8 +4718,14 @@ void RecordWidget::setCursorPos(const QPoint& p) {
 
 	if ( _enabled && _active ) {
 		int slot;
-		if ( _drawMode == InRows )
-			slot = p.y() * _streams.size() / height();
+		if ( _drawMode == InRows ) {
+			int visibleStreams = 0;
+			for ( int i = 0; i < _streams.size(); ++i ) {
+				if ( _streams[i] && _streams[i]->visible )
+					visibleStreams++;
+			}
+			slot = p.y() * visibleStreams / height();
+		}
 		else
 			slot = _currentSlot;
 
