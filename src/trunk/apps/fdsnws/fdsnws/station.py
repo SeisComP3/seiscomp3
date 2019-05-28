@@ -30,7 +30,7 @@ from seiscomp3.Client import Application
 from seiscomp3.Core import Time
 from seiscomp3.IO import Exporter, ExportObjectList
 
-from http import HTTP
+from http import BaseResource
 from request import RequestOptions
 import utils
 
@@ -225,13 +225,12 @@ class _StationRequestOptions(RequestOptions):
 
 
 ################################################################################
-class FDSNStation(resource.Resource):
+class FDSNStation(BaseResource):
 	isLeaf = True
-	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, inv, restricted, maxObj, daEnabled):
-		resource.Resource.__init__(self)
+		BaseResource.__init__(self, VERSION)
 		self._inv = inv
 		self._allowRestricted = restricted
 		self._maxObj = maxObj
@@ -264,7 +263,7 @@ class FDSNStation(resource.Resource):
 			ro.streams.append(ro)
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._prepareRequest(req, ro)
 
@@ -278,7 +277,7 @@ class FDSNStation(resource.Resource):
 			ro.parse()
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._prepareRequest(req, ro)
 
@@ -287,15 +286,15 @@ class FDSNStation(resource.Resource):
 	def _prepareRequest(self, req, ro):
 		if ro.availability and not self._daEnabled:
 			msg = "including of availability information not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.updatedAfter:
 			msg = "filtering based on update time not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.matchTimeSeries and not self._daEnabled:
 			msg = "filtering based on available time series not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# load data availability if requested
 		dac = None
@@ -303,13 +302,13 @@ class FDSNStation(resource.Resource):
 			dac = Application.Instance().getDACache()
 			if dac is None or len(dac.extents()) == 0:
 				msg = "no data availabiltiy extent information found"
-				return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+				return self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
 			if ro.includeRes:
 				msg = "response level output not available in text format"
-				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+				return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 			req.setHeader('Content-Type', 'text/plain')
 			d = deferToThread(self._processRequestText, req, ro, dac)
 		else:
@@ -318,7 +317,7 @@ class FDSNStation(resource.Resource):
 				msg = "output format '%s' no available, export module '%s' " \
 				      "could not be loaded." % (
 				      ro.format, ro.Exporters[ro.format])
-				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+				return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 			req.setHeader('Content-Type', 'application/xml')
 			exp.setFormattedOutput(bool(ro.formatted))
@@ -362,7 +361,7 @@ class FDSNStation(resource.Resource):
 					return False
 				if skipRestricted and utils.isRestricted(sta):
 					continue
-				if not HTTP.checkObjects(req, objCount, self._maxObj):
+				if not self.checkObjects(req, objCount, self._maxObj):
 					return False
 
 				if ro.includeCha:
@@ -374,7 +373,7 @@ class FDSNStation(resource.Resource):
 						chaCount += numCha
 						extCount += len(e)
 						objCount += numLoc + numCha + extCount
-						if not HTTP.checkObjects(req, objCount, self._maxObj):
+						if not self.checkObjects(req, objCount, self._maxObj):
 							return False
 						dataloggers |= d
 						sensors |= s
@@ -401,7 +400,7 @@ class FDSNStation(resource.Resource):
 		# Return 204 if no matching inventory was found
 		if newInv.networkCount() == 0:
 			msg = "no matching inventory found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return True
@@ -603,7 +602,7 @@ class FDSNStation(resource.Resource):
 		# Return 204 if no matching inventory was found
 		if len(lines) == 0:
 			msg = "no matching inventory found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return False
@@ -718,7 +717,7 @@ class FDSNStation(resource.Resource):
 
 		objCount += newInv.dataloggerCount() + decCount
 		resCount = len(responses)
-		if not HTTP.checkObjects(req, objCount + resCount, maxObj):
+		if not self.checkObjects(req, objCount + resCount, maxObj):
 			return None
 
 		# sensor
@@ -740,7 +739,7 @@ class FDSNStation(resource.Resource):
 
 		objCount += newInv.sensorCount()
 		resCount = len(responses)
-		if not HTTP.checkObjects(req, objCount + resCount, maxObj):
+		if not self.checkObjects(req, objCount + resCount, maxObj):
 			return None
 
 		# responses

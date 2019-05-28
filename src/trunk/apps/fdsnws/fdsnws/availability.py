@@ -29,7 +29,7 @@ from seiscomp3 import DataModel, IO, Logging
 from seiscomp3.Client import Application
 from seiscomp3.Core import Time
 
-from http import HTTP
+from http import BaseResource
 from request import RequestOptions
 
 import utils
@@ -142,13 +142,12 @@ class _AvailabilityRequestOptions(RequestOptions):
 
 
 ################################################################################
-class _Availability(resource.Resource):
+class _Availability(BaseResource):
 	isLeaf = True
-	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self):
-		resource.Resource.__init__(self)
+		BaseResource.__init__(self, VERSION)
 
 
 	#---------------------------------------------------------------------------
@@ -170,7 +169,7 @@ class _Availability(resource.Resource):
 			ro.streams.append(ro)
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._prepareRequest(req, ro)
 
@@ -184,7 +183,7 @@ class _Availability(resource.Resource):
 			ro.parse()
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._prepareRequest(req, ro)
 
@@ -737,7 +736,7 @@ class AvailabilityExtent(_Availability):
 		# Return 204 if no matching availability information was found
 		if len(lines) == 0:
 			msg = "no matching availabilty information found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return True
@@ -1276,7 +1275,7 @@ class AvailabilityQuery(_Availability):
 			      'Rejected extents: {{{0}}}. This limitation may be ' \
 			      'resolved in a future version of this webservice.' \
 			      .format(extents)
-			data = HTTP.renderErrorPage(req, http.REQUEST_ENTITY_TOO_LARGE,
+			data = self.renderErrorPage(req, http.REQUEST_ENTITY_TOO_LARGE,
 			                            msg, ro)
 			if data:
 				utils.writeTS(req, data)
@@ -1285,7 +1284,7 @@ class AvailabilityQuery(_Availability):
 			parentOIDs.append(idList)
 		else:
 			msg = "no matching availabilty information found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return False
@@ -1293,7 +1292,7 @@ class AvailabilityQuery(_Availability):
 		db = IO.DatabaseInterface.Open(Application.Instance().databaseURI())
 		if db is None:
 			msg = "could not connect to database"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return self.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
 		lines = self._lineIter(db, parentOIDs, req, ro, dac.extentsOID())
 
@@ -1302,7 +1301,7 @@ class AvailabilityQuery(_Availability):
 		# Return 204 if no matching availability information was found
 		if segCount <= 0:
 			msg = "no matching availabilty information found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return True

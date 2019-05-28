@@ -36,9 +36,13 @@ except ImportError, e:
 
 from seiscomp3.fdsnws import utils
 from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, FDSNDataSelectAuthRealm
+from seiscomp3.fdsnws.dataselect import VERSION as DataSelectVersion
 from seiscomp3.fdsnws.event import FDSNEvent
+from seiscomp3.fdsnws.event import VERSION as EventVersion
 from seiscomp3.fdsnws.station import FDSNStation
+from seiscomp3.fdsnws.station import VERSION as StationVersion
 from seiscomp3.fdsnws.availability import AvailabilityExtent, AvailabilityQuery
+from seiscomp3.fdsnws.availability import VERSION as AvailabilityVersion
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
                                   Site, ServiceVersion, AuthResource
 from seiscomp3.fdsnws.log import Log
@@ -759,32 +763,34 @@ class FDSNWS(Application):
 
 		# dataselect
 		if self._serveDataSelect:
-			dataselect = ListingResource()
+			dataselect = ListingResource(DataSelectVersion)
 			prefix.putChild('dataselect', dataselect)
-			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
+			lstFile = os.path.join(shareDir, 'dataselect.html')
+			dataselect1 = DirectoryResource(lstFile, DataSelectVersion)
 			dataselect.putChild('1', dataselect1)
 
 			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._recordBulkSize))
 			msg = 'authorization for restricted time series data required'
 			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
-			dataselect1.putChild('version', ServiceVersion(FDSNDataSelect.version))
+			dataselect1.putChild('version', ServiceVersion(DataSelectVersion))
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(DataSelectVersion)
 			dataselect1.putChild('application.wadl', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'dataselect-builder.html'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(DataSelectVersion)
 			dataselect1.putChild('builder', fileRes)
 
 			if self._authEnabled:
-				dataselect1.putChild('auth', AuthResource(self._authGnupgHome,
-				                     self._userdb))
+				dataselect1.putChild('auth', AuthResource(
+				    DataSelectVersion, self._authGnupgHome, self._userdb))
 
 		# event
 		if self._serveEvent:
-			event = ListingResource()
+			event = ListingResource(EventVersion)
 			prefix.putChild('event', event)
-			event1 = DirectoryResource(os.path.join(shareDir, 'event.html'))
+			lstFile = os.path.join(shareDir, 'event.html')
+			event1 = DirectoryResource(lstFile, EventVersion)
 			event.putChild('1', event1)
 
 			event1.putChild('query', FDSNEvent(self._hideAuthor,
@@ -793,36 +799,37 @@ class FDSNWS(Application):
 			                                   self._eventTypeBlacklist,
 			                                   self._eventFormats))
 			fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(EventVersion)
 			event1.putChild('catalogs', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'contributors.xml'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(EventVersion)
 			event1.putChild('contributors', fileRes)
-			event1.putChild('version', ServiceVersion(FDSNEvent.version))
+			event1.putChild('version', ServiceVersion(EventVersion))
 			fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(EventVersion)
 			event1.putChild('application.wadl', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(EventVersion)
 			event1.putChild('builder', fileRes)
 
 		# station
 		if self._serveStation:
-			station = ListingResource()
+			station = ListingResource(StationVersion)
 			prefix.putChild('station', station)
-			station1 = DirectoryResource(os.path.join(shareDir, 'station.html'))
+			lstFile = os.path.join(shareDir, 'station.html')
+			station1 = DirectoryResource(lstFile, StationVersion)
 			station.putChild('1', station1)
 
 			station1.putChild('query', FDSNStation(stationInv,
 			                                       self._allowRestricted,
 			                                       self._queryObjects,
 			                                       self._daEnabled))
-			station1.putChild('version', ServiceVersion(FDSNStation.version))
+			station1.putChild('version', ServiceVersion(StationVersion))
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(StationVersion)
 			station1.putChild('application.wadl', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(StationVersion)
 			station1.putChild('builder', fileRes)
 
 		# availability
@@ -851,22 +858,23 @@ class FDSNWS(Application):
 
 			ext = ListingResource()
 			prefix.putChild('ext', ext)
-			availability = ListingResource()
+			availability = ListingResource(AvailabilityVersion)
 			ext.putChild('availability', availability)
-			availability1 = DirectoryResource(os.path.join(shareDir, 'availability.html'))
+			lstFile = os.path.join(shareDir, 'availability.html')
+			availability1 = DirectoryResource(lstFile, AvailabilityVersion)
 			availability.putChild('1', availability1)
 
 			availability1.putChild('extent', AvailabilityExtent())
 			availability1.putChild('query', AvailabilityQuery())
-			availability1.putChild('version', ServiceVersion(AvailabilityExtent.version))
+			availability1.putChild('version', ServiceVersion(AvailabilityVersion))
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(AvailabilityVersion)
 			availability1.putChild('availability.wadl', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'availability-extent-builder.html'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(AvailabilityVersion)
 			availability1.putChild('builder-extent', fileRes)
 			fileRes = static.File(os.path.join(shareDir, 'availability-builder.html'))
-			fileRes.childNotFound = NoResource()
+			fileRes.childNotFound = NoResource(AvailabilityVersion)
 			availability1.putChild('builder', fileRes)
 
 
