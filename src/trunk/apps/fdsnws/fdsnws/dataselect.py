@@ -25,7 +25,7 @@ from seiscomp3.Client import Application
 from seiscomp3.Core import Array, Record, Time
 from seiscomp3.IO import RecordInput, RecordStream
 
-from http import HTTP
+from http import HTTP, BaseResource
 from request import RequestOptions
 import utils
 
@@ -261,7 +261,8 @@ class _WaveformProducer(object):
 	def _finish(self):
 		if self.written == 0:
 			msg = "no waveform data found"
-			errorpage = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
+			errorpage = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg,
+			                                 VERSION, self.ro)
 
 			if errorpage:
 				self.req.write(errorpage)
@@ -358,14 +359,12 @@ class FDSNDataSelectAuthRealm(object):
 
 
 ################################################################################
-class FDSNDataSelect(resource.Resource):
-
+class FDSNDataSelect(BaseResource):
 	isLeaf = True
-	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, inv, bufferSize, access=None, user=None):
-		resource.Resource.__init__(self)
+		BaseResource.__init__(self, VERSION)
 		self._rsURL = Application.Instance().recordStreamURL()
 		self.__inv = inv
 		self.__access = access
@@ -394,7 +393,7 @@ class FDSNDataSelect(resource.Resource):
 			ro.streams.append(ro)
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._processRequest(req, ro)
 
@@ -409,7 +408,7 @@ class FDSNDataSelect(resource.Resource):
 			ro.parse()
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		return self._processRequest(req, ro)
 
@@ -495,15 +494,15 @@ class FDSNDataSelect(resource.Resource):
 
 		if ro.quality != 'B' and ro.quality != 'M':
 			msg = "quality other than 'B' or 'M' not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.minimumLength:
 			msg = "enforcing of minimum record length not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if ro.longestOnly:
 			msg = "limitation to longest segment not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		app = Application.Instance()
 		ro._checkTimes(app._realtimeGap)
@@ -602,7 +601,7 @@ class FDSNDataSelect(resource.Resource):
 								if samples > maxSamples:
 									msg = "maximum number of %sM samples " \
 									      "exceeded" % str(app._samplesM)
-									return HTTP.renderErrorPage(req,
+									return self.renderErrorPage(req,
 									       http.REQUEST_ENTITY_TOO_LARGE, msg,
 									       ro)
 
@@ -621,7 +620,7 @@ class FDSNDataSelect(resource.Resource):
 				tracker.request_status("END", "")
 
 			msg = "access denied"
-			return HTTP.renderErrorPage(req, http.FORBIDDEN, msg, ro)
+			return self.renderErrorPage(req, http.FORBIDDEN, msg, ro)
 
 		elif forbidden is None:
 			if tracker:
@@ -629,7 +628,7 @@ class FDSNDataSelect(resource.Resource):
 				tracker.request_status("END", "")
 
 			msg = "no metadata found"
-			return HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			return self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix.replace("%time",
