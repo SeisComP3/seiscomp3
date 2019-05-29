@@ -4,6 +4,16 @@
 
 * trunk
 
+  * sdsarchive support multiple archives to read its files from
+
+* fdsnws
+
+  * Add service specific version string to error messages
+
+## Release 2018.327 patch13
+
+* trunk
+
   * Add distance and depth range confguration to amplitude profiles
     in scconfig
   * Fix PostgreSQL database plugin to unescape bytea encoded data
