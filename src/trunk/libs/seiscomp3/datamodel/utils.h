@@ -65,7 +65,7 @@ char objectStatusToChar(const T *o) {
 	catch ( ... ) {}
 
 	try {
-		if ( o->evaluationMode() == 'M' )
+		if ( o->evaluationMode() == DataModel::MANUAL )
 			return 'M';
 	}
 	catch ( ... ) {}
