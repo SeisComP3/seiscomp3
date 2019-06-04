@@ -10,6 +10,11 @@
 
   * Add service specific version string to error messages
 
+* scmag
+
+  * Add ```--warning``` flag to output a warning for standard deviations of
+    network magnitudes exceeding the provided value.
+
 ## Release 2018.327 patch13
 
 * trunk

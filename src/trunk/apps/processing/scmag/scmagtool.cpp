@@ -65,6 +65,9 @@ class MagToolApp : public Seiscomp::Client::Application {
 			                        &_epFile);
 			commandline().addOption("Input", "reprocess", "Reprocess also station and network magnitudes with an evaluation status. Only used with --ep.");
 
+			commandline().addGroup("Process");
+			commandline().addOption("Process", "warning", "Output a warning for standard deviations of network magnitudes exceeding the provided value.",
+			                        &_warningLevel);
 			commandline().addGroup("Reprocess");
 			commandline().addOption("Reprocess", "static", "Do not create new station or new network magnitudes just update them. Considers the associated amplitudes. Weights of station magnitudes will be changed according to the accumulation function of the network magnitude.");
 			commandline().addOption("Reprocess", "keep-weights", "Reuse the original weights in combintation with --static.");
@@ -337,7 +340,8 @@ class MagToolApp : public Seiscomp::Client::Application {
 			_magtool.init(_magTypes, _expiry,
 			              commandline().hasOption("reprocess"),
 			              commandline().hasOption("static"),
-			              commandline().hasOption("keep-weights"));
+			              commandline().hasOption("keep-weights"),
+			              _warningLevel);
 
 			if ( _interval > 0 )
 				enableTimer(_interval);
@@ -489,6 +493,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 		MagTool _magtool;
 
 		std::string _epFile;
+		double _warningLevel = -1;
 };
 
 
