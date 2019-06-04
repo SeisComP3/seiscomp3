@@ -176,6 +176,7 @@ MagTool::MagTool() {
 	_allowReprocessing = false;
 	_staticUpdate = false;
 	_keepWeights = false;
+	_warningLevel = -1;
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
@@ -287,7 +288,7 @@ void MagTool::setMinimumArrivalWeight(double w) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
-                   bool allowReprocessing, bool staticUpdate, bool keepWeights) {
+                   bool allowReprocessing, bool staticUpdate, bool keepWeights, double warningLevel) {
 	_cacheSize = expiry;
 	_objectCache.setDatabaseArchive(SCCoreApp->query());
 	_objectCache.setTimeSpan(_cacheSize);
@@ -297,6 +298,7 @@ bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
 	_allowReprocessing = allowReprocessing;
 	_staticUpdate = staticUpdate;
 	_keepWeights = keepWeights;
+	_warningLevel = warningLevel;
 
 	MagnitudeTypeList *services = MagnitudeProcessorFactory::Services();
 
@@ -1613,6 +1615,14 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			}
 			else if ( !computeAverage(averageMethod, mv, weights, methodID, val, stdev) )
 				return false;
+
+			if ( stdev > _warningLevel ) {
+				string mID = "mean with preset weights";
+				if ( !_keepWeights )
+					mID = methodID;
+				SEISCOMP_WARNING("Exceedence of warning level - magnitude type: %s method: %s value: %.2f stdev: %.2f",
+				                 netMag->type().c_str(), mID.c_str(), val, stdev);
+			}
 
 			netMag->setMagnitude(DataModel::RealQuantity(val, stdev, Core::None, Core::None, Core::None));
 			netMag->setMethodID(methodID);
