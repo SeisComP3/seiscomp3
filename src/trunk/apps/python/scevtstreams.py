@@ -15,6 +15,71 @@
 import sys, traceback
 import seiscomp3.Client
 
+def readXML(self):
+
+  pickIDs = set()
+  picks = []
+
+  try:
+    if self.inputFormat == "xml":
+      ar = seiscomp3.IO.XMLArchive()
+    elif self.inputFormat == "zxml":
+      ar = seiscomp3.IO.XMLArchive()
+      ar.setCompression(True)
+    elif self.inputFormat == "binary":
+      ar = seiscomp3.IO.VBinaryArchive()
+    else:
+      raise TypeError, "unknown input format '" + inputFormat + "'"
+
+    if ar.open(self.inputFile) == False:
+      raise IOError, self.inputFile + ": unable to open"
+
+    obj = ar.readObject()
+    if obj is None:
+      raise TypeError, self.inputFile + ": invalid format"
+
+    ep = seiscomp3.DataModel.EventParameters.Cast(obj)
+    if ep is None:
+      raise TypeError, self.inputFile + ": no eventparameters found"
+
+    if ep.eventCount() <= 0:
+      if ep.originCount() <= 0:
+        raise TypeError, self.inputFile + ": no origin and no event in eventparameters found"
+    else:
+      if ep.eventCount() > 1:
+        if not self.event:
+          sys.stderr.write("\nERROR: input contains more than 1 event. Considering only first event\n")
+
+      for i in xrange(ep.eventCount()):
+        ev = ep.event(i)
+        if self.eventID:
+          if self.eventID != ev.publicID():
+            # sys.stderr.write("Ignoring event ID" + ev.publicID() + "\n")
+            continue
+
+        # sys.stderr.write("Working on event ID" + ev.publicID() + "\n")
+        for iorg in xrange(ev.originReferenceCount()):
+           org = seiscomp3.DataModel.Origin.Find(ev.originReference(iorg).originID())
+           if org is None:
+             continue
+#           sys.stderr.write("Working on origin" + org.publicID() + "\n")
+
+           for iarrival in xrange(org.arrivalCount()):
+             pickID = org.arrival(iarrival).pickID()
+             pickIDs.add(pickID)
+
+        for pickID in pickIDs:
+          pick = seiscomp3.DataModel.Pick.Find(pickID)
+          picks.append(pick)
+
+        break
+
+  except Exception, exc:
+    sys.stderr.write("ERROR: " + str(exc) + "\n")
+    return False
+
+  return picks
+
 class EventStreams(seiscomp3.Client.Application):
   def __init__(self, argc, argv):
     seiscomp3.Client.Application.__init__(self, argc, argv)
@@ -24,6 +89,7 @@ class EventStreams(seiscomp3.Client.Application):
     self.setDaemonEnabled(False)
 
     self.eventID = None
+    self.inputFile = None
     self.margin = 300
 
     self.allComponents = True
@@ -33,15 +99,20 @@ class EventStreams(seiscomp3.Client.Application):
 
 
   def createCommandLineDescription(self):
+    self.commandline().addGroup("Input")
+    self.commandline().addStringOption("Input", "input,i", "input XML file name. Overwrites reading from database.")
+    self.commandline().addStringOption("Input", "format,f", "input format to use (xml [default], zxml (zipped xml), binary). "\
+                                       "Only relevant with --input.")
+
     self.commandline().addGroup("Dump")
     self.commandline().addStringOption("Dump", "event,E", "event id")
     self.commandline().addIntOption("Dump", "margin,m", "time margin around the picked timewindow, default is 300")
     self.commandline().addStringOption("Dump", "streams,S", "comma separated list of streams per station to add, e.g. BH,SH,HH")
-    self.commandline().addOption("Dump", "all-streams", "dump all streams. If unused just streams with picks are dumped.")
+    self.commandline().addOption("Dump", "all-streams", "dump all streams. If unused, just streams with picks are dumped.")
     self.commandline().addIntOption("Dump", "all-components,C", "all components or just the picked one, default is True")
     self.commandline().addIntOption("Dump", "all-locations,L", "all components or just the picked one, default is True")
-    self.commandline().addOption("Dump", "all-stations", "dump all stations from the same network. If unused just stations with picks are dumped.")
-    self.commandline().addOption("Dump", "all-networks", "dump all networks. If unused just networks with picks are dumped. "\
+    self.commandline().addOption("Dump", "all-stations", "dump all stations from the same network. If unused, just stations with picks are dumped.")
+    self.commandline().addOption("Dump", "all-networks", "dump all networks. If unused, just networks with picks are dumped. "\
                                             "This option implies all-stations, all-locations, all-streams, all-components "\
                                             "and will only provide the time window.")
     self.commandline().addOption("Dump", "resolve-wildcards,R", "if all components are used, use inventory to resolve stream components instead of using '?' (important when Arclink should be used)")
@@ -51,16 +122,26 @@ class EventStreams(seiscomp3.Client.Application):
   def validateParameters(self):
     if self.commandline().hasOption("resolve-wildcards"):
       self.setLoadStationsEnabled(True)
+
+    try: self.inputFile = self.commandline().optionString("input")
+    except: pass
+
+    if self.inputFile:
+      self.setDatabaseEnabled(False, False)
+
     return True
 
   def init(self):
     try:
       if not seiscomp3.Client.Application.init(self): return False
 
+      try: self.inputFormat = self.commandline().optionString("format")
+      except: self.inputFormat = "xml"
+
       try:
         self.eventID = self.commandline().optionString("event")
       except:
-        sys.stderr.write("An eventID is mandatory")
+        sys.stderr.write("Error: An eventID is mandatory\n")
         return False
 
       try:
@@ -111,11 +192,24 @@ class EventStreams(seiscomp3.Client.Application):
 
       resolveWildcards = self.commandline().hasOption("resolve-wildcards")
 
-      for obj in self.query().getEventPicks(self.eventID):
-        pick = seiscomp3.DataModel.Pick.Cast(obj)
-        if pick is None: continue
-        picks.append(pick)
+      if self.inputFile == None:
+        # sys.stderr.write("Reading from database\n")
+        for obj in self.query().getEventPicks(self.eventID):
+          pick = seiscomp3.DataModel.Pick.Cast(obj)
+          if pick is None: continue
+          picks.append(pick)
+      else:
+        # sys.stderr.write("Reading from XML input. Ignoring events in database\n")
+        picks = readXML(self)
 
+      if not picks:
+        sys.stderr.write("Could not find picks for event " + self.eventID)
+        if self.inputFile == None:
+          sys.stderr.write("in database\n")
+        else:
+          sys.stderr.write("in input file " + self.inputFile + "\n")
+
+      for pick in picks:
         if minTime is None: minTime = pick.time().value()
         elif minTime > pick.time().value(): minTime = pick.time().value()
 

@@ -34,6 +34,20 @@
 				<optionReference>database#db-disable</optionReference>
 			</group>
 
+			<group name="Input">
+				<option flag="i" long-flag="input" argument="arg">
+					<description>
+					Input XML file name. Overwrites reading from database.
+					</description>
+				</option>
+				<option flag="f" long-flag="format" argument="arg">
+					<description>
+					Input format to use (xml [default], zxml (zipped xml), binary).
+					Only relevant with --input.
+					</description>
+				</option>
+			</group>
+
 			<group name="Dump">
 				<option flag="E" long-flag="event" argument="arg">
 					<description>Specifies the event id.</description>
@@ -56,6 +70,29 @@
 				<option flag="L" long-flag="all-locations" argument="flag">
 					<description>
 					Specifies whether to use all location codes (0) or just the picked one (1), default 1.
+					</description>
+				</option>
+				<option flag="" long-flag="all-stations" argument="flag">
+					<description>
+					Dump all stations from the same network. If unused, just stations with picks are dumped.
+					</description>
+				</option>
+				<option flag="" long-flag="all-networks" argument="flag">
+					<description>
+					Dump all networks. If unused, just networks with picks are
+					dumped. This option implies all-stations, all-locations,
+					all-streams, all-components and will only provide the time window.
+					</description>
+				</option>
+				<option flag="R" long-flag="resolve-wildcards" argument="flag">
+					<description>
+					If all components are used, use inventory to resolve stream
+					components instead of using '?' (important when Arclink should be used).
+					</description>
+				</option>
+				<option flag="" long-flag="caps" argument="flag">
+					<description>
+					Dump in capstool format (Common Acquisition Protocol Server by gempa GmbH)
 					</description>
 				</option>
 			</group>
