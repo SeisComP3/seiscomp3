@@ -10,6 +10,11 @@
 
   * Add service specific version string to error messages
 
+* scevtstreams
+
+  * Add ```--input``` and ```--format``` options to read event parameters 
+    from file
+
 * scmag
 
   * Add ```--warning``` flag to output a warning for standard deviations of
