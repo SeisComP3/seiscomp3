@@ -17,22 +17,23 @@ Examples
 
       scevtstreams -E gfz2012abcd -d mysql://sysop:sysop@localhost/seiscomp3
 
-#. Get the time windows for an event in an XML file:
+#. Get the asymetric time windows for an event in an XML file. The time window
+   starts 120 s before the first pick and ends 500 s after the last pick:
 
    .. code-block:: sh
 
-      scevtstreams -i event.xml
+      scevtstreams -E gfz2012abcd -i event.xml -m 120,500
 
 #. Create a playback of an event with a time window of 5 minutes data and sort the records by end time:
 
    .. code-block:: sh
 
-      scevtstreams -E gfz2012abcd -d mysql://sysop:sysop@localhost/seiscomp3 -L 0 -m 300 |\
+      scevtstreams -E gfz2012abcd -d mysql://sysop:sysop@localhost/seiscomp3 -m 300 |\
       scart -dsvE --list - ~/seiscomp3/acquisition/archive > gfz2012abcd-sorted.mseed
 
 #. Download waveforms from Arclink and import into local archive. Include all stations from the contributing networks:
 
    .. code-block:: sh
 
-      scevtstreams -E gfz2012abcd -d mysql://sysop:sysop@localhost/seiscomp3 -L 0 -m 300 -R --all-stations |\
+      scevtstreams -E gfz2012abcd -d mysql://sysop:sysop@localhost/seiscomp3 -m 300 -R --all-stations |\
       scart --list - ./my-archive
