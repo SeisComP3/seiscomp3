@@ -206,7 +206,7 @@ class ItemWidget : public QWidget {
 
 		void resizeEvent(QResizeEvent *event) {
 			for ( int i = 0; i < _owner->rowCount(); ++i )
-				_owner->itemAt(i)->setFixedWidth(event->size().width());
+				_owner->itemAt(i)->setFixedWidth(width());
 		}
 
 	private:
@@ -621,7 +621,7 @@ void RecordView::setRowHeight(int h, bool allowStretch) {
 		}
 	}
 
-	foreach (RecordViewItem* item, _rows) {
+	foreach ( RecordViewItem* item, _rows ) {
 		item->widget()->setDirty();
 		item->setRowHeight(rowHeight() + stretch);
 
@@ -705,7 +705,7 @@ void RecordView::layoutRows() {
 
 	setUpdatesEnabled(false);
 
-	foreach (RecordViewItem* item, _rows) {
+	foreach ( RecordViewItem* item, _rows ) {
 		if ( item->isHidden() ) continue;
 
 		if ( item->pos().y() != pos )
