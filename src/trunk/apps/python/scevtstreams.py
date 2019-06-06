@@ -90,13 +90,14 @@ class EventStreams(seiscomp3.Client.Application):
 
     self.eventID = None
     self.inputFile = None
-    self.margin = 300
+    self.margin = [300]
 
     self.allComponents = True
     self.allLocations = True
 
     self.streams = []
 
+    self.caps = False
 
   def createCommandLineDescription(self):
     self.commandline().addGroup("Input")
@@ -106,11 +107,11 @@ class EventStreams(seiscomp3.Client.Application):
 
     self.commandline().addGroup("Dump")
     self.commandline().addStringOption("Dump", "event,E", "event id")
-    self.commandline().addIntOption("Dump", "margin,m", "time margin around the picked timewindow, default is 300")
+    self.commandline().addStringOption("Dump", "margin,m", "time margin around the picked time window, default is 300. Added before the first and after the last pick, respectively. Use 2 comma-separted values (before,after) for asymmetric margins, e.g. -m 120,300.")
     self.commandline().addStringOption("Dump", "streams,S", "comma separated list of streams per station to add, e.g. BH,SH,HH")
     self.commandline().addOption("Dump", "all-streams", "dump all streams. If unused, just streams with picks are dumped.")
-    self.commandline().addIntOption("Dump", "all-components,C", "all components or just the picked one, default is True")
-    self.commandline().addIntOption("Dump", "all-locations,L", "all components or just the picked one, default is True")
+    self.commandline().addIntOption("Dump", "all-components,C", "all components or just the picked ones (0). Default is 1")
+    self.commandline().addIntOption("Dump", "all-locations,L", "all locations or just the picked ones (0). Default is 1")
     self.commandline().addOption("Dump", "all-stations", "dump all stations from the same network. If unused, just stations with picks are dumped.")
     self.commandline().addOption("Dump", "all-networks", "dump all networks. If unused, just networks with picks are dumped. "\
                                             "This option implies all-stations, all-locations, all-streams, all-components "\
@@ -145,7 +146,7 @@ class EventStreams(seiscomp3.Client.Application):
         return False
 
       try:
-        self.margin = self.commandline().optionInt("margin")
+        self.margin = self.commandline().optionString("margin").split(",")
       except: pass
 
       try:
@@ -153,13 +154,16 @@ class EventStreams(seiscomp3.Client.Application):
       except: pass
 
       try:
+        self.allComponents = self.commandline().optionInt("all-components") != 0
+      except: pass
+
+      try:
         self.allStreams = self.commandline().hasOption("all-streams")
       except: pass
 
       try:
-        self.allComponents = self.commandline().optionInt("all-components") != 0
+        self.allLocations = self.commandline().optionInt("all-locations") != 0
       except: pass
-
       try:
         self.allStations = self.commandline().hasOption("all-stations")
       except: pass
@@ -169,11 +173,7 @@ class EventStreams(seiscomp3.Client.Application):
       except: pass
 
       try:
-        self.allLocations = self.commandline().optionInt("all-locations") != 0
-      except: pass
-
-      try:
-        self.caps = self.commandline().hasOption("caps") != 0
+        self.caps = self.commandline().hasOption("caps")
       except: pass
 
       return True
@@ -189,6 +189,9 @@ class EventStreams(seiscomp3.Client.Application):
       picks = []
       minTime = None
       maxTime = None
+
+      self.marginBefore = int(self.margin[0])
+      self.marginAfter = int(self.margin[-1])
 
       resolveWildcards = self.commandline().hasOption("resolve-wildcards")
 
@@ -216,13 +219,15 @@ class EventStreams(seiscomp3.Client.Application):
         if maxTime is None: maxTime = pick.time().value()
         elif maxTime < pick.time().value(): maxTime = pick.time().value()
 
-      if minTime: minTime = minTime - seiscomp3.Core.TimeSpan(self.margin)
-      if maxTime: maxTime = maxTime + seiscomp3.Core.TimeSpan(self.margin)
+      if minTime: minTime = minTime - seiscomp3.Core.TimeSpan(self.marginBefore)
+      if maxTime: maxTime = maxTime + seiscomp3.Core.TimeSpan(self.marginAfter)
 
       inv = seiscomp3.Client.Inventory.Instance().inventory()
 
       lines = set()
       for pick in picks:
+        net = pick.waveformID().networkCode()
+        station = pick.waveformID().stationCode()
         loc = pick.waveformID().locationCode()
         streams = [pick.waveformID().channelCode()]
         rawStream = streams[0][:2]
@@ -241,30 +246,21 @@ class EventStreams(seiscomp3.Client.Application):
             streams = [rawStream + "?"]
 
         if self.allLocations == True:
-          if self.caps:
             loc = "*"
-          else:
-            loc = ""
 
         if self.allStations:
           station = "*"
-        else:
-          station = pick.waveformID().stationCode()
 
         if self.allNetworks:
           net = "*"
           station = "*"
           loc = "*"
-        else:
-          net = pick.waveformID().networkCode()
 
         for s in streams:
-
           if self.allStreams or self.allNetworks:
             s = "*"
 
           if self.caps:
-
             line = minTime.toString("%Y,%m,%d,%H,%M,%S") + " " + maxTime.toString("%Y,%m,%d,%H,%M,%S") + " " \
                    + net + " " + station \
                    + " " + loc + " " +  s
@@ -282,7 +278,6 @@ class EventStreams(seiscomp3.Client.Application):
               s = "*"
 
             if self.caps:
-
               line = minTime.toString("%Y,%m,%d,%H,%M,%S") + " " + maxTime.toString("%Y,%m,%d,%H,%M,%S") + " " \
                      + net + " " + station + " " + loc + " " +  s  + streams[0][2]
             else:
