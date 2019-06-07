@@ -137,6 +137,7 @@ class SC_GUI_API SpectrogramRenderer {
 			Core::TimeSpan dt;
 			double         minimumFrequency;
 			double         maximumFrequency;
+			int            width;
 		};
 
 		typedef QList<SpecImage> SpecImageList;
