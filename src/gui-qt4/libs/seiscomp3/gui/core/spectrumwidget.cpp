@@ -106,16 +106,22 @@ void SpectrumWidget::updateData() {
 
 	switch ( _mode ) {
 		case Amplitude:
+		{
+			double norm = 0.5 / _freqNyquist;
 			for ( size_t i = 1; i < _spec.size(); ++i )
-				_powerSpectrum.y[i-1] = abs(_spec[i]);
+				_powerSpectrum.y[i-1] = abs(_spec[i]) * norm;
 			break;
+		}
 
 		case Power:
+		{
+			double norm = 0.5 / _freqNyquist;
 			for ( size_t i = 1; i < _spec.size(); ++i ) {
-				double v = abs(_spec[i]);
+				double v = abs(_spec[i]) * norm;
 				_powerSpectrum.y[i-1] = v*v;
 			}
 			break;
+		}
 
 		case Phase:
 			for ( size_t i = 1; i < _spec.size(); ++i )
@@ -145,25 +151,31 @@ void SpectrumWidget::updateData() {
 
 			switch ( _mode ) {
 				case Amplitude:
+				{
+					double norm = 0.5 / _freqNyquist;
 					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
 						Math::Complex r;
 						tf->evaluate(&r, 1, &px);
 						_responsePowerSpectrum.y[i-1] = abs(r);
-						_responseCorrectedPowerSpectrum.y[i-1] = abs(_spec[i] / r);
+						_responseCorrectedPowerSpectrum.y[i-1] = abs(_spec[i] / r) * norm;
 					}
 					break;
+				}
 
 				case Power:
+				{
+					double norm = 0.5 / _freqNyquist;
 					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
 						Math::Complex r;
 						tf->evaluate(&r, 1, &px);
 
 						double resp = abs(r);
-						double cresp = abs(_spec[i] / r);
+						double cresp = abs(_spec[i] / r) * norm;
 						_responsePowerSpectrum.y[i-1] = resp*resp;
 						_responseCorrectedPowerSpectrum.y[i-1] = cresp*cresp;
 					}
 					break;
+				}
 
 				case Phase:
 					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
