@@ -1287,7 +1287,7 @@ void EventEdit::addObject(const QString& parentID,
 					if ( !derived )
 						derived = Origin::Cast(_reader->getObject(Origin::TypeInfo(), derivedID));
 					if ( derived ) {
-						if ( derived->magnitudeCount() == 0 )
+						if ( derived->magnitudeCount() == 0 && _reader )
 							_reader->loadMagnitudes(derived.get());
 						storeDerivedOrigin(derived.get());
 					}
@@ -1654,7 +1654,7 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 				if ( !derived )
 					derived = Origin::Cast(_reader->getObject(Origin::TypeInfo(), derivedID));
 				if ( derived ) {
-					if ( derived->magnitudeCount() == 0 )
+					if ( derived->magnitudeCount() == 0 && _reader )
 						_reader->loadMagnitudes(derived.get());
 					storeDerivedOrigin(derived.get());
 				}
