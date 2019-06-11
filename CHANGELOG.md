@@ -2,6 +2,11 @@
 
 ## Release YYYY.ddd
 
+* sh2proc
+
+  * Add parameters parsed from Seismic Handler to SeisComP3. 
+    Thanks to Klaus Stammler for providing valuable information on Seismic Handler.
+
 * trunk
 
   * sdsarchive support multiple archives to read its files from
