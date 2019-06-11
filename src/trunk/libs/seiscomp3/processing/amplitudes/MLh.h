@@ -91,7 +91,8 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_ML2h : public AmplitudeProcessor {
 		enum CombinerProc {
 			TakeMin,
 			TakeMax,
-			TakeAverage
+			TakeAverage,
+			TakeGeometricMean
 		};
 
 		mutable AmplitudeProcessor_MLh _ampE, _ampN;

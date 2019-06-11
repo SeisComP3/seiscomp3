@@ -95,6 +95,45 @@ AmplitudeProcessor::AmplitudeTime average(
 	return t;
 }
 
+
+AmplitudeProcessor::AmplitudeValue gmean(
+	const AmplitudeProcessor::AmplitudeValue &v0,
+	const AmplitudeProcessor::AmplitudeValue &v1)
+{
+	AmplitudeProcessor::AmplitudeValue v;
+	// Average both values
+	v.value = sqrt(v0.value * v1.value);
+
+	// Compute lower and upper uncertainty
+	double v0l = v0.value;
+	double v0u = v0.value;
+	double v1l = v1.value;
+	double v1u = v1.value;
+
+	if ( v0.lowerUncertainty ) v0l -= *v0.lowerUncertainty;
+	if ( v0.upperUncertainty ) v0u += *v0.upperUncertainty;
+	if ( v1.lowerUncertainty ) v1l -= *v1.lowerUncertainty;
+	if ( v1.upperUncertainty ) v1u += *v1.upperUncertainty;
+
+	double l = 0, u = 0;
+
+	l = std::max(l, v.value - v0l);
+	l = std::max(l, v.value - v0u);
+	l = std::max(l, v.value - v1l);
+	l = std::max(l, v.value - v1u);
+
+	u = std::max(l, v0l - v.value);
+	u = std::max(l, v0u - v.value);
+	u = std::max(l, v1l - v.value);
+	u = std::max(l, v1u - v.value);
+
+	v.lowerUncertainty = l;
+	v.upperUncertainty = u;
+
+	return v;
+}
+
+
 }
 
 
@@ -217,6 +256,7 @@ AmplitudeProcessor_ML2h::capabilityParameters(Capability cap) const {
 		params.push_back("Average");
 		params.push_back("Max");
 		params.push_back("Min");
+		params.push_back("Geometric mean");
 		return params;
 	}
 
@@ -236,6 +276,10 @@ bool AmplitudeProcessor_ML2h::setParameter(Capability cap, const std::string &va
 		}
 		else if ( value == "Average" ) {
 			_combiner = TakeAverage;
+			return true;
+		}
+		else if ( value == "Geometric mean" ) {
+			_combiner = TakeGeometricMean;
 			return true;
 		}
 
@@ -263,6 +307,8 @@ bool AmplitudeProcessor_ML2h::setup(const Settings &settings) {
 			_combiner = TakeMax;
 		else if ( s == "min" )
 			_combiner = TakeMin;
+		else if ( s == "geometric_mean" )
+			_combiner = TakeGeometricMean;
 		else {
 			SEISCOMP_ERROR("%s: invalid combiner type for station %s.%s: %s",
 			               _type.c_str(),
@@ -403,6 +449,11 @@ void AmplitudeProcessor_ML2h::newAmplitude(const AmplitudeProcessor *proc,
 		switch ( _combiner ) {
 			case TakeAverage:
 				newRes.amplitude = average(_results[0]->value, _results[1]->value);
+				newRes.time = average(_results[0]->time, _results[1]->time);
+				newRes.component = Horizontal;
+				break;
+			case TakeGeometricMean:
+				newRes.amplitude = gmean(_results[0]->value, _results[1]->value);
 				newRes.time = average(_results[0]->time, _results[1]->time);
 				newRes.component = Horizontal;
 				break;
