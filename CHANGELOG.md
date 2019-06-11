@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch14
 
 * sh2proc
 
@@ -25,6 +25,10 @@
 
   * Add ```--warning``` flag to output a warning for standard deviations of
     network magnitudes exceeding the provided value.
+
+* GUI
+
+  * Fix spectrogram rendering with logarithmic scale
 
 ## Release 2018.327 patch13
 
