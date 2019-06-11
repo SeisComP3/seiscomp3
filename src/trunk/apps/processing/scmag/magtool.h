@@ -104,7 +104,7 @@ class MagTool {
 		void setMinimumArrivalWeight(double);
 
 		bool init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry,
-		          bool allowReprocessing, bool staticUpdate, bool keepWeights);
+		          bool allowReprocessing, bool staticUpdate, bool keepWeights, double warning);
 		void done();
 
 		bool feed(DataModel::Origin*);
@@ -214,6 +214,7 @@ class MagTool {
 		bool               _allowReprocessing;
 		bool               _staticUpdate;
 		bool               _keepWeights;
+		double             _warningLevel;
 		size_t             _dbAccesses;
 
 	public:

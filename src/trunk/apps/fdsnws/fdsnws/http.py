@@ -33,7 +33,7 @@ class HTTP:
 
 	#---------------------------------------------------------------------------
 	@staticmethod
-	def renderErrorPage(request, code, msg, ro=None):
+	def renderErrorPage(request, code, msg, version=VERSION, ro=None):
 		resp = """\
 Error %i: %s
 
@@ -71,7 +71,7 @@ Service Version:
 			codeStr = http.RESPONSES[code]
 			date = Core.Time.GMT().toString("%FT%T.%f")
 			response = resp % (code, codeStr, msg, reference, request.uri, date,
-			                   VERSION)
+			                   version)
 			if not noContent:
 				Logging.warning("responding with error: %i (%s)" % (
 				                code, codeStr))
@@ -82,25 +82,9 @@ Service Version:
 
 	#---------------------------------------------------------------------------
 	@staticmethod
-	def renderNotFound(request):
+	def renderNotFound(request, version=VERSION):
 		msg = "The requested resource does not exist on this server."
-		return HTTP.renderErrorPage(request, http.NOT_FOUND, msg)
-
-	#---------------------------------------------------------------------------
-	# Renders error page if the result set exceeds the configured maximum number
-	# objects
-	@staticmethod
-	def checkObjects(req, objCount, maxObj):
-		if objCount <= maxObj:
-			return True
-
-		msg = "The result set of your request exceeds the configured maximum " \
-		      "number of objects (%i). Refine your request parameters." % maxObj
-		utils.writeTS(req, HTTP.renderErrorPage(
-		              req, http.REQUEST_ENTITY_TOO_LARGE, msg))
-		return False
-
-
+		return HTTP.renderErrorPage(request, http.NOT_FOUND, msg, version)
 
 
 ################################################################################
@@ -118,11 +102,46 @@ class ServiceVersion(resource.Resource):
 
 
 ################################################################################
-class NoResource(resource.Resource):
+class BaseResource(resource.Resource):
+
+	#---------------------------------------------------------------------------
+	def __init__(self, version=VERSION):
+		resource.Resource.__init__(self)
+		self.version = version
+
+
+	#---------------------------------------------------------------------------
+	def renderErrorPage(self, request, code, msg, ro=None):
+		return HTTP.renderErrorPage(request, code, msg, self.version, ro)
+
+
+	#---------------------------------------------------------------------------
+	# Renders error page if the result set exceeds the configured maximum number
+	# objects
+	def checkObjects(self, req, objCount, maxObj):
+		if objCount <= maxObj:
+			return True
+
+		msg = "The result set of your request exceeds the configured maximum " \
+		      "number of objects (%i). Refine your request parameters." % maxObj
+		version = self.version
+		utils.writeTS(req, HTTP.renderErrorPage(
+		              req, http.REQUEST_ENTITY_TOO_LARGE, msg, version))
+		return False
+
+
+################################################################################
+class NoResource(BaseResource):
+	isLeaf = True
+
+	#---------------------------------------------------------------------------
+	def __init__(self, version=VERSION):
+		BaseResource.__init__(self, version)
+
 
 	#---------------------------------------------------------------------------
 	def render(self, request):
-		return HTTP.renderNotFound(request)
+		return HTTP.renderNotFound(request, self.version)
 
 
 	#---------------------------------------------------------------------------
@@ -131,7 +150,7 @@ class NoResource(resource.Resource):
 
 
 ################################################################################
-class ListingResource(resource.Resource):
+class ListingResource(BaseResource):
 
 	html = """<!doctype html>
 <html lang="en">
@@ -147,6 +166,11 @@ class ListingResource(resource.Resource):
 %s
   </ul>
 </body>"""
+
+	#---------------------------------------------------------------------------
+	def __init__(self, version=VERSION):
+		BaseResource.__init__(self, version)
+
 
 	#---------------------------------------------------------------------------
 	def render(self, request):
@@ -168,7 +192,7 @@ class ListingResource(resource.Resource):
 	def getChild(self, chnam, request):
 		if not chnam:
 			return self
-		return NoResource()
+		return NoResource(self.version)
 
 
 
@@ -176,9 +200,10 @@ class ListingResource(resource.Resource):
 class DirectoryResource(static.File):
 
 	#---------------------------------------------------------------------------
-	def __init__(self, fileName):
+	def __init__(self, fileName, version=VERSION):
 		static.File.__init__(self, fileName)
-		self.childNotFound = NoResource()
+		self.version = version
+		self.childNotFound = NoResource(self.version)
 
 
 	#---------------------------------------------------------------------------
@@ -192,16 +217,16 @@ class DirectoryResource(static.File):
 	def getChild(self, chnam, request):
 		if not chnam:
 			return self
-		return NoResource()
+		return NoResource(self.version)
 
 
 
 ################################################################################
-class AuthResource(resource.Resource):
+class AuthResource(BaseResource):
 	isLeaf = True
 
-	def __init__(self, gnupghome, userdb):
-		resource.Resource.__init__(self)
+	def __init__(self, version, gnupghome, userdb):
+		BaseResource.__init__(self, version)
 		self.__gpg = gnupg.GPG(gnupghome=gnupghome)
 		self.__userdb = userdb
 
@@ -215,17 +240,17 @@ class AuthResource(resource.Resource):
 		except OSError, e:
 			msg = "gpg decrypt error"
 			Logging.warning("%s: %s" % (msg, str(e)))
-			return HTTP.renderErrorPage(request, http.INTERNAL_SERVER_ERROR, msg, None)
+			return self.renderErrorPage(request, http.INTERNAL_SERVER_ERROR, msg)
 		
 		except Exception, e:
 			msg = "invalid token"
 			Logging.warning("%s: %s" % (msg, str(e)))
-			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+			return self.renderErrorPage(request, http.BAD_REQUEST, msg)
 
 		if verified.trust_level is None or verified.trust_level < verified.TRUST_FULLY:
 			msg = "token has invalid signature"
 			Logging.warning(msg)
-			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+			return self.renderErrorPage(request, http.BAD_REQUEST, msg)
 
 		try:
 			attributes = json.loads(verified.data)
@@ -236,12 +261,12 @@ class AuthResource(resource.Resource):
 		except Exception, e:
 			msg = "token has invalid validity"
 			Logging.warning("%s: %s" % (msg, str(e)))
-			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+			return self.renderErrorPage(request, http.BAD_REQUEST, msg)
 
 		if lifetime <= 0:
 			msg = "token is expired"
 			Logging.warning(msg)
-			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+			return self.renderErrorPage(request, http.BAD_REQUEST, msg)
 
 		userid = base64.urlsafe_b64encode(hashlib.sha256(verified.data).digest()[:18])
 		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600), verified.data)

@@ -340,6 +340,7 @@ void SpectrogramRenderer::renderSpectrogram() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
+#define PRE_ALLOC_WIDTH 100
 	Seiscomp::ComplexDoubleArray *data = spec->data();
 	int offset = 0;
 
@@ -359,9 +360,10 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 		img.startTime = spec->center();
 		img.dt = spec->dt();
 
-		img.data = QImage(1, nSamples, _imageFormat);
+		img.data = QImage(PRE_ALLOC_WIDTH, data->size(), _imageFormat);
+		img.width = 1;
 
-		fillRow(img.data, data, spec->maximumFrequency(), 0, offset);
+		fillRow(img, data, 0, offset);
 
 		_images.append(img);
 	}
@@ -372,7 +374,7 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 		// Do more checks on gaps and so on
 
 		double dt = (double)img.dt;
-		Core::Time currentEndTime = img.startTime + Core::TimeSpan(img.data.width()*dt);
+		Core::Time currentEndTime = img.startTime + Core::TimeSpan(img.width*dt);
 
 		bool needNewImage = (fabs((double)(newTime - currentEndTime)) > dt*0.5)
 		                 || (img.data.height() != nSamples)
@@ -382,24 +384,32 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 
 		// Gap, overlap or different meta data -> start new image
 		if ( needNewImage ) {
+			if ( img.width < img.data.width() ) {
+				// Trim image width
+				img.data = img.data.copy(0,0,img.width,img.data.height());
+			}
+
 			SpecImage newImg;
 			newImg.minimumFrequency = minFreq;
 			newImg.maximumFrequency = spec->maximumFrequency();
 			newImg.startTime = spec->center();
 			newImg.dt = spec->dt();
 
-			newImg.data = QImage(1, nSamples, _imageFormat);
-			fillRow(newImg.data, data, spec->maximumFrequency(), 0, offset);
+			newImg.data = QImage(PRE_ALLOC_WIDTH, data->size(), _imageFormat);
+			newImg.width = 1;
+			fillRow(newImg, data, 0, offset);
 
 			_images.append(newImg);
 		}
 		else {
-			// Extent image by one column
-			int col = img.data.width();
-			img.data = img.data.copy(0,0,col+1,img.data.height());
+			if ( img.width >= img.data.width() ) {
+				// Extent image by one column
+				img.data = img.data.copy(0,0,img.width+PRE_ALLOC_WIDTH,img.data.height());
+			}
 
 			// Fill colors for column
-			fillRow(img.data, data, spec->maximumFrequency(), col, offset);
+			fillRow(img, data, img.width, offset);
+			++img.width;
 		}
 	}
 }
@@ -409,11 +419,13 @@ void SpectrogramRenderer::addSpectrum(IO::Spectrum *spec) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spec,
-                                  double maxFreq, int column, int offset) {
-	QRgb *rgb = (QRgb*)img.bits();
-	int ofs = img.width();
+void SpectrogramRenderer::fillRow(SpecImage &img, ComplexDoubleArray *spec,
+                                  int column, int offset) {
+	QRgb *rgb = (QRgb*)img.data.bits();
+	int ofs = img.data.width();
 	int n = spec->size();
+	double maxFreq = img.maximumFrequency;
+	double norm = _scale * double(img.dt);
 
 	// Goto nth column
 	rgb += column;
@@ -433,8 +445,8 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 
 			Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
 
-			double sr = v.real()*_scale;
-			double si = v.imag()*_scale;
+			double sr = v.real()*norm;
+			double si = v.imag()*norm;
 			double ps = sr*sr + si*si;
 			if ( ps > 0 ) {
 				if ( amin < 0 || amin > ps )
@@ -471,22 +483,22 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 				double sr, si, ps;
 
 				if ( i0 >= n-1 ) {
-					sr = (*spec)[n-1].real()*_scale;
-					si = (*spec)[n-1].imag()*_scale;
+					sr = (*spec)[n-1].real()*norm;
+					si = (*spec)[n-1].imag()*norm;
 					ps = sr*sr + si*si;
 				}
 				else if ( t == 0 ) {
-					sr = (*spec)[i0].real()*_scale;
-					si = (*spec)[i0].imag()*_scale;
+					sr = (*spec)[i0].real()*norm;
+					si = (*spec)[i0].imag()*norm;
 					ps = sr*sr + si*si;
 				}
 				else {
-					sr = (*spec)[i0].real()*_scale;
-					si = (*spec)[i0].imag()*_scale;
+					sr = (*spec)[i0].real()*norm;
+					si = (*spec)[i0].imag()*norm;
 					ps = sr*sr + si*si;
 
-					sr = (*spec)[i0+1].real()*_scale;
-					si = (*spec)[i0+1].imag()*_scale;
+					sr = (*spec)[i0+1].real()*norm;
+					si = (*spec)[i0+1].imag()*norm;
 					ps = ps * (1-t) + (sr*sr + si*si) * t;
 				}
 
@@ -501,8 +513,8 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			for ( int i = n; i > offset; --i ) {
 				Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
 
-				double sr = v.real()*_scale;
-				double si = v.imag()*_scale;
+				double sr = v.real()*norm;
+				double si = v.imag()*norm;
 				double ps = sr*sr + si*si;
 				double amp = ps > 0?log10(ps):_gradient.lowerBound();
 				amp = (amp-amin)*ascale;
@@ -526,22 +538,22 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 				double sr, si, ps;
 
 				if ( i0 >= n-1 ) {
-					sr = (*spec)[n-1].real()*_scale;
-					si = (*spec)[n-1].imag()*_scale;
+					sr = (*spec)[n-1].real()*norm;
+					si = (*spec)[n-1].imag()*norm;
 					ps = sr*sr + si*si;
 				}
 				else if ( t == 0 ) {
-					sr = (*spec)[i0].real()*_scale;
-					si = (*spec)[i0].imag()*_scale;
+					sr = (*spec)[i0].real()*norm;
+					si = (*spec)[i0].imag()*norm;
 					ps = sr*sr + si*si;
 				}
 				else {
-					sr = (*spec)[i0].real()*_scale;
-					si = (*spec)[i0].imag()*_scale;
+					sr = (*spec)[i0].real()*norm;
+					si = (*spec)[i0].imag()*norm;
 					ps = sr*sr + si*si;
 
-					sr = (*spec)[i0+1].real()*_scale;
-					si = (*spec)[i0+1].imag()*_scale;
+					sr = (*spec)[i0+1].real()*norm;
+					si = (*spec)[i0+1].imag()*norm;
 					ps = ps * (1-t) + (sr*sr + si*si) * t;
 				}
 
@@ -555,8 +567,8 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			for ( int i = n; i > offset; --i ) {
 				Seiscomp::ComplexDoubleArray::Type &v = (*spec)[i-1];
 
-				double sr = v.real()*_scale;
-				double si = v.imag()*_scale;
+				double sr = v.real()*norm;
+				double si = v.imag()*norm;
 				double ps = sr*sr + si*si;
 				double amp = ps > 0?log10(ps):_gradient.lowerBound();
 
@@ -649,7 +661,7 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 		if ( img.maximumFrequency <= fmin ) continue;
 
 		Core::Time startTime = img.startTime - Core::TimeSpan((double)img.dt*0.5);
-		Core::Time endTime   = startTime + Core::TimeSpan((double)img.dt * img.data.width());
+		Core::Time endTime   = startTime + Core::TimeSpan((double)img.dt * img.width);
 
 		// Clip by start time
 		if ( startTime >= t1 ) continue;
@@ -696,7 +708,7 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 				sy1 = (int)((1.0-(img.maximumFrequency-fmax)/ifw) * img.data.height());
 		}
 
-		QRect sourceRect(0,img.data.height()-sy1,img.data.width(),sy1-sy0),
+		QRect sourceRect(0,img.data.height()-sy1,img.width,sy1-sy0),
 		      targetRect(rect.left()+ix0,rect.top()+h-ty1,ix1-ix0,ty1-ty0);
 
 		p.drawImage(targetRect, img.data, sourceRect);

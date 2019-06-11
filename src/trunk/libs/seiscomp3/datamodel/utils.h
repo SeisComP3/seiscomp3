@@ -65,7 +65,7 @@ char objectStatusToChar(const T *o) {
 	catch ( ... ) {}
 
 	try {
-		if ( o->evaluationMode() == 'M' )
+		if ( o->evaluationMode() == MANUAL )
 			return 'M';
 	}
 	catch ( ... ) {}

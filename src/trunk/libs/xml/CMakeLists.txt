@@ -55,6 +55,7 @@ FILES
 	0.8/sc3ml_0.8.xsd
 	0.8/sc3ml_0.8__quakeml_1.2.xsl
 	0.8/sc3ml_0.8__quakeml_1.2-RT.xsl
+	0.8/quakeml_1.2__sc3ml_0.8.xsl
 DESTINATION
 	${SC3_PACKAGE_SHARE_DIR}/xml/0.8
 )
@@ -66,6 +67,7 @@ FILES
 	0.9/sc3ml_0.9.xsd
 	0.9/sc3ml_0.9__quakeml_1.2.xsl
 	0.9/sc3ml_0.9__quakeml_1.2-RT.xsl
+	0.9/quakeml_1.2__sc3ml_0.9.xsl
 DESTINATION
 	${SC3_PACKAGE_SHARE_DIR}/xml/0.9
 )
@@ -76,6 +78,7 @@ FILES
 	0.10/sc3ml_0.10.xsd
 	0.10/sc3ml_0.10__quakeml_1.2.xsl
 	0.10/sc3ml_0.10__quakeml_1.2-RT.xsl
+	0.10/quakeml_1.2__sc3ml_0.10.xsl
 DESTINATION
 	${SC3_PACKAGE_SHARE_DIR}/xml/0.10
 )
@@ -86,6 +89,7 @@ FILES
 	0.11/sc3ml_0.11.xsd
 	0.11/sc3ml_0.11__quakeml_1.2.xsl
 	0.11/sc3ml_0.11__quakeml_1.2-RT.xsl
+	0.11/quakeml_1.2__sc3ml_0.11.xsl
 DESTINATION
 	${SC3_PACKAGE_SHARE_DIR}/xml/0.11
 )

@@ -33,7 +33,7 @@ from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
 from seiscomp3.IO import DatabaseInterface, Exporter
 
-from http import HTTP
+from http import BaseResource
 from request import RequestOptions
 import utils
 
@@ -209,15 +209,14 @@ class _EventRequestOptions(RequestOptions):
 
 
 ################################################################################
-class FDSNEvent(resource.Resource):
+class FDSNEvent(BaseResource):
 	isLeaf = True
-	version = VERSION
 
 	#---------------------------------------------------------------------------
 	def __init__(self, hideAuthor = False, evaluationMode = None,
 	             eventTypeWhitelist = None, eventTypeBlacklist = None,
 	             formatList = None):
-		resource.Resource.__init__(self)
+		BaseResource.__init__(self, VERSION)
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
 		self._eventTypeWhitelist = eventTypeWhitelist
@@ -243,21 +242,21 @@ class FDSNEvent(resource.Resource):
 			ro.parse()
 		except ValueError, e:
 			Logging.warning(str(e))
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
 		# Catalog filter is not supported
 		if ro.catalogs:
 			msg = "catalog filter not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# updateafter not implemented
 		if ro.updatedAfter:
 			msg = "filtering based on update time not supported"
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		if self._formatList is not None and ro.format not in self._formatList:
 			msg = "output format '%s' not available" % ro.format
-			return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+			return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
@@ -269,13 +268,13 @@ class FDSNEvent(resource.Resource):
 			else:
 				msg = "output format '%s' not available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
-				return HTTP.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+				return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
 		# Create database query
 		db = DatabaseInterface.Open(Application.Instance().databaseURI())
 		if db is None:
 			msg = "could not connect to database: %s" % dbq.errorMsg()
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+			return self.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
 		dbq = DataModel.DatabaseQuery(db)
 
@@ -311,7 +310,7 @@ class FDSNEvent(resource.Resource):
 		objCount = ep.eventCount()
 		maxObj = Application.Instance()._queryObjects
 
-		if not HTTP.checkObjects(req, objCount, maxObj):
+		if not self.checkObjects(req, objCount, maxObj):
 			return False
 
 		pickIDs = set()
@@ -334,7 +333,7 @@ class FDSNEvent(resource.Resource):
 			objCount += dbq.loadEventDescriptions(e)
 			if ro.comments:
 				objCount += self._loadComments(dbq, e)
-			if not HTTP.checkObjects(req, objCount, maxObj):
+			if not self.checkObjects(req, objCount, maxObj):
 				return False
 
 			# origin references: either all or preferred only
@@ -368,7 +367,7 @@ class FDSNEvent(resource.Resource):
 
 			objCount += e.focalMechanismReferenceCount()
 
-			if not HTTP.checkObjects(req, objCount, maxObj):
+			if not self.checkObjects(req, objCount, maxObj):
 				return False
 
 			# focal mechanisms: process before origins to add derived origin to
@@ -394,7 +393,7 @@ class FDSNEvent(resource.Resource):
 				# momentTensors
 				objCount += dbq.loadMomentTensors(fm)
 
-				if not HTTP.checkObjects(req, objCount, maxObj):
+				if not self.checkObjects(req, objCount, maxObj):
 					return False
 
 				for iMT in xrange(fm.momentTensorCount()):
@@ -417,7 +416,7 @@ class FDSNEvent(resource.Resource):
 						for iStaMT in xrange(mt.momentTensorStationContributionCount()):
 							objCount += dbq.load(mt.momentTensorStationContribution(iStaMT))
 
-					if not HTTP.checkObjects(req, objCount, maxObj):
+					if not self.checkObjects(req, objCount, maxObj):
 						return False
 
 			# find ID of origin containing preferred Magnitude
@@ -447,7 +446,7 @@ class FDSNEvent(resource.Resource):
 				# comments
 				if ro.comments:
 					objCount += self._loadComments(dbq, o)
-				if not HTTP.checkObjects(req, objCount, maxObj):
+				if not self.checkObjects(req, objCount, maxObj):
 					return False
 
 				# magnitudes
@@ -469,7 +468,7 @@ class FDSNEvent(resource.Resource):
 				if ro.comments:
 					for iMag in xrange(o.magnitudeCount()):
 						objCount += self._loadComments(dbq, o.magnitude(iMag))
-				if not HTTP.checkObjects(req, objCount, maxObj):
+				if not self.checkObjects(req, objCount, maxObj):
 					return False
 
 				# TODO station magnitudes, amplitudes
@@ -487,13 +486,13 @@ class FDSNEvent(resource.Resource):
 						for iArrival in xrange(o.arrivalCount()):
 							pickIDs.add(o.arrival(iArrival).pickID())
 
-				if not HTTP.checkObjects(req, objCount, maxObj):
+				if not self.checkObjects(req, objCount, maxObj):
 					return False
 
 		# picks
 		if pickIDs:
 			objCount += len(pickIDs)
-			if not HTTP.checkObjects(req, objCount, maxObj):
+			if not self.checkObjects(req, objCount, maxObj):
 				return False
 
 			for pickID in pickIDs:
@@ -505,7 +504,7 @@ class FDSNEvent(resource.Resource):
 					if ro.comments:
 						objCount += self._loadComments(dbq, pick)
 					ep.add(pick)
-				if not HTTP.checkObjects(req, objCount, maxObj):
+				if not self.checkObjects(req, objCount, maxObj):
 					return False
 
 		# write response
@@ -642,7 +641,7 @@ class FDSNEvent(resource.Resource):
 
 		if ep.eventCount() == 0:
 			msg = "no matching events found"
-			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
 				utils.writeTS(req, data)
 			return True

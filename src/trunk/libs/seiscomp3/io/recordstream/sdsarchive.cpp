@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <iomanip>
+#include <seiscomp3/core/strings.h>
 #include <seiscomp3/system/environment.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/sdsarchive.h>
@@ -48,15 +49,16 @@ REGISTER_RECORDSTREAM(SDSArchive, "sdsarchive");
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SDSArchive::SDSArchive() : RecordStream() {}
+SDSArchive::SDSArchive() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SDSArchive::SDSArchive(const string arcroot)
-: RecordStream(), _arcroot(arcroot) {}
+SDSArchive::SDSArchive(const string arcroot) {
+	setSource(arcroot);
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -64,7 +66,7 @@ SDSArchive::SDSArchive(const string arcroot)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::SDSArchive(const SDSArchive &mem) : RecordStream() {
-	setSource(mem.archiveRoot());
+	_arcroots = mem._arcroots;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -80,8 +82,8 @@ SDSArchive::~SDSArchive() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive& SDSArchive::operator=(const SDSArchive &mem) {
-	if (this != &mem)
-		_arcroot = mem.archiveRoot();
+	if ( this != &mem )
+		_arcroots = mem._arcroots;
 
 	return *this;
 }
@@ -92,9 +94,17 @@ SDSArchive& SDSArchive::operator=(const SDSArchive &mem) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::setSource(const string &src) {
-	_arcroot = src;
-	if ( _arcroot.empty() )
-		_arcroot = Seiscomp::Environment::Instance()->installDir() + "/var/lib/archive";
+	if ( src.empty() )
+		_arcroots.push_back(Seiscomp::Environment::Instance()->installDir() + "/var/lib/archive");
+	else
+		Core::split(_arcroots, src.c_str(), ",");
+
+	std::vector<std::string>::iterator it;
+	for ( it = _arcroots.begin(); it != _arcroots.end(); ++it ) {
+		SEISCOMP_DEBUG("+ Add to archive root list: %s", it->c_str());
+	}
+
+	SEISCOMP_DEBUG("Total of %ld archive roots are in use.", _arcroots.size());
 
 	return true;
 }
@@ -190,15 +200,6 @@ void SDSArchive::close() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-string SDSArchive::archiveRoot() const {
-	return _arcroot;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time SDSArchive::getStartTime(const string &file) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
@@ -241,7 +242,7 @@ string SDSArchive::filename(int doy, int year) {
 	stringstream ss;
 
 	ss << year;
-	string path = _arcroot + "/" + ss.str() + "/" + net + "/" + sta + "/" + cha + ".D/" +
+	string path = "/" + ss.str() + "/" + net + "/" + sta + "/" + cha + ".D/" +
 	net + "." + sta + "." + loc + "." + cha + ".D." + ss.str() + ".";
 	ss.str("");
 	ss << setfill ('0') << setw(3) << doy;
@@ -500,15 +501,27 @@ bool SDSArchive::stepStream() {
 		}
 
 		while ( !_fnames.empty() ) {
-			_currentFilename = _fnames.front();
+			string relativeFilename = _fnames.front();
 			_fnames.pop();
-			_recstream.close();
-			_recstream.clear();
-			_recstream.open(_currentFilename.c_str(), ios_base::in | ios_base::binary);
-			if ( !_recstream.is_open() ) {
-				SEISCOMP_DEBUG("+ %s (not found)", _currentFilename.c_str());
+
+			if ( first ) {
+				// Start checking the first archive in the list
+				_currentArchive = _arcroots.begin();
 			}
-			else {
+
+			for ( ; _currentArchive != _arcroots.end(); ++_currentArchive ) {
+				_currentFilename = *_currentArchive + relativeFilename;
+				_recstream.close();
+				_recstream.clear();
+				_recstream.open(_currentFilename.c_str(), ios_base::in | ios_base::binary);
+				if ( !_recstream.is_open() ) {
+					SEISCOMP_DEBUG("+ %s (not found)", _currentFilename.c_str());
+				}
+				else
+					break;
+			}
+
+			if ( _recstream.is_open() ) {
 				SEISCOMP_DEBUG("+ %s (init:%d)", _currentFilename.c_str(), first?1:0);
 				if ( first ) {
 					if ( !setStart(_currentFilename) ) {

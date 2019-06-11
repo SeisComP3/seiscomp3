@@ -119,10 +119,19 @@ class SC_GUI_API SpectrogramRenderer {
 	//  Private Interface
 	// ----------------------------------------------------------------------
 	private:
+		struct SpecImage {
+			QImage         data;
+			Core::Time     startTime;
+			Core::TimeSpan dt;
+			double         minimumFrequency;
+			double         maximumFrequency;
+			int            width;
+		};
+
 		void setDirty();
 		void addSpectrum(IO::Spectrum *);
-		void fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spec,
-		             double maxFreq, int column, int offset);
+		void fillRow(SpecImage &img, Seiscomp::ComplexDoubleArray *spec,
+		             int column, int offset);
 
 
 	// ----------------------------------------------------------------------
@@ -130,14 +139,6 @@ class SC_GUI_API SpectrogramRenderer {
 	// ----------------------------------------------------------------------
 	private:
 		typedef QList<IO::SpectrumPtr> Spectra;
-
-		struct SpecImage {
-			QImage         data;
-			Core::Time     startTime;
-			Core::TimeSpan dt;
-			double         minimumFrequency;
-			double         maximumFrequency;
-		};
 
 		typedef QList<SpecImage> SpecImageList;
 		typedef StaticColorLUT<512> Gradient512;

@@ -1,19 +1,100 @@
-sh2proc converts SeismicHandler (http://www.seismic-handler.org/) event data to
-SeisComP3. Data is read from input file or `stdin` if no input file is
+sh2proc converts `Seismic Handler <http://www.seismic-handler.org/>`_ event data to
+SeisComP3 XML format. Data is read from input file or `stdin` if no input file is
 specified.  The result is available on `stdout`.
 
-Since SeismicHandler only specifies station and component codes, a mapping to
+Code mapping
+============
+
+Since Seismic Handler only specifies station and component codes, a mapping to
 SeisComP3 network, location and channel codes is necessary. The script assumes
 that the same station code is not used in different networks. In case an
 ambiguous id is found a warning is printed and the first network code is used.
 The channel and stream code is extracted from the dectecStream and detecLocid
-configured in the global binding. In case no configuration module is available
+configured in the global bindings. In case no configuration module is available
 the first location and stream is used.
+
+Event parameters
+================
+
+* Event types given in Seismic Handler files are mapped to SeisComP3 event types:
+
+  .. csv-table::
+     :header: "Seismic Handler", "SeisComP3"
+
+     "teleseismic quake","earthquake"
+     "regional quake","earthquake"
+     "local quake","earthquake"
+     "quarry blast","quarry blast"
+     "nuclear explosion","nuclear explosion"
+     "mining event","mining explosion"
+
+* The EventID given in Seismic Handler files is mapped as a comment to the event.
+
+Magnitudes
+==========
+
+* Magnitude types given in Seismic Handler files are mapped to SeisComP3 magnitudes:
+
+  .. csv-table::
+     :header: "Seismic Handler", "SeisComP3"
+
+     "m","M"
+     "ml","ML"
+     "mb","mb"
+     "ms","Ms(BB)"
+     "mw","Mw"
+     "bb","mB"
+
+* ML magnitudes in Seismic Handler files have no corresponding measured amplitudes.
+  Therefore the ML station magnitudes are converted without referencing the amplitude.
+
+* Seismic Handler uses the phase name "L" for referring to surface waves without
+  further specification. The phase name is kept unchanged.
+
+Distance calculations
+=====================
+
+In Seismic Handler files distances can be given in units of km or degree but in
+SeisComP3 only degree is used. Both representations are considered for conversion.
+In case of double posting preference is given to the Seismic Handler values given in km
+due to their higher precision.
+
+Beam parameters
+===============
+
+Seismic Handler files provide the phase picks with theoretical, measured and corrected
+slowness and (back) azimuth but the pick in SeisComP3 knows only one value.
+During conversion highest preference is given to corrected values.
+The theoretical values are ignored.
+
+Limitations
+===========
+
+The following parameters from Seismic Handler files are not considered:
+
+* Phase Flag
+* Location Input Params
+* Reference Location Name
+* Quality Number
+* Ampl&Period Source
+* Location Quality
+* Reference Latitude
+* Reference Longitude
+* Amplitude Time
+
+Further processing in SeisComP3
+===============================
+
+The created XML files can be used in multiple ways, e.g.:
+
+#. By other modules in an XML-base playback
+#. Inject into the messaging system by :ref:`scdispatch`
+#. Integrate into the database by :ref:`scdb`
 
 Examples
 ========
 
-#. Converts the SeismicHandler file `shm.evt` and writes SC3ML into the file
+#. Convert the Seismic Handler file `shm.evt` and writes SC3ML into the file
    `sc3.xml`. The database connection to read inventory and configuration
    information is fetched from the default messaging connection.
 
@@ -21,12 +102,12 @@ Examples
 
       sh2proc shm.evt > sc3.xml
 
-#. Reads SeismicHandler data from `stdin`. Inventory and configuration information
+#. Read Seismic Handler data from `stdin`. Inventory and configuration information
    is provided through files.
 
    .. code-block:: sh
 
-      cat shm.evt | sh2proc --inventory-db=inv.xml --config-db=config.xml > sc3.xml
+      cat shm.evt | sh2proc --inventory-db=inventory.xml --config-db=config.xml > sc3.xml
 
 shm.evt file format
 ===================
