@@ -32,7 +32,7 @@
 ###############################################################################
 
 
-from seiscomp3 import Client, Core, DataModel, IO, Logging, Geo
+from seiscomp3 import Client, Core, DataModel, IO, Logging, Math
 from time import strptime
 import sys, traceback
 
@@ -43,16 +43,14 @@ TimeFormats = [
 
 
 ## SC3 has more event types available in the datamodel
-EventTypes = {'teleseismic quake'  : DataModel.EARTHQUAKE,
-			  'local quake'        : DataModel.EARTHQUAKE,
-			  'regional quake'     : DataModel.EARTHQUAKE,
-			  'quarry blast'       : DataModel.QUARRY_BLAST,
-			  'nuclear explosion'  : DataModel.NUCLEAR_EXPLOSION,
-			  'mining event'       : DataModel.MINING_EXPLOSION
-			  }
-
-## Factor degree in km
-deg2kmFac = 111.13291490135191
+EventTypes = {
+	'teleseismic quake'  : DataModel.EARTHQUAKE,
+	'local quake'        : DataModel.EARTHQUAKE,
+	'regional quake'     : DataModel.EARTHQUAKE,
+	'quarry blast'       : DataModel.QUARRY_BLAST,
+	'nuclear explosion'  : DataModel.NUCLEAR_EXPLOSION,
+	'mining event'       : DataModel.MINING_EXPLOSION
+}
 
 def wfs2Str(wfsID):
 	return '%s.%s.%s.%s' % (wfsID.networkCode(), wfsID.stationCode(),
@@ -282,7 +280,7 @@ class SH2Proc(Client.Application):
 	def sh2proc(self, file):
 		ep             = DataModel.EventParameters()
 		origin         = DataModel.Origin.Create()
-		event 		   = DataModel.Event.Create()
+		event          = DataModel.Event.Create()
 
 		origin.setCreationInfo(DataModel.CreationInfo())
 		origin.creationInfo().setCreationTime(Core.Time.GMT())
@@ -301,16 +299,17 @@ class SH2Proc(Client.Application):
 		compCode       = None
 		stationMagBB   = None
 
-		amplitudeDisp = None
-		amplitudeVel  = None
-		amplitudeSNR  = None
-		amplitudeBB   = None
+		amplitudeDisp  = None
+		amplitudeVel   = None
+		amplitudeSNR   = None
+		amplitudeBB    = None
 
-		magnitudeMB = None
-		magnitudeML = None
-		magnitudeMS = None
-		magnitudeBB = None
+		magnitudeMB    = None
+		magnitudeML    = None
+		magnitudeMS    = None
+		magnitudeBB    = None
 
+		km2degFac      = 1.0 / Math.deg2km(1.0)
 
 		# read file line by line, split key and value at colon
 		iLine = 0
@@ -320,6 +319,7 @@ class SH2Proc(Client.Application):
 			key = a[0].strip()
 			keyLower = key.lower()
 			value = None
+
 			# empty line
 			if len(keyLower) == 0:
 				continue
@@ -413,15 +413,15 @@ class SH2Proc(Client.Application):
 						magnitudeMB.add(stationMagContrib)
 
 
-				pick       = None
-				staCode    = None
-				compCode    = None
-				stationMag = None
-				stationMagBB = None
+				pick          = None
+				staCode       = None
+				compCode      = None
+				stationMag    = None
+				stationMagBB  = None
 				amplitudeDisp = None
 				amplitudeVel  = None
 				amplitudeSNR  = None
-				amplitudeBB = None
+				amplitudeBB   = None
 				continue
 
 			# empty key
@@ -432,7 +432,7 @@ class SH2Proc(Client.Application):
 			value = a[1].strip()
 			if pick is None:
 				pick = DataModel.Pick.Create()
-				arrival  = DataModel.Arrival()
+				arrival = DataModel.Arrival()
 
 			try:
 				##############################################################
@@ -450,11 +450,11 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'onset type':
 					found = False
 					for onset in [ DataModel.EMERGENT, DataModel.IMPULSIVE,
-								   DataModel.QUESTIONABLE ]:
+					               DataModel.QUESTIONABLE ]:
 						if value == DataModel.EPickOnsetNames_name(onset):
 							pick.setOnset(onset)
 							found = True
-							break;
+							break
 					if not found:
 						raise Exception('Unsupported onset value')
 
@@ -486,7 +486,7 @@ class SH2Proc(Client.Application):
 						if value == DataModel.EEvaluationModeNames_name(mode):
 							pick.setEvaluationMode(mode)
 							found = True
-							break;
+							break
 					if not found:
 						raise Exception('Unsupported evaluation mode value')
 
@@ -519,7 +519,7 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'theo. backazimuth (deg)':
 					if pick.slownessMethodID() == 'corrected':
 						Logging.debug('Line %i: ignoring parameter: %s' % (
-					              iLine, key))
+						              iLine, key))
 					else:
 						pick.setBackazimuth(DataModel.RealQuantity(float(value)))
 						pick.setSlownessMethodID('theoretical')
@@ -528,7 +528,7 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'beam-slowness (sec/deg)':
 					if pick.slownessMethodID() == 'corrected':
 						Logging.debug('Line %i: ignoring parameter: %s' % (
-					              iLine, key))
+						              iLine, key))
 					else:
 						pick.setHorizontalSlowness(DataModel.RealQuantity(float(value)))
 						pick.setSlownessMethodID('Array Beam')
@@ -537,7 +537,7 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'beam-azimuth (deg)':
 					if pick.slownessMethodID() == 'corrected':
 						Logging.debug('Line %i: ignoring parameter: %s' % (
-					              iLine, key))
+						              iLine, key))
 					else:
 						pick.setBackazimuth(DataModel.RealQuantity(float(value)))
 
@@ -558,8 +558,8 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'distance (km)':
 					if isinstance(arrival.distance(), float):
 						Logging.debug('Line %i: ignoring parameter: %s' % (
-					              iLine-1, 'distance (deg)'))
-					arrival.setDistance(float(value)/deg2kmFac)
+						              iLine-1, 'distance (deg)'))
+					arrival.setDistance(float(value) * km2degFac)
 
 				# arrival time residual
 				elif keyLower == 'residual time':
@@ -624,7 +624,7 @@ class SH2Proc(Client.Application):
 						stationMag.setAmplitudeID(amplitudeVel.publicID())
 					else:
 						Logging.debug('Line %i: Magnitude Type not known %s.' % (
-					              iLine, magType))
+						              iLine, magType))
 
 
 				###############################################################
@@ -666,7 +666,7 @@ class SH2Proc(Client.Application):
 
 					else:
 						Logging.warning('Line %i: Magnitude type %s not defined yet.' % (
-					              iLine, magType))
+						                iLine, magType))
 
 				# latitude
 				elif keyLower == 'latitude':
