@@ -15,7 +15,7 @@ Primary magnitudes
 
 Currently the following magnitude types are implemented:
 
-:term:`MLh <magnitude, local (ML)>`
+:term:`ML <magnitude, local (ML)>`
    Local magnitude calculated on the vertical component using a correction term
    to fit with the standard ML
 

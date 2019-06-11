@@ -20,7 +20,7 @@ discarded. This minimum weight can be configured with
 Amplitudes for the following magnitudes are currently computed:
 
 
-:term:`MLh <magnitude, local (ML)>`
+:term:`ML <magnitude, local (ML)>`
    Local magnitude calculated on the vertical component using a correction term
    to fit with the standard ML
 

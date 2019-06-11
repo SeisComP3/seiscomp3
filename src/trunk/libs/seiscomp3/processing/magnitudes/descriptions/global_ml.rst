@@ -1,7 +1,11 @@
 Amplitude
 ---------
 
-The ML amplitude calculation is similar to the original ML.
+The ML amplitude calculation is similar to the original ML. Waveforms from both
+horizontal components are time-windowed and restituted to the Wood-Anderson seismograph.
+Within the time window the amplitudes are measured on both horizontal components
+and combined. The methods for measuring and combining amplitudes are configurable
+in the global bindings.
 
 Station Magnitude
 -----------------
@@ -12,7 +16,7 @@ The individual station ML is calculated using the following formula:
 
    mag = \log10(A) - \log10(A0)
 
-A is the ML Wood-Anderson amplitude in millimeters. The second term
+A is the measured ML Wood-Anderson amplitude in millimeters. The second term
 is the empirical calibration function, which in turn is a function
 of the epicentral distance (see Richter, 1935). This calibration
 function can be configured globally or per station using the config
@@ -49,6 +53,6 @@ epicenter distance.
 Configuration
 -------------
 
-Set the calibration parameters in the global bindings. Add ML to the list of
+Set the configuration and calibration parameters in the global bindings. Add ML to the list of
 computed amplitudes and magnitudes in the configuration of :ref:`scamp` and :ref:`scmag`
 and in :ref:`scesv` for visibility.

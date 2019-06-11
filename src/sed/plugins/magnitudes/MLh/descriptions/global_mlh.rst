@@ -1,7 +1,8 @@
 Amplitude
 ---------
 
-The MLh amplitude calculation is very similar to the original ML. The two differences are:
+The MLh amplitude calculation is very similar to the original :ref:`ML<global_ml>`.
+The two differences are:
 
 - It uses the maximum of the two horizontal components (average can be configured if necessary)
 - It uses zero-to-peak in stead of peak-to-peak values

@@ -81,7 +81,7 @@
 
 * seedlink
 
-  * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
+  * Fix duplicate mapping detection in scream\_plugin\_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
   * Work around EarthData WNRO bug
 
@@ -96,6 +96,11 @@
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
   * Add event attribute synchronization per input host
+
+* scamp
+
+  * Add geomtric\_mean method for combining ML amplitudes measured on both horizontals.
+    This corresponds to averaging the single-component station magnitudes instead of the amplitudes.
 
 * python-apps
 

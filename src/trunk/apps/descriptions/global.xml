@@ -678,7 +678,9 @@
 						Defines the combiner operation for the amplitudes measured
 						on either both horizontal component. The default is to
 						use the average. Allowed values are: &quot;average&quot;,
-						&quot;min&quot; and &quot;max&quot;.
+						&quot;min&quot;, &quot;max&quot; and &quot;geometric_mean&quot;.
+						&quot;geometric_mean&quot; corresponds to averaging single-trace
+						magnitudes instead of their amplitudes.
 						</description>
 					</parameter>
 				</group>

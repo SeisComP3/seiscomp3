@@ -353,7 +353,8 @@ is taken from Modern Global Seismology.
       Read the :ref:`technical documentation <global_mlh>` for the configuration.
 
    magnitude, local GNS/GEONET (MLr)
-      Local magnitude calculated from MLv amplitudes based on GNS/GEONET specifications for New Zealand.
+      Local magnitude calculated from :term:`MLv <magnitude, local vertical (MLv)>`
+      amplitudes based on GNS/GEONET specifications for New Zealand.
 
       Read the :ref:`technical documentation <global_mlr>` for the configuration.
 
