@@ -12,7 +12,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               #
 # SeisComP Public License for more details.                                   #
 #                                                                             #
-# Author: Alexander Jaeger, Stephan Herrnkind                                 #
+# Author: Alexander Jaeger, Stephan Herrnkind, Lukas Lehmann, Dirk Roessler   #
 # Email: herrnkind@gempa.de                                                   #
 #                                                                             #
 # Converts SeismicHandler (http://www.seismic-handler.org/) event data to     #
@@ -32,7 +32,7 @@
 ###############################################################################
 
 
-from seiscomp3 import Client, Core, DataModel, IO, Logging
+from seiscomp3 import Client, Core, DataModel, IO, Logging, Geo
 from time import strptime
 import sys, traceback
 
@@ -40,6 +40,19 @@ TimeFormats = [
 	'%d-%b-%Y_%H:%M:%S.%f',
 	'%d-%b-%Y_%H:%M:%S'
 ]
+
+
+## SC3 has more event types available in the datamodel
+EventTypes = {'teleseismic quake'  : DataModel.EARTHQUAKE,
+			  'local quake'        : DataModel.EARTHQUAKE,
+			  'regional quake'     : DataModel.EARTHQUAKE,
+			  'quarry blast'       : DataModel.QUARRY_BLAST,
+			  'nuclear explosion'  : DataModel.NUCLEAR_EXPLOSION,
+			  'mining event'       : DataModel.MINING_EXPLOSION
+			  }
+
+## Factor degree in km
+deg2kmFac = 111.13291490135191
 
 def wfs2Str(wfsID):
 	return '%s.%s.%s.%s' % (wfsID.networkCode(), wfsID.stationCode(),
@@ -180,7 +193,6 @@ class SH2Proc(Client.Application):
 			return
 
 
-
 		# fallback loading streams from inventory
 		Logging.warning('no configuration module available, loading streams ' \
 		                'from inventory and selecting first available stream ' \
@@ -254,11 +266,13 @@ class SH2Proc(Client.Application):
 		elif value == 'ml':
 			return 'ML'
 		elif value == 'mb':
-			return 'Mb'
+			return 'mb'
 		elif value == 'ms':
-			return 'MS'
+			return 'Ms(BB)'
 		elif value == 'mw':
 			return 'Mw'
+		elif value == 'bb':
+			return 'mB'
 
 		return ''
 
@@ -267,8 +281,8 @@ class SH2Proc(Client.Application):
 	###########################################################################
 	def sh2proc(self, file):
 		ep             = DataModel.EventParameters()
-		magnitude      = DataModel.Magnitude.Create()
 		origin         = DataModel.Origin.Create()
+		event 		   = DataModel.Event.Create()
 
 		origin.setCreationInfo(DataModel.CreationInfo())
 		origin.creationInfo().setCreationTime(Core.Time.GMT())
@@ -280,11 +294,23 @@ class SH2Proc(Client.Application):
 		depthError     = None
 		originComments = {}
 
-		# phase variables, reset after 'end of phase'
+		# variables, reset after 'end of phase'
 		pick           = None
 		stationMag     = None
 		staCode        = None
-		compCode        = None
+		compCode       = None
+		stationMagBB   = None
+
+		amplitudeDisp = None
+		amplitudeVel  = None
+		amplitudeSNR  = None
+		amplitudeBB   = None
+
+		magnitudeMB = None
+		magnitudeML = None
+		magnitudeMS = None
+		magnitudeBB = None
+
 
 		# read file line by line, split key and value at colon
 		iLine = 0
@@ -294,7 +320,6 @@ class SH2Proc(Client.Application):
 			key = a[0].strip()
 			keyLower = key.lower()
 			value = None
-
 			# empty line
 			if len(keyLower) == 0:
 				continue
@@ -327,23 +352,76 @@ class SH2Proc(Client.Application):
 				ep.add(pick)
 
 				arrival.setPickID(pick.publicID())
+				arrival.setPhase(phase)
 				origin.add(arrival)
 
-				amplitude.setPickID(pick.publicID())
-				ep.add(amplitude)
+
+				if amplitudeSNR is not None:
+					amplitudeSNR.setPickID(pick.publicID())
+					amplitudeSNR.setWaveformID(streamID)
+					ep.add(amplitudeSNR)
+
+				if amplitudeBB is not None:
+					amplitudeBB.setPickID(pick.publicID())
+					amplitudeBB.setWaveformID(streamID)
+					ep.add(amplitudeBB)
+
+				if stationMagBB is not None:
+					stationMagBB.setWaveformID(streamID)
+					origin.add(stationMagBB)
+					stationMagContrib = DataModel.StationMagnitudeContribution()
+					stationMagContrib.setStationMagnitudeID(stationMagBB.publicID())
+					if magnitudeBB is None:
+						magnitudeBB = DataModel.Magnitude.Create()
+					magnitudeBB.add(stationMagContrib)
 
 				if stationMag is not None:
+					if stationMag.type() in ['mb', 'ML'] and amplitudeDisp is not None:
+						amplitudeDisp.setPickID(pick.publicID())
+						amplitudeDisp.setWaveformID(streamID)
+						amplitudeDisp.setPeriod(DataModel.RealQuantity(ampPeriod))
+						amplitudeDisp.setType(stationMag.type())
+						ep.add(amplitudeDisp)
+
+					if stationMag.type() in ['Ms(BB)'] and amplitudeVel is not None:
+						amplitudeVel.setPickID(pick.publicID())
+						amplitudeVel.setWaveformID(streamID)
+						amplitudeVel.setPeriod(DataModel.RealQuantity(ampPeriod))
+						amplitudeVel.setType(stationMag.type())
+						ep.add(amplitudeVel)
+
 					stationMag.setWaveformID(streamID)
 					origin.add(stationMag)
 
 					stationMagContrib = DataModel.StationMagnitudeContribution()
 					stationMagContrib.setStationMagnitudeID(stationMag.publicID())
-					magnitude.add(stationMagContrib)
+
+					magType = stationMag.type()
+					if magType == 'ML':
+						if magnitudeML is None:
+							magnitudeML = DataModel.Magnitude.Create()
+						magnitudeML.add(stationMagContrib)
+
+					elif magType == 'Ms(BB)':
+						if magnitudeMS is None:
+							magnitudeMS = DataModel.Magnitude.Create()
+						magnitudeMS.add(stationMagContrib)
+
+					elif magType == 'mb':
+						if magnitudeMB is None:
+							magnitudeMB = DataModel.Magnitude.Create()
+						magnitudeMB.add(stationMagContrib)
+
 
 				pick       = None
 				staCode    = None
 				compCode    = None
 				stationMag = None
+				stationMagBB = None
+				amplitudeDisp = None
+				amplitudeVel  = None
+				amplitudeSNR  = None
+				amplitudeBB = None
 				continue
 
 			# empty key
@@ -352,11 +430,9 @@ class SH2Proc(Client.Application):
 				continue
 
 			value = a[1].strip()
-
 			if pick is None:
 				pick = DataModel.Pick.Create()
 				arrival  = DataModel.Arrival()
-				amplitude = DataModel.Amplitude.Create()
 
 			try:
 				##############################################################
@@ -387,10 +463,11 @@ class SH2Proc(Client.Application):
 					phase = DataModel.Phase()
 					phase.setCode(value)
 					pick.setPhaseHint(phase)
-					arrival.setPhase(phase)
 
-				# event type, added as origin comment later on
+				# event type
 				elif keyLower == 'event type':
+					evttype = EventTypes[value]
+					event.setType(evttype)
 					originComments[key] = value
 
 				# filter ID
@@ -413,6 +490,23 @@ class SH2Proc(Client.Application):
 					if not found:
 						raise Exception('Unsupported evaluation mode value')
 
+				# pick author
+				elif keyLower == 'analyst':
+					creationInfo = DataModel.CreationInfo()
+					creationInfo.setAuthor(value)
+					pick.setCreationInfo(creationInfo)
+
+				# pick polarity
+				# isn't tested
+				elif keyLower == 'sign':
+					if value == 'positive':
+						sign = '0' # positive
+					elif value == 'negative':
+						sign = '1' # negative
+					else:
+						sign =  '2' # unknown
+					pick.setPolarity(float(sign))
+
 				# arrival weight
 				elif keyLower == 'weight':
 					arrival.setWeight(float(value))
@@ -421,22 +515,94 @@ class SH2Proc(Client.Application):
 				elif keyLower == 'theo. azimuth (deg)':
 					arrival.setAzimuth(float(value))
 
-				# arrival backazimuth
+				# pick theo backazimuth
 				elif keyLower == 'theo. backazimuth (deg)':
+					if pick.slownessMethodID() == 'corrected':
+						Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+					else:
+						pick.setBackazimuth(DataModel.RealQuantity(float(value)))
+						pick.setSlownessMethodID('theoretical')
+
+				# pick beam slowness
+				elif keyLower == 'beam-slowness (sec/deg)':
+					if pick.slownessMethodID() == 'corrected':
+						Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+					else:
+						pick.setHorizontalSlowness(DataModel.RealQuantity(float(value)))
+						pick.setSlownessMethodID('Array Beam')
+
+				# pick beam backazimuth
+				elif keyLower == 'beam-azimuth (deg)':
+					if pick.slownessMethodID() == 'corrected':
+						Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+					else:
+						pick.setBackazimuth(DataModel.RealQuantity(float(value)))
+
+				# pick epi slowness
+				elif keyLower == 'epi-slowness (sec/deg)':
+					pick.setHorizontalSlowness(DataModel.RealQuantity(float(value)))
+					pick.setSlownessMethodID('corrected')
+
+				# pick epi backazimuth
+				elif keyLower == 'epi-azimuth (deg)':
 					pick.setBackazimuth(DataModel.RealQuantity(float(value)))
 
-				# arrival distance
+				# arrival distance degree
 				elif keyLower == 'distance (deg)':
 					arrival.setDistance(float(value))
 
-				# ignored
+				# arrival distance km, recalculates for degree
 				elif keyLower == 'distance (km)':
-					Logging.debug('Line %i: ignoring parameter: %s' % (
-					              iLine, key))
+					if isinstance(arrival.distance(), float):
+						Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine-1, 'distance (deg)'))
+					arrival.setDistance(float(value)/deg2kmFac)
 
 				# arrival time residual
 				elif keyLower == 'residual time':
 					arrival.setTimeResidual(float(value))
+
+				# amplitude snr
+				elif keyLower == 'signal/noise':
+					amplitudeSNR = DataModel.Amplitude.Create()
+					amplitudeSNR.setType('SNR')
+					amplitudeSNR.setAmplitude(DataModel.RealQuantity(float(value)))
+
+				# amplitude period
+				elif keyLower.startswith('period'):
+					ampPeriod = float(value)
+
+				# amplitude value for displacement
+				elif keyLower == 'amplitude (nm)':
+					amplitudeDisp = DataModel.Amplitude.Create()
+					amplitudeDisp.setAmplitude(DataModel.RealQuantity(float(value)))
+					amplitudeDisp.setUnit('nm')
+
+				# amplitude value for velocity
+				elif keyLower.startswith('vel. amplitude'):
+					amplitudeVel = DataModel.Amplitude.Create()
+					amplitudeVel.setAmplitude(DataModel.RealQuantity(float(value)))
+					amplitudeVel.setUnit('nm/s')
+
+				elif keyLower == 'bb amplitude (nm/sec)':
+					amplitudeBB = DataModel.Amplitude.Create()
+					amplitudeBB.setAmplitude(DataModel.RealQuantity(float(value)))
+					amplitudeBB.setType('mB')
+					amplitudeBB.setUnit('nm/s')
+					amplitudeBB.setPeriod(DataModel.RealQuantity(ampBBPeriod))
+
+				elif keyLower == 'bb period (sec)':
+					ampBBPeriod = float(value)
+
+				elif keyLower == 'broadband magnitude':
+					magType = self.parseMagType('bb')
+					stationMagBB = DataModel.StationMagnitude.Create()
+					stationMagBB.setMagnitude(DataModel.RealQuantity(float(value)))
+					stationMagBB.setType(magType)
+					stationMagBB.setAmplitudeID(amplitudeBB.publicID())
 
 				# ignored
 				elif keyLower == 'quality number':
@@ -445,13 +611,20 @@ class SH2Proc(Client.Application):
 
 				# station magnitude value and type
 				elif keyLower.startswith('magnitude '):
-					stationMag = DataModel.StationMagnitude.Create()
-					stationMag.setAmplitudeID(amplitude.publicID())
-					stationMag.setMagnitude(DataModel.RealQuantity(float(value)))
 					magType = self.parseMagType(key[10:])
+					stationMag = DataModel.StationMagnitude.Create()
+					stationMag.setMagnitude(DataModel.RealQuantity(float(value)))
+
 					if len(magType) > 0:
 						stationMag.setType(magType)
-						amplitude.setType(magType)
+					if magType == 'mb':
+						stationMag.setAmplitudeID(amplitudeDisp.publicID())
+
+					elif magType == 'MS(BB)':
+						stationMag.setAmplitudeID(amplitudeVel.publicID())
+					else:
+						Logging.debug('Line %i: Magnitude Type not known %s.' % (
+					              iLine, magType))
 
 
 				###############################################################
@@ -462,11 +635,38 @@ class SH2Proc(Client.Application):
 					originComments[key] = value
 
 				# magnitude value and type
+				elif keyLower == 'mean bb magnitude':
+					magType = self.parseMagType('bb')
+					if magnitudeBB is None:
+						magnitudeBB = DataModel.Magnitude.Create()
+					magnitudeBB.setMagnitude(DataModel.RealQuantity(float(value)))
+					magnitudeBB.setType(magType)
+
+
 				elif keyLower.startswith('mean magnitude '):
-					magnitude.setMagnitude(DataModel.RealQuantity(float(value)))
 					magType = self.parseMagType(key[15:])
-					if len(magType) > 0:
-						magnitude.setType(magType)
+
+					if magType =='ML':
+						if magnitudeML is None:
+							magnitudeML = DataModel.Magnitude.Create()
+						magnitudeML.setMagnitude(DataModel.RealQuantity(float(value)))
+						magnitudeML.setType(magType)
+
+					elif magType == 'Ms(BB)':
+						if magnitudeMS is None:
+							magnitudeMS = DataModel.Magnitude.Create()
+						magnitudeMS.setMagnitude(DataModel.RealQuantity(float(value)))
+						magnitudeMS.setType(magType)
+
+					elif magType == 'mb':
+						if magnitudeMB is None:
+							magnitudeMB = DataModel.Magnitude.Create()
+						magnitudeMB.setMagnitude(DataModel.RealQuantity(float(value)))
+						magnitudeMB.setType(magType)
+
+					else:
+						Logging.warning('Line %i: Magnitude type %s not defined yet.' % (
+					              iLine, magType))
 
 				# latitude
 				elif keyLower == 'latitude':
@@ -500,6 +700,10 @@ class SH2Proc(Client.Application):
 					origin.time().setValue(self.parseTime(value))
 				elif keyLower == 'error in origin time':
 					origin.time().setUncertainty(float(value))
+
+				# location method
+				elif keyLower == 'location method':
+					origin.setMethodID(str(value))
 
 				# region table, added as origin comment later on
 				elif keyLower == 'region table':
@@ -553,7 +757,7 @@ class SH2Proc(Client.Application):
 					origin.creationInfo().setAuthor(value)
 
 				# creation info agency
-				elif keyLower == 'agency':
+				elif keyLower == 'source of information':
 					origin.creationInfo().setAgencyID(value)
 
 				# earth model id
@@ -576,6 +780,28 @@ class SH2Proc(Client.Application):
 					Logging.debug('Line %i: ignoring parameter: %s' % (
 					              iLine, key))
 
+				### missing keys
+				elif keyLower == 'ampl&period source':
+					Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+
+				elif keyLower == 'location quality':
+					Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+
+				elif keyLower == 'reference latitude':
+					Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+
+				elif keyLower == 'reference longitude':
+					Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+
+				elif keyLower.startswith('amplitude time'):
+					Logging.debug('Line %i: ignoring parameter: %s' % (
+					              iLine, key))
+
+
 				# unknown key
 				else:
 					Logging.warning('Line %i: ignoring unknown parameter: %s' \
@@ -597,8 +823,17 @@ class SH2Proc(Client.Application):
 		elif not origin.time().value().valid():
 			Logging.warning('could not add origin, missing origin time parameter')
 		else:
+			if magnitudeMB is not None:
+				origin.add(magnitudeMB)
+			if magnitudeML is not None:
+				origin.add(magnitudeML)
+			if magnitudeMS is not None:
+				origin.add(magnitudeMS)
+			if magnitudeBB is not None:
+				origin.add(magnitudeBB)
+
+			ep.add(event)
 			ep.add(origin)
-			origin.add(magnitude)
 
 			if originQuality is not None:
 				origin.setQuality(originQuality)
