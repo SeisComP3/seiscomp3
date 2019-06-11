@@ -25,6 +25,13 @@
   * Add ```--warning``` flag to output a warning for standard deviations of
     network magnitudes exceeding the provided value.
 
+* GUI
+
+  * Fix spectrogram rendering with logarithmic scale
+  * Improve spectrogram rendering speed
+  * Normalize spectrogram spectral amplitudes with respect to
+    sampling rate
+
 ## Release 2018.327 patch13
 
 * trunk
