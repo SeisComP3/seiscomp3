@@ -54,7 +54,9 @@
 				</option>
 				<option flag="m" long-flag="margin" argument="arg">
 					<description>
-					Time margin in seconds added to the final stream time window, default 300.
+					Time margin around the picked time window, default is 300.
+					Added before the first and after the last pick, respectively. Use 2
+					comma-separted values (before,after) for asymmetric margins, e.g. 120,300.
 					</description>
 				</option>
 				<option flag="S" long-flag="streams" argument="arg">
@@ -62,14 +64,14 @@
 					Comma separated list of streams per station to add, e.g. BH,SH,HH.
 					</description>
 				</option>
-				<option flag="C" long-flag="all-components" argument="flag">
+				<option flag="C" long-flag="all-components" argument="arg">
 					<description>
-					Specifies whether to use all components (0) or just the picked one (1), default 1.
+					Specifies whether to use all components (1) or just the picked ones (0). Default: 1.
 					</description>
 				</option>
-				<option flag="L" long-flag="all-locations" argument="flag">
+				<option flag="L" long-flag="all-locations" argument="arg">
 					<description>
-					Specifies whether to use all location codes (0) or just the picked one (1), default 1.
+					Specifies whether to use all location codes (1) or just the picked ones (0). Default: 1.
 					</description>
 				</option>
 				<option flag="" long-flag="all-stations" argument="flag">

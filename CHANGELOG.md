@@ -19,6 +19,7 @@
 
   * Add ```--input``` and ```--format``` options to read event parameters 
     from file
+  * Add asymmetric time margins
 
 * scmag
 
