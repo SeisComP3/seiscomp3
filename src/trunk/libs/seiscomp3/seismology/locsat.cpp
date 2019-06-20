@@ -275,6 +275,10 @@ int LocSAT::capabilities() const {
 DataModel::Origin* LocSAT::locate(PickList& pickList,
                                   double initLat, double initLon, double initDepth,
                                   const Core::Time &initTime) {
+	_locator_params->lat_init = initLat;
+	_locator_params->lon_init = initLon;
+	_locator_params->depth_init = initDepth;
+
 	if (_locateEvent) delete _locateEvent;
 	_locateEvent = new Internal::LocSAT;
 	_locateEvent->setOrigin(initLat, initLon, initDepth);
@@ -454,6 +458,10 @@ DataModel::Origin *LocSAT::relocate(const DataModel::Origin *origin) {
 
 	double depth = 0.0;
 	try { depth = origin->depth().value(); } catch (...){}
+
+	_locator_params->lat_init = origin->latitude().value();
+	_locator_params->lon_init = origin->longitude().value();
+	_locator_params->depth_init = depth;
 
 	_locateEvent->setOrigin(origin->latitude().value(),
 	                        origin->longitude().value(),
