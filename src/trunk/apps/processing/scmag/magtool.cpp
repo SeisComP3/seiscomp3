@@ -36,10 +36,11 @@
 #include <seiscomp3/utils/timer.h>
 
 #include <iostream>
-#include <string>
+#include <limits>
 #include <map>
-#include <vector>
 #include <set>
+#include <string>
+#include <vector>
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -176,7 +177,7 @@ MagTool::MagTool() {
 	_allowReprocessing = false;
 	_staticUpdate = false;
 	_keepWeights = false;
-	_warningLevel = -1;
+	_warningLevel = numeric_limits<double>::max();
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
