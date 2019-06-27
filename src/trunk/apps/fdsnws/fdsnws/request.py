@@ -123,20 +123,20 @@ class RequestOptions:
 		def match(self, start, end=None):
 			# simple time: limit to epochs intersecting with the specified time
 			# range
-			res = (not self.start or (end is None or end >= self.start)) and \
-			      (not self.end or start <= self.end)
+			res = (self.start is None or end is None or end >= self.start) and \
+			      (self.end is None or start <= self.end)
 
 			# window time: limit to epochs strictly starting or ending before or
 			# after a specified time value
 			if not self.simpleTime:
 				res = res and \
-				      (not self.startBefore or (
+				      (self.startBefore is None or (
 				           start is not None and start < self.startBefore)) and \
-				      (not self.startAfter or (
+				      (self.startAfter is None or (
 				           start is not None and start > self.startAfter)) and \
-				      (not self.endBefore or (
+				      (self.endBefore is None or (
 				           end is not None and end < self.endBefore)) and \
-				      (not self.endAfter or end is None or end > self.endAfter)
+				      (self.endAfter is None or end is None or end > self.endAfter)
 
 			return res
 
@@ -456,11 +456,13 @@ class RequestOptions:
 			return None
 
 		time = Time()
+		timeValid = False
 		for fmt in RequestOptions.TimeFormats:
 			if time.fromString(value, fmt):
+				timeValid = True
 				break
 
-		if not time.valid():
+		if not timeValid:
 			raise ValueError, "invalid date format in parameter: %s" % key
 
 		return time
