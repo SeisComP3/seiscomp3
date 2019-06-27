@@ -113,6 +113,8 @@ namespace Core {
    - Changed Seiscomp::Gui::Map::Canvas::menu parent parameter type from QWidget to QMenu
    - Changed Seiscomp::Gui::Map::Layer::menu parent parameter type from QWidget to QMenu
    - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added Seiscomp::Gui::Map::Layer::show
+   - Added Seiscomp::Gui::Map::Layer::hide
    - Added Seiscomp::Gui::Map::Layer::baseBufferUpdated
    - Added Seiscomp::Gui::Map::Layer::size
    - Added Seiscomp::Gui::Map::Layer::isInside
