@@ -428,7 +428,7 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
         ILOC_TT_TABLE *LocalTTtables, short int **topo, int isfirst)
 {
     double resid, bigres = 60., min_resid, dtdd = ILOC_NULLVAL;
-    double ttime = ILOC_NULLVAL, pPttime = ILOC_NULLVAL;
+    double ttime = ILOC_NULLVAL, pPttime = ILOC_NULLVAL, d2tdd = 0, d2tdh = 0;
     char candidate_phase[ILOC_PHALEN], mappedphase[ILOC_PHALEN], phase[ILOC_PHALEN];
     char Vmodel[ILOC_VALLEN];
     int isS = 0, isP = 0, isI = 0, isH = 0, iss = 0, isp = 0;
@@ -504,7 +504,7 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
  */
             if (iLoc_GetTravelTimePrediction(iLocConfig, Hypocenter, &Assocs[k],
                             &StaLocs[sind], ec, TTInfo, TTtables, LocalTTInfo,
-                            LocalTTtables, topo, 0, isfirst, 0)) {
+                            LocalTTtables, topo, 1, isfirst, 1)) {
                 Assocs[k].ttime = ILOC_NULLVAL;
                 Assocs[k].TimeRes = ILOC_NULLVAL;
                 Assocs[k].SlowRes = ILOC_NULLVAL;
@@ -536,6 +536,8 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                         Assocs[k-1].ttime = Assocs[k].ttime;
                         Assocs[k-1].TimeRes = Assocs[k].TimeRes;
                         Assocs[k-1].dtdd = Assocs[k].dtdd;
+                        Assocs[k-1].d2tdd = Assocs[k].d2tdd;
+                        Assocs[k-1].d2tdh = Assocs[k].d2tdh;
                         Assocs[k].duplicate = 1;
                         continue;
                     }
@@ -557,6 +559,8 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                         Assocs[k].ttime = Assocs[k-1].ttime;
                         Assocs[k].TimeRes = Assocs[k-1].TimeRes;
                         Assocs[k].dtdd = Assocs[k-1].dtdd;
+                        Assocs[k].d2tdd = Assocs[k-1].d2tdd;
+                        Assocs[k].d2tdh = Assocs[k-1].d2tdh;
                         Assocs[k].duplicate = 1;
                         continue;
                     }
@@ -730,7 +734,7 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 strcpy(Assocs[k].Phase, phase);
                 if (iLoc_GetTravelTimePrediction(iLocConfig, Hypocenter, &Assocs[k],
                             &StaLocs[sind], ec, TTInfo, TTtables, LocalTTInfo,
-                            LocalTTtables, topo, 0, isfirst, 0))
+                            LocalTTtables, topo, 1, isfirst, 1))
                     continue;
 /*
  *              keep record of pP ttime
@@ -755,6 +759,8 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                     min_resid = resid;
                     ttime = Assocs[k].ttime;
                     dtdd = Assocs[k].dtdd;
+                    d2tdd = Assocs[k].d2tdd;
+                    d2tdh = Assocs[k].d2tdh;
                 }
             }
 /*
@@ -773,6 +779,8 @@ static void PhaseIdentification(ILOC_CONF *iLocConfig, ILOC_HYPO *Hypocenter,
                 Assocs[k].TimeRes = min_resid;
                 Assocs[k].ttime = ttime;
                 Assocs[k].dtdd = dtdd;
+                Assocs[k].d2tdd = d2tdd;
+                Assocs[k].d2tdh = d2tdh;
                 if (Assocs[k].BackAzimuth != ILOC_NULLVAL)
                     Assocs[k].AzimRes = Assocs[k].BackAzimuth - Assocs[k].Seaz;
                 if (Assocs[k].Slowness != ILOC_NULLVAL)
