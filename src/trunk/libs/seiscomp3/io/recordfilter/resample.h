@@ -138,6 +138,8 @@ class SC_SYSTEM_CORE_API RecordResampler : public RecordResamplerBase {
 			// without resampling.
 			bool passThrough;
 
+			bool valid;
+
 			size_t samplesToSkip;
 
 			Coefficients *coefficients;
