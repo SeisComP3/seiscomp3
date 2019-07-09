@@ -40,9 +40,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void remez(double h[], int numtaps,
-           int numband, double bands[], double des[], double weight[],
-           int type);
+int remez(double h[], int numtaps,
+          int numband, double bands[], double des[], double weight[],
+          int type);
 #ifdef __cplusplus
 }
 #endif

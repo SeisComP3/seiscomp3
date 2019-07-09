@@ -285,8 +285,12 @@ void RecordResampler<T>::init(DownsampleStage *stage, const Record *rec, int ups
 	stage->sampleRate = rec->samplingFrequency()*upscale;
 	stage->targetRate = stage->sampleRate / N;
 	stage->dt = 0;
-	if ( !stage->passThrough ) initCoefficients(stage);
-	else stage->coefficients = NULL;
+	stage->valid = true;
+
+	if ( !stage->passThrough )
+		initCoefficients(stage);
+	else
+		stage->coefficients = NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -316,6 +320,9 @@ void RecordResampler<T>::init(UpsampleStage *stage, const Record *rec, int N) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record *rec) {
+	if ( !stage->valid )
+		return NULL;
+
 	Core::Time endTime;
 	try {
 		endTime = rec->endTime();
@@ -640,14 +647,14 @@ Record *RecordResampler<T>::feed(const Record *record) {
 		if ( num > 1 ) {
 			//SEISCOMP_DEBUG("[resample] create upscaling of factor %d", num);
 
-			if ( _upsampler == NULL )
+			if ( !_upsampler )
 				_upsampler = new UpsampleStage;
 			else
 				_upsampler->reset();
 
 			init(_upsampler, record, num);
 		}
-		else if ( _upsampler != NULL ) {
+		else if ( _upsampler ) {
 			delete _upsampler;
 			_upsampler = NULL;
 		}
@@ -656,7 +663,7 @@ Record *RecordResampler<T>::feed(const Record *record) {
 		if ( num > 1 || den > 1 ) {
 			//SEISCOMP_DEBUG("[resample] create downscaling of factor %d", den);
 
-			if ( _downsampler == NULL )
+			if ( !_downsampler )
 				_downsampler = new DownsampleStage;
 			else {
 				_downsampler->reset();
@@ -670,7 +677,7 @@ Record *RecordResampler<T>::feed(const Record *record) {
 
 			init(_downsampler, record, num, den);
 		}
-		else if ( _downsampler != NULL ) {
+		else if ( _downsampler ) {
 			delete _downsampler;
 			_downsampler = NULL;
 		}
@@ -686,7 +693,7 @@ Record *RecordResampler<T>::feed(const Record *record) {
 			               tmp->samplingFrequency());
 		*/
 
-		if ( tmp != NULL && _downsampler != NULL ) {
+		if ( tmp && _downsampler ) {
 			// The tmp record from previous stage is just temporary
 			RecordPtr guard(tmp);
 			tmp = resample(_downsampler, tmp);
@@ -697,7 +704,7 @@ Record *RecordResampler<T>::feed(const Record *record) {
 			*/
 		}
 	}
-	else if ( _downsampler != NULL ) {
+	else if ( _downsampler ) {
 		tmp = resample(_downsampler, record);
 		/*
 		if ( tmp )
@@ -720,6 +727,8 @@ template <typename T>
 void RecordResampler<T>::initCoefficients(DownsampleStage *stage) {
 	_coefficientMutex.lock();
 
+	stage->valid = true;
+
 	CoefficientMap::iterator it = _coefficients.find(stage->N);
 	if ( it != _coefficients.end() )
 		stage->coefficients = it->second;
@@ -729,7 +738,15 @@ void RecordResampler<T>::initCoefficients(DownsampleStage *stage) {
 		if ( stage->N > _maxN ) {
 			for ( int i = _maxN; i > 1; --i ) {
 				if ( stage->N % i == 0 ) {
+					_coefficientMutex.unlock();
+
 					int nextStageN = stage->N / i;
+					if ( nextStageN > _maxN ) {
+						SEISCOMP_WARNING("[dec] max decimations exceeded: %d > %d",
+						                 nextStageN, _maxN);
+						stage->valid = false;
+						return;
+					}
 
 					//SEISCOMP_DEBUG("[dec] clipping N=%d to %d and create sub stage",
 					//               stage->N, i);
@@ -742,11 +759,18 @@ void RecordResampler<T>::initCoefficients(DownsampleStage *stage) {
 					nextStage->targetRate = _targetRate;
 					nextStage->N = nextStageN;
 
-					_coefficientMutex.unlock();
 					initCoefficients(nextStage);
-					_coefficientMutex.lock();
 
-					stage->nextStage = nextStage;
+					if ( !nextStage->valid ) {
+						delete nextStage;
+						stage->valid = false;
+						return;
+					}
+					else {
+						stage->nextStage = nextStage;
+					}
+
+					_coefficientMutex.lock();
 
 					break;
 				}
@@ -763,13 +787,19 @@ void RecordResampler<T>::initCoefficients(DownsampleStage *stage) {
 
 			Coefficients *coeff = new Coefficients(Ncoeff);
 
-			SEISCOMP_DEBUG("[dec] caching %d coefficents for N=%d", Ncoeff, stage->N);
-
 			double bands[4] = {0,0.5*(_fp/stage->N),0.5*(_fs/stage->N),0.5};
 			double weights[2] = {1,1};
 			double desired[2] = {1,0};
 
-			remez(&((*coeff)[0]), Ncoeff, 2, bands, desired, weights, BANDPASS);
+			if ( remez(&((*coeff)[0]), Ncoeff, 2, bands, desired, weights, BANDPASS) ) {
+				SEISCOMP_WARNING("[dec] failed to build coefficients for N=%d, ignore stream", stage->N);
+				stage->valid = false;
+				delete coeff;
+				_coefficientMutex.unlock();
+				return;
+			}
+
+			SEISCOMP_DEBUG("[dec] caching %d coefficents for N=%d", Ncoeff, stage->N);
 
 			_coefficients[stage->N] = coeff;
 			stage->coefficients = coeff;

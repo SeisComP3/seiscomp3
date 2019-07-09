@@ -353,6 +353,12 @@ void Search(int r, int Ext[],
  */
    extra = k - (r+1);
 
+   if (extra < 0)
+   {
+      free(foundExt);
+      return;
+   }
+
    while (extra > 0)
    {
       if (E[foundExt[0]] > 0.0)
@@ -538,17 +544,24 @@ short isDone(int r, int Ext[], double E[])
  * OUTPUT:
  * -------
  * double h[]      - Impulse response of final filter [numtaps]
+ *
+ * RETURN:
+ * -------
+ *
+ * 0 - Success
+ * Error otherwise
  ********************/
 
-void remez(double h[], int numtaps,
-           int numband, double bands[], double des[], double weight[],
-           int type)
+int remez(double h[], int numtaps,
+          int numband, double bands[], double des[], double weight[],
+          int type)
 {
    double *Grid, *W, *D, *E;
    int    i, iter, gridsize, r, *Ext;
    double *taps, c;
    double *x, *y, *ad;
    int    symmetry;
+   int    result = 0;
 
    if (type == BANDPASS)
       symmetry = POSITIVE;
@@ -657,39 +670,42 @@ void remez(double h[], int numtaps,
    }
    if (iter == MAXITERATIONS)
    {
-      fprintf(stderr,"remez(): reached maximum iteration count; results may be bad.\n");
+      //fprintf(stderr,"remez(): reached maximum iteration count.\n");
+      result = 1;
    }
-
-   CalcParms(r, Ext, Grid, D, W, ad, x, y);
-
-/*
- * Find the 'taps' of the filter for use with Frequency
- * Sampling.  If odd or Negative symmetry, fix the taps
- * according to Parks McClellan
- */
-   for (i=0; i<=numtaps/2; i++)
+   else
    {
-      if (symmetry == POSITIVE)
-      {
-         if (numtaps%2)
-            c = 1;
-         else
-            c = cos(Pi * (double)i/numtaps);
-      }
-      else
-      {
-         if (numtaps%2)
-            c = sin(Pi2 * (double)i/numtaps);
-         else
-            c = sin(Pi * (double)i/numtaps);
-      }
-      taps[i] = ComputeA((double)i/numtaps, r, ad, x, y)*c;
-   }
+      CalcParms(r, Ext, Grid, D, W, ad, x, y);
 
-/*
- * Frequency sampling design with calculated taps
- */
-   FreqSample(numtaps, taps, h, symmetry);
+   /*
+    * Find the 'taps' of the filter for use with Frequency
+    * Sampling.  If odd or Negative symmetry, fix the taps
+    * according to Parks McClellan
+    */
+      for (i=0; i<=numtaps/2; i++)
+      {
+         if (symmetry == POSITIVE)
+         {
+            if (numtaps%2)
+               c = 1;
+            else
+               c = cos(Pi * (double)i/numtaps);
+         }
+         else
+         {
+            if (numtaps%2)
+               c = sin(Pi2 * (double)i/numtaps);
+            else
+               c = sin(Pi * (double)i/numtaps);
+         }
+         taps[i] = ComputeA((double)i/numtaps, r, ad, x, y)*c;
+      }
+
+   /*
+    * Frequency sampling design with calculated taps
+    */
+      FreqSample(numtaps, taps, h, symmetry);
+   }
 
 /*
  * Delete allocated memory
@@ -703,5 +719,7 @@ void remez(double h[], int numtaps,
    free(y);
    free(ad);
    free(taps);
+
+   return result;
 }
 
