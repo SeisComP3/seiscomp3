@@ -20,6 +20,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/io/archive/jsonarchive.h>
 #include <seiscomp3/datamodel/version.h>
+#include <seiscomp3/math/math.h>
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
@@ -539,6 +540,13 @@ void JSONArchive::read(int &value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void JSONArchive::read(float &value) {
 	if ( !_objectLocation->IsNumber() ) {
+		if ( _objectLocation->IsString() ) {
+			if ( !strcmp(_objectLocation->GetString(), "NaN") ) {
+				value = std::numeric_limits<float>::quiet_NaN();
+				return;
+			}
+		}
+
 		SEISCOMP_ERROR("number expected");
 		setValidity(false);
 		return;
@@ -554,6 +562,13 @@ void JSONArchive::read(float &value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void JSONArchive::read(double &value) {
 	if ( !_objectLocation->IsNumber() ) {
+		if ( _objectLocation->IsString() ) {
+			if ( !strcmp(_objectLocation->GetString(), "NaN") ) {
+				value = std::numeric_limits<float>::quiet_NaN();
+				return;
+			}
+		}
+
 		SEISCOMP_ERROR("number expected");
 		setValidity(false);
 		return;
@@ -937,7 +952,10 @@ void JSONArchive::write(int value) {
 void JSONArchive::write(float value) {
 	if ( !_buf ) return;
 	preAttrib();
-	*_os << boost::lexical_cast<std::string>(value);
+	if ( Math::isNaN(value) )
+		*_os << "\"NaN\"";
+	else
+		*_os << boost::lexical_cast<std::string>(value);
 	postAttrib();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -948,9 +966,11 @@ void JSONArchive::write(float value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void JSONArchive::write(double value) {
 	if ( !_buf ) return;
-
 	preAttrib();
-	*_os << boost::lexical_cast<std::string>(value);
+	if ( Math::isNaN(value) )
+		*_os << "\"NaN\"";
+	else
+		*_os << boost::lexical_cast<std::string>(value);
 	postAttrib();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
