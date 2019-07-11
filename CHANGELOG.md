@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* python-apps
+
+  * Add simple script to dump public objects
+
 * sh2proc
 
   * Add parameters parsed from Seismic Handler to SeisComP3. 
