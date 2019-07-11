@@ -230,3 +230,5 @@ optional_enum(Seiscomp::DataModel::StationGroupType);
 %include "seiscomp3/datamodel/databasereader.h"
 %include "seiscomp3/datamodel/databasequery.h"
 %include "seiscomp3/datamodel/messages.h"
+
+%include "datamodelext.i"

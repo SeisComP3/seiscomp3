@@ -16,13 +16,34 @@
 
 #include <string>
 
-//#include <seiscomp3/io/importer.h>
+#include <seiscomp3/datamodel/types.h>
+
 #include <seiscomp3/io/xml/exporter.h>
 #include <seiscomp3/io/xml/handler.h>
 
 
 namespace Seiscomp {
 namespace QML {
+
+class TypeMapper {
+	public:
+		/**
+		 * @brief Maps an QML event type string to the EventType enumeration.
+		 *
+		 * If the conversion fails, an ValueException is thrown.
+		 *
+		 * @param str The input string
+		 * @return The mapped event type or an exception
+		 */
+		static DataModel::EventType EventTypeFromString(const std::string &str);
+
+		/**
+		 * @brief Maps an EventType to an QML event type string.
+		 * @param type The EventType
+		 * @return The QML event type string
+		 */
+		static std::string EventTypeToString(DataModel::EventType type);
+};
 
 class Exporter : public IO::XML::Exporter {
 	public:

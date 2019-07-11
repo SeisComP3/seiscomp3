@@ -27167,6 +27167,47 @@ def ArtificialOriginMessage_ConstCast(*args):
     """
     return _DataModel.ArtificialOriginMessage_ConstCast(*args)
 
+class QMLTypeMapper(_object):
+    """Proxy of C++ Seiscomp::QML::TypeMapper class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, QMLTypeMapper, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, QMLTypeMapper, name)
+    __repr__ = _swig_repr
+
+    def EventTypeFromString(str):
+        """EventTypeFromString(std::string const & str) -> Seiscomp::DataModel::EventType"""
+        return _DataModel.QMLTypeMapper_EventTypeFromString(str)
+
+    EventTypeFromString = staticmethod(EventTypeFromString)
+
+    def EventTypeToString(type):
+        """EventTypeToString(Seiscomp::DataModel::EventType type) -> std::string"""
+        return _DataModel.QMLTypeMapper_EventTypeToString(type)
+
+    EventTypeToString = staticmethod(EventTypeToString)
+
+    def __init__(self):
+        """__init__(Seiscomp::QML::TypeMapper self) -> QMLTypeMapper"""
+        this = _DataModel.new_QMLTypeMapper()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_QMLTypeMapper
+    __del__ = lambda self: None
+QMLTypeMapper_swigregister = _DataModel.QMLTypeMapper_swigregister
+QMLTypeMapper_swigregister(QMLTypeMapper)
+
+def QMLTypeMapper_EventTypeFromString(str):
+    """QMLTypeMapper_EventTypeFromString(std::string const & str) -> Seiscomp::DataModel::EventType"""
+    return _DataModel.QMLTypeMapper_EventTypeFromString(str)
+
+def QMLTypeMapper_EventTypeToString(type):
+    """QMLTypeMapper_EventTypeToString(Seiscomp::DataModel::EventType type) -> std::string"""
+    return _DataModel.QMLTypeMapper_EventTypeToString(type)
+
 # This file is compatible with both classic and new-style classes.
 
 
