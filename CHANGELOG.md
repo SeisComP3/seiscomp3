@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch15
+
+* python-apps
+
+  * Add simple script to dump public objects
+
 ## Release 2018.327 patch14
 
 * sh2proc
