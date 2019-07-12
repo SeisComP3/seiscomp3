@@ -162,7 +162,7 @@ bool MNAmplitude::readPriorities(PhaseOrVelocity *priorities,
                                  const std::string &parameter) {
 	try {
 		vector<string> strPriorities;
-		Core::split(strPriorities, settings.getString(parameter).c_str(), ",");
+		Core::split(strPriorities, settings.getString(parameter).c_str(), ", ");
 		if ( strPriorities.size() > EPhaseOrVelocityQuantity ) {
 			SEISCOMP_ERROR("%s: too many priorities, maximum is %d",
 			               parameter.c_str(), EPhaseOrVelocityQuantity);
@@ -579,11 +579,13 @@ void MNAmplitude::setEnvironment(const Seiscomp::DataModel::Origin *hypocenter,
 	if ( !noiseWindowEnd || !signalWindowStart || !signalWindowEnd ) {
 		// Use error code 1 as time window computation error
 		setStatus(Error, 1);
+		return;
 	}
 
 	if ( *signalWindowStart >= *signalWindowEnd ) {
 		// Use error code 2 as empty or invalid time window
 		setStatus(Error, 2);
+		return;
 	}
 
 	*noiseWindowEnd -= _noiseWindowPreSeconds;
