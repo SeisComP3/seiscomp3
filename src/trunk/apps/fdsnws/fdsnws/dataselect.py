@@ -109,9 +109,9 @@ class _DataSelectRequestOptions(RequestOptions):
 
 ################################################################################
 class _MyRecordStream(object):
-	def __init__(self, url, tracker, bufferSize):
+	def __init__(self, url, trackerList, bufferSize):
 		self.__url = url
-		self.__tracker = tracker
+		self.__trackerList = trackerList
 		self.__bufferSize = bufferSize
 		self.__tw = []
 
@@ -210,25 +210,25 @@ class _MyRecordStream(object):
 							except Exception, e:
 								Logging.error("could not override network code: %s" % str(e))
 
-			if self.__tracker:
+			for tracker in self.__trackerList:
 				net_class = 't' if net[0] in "0123456789XYZ" else 'p'
 
 				if size == 0:
-					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
-					                           restricted, net_class, True, [],
-					                           "fdsnws", "NODATA", 0, "")
+					tracker.line_status(startt, endt, net, sta, cha, loc,
+					                    restricted, net_class, True, [],
+					                    "fdsnws", "NODATA", 0, "")
 
 				else:
-					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
-					                           restricted, net_class, True, [],
-					                           "fdsnws", "OK", size, "")
+					tracker.line_status(startt, endt, net, sta, cha, loc,
+					                    restricted, net_class, True, [],
+					                    "fdsnws", "OK", size, "")
 
 
 ################################################################################
 class _WaveformProducer(object):
 	implements(interfaces.IPushProducer)
 
-	def __init__(self, req, ro, rs, fileName, tracker):
+	def __init__(self, req, ro, rs, fileName, trackerList):
 		self.req = req
 		self.ro = ro
 		self.it = rs.input()
@@ -236,13 +236,16 @@ class _WaveformProducer(object):
 		self.fileName = fileName
 		self.written = 0
 
-		self.tracker = tracker
+		self.trackerList = trackerList
 		self.paused = False
 		self.stopped = False
 		self.running = False
 
 
 	def _flush(self, data):
+		if self.stopped:
+			return
+
 		if not self.paused:
 			reactor.callInThread(self._collectData)
 
@@ -259,6 +262,9 @@ class _WaveformProducer(object):
 
 
 	def _finish(self):
+		if self.stopped:
+			return
+
 		if self.written == 0:
 			msg = "no waveform data found"
 			errorpage = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg,
@@ -267,28 +273,24 @@ class _WaveformProducer(object):
 			if errorpage:
 				self.req.write(errorpage)
 
-			if self.tracker:
-				self.tracker.volume_status("fdsnws", "NODATA", 0, "")
-				self.tracker.request_status("END", "")
+			for tracker in self.trackerList:
+				tracker.volume_status("fdsnws", "NODATA", 0, "")
+				tracker.request_status("END", "")
 
 		else:
 			Logging.debug("%s: returned %i bytes of mseed data" % (
 			              self.ro.service, self.written))
 			utils.accessLog(self.req, self.ro, http.OK, self.written, None)
 
-			if self.tracker:
-				self.tracker.volume_status("fdsnws", "OK", self.written, "")
-				self.tracker.request_status("END", "")
-
+			for tracker in self.trackerList:
+				tracker.volume_status("fdsnws", "OK", self.written, "")
+				tracker.request_status("END", "")
 
 		self.req.unregisterProducer()
 		self.req.finish()
 
 
 	def _collectData(self):
-		if self.stopped:
-			return
-
 		try:
 			reactor.callFromThread(self._flush, self.it.next())
 
@@ -311,6 +313,16 @@ class _WaveformProducer(object):
 	def stopProducing(self):
 		self.stopped = True
 
+		Logging.debug("%s: returned %i bytes of mseed data (not completed)" % (
+		              self.ro.service, self.written))
+		utils.accessLog(self.req, self.ro, http.OK, self.written, "not completed")
+
+		for tracker in self.trackerList:
+			tracker.volume_status("fdsnws", "ERROR", self.written, "")
+			tracker.request_status("END", "")
+
+		self.req.unregisterProducer()
+		self.req.finish()
 
 
 ################################################################################
@@ -512,26 +524,41 @@ class FDSNDataSelect(BaseResource):
 			maxSamples = app._samplesM * 1000000
 			samples = 0
 
-		app = Application.Instance()
-		if app._trackdbEnabled:
-			userid = ro.userName or app._trackdbDefaultUser
-			reqid = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
+		trackerList = []
+
+		if app._trackdbEnabled or app._requestLog:
 			xff = req.requestHeaders.getRawHeaders("x-forwarded-for")
 			if xff:
 				userIP = xff[0].split(",")[0].strip()
 			else:
 				userIP = req.getClientIP()
 
-			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid,
-			                           "WAVEFORM", userid,
-			                           "REQUEST WAVEFORM " + reqid,
+			clientID = req.getHeader("User-Agent")
+			if clientID:
+				clientID = clientID[:80]
+			else:
+				clientID = "fdsnws"
+
+		if app._trackdbEnabled:
+			if ro.userName:
+				userID = ro.userName
+			else:
+				userID = app._trackdbDefaultUser
+
+			reqID = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
+			tracker = RequestTrackerDB(clientID, app.connection(), reqID,
+			                           "WAVEFORM", userID,
+			                           "REQUEST WAVEFORM " + reqID,
 			                           "fdsnws", userIP, req.getClientIP())
 
-		else:
-			tracker = None
+			trackerList.append(tracker)
+
+		if app._requestLog:
+			tracker = app._requestLog.tracker(ro.service, ro.userName, userIP, clientID)
+			trackerList.append(tracker)
 
 		# Open record stream
-		rs = _MyRecordStream(self._rsURL, tracker, self.__bufferSize)
+		rs = _MyRecordStream(self._rsURL, trackerList, self.__bufferSize)
 
 		forbidden = None
 
@@ -540,12 +567,12 @@ class FDSNDataSelect(BaseResource):
 		for s in ro.streams:
 			for net in self._networkIter(s):
 				netRestricted = utils.isRestricted(net)
-				if not tracker and netRestricted and not self.__user:
+				if not trackerList and netRestricted and not self.__user:
 					forbidden = forbidden or (forbidden is None)
 					continue
 				for sta in self._stationIter(net, s):
 					staRestricted = utils.isRestricted(sta)
-					if not tracker and staRestricted and not self.__user:
+					if not trackerList and staRestricted and not self.__user:
 						forbidden = forbidden or (forbidden is None)
 						continue
 					for loc in self._locationIter(sta, s):
@@ -569,7 +596,7 @@ class FDSNDataSelect(BaseResource):
 							         net.code(), sta.code(), loc.code(),
 							         cha.code(), start_time, end_time))):
 
-								if tracker:
+								for tracker in trackerList:
 									net_class = 't' if net.code()[0] in "0123456789XYZ" else 'p'
 									tracker.line_status(start_time, end_time,
 									    net.code(), sta.code(), cha.code(), loc.code(),
@@ -615,15 +642,15 @@ class FDSNDataSelect(BaseResource):
 							             sta.archiveNetworkCode())
 
 		if forbidden:
-			if tracker:
-				tracker.volume_status("fdsnws", "NODATA", 0, "")
+			for tracker in trackerList:
+				tracker.volume_status("fdsnws", "DENIED", 0, "")
 				tracker.request_status("END", "")
 
 			msg = "access denied"
 			return self.renderErrorPage(req, http.FORBIDDEN, msg, ro)
 
 		elif forbidden is None:
-			if tracker:
+			for tracker in trackerList:
 				tracker.volume_status("fdsnws", "NODATA", 0, "")
 				tracker.request_status("END", "")
 
@@ -635,7 +662,7 @@ class FDSNDataSelect(BaseResource):
 		           time.strftime('%Y-%m-%dT%H:%M:%S')) + '.mseed'
 
 		# Create producer for async IO
-		prod = _WaveformProducer(req, ro, rs, fileName, tracker)
+		prod = _WaveformProducer(req, ro, rs, fileName, trackerList)
 		req.registerProducer(prod, True)
 		prod.resumeProducing()
 

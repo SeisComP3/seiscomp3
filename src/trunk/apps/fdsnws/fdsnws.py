@@ -378,6 +378,7 @@ class FDSNWS(Application):
 		self._recordBulkSize = 102400    # desired record bulk size
 		self._htpasswd       = '@CONFIGDIR@/fdsnws.htpasswd'
 		self._accessLogFile  = ''
+		self._requestLogFile  = ''
 
 		self._allowRestricted   = True
 		self._useArclinkAccess  = False
@@ -466,6 +467,12 @@ class FDSNWS(Application):
 		try:
 			self._accessLogFile = Environment.Instance().absolutePath(
 			                      self.configGetString('accessLog'))
+		except Exception: pass
+
+		# location of request log file
+		try:
+			self._requestLogFile = Environment.Instance().absolutePath(
+			                       self.configGetString('requestLog'))
 		except Exception: pass
 
 		# access to restricted inventory information
@@ -686,7 +693,8 @@ class FDSNWS(Application):
 		               "    defaultUser   : %s\n" \
 		               "  auth\n" \
 		               "    enabled       : %s\n" \
-		               "    gnupgHome     : %s\n" % (
+		               "    gnupgHome     : %s\n" \
+		               "  requestLog      : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
 		               self._serveStation, self._serveAvailability,
 		               self._listenAddress, self._port, self._connections,
@@ -699,7 +707,7 @@ class FDSNWS(Application):
 		               stationFilterStr, dataSelectFilterStr,
 		               self._debugFilter, self._trackdbEnabled,
 		               self._trackdbDefaultUser, self._authEnabled,
-		               self._authGnupgHome))
+		               self._authGnupgHome, self._requestLogFile))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
@@ -709,6 +717,12 @@ class FDSNWS(Application):
 		# access logger if requested
 		if self._accessLogFile:
 			self._accessLog = Log(self._accessLogFile)
+
+		# request logger if requested
+		if self._requestLogFile:
+			# import here, so we don't depend on GeoIP if request log is not needed
+			from seiscomp3.fdsnws.reqlog import RequestLog
+			self._requestLog = RequestLog(self._requestLogFile)
 
 		# load inventory needed by DataSelect and Station service
 		stationInv = dataSelectInv = None
