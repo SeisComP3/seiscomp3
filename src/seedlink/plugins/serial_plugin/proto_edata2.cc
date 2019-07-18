@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstddef>
+#include <cstdio>
 
 #include <unistd.h>
 #include <time.h>
@@ -24,7 +25,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "qdefines.h"
 #include "qtime.h"
 
 #include "utils.h"

@@ -13,10 +13,12 @@ SET(SLUTILS_HEADERS
 	descriptor.h
 	diag.h
 	utils.h
+	qtime.h
 )
 
 SET(SLUTILS_SOURCES
 	utils.cc
+	qtime.cc
 	conf_xml.cc
 	confbase.cc
 )

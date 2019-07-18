@@ -6,7 +6,6 @@ SET(CHAINPLUGIN_SOURCES
 INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(../../libs/plugin)
 INCLUDE_DIRECTORIES(../../libs/3rd-party/libslink)
-INCLUDE_DIRECTORIES(../../libs/3rd-party/qlib2)
 
 SET(OPTIONS "-DSYSLOG_FACILITY=LOG_LOCAL0")
 
@@ -18,7 +17,6 @@ ADD_EXECUTABLE(chain_plugin ${CHAINPLUGIN_SOURCES})
 TARGET_LINK_LIBRARIES(
 	chain_plugin
 		slink
-		qlib2
 		slplugin
 		slutils
 		${LIBXML2_LIBRARIES}

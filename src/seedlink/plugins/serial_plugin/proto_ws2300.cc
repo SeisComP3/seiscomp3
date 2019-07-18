@@ -26,7 +26,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "qdefines.h"
 #include "qtime.h"
 
 #include "utils.h"

@@ -28,9 +28,8 @@
 #include "libslink.h"
 
 #include "qtime.h"
-#include "qdefines.h"
 
-#define MYVERSION "1.0 (2010.256)"
+#define MYVERSION "1.0 (2019.199)"
 
 const char *const ident_str = "load_timetable v" MYVERSION;
 

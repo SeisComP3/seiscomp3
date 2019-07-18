@@ -34,8 +34,6 @@
 #include <getopt.h>
 #endif
 
-#include "qdefines.h"
-#include "qutils.h"
 #include "qtime.h"
 
 #include "libslink.h"
@@ -52,7 +50,7 @@
 
 #include "schedule.h"
 
-#define MYVERSION "2.0 (2018.198)"
+#define MYVERSION "2.0 (2019.199)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/chain.xml"
@@ -872,11 +870,15 @@ void Station::process_mseed(char *pseed, int packtype, int seq, int size)
         SLMSrecord* msr = sl_msr_new();
         sl_msr_parse(NULL, pseed, &msr, 1, 1);
         
-        if(msr == NULL) return;
+        if(msr == NULL)
+          {
+            logs(LOG_ERR) << "error decoding Mini-SEED packet " <<
+              string(fsdh->sequence_number, 6) << ", "
+              "station " << net << "_" << sta << " (" << myid << "), "
+              "stream " << loc << "." << chn << ".D" << endl;
 
-        int timing_quality = default_timing_quality;
-        if(msr->Blkt1001 != NULL)
-            timing_quality = msr->Blkt1001->timing_qual;
+            return;
+          }
 
         if(msr->numsamples < 0 || msr->numsamples > MAX_SAMPLES)
           {
@@ -889,13 +891,28 @@ void Station::process_mseed(char *pseed, int packtype, int seq, int size)
             return;
           }
 
+        if(msr->numsamples == 0)
+          {
+            // not a data record
+            sl_msr_free(&msr);
+            return;
+          }
+
+        int timing_quality = default_timing_quality, usec99 = 0;
+
+        if(msr->Blkt1001 != NULL)
+          {
+            timing_quality = msr->Blkt1001->timing_qual;
+            usec99 = msr->Blkt1001->usec;
+          }
+
         struct ptime pt;
         pt.year = ntohs(fsdh->start_time.year);
         pt.yday = ntohs(fsdh->start_time.day);
         pt.hour = fsdh->start_time.hour;
         pt.minute = fsdh->start_time.min;
         pt.second = fsdh->start_time.sec;
-        pt.usec = ntohs(fsdh->start_time.fract) * 100;
+        pt.usec = ntohs(fsdh->start_time.fract) * 100 + usec99;
 
         int r = 0;
         if(q->second.double_rate)
@@ -3004,8 +3021,6 @@ try
     redirect_ostream(clog, LogFunc(), LOG_ERR);
 
     logs(LOG_NOTICE) << ident_str << " started" << endl;
-    
-    init_qlib2(0);
     
     string timetable_loader;
     read_config_xml(config_file, ChainElement(timetable_loader));

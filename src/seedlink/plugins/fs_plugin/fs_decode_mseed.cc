@@ -13,16 +13,13 @@
 
 #include <string>
 #include <map>
+#include <cstdio>
 
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#include "qtime.h"
-#include "qutils.h"
-#include "sdr_utils.h"
-#include "ms_unpack.h"
+#include <netinet/in.h>
 
 #include "libslink.h"
 
@@ -43,6 +40,10 @@ using namespace SeedlinkPlugin;
 const int HEADER_SIZE         = 64;
 const int MAX_PACKET_SIZE     = 4096;
 const int MAX_SAMPLES         = ((MAX_PACKET_SIZE - HEADER_SIZE) * 2);
+const int STATLEN             = 5;
+const int NETLEN              = 2;
+const int LOCLEN              = 2;
+const int CHLEN               = 3;
 
 //*****************************************************************************
 // FS_Decode_MSEED
@@ -54,7 +55,8 @@ class FS_Decode_MSEED: public FS_Decoder
     map<string, string > channel_map;
 
     size_t readn(int fd, void *vptr, size_t n);
-    void decoding_error(DATA_HDR *hdr);
+    void get_id(const sl_fsdh_s *fsdh, string &net, string &sta,
+      string &loc, string &chn);
     int send_mseed_unpack(const string &channel_name, const void *dataptr,
       size_t data_size);
 
@@ -95,97 +97,110 @@ size_t FS_Decode_MSEED::readn(int fd, void *vptr, size_t n)
     return(n);
   }
 
-void FS_Decode_MSEED::decoding_error(DATA_HDR *hdr)
+void FS_Decode_MSEED::get_id(const sl_fsdh_s *fsdh, string &net, string &sta,
+  string &loc, string &chn)
   {
-    logs(LOG_ERR) << "error decoding Mini-SEED packet " << hdr->seq_no <<
-      ", station " << hdr->station_id << ", channel " << hdr->location_id <<
-      hdr->channel_id << endl;
+    for(int n = NETLEN; n > 0; --n)
+        if(fsdh->network[n - 1] != ' ')
+          {
+            net = string(fsdh->network, n);
+            break;
+          }
+
+    for(int n = STATLEN; n > 0; --n)
+        if(fsdh->station[n - 1] != ' ')
+          {
+            sta = string(fsdh->station, n);
+            break;
+          }
+
+    for(int n = LOCLEN; n > 0; --n)
+        if(fsdh->location[n - 1] != ' ')
+          {
+            loc = string(fsdh->location, n);
+            break;
+          }
+
+    for(int n = CHLEN; n > 0; --n)
+        if(fsdh->channel[n - 1] != ' ')
+          {
+            chn = string(fsdh->channel, n);
+            break;
+          }
   }
 
 int FS_Decode_MSEED::send_mseed_unpack(const string &channel_name,
   const void *dataptr, size_t data_size)
   {
-    DATA_HDR *hdr;
-    BLOCKETTE_HDR *bh;
-    BS *bs;
-    int nsamples;
-    int32_t data[MAX_SAMPLES];
+    const sl_fsdh_s* fsdh = reinterpret_cast<const sl_fsdh_s *>(dataptr);
+    SLMSrecord* msr = sl_msr_new();
+    sl_msr_parse(NULL, reinterpret_cast<const char *>(dataptr), &msr, 1, 1);
 
-    if((hdr = decode_hdr_sdr((SDR_HDR *)dataptr, data_size)) == NULL)
+    string net, sta, loc, chn;
+    get_id(fsdh, net, sta, loc, chn);
+
+    if(msr == NULL)
       {
-        logs(LOG_ERR) << "invalid Mini-SEED packet" << endl;
+        logs(LOG_ERR) << "error decoding Mini-SEED packet " <<
+          string(fsdh->sequence_number, 6) <<
+          ", station " << net << "_" << sta <<
+          ", channel " << loc << "." << chn << endl;
+
         return data_size;
       }
-    
-    trim(hdr->station_id);
-    trim(hdr->channel_id);
-    trim(hdr->location_id);
-    trim(hdr->network_id);
-    
+
+    if(msr->numsamples < 0 || msr->numsamples > MAX_SAMPLES)
+      {
+        logs(LOG_ERR) << "error decoding Mini-SEED packet " <<
+          string(fsdh->sequence_number, 6) <<
+          ", station " << net << "_" << sta <<
+          ", channel " << loc << "." << chn << endl;
+
+        sl_msr_free(&msr);
+        return data_size;
+      }
+
+    if(msr->numsamples == 0)
+      {
+        // not a data record
+        sl_msr_free(&msr);
+        return data_size;
+      }
+
     int timing_quality = default_timing_quality, usec99 = 0;
-    bool data_record = false;
-    
-    for(bs = hdr->pblockettes; bs != (BS *)NULL; bs = bs->next)
-      {
-        if(bs->wordorder != my_wordorder &&
-          swab_blockette(bs->type, bs->pb, bs->len) == 0)
-            bs->wordorder = my_wordorder;
 
-        bh = (BLOCKETTE_HDR *) bs->pb;
-        
-        if(bh->type == 1000 && ((BLOCKETTE_1000 *)bh)->format != 0)
-            data_record = true;
-
-        if(bh->type == 1001)
-          {
-            timing_quality = ((BLOCKETTE_1001 *)bh)->clock_quality;
-            usec99 = ((BLOCKETTE_1001 *)bh)->usec99;
-          }
-      }
-    
-    if(!data_record)
+    if(msr->Blkt1001 != NULL)
       {
-        free_data_hdr(hdr);
-        return data_size;
+        timing_quality = msr->Blkt1001->timing_qual;
+        usec99 = msr->Blkt1001->usec;
       }
-            
-    nsamples = ms_unpack(hdr, MAX_SAMPLES, (char *) dataptr, data);
-    
-    if(nsamples < 0)
-      {
-        decoding_error(hdr);
-        free_data_hdr(hdr);
-        return data_size;
-      }
-    
-    // Already done by Qlib2!
-    // INT_TIME it = add_time(hdr->hdrtime, 0, usec99);
 
-    EXT_TIME et = int_to_ext(hdr->hdrtime);
     struct ptime pt;
-    pt.year = et.year;
-    pt.yday = et.doy;
-    pt.hour = et.hour;
-    pt.minute = et.minute;
-    pt.second = et.second;
-    pt.usec = et.usec;
+    pt.year = ntohs(fsdh->start_time.year);
+    pt.yday = ntohs(fsdh->start_time.day);
+    pt.hour = fsdh->start_time.hour;
+    pt.minute = fsdh->start_time.min;
+    pt.second = fsdh->start_time.sec;
+    pt.usec = ntohs(fsdh->start_time.fract) * 100 + usec99;
 
     int r = 0;
     if(station_name.length() != 0)
       {
         r = send_raw3(station_name.c_str(), channel_name.c_str(), &pt,
-          hdr->num_ticks_correction, timing_quality, data, nsamples);
+          ntohs(fsdh->time_correct), timing_quality, msr->datasamples,
+          msr->numsamples);
       }
     else
       {
-        r = send_raw3(hdr->station_id, channel_name.c_str(), &pt,
-          hdr->num_ticks_correction, timing_quality, data, nsamples);
+        r = send_raw3(sta.c_str(), channel_name.c_str(), &pt,
+          ntohs(fsdh->time_correct), timing_quality, msr->datasamples,
+          msr->numsamples);
       }
     
     DEBUG_MSG("sent " << r << " bytes of data, station \"" << station <<
       "\", channel \"" << channel << "\"" << endl);
     
-    free_data_hdr(hdr);
+    sl_msr_free(&msr);
 
     if(r <= 0) return r;
 

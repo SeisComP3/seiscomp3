@@ -1,1 +1,1 @@
-SUBDIRS(libslink qlib2)
+SUBDIRS(libslink)
