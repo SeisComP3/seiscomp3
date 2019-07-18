@@ -41,6 +41,11 @@
 
   * Fix routing table lookup when dealing with merge operation
 
+* ql2sc
+
+  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
+    on long idle periods.
+
 ## Release 2018.327 patch13
 
 * trunk
