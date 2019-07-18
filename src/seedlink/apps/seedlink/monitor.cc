@@ -32,7 +32,6 @@
 #include <libxml/xmlIO.h>
 #include <libxml/tree.h>
 
-#include "qdefines.h"
 #include "qtime.h"
 
 #include "libslink.h"

@@ -19,6 +19,7 @@
 #include <cmath>
 #include <cstring>
 #include <cerrno>
+#include <cstdio>
 
 #include <unistd.h>
 #include <time.h>
@@ -34,7 +35,6 @@
 #include <sched.h>
 #endif
 
-#include "qdefines.h"
 #include "qtime.h"
 
 #include "utils.h"

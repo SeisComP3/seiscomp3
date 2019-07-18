@@ -39,7 +39,6 @@
 #endif
 
 #include "libslink.h"
-#include "qutils.h"
 #include "qtime.h"
 
 #include "conf_ini.h"
@@ -58,7 +57,7 @@
 #include "plugin.h"
 #include "diag.h"
 
-#define MYVERSION "3.2 (2014.071)"
+#define MYVERSION "3.2 (2019.199)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/seedlink.ini"
@@ -2049,8 +2048,6 @@ try
 
     logs(LOG_NOTICE) << ident_str << " started" << endl;
     
-    init_qlib2(0);
-
     configure_seedlink(config_file);
     if(stations.size() == 0)
       {
