@@ -125,7 +125,7 @@ bool Config::init() {
 
 		// keep alive messages
 		try { isSet = app->configGetBool(prefix + "keepAlive"); }
-		catch ( ... ) { isSet = false; }
+		catch ( ... ) { isSet = true; }
 		if ( isSet ) cfg.options |= Seiscomp::IO::QuakeLink::opKeepAlive;
 
 		// filter
