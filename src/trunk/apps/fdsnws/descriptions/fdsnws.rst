@@ -513,3 +513,100 @@ station AAI (assuming that we are authorized to get data of this station).
 .. code-block:: sh
 
   sysop@host:~$ fdsnws_fetch -a token.asc -s 2015-12-15T16:00:00Z -e 2015-12-15T16:10:00Z -N IA -S AAI -o data.mseed
+
+Logging
+-------
+In addition to normal SC3 logs, fdsnws can create a simple HTTP access log
+and/or a detailed request log. The locations of log files are specified by
+"accessLog" and "requestLog" in fdsnws.cfg.
+
+Both logs are text-based and line-oriented. Each line of *access* log
+contains the following fields, separated by '|' (some fields can be empty):
+
+* service name;
+* hostname of service;
+* access time;
+* hostname of user;
+* IP address of user (proxy);
+* length of data in bytes;
+* processing time in milliseconds;
+* error message;
+* agent string;
+* HTTP response code;
+* username (if authenticated);
+* network code of GET request;
+* station code of GET request;
+* location code of GET request;
+* channel code of GET request;
+
+Each line of *request* log contains a JSON object, which has the following
+attributes::
+
+service
+  service name
+
+userID
+  anonymized (numeric) user ID for statistic purposes
+
+clientID
+  agent string
+
+userEmail
+  e-mail address of authenticated user if using restricted data.
+
+userLocation
+  JSON object containing rough user location (eg., country) for statistic
+  purposes
+
+created
+  time of request creation
+
+status
+  "OK", "NODATA", "ERROR" or "DENIED"
+
+bytes
+  length of data in bytes
+
+finished
+  time of request completion
+
+trace
+  request content after wildcard expansion (array of JSON objects)
+
+Each trace object has the following attributes::
+
+net
+  network code
+
+sta
+  station code
+
+loc
+  location code
+
+cha
+  channel code
+
+start
+  start time
+
+end
+  end time
+
+restricted
+  True if the data requires authorization
+
+status
+  "OK", "NODATA", "ERROR" or "DENIED"
+
+bytes
+  length of trace in bytes
+
+Both logs are rotated daily. In case of access log, one week of data is
+kept. Request logs are compressed using bzip2 and not removed.
+
+If trackdb.enable=true in fdsnws.cfg, then requests are additionally logged
+into SC3 database using the ArcLink request log schema. Be aware that the
+number of requests in a production system can be rather large. For example,
+the GEOFON datacentre is currently serving between 0.5..1 million FDSNWS
+requests per day.
