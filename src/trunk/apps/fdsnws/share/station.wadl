@@ -30,6 +30,7 @@
 					</param>
 					<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
 					<param name="includeavailability" style="query" type="xsd:boolean" default="false"/>
+					<!-- matchtimeseries parameter, requires data availability feature to be enabled -->
 					<param name="matchtimeseries" style="query" type="xsd:boolean" default="false"/>
 					<param name="nodata" style="query" type="xsd:int" default="204">
 						<option value="204"/>
