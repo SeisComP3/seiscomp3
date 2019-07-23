@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 
 ################################################################################
 class HTTP:
@@ -99,6 +99,24 @@ class ServiceVersion(resource.Resource):
 	#---------------------------------------------------------------------------
 	def render(self, request):
 		return self.version
+
+
+################################################################################
+class WADLFilter(static.Data):
+
+	#---------------------------------------------------------------------------
+	def __init__(self, path, filterList):
+		data = []
+		for line in open(path):
+			valid = True
+			for f in filterList:
+				if f in line:
+					valid = False
+					break
+			if valid:
+				data.append(line)
+
+		static.Data.__init__(self, "\n".join(data), "application/xml")
 
 
 ################################################################################
