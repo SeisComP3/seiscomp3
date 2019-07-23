@@ -44,7 +44,7 @@ from seiscomp3.fdsnws.station import VERSION as StationVersion
 from seiscomp3.fdsnws.availability import AvailabilityExtent, AvailabilityQuery
 from seiscomp3.fdsnws.availability import VERSION as AvailabilityVersion
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
-                                  Site, ServiceVersion, AuthResource
+                                  Site, ServiceVersion, AuthResource, WADLFilter
 from seiscomp3.fdsnws.log import Log
 
 def logSC3(entry):
@@ -385,7 +385,7 @@ class FDSNWS(Application):
 		self._serveEvent        = True
 		self._serveStation      = True
 		self._serveAvailability = False
-		self._daEnabled         = True
+		self._daEnabled         = False
 		self._daCacheDuration   = 300
 		self._daCache           = None
 		self._openStreams       = None
@@ -584,7 +584,7 @@ class FDSNWS(Application):
 		else:
 			# Without the event service, a database connection is not
 			# required if the inventory is loaded from file and no data
-			# availability is not enabled
+			# availability information should be processed
 			if not self._serveEvent and not self._useArclinkAccess and \
 			   ( not self._serveStation or ( \
 			     not self.isInventoryDatabaseEnabled() and not self._daEnabled ) ):
@@ -825,9 +825,16 @@ class FDSNWS(Application):
 			                                       self._queryObjects,
 			                                       self._daEnabled))
 			station1.putChild('version', ServiceVersion(StationVersion))
-			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
-			fileRes.childNotFound = NoResource(StationVersion)
+
+			# wadl, optionally filtered
+			filterList = [] if self._daEnabled else [ 'name="matchtimeseries"' ]
+			try:
+				fileRes = WADLFilter(os.path.join(shareDir, 'station.wadl'),
+				                     filterList)
+			except:
+				fileRes = NoResource(StationVersion)
 			station1.putChild('application.wadl', fileRes)
+
 			fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
 			fileRes.childNotFound = NoResource(StationVersion)
 			station1.putChild('builder', fileRes)

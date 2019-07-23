@@ -34,7 +34,7 @@ from http import BaseResource
 from request import RequestOptions
 import utils
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 ################################################################################
 class _StationRequestOptions(RequestOptions):
