@@ -5666,7 +5666,11 @@ void OriginLocatorView::commit(bool associate) {
 		while ( i < _currentOrigin->magnitudeCount() ) {
 			Magnitude *mag = _currentOrigin->magnitude(i);
 			try {
-				if ( mag->evaluationStatus() == REJECTED ) {
+				// Only remove rejected magnitudes with no magnitude contributions.
+				// There are cases when network magnitudes are invalid but
+				// contain station magnitudes which did not pass QC checks.
+				if ( mag->evaluationStatus() == REJECTED
+				  && mag->stationMagnitudeContributionCount() == 0 ) {
 					_currentOrigin->removeMagnitude(i);
 					continue;
 				}
