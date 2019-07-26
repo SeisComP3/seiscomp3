@@ -579,7 +579,7 @@ bool App::initComponent(Processing::WaveformProcessor *proc,
                         Processing::WaveformProcessor::Component comp,
                         const Core::Time &time,
                         const std::string &streamID,
-			const DataModel::WaveformStreamID &waveformID,
+                        const DataModel::WaveformStreamID &waveformID,
                         bool metaDataRequired) {
 	StreamMap::iterator it = _streams.find(streamID);
 	if ( it != _streams.end() && contains(it->second->epoch, time) ) {
