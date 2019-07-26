@@ -53,6 +53,9 @@
 
   * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
     on long idle periods.
+  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
+    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+  * Add event attribute synchronization per input host
 
 ## Release 2018.327 patch13
 

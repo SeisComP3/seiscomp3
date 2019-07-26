@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -33,6 +33,7 @@ namespace DataModel {
 	class FocalMechanism;
 	class Magnitude;
 	class Origin;
+	class Event;
 }
 
 namespace QL2SC {
@@ -63,15 +64,23 @@ class App : public Seiscomp::Client::Application {
 		void diffPO(T *remotePO, const std::string &parentID,
 		            Notifiers &notifiers, LogNode *logNode = NULL);
 
+		void syncEvent(Seiscomp::DataModel::Event *event,
+		               Notifiers &notifiers);
+
 		bool sendNotifiers(const Notifiers &notifiers, const RoutingTable &routing);
+		bool sendJournals(const Notifiers &journals);
 		void applyNotifier(const DataModel::Notifier *n);
 		void readLastUpdates();
 		void writeLastUpdates();
 
+		DataModel::JournalEntry *createJournalEntry(const std::string &id,
+		                                            const std::string &action,
+		                                            const std::string &params);
+
 	private:
 		Config                                      _config;
 		QLClients                                   _clients;
-		Seiscomp::DataModel::PublicObjectRingBuffer	_cache;
+		Seiscomp::DataModel::PublicObjectRingBuffer _cache;
 		std::string                                 _lastUpdateFile;
 };
 
