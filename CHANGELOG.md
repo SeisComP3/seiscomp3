@@ -11,6 +11,14 @@
   * Fix phase priority parsing and fix crash
   * Do not apply default uncertainties to Vmin/Vmax 
 
+* scdispatch
+
+  * Fix routing table lookup when dealing with merge operation
+
+* trunk
+
+  * Migration scripts for scwfparam db extension added thanks to Philipp Kaestli / ETHZ
+
 ## Release 2018.327 patch14
 
 * sh2proc
