@@ -6,6 +6,11 @@
 
   * Add simple script to dump public objects
 
+* Nuttli magnitude
+
+  * Fix phase priority parsing and fix crash
+  * Do not apply default uncertainties to Vmin/Vmax 
+
 ## Release 2018.327 patch14
 
 * sh2proc
