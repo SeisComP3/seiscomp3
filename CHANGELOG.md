@@ -6,29 +6,8 @@
 
   * Add simple script to dump public objects
 
-* sh2proc
-
-  * Add parameters parsed from Seismic Handler to SeisComP3. 
-    Thanks to Klaus Stammler for providing valuable information on Seismic Handler.
-
-* trunk
-
-  * sdsarchive support multiple archives to read its files from
-
-* fdsnws
-
-  * Add service specific version string to error messages
-
-* scevtstreams
-
-  * Add ```--input``` and ```--format``` options to read event parameters 
-    from file
-  * Add asymmetric time margins
-
 * scmag
 
-  * Add ```--warning``` flag to output a warning for standard deviations of
-    network magnitudes exceeding the provided value.
   * Avoid setting a network magnitude to NaN (not supported with any database)
     and use 0 instead. In order to detect if a network magnitude is valid one could
     use the station count (0 == invalid). But that is in general a hack for the
@@ -37,7 +16,6 @@
 
 * GUI
 
-  * Fix spectrogram rendering with logarithmic scale
   * Improve spectrogram rendering speed
   * Normalize spectrogram spectral amplitudes with respect to
     sampling rate
@@ -53,6 +31,36 @@
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
   * Add event attribute synchronization per input host
+
+## Release 2018.327 patch14
+
+* sh2proc
+
+  * Add parameters parsed from Seismic Handler to SeisComP3.·
+    Thanks to Klaus Stammler for providing valuable information on Seismic Handler.
+
+* trunk
+
+  * sdsarchive support multiple archives to read its files from
+
+* fdsnws
+
+  * Add service specific version string to error messages
+
+* scevtstreams
+
+  * Add ```--input``` and ```--format``` options to read event parameters·
+    from file
+  * Add asymmetric time margins
+
+* scmag
+
+  * Add ```--warning``` flag to output a warning for standard deviations of
+    network magnitudes exceeding the provided value.
+
+* GUI
+
+  * Fix spectrogram rendering with logarithmic scale
 
 ## Release 2018.327 patch13
 
