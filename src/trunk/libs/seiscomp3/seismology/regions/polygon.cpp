@@ -139,10 +139,8 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 				pr->updateBoundingBox();
 				addRegion(pr);
 
-				if ( pr->area() < 0 ) {
-					SEISCOMP_WARNING("Polygon %s is defined counter-clockwise", pr->name().c_str());
+				if ( pr->area() < 0 )
 					pr->invertOrder();
-				}
 			}
 
 			last = Core::None;

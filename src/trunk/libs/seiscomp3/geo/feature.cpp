@@ -283,7 +283,7 @@ double GeoFeature::area(const GeoCoordinate *polygon, size_t sides) {
 		GeoCoordinate::ValueType l0 = sub(polygon[j].lon, ref_lon);
 		GeoCoordinate::ValueType l1 = sub(polygon[i].lon, ref_lon);
 
-		A += l1*polygon[j].lat - l0*polygon[i].lat;
+		A += l0*polygon[i].lat- l1*polygon[j].lat;
 	}
 
 	return A*0.5;
