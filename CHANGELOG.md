@@ -6,6 +6,7 @@
 
   * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
+  * Work around EarthData WNRO bug
 
 * scolv
 
@@ -19,6 +20,7 @@
     on long idle periods.
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+  * Add event attribute synchronization per input host
 
 * python-apps
 
@@ -49,6 +51,20 @@
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
   * Add event attribute synchronization per input host
+
+* scmag
+
+  * Avoid setting a network magnitude to NaN (not supported with any database)
+    and use 0 instead. In order to detect if a network magnitude is valid one could
+    use the station count (0 == invalid). But that is in general a hack for the
+    time being and the correct solution is to naje the Magnitude.value an
+    optional quantity.
+
+* GUI
+
+  * Improve spectrogram rendering speed
+  * Normalize spectrogram spectral amplitudes with respect to
+    sampling rate
 
 ## Release 2018.327 patch14
 
