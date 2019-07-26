@@ -350,6 +350,8 @@ class ObjectMerger : public BaseObjectDispatcher {
 
 			_inputIndent = indent(po);
 
+			string tmpTG(_targetGroup);
+
 			for ( size_t i = 0; i < diffs.size(); ++i ) {
 				Notifier *n = diffs[i].get();
 
@@ -358,11 +360,20 @@ class ObjectMerger : public BaseObjectDispatcher {
 					continue;
 
 				po = PublicObject::Cast(n->object());
-				if ( po != NULL ) flush();
+				if ( po != NULL ) {
+					flush();
+					targetIt = _routingTable.find(po->className());
+					if ( targetIt != _routingTable.end() && targetIt->second != _targetGroup )
+						_targetGroup = targetIt->second;
+					else
+						_targetGroup = tmpTG;
+				}
 				write(n->object()->parent(), n->object(), n->operation());
 			}
 
 			_inputIndent.clear();
+
+			_targetGroup = tmpTG;
 
 			return false;
 		}
