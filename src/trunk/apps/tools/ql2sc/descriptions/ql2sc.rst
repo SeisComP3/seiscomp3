@@ -58,7 +58,7 @@ Subsequent to the server-side filters a routing table defines which objects to
 import and to which message group to send them. Depending on the SC3 modules
 listening to the specified message groups an object may be further processed.
 Typically no modules (other than :ref:`scmaster`) is connected to the
-``IMPORT_GROUP`` so that objects send to this group are just stored to the
+``IMPORT_GROUP`` so that objects sent to this group are just stored to the
 database. If an object should be discarded the special group identifier ``NULL``
 may be used.
 
@@ -198,9 +198,25 @@ limit is reached.
    is to big the overall message size limit (default: 1MB) may be exceeded
    resulting in an undeliverable message. On the other hand a much to small
    value will create unwanted results in the SC3 processing chain. If for
-   instances picks are routed to the ``PICK`` group and the pick set is split
+   instance picks are routed to the ``PICK`` group and the pick set is split
    into several notifier messages the local :ref:`scautoloc` might create
    locations based on an incomplete dataset.
+
+
+Event attributes
+================
+
+It might be desirable to synchronize event attributes set at the soure with
+the local system. In particular the event type, the type uncertainty, event
+descriptions and comments might be of interest. Because it is not advisable
+to route events and let :ref:`scevent` associate imported origins it can
+happen that the imported event id is different from the event id of the local
+system. The input host configuration parameter :confval:`syncEventAttributes`
+controls that behaviour. It is set to true by default which means that imported
+event attributes are going to be imported as well. ql2sc does not update
+directly the attributes but commandates scevent is as many cases as possible
+to do so. To find the matching local event it takes the first occurrence which
+has associated the currently imported preferred origin.
 
 
 Caveats

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -13,11 +13,13 @@
  *   Email : herrnkind@gempa.de                                            *
  ***************************************************************************/
 
+
 #define SEISCOMP_COMPONENT QL2SC
 
 #include "app.h"
 
 #include <seiscomp3/logging/log.h>
+
 
 int main(int argc, char **argv) {
 	Seiscomp::QL2SC::App app(argc, argv);
