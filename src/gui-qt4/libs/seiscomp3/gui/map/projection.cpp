@@ -261,10 +261,21 @@ void Projection::updateBoundingBox() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Projection::displayRect(const QRectF& rect) {
-	QPointF center = rect.center();
+	QRectF r(rect);
 
-	double zoomLevelH = 360.0 / rect.width();
-	double zoomLevelW = 360.0 / rect.height();
+	if ( rect.height() < 0 ) {
+		r.setTop(rect.bottom());
+		r.setBottom(rect.top());
+	}
+
+	// handle Date Line
+	if ( rect.width() < 0 )
+		r.setWidth(360. + rect.width());
+
+	QPointF center = r.center();
+
+	double zoomLevelH = 180.0 / r.height();
+	double zoomLevelW = 360.0 / r.width();
 
 	setView(center, std::min(zoomLevelH, zoomLevelW));
 }
