@@ -42,6 +42,10 @@ using namespace Seiscomp::Client;
 using namespace Seiscomp::IO;
 using namespace Seiscomp::DataModel;
 
+
+#define INVALID_MAG 0.0
+
+
 namespace Seiscomp {
 namespace Gui {
 
@@ -1921,10 +1925,7 @@ void MagnitudeView::computeMagnitudes() {
 			MagnitudePtr mag = Magnitude::Create();
 			mag->setType(magnitudeTypes[i]);
 			mag->setEvaluationStatus(EvaluationStatus(REJECTED));
-			if ( numeric_limits<double>::has_quiet_NaN )
-				mag->setMagnitude(RealQuantity(numeric_limits<double>::quiet_NaN()));
-			else
-				mag->setMagnitude(RealQuantity(-999));
+			mag->setMagnitude(RealQuantity(INVALID_MAG));
 
 			CreationInfo ci;
 			ci.setAgencyID(SCApp->agencyID());
@@ -2480,7 +2481,7 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 	}
 
 	int staCount = 0;
-	double netmag = std::numeric_limits<double>::quiet_NaN();
+	double netmag = INVALID_MAG;
 	OPT(double) stdev = 0.0;
 
 	if ( !stamags.empty() ) {
@@ -3020,13 +3021,12 @@ int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
 	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
 	_tabMagnitudes->setTabData(tabIndex, data);
 
-	if ( std::isnan(netMag->magnitude().value()) ) {
-		_tabMagnitudes->setTabTextColor(tabIndex, palette().color(QPalette::Disabled, QPalette::WindowText));
-	}
-
 	try {
-		if ( netMag->evaluationStatus() == REJECTED )
+		if ( netMag->evaluationStatus() == REJECTED ) {
+			_tabMagnitudes->setTabText(tabIndex, QString("%1 -.--").arg(netMag->type().c_str()));
+			_tabMagnitudes->setTabTextColor(tabIndex, palette().color(QPalette::Disabled, QPalette::WindowText));
 			_tabMagnitudes->setTabIcon(tabIndex, QIcon(":icons/icons/disabled.png"));
+		}
 	}
 	catch ( ... ) {}
 
