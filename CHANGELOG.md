@@ -37,6 +37,10 @@
   * Normalize spectrogram spectral amplitudes with respect to
     sampling rate
 
+* scdispatch
+
+  * Fix routing table lookup when dealing with merge operation
+
 ## Release 2018.327 patch13
 
 * trunk
