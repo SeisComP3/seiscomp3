@@ -527,10 +527,8 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 
 		if ( fileValid ) {
 			feature->updateBoundingBox();
-			if ( feature->area() < 0 ) {
-				SEISCOMP_WARNING("Polygon %s is defined counter-clockwise", feature->name().c_str());
+			if ( feature->area() < 0 )
 				feature->invertOrder();
-			}
 		}
 	}
 
