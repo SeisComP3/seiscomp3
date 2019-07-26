@@ -44,6 +44,11 @@
 
   * Add ```--warning``` flag to output a warning for standard deviations of
     network magnitudes exceeding the provided value.
+  * Avoid setting a network magnitude to NaN (not supported with any database)
+    and use 0 instead. In order to detect if a network magnitude is valid one could
+    use the station count (0 == invalid). But that is in general a hack for the
+    time being and the correct solution is to naje the Magnitude.value an
+    optional quantity.
 
 * GUI
 
