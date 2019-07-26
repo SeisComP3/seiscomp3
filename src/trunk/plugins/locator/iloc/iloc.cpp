@@ -837,17 +837,18 @@ throw(Seiscomp::Core::GeneralException)
 				arrival->setWeight(0.0);
 
 			arrival->setDistance(assoc.Delta);
-			if ( assoc.TimeRes > -999.0 )
+			if ( assoc.TimeRes != ILOC_NULLVAL )
 				arrival->setTimeResidual(assoc.TimeRes);
-			arrival->setAzimuth(assoc.Esaz);
+			if ( assoc.Esaz != ILOC_NULLVAL )
+				arrival->setAzimuth(assoc.Esaz);
 			arrival->setPhase(DataModel::Phase(assoc.Phase));
 
 			// Populate horizontal slowness residual
-			if ( assoc.SlowRes > -999.0 )
+			if ( assoc.SlowRes != ILOC_NULLVAL )
 				arrival->setHorizontalSlownessResidual(assoc.SlowRes);
 
 			// Populate backazimuth residual
-			if ( assoc.AzimRes > -999.0 )
+			if ( assoc.AzimRes != ILOC_NULLVAL )
 				arrival->setBackazimuthResidual(assoc.AzimRes);
 
 			if ( !origin->add(arrival.get()) )
