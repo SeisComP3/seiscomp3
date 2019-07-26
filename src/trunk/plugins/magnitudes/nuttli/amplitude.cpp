@@ -162,7 +162,7 @@ bool MNAmplitude::readPriorities(PhaseOrVelocity *priorities,
                                  const std::string &parameter) {
 	try {
 		vector<string> strPriorities;
-		Core::split(strPriorities, settings.getString(parameter).c_str(), ",");
+		Core::split(strPriorities, settings.getString(parameter).c_str(), ", ");
 		if ( strPriorities.size() > EPhaseOrVelocityQuantity ) {
 			SEISCOMP_ERROR("%s: too many priorities, maximum is %d",
 			               parameter.c_str(), EPhaseOrVelocityQuantity);
@@ -367,10 +367,9 @@ OPT(double) MNAmplitude::getDefinedOnset(const PhaseOrVelocity *priorities,
 			}
 			case PoV_Vmin:
 				if ( _Vmin > 0 ) {
-					double scale = left ? -1.0 : 1.0;
 					double hypoDist = Math::Geo::deg2km(dist);
 					hypoDist = sqrt(hypoDist*hypoDist + depth*depth);
-					double onset = hypoDist / _Vmin + scale * (1 + 0.05*hypoDist/((_Vmin+_Vmax)*0.5));
+					double onset = hypoDist / _Vmin;
 					SEISCOMP_DEBUG("%s.%s.%s: vmin = %f",
 					               _networkCode.c_str(), _stationCode.c_str(), _locationCode.c_str(),
 					               onset);
@@ -379,10 +378,9 @@ OPT(double) MNAmplitude::getDefinedOnset(const PhaseOrVelocity *priorities,
 				break;
 			case PoV_Vmax:
 				if ( _Vmax > 0 ) {
-					double scale = left ? -1.0 : 1.0;
 					double hypoDist = Math::Geo::deg2km(dist);
 					hypoDist = sqrt(hypoDist*hypoDist + depth*depth);
-					double onset = hypoDist / _Vmax + scale * (1 + 0.05*hypoDist/((_Vmin+_Vmax)*0.5));
+					double onset = hypoDist / _Vmax;
 					SEISCOMP_DEBUG("%s.%s.%s: vmax = %f",
 					               _networkCode.c_str(), _stationCode.c_str(), _locationCode.c_str(),
 					               onset);
@@ -579,11 +577,13 @@ void MNAmplitude::setEnvironment(const Seiscomp::DataModel::Origin *hypocenter,
 	if ( !noiseWindowEnd || !signalWindowStart || !signalWindowEnd ) {
 		// Use error code 1 as time window computation error
 		setStatus(Error, 1);
+		return;
 	}
 
 	if ( *signalWindowStart >= *signalWindowEnd ) {
 		// Use error code 2 as empty or invalid time window
 		setStatus(Error, 2);
+		return;
 	}
 
 	*noiseWindowEnd -= _noiseWindowPreSeconds;

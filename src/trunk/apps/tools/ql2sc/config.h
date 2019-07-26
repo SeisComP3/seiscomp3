@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -35,6 +35,7 @@ struct HostConfig {
 	int             options;
 	std::string     filter;
 	RoutingTable    routingTable;
+	bool            syncEventAttributes;
 };
 
 typedef std::vector<HostConfig> HostConfigs;

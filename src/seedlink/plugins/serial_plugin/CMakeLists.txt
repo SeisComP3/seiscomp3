@@ -25,7 +25,7 @@ SET(SERIALPLUGIN_SOURCES
 )
 
 INCLUDE_DIRECTORIES(../../libs/plugin)
-INCLUDE_DIRECTORIES(../../libs/3rd-party/qlib2)
+INCLUDE_DIRECTORIES(../../libs/slutils)
 INCLUDE_DIRECTORIES(../libgcf2-2.3.2/src)
 
 SET(CONFIG_FILE ${SC3_PACKAGE_INSTALL_PREFIX}/acquisition/config/plugins.ini)
@@ -59,7 +59,6 @@ ADD_CUSTOM_COMMAND(
 TARGET_LINK_LIBRARIES(
 	serial_plugin
 		${GCF_DIR}/src/libgcf2.a
-		qlib2
 		slplugin
 		slutils
 )

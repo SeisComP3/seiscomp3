@@ -189,7 +189,7 @@
 				information may be collected by scardac (SeisComP archive
 				data availability collector).
 				</description>
-				<parameter name="enable" type="boolean" default="true">
+				<parameter name="enable" type="boolean" default="false">
 					<description>
 					Enable loading of data availabilty information from
 					SeisComP3 database. Availability information is used by

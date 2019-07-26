@@ -1,32 +1,21 @@
 /***************************************************************************
- * Copyright (C) 2019 by gempa GmbH                                        *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
- * All Rights Reserved.                                                    *
+ *   You can redistribute and/or modify this program under the             *
+ *   terms of the SeisComP Public License.                                 *
  *                                                                         *
- * NOTICE: All information contained herein is, and remains                *
- * the property of gempa GmbH and its suppliers, if any. The intellectual  *
- * and technical concepts contained herein are proprietary to gempa GmbH   *
- * and its suppliers.                                                      *
- * Dissemination of this information or reproduction of this material      *
- * is strictly forbidden unless prior written permission is obtained       *
- * from gempa GmbH.                                                        *
- *                                                                         *
- * Author: Jan Becker                                                      *
- * Email: jabe@gempa.de                                                    *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
 
 #include <seiscomp3/core/plugin.h>
-#include <seiscomp3/core/version.h>
 
-
-#if SC_API_VERSION >= SC_API_VERSION_CHECK(10,0,0)
 
 ADD_SC_PLUGIN(
 	"Locator test implementation for iLoc",
 	"Jan Becker, gempa GmbH",
-	0, 6, 0
+	0, 7, 0
 )
-
-
-#endif

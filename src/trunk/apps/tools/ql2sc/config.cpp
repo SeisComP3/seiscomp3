@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -33,11 +33,18 @@
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/logging/log.h>
 
+
 using namespace std;
+
 
 namespace Seiscomp {
 namespace QL2SC {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Config::init() {
 	Client::Application *app = SCCoreApp;
 	if ( app == NULL ) return false;
@@ -94,6 +101,9 @@ bool Config::init() {
 		try { cfg.native = app->configGetBool(prefix + "native"); }
 		catch ( ... ) { cfg.native = false; }
 
+		try { cfg.syncEventAttributes = app->configGetBool(prefix + "syncEventAttributes"); }
+		catch ( ... ) { cfg.syncEventAttributes = true; }
+
 		// data options
 		bool isSet;
 		string dataPrefix = prefix + "data.";
@@ -125,7 +135,7 @@ bool Config::init() {
 
 		// keep alive messages
 		try { isSet = app->configGetBool(prefix + "keepAlive"); }
-		catch ( ... ) { isSet = false; }
+		catch ( ... ) { isSet = true; }
 		if ( isSet ) cfg.options |= Seiscomp::IO::QuakeLink::opKeepAlive;
 
 		// filter
@@ -206,7 +216,12 @@ bool Config::init() {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Config::format(stringstream &ss, const RoutingTable &table) const {
 	bool first = true;
 	for ( RoutingTable::const_iterator it = table.begin();
@@ -215,6 +230,11 @@ void Config::format(stringstream &ss, const RoutingTable &table) const {
 		ss << it->first << ":" << it->second;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // ns QL2SC
 } // ns Seiscomp

@@ -14,6 +14,7 @@
 
 #include "quakeml.h"
 
+#include <seiscomp3/core/exceptions.h>
 #include <seiscomp3/datamodel/eventparameters_package.h>
 #include <seiscomp3/io/xml/handler.h>
 #include <seiscomp3/utils/units.h>
@@ -145,19 +146,13 @@ EvaluationStatusFormatter __evaluationStatus;
 
 struct EventTypeFormatter : Formatter {
 	void to(std::string &v) {
-		if ( v == EEventTypeNames::name(INDUCED_EARTHQUAKE) )
-			v = "induced or triggered event";
-		else if ( v == EEventTypeNames::name(METEOR_IMPACT) )
-			v = "meteorite";
-		else if ( v == EEventTypeNames::name(OTHER_EVENT) )
-			v = "other event";
-		else if ( v == EEventTypeNames::name(NOT_LOCATABLE) ||
-		          v == EEventTypeNames::name(OUTSIDE_OF_NETWORK_INTEREST) ||
-		          v == EEventTypeNames::name(DUPLICATE) ) {
-			SEISCOMP_WARNING("mapping unsupported EventType '%s' to 'other event'",
-			                 v.c_str());
-			v = "other event";
+		EventType type;
+		if ( !type.fromString(v) ) {
+			SEISCOMP_WARNING("unknown event type '%s' found, mapping to "
+			                 "'other event'", v.c_str());
+			type = OTHER_EVENT;
 		}
+		v = TypeMapper::EventTypeToString(type);
 	}
 };
 static EventTypeFormatter __eventType;
@@ -208,7 +203,7 @@ struct OriginConnector : IO::XML::MemberHandler {
 		StationMagnitude *staMag;
 		Amplitude *amplitude;
 		Pick *pick;
-		bool foundPreferredMagnitude = false;
+		bool foundPreferredMagnitude = event->preferredMagnitudeID().empty();
 
 		std::set<std::string> orgRefs;
 		std::set<std::string> pickRefs;
@@ -1227,6 +1222,43 @@ RTTypeMap::RTTypeMap() : TypeMapCommon() {
 	registerMapping("Reading", "", "Reading", &rtReadingHandler);
 	registerMapping("PickReference", "", "PickReference", &rtPickReferenceHandler);
 	registerMapping("AmplitudeReference", "", "AmplitudeReference", &rtAmplitudeReferenceHandler);
+}
+
+EventType TypeMapper::EventTypeFromString(const std::string &str) {
+	EventType type;
+	if ( !type.fromString(str) ) {
+		if ( str == "meteorite" )
+			type = METEOR_IMPACT;
+		else if ( str == "other event" )
+			type = OTHER_EVENT;
+		else
+			throw Core::ValueException("Could not map event type");
+	}
+
+	return type;
+}
+
+std::string TypeMapper::EventTypeToString(EventType type) {
+	switch(type) {
+		case INDUCED_EARTHQUAKE: {
+			EventType t(INDUCED_OR_TRIGGERED_EVENT);
+			SEISCOMP_DEBUG("mapping unsupported EventType '%s' to '%s'",
+			               type.toString(), t.toString());
+			return t.toString();
+		}
+		case METEOR_IMPACT:
+			return "meteorite";
+		case OTHER_EVENT:
+			return "other event";
+		case DUPLICATE:
+		case NOT_LOCATABLE:
+		case OUTSIDE_OF_NETWORK_INTEREST:
+			SEISCOMP_DEBUG("mapping unsupported EventType '%s' to 'other event'",
+			               type.toString());
+			return "other event";
+		default:
+			return type.toString();
+	}
 }
 
 Exporter::Exporter() {

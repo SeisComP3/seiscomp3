@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -28,8 +28,10 @@
 #include <string>
 #include <vector>
 
+
 namespace Seiscomp {
 namespace QL2SC {
+
 
 class QLClient : public IO::QuakeLink::Connection {
 
@@ -69,7 +71,9 @@ class QLClient : public IO::QuakeLink::Connection {
 		Statistics                  _stats;
 };
 
+
 } // ns QL2SC
 } // ns Seiscomp
+
 
 #endif // __SEISCOMP_QL2SC_QUAKELINK_H__

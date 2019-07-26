@@ -49,6 +49,16 @@
 					<parameter name="native" type="boolean" default="false">
 						<description>Request native data instead of XML format. Native data export may be disabled on some hosts.</description>
 					</parameter>
+					<parameter name="syncEventAttributes" type="boolean" default="true">
+						<description>
+							Tries to update the event attributes of the target event
+							with the attributes of the source event which includes
+							event type and event certainty. It will not import
+							events but tries to find the associated event of the
+							input preferred origin at the target system and will
+							update the event attributes via journaling.
+						</description>
+					</parameter>
 					<group name="data">
 						<description>
 							QuakeLink options specifying which XML components to fetch.

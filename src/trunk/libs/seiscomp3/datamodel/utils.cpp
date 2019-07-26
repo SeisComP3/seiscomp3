@@ -1144,7 +1144,7 @@ class SC_SYSTEM_CORE_API ReferenceValidator : public Visitor {
 				Core::BaseObject* bo = boost::any_cast<Core::BaseObject*>(value);
 				Blob* refList = Blob::Cast(bo);
 				std::vector<std::string> v;
-				Core::fromString<std::string>(v, refList->content());
+				Core::fromString(v, refList->content());
 				std::vector<std::string>::const_iterator it = v.begin();
 				for ( ; it != v.end(); ++it ) {
 					ref = *it;
@@ -1180,7 +1180,7 @@ class SC_SYSTEM_CORE_API ReferenceValidator : public Visitor {
 				Blob* refList = Blob::Cast(bo);
 				bool modified = false;
 				std::vector<std::string> v;
-				Core::fromString<std::string>(v, refList->content());
+				Core::fromString(v, refList->content());
 				
 				for ( size_t i = 0; i < v.size(); ++i ) {
 					it_map = _mappings->find(v[i]);
@@ -1196,7 +1196,7 @@ class SC_SYSTEM_CORE_API ReferenceValidator : public Visitor {
 
 				// Replace Blob value if modified
 				if ( modified )
-					refList->setContent(Core::toString<std::string>(v));
+					refList->setContent(Core::toString(v));
 			}
 		}
 

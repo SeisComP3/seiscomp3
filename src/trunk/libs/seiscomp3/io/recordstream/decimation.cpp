@@ -377,10 +377,15 @@ int Decimation::checkSR(Record *rec) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Decimation::initCoefficients(ResampleStage *stage) {
+bool Decimation::initCoefficients(ResampleStage *stage) {
 	CoefficientMap::iterator it = _coefficients.find(stage->N);
-	if ( it != _coefficients.end() )
+	if ( it != _coefficients.end() ) {
+		if ( it->second == NULL )
+			// Invalid coefficients for that stage?
+			return false;
+
 		stage->coefficients = it->second;
+	}
 	else {
 		stage->coefficients = NULL;
 
@@ -388,6 +393,12 @@ void Decimation::initCoefficients(ResampleStage *stage) {
 			for ( int i = _maxN; i > 1; --i ) {
 				if ( stage->N % i == 0 ) {
 					int nextStageN = stage->N / i;
+
+					if ( nextStageN > _maxN ) {
+						SEISCOMP_WARNING("[dec] max decimations exceeded: %d > %d",
+						                 nextStageN, _maxN);
+						return false;
+					}
 
 					SEISCOMP_DEBUG("[dec] clipping N=%d to %d and create sub stage",
 					               stage->N, i);
@@ -399,7 +410,10 @@ void Decimation::initCoefficients(ResampleStage *stage) {
 					nextStage->sampleRate = stage->targetRate;
 					nextStage->targetRate = _targetRate;
 					nextStage->N = nextStageN;
-					initCoefficients(nextStage);
+					if ( !initCoefficients(nextStage) ) {
+						delete nextStage;
+						return false;
+					}
 
 					stage->nextStage = nextStage;
 
@@ -418,13 +432,18 @@ void Decimation::initCoefficients(ResampleStage *stage) {
 
 			Coefficients *coeff = new Coefficients(Ncoeff);
 
-			SEISCOMP_DEBUG("[dec] caching %d coefficents for N=%d", Ncoeff, stage->N);
-
 			double bands[4] = {0,0.5*(_fp/stage->N),0.5*(_fs/stage->N),0.5};
 			double weights[2] = {1,1};
 			double desired[2] = {1,0};
 
-			remez(&((*coeff)[0]), Ncoeff, 2, bands, desired, weights, BANDPASS);
+			if ( remez(&((*coeff)[0]), Ncoeff, 2, bands, desired, weights, BANDPASS) ) {
+				SEISCOMP_WARNING("[dec] failed to build coefficients for N=%d, ignore stream", stage->N);
+				delete coeff;
+				_coefficients[stage->N] = NULL;
+				return false;
+			}
+
+			SEISCOMP_DEBUG("[dec] caching %d coefficents for N=%d", Ncoeff, stage->N);
 
 			_coefficients[stage->N] = coeff;
 			stage->coefficients = coeff;
@@ -435,6 +454,8 @@ void Decimation::initCoefficients(ResampleStage *stage) {
 	stage->N2 = stage->coefficients->size() / 2;
 	stage->buffer.resize(stage->coefficients->size());
 	stage->reset();
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -448,8 +469,12 @@ void Decimation::init(ResampleStage *stage, Record *rec) {
 	stage->targetRate = _targetRate;
 	stage->sampleRate = rec->samplingFrequency();
 	stage->dt = 0;
-	if ( !stage->passThrough ) initCoefficients(stage);
-	else stage->coefficients = NULL;
+	stage->valid = true;
+
+	if ( !stage->passThrough )
+		stage->valid = initCoefficients(stage);
+	else
+		stage->coefficients = NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -531,6 +556,9 @@ GenericRecord *Decimation::convert(Record *rec) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GenericRecord *Decimation::resample(ResampleStage *stage, Record *rec) {
+	if ( !stage->valid )
+		return NULL;
+
 	Core::Time endTime;
 	try {
 		endTime = rec->endTime();

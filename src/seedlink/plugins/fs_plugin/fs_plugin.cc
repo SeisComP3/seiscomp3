@@ -32,8 +32,6 @@
 #include <getopt.h>
 #endif
 
-#include "qutils.h"
-
 #include "confbase.h"
 #include "conf_ini.h"
 #include "confattr.h"
@@ -43,7 +41,7 @@
 #include "fs_plugin.h"
 #include "diag.h"
 
-#define MYVERSION "1.0 (2012.341)"
+#define MYVERSION "1.0 (2019.199)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/plugins.ini"
@@ -594,8 +592,6 @@ try
     redirect_ostream(seed_log, SEEDLog(), 0);
 
     logs(LOG_NOTICE) << ident_str << " started" << endl;
-    
-    init_qlib2(0);
     
     configure_plugin(config_file);
 

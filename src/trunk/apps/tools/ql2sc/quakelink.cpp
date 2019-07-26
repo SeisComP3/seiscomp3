@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -12,6 +12,7 @@
  *   Author: Stephan Herrnkind                                             *
  *   Email : herrnkind@gempa.de                                            *
  ***************************************************************************/
+
 
 #define SEISCOMP_COMPONENT QL2SC
 
@@ -28,7 +29,9 @@ using namespace std;
 namespace Seiscomp {
 namespace QL2SC {
 
+
 namespace {
+
 
 #if BOOST_VERSION >= 103500
 boost::posix_time::time_duration wait(const Core::Time &until) {
@@ -39,14 +42,25 @@ boost::posix_time::time_duration wait(const Core::Time &until) {
 }
 #endif
 
-} // ns anonymous
 
+} // ns anonymous
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QLClient::QLClient(int notificationID, const HostConfig *config, size_t backLog)
  : IO::QuakeLink::Connection(), _notificationID(notificationID), _config(config),
    _backLog(backLog), _thread(NULL) {
 	setLogPrefix("[QL " + _config->host + "] ");
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QLClient::~QLClient() {
 	if ( _thread != NULL ) {
 		delete _thread;
@@ -57,14 +71,23 @@ QLClient::~QLClient() {
 	              _logPrefix.c_str(), (unsigned long)_stats.messages,
 	              (unsigned long)_stats.payloadBytes);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QLClient::run() {
 	SEISCOMP_INFO("%sconnecting to URL '%s'", _logPrefix.c_str(),
 	              _config->url.c_str());
 	_thread = new boost::thread(boost::bind(&QLClient::listen, this));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QLClient::join(const Core::Time &until) {
 	if ( _thread ) {
 		SEISCOMP_DEBUG("%swaiting for thread to terminate", _logPrefix.c_str());
@@ -79,18 +102,32 @@ void QLClient::join(const Core::Time &until) {
 #endif
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Core::Time QLClient::lastUpdate() const {
 	boost::mutex::scoped_lock l(_mutex);
 	return _lastUpdate;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QLClient::setLastUpdate(const Core::Time &time) {
 	boost::mutex::scoped_lock l(_mutex);
 	_lastUpdate = time;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QLClient::processResponse(IO::QuakeLink::Response *response) {
 	SEISCOMP_INFO("%sreceived message, size: %lu)", _logPrefix.c_str(),
 	              (unsigned long)response->length);
@@ -99,7 +136,12 @@ void QLClient::processResponse(IO::QuakeLink::Response *response) {
 	++_stats.messages;
 	_stats.payloadBytes += response->length;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QLClient::listen() {
 	IO::QuakeLink::RequestFormat rf = _config->gzip ?
 	                                 (_config->native ? IO::QuakeLink::rfGZNative : IO::QuakeLink::rfGZXML) :
@@ -155,7 +197,11 @@ void QLClient::listen() {
 		SEISCOMP_INFO("%sQuakeLink connection interrupted", _logPrefix.c_str());
 	_sock->close();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // ns QL2SC
 } // ns Seiscomp

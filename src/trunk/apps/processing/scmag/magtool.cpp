@@ -36,10 +36,11 @@
 #include <seiscomp3/utils/timer.h>
 
 #include <iostream>
-#include <string>
+#include <limits>
 #include <map>
-#include <vector>
 #include <set>
+#include <string>
+#include <vector>
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -152,6 +153,10 @@ bool hasHigherPriority(const DataModel::Amplitude *candidate,
 }
 
 
+//#define INVALID_MAG std::numeric_limits<double>::quiet_NaN()
+#define INVALID_MAG 0
+
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -176,7 +181,7 @@ MagTool::MagTool() {
 	_allowReprocessing = false;
 	_staticUpdate = false;
 	_keepWeights = false;
-	_warningLevel = -1;
+	_warningLevel = numeric_limits<double>::max();
 
 	_summaryMagnitudeEnabled = true;
 	_summaryMagnitudeType = "M";
@@ -688,6 +693,7 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 	OPT(double) stdev = 0.0;
 	string methodID;
 	std::vector<double> weights;
+	bool invalidMagnitude = false;
 
 	StaMagArray stationMagnitudesZeroWeight;
 	StaMagArray stationMagnitudes;
@@ -724,12 +730,22 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 		return false;
 	else {
 		stdev = Core::None;
-		value = std::numeric_limits<double>::quiet_NaN();
+		value = INVALID_MAG;
+		invalidMagnitude = true;
 	}
 
 	// adding stamag referencomputeStationMagnitudeces and set the weights
 	size_t weightIndex = 0;
 	size_t staCount = 0;
+
+	// Count contributing station magnitudes
+	for ( StaMagArray::iterator it = stationMagnitudes.begin();
+	      it != stationMagnitudes.end(); ++it, ++weightIndex ) {
+		if ( weights[weightIndex] > 0 ) ++staCount;
+	}
+
+	weightIndex = 0;
+
 	for ( StaMagArray::iterator it = stationMagnitudes.begin();
 	      it != stationMagnitudes.end(); ++it ) {
 		const DataModel::StationMagnitude *stationMagnitude = (*it).get();
@@ -772,9 +788,6 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 				SEISCOMP_DEBUG("Updating magnitude reference for %s", stationMagnitude->publicID().c_str());
 			}
 		}
-
-		if ( weights[weightIndex] > 0 )
-			++staCount;
 
 		++weightIndex;
 	}
@@ -826,7 +839,10 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 
 	netMag->setMethodID(methodID);
 	netMag->setMagnitude(RealQuantity(value, stdev, Core::None, Core::None, Core::None));
-	netMag->setEvaluationStatus(Core::None);
+	if ( invalidMagnitude )
+		netMag->setEvaluationStatus(DataModel::EvaluationStatus(DataModel::REJECTED));
+	else
+		netMag->setEvaluationStatus(Core::None);
 
 	netMag->setStationCount(staCount);
 
@@ -1669,8 +1685,9 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			return false;
 		}
 		else {
-			netMag->setMagnitude(DataModel::RealQuantity(std::numeric_limits<double>::quiet_NaN()));
+			netMag->setMagnitude(DataModel::RealQuantity(INVALID_MAG));
 			netMag->setMethodID(std::string());
+			netMag->setEvaluationStatus(DataModel::EvaluationStatus(DataModel::REJECTED));
 
 			for ( size_t i = 0; i < netMag->stationMagnitudeContributionCount(); ++i ) {
 				contrib = netMag->stationMagnitudeContribution(i);

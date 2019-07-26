@@ -12,7 +12,6 @@ INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(../../libs/slutils)
 INCLUDE_DIRECTORIES(../../libs/plugin)
 INCLUDE_DIRECTORIES(../../libs/3rd-party/libslink)
-INCLUDE_DIRECTORIES(../../libs/3rd-party/qlib2)
 
 
 SET(CONFIG_FILE ${SC3_PACKAGE_INSTALL_PREFIX}/acquisition/config/seedlink.ini)
@@ -33,7 +32,6 @@ TARGET_LINK_LIBRARIES(
 		${LIBXML2_LIBRARIES}
 		slutils
 		slplugin
-		qlib2
 )
 
 SC_INSTALL_INIT(seedlink config/seedlink.py)

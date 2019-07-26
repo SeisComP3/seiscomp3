@@ -99,6 +99,8 @@ class SC_SYSTEM_CORE_API Decimation : public Seiscomp::IO::RecordStream {
 			// without resampling.
 			bool passThrough;
 
+			bool valid;
+
 			int N;
 			int N2;
 			size_t samplesToSkip;
@@ -138,7 +140,7 @@ class SC_SYSTEM_CORE_API Decimation : public Seiscomp::IO::RecordStream {
 		typedef std::map<std::string, ResampleStage*> StreamMap;
 
 		void init(ResampleStage *stage, Record *rec);
-		void initCoefficients(ResampleStage *stage);
+		bool initCoefficients(ResampleStage *stage);
 		GenericRecord *resample(ResampleStage *stage, Record *rec);
 
 		IO::RecordStreamPtr _source;

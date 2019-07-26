@@ -19,8 +19,10 @@
 #include <libmseed.h>
 #include <cctype>
 
-using namespace Seiscomp;
-using namespace Seiscomp::IO;
+
+namespace Seiscomp {
+namespace IO {
+
 
 struct MSEEDLogger {
 	MSEEDLogger() {
@@ -41,42 +43,52 @@ static MSEEDLogger __logger__;
 
 IMPLEMENT_SC_CLASS_DERIVED(MSeedRecord, Record, "MSeedRecord");
 REGISTER_RECORD(MSeedRecord, "mseed");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord::MSeedRecord(Array::DataType dt, Hint h)
- : Record(dt, h),
-   _raw(CharArray()),
-   _data(0),
-   _seqno(0),
-   _rectype('D'),
-   _srfact(0),
-   _srmult(0),
-   _byteorder(0),
-   _encoding(0),
-   _srnum(0),
-   _srdenom(0),
-   _reclen(0),
-   _nframes(0),
-   _leap(0),
-   _etime(Seiscomp::Core::Time(0,0)),
-   _encodingFlag(true)
+: Record(dt, h)
+, _raw(CharArray())
+, _data(0)
+, _seqno(0)
+, _rectype('D')
+, _srfact(0)
+, _srmult(0)
+, _byteorder(0)
+, _encoding(0)
+, _srnum(0)
+, _srdenom(0)
+, _reclen(0)
+, _nframes(0)
+, _leap(0)
+, _etime(Seiscomp::Core::Time(0,0))
+, _encodingFlag(true)
 {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord::MSeedRecord(MSRecord *rec, Array::DataType dt, Hint h)
- : Record(dt, h, rec->network, rec->station, rec->location, rec->channel,
-          Seiscomp::Core::Time((hptime_t)rec->starttime/HPTMODULUS,(hptime_t)rec->starttime%HPTMODULUS),
-          rec->samplecnt, rec->samprate, rec->Blkt1001 ? rec->Blkt1001->timing_qual : -1),
-   _data(0),
-   _seqno(rec->sequence_number),
-   _rectype(rec->dataquality),
-   _srfact(rec->fsdh->samprate_fact),
-   _srmult(rec->fsdh->samprate_mult),
-   _byteorder(rec->byteorder),
-   _encoding(rec->encoding),
-   _reclen(rec->reclen),
-   _encodingFlag(true)
+: Record(dt, h, rec->network, rec->station, rec->location, rec->channel,
+         Seiscomp::Core::Time((hptime_t)rec->starttime/HPTMODULUS,(hptime_t)rec->starttime%HPTMODULUS),
+         rec->samplecnt, rec->samprate, rec->Blkt1001 ? rec->Blkt1001->timing_qual : -1)
+, _data(0)
+, _seqno(rec->sequence_number)
+, _rectype(rec->dataquality)
+, _srfact(rec->fsdh->samprate_fact)
+, _srmult(rec->fsdh->samprate_mult)
+, _byteorder(rec->byteorder)
+, _encoding(rec->encoding)
+, _reclen(rec->reclen)
+, _encodingFlag(true)
 {
- 	if (_hint == SAVE_RAW)
- 		_raw.setData(rec->reclen,rec->record);
+	if (_hint == SAVE_RAW)
+		_raw.setData(rec->reclen,rec->record);
 	else
 		if (_hint == DATA_ONLY)
 			try {
@@ -114,48 +126,68 @@ MSeedRecord::MSeedRecord(MSRecord *rec, Array::DataType dt, Hint h)
 	hptime_t hptime = msr_endtime(rec);
 	_etime = Seiscomp::Core::Time((hptime_t)hptime/HPTMODULUS,(hptime_t)hptime%HPTMODULUS);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord::MSeedRecord(const MSeedRecord &msrec)
- : Record(msrec),
-   _seqno(msrec.sequenceNumber()),
-   _rectype(msrec.dataQuality()),
-   _srfact(msrec.sampleRateFactor()),
-   _srmult(msrec.sampleRateMultiplier()),
-   _byteorder(msrec.byteOrder()),
-   _encoding(msrec.encoding()),
-   _srnum(msrec.sampleRateNumerator()),
-   _srdenom(msrec.sampleRateDenominator()),
-   _nframes(msrec.frameNumber()),
-   _leap(msrec.leapSeconds()),
-   _etime(msrec.endTime()),
-   _encodingFlag(true)
+: Record(msrec)
+, _seqno(msrec.sequenceNumber())
+, _rectype(msrec.dataQuality())
+, _srfact(msrec.sampleRateFactor())
+, _srmult(msrec.sampleRateMultiplier())
+, _byteorder(msrec.byteOrder())
+, _encoding(msrec.encoding())
+, _srnum(msrec.sampleRateNumerator())
+, _srdenom(msrec.sampleRateDenominator())
+, _nframes(msrec.frameNumber())
+, _leap(msrec.leapSeconds())
+, _etime(msrec.endTime())
+, _encodingFlag(true)
 {
 	_reclen = msrec._reclen;
 	_raw = msrec._raw;
 	_data = msrec._data?msrec._data->clone():NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord::MSeedRecord(const Record &rec, int reclen)
- : Record(rec),
-   _seqno(0),
-   _rectype('D'),
-   _srfact(0),
-   _srmult(0),
-   _byteorder(0),
-   _encoding(0),
-   _srnum(0),
-   _srdenom(0),
-   _nframes(0),
-   _leap(0),
-   _etime(Seiscomp::Core::Time()),
-   _encodingFlag(false)
+: Record(rec)
+, _seqno(0)
+, _rectype('D')
+, _srfact(0)
+, _srmult(0)
+, _byteorder(0)
+, _encoding(0)
+, _srnum(0)
+, _srdenom(0)
+, _nframes(0)
+, _leap(0)
+, _etime(Seiscomp::Core::Time())
+, _encodingFlag(false)
 {
-    _reclen = reclen;
-    _data = rec.data()?rec.data()->clone():NULL;
+	_reclen = reclen;
+	_data = rec.data()?rec.data()->clone():NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord::~MSeedRecord() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setNetworkCode(std::string net) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
@@ -166,7 +198,12 @@ void MSeedRecord::setNetworkCode(std::string net) {
 
 	Record::setNetworkCode(net);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setStationCode(std::string sta) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
@@ -177,7 +214,12 @@ void MSeedRecord::setStationCode(std::string sta) {
 
 	Record::setStationCode(sta);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setLocationCode(std::string loc) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
@@ -188,7 +230,12 @@ void MSeedRecord::setLocationCode(std::string loc) {
 
 	Record::setLocationCode(loc);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setChannelCode(std::string cha) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
@@ -199,7 +246,12 @@ void MSeedRecord::setChannelCode(std::string cha) {
 
 	Record::setChannelCode(cha);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setStartTime(const Core::Time& time) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
@@ -210,10 +262,14 @@ void MSeedRecord::setStartTime(const Core::Time& time) {
 
 	Record::setStartTime(time);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MSeedRecord& MSeedRecord::operator=(const MSeedRecord &msrec) {
-  if (&msrec != this) {
+	if ( &msrec != this ) {
 		Record::operator=(msrec);
 		_raw = msrec._raw;
 		_data = msrec._data?msrec._data->clone():NULL;
@@ -233,83 +289,178 @@ MSeedRecord& MSeedRecord::operator=(const MSeedRecord &msrec) {
 
 	return (*this);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::sequenceNumber() const {
-  return _seqno;
+	return _seqno;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setSequenceNumber(int seqno) {
-  _seqno = seqno;
+	_seqno = seqno;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 char MSeedRecord::dataQuality() const {
-  return _rectype;
+	return _rectype;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setDataQuality(char qual) {
 	_rectype = qual;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::sampleRateFactor() const {
 	return _srfact;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setSampleRateFactor(int srfact) {
 	_srfact = srfact;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::sampleRateMultiplier() const {
 	return _srmult;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setSampleRateMultiplier(int srmult) {
 	_srmult = srmult;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 unsigned short MSeedRecord::byteOrder() const {
 	return _byteorder;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 unsigned short MSeedRecord::encoding() const {
 	return _encoding;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::sampleRateNumerator() const {
 	return _srnum;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::sampleRateDenominator() const {
 	return _srdenom;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::frameNumber() const {
 	return _nframes;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Core::Time& MSeedRecord::endTime() const {
 	return _etime;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::recordLength() const {
 	return _reclen;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MSeedRecord::leapSeconds() const {
 	return _leap;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Array* MSeedRecord::raw() const {
 	return &_raw;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Array* MSeedRecord::data() const {
-    if (_raw.data() && (!_data || _datatype != _data->dataType())) {
-        _setDataAttributes(_reclen,(char *)_raw.data());
-    }
+	if (_raw.data() && (!_data || _datatype != _data->dataType())) {
+		_setDataAttributes(_reclen,(char *)_raw.data());
+	}
 
-    return _data.get();
+	return _data.get();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 	MSRecord *pmsr = NULL;
 
@@ -339,36 +490,66 @@ void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 			throw LibmseedException("Unpacking of Mini SEED record failed.");
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::saveSpace() const {
-  if (_hint == SAVE_RAW && _data) {
-    _data = 0;
-  }
+	if (_hint == SAVE_RAW && _data) {
+		_data = 0;
+	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Record* MSeedRecord::copy() const {
-  return new MSeedRecord(*this);
+	return new MSeedRecord(*this);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::useEncoding(bool flag) {
-    _encodingFlag = flag;
+	_encodingFlag = flag;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::setOutputRecordLength(int reclen) {
 	_reclen = reclen;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool _isHeader(const char *header) {
-  return (std::isdigit((unsigned char) *(header)) &&
-	  std::isdigit((unsigned char) *(header+1)) &&
-	  std::isdigit((unsigned char) *(header+2)) &&
-	  std::isdigit((unsigned char) *(header+3)) &&
-	  std::isdigit((unsigned char) *(header+4)) &&
-	  std::isdigit((unsigned char) *(header+5)) &&
-	  std::isalpha((unsigned char) *(header+6)) &&
-	  (*(header+7) == ' ' || *(header+7) == '\0'));
+	return (std::isdigit((unsigned char) *(header))
+	     && std::isdigit((unsigned char) *(header+1))
+	     && std::isdigit((unsigned char) *(header+2))
+	     && std::isdigit((unsigned char) *(header+3))
+	     && std::isdigit((unsigned char) *(header+4))
+	     && std::isdigit((unsigned char) *(header+5))
+	     && std::isalpha((unsigned char) *(header+6))
+	     && (*(header+7) == ' ' || *(header+7) == '\0'));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::read(std::istream &is) {
 	int reclen = -1;
 	int pos = is.tellg();
@@ -450,8 +631,12 @@ void MSeedRecord::read(std::istream &is) {
 			throw Core::EndOfStreamException("Invalid miniSEED record, too small");
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::write(std::ostream& out) {
 	if (!_data) {
 		if (!_raw.data())
@@ -573,4 +758,11 @@ void MSeedRecord::write(std::ostream& out) {
 
 	out.write(packed.typedData(), packed.size());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+}
+}

@@ -1,18 +1,13 @@
 /***************************************************************************
- * Copyright (C) 2018 by gempa GmbH                                        *
+ *   Copyright (C) gempa GmbH                                              *
  *                                                                         *
- * All Rights Reserved.                                                    *
+ *   You can redistribute and/or modify this program under the             *
+ *   terms of the SeisComP Public License.                                 *
  *                                                                         *
- * NOTICE: All information contained herein is, and remains                *
- * the property of gempa GmbH and its suppliers, if any. The intellectual  *
- * and technical concepts contained herein are proprietary to gempa GmbH   *
- * and its suppliers.                                                      *
- * Dissemination of this information or reproduction of this material      *
- * is strictly forbidden unless prior written permission is obtained       *
- * from gempa GmbH.                                                        *
- *                                                                         *
- * Author: Jan Becker                                                      *
- * Email: jabe@gempa.de                                                    *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
 
@@ -23,8 +18,6 @@
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/system/environment.h>
 
-
-#if SC_API_VERSION >= SC_API_VERSION_CHECK(10,0,0)
 
 #include "iloc.h"
 #include <iomanip>
@@ -844,17 +837,18 @@ throw(Seiscomp::Core::GeneralException)
 				arrival->setWeight(0.0);
 
 			arrival->setDistance(assoc.Delta);
-			if ( assoc.TimeRes > -999.0 )
+			if ( assoc.TimeRes != ILOC_NULLVAL )
 				arrival->setTimeResidual(assoc.TimeRes);
-			arrival->setAzimuth(assoc.Esaz);
+			if ( assoc.Esaz != ILOC_NULLVAL )
+				arrival->setAzimuth(assoc.Esaz);
 			arrival->setPhase(DataModel::Phase(assoc.Phase));
 
 			// Populate horizontal slowness residual
-			if ( assoc.SlowRes > -999.0 )
+			if ( assoc.SlowRes != ILOC_NULLVAL )
 				arrival->setHorizontalSlownessResidual(assoc.SlowRes);
 
 			// Populate backazimuth residual
-			if ( assoc.AzimRes > -999.0 )
+			if ( assoc.AzimRes != ILOC_NULLVAL )
 				arrival->setBackazimuthResidual(assoc.AzimRes);
 
 			if ( !origin->add(arrival.get()) )
@@ -968,8 +962,6 @@ void ILoc::prepareAuxFiles() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 REGISTER_LOCATOR(ILoc, "iLoc");
 
+
 }
 }
-
-
-#endif

@@ -248,10 +248,6 @@ void LocSAT::setOrigin(float lat_init, float lon_init, float depth_init) {
 	_origin->lat                = lat_init;
 	_origin->lon                = lon_init;
 	_origin->depth              = depth_init;
-
-	_locator_params->lat_init   = lat_init;
-	_locator_params->lon_init   = lon_init;
-	_locator_params->depth_init = depth_init;
 }
 
 
@@ -271,6 +267,9 @@ void LocSAT::printLocatorParams(){
 	std::cerr << "_locator_params->est_std_error  = " << _locator_params->est_std_error << std::endl;
 	std::cerr << "_locator_params->num_dof        = " << _locator_params->num_dof << std::endl;
 	std::cerr << "_locator_params->max_iterations = " << _locator_params->max_iterations << std::endl;
+	std::cerr << "_locator_params->lat_init       = " << _locator_params->lat_init << std::endl;
+	std::cerr << "_locator_params->lon_init       = " << _locator_params->lon_init << std::endl;
+	std::cerr << "_locator_params->depth_init     = " << _locator_params->depth_init << std::endl;
 }
 
 
@@ -280,7 +279,6 @@ void LocSAT::setLocatorParams(Locator_params* params){
 	char *prefix = _locator_params->prefix;
 
 	memmove(_locator_params, params, sizeof(Locator_params));
-
 	_locator_params->prefix = prefix;
 	_locator_params->outfile_name = outfile_name;
 

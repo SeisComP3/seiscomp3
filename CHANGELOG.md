@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* python-apps
+
+  * Add simple script to dump public objects
+
 * sh2proc
 
   * Add parameters parsed from Seismic Handler to SeisComP3. 
@@ -25,6 +29,11 @@
 
   * Add ```--warning``` flag to output a warning for standard deviations of
     network magnitudes exceeding the provided value.
+  * Avoid setting a network magnitude to NaN (not supported with any database)
+    and use 0 instead. In order to detect if a network magnitude is valid one could
+    use the station count (0 == invalid). But that is in general a hack for the
+    time being and the correct solution is to naje the Magnitude.value an
+    optional quantity.
 
 * GUI
 
@@ -32,6 +41,18 @@
   * Improve spectrogram rendering speed
   * Normalize spectrogram spectral amplitudes with respect to
     sampling rate
+
+* scdispatch
+
+  * Fix routing table lookup when dealing with merge operation
+
+* ql2sc
+
+  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
+    on long idle periods.
+  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
+    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+  * Add event attribute synchronization per input host
 
 ## Release 2018.327 patch13
 
