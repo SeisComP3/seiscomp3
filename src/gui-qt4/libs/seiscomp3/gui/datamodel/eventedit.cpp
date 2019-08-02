@@ -940,9 +940,9 @@ void EventEdit::init() {
 			usedFlags[i] = false;
 
 		for ( int i = 0; i < _eventTypesWhitelist.count(); ++i ) {
-			if ( usedFlags[i] ) continue;
+			if ( usedFlags[_eventTypesWhitelist[i]] ) continue;
 			_ui.comboTypes->addItem(_eventTypesWhitelist[i].toString());
-			usedFlags[i] = true;
+			usedFlags[_eventTypesWhitelist[i]] = true;
 		}
 
 		QColor reducedColor;

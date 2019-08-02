@@ -7,6 +7,10 @@
   * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
 
+* scolv
+
+  * Fix event type list preparation in combination with `olv.commonEventTypes`.
+
 ## Release 2018.327 patch15
 
 * ql2sc
