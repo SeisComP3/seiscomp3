@@ -46,9 +46,13 @@ void add_map (Map *inmap)
    }
    else {
         for ( mp = rootmap; mp != NULL; mp=mp->next ) {
-
-              if ( strncmp ( mp->stream, inmap->stream, strlen(inmap->stream)) == 0 )
-                   break;
+              if ( strncmp ( mp->stream, inmap->stream, strlen(inmap->stream)) == 0 ) {
+                   if ( mp->sysid == NULL && inmap->sysid == NULL )
+                       break;
+                   if ( mp->sysid != NULL && inmap->sysid != NULL &&
+                        strncmp ( mp->sysid, inmap->sysid, strlen(inmap->sysid)) == 0 )
+                       break;
+              }
         }
 
         if (mp==NULL) {
