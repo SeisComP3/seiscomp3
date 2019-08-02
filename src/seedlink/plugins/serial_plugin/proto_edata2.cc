@@ -175,6 +175,7 @@ class Edata2Protocol: public Proto
     char *datseg;
     unsigned int modsize, mdesize, datsize, sumsize, gpssize;
 
+    void set_time_from_gps(const GPSData &gps);
     void set_time(time_t sec);
     void retransmit(time_t sec);
     void do_start();
@@ -254,6 +255,22 @@ void Edata2Protocol::start()
       }
 
     close(fd);
+  }
+
+void Edata2Protocol::set_time_from_gps(const GPSData &gps)
+  {
+    EXT_TIME et;
+
+    et.year = gps.year;
+    et.month = gps.month;
+    et.day = gps.day;
+    et.hour = gps.hour;
+    et.minute = gps.min;
+    et.second = gps.sec;
+    et.usec = 0;
+    et.doy = mdy_to_doy(et.month, et.day, et.year);
+    digitime.it = ext_to_int(et);
+    digitime.valid = true;
   }
 
 void Edata2Protocol::set_time(time_t sec)
@@ -532,7 +549,25 @@ void Edata2Protocol::do_start()
         retransmit_wait = 0;
         retransmit_retry = 0;
         
-        set_time(lastsecond);
+        GPSData gps;
+        if(modseg->gps_message[0] == '$')
+            decode_nmea(gps, modseg->gps_message);
+        else if(mdeseg != NULL)
+            decode_taip(gps, mdeseg->gps_message);
+        else
+            gps.valid = false;
+
+        if(lastsecond >= 1546300800 && lastsecond <= 2147483647) // no WNRO
+          {
+            set_time(lastsecond);
+          }
+        else if(gps.valid)
+          {
+            set_time_from_gps(gps);
+
+            if(gps.year >= 1999 && gps.year < 2019) // WNRO -> add 1024 weeks
+                digitime.it = add_time(digitime.it, 619315200, 0);
+          }
 
         if(modseg->block_count == modseg->gps_block)
           {
@@ -555,14 +590,6 @@ void Edata2Protocol::do_start()
               }
           }
             
-        GPSData gps;
-        if(modseg->gps_message[0] == '$')
-            decode_nmea(gps, modseg->gps_message);
-        else if(mdeseg != NULL)
-            decode_taip(gps, mdeseg->gps_message);
-        else
-            gps.valid = false;
-    
         EXT_TIME et = int_to_ext(digitime.it);
         
         if(et.hour == 0 && et.minute == 0 && et.second == 1)
