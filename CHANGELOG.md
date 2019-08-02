@@ -16,6 +16,10 @@
   * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
 
+* scolv
+
+  * Fix event type list preparation in combination with `olv.commonEventTypes`.
+
 * ql2sc
 
   * Enable sending of keep-alive messages by default. This prevents connection resets by firewall

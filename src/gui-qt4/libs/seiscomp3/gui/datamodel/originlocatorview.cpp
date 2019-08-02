@@ -318,7 +318,7 @@ class CommitOptions : public QDialog {
 
 			try {
 				vector<string> eventTypes = SCApp->configGetStrings("olv.commonEventTypes");
-				for (  size_t i = 0; i < eventTypes.size(); ++i ) {
+				for ( size_t i = 0; i < eventTypes.size(); ++i ) {
 					DataModel::EventType type;
 					if ( !type.fromString(eventTypes[i].c_str()) ) {
 						SEISCOMP_WARNING("olv.commonEventTypes: invalid type, ignoring: %s",
@@ -347,9 +347,9 @@ class CommitOptions : public QDialog {
 					usedFlags[i] = false;
 
 				for ( int i = 0; i < eventTypesWhitelist.count(); ++i ) {
-					if ( usedFlags[i] ) continue;
+					if ( usedFlags[eventTypesWhitelist[i]] ) continue;
 					ui.comboEventTypes->addItem(eventTypesWhitelist[i].toString());
-					usedFlags[i] = true;
+					usedFlags[eventTypesWhitelist[i]] = true;
 				}
 
 				QColor reducedColor;
