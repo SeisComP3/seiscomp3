@@ -21,6 +21,8 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/logging/log.h>
 
+#include <limits>
+
 
 using namespace std;
 using namespace Seiscomp;
@@ -33,7 +35,8 @@ using namespace Seiscomp::IO;
 class MagToolApp : public Seiscomp::Client::Application {
 	public:
 		MagToolApp(int argc, char **argv)
-		: Application(argc, argv), _expiry(3*3600.) {
+		: Application(argc, argv), _expiry(3*3600.)
+		, _warningLevel(numeric_limits<double>::max()) {
 			_fExpiry = 1.0;
 			_interval = 1;
 
@@ -493,7 +496,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 		MagTool _magtool;
 
 		std::string _epFile;
-		double _warningLevel = -1;
+		double _warningLevel;
 };
 
 
