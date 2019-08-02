@@ -2,6 +2,27 @@
 
 ## Release 2018.327 patch15
 
+* fdsnws
+
+  * Reduce QuakeML exporter warnings: do not report a warning if the event does not reference
+    a preferred magnitude and reduce log level of event type mapping from warning to debug
+  * Expose matchtimeseries WADL parameter only if data availability information is enabled
+    via config
+  * Disable data availability information by default
+  * Add request logging for dataselect
+
+* seedlink
+
+  * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
+    id was given then it was ignored regardless of the attached sysid.
+
+* ql2sc
+
+  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
+    on long idle periods.
+  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
+    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+
 * python-apps
 
   * Add simple script to dump public objects
