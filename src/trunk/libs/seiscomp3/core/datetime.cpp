@@ -10,6 +10,10 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
+#define SEISCOMP_COMPONENT Core
+
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/exceptions.h>
 
@@ -1016,13 +1020,36 @@ bool Time::fromString(const char* str, const char* fmt) {
 
 		usec = atoi(data) * multiplier;
 
-		memcpy(data, str, start-str);
-		data[start - str] = '\0';
+		int len = start - str;
+		if ( len > BUFFER_SIZE-1 ) {
+			SEISCOMP_ERROR("Time::fromString: buffer size exceeded: %d > %d",
+			               len, BUFFER_SIZE-1);
+			return false;
+		}
+
+		memcpy(data, str, len);
+		data[len] = '\0';
+
 		strcat(data, "%");
+		++len;
+
+		if ( len + strlen(end) > BUFFER_SIZE-1 ) {
+			SEISCOMP_ERROR("Time::fromString: buffer size exceeded: %d > %d",
+			               int(len + strlen(end)), BUFFER_SIZE);
+			return false;
+		}
+
 		strcat(data, end);
 		str = data;
 
-		strcpy(tmpFmt, fmt);
+		tmpFmt[BUFFER_SIZE-1] = '\0';
+		strncpy(tmpFmt, fmt, BUFFER_SIZE);
+		if ( tmpFmt[BUFFER_SIZE-1] != '\0' ) {
+			SEISCOMP_ERROR("Time::fromString: format buffer size exceeded: %d > %d",
+			               int(strlen(fmt)), BUFFER_SIZE-1);
+			return false;
+		}
+
 		tmpFmt[microSeconds - fmt + 1] = '%';
 		fmt = tmpFmt;
 	}
