@@ -37,28 +37,30 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	//  Public interface
 	// ------------------------------------------------------------------
 	public:
-		bool connect(const char *con);
-		void disconnect();
+		virtual bool connect(const char *con);
+		virtual void disconnect();
 
-		bool isConnected() const;
+		virtual bool isConnected() const;
 
-		void start();
-		void commit();
-		void rollback();
+		virtual void start();
+		virtual void commit();
+		virtual void rollback();
 
-		bool execute(const char* command);
-		bool beginQuery(const char* query);
-		void endQuery();
+		virtual bool execute(const char* command);
+		virtual bool beginQuery(const char* query);
+		virtual void endQuery();
 
-		unsigned long lastInsertId(const char* table);
-		uint64_t numberOfAffectedRows();
+		virtual unsigned long lastInsertId(const char* table);
+		virtual uint64_t numberOfAffectedRows();
 
-		bool fetchRow();
-		int findColumn(const char* name);
-		int getRowFieldCount() const;
-		const char *getRowFieldName(int index);
-		const void* getRowField(int index);
-		size_t getRowFieldSize(int index);
+		virtual bool fetchRow();
+		virtual int findColumn(const char* name);
+		virtual int getRowFieldCount() const;
+		virtual const char *getRowFieldName(int index);
+		virtual const void* getRowField(int index);
+		virtual size_t getRowFieldSize(int index);
+
+		virtual bool escape(std::string &out, const std::string &in);
 
 
 	// ------------------------------------------------------------------

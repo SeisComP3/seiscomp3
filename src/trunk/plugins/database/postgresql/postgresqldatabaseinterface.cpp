@@ -388,5 +388,20 @@ size_t PostgreSQLDatabase::getRowFieldSize(int index) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PostgreSQLDatabase::escape(std::string &out, const std::string &in) {
+	if ( !_handle ) return false;
+	int error;
+	out.resize(in.size()*2);
+	size_t l = PQescapeStringConn(_handle, &out[0], in.c_str(), in.size(), &error);
+	out[l] = '\0';
+	out.resize(l);
+	return !error;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

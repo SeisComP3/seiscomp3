@@ -279,5 +279,34 @@ size_t SQLiteDatabase::getRowFieldSize(int index) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SQLiteDatabase::escape(std::string &out, const std::string &in) {
+	out.resize(in.size()*2+1);
+	size_t length = in.length();
+	const char *in_buf = in.c_str();
+	char *out_buf = &out[0];
+	size_t j = 0;
+
+	for ( size_t i = 0; i < length && *in_buf; ++length, ++in_buf ) {
+		switch ( *in_buf ) {
+			case '\'':
+				out_buf[j++] = '\'';
+				out_buf[j++]   = '\'';
+				break;
+			default:
+				out_buf[j++] = *in_buf;
+				break;
+		}
+	}
+
+	out_buf[j] = '\0';
+	out.resize(j);
+	return j;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

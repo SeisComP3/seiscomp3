@@ -102,27 +102,14 @@ std::ostream &operator<<(std::ostream &os, const ValueMapper &m) {
 }
 
 
-const std::string &toSQL(const std::string &str) {
+const std::string &toSQL(IO::DatabaseInterface *db, const std::string &str) {
 	static std::string converted;
-	std::string::size_type pos = str.find('\'');
-	if ( pos == std::string::npos )
-		return str;
 
-	converted.clear();
-
-	if ( pos > 0 )
-		converted.append(str, 0, pos);
-
-	++pos;
-	converted.append("''");
-	while ( pos < str.size() ) {
-		if ( str[pos] == '\'' )
-			converted.push_back('\'');
-		converted.push_back(str[pos]);
-		++pos;
+	if ( !db->escape(converted, str) ) {
+		converted = "";
+		SEISCOMP_WARNING("db string conversion from failed: %s", str.c_str());
 	}
 
-	SEISCOMP_DEBUG("converted string: %s -> %s", str.c_str(), converted.c_str());
 	return converted;
 }
 
@@ -874,7 +861,7 @@ std::string DatabaseArchive::parentPublicID(const PublicObject *object) {
 	        " where Child._oid=" +
 	        object->className() + "._oid and Parent._oid=" +
 	        object->className() + "._parent_oid and Child." + _publicIDColumn + "='" +
-	        toSQL(object->publicID()) + "'";
+	        toSQL(_db.get(), object->publicID()) + "'";
 
 	if ( !_db->beginQuery(query.c_str()) ) {
 		SEISCOMP_ERROR("starting query '%s' failed", query.c_str());
@@ -1013,7 +1000,7 @@ std::string DatabaseArchive::toString(const Core::Time &value) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string DatabaseArchive::toString(const std::string &value) const {
-	return toSQL(value);
+	return toSQL(_db.get(), value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1022,7 +1009,7 @@ std::string DatabaseArchive::toString(const std::string &value) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string DatabaseArchive::toString(const char *value) const {
-	return toSQL(std::string(value));
+	return toSQL(_db.get(), std::string(value));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1306,7 +1293,7 @@ void DatabaseArchive::write(std::vector<std::complex<double> > &value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::write(std::string &value) {
-	writeAttrib("'" + toSQL(value) + "'");
+	writeAttrib("'" + toSQL(_db.get(), value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1393,7 +1380,7 @@ unsigned long DatabaseArchive::publicObjectId(const std::string &publicId) {
 	unsigned long id = 0;
 	std::stringstream ss;
 	ss << "select _oid from " << PublicObject::ClassName()
-	   << " where " << _publicIDColumn << "='" << toSQL(publicId) << "'";
+	   << " where " << _publicIDColumn << "='" << toSQL(_db.get(), publicId) << "'";
 	if ( !_db->beginQuery(ss.str().c_str()) )
 		return id;
 
@@ -1534,7 +1521,7 @@ unsigned long DatabaseArchive::insertPublicObject(const std::string &publicId) {
 	std::stringstream ss;
 	ss << "insert into " << PublicObject::ClassName()
 	   << "(_oid," << _publicIDColumn << ") values("
-	   << objectId << ",'" << toSQL(publicId) << "')";
+	   << objectId << ",'" << toSQL(_db.get(), publicId) << "')";
 
 	if ( !_db->execute(ss.str().c_str()) ) {
 		deleteObject(objectId);
@@ -1572,7 +1559,7 @@ bool DatabaseArchive::insertRow(const std::string &table,
 	else
 		ss << " from " << PublicObject::ClassName()
 		   << " where " << PublicObject::ClassName()
-		   << "." << _publicIDColumn << "='" << toSQL(parentId) << "'";
+		   << "." << _publicIDColumn << "='" << toSQL(_db.get(), parentId) << "'";
 
 	//SEISCOMP_DEBUG(ss.str().c_str());
 	return _db->execute(ss.str().c_str());
