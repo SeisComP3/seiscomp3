@@ -6,38 +6,35 @@
   <title>SeisComP3 - Data Availability</title>
 </head>
 <body>
+  <p><a href="../">Parent Directory</a></p>
   <h1>SeisComP3 Data Availability Web Service</h1>
   <p>The data availability web service returns detailed time span information of
-  what timeseries data is available at the DMC archive.</p>
+  what timeseries data is available at the DMC archive. The request type is
+  <em>HTTP-GET</em> and <em>HTTP-POST</em>. Please refer to <a
+  href="http://www.fdsn.org/webservices">http://www.fdsn.org/webservice</a> for
+  a complete service description.</p>
 
   <h2>Available URLs</h2>
   <ul>
+    <li>
+      <a href="query">query</a> - Produces list of continuous time spans for
+      selected channels (network, station, location, channel and quality) and
+      time ranges.
+    </li>
     <li>
       <a href="extent">extent</a> - Produces list of available time extents
       (earliest to latest) for selected channels (network, station, location and
       quality) and time ranges.
     </li>
-    <li>
-      <a href="builder-extent">builder-extent</a> - URL builder helping you to form your
-      data extent requests
-    </li>
-    <li>
-      <a href="query">query</a> - Produces list of contiguous time spans for
-      selected channels (network, station, location, channel and quality) and
-      time ranges.
-    </li>
-    <li>
-      <a href="builder">builder</a> - URL builder helping you to form your
-      data time span requests
-    </li>
     <li><a href="version">version</a></li>
+    <li><a href="application.wadl">application.wadl</a></li>
+    <li>builder - URL builder helping you to form your query
+      <ul>
+        <li><a href="builder-query">query</a> - continuous time spans</li>
+        <li><a href="builder-extent">extent</a> - data extents</li>
+      </ul>
+    </li>
   </ul>
-
-  <h2>Interface Documentation</h2>
-  <p>The availability service is no official standard yet. This implementation
-  aims to be compatible with the <a
-  href="https://service.iris.edu/irisws/availability/1/">IRIS DMC IRISWS
-  availability Web Service</a> implementation.
 
   <h2>Feature Notes</h2>
   <ul>
@@ -45,9 +42,14 @@
     <li>The IRISWS availability implementation truncates the timespans of the
     returned data extents and segments to the requested start and end times (if
     any). This implementation truncates the start and end time only for the
-    formats: <em>sync</em> and <em>request</em>. The <em>text</em>,
-    <em>geocsv</em> and <em>json</em> format will return the exact time windows
-    extracted from the waveform archive.
+    <em>request</em> format. The <em>text</em>, <em>geocsv</em> and
+    <em>json</em> format will return the exact time windows extracted from the
+    waveform archive.
+    </li>
+    <li>additional request parameters:
+      <ul>
+        <li><em>excludetoolarge</em> (query): boolean, default: <em>true</em></li>
+      </ul>
     </li>
   </ul>
 </body>

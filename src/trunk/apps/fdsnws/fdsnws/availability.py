@@ -1,29 +1,22 @@
-################################################################################
+###############################################################################
 # Copyright (C) 2013-2014 by gempa GmbH
 #
-# FDSNStation -- Implements the fdsnws-station Web service, see
+# FDSNStation -- Implements the fdsnws-availability Web service, see
 #   http://www.fdsn.org/webservices/
 #
 # Feature notes:
-#   - 'updatedafter' request parameter not implemented: The last modification
-#     time in SeisComP is tracked on the object level. If a child of an object
-#     is updated the update time is not propagated to all parents. In order to
-#     check if a station was updated all children must be evaluated recursively.
-#     This operation would be much to expensive.
 #   - additional request parameters:
-#     - formatted:       boolean, default: false
-#   - additional values of request parameters:
-#     - format
-#       - standard:      [xml, text]
-#       - additional:    [fdsnxml (=xml), stationxml, sc3ml]
-#       - default:       xml
+#     - excludetoolarge:       boolean, default: true
 #
 # Author:  Stephan Herrnkind
 # Email:   herrnkind@gempa.de
-################################################################################
+###############################################################################
 
+from twisted.cred import portal
 from twisted.internet.threads import deferToThread
 from twisted.web import http, resource, server
+
+from zope.interface import implements
 
 from seiscomp3 import DataModel, IO, Logging
 from seiscomp3.Client import Application
@@ -36,117 +29,237 @@ import utils
 
 
 DBMaxUInt = 18446744073709551615  # 2^64 - 1
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 
-################################################################################
-
-
+###############################################################################
 class _AvailabilityRequestOptions(RequestOptions):
 
+    # merge options
+    VMergeSampleRate = 'samplerate'
+    VMergeQuality = 'quality'
+    VMergeOverlap = 'overlap'
+    VMerge = [VMergeSampleRate, VMergeQuality] # overlap option only available
+                                               # in query method
+
+    # orderby options
+    VOrderByNSLC = 'nslc_time_quality_samplerate'
+    VOrderByCount = 'timespancount'
+    VOrderByCountDesc = 'timespancount_desc'
+    VOrderByUpdate = 'latestupdate'
+    VOrderByUpdateDesc = 'latestupdate_desc'
+    VOrderBy = [
+        VOrderByNSLC, VOrderByCount, VOrderByCountDesc, VOrderByUpdate,
+        VOrderByUpdateDesc
+    ]
+
+    # format options
     VFormatText = 'text'
     VFormatGeoCSV = 'geocsv'
     VFormatJSON = 'json'
-    VFormatSync = 'sync'
+    VFormatRequest = 'request'
+    OutputFormats = [VFormatText, VFormatGeoCSV, VFormatJSON, VFormatRequest]
 
-    OutputFormats = [VFormatText, VFormatGeoCSV, VFormatJSON,
-                     VFormatSync]
-
+    # request parameters
     PQuality = ['quality']
-    PMergeQuality = ['mergequality']
-    PMergeSampleRate = ['mergesamplerate']
+    PMerge = ['merge']
+    POrderBy = ['orderby']
+    PLimit = ['limit']
     PIncludeRestricted = ['includerestricted']
 
-    POSTParams = RequestOptions.POSTParams + PQuality + \
-        PMergeQuality + PMergeSampleRate + PIncludeRestricted
+    POSTParams = RequestOptions.POSTParams + PQuality + PMerge + POrderBy + \
+                 PLimit + PIncludeRestricted
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def __init__(self, args=None):
         RequestOptions.__init__(self, args)
 
         self.service = 'availability-base'
-
         self.quality = None
-        self.mergeQuality = None
         self.mergeSampleRate = None
-        self.showLastUpdate = None
+        self.mergeQuality = None
+        self.mergeOverlap = None
+        self.orderBy = self.VOrderBy[0]
+        self.limit = None
         self.includeRestricted = None
+        self.showLatestUpdate = None
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def parse(self):
         self.parseTime()
         self.parseChannel()
         self.parseOutput()
 
         # quality: D, M, Q, R, * (optional)
-        foundAny = False
-        for vList in self.getValues(self.PQuality):
-            for v in vList.split(','):
-                v = v.strip()
-                if len(v) == 1:
-                    if v[0] == '*':
-                        foundAny = True
-                        break
-                    elif v[0].isupper():
-                        if self.quality is None:
-                            self.quality = [v]
-                        else:
-                            self.quality.append(v)
-                        continue
-                self.raiseValueError(self.PQuality[0])
-            if foundAny:
-                self.quality = None
-                break
+        for v in self.getListValues(self.PQuality):
+            if len(v) == 1:
+                if v[0] == '*':
+                    self.quality = None
+                    break
+                elif v[0].isupper():
+                    if self.quality is None:
+                        self.quality = [v]
+                    else:
+                        self.quality.append(v)
+                    continue
+            self.raiseValueError(self.PQuality[0])
 
-        # mergeQuality (optional)
-        self.mergeQuality = self.parseBool(self.PMergeQuality)
+        # merge (optional)
+        for v in self.getListValues(self.PMerge, True):
+            if v not in self.VMerge:
+                self.raiseValueError(v)
 
-        # mergeSampleRate (optional)
-        self.mergeSampleRate = self.parseBool(self.PMergeSampleRate)
+            if v == self.VMergeSampleRate:
+                self.mergeSampleRate = True
+            elif v == self.VMergeQuality:
+                self.mergeQuality = True
+            elif v == self.VMergeOverlap:
+                self.mergeOverlap = True
+
+        # orderby (optional)
+        key, value = self.getFirstValue(self.POrderBy)
+        if value is not None:
+            if value in self.VOrderBy:
+                self.orderBy = value
+            else:
+                self.raiseValueError(key)
+
+        # limit (optional)
+        self.limit = self.parseInt(self.PLimit, 1, DBMaxUInt)
 
         # includeRestricted (optional)
         self.includeRestricted = self.parseBool(self.PIncludeRestricted)
-        if self.includeRestricted is None:
-            self.includeRestricted = True
 
-        # sync format implies printing of last update and forces merging of
-        # quality
-        if self.format == self.VFormatSync:
-            self.showLastUpdate = True
-            self.mergeQuality = True
 
-    #---------------------------------------------------------------------------
-    def extentIter(self, dac):
+    #--------------------------------------------------------------------------
+    def extentIter(self, dac, user=None, access=None):
         # tupel: extent, oid, restricted
         for e in dac.extentsSorted():
             ext = e[0]
             restricted = e[2]
+            wid = ext.waveformID()
+            net = wid.networkCode()
+            sta = wid.stationCode()
+            loc = wid.locationCode()
+            cha = wid.channelCode()
+
+            if restricted:
+                if not user:
+                    continue
+                if access:
+                    startTime = ext.start()
+                    if ro.time.start() > startTime:
+                        startTime = ro.time.start()
+                    endTime = ext.end()
+                    if ro.time.end() < ext.end():
+                        endTime = ro.time.end()
+                    if not access.authorize(user, net, sta, loc, cha,
+                                            startTime, endTime):
+                        continue
+
             for ro in self.streams:
                 if ro.channel:
-                    wid = ext.waveformID()
-                    if not ro.channel.matchNet(wid.networkCode()) or \
-                       not ro.channel.matchSta(wid.stationCode()) or \
-                       not ro.channel.matchLoc(wid.locationCode()) or \
-                       not ro.channel.matchCha(wid.channelCode()):
+                    if not ro.channel.matchNet(net) or \
+                       not ro.channel.matchSta(sta) or \
+                       not ro.channel.matchLoc(loc) or \
+                       not ro.channel.matchCha(cha):
                         continue
 
                 if ro.time and not ro.time.match(ext.start(), ext.end()):
                     continue
 
-                if not ro.includeRestricted and restricted:
+                if not self.includeRestricted and restricted:
                     continue
 
                 yield e
 
 
-################################################################################
+###############################################################################
+class _AvailabilityExtentRequestOptions(_AvailabilityRequestOptions):
+
+    #--------------------------------------------------------------------------
+    def __init__(self, args=None):
+        _AvailabilityRequestOptions.__init__(self, args)
+        self.service = 'availability-extent'
+
+        self.showLatestUpdate = True
+
+
+    #--------------------------------------------------------------------------
+    def attributeExtentIter(self, ext):
+
+        for i in xrange(ext.dataAttributeExtentCount()):
+            e = ext.dataAttributeExtent(i)
+
+            if self.time and not self.time.match(e.start(), e.end()):
+                continue
+
+            if self.quality and e.quality() not in self.quality:
+                continue
+
+            yield e
+
+
+###############################################################################
+class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
+
+    # additional merge options
+    VMerge = _AvailabilityRequestOptions.VMerge + \
+             [_AvailabilityRequestOptions.VMergeOverlap]
+
+    # show options
+    VShowLatestUpdate = 'latestupdate'
+    VShow = [VShowLatestUpdate]
+
+    # additional query specific request parameters
+    PMergeGaps = ['mergegaps']
+    PShow = ['show']
+    PExcludeTooLarge = ['excludetoolarge']
+
+    POSTParams = _AvailabilityRequestOptions.POSTParams + PMergeGaps + \
+                 PShow + PExcludeTooLarge
+
+    #--------------------------------------------------------------------------
+    def __init__(self, args=None):
+        _AvailabilityRequestOptions.__init__(self, args)
+        self.service = 'availability-query'
+
+        self.mergeGaps = None
+        self.excludeTooLarge = None
+
+    #--------------------------------------------------------------------------
+    def parse(self):
+        _AvailabilityRequestOptions.parse(self)
+
+        # merge gaps threshold (optional)
+        self.mergeGaps = self.parseFloat(self.PMergeGaps, 0)
+
+        # show (optional)
+        for v in self.getListValues(self.PShow, True):
+            if v not in self.VShow:
+                self.raiseValueError(key)
+            if v == self.VShowLatestUpdate:
+                self.showLatestUpdate = True
+
+        # exclude to large (optional)
+        self.excludeTooLarge = self.parseBool(self.PExcludeTooLarge)
+        if self.excludeTooLarge is None:
+            self.excludeTooLarge = True
+
+
+###############################################################################
 class _Availability(BaseResource):
     isLeaf = True
 
-    #---------------------------------------------------------------------------
-    def __init__(self):
+    #--------------------------------------------------------------------------
+    def __init__(self, access=None, user=None):
         BaseResource.__init__(self, VERSION)
+        self.access = access
+        self.user = user
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def render_OPTIONS(self, req):
         req.setHeader('Access-Control-Allow-Origin', '*')
         req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
@@ -155,12 +268,16 @@ class _Availability(BaseResource):
         req.setHeader('Content-Type', 'text/plain')
         return ""
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def render_GET(self, req):
         # Parse and validate GET parameters
         ro = self._createRequestOptions(req.args)
         try:
             ro.parse()
+            if not ro.channel:
+                raise ValueError, 'Request contains no selections'
+
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)
         except ValueError, e:
@@ -169,7 +286,8 @@ class _Availability(BaseResource):
 
         return self._prepareRequest(req, ro)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def render_POST(self, req):
         # Parse and validate POST parameters
         ro = self._createRequestOptions()
@@ -182,7 +300,8 @@ class _Availability(BaseResource):
 
         return self._prepareRequest(req, ro)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _prepareRequest(self, req, ro):
 
         dac = Application.Instance().getDACache()
@@ -191,7 +310,7 @@ class _Availability(BaseResource):
             contentType = 'application/json'
             extension = 'json'
         elif ro.format == ro.VFormatGeoCSV:
-            contentType = 'application/csv'
+            contentType = 'text/csv'
             extension = 'csv'
         else:
             contentType = 'text/plain'
@@ -210,14 +329,16 @@ class _Availability(BaseResource):
         # The request is handled by the deferred object
         return server.NOT_DONE_YET
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _formatTime(self, time, ms=False):
         if ms:
             return '{0}.{1:06d}Z'.format(time.toString('%FT%T'),
                                          time.microseconds())
         return time.toString('%FT%TZ')
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _writeLines(self, req, lines, ro):
         if ro.format == ro.VFormatText:
             return self._writeFormatText(req, lines, ro)
@@ -225,12 +346,13 @@ class _Availability(BaseResource):
             return self._writeFormatGeoCSV(req, lines, ro)
         elif ro.format == ro.VFormatJSON:
             return self._writeFormatJSON(req, lines, ro)
-        elif ro.format == ro.VFormatSync:
-            return self._writeFormatSync(req, lines, ro)
+        elif ro.format == ro.VFormatRequest:
+            return self._writeFormatRequest(req, lines, ro)
 
         raise Exception, "unknown reponse format: %s" % ro.format
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _writeFormatText(self, req, lines, ro):
         byteCount = 0
         lineCount = 0
@@ -238,29 +360,26 @@ class _Availability(BaseResource):
         # the extent service uses a different update column name and alignment
         isExtentReq = ro.__class__ == _AvailabilityExtentRequestOptions
 
-        nslc = '{0: <2} {1: <5} {2: <2} {3: <3}'
-        quality = ' {0: <1}'
-        sampleRate = ' {0: >11}'
-        sampleRateF = ' {0: >11.1f}'
-        time = ' {0: >27} {1: >27}'
-        updated = ' {0: >20}' if isExtentReq else ' {0: <20}'
-        timeSpans = ' {0: >10}'
-        restriction = ' {0: <11}'
+        nslc = '{0: <2}  {1: <5}  {2: <2}  {3: <3}'
+        quality = '  {0: <1}'
+        sampleRate = '  {0: >11}'
+        sampleRateF = '  {0: >11.1f}'
+        time = '  {0: <27}  {1: <27}'
+        updated = '  {0: <20}'
+        timeSpans = '  {0: >10}'
+        restriction = '  {0: <11}'
 
-        header = nslc.format('#n', 's', 'l', 'c')
+        header = nslc.format('#N', 'S', 'L', 'C')
         if not ro.mergeQuality:
-            header += quality.format('q')
+            header += quality.format('Q')
         if not ro.mergeSampleRate:
-            header += sampleRate.format('sample-rate')
-        header += time.format('earliest', 'latest')
-        if ro.showLastUpdate:
-            header += updated.format('updated' if isExtentReq else
-                                     'most-recent-update')
+            header += sampleRate.format('SampleRate')
+        header += time.format('Earliest', 'Latest')
+        if ro.showLatestUpdate:
+            header += updated.format('Updated')
         if isExtentReq:
-            if ro.showTimeSpanCount:
-                header += timeSpans.format('time-spans')
-            if ro.showRestriction:
-                header += restriction.format('restriction')
+            header += timeSpans.format('TimeSpans')
+            header += restriction.format('Restriction')
         header += '\n'
 
         first = True
@@ -281,14 +400,11 @@ class _Availability(BaseResource):
                 data += sampleRateF.format(e.sampleRate())
             data += time.format(self._formatTime(e.start(), True),
                                 self._formatTime(e.end(), True))
-            if ro.showLastUpdate:
+            if ro.showLatestUpdate:
                 data += updated.format(self._formatTime(e.updated()))
             if isExtentReq:
-                if ro.showTimeSpanCount:
-                    data += timeSpans.format(e.segmentCount())
-                if ro.showRestriction:
-                    data += restriction.format('RESTRICTED' if line[2] else
-                                               'OPEN')
+                data += timeSpans.format(e.segmentCount())
+                data += restriction.format('RESTRICTED' if line[2] else 'OPEN')
             data += '\n'
 
             utils.writeTS(req, data)
@@ -297,7 +413,39 @@ class _Availability(BaseResource):
 
         return byteCount, lineCount
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
+    def _writeFormatRequest(self, req, lines, ro):
+        byteCount = 0
+        lineCount = 0
+
+        for line in lines:
+            wid = line[0].waveformID()
+            e = line[1]
+            loc = wid.locationCode() if wid.locationCode() else "--"
+            start = e.start()
+            end = e.end()
+
+            # truncate start and end time to requested time frame
+            if ro.time:
+                if ro.time.start and ro.time.start > start:
+                    start = ro.time.start
+                if ro.time.end and ro.time.end < end:
+                    end = ro.time.end
+
+            data = '{0} {1} {2} {3} {4} {5}\n'.format(
+                   wid.networkCode(), wid.stationCode(), loc,
+                   wid.channelCode(), self._formatTime(start, True),
+                   self._formatTime(end, True))
+
+            utils.writeTS(req, data)
+            byteCount += len(data)
+            lineCount += 1
+
+        return byteCount, lineCount
+
+
+    #--------------------------------------------------------------------------
     def _writeFormatGeoCSV(self, req, lines, ro):
         byteCount = 0
         lineCount = 0
@@ -309,48 +457,33 @@ class _Availability(BaseResource):
         time = '|{0}|{1}'
 
         # header
-        fieldUnit = '#field_unit: unitless | unitless | unitless | unitless'
-        fieldType = '#field_type: string | string | string | string'
-        fieldName = 'network|station|location|channel'
-
-        if not isExtentReq:
-            fieldUnit += ' | unitless'
-            fieldType += ' | string'
-            fieldName += '|repository'
-            repoName = '|' + Application.Instance()._daRepositoryName
+        fieldUnit = '#field_unit: unitless|unitless|unitless|unitless'
+        fieldType = '#field_type: string|string|string|string'
+        fieldName = 'Network|Station|Location|Channel'
 
         if not ro.mergeQuality:
-            fieldUnit += ' | unitless'
-            fieldType += ' | string'
-            fieldName += '|quality'
+            fieldUnit += '|unitless'
+            fieldType += '|string'
+            fieldName += '|Quality'
 
         if not ro.mergeSampleRate:
-            fieldUnit += ' | unitless'
-            fieldType += ' | float'
-            fieldName += '|sample_rate' if isExtentReq else \
-                         '|samplerate'
+            fieldUnit += ' |hertz'
+            fieldType += ' |float'
+            fieldName += '|SampleRate'
 
-        fieldUnit += ' | ISO_8601 | ISO_8601'
-        fieldType += ' | datetime | datetime'
-        fieldName += '|earliest|latest' if isExtentReq else \
-                     '|starttime|endtime'
+        fieldUnit += ' |ISO_8601|ISO_8601'
+        fieldType += ' |datetime|datetime'
+        fieldName += '|Earliest|Latest'
 
-        if ro.showLastUpdate:
-            fieldUnit += ' | ISO_8601'
-            fieldType += ' | datetime'
-            fieldName += '|updated' if isExtentReq else \
-                         '|lastupdate'
+        if ro.showLatestUpdate:
+            fieldUnit += '|ISO_8601'
+            fieldType += '|datetime'
+            fieldName += '|Updated'
 
         if isExtentReq:
-            if ro.showTimeSpanCount:
-                fieldUnit += ' | unitless'
-                fieldType += ' | integer'
-                fieldName += '|timespans'
-
-            if ro.showRestriction:
-                fieldUnit += ' | unitless'
-                fieldType += ' | string'
-                fieldName += '|restriction'
+            fieldUnit += '|unitless|unitless'
+            fieldType += '|integer|string'
+            fieldName += '|TimeSpans|Restriction'
 
         header = '#dataset: GeoCSV 2.0\n' \
                  '#delimiter: |\n'
@@ -367,21 +500,17 @@ class _Availability(BaseResource):
             e = line[1]
             data = nslc.format(wid.networkCode(), wid.stationCode(),
                                wid.locationCode(), wid.channelCode())
-            if not isExtentReq:
-                data += repoName
             if not ro.mergeQuality:
                 data += '|' + e.quality()
             if not ro.mergeSampleRate:
                 data += '|{0:.1f}'.format(e.sampleRate())
             data += time.format(self._formatTime(e.start(), True),
                                 self._formatTime(e.end(), True))
-            if ro.showLastUpdate:
+            if ro.showLatestUpdate:
                 data += '|' + self._formatTime(e.updated())
             if isExtentReq:
-                if ro.showTimeSpanCount:
-                    data += '|{0:d}'.format(e.segmentCount())
-                if ro.showRestriction:
-                    data += '|RESTRICTED' if line[2] else '|OPEN'
+                data += '|{0:d}'.format(e.segmentCount())
+                data += '|RESTRICTED' if line[2] else '|OPEN'
             data += '\n'
 
             utils.writeTS(req, data)
@@ -390,170 +519,76 @@ class _Availability(BaseResource):
 
         return byteCount, lineCount
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _writeFormatJSON(self, req, lines, ro):
         byteCount = 0
         lineCount = 0
 
-        now = self._formatTime(Time.GMT())
-        repoName = Application.Instance()._daRepositoryName
         header = '{{' \
             '"created":"{0}",' \
-            '"repository":[{{' \
-            '"repository_name":"{1}",' \
-            '"channels":['.format(now, repoName)
-        footer = ']}]}'
+            '"version": 1.0,' \
+            '"datasources":['.format(self._formatTime(Time.GMT()))
+        footer = ']}'
 
         return self._writeJSONChannels(req, header, footer, lines, ro)
 
-    #---------------------------------------------------------------------------
-    def _writeFormatSync(self, req, lines, ro):
-        byteCount = 0
-        lineCount = 0
-        dccName = Application.Instance()._daDCCName
-        repoName = Application.Instance()._daRepositoryName
-
-        updated = None
-
-        header = '{0}|{1}\n'.format(dccName, Time.GMT().toString('%Y,%j'))
-
-        first = True
-        for line in lines:
-            if first:
-                first = False
-                utils.writeTS(req, header)
-                byteCount += len(header)
-
-            wid = line[0].waveformID()
-            e = line[1]
-
-            start = e.start()
-            end = e.end()
-
-            # truncate start and end time to requested time frame
-            if ro.time:
-                if ro.time.start and ro.time.start > start:
-                    start = ro.time.start
-                if ro.time.end and ro.time.end < end:
-                    end = ro.time.end
-
-            sr = "" if ro.mergeSampleRate \
-                else '{0:.1f}'.format(e.sampleRate())
-            data = '{0}|{1}|{2}|{3}|{4}|{5}||{6}||||||{7}||\n'.format(
-                   wid.networkCode(), wid.stationCode(), wid.locationCode(),
-                   wid.channelCode(), start.toString('%Y,%j,%T'),
-                   end.toString('%Y,%j,%T'), sr, repoName)
-            utils.writeTS(req, data)
-            byteCount += len(data)
-            lineCount += 1
-
-        return byteCount, lineCount
 
 
-################################################################################
-class _AvailabilityExtentRequestOptions(_AvailabilityRequestOptions):
+###############################################################################
+class FDSNAvailabilityExtentRealm(object):
+    implements(portal.IRealm)
 
-    VFormatRequest = 'request'
+    #--------------------------------------------------------------------------
+    def __init__(self, access):
+        self.__access = access
 
-    OutputFormats = _AvailabilityRequestOptions.OutputFormats + \
-        [VFormatRequest]
+    #--------------------------------------------------------------------------
+    def requestAvatar(self, avatarId, mind, *interfaces):
+        if resource.IResource in interfaces:
+            user = {"mail": avatarId, "blacklisted": False}
+            return (resource.IResource,
+                    FDSNAvailabilityExtent(self.__access, user),
+                    lambda: None)
 
-    VOrderByNSLC = 'nslc_time_quality_samplerate'
-    VOrderByCount = 'timespancount'
-    VOrderByCountDesc = 'timespancount_desc'
-    VOrderByUpdate = 'latestupdate'
-    VOrderByUpdateDesc = 'latestupdate_desc'
-    VOrderBy = [VOrderByNSLC, VOrderByCount, VOrderByCountDesc,
-                VOrderByUpdate, VOrderByUpdateDesc]
-
-    VShowLatestUpdate = 'latestupdate'
-    VShowTimeSpanCount = 'timespancount'
-    VShowRestriction = 'restriction'
-
-    POrderBy = ['orderby']
-    PRowLimit = ['rowlimit']
-    PShow = ['show']
-
-    POSTParams = _AvailabilityRequestOptions.POSTParams + \
-        POrderBy + PRowLimit + PShow
-
-    #---------------------------------------------------------------------------
-    def __init__(self, args=None):
-        _AvailabilityRequestOptions.__init__(self, args)
-        self.service = 'availability-extent'
-
-        self.orderBy = None
-        self.rowLimit = None
-        self.showTimeSpanCount = False
-        self.showRestriction = False
-
-    #---------------------------------------------------------------------------
-    def parse(self):
-        _AvailabilityRequestOptions.parse(self)
-
-        # orderby
-        key, value = self.getFirstValue(self.POrderBy)
-        if value is None:
-            self.orderBy = self.VOrderBy[0]
-        else:
-            if value in self.VOrderBy:
-                self.orderBy = value
-            else:
-                self.raiseValueError(key)
-
-        # rowlimit
-        self.rowLimit = self.parseInt(self.PRowLimit, 1, DBMaxUInt)
-
-        # show
-        for vList in self.getValues(self.PShow):
-            for v in vList.split(','):
-                v = v.strip()
-                if v == self.VShowLatestUpdate:
-                    self.showLastUpdate = True
-                elif v == self.VShowTimeSpanCount:
-                    self.showTimeSpanCount = True
-                elif v == self.VShowRestriction:
-                    self.showRestriction = True
-                else:
-                    self.raiseValueError(self.PShow[0])
-
-        # request format implies no extra columns and forces merging of
-        # quality and sample rate
-        if self.format == self.VFormatRequest:
-            self.showLastUpdate = False
-            self.showTimeSpanCount = False
-            self.showRestriction = False
-            self.mergeQuality = True
-            self.mergeSampleRate = True
-
-    #---------------------------------------------------------------------------
-    def attributeExtentIter(self, ext):
-
-        for i in xrange(ext.dataAttributeExtentCount()):
-            e = ext.dataAttributeExtent(i)
-
-            if self.time and not self.time.match(e.start(), e.end()):
-                continue
-
-            if self.quality and e.quality() not in self.quality:
-                continue
-
-            yield e
+        raise NotImplementedError()
 
 
-################################################################################
-class AvailabilityExtent(_Availability):
+###############################################################################
+class FDSNAvailabilityExtentAuthRealm(object):
+    implements(portal.IRealm)
+
+    #--------------------------------------------------------------------------
+    def __init__(self, access, userdb):
+        self.__access = access
+        self.__userdb = userdb
+
+    #--------------------------------------------------------------------------
+    def requestAvatar(self, avatarId, mind, *interfaces):
+        if resource.IResource in interfaces:
+            user = self.__userdb.getAttributes(avatarId)
+            return (resource.IResource,
+                    FDSNAvailabilityExtent(self.__access, user),
+                    lambda: None)
+
+        raise NotImplementedError()
+
+
+###############################################################################
+class FDSNAvailabilityExtent(_Availability):
     isLeaf = True
 
-    #---------------------------------------------------------------------------
-    def __init__(self):
-        _Availability.__init__(self)
+    #--------------------------------------------------------------------------
+    def __init__(self, access=None, user=None):
+        _Availability.__init__(self, access, user)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _createRequestOptions(self, args=None):
         return _AvailabilityExtentRequestOptions(args)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _mergeExtents(self, attributeExtents):
 
         merged = None
@@ -581,56 +616,20 @@ class AvailabilityExtent(_Availability):
 
         return merged
 
-    #---------------------------------------------------------------------------
-    def _writeLines(self, req, lines, ro):
-        if ro.format == ro.VFormatRequest:
-            return self._writeFormatRequest(req, lines, ro), len(lines)
-        else:
-            return _Availability._writeLines(self, req, lines, ro)
 
-    #---------------------------------------------------------------------------
-    def _writeFormatRequest(self, req, lines, ro):
-        byteCount = 0
-
-        for line in lines:
-            wid = line[0].waveformID()
-            e = line[1]
-            loc = wid.locationCode() if wid.locationCode() else "--"
-            start = e.start()
-            end = e.end()
-
-            # truncate start and end time to requested time frame
-            if ro.time:
-                if ro.time.start and ro.time.start > start:
-                    start = ro.time.start
-                if ro.time.end and ro.time.end < end:
-                    end = ro.time.end
-
-            data = '{0} {1} {2} {3} {4} {5}\n'.format(
-                   wid.networkCode(), wid.stationCode(), loc,
-                   wid.channelCode(), self._formatTime(start, True),
-                   self._formatTime(end, True))
-
-            utils.writeTS(req, data)
-            byteCount += len(data)
-
-        return byteCount
-
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _writeJSONChannels(self, req, header, footer, lines, ro):
         byteCount = 0
 
         nslc = '{{' \
-            '"net":"{0}",' \
-            '"sta":"{1}",' \
-            '"loc":"{2}",' \
-            '"cha":"{3}"'
+            '"network":"{0}",' \
+            '"station":"{1}",' \
+            '"location":"{2}",' \
+            '"channel":"{3}"'
         quality = ',"quality":"{0}"'
-        sampleRate = ',"sample_rate":{0}'
-        time = ',"earliest":"{0}","latest":"{1}"'
-        updated = ',"updated":"{0}"'
-        timeSpans = ',"timespans":{0}'
-        restriction = ',"restriction":"{0}"'
+        sampleRate = ',"samplerate":{0}'
+        time = ',"earliest":"{0}","latest":"{1}","timespanCount":{2}' \
+               ',"updated":"{3}","restriction":"{4}"}}'
 
         utils.writeTS(req, header)
         byteCount += len(header)
@@ -647,14 +646,10 @@ class AvailabilityExtent(_Availability):
             if not ro.mergeSampleRate:
                 data += sampleRate.format(e.sampleRate())
             data += time.format(self._formatTime(e.start(), True),
-                                self._formatTime(e.end(), True))
-            if ro.showLastUpdate:
-                data += updated.format(self._formatTime(e.updated()))
-            if ro.showTimeSpanCount:
-                data += timeSpans.format(e.segmentCount())
-            if ro.showRestriction:
-                data += restriction.format('RESTRICTED' if line[2] else 'OPEN')
-            data += '}'
+                                self._formatTime(e.end(), True),
+                                e.segmentCount(),
+                                self._formatTime(e.updated()),
+                                format('RESTRICTED' if line[2] else 'OPEN'))
 
             utils.writeTS(req, data)
             byteCount += len(data)
@@ -664,7 +659,8 @@ class AvailabilityExtent(_Availability):
 
         return byteCount, len(lines)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _processRequest(self, req, ro, dac):
         if req._disconnected:
             return False
@@ -680,7 +676,8 @@ class AvailabilityExtent(_Availability):
         mergeOne = not mergeAll and not mergeNone
 
         # iterate extents
-        for ext, objID, restricted in ro.extentIter(dac):
+        for ext, objID, restricted in ro.extentIter(dac, self.user,
+                                                    self.access):
             if req._disconnected:
                 return False
 
@@ -725,8 +722,8 @@ class AvailabilityExtent(_Availability):
         self._sortLines(lines, ro)
 
         # truncate lines to requested row limit
-        if ro.rowLimit:
-            del lines[ro.rowLimit:]
+        if ro.limit:
+            del lines[ro.limit:]
 
         byteCount, extCount = self._writeLines(req, lines, ro)
 
@@ -735,7 +732,8 @@ class AvailabilityExtent(_Availability):
         utils.accessLog(req, ro, http.OK, byteCount, None)
         return True
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _sortLines(self, lines, ro):
 
         def compareNSLC(l1, l2):
@@ -809,75 +807,74 @@ class AvailabilityExtent(_Availability):
         lines.sort(cmp=comparator)
 
 
-################################################################################
-class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
+###############################################################################
+class FDSNAvailabilityQueryRealm(object):
+    implements(portal.IRealm)
 
-    PMergeOverlap = ['mergeoverlap']
-    PMergeTolerance = ['mergetolerance']
-    PShowLastUpdate = ['showlastupdate']
-    PExcludeTooLarge = ['excludetoolarge']
+    #--------------------------------------------------------------------------
+    def __init__(self, access):
+        self.__access = access
 
-    POSTParams = _AvailabilityRequestOptions.POSTParams + \
-        PMergeOverlap + PMergeTolerance + PShowLastUpdate + \
-        PExcludeTooLarge
+    #--------------------------------------------------------------------------
+    def requestAvatar(self, avatarId, mind, *interfaces):
+        if resource.IResource in interfaces:
+            user = {"mail": avatarId, "blacklisted": False}
+            return (resource.IResource,
+                    FDSNAvailabilityQuery(self.__access, user),
+                    lambda: None)
 
-    #---------------------------------------------------------------------------
-    def __init__(self, args=None):
-        _AvailabilityRequestOptions.__init__(self, args)
-        self.service = 'availability-query'
-
-        self.mergeOverlap = None
-        self.mergeTolerance = None
-        self.excludeTooLarge = None
-
-    #---------------------------------------------------------------------------
-    def parse(self):
-        _AvailabilityRequestOptions.parse(self)
-
-        self.mergeOverlap = self.parseBool(self.PMergeOverlap)
-        self.mergeTolerance = self.parseFloat(self.PMergeTolerance, 0, 86400)
-        self.showLastUpdate = self.parseBool(self.PShowLastUpdate)
-        self.excludeTooLarge = self.parseBool(self.PExcludeTooLarge)
-        if self.excludeTooLarge is None:
-            self.excludeTooLarge = True
-
-        if self.channel is None:
-            raise ValueError, 'Request contains no selections'
-
-        if self.mergeTolerance is not None and not self.mergeOverlap:
-            raise ValueError, 'mergetolerance given ({0:.1f}) but ' \
-                              'mergeoverlap is not specified'.format(
-                                  self.mergeTolerance)
+        raise NotImplementedError()
 
 
-################################################################################
-class AvailabilityQuery(_Availability):
+###############################################################################
+class FDSNAvailabilityQueryAuthRealm(object):
+    implements(portal.IRealm)
+
+    #--------------------------------------------------------------------------
+    def __init__(self, access, userdb):
+        self.__access = access
+        self.__userdb = userdb
+
+    #--------------------------------------------------------------------------
+    def requestAvatar(self, avatarId, mind, *interfaces):
+        if resource.IResource in interfaces:
+            user = self.__userdb.getAttributes(avatarId)
+            return (resource.IResource,
+                    FDSNAvailabilityQuery(self.__access, user),
+                    lambda: None)
+
+        raise NotImplementedError()
+
+
+###############################################################################
+class FDSNAvailabilityQuery(_Availability):
     isLeaf = True
 
-    #---------------------------------------------------------------------------
-    def __init__(self):
-        _Availability.__init__(self)
+    #--------------------------------------------------------------------------
+    def __init__(self, access=None, user=None):
+        _Availability.__init__(self, access, user)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _createRequestOptions(self, args=None):
         return _AvailabilityQueryRequestOptions(args)
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _writeJSONChannels(self, req, header, footer, lines, ro):
         byteCount = 0
         lineCount = 0
 
         nslc = '{{' \
-            '"net":"{0}",' \
-            '"sta":"{1}",' \
-            '"loc":"{2}",' \
-            '"cha":"{3}"'
+            '"network":"{0}",' \
+            '"station":"{1}",' \
+            '"location":"{2}",' \
+            '"channel":"{3}"'
         quality = ',"quality":"{0}"'
-        sampleRate = ',"sample_rate":{0}'
+        sampleRate = ',"samplerate":{0}'
         updated = ',"updated":"{0}"'
         timeSpans = ',"timespans":[['
         seg = '"{0}","{1}"]'
-        segUpdated = '"{0}","{1}","{2}"]'
 
         class SegGroup:
             def __init__(self, segments, updated):
@@ -888,33 +885,18 @@ class AvailabilityQuery(_Availability):
             first = True
             byteCount = 0
 
-            if ro.showLastUpdate:
-                for s in segments:
-                    if first:
-                        first = False
-                        data = timeSpans
-                    else:
-                        data = ",["
+            for s in segments:
+                if first:
+                    first = False
+                    data = timeSpans
+                else:
+                    data = ",["
 
-                    data += segUpdated.format(
-                        self._formatTime(s.start(), True),
-                        self._formatTime(s.end(), True),
-                        self._formatTime(s.updated()))
-                    utils.writeTS(req, data)
-                    byteCount += len(data)
-            else:
-                for s in segments:
-                    if first:
-                        first = False
-                        data = timeSpans
-                    else:
-                        data = ",["
-
-                    data += seg.format(
-                        self._formatTime(s.start(), True),
-                        self._formatTime(s.end(), True))
-                    utils.writeTS(req, data)
-                    byteCount += len(data)
+                data += seg.format(
+                    self._formatTime(s.start(), True),
+                    self._formatTime(s.end(), True))
+                utils.writeTS(req, data)
+                byteCount += len(data)
 
             return byteCount
 
@@ -939,10 +921,13 @@ class AvailabilityQuery(_Availability):
                             data = ']},'
 
                         wid = ext.waveformID()
-                        data += nslc.format(wid.networkCode(), wid.stationCode(),
-                                            wid.locationCode(), wid.channelCode())
-                        if ro.showLastUpdate:
-                            data += updated.format(self._formatTime(lastUpdate))
+                        data += nslc.format(wid.networkCode(),
+                                            wid.stationCode(),
+                                            wid.locationCode(),
+                                            wid.channelCode())
+                        if ro.showLatestUpdate:
+                            data += updated.format(
+                                    self._formatTime(lastUpdate))
                         utils.writeTS(req, data)
                         byteCount += len(data)
                         byteCount += writeSegments(segments)
@@ -967,7 +952,7 @@ class AvailabilityQuery(_Availability):
                 wid = ext.waveformID()
                 data += nslc.format(wid.networkCode(), wid.stationCode(),
                                     wid.locationCode(), wid.channelCode())
-                if ro.showLastUpdate:
+                if ro.showLatestUpdate:
                     data += updated.format(self._formatTime(lastUpdate))
                 utils.writeTS(req, data)
                 byteCount += len(data)
@@ -1005,7 +990,7 @@ class AvailabilityQuery(_Availability):
                                                 wid.locationCode(),
                                                 wid.channelCode())
                             data += sampleRate.format(sr)
-                            if ro.showLastUpdate:
+                            if ro.showLatestUpdate:
                                 data += updated.format(
                                     self._formatTime(sg.updated))
                             utils.writeTS(req, data)
@@ -1040,7 +1025,7 @@ class AvailabilityQuery(_Availability):
                     data += nslc.format(wid.networkCode(), wid.stationCode(),
                                         wid.locationCode(), wid.channelCode())
                     data += sampleRate.format(sr)
-                    if ro.showLastUpdate:
+                    if ro.showLatestUpdate:
                         data += updated.format(self._formatTime(sg.updated))
                     utils.writeTS(req, data)
                     byteCount += len(data)
@@ -1078,7 +1063,7 @@ class AvailabilityQuery(_Availability):
                                                 wid.locationCode(),
                                                 wid.channelCode())
                             data += quality.format(q)
-                            if ro.showLastUpdate:
+                            if ro.showLatestUpdate:
                                 data += updated.format(
                                     self._formatTime(sg.updated))
                             utils.writeTS(req, data)
@@ -1113,7 +1098,7 @@ class AvailabilityQuery(_Availability):
                     data += nslc.format(wid.networkCode(), wid.stationCode(),
                                         wid.locationCode(), wid.channelCode())
                     data += quality.format(q)
-                    if ro.showLastUpdate:
+                    if ro.showLatestUpdate:
                         data += updated.format(self._formatTime(sg.updated))
                     utils.writeTS(req, data)
                     byteCount += len(data)
@@ -1152,7 +1137,7 @@ class AvailabilityQuery(_Availability):
                                                 wid.channelCode())
                             data += quality.format(q)
                             data += sampleRate.format(sr)
-                            if ro.showLastUpdate:
+                            if ro.showLatestUpdate:
                                 data += updated.format(
                                     self._formatTime(sg.updated))
                             utils.writeTS(req, data)
@@ -1190,7 +1175,7 @@ class AvailabilityQuery(_Availability):
                                         wid.locationCode(), wid.channelCode())
                     data += quality.format(q)
                     data += sampleRate.format(sr)
-                    if ro.showLastUpdate:
+                    if ro.showLatestUpdate:
                         data += updated.format(self._formatTime(sg.updated))
                     utils.writeTS(req, data)
                     byteCount += len(data)
@@ -1204,7 +1189,8 @@ class AvailabilityQuery(_Availability):
 
         return byteCount, lineCount
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _processRequest(self, req, ro, dac):
         if req._disconnected:
             return False
@@ -1222,7 +1208,8 @@ class AvailabilityQuery(_Availability):
         # of 1000 because the query size is limited
         parentOIDs, idList, tooLarge = [], [], []
         i = 0
-        for ext, objID, restricted in ro.extentIter(dac):
+        for ext, objID, restricted in ro.extentIter(dac, self.user,
+                                                    self.access):
             if req._disconnected:
                 return False
 
@@ -1292,7 +1279,8 @@ class AvailabilityQuery(_Availability):
 
         return True
 
-    #---------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
     def _lineIter(self, db, parentOIDs, req, ro, oIDs):
 
         def _T(name):
@@ -1337,65 +1325,68 @@ class AvailabilityQuery(_Availability):
             if segIt is None or not segIt.valid():
                 raise StopIteration
 
-            if not ro.mergeOverlap:
-                # No merge of overlap requested, segment can be instantly
-                # processed.
-                while not req._disconnected:
-                    s = DataModel.DataSegment.Cast(segIt.get())
-                    if s is None:
-                        break
-                    try:
-                        ext, restricted = oIDs[segIt.parentOid()]
-                    except KeyError:
-                        Logging.warning("parent object id not found: %i",
-                                        segIt.parentOid())
-                        continue
-                    yield (ext, s, restricted)
+            # Iterate and optionally merge segments.
+            # A segment will be yielded if
+            # - the extent changed
+            # - quality changed and merging of quality was not requested
+            # - sample rate changed and merging of sample rate was not
+            #   requested
+            # - an overlap was detected and merging of overlaps was not
+            #   requested
+            # - an gap was detected and the gaps exceeds the mergeGaps
+            #   threshold
+            seg = None
+            ext = None
+            lines = 0
+            while not req._disconnected and (seg is None or segIt.next()) and \
+                  (not ro.limit or lines < ro.limit):
+                s = DataModel.DataSegment.Cast(segIt.get())
+                if s is None:
+                    break
 
-                    if not segIt.next():
-                        break
+                # get extent for current segment
+                try:
+                    e, restricted = oIDs[segIt.parentOid()]
+                except KeyError:
+                    Logging.warning("parent object id not found: %i",
+                                    segIt.parentOid())
+                    continue
 
-            else:
-                # Merge overlapping segments (gaps and overlaps): segment can
-                # only be yielded if
-                # - extent changed
-                # - quality changed and merging of quality was not requested
-                # - sample rate changed and merging of sample rate was not
-                #   requested
-                # - mergetolerance is exceeded
-                seg = None
-                ext = None
-                while not req._disconnected and (seg is None or segIt.next()):
-                    s = DataModel.DataSegment.Cast(segIt.get())
-                    if s is None:
-                        break
+                # first segment, no merge test required
+                if seg is None:
+                    seg = s
+                    ext = e
+                    jitter = 1 / (2 * s.sampleRate())
+                    continue
 
-                    try:
-                        ext, restricted = oIDs[segIt.parentOid()]
-                    except KeyError:
-                        Logging.warning("parent object id not found: %i",
-                                        segIt.parentOid())
-                        continue
+                # merge test
+                diff = float(s.start() - seg.end())
+                if e is ext and \
+                    (ro.mergeQuality or s.quality() == seg.quality()) and \
+                    (ro.mergeSampleRate or
+                     s.sampleRate() == seg.sampleRate()) and \
+                    ((ro.mergeGaps is None and diff <= jitter) or \
+                     (diff <= ro.mergeGaps)) and \
+                    (-diff <= jitter or ro.mergeOverap):
 
-                    if seg is None:
-                        seg = s
-                        ext = e
-                    elif e is ext and \
-                        (ro.mergeQuality or s.quality() == seg.quality()) and \
-                        (ro.mergeSampleRate or
-                         s.sampleRate() == seg.sampleRate()) and \
-                            abs(float(s.start() - seg.end())) <= ro.mergeTolerance:
+                    seg.setEnd(s.end())
+                    if s.updated() > seg.updated():
+                        seg.setUpdated(s.updated())
+                # merge was not possible, yield previous segment
+                else:
+                    yield (ext, seg, restricted)
+                    lines += 1
+                    seg = s
+                    ext = e
+                    if seg.sampleRate() != s.sampleRate():
+                        jitter = 1 / (2 * s.sampleRate())
 
-                        seg.setEnd(s.end())
-                        if s.updated() > seg.updated():
-                            seg.setUpdated(s.updated())
-                    else:
-                        yield (ext, s, restricted)
-                        seg = s
-                        ext = e
+            if seg is not None and (not ro.limit or lines < ro.limit):
+                yield (ext, seg, restricted)
 
-                if seg is not None:
-                    yield (ext, seg, restriction)
+            # close database iterator if iteration was stopped because of 
+            # row limit
+            raise StopIteration
 
 
-# vim: ts=4 et
+# vim: ts=4 et tw=79
