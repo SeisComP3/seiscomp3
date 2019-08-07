@@ -287,7 +287,7 @@ void LiteratureSource::setYear(const OPT(int)& year) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int LiteratureSource::year() const throw(Seiscomp::Core::ValueException) {
+int LiteratureSource::year() const {
 	if ( _year )
 		return *_year;
 	throw Seiscomp::Core::ValueException("LiteratureSource.year is not set");
@@ -379,7 +379,7 @@ void LiteratureSource::setTome(const OPT(int)& tome) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int LiteratureSource::tome() const throw(Seiscomp::Core::ValueException) {
+int LiteratureSource::tome() const {
 	if ( _tome )
 		return *_tome;
 	throw Seiscomp::Core::ValueException("LiteratureSource.tome is not set");
@@ -399,7 +399,7 @@ void LiteratureSource::setPageFrom(const OPT(int)& pageFrom) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int LiteratureSource::pageFrom() const throw(Seiscomp::Core::ValueException) {
+int LiteratureSource::pageFrom() const {
 	if ( _pageFrom )
 		return *_pageFrom;
 	throw Seiscomp::Core::ValueException("LiteratureSource.pageFrom is not set");
@@ -419,7 +419,7 @@ void LiteratureSource::setPageTo(const OPT(int)& pageTo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int LiteratureSource::pageTo() const throw(Seiscomp::Core::ValueException) {
+int LiteratureSource::pageTo() const {
 	if ( _pageTo )
 		return *_pageTo;
 	throw Seiscomp::Core::ValueException("LiteratureSource.pageTo is not set");
@@ -455,7 +455,7 @@ LiteratureSource& LiteratureSource::operator=(const LiteratureSource& other) {
 void LiteratureSource::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: LiteratureSource skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

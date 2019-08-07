@@ -181,7 +181,7 @@ void StrongOriginDescription::setWaveformCount(const OPT(int)& waveformCount) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int StrongOriginDescription::waveformCount() const throw(Seiscomp::Core::ValueException) {
+int StrongOriginDescription::waveformCount() const {
 	if ( _waveformCount )
 		return *_waveformCount;
 	throw Seiscomp::Core::ValueException("StrongOriginDescription.waveformCount is not set");
@@ -201,7 +201,7 @@ void StrongOriginDescription::setCreationInfo(const OPT(CreationInfo)& creationI
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& StrongOriginDescription::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& StrongOriginDescription::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("StrongOriginDescription.creationInfo is not set");
@@ -212,7 +212,7 @@ CreationInfo& StrongOriginDescription::creationInfo() throw(Seiscomp::Core::Valu
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& StrongOriginDescription::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& StrongOriginDescription::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("StrongOriginDescription.creationInfo is not set");
@@ -638,7 +638,7 @@ bool StrongOriginDescription::removeRupture(size_t i) {
 void StrongOriginDescription::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: StrongOriginDescription skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

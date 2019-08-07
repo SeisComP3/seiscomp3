@@ -102,11 +102,11 @@ class SC_STRONGMOTION_API StrongOriginDescription : public PublicObject {
 		const std::string& originID() const;
 
 		void setWaveformCount(const OPT(int)& waveformCount);
-		int waveformCount() const throw(Seiscomp::Core::ValueException);
+		int waveformCount() const;
 
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

@@ -79,8 +79,8 @@ class SC_STRONGMOTION_API SurfaceRupture : public Core::BaseObject {
 		const std::string& evidence() const;
 
 		void setLiteratureSource(const OPT(LiteratureSource)& literatureSource);
-		LiteratureSource& literatureSource() throw(Seiscomp::Core::ValueException);
-		const LiteratureSource& literatureSource() const throw(Seiscomp::Core::ValueException);
+		LiteratureSource& literatureSource();
+		const LiteratureSource& literatureSource() const;
 
 
 	// ------------------------------------------------------------------

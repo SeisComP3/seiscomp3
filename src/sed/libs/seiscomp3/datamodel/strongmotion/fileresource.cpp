@@ -116,7 +116,7 @@ void FileResource::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& FileResource::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& FileResource::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("FileResource.creationInfo is not set");
@@ -127,7 +127,7 @@ CreationInfo& FileResource::creationInfo() throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& FileResource::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& FileResource::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("FileResource.creationInfo is not set");
@@ -246,7 +246,7 @@ FileResource& FileResource::operator=(const FileResource& other) {
 void FileResource::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: FileResource skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

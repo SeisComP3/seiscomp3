@@ -98,62 +98,58 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 	// ------------------------------------------------------------------
 	public:
 		void setWidth(const OPT(RealQuantity)& width);
-		RealQuantity& width() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& width() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& width();
+		const RealQuantity& width() const;
 
 		void setDisplacement(const OPT(RealQuantity)& displacement);
-		RealQuantity& displacement() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& displacement() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& displacement();
+		const RealQuantity& displacement() const;
 
 		void setRiseTime(const OPT(RealQuantity)& riseTime);
-		RealQuantity& riseTime() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& riseTime() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& riseTime();
+		const RealQuantity& riseTime() const;
 
 		void setVtToVs(const OPT(RealQuantity)& vtToVs);
-		RealQuantity& vtToVs() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& vtToVs() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& vtToVs();
+		const RealQuantity& vtToVs() const;
 
 		void setShallowAsperityDepth(const OPT(RealQuantity)& shallowAsperityDepth);
-		RealQuantity& shallowAsperityDepth() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& shallowAsperityDepth() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& shallowAsperityDepth();
+		const RealQuantity& shallowAsperityDepth() const;
 
 		void setShallowAsperity(const OPT(bool)& shallowAsperity);
-		bool shallowAsperity() const throw(Seiscomp::Core::ValueException);
+		bool shallowAsperity() const;
 
 		void setLiteratureSource(const OPT(LiteratureSource)& literatureSource);
-		LiteratureSource& literatureSource() throw(Seiscomp::Core::ValueException);
-		const LiteratureSource& literatureSource() const throw(Seiscomp::Core::ValueException);
+		LiteratureSource& literatureSource();
+		const LiteratureSource& literatureSource() const;
 
 		void setSlipVelocity(const OPT(RealQuantity)& slipVelocity);
-		RealQuantity& slipVelocity() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& slipVelocity() const throw(Seiscomp::Core::ValueException);
-
-		void setStrike(const OPT(RealQuantity)& strike);
-		RealQuantity& strike() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& strike() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& slipVelocity();
+		const RealQuantity& slipVelocity() const;
 
 		void setLength(const OPT(RealQuantity)& length);
-		RealQuantity& length() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& length() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& length();
+		const RealQuantity& length() const;
 
 		void setArea(const OPT(RealQuantity)& area);
-		RealQuantity& area() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& area() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& area();
+		const RealQuantity& area() const;
 
 		void setRuptureVelocity(const OPT(RealQuantity)& ruptureVelocity);
-		RealQuantity& ruptureVelocity() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& ruptureVelocity() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& ruptureVelocity();
+		const RealQuantity& ruptureVelocity() const;
 
 		void setStressdrop(const OPT(RealQuantity)& stressdrop);
-		RealQuantity& stressdrop() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& stressdrop() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& stressdrop();
+		const RealQuantity& stressdrop() const;
 
 		void setMomentReleaseTop5km(const OPT(RealQuantity)& momentReleaseTop5km);
-		RealQuantity& momentReleaseTop5km() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& momentReleaseTop5km() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& momentReleaseTop5km();
+		const RealQuantity& momentReleaseTop5km() const;
 
 		void setFwHwIndicator(const OPT(FwHwIndicator)& fwHwIndicator);
-		FwHwIndicator fwHwIndicator() const throw(Seiscomp::Core::ValueException);
+		FwHwIndicator fwHwIndicator() const;
 
 		void setRuptureGeometryWKT(const std::string& ruptureGeometryWKT);
 		const std::string& ruptureGeometryWKT() const;
@@ -162,8 +158,8 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		const std::string& faultID() const;
 
 		void setSurfaceRupture(const OPT(SurfaceRupture)& surfaceRupture);
-		SurfaceRupture& surfaceRupture() throw(Seiscomp::Core::ValueException);
-		const SurfaceRupture& surfaceRupture() const throw(Seiscomp::Core::ValueException);
+		SurfaceRupture& surfaceRupture();
+		const SurfaceRupture& surfaceRupture() const;
 
 		void setCentroidReference(const std::string& centroidReference);
 		const std::string& centroidReference() const;
@@ -203,7 +199,6 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		OPT(bool) _shallowAsperity;
 		OPT(LiteratureSource) _literatureSource;
 		OPT(RealQuantity) _slipVelocity;
-		OPT(RealQuantity) _strike;
 		OPT(RealQuantity) _length;
 		OPT(RealQuantity) _area;
 		OPT(RealQuantity) _ruptureVelocity;

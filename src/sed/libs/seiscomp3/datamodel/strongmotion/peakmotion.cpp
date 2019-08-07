@@ -162,7 +162,7 @@ void PeakMotion::setPeriod(const OPT(double)& period) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double PeakMotion::period() const throw(Seiscomp::Core::ValueException) {
+double PeakMotion::period() const {
 	if ( _period )
 		return *_period;
 	throw Seiscomp::Core::ValueException("PeakMotion.period is not set");
@@ -182,7 +182,7 @@ void PeakMotion::setDamping(const OPT(double)& damping) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double PeakMotion::damping() const throw(Seiscomp::Core::ValueException) {
+double PeakMotion::damping() const {
 	if ( _damping )
 		return *_damping;
 	throw Seiscomp::Core::ValueException("PeakMotion.damping is not set");
@@ -220,7 +220,7 @@ void PeakMotion::setAtTime(const OPT(TimeQuantity)& atTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-TimeQuantity& PeakMotion::atTime() throw(Seiscomp::Core::ValueException) {
+TimeQuantity& PeakMotion::atTime() {
 	if ( _atTime )
 		return *_atTime;
 	throw Seiscomp::Core::ValueException("PeakMotion.atTime is not set");
@@ -231,7 +231,7 @@ TimeQuantity& PeakMotion::atTime() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const TimeQuantity& PeakMotion::atTime() const throw(Seiscomp::Core::ValueException) {
+const TimeQuantity& PeakMotion::atTime() const {
 	if ( _atTime )
 		return *_atTime;
 	throw Seiscomp::Core::ValueException("PeakMotion.atTime is not set");
@@ -364,7 +364,7 @@ void PeakMotion::accept(Visitor* visitor) {
 void PeakMotion::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: PeakMotion skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
