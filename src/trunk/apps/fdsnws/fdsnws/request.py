@@ -396,6 +396,10 @@ class RequestOptions:
         return v
 
     #---------------------------------------------------------------------------
+    def getListValues(self, keys):
+        return [x.strip() for v in self.getValues(keys) for x in v.split(',')]
+
+    #---------------------------------------------------------------------------
     def parseInt(self, keys, minValue=None, maxValue=None):
         key, value = self.getFirstValue(keys)
 

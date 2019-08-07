@@ -578,13 +578,34 @@ class FDSNWS(Application):
         try:
             strings = self.configGetStrings('eventType.whitelist')
             if len(strings) > 1 or len(strings[0]):
-                self._eventTypeWhitelist = [s.lower() for s in strings]
+                try:
+                    self._eventTypeWhitelist = self._parseEventTypes(strings)
+                except Exception, e:
+                    print >> sys.stderr, \
+                        "error parsing eventType.whitelist: %s" % str(e)
+                    return False
         except Exception:
             pass
         try:
             strings = self.configGetStrings('eventType.blacklist')
-            if len(strings) > 0 or len(strings[0]):
-                self._eventTypeBlacklist = [s.lower() for s in strings]
+            if len(strings) > 1 or len(strings[0]):
+                try:
+                    self._eventTypeBlacklist = self._parseEventTypes(strings)
+                    if self._eventTypeWhitelist:
+                        lenBefore = len(self._eventTypeWhitelist)
+                        diff = self._eventTypeWhitelist.difference(
+                            self._eventTypeBlacklist)
+                        overlapCount = lenBefore - len(diff)
+                        if overlapCount > 0:
+                            self._eventTypeWhitelist = diff
+                            print >> sys.stderr, \
+                                "warning: found %i overlapping event " \
+                                "types in white and black list, black " \
+                                "list takes precedence" % overlapCount
+                except Exception, e:
+                    print >> sys.stderr, \
+                        "error parsing eventType.whitelist: %s" % str(e)
+                    return False
         except Exception:
             pass
         try:
@@ -710,16 +731,44 @@ class FDSNWS(Application):
         return self._daCache
 
     #---------------------------------------------------------------------------
+    def _parseEventTypes(self, names):
+        types = set()
+        typeMap = {DataModel.EEventTypeNames.name(i): i
+                   for i in xrange(DataModel.EEventTypeQuantity)}
+        for n in names:
+            name = n.lower().strip()
+            if name == "unknown":
+                types.add(-1)
+            else:
+                if name in typeMap:
+                    types.add(typeMap[name])
+                else:
+                    raise Exception(
+                        "event type name '%s' not supported" % name)
+
+        return types
+
+    #---------------------------------------------------------------------------
+    def _formatEventTypes(self, types):
+        return ",".join(["unknown" if i < 0 else
+                         DataModel.EEventTypeNames.name(i)
+                         for i in sorted(types)])
+
+    #---------------------------------------------------------------------------
     def _site(self):
         modeStr = None
         if self._evaluationMode is not None:
             modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
         whitelistStr = "<None>"
         if self._eventTypeWhitelist is not None:
-            whitelistStr = ", ".join(self._eventTypeWhitelist)
+            whitelistStr = ", ".join(["unknown" if i < 0 else
+                                      DataModel.EEventTypeNames.name(i)
+                                      for i in sorted(self._eventTypeWhitelist)])
         blacklistStr = "<None>"
         if self._eventTypeBlacklist is not None:
-            blacklistStr = ", ".join(self._eventTypeBlacklist)
+            blacklistStr = ", ".join(["unknown" if i < 0 else
+                                      DataModel.EEventTypeNames.name(i)
+                                      for i in sorted(self._eventTypeBlacklist)])
         stationFilterStr = "<None>"
         if self._stationFilter is not None:
             stationFilterStr = self._stationFilter

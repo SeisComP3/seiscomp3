@@ -40,7 +40,7 @@ import utils
 
 DBMaxUInt = 18446744073709551615  # 2^64 - 1
 
-VERSION = "1.2.0"
+VERSION = "1.2.2"
 
 ################################################################################
 
@@ -61,6 +61,7 @@ class _EventRequestOptions(RequestOptions):
     PMinMag = ['minmagnitude', 'minmag']
     PMaxMag = ['maxmagnitude', 'maxmag']
     PMagType = ['magnitudetype', 'magtype']
+    PEventType = ['eventtype']
 
     PAllOrigins = ['includeallorigins', 'allorigins']
     PAllMags = ['includeallmagnitudes', 'allmagnitudes', 'allmags']
@@ -84,6 +85,21 @@ class _EventRequestOptions(RequestOptions):
     PComments = ['includecomments', 'comments']
     PFormatted = ['formatted']
 
+    # SC3 knows more event types than QuakeML. Types unknown to QuakeML are
+    # mapped during the SC3 to QuakeML conversion. Since the FDNSWS standard
+    # defines both, the request and response type to be QuakeML some extra
+    # SC3 types need to be queried from the database.
+    ExtraEventTypes = {
+        DataModel.INDUCED_OR_TRIGGERED_EVENT: [
+            DataModel.INDUCED_EARTHQUAKE
+        ],
+        DataModel.OTHER_EVENT: [
+            DataModel.DUPLICATE,
+            DataModel.NOT_LOCATABLE,
+            DataModel.OUTSIDE_OF_NETWORK_INTEREST
+        ]
+    }
+
     #---------------------------------------------------------------------------
     class Depth:
         def __init__(self):
@@ -104,6 +120,8 @@ class _EventRequestOptions(RequestOptions):
 
         self.depth = None
         self.mag = None
+        self.eventTypes = set()  # SC3 numeric event type ids, -1 is used for
+        # empty event types
 
         self.allOrigins = None
         self.allMags = None
@@ -156,6 +174,28 @@ class _EventRequestOptions(RequestOptions):
         key, m.type = self.getFirstValue(self.PMagType)
         if m.min is not None or m.max is not None or m.type is not None:
             self.mag = m
+
+        # event type
+        for eType in self.getListValues(self.PEventType):
+            if not eType:
+                continue
+
+            t = eType.lower()
+            if t == 'unknown':
+                self.eventTypes.add(-1)
+            else:
+                try:
+                    sc3Type = DataModel.QMLTypeMapper.EventTypeFromString(t)
+                    self.eventTypes.add(sc3Type)
+                    # SC3 knows more event types than QuakeML. Types unknown to
+                    # QuakeML are mapped during the SC3 to QuakeML conversion.
+                    # Since the FDNSWS standard defines both, the request and
+                    # response type to be QuakeML some extra SC3 types need to
+                    # be queried from the database.
+                    if sc3Type in self.ExtraEventTypes:
+                        self.eventTypes.update(self.ExtraEventTypes[sc3Type])
+                except ValueError:
+                    raise ValueError, "'%s' is not a valid QuakeML event type" % t
 
         # output components
         self.allOrigins = self.parseBool(self.PAllOrigins)
@@ -519,7 +559,7 @@ class FDSNEvent(BaseResource):
 
         line = "#EventID|Time|Latitude|Longitude|Depth/km|Author|Catalog|" \
                "Contributor|ContributorID|MagType|Magnitude|MagAuthor|" \
-               "EventLocationName\n"
+               "EventLocationName|EventType\n"
         df = "%FT%T.%f"
         utils.writeTS(req, line)
         byteCount = len(line)
@@ -585,12 +625,18 @@ class FDSNEvent(BaseResource):
                     region = ed.text()
                     break
 
+            # event type
+            try:
+                eType = DataModel.QMLTypeMapper.EventTypeToString(e.type())
+            except ValueError:
+                eType = ''
+
             if req._disconnected:
                 return False
-            line = "%s|%s|%f|%f|%s|%s||%s|%s|%s|%s|%s|%s\n" % (
+            line = "%s|%s|%f|%f|%s|%s||%s|%s|%s|%s|%s|%s|%s\n" % (
                    eID, o.time().value().toString(df), o.latitude().value(),
                    o.longitude().value(), depth, author, contrib, eID,
-                   mType, mVal, mAuthor, region)
+                   mType, mVal, mAuthor, region, eType)
             utils.writeTS(req, line)
             lineCount += 1
             byteCount += len(line)
@@ -618,9 +664,9 @@ class FDSNEvent(BaseResource):
                     continue
 
                 if self._eventTypeWhitelist or self._eventTypeBlacklist:
-                    eType = None
+                    eType = -1
                     try:
-                        eType = DataModel.EEventTypeNames_name(e.type())
+                        eType = e.type()
                     except ValueError:
                         pass
                     if self._eventTypeWhitelist and \
@@ -712,14 +758,51 @@ class FDSNEvent(BaseResource):
         # WHERE ---------------------------------
         q += " WHERE e._oid = pe._oid"
 
-        # event information filter
-        if self._eventTypeWhitelist:
-            q += " AND e.%s IN ('%s')" % (
-                 _T('type'), "', '".join(self._eventTypeWhitelist))
+        # event type white list filter, defined via configuration and/or request
+        # parameters
+        types = None
+        if self._eventTypeWhitelist and ro.eventTypes:
+            types = self._eventTypeWhitelist.intersection(ro.eventTypes)
+            if not types:
+                Logging.debug('all requested event types filtered by '
+                              'configured event type white list')
+                return
+        elif self._eventTypeWhitelist:
+            types = self._eventTypeWhitelist
+        elif ro.eventTypes:
+            types = ro.eventTypes
+        if types is not None:
+            allowNull = -1 in types
+            types = [x for x in types if x >= 0]
+
+            etqIn = "e.%s IN ('%s')" % (_T('type'),
+                                        "', '".join(DataModel.EEventTypeNames.name(x) for x in types))
+            if allowNull:
+                etqNull = "e.%s is NULL" % _T('type')
+                if types:
+                    q += " AND (%s OR %s)" % (etqNull, etqIn)
+                else:
+                    q += " AND %s" % etqNull
+            else:
+                q += " AND %s" % etqIn
+
+        # event type black list filter, defined in configuration
         if self._eventTypeBlacklist:
-            q += " AND (e.%s IS NULL OR e.%s NOT IN ('%s'))" % (
-                 _T('type'), _T('type'),
-                 "', '".join(self._eventTypeBlacklist))
+            allowNull = -1 not in self._eventTypeBlacklist
+            types = [x for x in self._eventTypeBlacklist if x >= 0]
+
+            etqNotIn = "e.%s NOT IN ('%s')" % (_T('type'),
+                                               "', '".join(DataModel.EEventTypeNames.name(x) for x in types))
+            if allowNull:
+                etqNull = "e.%s is NULL" % _T('type')
+                if types:
+                    q += " AND (%s OR %s)" % (etqNull, etqNotIn)
+                else:
+                    q += " AND %s" % etqNull
+            else:
+                q += " AND %s" % etqNotIn
+
+        # event agency id filter
         if ro.contributors:
             q += " AND e.%s AND upper(e.%s) IN('%s')" % (
                  _T('creationinfo_used'), _T('creationinfo_agencyid'),

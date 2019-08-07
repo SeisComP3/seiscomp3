@@ -19,6 +19,7 @@
 					<param name="minmagnitude" style="query" type="xsd:float"/>
 					<param name="maxmagnitude" style="query" type="xsd:float"/>
 					<param name="magnitudetype" style="query" type="xsd:string"/>
+					<param name="eventtype" style="query" type="xsd:string"/>
 					<param name="includeallorigins" style="query" type="xsd:boolean" default="false"/>
 					<param name="includeallmagnitudes" style="query" type="xsd:boolean" default="false"/>
 					<param name="includearrivals" style="query" type="xsd:boolean" default="false"/>
@@ -41,7 +42,8 @@
 					</param>
 					<param name="contributor" style="query" type="xsd:string"/>
 					<param name="catalog" style="query" type="xsd:string"/>
-					<param name="updatedafter" style="query" type="xsd:dateTime"/>
+					<!-- not implemented -->
+					<!--param name="updateafter" style="query" type="xsd:dateTime"/-->
 					<param name="format" style="query" type="xsd:string" default="xml">
 						<option value="xml" mediaType="application/xml"/>
 						<option value="text" mediaType="text/plain"/>
@@ -91,9 +93,6 @@
 							Controls formatted (pretty print) output.
 						</doc>
 					</param>
-
-					<!-- not implemented -->
-					<!--param name="updateafter" style="query" type="xsd:dateTime"/-->
 				</request>
 				<response status="200">
 					<representation mediaType="application/xml"/>
