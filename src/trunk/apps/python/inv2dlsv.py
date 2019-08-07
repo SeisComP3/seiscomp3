@@ -21,8 +21,10 @@ from seiscomp3 import DataModel, IO
 
 ORGANIZATION = "EIDA"
 
+
 def iterinv(obj):
     return (j for i in obj.itervalues() for j in i.itervalues())
+
 
 def main():
     if len(sys.argv) < 1 or len(sys.argv) > 3:
@@ -64,10 +66,12 @@ def main():
             for loc in iterinv(sta.sensorLocation):
                 for strm in iterinv(loc.stream):
                     try:
-                        vol.add_chan(net.code, sta.code, loc.code, strm.code, strm.start, strm.end)
+                        vol.add_chan(net.code, sta.code, loc.code,
+                                     strm.code, strm.start, strm.end)
 
                     except SEEDError, e:
-                        sys.stderr.write("Error (%s,%s,%s,%s): %s\n" % (net.code, sta.code, loc.code, strm.code, str(e)))
+                        sys.stderr.write("Error (%s,%s,%s,%s): %s\n" % (
+                            net.code, sta.code, loc.code, strm.code, str(e)))
 
     if not out or out == "-":
         output = StringIO.StringIO()
@@ -82,7 +86,8 @@ def main():
 
 
 if __name__ == "__main__":
-    try: sys.exit(main())
+    try:
+        sys.exit(main())
     except Exception, e:
         sys.stderr.write("Error: %s" % str(e))
         sys.exit(1)

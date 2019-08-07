@@ -12,46 +12,47 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import sys, os
+import sys
+import os
 import seiscomp3.Client
 
 
 class EventParameterLog(seiscomp3.Client.Application):
-  def __init__(self, argc, argv):
-    seiscomp3.Client.Application.__init__(self, argc, argv)
+    def __init__(self, argc, argv):
+        seiscomp3.Client.Application.__init__(self, argc, argv)
 
-    self.setMessagingEnabled(True)
-    self.setDatabaseEnabled(False, False)
-    self.setMessagingUsername("")
-    self.setPrimaryMessagingGroup(seiscomp3.Communication.Protocol.LISTENER_GROUP)
-    self.addMessagingSubscription("EVENT")
-    self.addMessagingSubscription("LOCATION")
-    self.addMessagingSubscription("MAGNITUDE")
-    self.addMessagingSubscription("AMPLITUDE")
-    self.addMessagingSubscription("PICK")
+        self.setMessagingEnabled(True)
+        self.setDatabaseEnabled(False, False)
+        self.setMessagingUsername("")
+        self.setPrimaryMessagingGroup(
+            seiscomp3.Communication.Protocol.LISTENER_GROUP)
+        self.addMessagingSubscription("EVENT")
+        self.addMessagingSubscription("LOCATION")
+        self.addMessagingSubscription("MAGNITUDE")
+        self.addMessagingSubscription("AMPLITUDE")
+        self.addMessagingSubscription("PICK")
 
-    self.setAutoApplyNotifierEnabled(True)
-    self.setInterpretNotifierEnabled(True)
+        self.setAutoApplyNotifierEnabled(True)
+        self.setInterpretNotifierEnabled(True)
 
-    # EventParameter object
-    self._eventParameters = seiscomp3.DataModel.EventParameters()
+        # EventParameter object
+        self._eventParameters = seiscomp3.DataModel.EventParameters()
 
+    def run(self):
+        if seiscomp3.Client.Application.run(self) == False:
+            return False
 
-  def run(self):
-    if seiscomp3.Client.Application.run(self) == False:
-      return False
-
-    ar = seiscomp3.IO.XMLArchive()
-    ar.setFormattedOutput(True)
-    if ar.create("-") == True:
-      ar.writeObject(self._eventParameters)
-      ar.close()
-      # Hack to avoid the "close failed in file object destructor"
-      # exception
+        ar = seiscomp3.IO.XMLArchive()
+        ar.setFormattedOutput(True)
+        if ar.create("-") == True:
+            ar.writeObject(self._eventParameters)
+            ar.close()
+            # Hack to avoid the "close failed in file object destructor"
+            # exception
 #     print ""
-      sys.stdout.write("\n")
+            sys.stdout.write("\n")
 
-    return True
+        return True
 
 
 app = EventParameterLog(len(sys.argv), sys.argv)

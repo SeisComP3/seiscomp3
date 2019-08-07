@@ -25,6 +25,7 @@ Options:
   -f             Enable formatted XML output
 """
 
+
 def main(argv):
     formatted = False
 
@@ -66,7 +67,7 @@ def main(argv):
         return 4
 
     if len(argv) < 2:
-        output_file = "-" 
+        output_file = "-"
     else:
         output_file = argv[1]
 
@@ -80,4 +81,3 @@ def main(argv):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-

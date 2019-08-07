@@ -11,9 +11,11 @@ import threading
 
 mutex = threading.Lock()
 
+
 class MyFileHandler(logging.handlers.TimedRotatingFileHandler):
     def __init__(self, filename):
-        super(MyFileHandler, self).__init__(filename, when="midnight", utc=True)
+        super(MyFileHandler, self).__init__(
+            filename, when="midnight", utc=True)
 
     # The rotate() method is missing in Python 2, must override doRollover()
     # def rotate(self, source, dest):
@@ -50,6 +52,7 @@ class MyFileHandler(logging.handlers.TimedRotatingFileHandler):
         if os.path.exists(dfn):
             subprocess.Popen(["bzip2", dfn])
 
+
 class Tracker(object):
     def __init__(self, logger, geoip, service, userName, userIP, clientID):
         self.__logger = logger
@@ -75,7 +78,7 @@ class Tracker(object):
             self.__data['userLocation']['institution'] = "GFZ"
 
     def line_status(self, start_time, end_time, network, station, channel,
-        location, restricted, net_class, shared, constraints, volume, status, size, message):
+                    location, restricted, net_class, shared, constraints, volume, status, size, message):
 
         try:
             trace = self.__data['trace']
@@ -109,6 +112,7 @@ class Tracker(object):
         with mutex:
             self.__logger.info(json.dumps(self.__data))
 
+
 class RequestLog(object):
     def __init__(self, filename):
         self.__logger = logging.getLogger("seiscomp3.fdsnws.reqlog")
@@ -118,4 +122,3 @@ class RequestLog(object):
 
     def tracker(self, service, userName, userIP, clientID):
         return Tracker(self.__logger, self.__geoip, service, userName, userIP, clientID)
-

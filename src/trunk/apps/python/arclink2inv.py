@@ -12,7 +12,8 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import seiscomp3.DataModel, seiscomp3.IO
+import seiscomp3.DataModel
+import seiscomp3.IO
 import getopt
 import sys
 
@@ -78,4 +79,3 @@ def main(argv):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-

@@ -416,7 +416,8 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
         msg = seiscomp3.DataModel.NotifierMessage()
         nmsg = seiscomp3.DataModel.Notifier.GetMessage(False)
         count = 0
-        sys.stderr.write("\r  + sending notifiers: %d%%" % (count * 100 / ncount))
+        sys.stderr.write("\r  + sending notifiers: %d%%" %
+                         (count * 100 / ncount))
         sys.stderr.flush()
         while nmsg:
             for o in nmsg:

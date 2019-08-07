@@ -15,6 +15,7 @@
 import sys
 from seiscomp3 import Core, DataModel, Client, Logging
 
+
 class SendOrigin(Client.Application):
 
     def __init__(self, argc, argv):
@@ -24,13 +25,15 @@ class SendOrigin(Client.Application):
         self.setPrimaryMessagingGroup("GUI")
 
     def init(self):
-        if not Client.Application.init(self): return False
+        if not Client.Application.init(self):
+            return False
 
         try:
             cstr = self.commandline().optionString("coord")
-            tstr  = self.commandline().optionString("time")
+            tstr = self.commandline().optionString("time")
         except:
-            sys.stderr.write("must specify origin using '--coord lat,lon,dep --time time'\n")
+            sys.stderr.write(
+                "must specify origin using '--coord lat,lon,dep --time time'\n")
             return False
 
         self.origin = DataModel.Origin.Create()
@@ -40,13 +43,13 @@ class SendOrigin(Client.Application):
         ci.setCreationTime(Core.Time.GMT())
         self.origin.setCreationInfo(ci)
 
-        lat,lon,dep = map(float, cstr.split(","))
+        lat, lon, dep = map(float, cstr.split(","))
         self.origin.setLongitude(DataModel.RealQuantity(lon))
         self.origin.setLatitude(DataModel.RealQuantity(lat))
         self.origin.setDepth(DataModel.RealQuantity(dep))
 
-        time = Core.Time() 
-        time.fromString(tstr.replace("/","-") + ":0:0", "%F %T")
+        time = Core.Time()
+        time.fromString(tstr.replace("/", "-") + ":0:0", "%F %T")
         self.origin.setTime(DataModel.TimeQuantity(time))
 
         return True
@@ -64,7 +67,8 @@ class SendOrigin(Client.Application):
         self.connection().send(msg)
         return True
 
+
 app = SendOrigin(len(sys.argv), sys.argv)
-#app.setName("scsendorigin")
+# app.setName("scsendorigin")
 app.setMessagingUsername("scsendorg")
 sys.exit(app())
