@@ -34,7 +34,7 @@ from http import BaseResource
 from request import RequestOptions
 import utils
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 
 ################################################################################
 class _StationRequestOptions(RequestOptions):
@@ -684,9 +684,8 @@ class FDSNStation(BaseResource):
 	#---------------------------------------------------------------------------
 	# Copy references (data loggers, sensors, responses) depended on request
 	# options
-	@staticmethod
-	def _copyReferences(newInv, req, objCount, inv, ro, dataloggers, sensors,
-	                    maxObj):
+	def _copyReferences(self, newInv, req, objCount, inv, ro, dataloggers,
+	                    sensors, maxObj):
 
 		responses = set()
 		decCount = 0

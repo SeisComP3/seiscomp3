@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.2.2"
+VERSION = "1.2.3"
 
 ################################################################################
 class HTTP:
