@@ -153,7 +153,8 @@ class _MyRecordStream(object):
                     startt.iso()).replace(tzinfo=None)
                 end = dateutil.parser.parse(endt.iso()).replace(tzinfo=None)
 
-                for data in fastsds.getRawBytes(start, end, archNet, sta, loc, cha, self.__bufferSize):
+                for data in fastsds.getRawBytes(start, end, archNet, sta, loc,
+                                                cha, self.__bufferSize):
                     size += len(data)
 
                     if archNet == net:
@@ -207,8 +208,8 @@ class _MyRecordStream(object):
                                 yield self.__override_network(data, net)
 
                             except Exception, e:
-                                Logging.error(
-                                    "could not override network code: %s" % str(e))
+                                Logging.error("could not override network " \
+                                              "code: %s" % str(e))
 
             for tracker in self.__trackerList:
                 net_class = 't' if net[0] in "0123456789XYZ" else 'p'
@@ -571,32 +572,29 @@ class FDSNDataSelect(BaseResource):
                         continue
                     for loc in self._locationIter(sta, s):
                         for cha in self._streamIter(loc, s):
-                            try:
-                                start_time = max(cha.start(), s.time.start)
-
-                            except Exception:
-                                start_time = s.time.start
+                            start_time = max(cha.start(), s.time.start)
 
                             try:
                                 end_time = min(cha.end(), s.time.end)
-
-                            except Exception:
+                            except ValueError:
                                 end_time = s.time.end
 
                             if (netRestricted or staRestricted or
-                                utils.isRestricted(cha)) and \
-                                (not self.__user or (self.__access and
-                                                     not self.__access.authorize(self.__user,
-                                                                                 net.code(), sta.code(), loc.code(),
-                                                                                 cha.code(), start_time, end_time))):
+                                utils.isRestricted(cha)) and (
+                                    not self.__user or (self.__access and
+                                        not self.__access.authorize(
+                                            self.__user, net.code(), sta.code(),
+                                            loc.code(), cha.code(),
+                                            start_time, end_time))):
 
                                 for tracker in trackerList:
-                                    net_class = 't' if net.code(
-                                    )[0] in "0123456789XYZ" else 'p'
-                                    tracker.line_status(start_time, end_time,
-                                                        net.code(), sta.code(), cha.code(), loc.code(),
-                                                        True, net_class, True, [],
-                                                        "fdsnws", "DENIED", 0, "")
+                                    net_class = 't' if net.code()[0] \
+                                        in "0123456789XYZ" else 'p'
+                                    tracker.line_status(
+                                        start_time, end_time, net.code(),
+                                        sta.code(), cha.code(), loc.code(),
+                                        True, net_class, True, [], "fdsnws",
+                                        "DENIED", 0, "")
 
                                 forbidden = forbidden or (forbidden is None)
                                 continue
@@ -611,8 +609,8 @@ class FDSNDataSelect(BaseResource):
                                 except ValueError:
                                     msg = "skipping stream without sampling " \
                                           "rate definition: %s.%s.%s.%s" % (
-                                              net.code(), sta.code(), loc.code(),
-                                              cha.code())
+                                              net.code(), sta.code(),
+                                              loc.code(), cha.code())
                                     Logging.warning(msg)
                                     continue
 
@@ -624,8 +622,7 @@ class FDSNDataSelect(BaseResource):
                                     msg = "maximum number of %sM samples " \
                                           "exceeded" % str(app._samplesM)
                                     return self.renderErrorPage(req,
-                                                                http.REQUEST_ENTITY_TOO_LARGE, msg,
-                                                                ro)
+                                        http.REQUEST_ENTITY_TOO_LARGE, msg, ro)
 
                             Logging.debug("adding stream: %s.%s.%s.%s %s - %s"
                                           % (net.code(), sta.code(), loc.code(),
@@ -653,8 +650,8 @@ class FDSNDataSelect(BaseResource):
             return self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 
         # Build output filename
-        fileName = Application.Instance()._fileNamePrefix.replace("%time",
-                                                                  time.strftime('%Y-%m-%dT%H:%M:%S')) + '.mseed'
+        fileName = Application.Instance()._fileNamePrefix.replace(
+            "%time", time.strftime('%Y-%m-%dT%H:%M:%S')) + '.mseed'
 
         # Create producer for async IO
         prod = _WaveformProducer(req, ro, rs, fileName, trackerList)
