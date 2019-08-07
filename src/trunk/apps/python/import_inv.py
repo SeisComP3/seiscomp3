@@ -12,8 +12,12 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import sys, os, subprocess, glob
+import sys
+import os
+import subprocess
+import glob
 import seiscomp3.Client
+
 
 class Importer(seiscomp3.Client.Application):
     def __init__(self, argc, argv):
@@ -24,10 +28,10 @@ class Importer(seiscomp3.Client.Application):
 
         self._args = argv[1:]
 
-
     def run(self):
         if len(self._args) == 0:
-            sys.stderr.write("Usage: import_inv [{format}|help] input output\n")
+            sys.stderr.write(
+                "Usage: import_inv [{format}|help] input output\n")
             return False
 
         if self._args[0] == "help":
@@ -43,9 +47,12 @@ class Importer(seiscomp3.Client.Application):
             return False
 
         fmt = self._args[0]
-        try: prog = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "%s2inv" % fmt)
+        try:
+            prog = os.path.join(
+                os.environ['SEISCOMP_ROOT'], "bin", "%s2inv" % fmt)
         except:
-            sys.stderr.write("Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
+            sys.stderr.write(
+                "Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
             return False
 
         if not os.path.exists(prog):
@@ -61,31 +68,38 @@ class Importer(seiscomp3.Client.Application):
         if len(self._args) < 3:
             filename = os.path.basename(os.path.abspath(input))
             if not filename:
-                filename = fmt;
+                filename = fmt
 
             # Append .xml if the ending is not already .xml
-            if filename[-4:] != ".xml": filename = filename + ".xml"
-            storage_dir = os.path.join(os.environ['SEISCOMP_ROOT'], "etc", "inventory")
+            if filename[-4:] != ".xml":
+                filename = filename + ".xml"
+            storage_dir = os.path.join(
+                os.environ['SEISCOMP_ROOT'], "etc", "inventory")
             output = os.path.join(storage_dir, filename)
-            try: os.makedirs(storage_dir)
-            except: pass
+            try:
+                os.makedirs(storage_dir)
+            except:
+                pass
             sys.stderr.write("Generating output to %s\n" % output)
         else:
             output = self._args[2]
 
-        proc = subprocess.Popen([prog, input, output], stdout=None, stderr=None, shell=False)
+        proc = subprocess.Popen([prog, input, output],
+                                stdout=None, stderr=None, shell=False)
         chans = proc.communicate()
         if proc.returncode != 0:
-            sys.stderr.write("Conversion failed, return code: %d\n" % proc.returncode)
+            sys.stderr.write(
+                "Conversion failed, return code: %d\n" % proc.returncode)
             return False
 
         return True
 
-
     def printFormats(self):
-        try: path = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "*2inv")
+        try:
+            path = os.path.join(os.environ['SEISCOMP_ROOT'], "bin", "*2inv")
         except:
-            sys.stderr.write("Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
+            sys.stderr.write(
+                "Could not get SeisComP3 root path, SEISCOMP_ROOT not set?\n")
             return False
 
         files = glob.glob(path)

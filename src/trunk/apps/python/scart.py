@@ -12,319 +12,340 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import glob, re, time, sys, os
-import seiscomp3.IO, seiscomp3.Logging, seiscomp3.Client, seiscomp3.System
-from   getopt import getopt, GetoptError
+import glob
+import re
+import time
+import sys
+import os
+import seiscomp3.IO
+import seiscomp3.Logging
+import seiscomp3.Client
+import seiscomp3.System
+from getopt import getopt, GetoptError
 import bisect
 
 
 class Archive:
-  def __init__(self, archiveDirectory):
-    self.archiveDirectory = archiveDirectory
-    self.filePool = dict()
-    self.filePoolSize = 100
+    def __init__(self, archiveDirectory):
+        self.archiveDirectory = archiveDirectory
+        self.filePool = dict()
+        self.filePoolSize = 100
 
-
-  def iterators(self, begin, end, net, sta, loc, cha):
-    t = time.gmtime(begin.seconds())
-    t_end = time.gmtime(end.seconds())
-
-    start_year = t[0]
-
-    for year in range(start_year,t_end[0]+1):
-      if year > start_year:
-        begin = seiscomp3.Core.Time.FromYearDay(year,1)
+    def iterators(self, begin, end, net, sta, loc, cha):
         t = time.gmtime(begin.seconds())
+        t_end = time.gmtime(end.seconds())
 
-      if net == "*":
-        netdir = self.archiveDirectory + str(year) + "/"
-        try: files = os.listdir(netdir)
-        except: continue
+        start_year = t[0]
 
-        its = []
-        for file in files:
-          if os.path.isdir(netdir + file) == False: continue
-          tmp_its = self.iterators(begin, end, file, sta, loc, cha)
-          for it in tmp_its:
-            its.append(it)
+        for year in range(start_year, t_end[0]+1):
+            if year > start_year:
+                begin = seiscomp3.Core.Time.FromYearDay(year, 1)
+                t = time.gmtime(begin.seconds())
 
-        return its
+            if net == "*":
+                netdir = self.archiveDirectory + str(year) + "/"
+                try:
+                    files = os.listdir(netdir)
+                except:
+                    continue
 
-      if sta == "*":
-        stadir = self.archiveDirectory + str(year) + "/" + net + "/"
-        files = os.listdir(stadir)
-        its = []
-        for file in files:
-          if os.path.isdir(stadir + file) == False: continue
-          tmp_its = self.iterators(begin, end, net, file, loc, cha)
-          for it in tmp_its:
-            its.append(it)
+                its = []
+                for file in files:
+                    if os.path.isdir(netdir + file) == False:
+                        continue
+                    tmp_its = self.iterators(begin, end, file, sta, loc, cha)
+                    for it in tmp_its:
+                        its.append(it)
 
-        return its
+                return its
 
-      # Check if cha contains a regular expression or not
-      mr = re.match("[A-Z|a-z|0-9]*", cha)
-      if (mr and mr.group() != cha) or cha == "*":
-        cha = cha.replace('?', '.')
-        stadir = self.archiveDirectory + str(year) + "/" + net + "/" + sta + "/"
-        try: files = os.listdir(stadir)
-        except: return []
-        its = []
-        for file in files:
-          if os.path.isdir(stadir + file) == False: continue
-          part = file[:3]
-          if cha != "*":
-            mr = re.match(cha, part)
-            if not mr or mr.group() != part:
-              continue
+            if sta == "*":
+                stadir = self.archiveDirectory + str(year) + "/" + net + "/"
+                files = os.listdir(stadir)
+                its = []
+                for file in files:
+                    if os.path.isdir(stadir + file) == False:
+                        continue
+                    tmp_its = self.iterators(begin, end, net, file, loc, cha)
+                    for it in tmp_its:
+                        its.append(it)
 
-          tmp_its = self.iterators(begin, end, net, sta, loc, part)
-          for it in tmp_its:
-            its.append(it)
+                return its
 
-        return its
+            # Check if cha contains a regular expression or not
+            mr = re.match("[A-Z|a-z|0-9]*", cha)
+            if (mr and mr.group() != cha) or cha == "*":
+                cha = cha.replace('?', '.')
+                stadir = self.archiveDirectory + \
+                    str(year) + "/" + net + "/" + sta + "/"
+                try:
+                    files = os.listdir(stadir)
+                except:
+                    return []
+                its = []
+                for file in files:
+                    if os.path.isdir(stadir + file) == False:
+                        continue
+                    part = file[:3]
+                    if cha != "*":
+                        mr = re.match(cha, part)
+                        if not mr or mr.group() != part:
+                            continue
 
-      if loc == "*":
-        dir = self.archiveDirectory + str(year) + "/" + net + "/" + sta + "/" + cha + ".D/"
-        its = []
+                    tmp_its = self.iterators(begin, end, net, sta, loc, part)
+                    for it in tmp_its:
+                        its.append(it)
 
-        start_day = t[7]
-        if t_end[0] > year:
-          end_day = 366
-        else:
-          end_day = t_end[7]
+                return its
 
-        files = files = glob.glob(dir + "*.%03d" % start_day)
+            if loc == "*":
+                dir = self.archiveDirectory + \
+                    str(year) + "/" + net + "/" + sta + "/" + cha + ".D/"
+                its = []
 
-        # Find first day with data
-        while len(files) == 0 and start_day <= end_day:
-          start_day += 1
-          begin = seiscomp3.Core.Time.FromYearDay(year, start_day)
-          files = glob.glob(dir + "*.%03d" % start_day)
+                start_day = t[7]
+                if t_end[0] > year:
+                    end_day = 366
+                else:
+                    end_day = t_end[7]
 
-        for file in files:
-          file = file.split('/')[-1]
-          if os.path.isfile(dir + file) == False: continue
+                files = files = glob.glob(dir + "*.%03d" % start_day)
 
-          tmp_its = self.iterators(begin, end, net, sta, file.split('.')[2], cha)
-          for it in tmp_its:
-            its.append(it)
+                # Find first day with data
+                while len(files) == 0 and start_day <= end_day:
+                    start_day += 1
+                    begin = seiscomp3.Core.Time.FromYearDay(year, start_day)
+                    files = glob.glob(dir + "*.%03d" % start_day)
 
-        return its
+                for file in files:
+                    file = file.split('/')[-1]
+                    if os.path.isfile(dir + file) == False:
+                        continue
 
-      it = StreamIterator(self, begin, end, net, sta, loc, cha)
-      if not it.record is None:
-        return [it]
+                    tmp_its = self.iterators(
+                        begin, end, net, sta, file.split('.')[2], cha)
+                    for it in tmp_its:
+                        its.append(it)
 
-    return []
+                return its
 
+            it = StreamIterator(self, begin, end, net, sta, loc, cha)
+            if not it.record is None:
+                return [it]
 
-  def location(self, rt, net, sta, loc, cha):
-    t = time.gmtime(rt.seconds())
-    dir = str(t[0]) + "/" + net + "/" + sta + "/" + cha + ".D/"
-    file = net + "." + sta + "." + loc + "." + cha + ".D." + str(t[0]) + ".%03d" % t[7]
-    return dir, file
+        return []
 
+    def location(self, rt, net, sta, loc, cha):
+        t = time.gmtime(rt.seconds())
+        dir = str(t[0]) + "/" + net + "/" + sta + "/" + cha + ".D/"
+        file = net + "." + sta + "." + loc + "." + \
+            cha + ".D." + str(t[0]) + ".%03d" % t[7]
+        return dir, file
 
-  def findIndex(self, begin, end, file):
-    rs = seiscomp3.IO.FileRecordStream()
-    rs.setRecordType("mseed")
-    if rs.setSource(self.archiveDirectory + file) == False:
-      return None, None
+    def findIndex(self, begin, end, file):
+        rs = seiscomp3.IO.FileRecordStream()
+        rs.setRecordType("mseed")
+        if rs.setSource(self.archiveDirectory + file) == False:
+            return None, None
 
-    ri = seiscomp3.IO.RecordInput(rs)
+        ri = seiscomp3.IO.RecordInput(rs)
 
-    index = None
-    retRec = None
+        index = None
+        retRec = None
 
-    for rec in ri:
-      if rec is None: break
+        for rec in ri:
+            if rec is None:
+                break
 
-      if rec.samplingFrequency() <= 0:
-        continue
+            if rec.samplingFrequency() <= 0:
+                continue
 
-      if rec.startTime() >= end: break
-      if rec.endTime() < begin: continue
+            if rec.startTime() >= end:
+                break
+            if rec.endTime() < begin:
+                continue
 
-      index = rs.tell()
-      retRec = rec
-      break
+            index = rs.tell()
+            retRec = rec
+            break
 
-    rs.close()
+        rs.close()
 
-    return retRec, index
+        return retRec, index
 
+    def readRecord(self, file, index):
+        try:
+            rs = self.filePool[file]
+        except:
+            rs = seiscomp3.IO.FileRecordStream()
+            rs.setRecordType("mseed")
+            if rs.setSource(self.archiveDirectory + file) == False:
+                return (None, None)
 
-  def readRecord(self, file, index):
-    try:
-      rs = self.filePool[file]
-    except:
-      rs = seiscomp3.IO.FileRecordStream()
-      rs.setRecordType("mseed")
-      if rs.setSource(self.archiveDirectory + file) == False:
-        return (None, None)
+            rs.seek(index)
 
-      rs.seek(index)
+            # Remove old handles
+            if len(self.filePool) < self.filePoolSize:
+                # self.filePool.pop(self.fileList[-1])
+                #print "Remove %s from filepool" % self.fileList[-1]
+                #del self.fileList[-1]
+                self.filePool[file] = rs
 
-      # Remove old handles
-      if len(self.filePool) < self.filePoolSize:
-        #self.filePool.pop(self.fileList[-1])
-        #print "Remove %s from filepool" % self.fileList[-1]
-        #del self.fileList[-1]
-        self.filePool[file] = rs
+        ri = seiscomp3.IO.RecordInput(
+            rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
+        # Read only valid records
+        while True:
+            rec = ri.next()
+            if rec is None:
+                break
+            if rec.samplingFrequency() <= 0:
+                continue
+            break
 
-    ri = seiscomp3.IO.RecordInput(rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
-    # Read only valid records
-    while True:
-      rec = ri.next()
-      if rec is None: break
-      if rec.samplingFrequency() <= 0: continue
-      break
+        index = rs.tell()
 
-    index = rs.tell()
+        if rec is None:
+            # Remove file handle from pool
+            rs.close()
+            try:
+                self.filePool.pop(file)
+            except:
+                pass
 
-    if rec is None:
-      # Remove file handle from pool
-      rs.close()
-      try: self.filePool.pop(file)
-      except: pass
+        return rec, index
 
-    return rec, index
-
-
-  def stepTime(self, rt):
-    rt = rt + seiscomp3.Core.TimeSpan(86400)
-    t = rt.get()
-    rt.set(t[1], t[2], t[3], 0, 0, 0, 0)
-    return rt
-
+    def stepTime(self, rt):
+        rt = rt + seiscomp3.Core.TimeSpan(86400)
+        t = rt.get()
+        rt.set(t[1], t[2], t[3], 0, 0, 0, 0)
+        return rt
 
 
 class StreamIterator:
-  def __init__(self, ar, begin, end, net, sta, loc, cha):
-    self.archive = ar
+    def __init__(self, ar, begin, end, net, sta, loc, cha):
+        self.archive = ar
 
-    self.begin = begin
-    self.end = end
+        self.begin = begin
+        self.end = end
 
-    self.net = net
-    self.sta = sta
-    self.loc = loc
-    self.cha = cha
+        self.net = net
+        self.sta = sta
+        self.loc = loc
+        self.cha = cha
 
-    self.compareEndTime = False
+        self.compareEndTime = False
 
-    workdir, file = ar.location(begin, net, sta, loc, cha)
-    self.file = workdir + file
-    #print "Starting at file %s" % self.file
-
-    self.record, self.index = ar.findIndex(begin, end, self.file)
-    if self.record:
-      self.current = self.record.startTime()
-      self.currentEnd = self.record.endTime()
-
-
-  def next(self):
-    while True:
-      self.record, self.index = self.archive.readRecord(self.file, self.index)
-      if self.record:
-        self.current = self.record.startTime()
-        self.currentEnd = self.record.endTime()
-        if self.current >= self.end:
-          self.record = None
-        return self.record
-      else:
-        # Skip the current day file
-        self.current = self.archive.stepTime(self.current)
-        # Are we out of scope?
-        if self.current >= self.end:
-          self.record = None
-          return self.record
-
-        # Use the new file and start from the beginning
-        workdir, file = self.archive.location(self.current, self.net, self.sta, self.loc, self.cha)
+        workdir, file = ar.location(begin, net, sta, loc, cha)
         self.file = workdir + file
-        self.index = 0
-        #print "Continue at " + self.file
+        #print "Starting at file %s" % self.file
 
-  def __cmp__(self, other):
-    if self.compareEndTime:
-      if self.currentEnd > other.currentEnd:
-        return 1
-      elif self.currentEnd < other.currentEnd:
-        return -1
-      return 0
-    else:
-      if self.current > other.current:
-        return 1
-      elif self.current < other.current:
-        return -1
-      return 0
+        self.record, self.index = ar.findIndex(begin, end, self.file)
+        if self.record:
+            self.current = self.record.startTime()
+            self.currentEnd = self.record.endTime()
+
+    def next(self):
+        while True:
+            self.record, self.index = self.archive.readRecord(
+                self.file, self.index)
+            if self.record:
+                self.current = self.record.startTime()
+                self.currentEnd = self.record.endTime()
+                if self.current >= self.end:
+                    self.record = None
+                return self.record
+            else:
+                # Skip the current day file
+                self.current = self.archive.stepTime(self.current)
+                # Are we out of scope?
+                if self.current >= self.end:
+                    self.record = None
+                    return self.record
+
+                # Use the new file and start from the beginning
+                workdir, file = self.archive.location(
+                    self.current, self.net, self.sta, self.loc, self.cha)
+                self.file = workdir + file
+                self.index = 0
+                #print "Continue at " + self.file
+
+    def __cmp__(self, other):
+        if self.compareEndTime:
+            if self.currentEnd > other.currentEnd:
+                return 1
+            elif self.currentEnd < other.currentEnd:
+                return -1
+            return 0
+        else:
+            if self.current > other.current:
+                return 1
+            elif self.current < other.current:
+                return -1
+            return 0
 
 
 class ArchiveIterator:
-  def __init__(self, ar, sortByEndTime):
-    self.archive = ar
-    self.streams = []
-    self.sortByEndTime = sortByEndTime
+    def __init__(self, ar, sortByEndTime):
+        self.archive = ar
+        self.streams = []
+        self.sortByEndTime = sortByEndTime
 
-  def append(self, beginTime, endTime, net, sta, loc, cha):
-    its = self.archive.iterators(beginTime, endTime, net, sta, loc, cha)
-    for it in its:
-      it.compareEndTime = self.sortByEndTime
-      bisect.insort(self.streams, it)
+    def append(self, beginTime, endTime, net, sta, loc, cha):
+        its = self.archive.iterators(beginTime, endTime, net, sta, loc, cha)
+        for it in its:
+            it.compareEndTime = self.sortByEndTime
+            bisect.insort(self.streams, it)
 
-  def appendStation(self, beginTime, endTime, net, sta):
-    self.append(beginTime, endTime, net, sta, "*", "*")
+    def appendStation(self, beginTime, endTime, net, sta):
+        self.append(beginTime, endTime, net, sta, "*", "*")
 
-  def nextSort(self):
-    if len(self.streams) == 0:
-      return None
+    def nextSort(self):
+        if len(self.streams) == 0:
+            return None
 
-    stream = self.streams.pop(0)
+        stream = self.streams.pop(0)
 
-    rec = stream.record
+        rec = stream.record
 
-    stream.next()
+        stream.next()
 
-    if stream.record is not None:
-      # Put the stream back on the right (sorted) position
-      bisect.insort(self.streams, stream)
+        if stream.record is not None:
+            # Put the stream back on the right (sorted) position
+            bisect.insort(self.streams, stream)
 
-    return rec
+        return rec
 
 
 class Copy:
-  def __init__(self, it):
-    self.iterator = it
+    def __init__(self, it):
+        self.iterator = it
 
-  def __iter__(self):
-    for stream in self.iterator.streams:
-      rec = stream.record
-      while rec:
-        yield rec
-        rec = stream.next()
+    def __iter__(self):
+        for stream in self.iterator.streams:
+            rec = stream.record
+            while rec:
+                yield rec
+                rec = stream.next()
 
-    raise StopIteration
+        raise StopIteration
 
 
 class Sorter:
-  def __init__(self, it):
-    self.iterator = it
+    def __init__(self, it):
+        self.iterator = it
 
-  def __iter__(self):
-    while 1:
-      rec = self.iterator.nextSort()
-      if not rec:
-        raise StopIteration
+    def __iter__(self):
+        while 1:
+            rec = self.iterator.nextSort()
+            if not rec:
+                raise StopIteration
 
-      yield rec
-
+            yield rec
 
 
 ####################################################################
 ##
-## Application block
+# Application block
 ##
 ####################################################################
 
@@ -336,7 +357,7 @@ def str2time(timestring):
     """
 
     timestring = timestring.strip()
-    for c in ["-","/",":", "T", "Z"]:
+    for c in ["-", "/", ":", "T", "Z"]:
         timestring = timestring.replace(c, " ")
     timestring = timestring.split()
     assert 3 <= len(timestring) <= 6
@@ -350,6 +371,7 @@ def str2time(timestring):
     t.fromString(timestring, format)
     return t
 
+
 def time2str(time):
     """
     Convert a seiscomp3.Core.Time to a string
@@ -358,74 +380,81 @@ def time2str(time):
 
 
 def create_dir(dir):
-  if os.access(dir, os.W_OK):
-    return True
+    if os.access(dir, os.W_OK):
+        return True
 
-  try:
-    os.makedirs(dir)
-    return True
-  except:
-    return False
+    try:
+        os.makedirs(dir)
+        return True
+    except:
+        return False
 
 
 def isFile(url):
-  toks = url.split('://')
-  return len(toks) < 2 or toks[0] == "file"
+    toks = url.split('://')
+    return len(toks) < 2 or toks[0] == "file"
 
 
 def readStreamList(file):
-  streams = []
+    streams = []
 
-  try:
-    if file == "-":
-      f = sys.stdin
-      file = "stdin"
-    else:
-      f = open(listFile, 'r')
-  except:
-    sys.stderr.write("%s: error: unable to open\n" % listFile)
-    return []
-
-  lineNumber = -1
-  for line in f:
-    lineNumber = lineNumber + 1
-    line = line.strip()
-    # ignore comments
-    if len(line) > 0 and line[0] == '#':
-      continue
-
-    if len(line) == 0: continue
-
-    toks = line.split(';')
-    if len(toks) != 3:
-      f.close()
-      sys.stderr.write("%s:%d: error: invalid line format, expected 3 items separated by ';'\n" % (listFile, lineNumber))
-      return []
-
-    try: tmin = str2time(toks[0].strip())
+    try:
+        if file == "-":
+            f = sys.stdin
+            file = "stdin"
+        else:
+            f = open(listFile, 'r')
     except:
-      f.close()
-      sys.stderr.write("%s:%d: error: invalid time format (tmin)\n" % (listFile, lineNumber))
-      return []
+        sys.stderr.write("%s: error: unable to open\n" % listFile)
+        return []
 
-    try: tmax = str2time(toks[1].strip())
-    except:
-      f.close()
-      sys.stderr.write("%s:%d: error: invalid time format (tmax)\n" % (listFile, lineNumber))
-      return []
+    lineNumber = -1
+    for line in f:
+        lineNumber = lineNumber + 1
+        line = line.strip()
+        # ignore comments
+        if len(line) > 0 and line[0] == '#':
+            continue
 
-    streamID = toks[2].strip()
-    toks = streamID.split('.')
-    if len(toks) != 4:
-      f.close()
-      sys.stderr.write("%s:%d: error: invalid stream format\n" % (listFile, lineNumber))
-      return []
+        if len(line) == 0:
+            continue
 
-    streams.append((tmin, tmax, toks[0], toks[1], toks[2], toks[3]))
+        toks = line.split(';')
+        if len(toks) != 3:
+            f.close()
+            sys.stderr.write("%s:%d: error: invalid line format, expected 3 items separated by ';'\n" % (
+                listFile, lineNumber))
+            return []
 
-  f.close()
+        try:
+            tmin = str2time(toks[0].strip())
+        except:
+            f.close()
+            sys.stderr.write(
+                "%s:%d: error: invalid time format (tmin)\n" % (listFile, lineNumber))
+            return []
 
-  return streams
+        try:
+            tmax = str2time(toks[1].strip())
+        except:
+            f.close()
+            sys.stderr.write(
+                "%s:%d: error: invalid time format (tmax)\n" % (listFile, lineNumber))
+            return []
+
+        streamID = toks[2].strip()
+        toks = streamID.split('.')
+        if len(toks) != 4:
+            f.close()
+            sys.stderr.write("%s:%d: error: invalid stream format\n" %
+                             (listFile, lineNumber))
+            return []
+
+        streams.append((tmin, tmax, toks[0], toks[1], toks[2], toks[3]))
+
+    f.close()
+
+    return streams
 
 
 usage_info = """
@@ -469,216 +498,252 @@ Example:
 
 """
 
+
 def usage(exitcode=0):
-  sys.stderr.write(usage_info)
-  sys.exit(exitcode)
+    sys.stderr.write(usage_info)
+    sys.exit(exitcode)
+
 
 try:
-  opts, files = getopt(sys.argv[1:], "I:dsmEn:c:t:l:hv",
-                       ["stdout", "dump", "list=", "sort", "modify", "speed=", "files=", "verbose", "test", "help"])
+    opts, files = getopt(sys.argv[1:], "I:dsmEn:c:t:l:hv",
+                         ["stdout", "dump", "list=", "sort", "modify", "speed=", "files=", "verbose", "test", "help"])
 except GetoptError:
-  usage(exitcode=1)
+    usage(exitcode=1)
 
 
-endtime      = False
-verbose      = False
-sort         = False
-modifyTime   = False
-dump         = False
-listFile     = None
-test         = False
+endtime = False
+verbose = False
+sort = False
+modifyTime = False
+dump = False
+listFile = None
+test = False
 filePoolSize = 100
 # default = stdin
-recordURL    = "file://-"
+recordURL = "file://-"
 
-speed        = 0
-stdout       = False
+speed = 0
+stdout = False
 
-channels     = "(B|S|M|H|E)(L|H)(Z|N|E)"
-networks     = "*"
+channels = "(B|S|M|H|E)(L|H)(Z|N|E)"
+networks = "*"
 
 archiveDirectory = "./"
 
 for flag, arg in opts:
-    if   flag == "-t":  tmin, tmax = map(str2time, arg.split("~"))
-    elif flag == "-E":  endtime = True
-    elif flag in ["-h", "--help"]:    usage(exitcode=0)
-    elif flag in ["--stdout"]:        stdout = True
-    elif flag in ["-v", "--verbose"]: verbose = True
-    elif flag in ["-d", "--dump"]:    dump = True
-    elif flag in ["-l", "--list"]:    listFile = arg
-    elif flag in ["-s", "--sort"]:    sort = True
-    elif flag in ["-m", "--modify"]:  modifyTime = True
-    elif flag in ["--speed"]:         speed = float(arg)
-    elif flag in ["--files"]:         filePoolSize = int(arg)
-    elif flag in ["--test"]:          test = True
-    elif flag == "-I":                recordURL = arg
-    elif flag == "-n":                networks = arg
-    elif flag == "-c":                channels = arg
-    else: usage(exitcode=1)
+    if flag == "-t":
+        tmin, tmax = map(str2time, arg.split("~"))
+    elif flag == "-E":
+        endtime = True
+    elif flag in ["-h", "--help"]:
+        usage(exitcode=0)
+    elif flag in ["--stdout"]:
+        stdout = True
+    elif flag in ["-v", "--verbose"]:
+        verbose = True
+    elif flag in ["-d", "--dump"]:
+        dump = True
+    elif flag in ["-l", "--list"]:
+        listFile = arg
+    elif flag in ["-s", "--sort"]:
+        sort = True
+    elif flag in ["-m", "--modify"]:
+        modifyTime = True
+    elif flag in ["--speed"]:
+        speed = float(arg)
+    elif flag in ["--files"]:
+        filePoolSize = int(arg)
+    elif flag in ["--test"]:
+        test = True
+    elif flag == "-I":
+        recordURL = arg
+    elif flag == "-n":
+        networks = arg
+    elif flag == "-c":
+        channels = arg
+    else:
+        usage(exitcode=1)
 
 
 if files:
-  archiveDirectory = files[0]
+    archiveDirectory = files[0]
 else:
-  try:
-    archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/var/lib/archive"
-  except: pass
+    try:
+        archiveDirectory = os.environ["SEISCOMP_ROOT"] + "/var/lib/archive"
+    except:
+        pass
 
 try:
-  if archiveDirectory[-1] != '/':
-    archiveDirectory = archiveDirectory + '/'
-except: pass
+    if archiveDirectory[-1] != '/':
+        archiveDirectory = archiveDirectory + '/'
+except:
+    pass
 
 
 archive = Archive(archiveDirectory)
 archive.filePoolSize = filePoolSize
 
 if verbose:
-  seiscomp3.Logging.enableConsoleLogging(seiscomp3.Logging.getAll())
-  if dump and not listFile:
-    sys.stderr.write("Time window: %s~%s\n" % (time2str(tmin), time2str(tmax)))
-  sys.stderr.write("Archive: %s\n" % archiveDirectory)
-  if dump:
-    if not sort and not modifyTime:
-      sys.stderr.write("Mode: DUMP\n")
-    elif sort and not modifyTime:
-      sys.stderr.write("Mode: DUMP & SORT\n")
-    elif not sort and modifyTime:
-      sys.stderr.write("Mode: DUMP & MODIFY_TIME\n")
-    elif sort and modifyTime:
-      sys.stderr.write("Mode: DUMP & SORT & MODIFY_TIME\n")
-  else:
-    sys.stderr.write("Mode: IMPORT\n")
+    seiscomp3.Logging.enableConsoleLogging(seiscomp3.Logging.getAll())
+    if dump and not listFile:
+        sys.stderr.write("Time window: %s~%s\n" %
+                         (time2str(tmin), time2str(tmax)))
+    sys.stderr.write("Archive: %s\n" % archiveDirectory)
+    if dump:
+        if not sort and not modifyTime:
+            sys.stderr.write("Mode: DUMP\n")
+        elif sort and not modifyTime:
+            sys.stderr.write("Mode: DUMP & SORT\n")
+        elif not sort and modifyTime:
+            sys.stderr.write("Mode: DUMP & MODIFY_TIME\n")
+        elif sort and modifyTime:
+            sys.stderr.write("Mode: DUMP & SORT & MODIFY_TIME\n")
+    else:
+        sys.stderr.write("Mode: IMPORT\n")
 
 it = ArchiveIterator(archive, endtime)
 
 if dump:
-  if listFile:
-    streams = readStreamList(listFile)
-    for stream in streams:
-      if verbose:
-        sys.stderr.write("adding stream: %s.%s.%s.%s\n" % (stream[2], stream[3], stream[4], stream[5]))
-      it.append(stream[0], stream[1], stream[2], stream[3], stream[4], stream[5])
-  else:
-    if networks == "*":
-      it.append(tmin, tmax, "*", "*", "*", channels)
+    if listFile:
+        streams = readStreamList(listFile)
+        for stream in streams:
+            if verbose:
+                sys.stderr.write("adding stream: %s.%s.%s.%s\n" % (
+                    stream[2], stream[3], stream[4], stream[5]))
+            it.append(stream[0], stream[1], stream[2],
+                      stream[3], stream[4], stream[5])
     else:
-      items = networks.split(",")
-      for n in items:
-        n = n.strip()
-        it.append(tmin, tmax, n, "*", "*", channels)
+        if networks == "*":
+            it.append(tmin, tmax, "*", "*", "*", channels)
+        else:
+            items = networks.split(",")
+            for n in items:
+                n = n.strip()
+                it.append(tmin, tmax, n, "*", "*", channels)
 
-  stime = None
-  realTime = seiscomp3.Core.Time.GMT()
+    stime = None
+    realTime = seiscomp3.Core.Time.GMT()
 
-  if sort:
-    records = Sorter(it)
-  else:
-    records = Copy(it)
-
-  for rec in records:
-    # skip corrupt records
-    etime = seiscomp3.Core.Time(rec.endTime())
-
-    if stime is None:
-      stime = etime
-      if verbose: sys.stderr.write("First record: %s\n" % stime.iso())
-
-    dt = etime - stime
-
-    now = seiscomp3.Core.Time.GMT()
-
-    if speed > 0:
-      playTime = (realTime + dt).toDouble() / speed;
+    if sort:
+        records = Sorter(it)
     else:
-      playTime = now.toDouble()
+        records = Copy(it)
 
-    sleepTime = playTime - now.toDouble()
-    if sleepTime > 0:
-      time.sleep(sleepTime)
+    for rec in records:
+        # skip corrupt records
+        etime = seiscomp3.Core.Time(rec.endTime())
 
-    if modifyTime:
-      recLength = etime - rec.startTime()
-      rec.setStartTime(seiscomp3.Core.Time(playTime) - recLength)
+        if stime is None:
+            stime = etime
+            if verbose:
+                sys.stderr.write("First record: %s\n" % stime.iso())
 
-    if verbose:
-      etime = rec.endTime()
-      sys.stderr.write("%s %s %s %s\n" % (rec.streamID(), seiscomp3.Core.Time.LocalTime().iso(), rec.startTime().iso(), etime.iso()))
+        dt = etime - stime
 
-    if test == False:
-      sys.stdout.write(rec.raw().str())
+        now = seiscomp3.Core.Time.GMT()
+
+        if speed > 0:
+            playTime = (realTime + dt).toDouble() / speed
+        else:
+            playTime = now.toDouble()
+
+        sleepTime = playTime - now.toDouble()
+        if sleepTime > 0:
+            time.sleep(sleepTime)
+
+        if modifyTime:
+            recLength = etime - rec.startTime()
+            rec.setStartTime(seiscomp3.Core.Time(playTime) - recLength)
+
+        if verbose:
+            etime = rec.endTime()
+            sys.stderr.write("%s %s %s %s\n" % (rec.streamID(
+            ), seiscomp3.Core.Time.LocalTime().iso(), rec.startTime().iso(), etime.iso()))
+
+        if test == False:
+            sys.stdout.write(rec.raw().str())
 
 else:
-  env = seiscomp3.System.Environment.Instance()
-  cfg = seiscomp3.Config.Config()
-  env.initConfig(cfg, "scart")
-  try:
-    plugins = cfg.getStrings("plugins")
-    registry = seiscomp3.Client.PluginRegistry.Instance()
-    for p in plugins:
-      registry.addPluginName(p)
-    registry.loadPlugins()
-  except Exception,e: pass
+    env = seiscomp3.System.Environment.Instance()
+    cfg = seiscomp3.Config.Config()
+    env.initConfig(cfg, "scart")
+    try:
+        plugins = cfg.getStrings("plugins")
+        registry = seiscomp3.Client.PluginRegistry.Instance()
+        for p in plugins:
+            registry.addPluginName(p)
+        registry.loadPlugins()
+    except Exception, e:
+        pass
 
-  rs = seiscomp3.IO.RecordStream.Open(recordURL)
-  if rs is None:
-    sys.stderr.write("Unable to open recordstream '%s'\n" % recordURL)
-    sys.exit(-1)
+    rs = seiscomp3.IO.RecordStream.Open(recordURL)
+    if rs is None:
+        sys.stderr.write("Unable to open recordstream '%s'\n" % recordURL)
+        sys.exit(-1)
 
-  if rs.setRecordType("mseed") == False:
-    sys.stderr.write("Format 'mseed' is not supported by recordstream '%s'\n" % recordURL)
-    sys.exit(-1)
+    if rs.setRecordType("mseed") == False:
+        sys.stderr.write(
+            "Format 'mseed' is not supported by recordstream '%s'\n" % recordURL)
+        sys.exit(-1)
 
-  if not isFile(recordURL):
-    if not listFile:
-      sys.stderr.write("A stream list is needed to fetch data from another source than a file\n")
-      sys.exit(-1)
-
-    streams = readStreamList(listFile)
-    for stream in streams:
-      # Add stream to recordstream
-      if rs.addStream(stream[2], stream[3], stream[4], stream[5], stream[0], stream[1]) == False:
-        if verbose:
-          sys.stderr.write("error: adding stream: %s %s %s.%s.%s.%s\n" % (stream[0], stream[1], stream[2], stream[3], stream[4], stream[5]))
-      else:
-        if verbose:
-          sys.stderr.write("adding stream: %s %s %s.%s.%s.%s\n" % (stream[0], stream[1], stream[2], stream[3], stream[4], stream[5]))
-
-  input = seiscomp3.IO.RecordInput(rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
-  filePool = dict()
-  f = None
-  try:
-    for rec in input:
-      if stdout:
-        sys.stdout.write(rec.raw().str())
-        continue
-
-      dir, file = archive.location(rec.startTime(), rec.networkCode(), rec.stationCode(), rec.locationCode(), rec.channelCode())
-      file = dir + file
-
-      if test == False:
-        try:
-          f = filePool[file]
-        except:
-          outdir = '/'.join((archiveDirectory + file).split('/')[:-1])
-          if create_dir(outdir) == False:
-            sys.stderr.write("Could not create directory '%s'\n" % outdir)
+    if not isFile(recordURL):
+        if not listFile:
+            sys.stderr.write(
+                "A stream list is needed to fetch data from another source than a file\n")
             sys.exit(-1)
 
-          try:
-            f = open(archiveDirectory + file, 'ab')
-          except:
-            sys.stderr.write("File '%s' could not be opened for writing\n" % (outputDirectory + file))
-            sys.exit(-1)
+        streams = readStreamList(listFile)
+        for stream in streams:
+            # Add stream to recordstream
+            if rs.addStream(stream[2], stream[3], stream[4], stream[5], stream[0], stream[1]) == False:
+                if verbose:
+                    sys.stderr.write("error: adding stream: %s %s %s.%s.%s.%s\n" % (
+                        stream[0], stream[1], stream[2], stream[3], stream[4], stream[5]))
+            else:
+                if verbose:
+                    sys.stderr.write("adding stream: %s %s %s.%s.%s.%s\n" % (
+                        stream[0], stream[1], stream[2], stream[3], stream[4], stream[5]))
 
-          # Remove old handles
-          if len(filePool) < filePoolSize:
-            filePool[file] = f
+    input = seiscomp3.IO.RecordInput(
+        rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
+    filePool = dict()
+    f = None
+    try:
+        for rec in input:
+            if stdout:
+                sys.stdout.write(rec.raw().str())
+                continue
 
-        f.write(rec.raw().str())
+            dir, file = archive.location(rec.startTime(), rec.networkCode(
+            ), rec.stationCode(), rec.locationCode(), rec.channelCode())
+            file = dir + file
 
-      if verbose:
-        sys.stderr.write("%s %s %s\n" % (rec.streamID(), rec.startTime().iso(), file))
-  except Exception, e:
-    sys.stderr.write("Exception: %s\n" % str(e))
+            if test == False:
+                try:
+                    f = filePool[file]
+                except:
+                    outdir = '/'.join((archiveDirectory +
+                                       file).split('/')[:-1])
+                    if create_dir(outdir) == False:
+                        sys.stderr.write(
+                            "Could not create directory '%s'\n" % outdir)
+                        sys.exit(-1)
+
+                    try:
+                        f = open(archiveDirectory + file, 'ab')
+                    except:
+                        sys.stderr.write("File '%s' could not be opened for writing\n" % (
+                            outputDirectory + file))
+                        sys.exit(-1)
+
+                    # Remove old handles
+                    if len(filePool) < filePoolSize:
+                        filePool[file] = f
+
+                f.write(rec.raw().str())
+
+            if verbose:
+                sys.stderr.write("%s %s %s\n" %
+                                 (rec.streamID(), rec.startTime().iso(), file))
+    except Exception, e:
+        sys.stderr.write("Exception: %s\n" % str(e))

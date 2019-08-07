@@ -709,7 +709,7 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
                                     remaining_header_size = data_offset - \
                                         FIXED_DATA_HEADER_SIZE
 
-                                elif data_offset == 0 :
+                                elif data_offset == 0:
                                     # This means that blockettes can follow,
                                     # but no data samples. Use minimum record
                                     # size to read following blockettes. This
@@ -717,19 +717,19 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
                                     # position 256
                                     remaining_header_size = \
                                         MINIMUM_RECORD_LENGTH - \
-                                            FIXED_DATA_HEADER_SIZE
+                                        FIXED_DATA_HEADER_SIZE
 
                                 else:
                                     # Full header size cannot be smaller than
                                     # fixed header size. This is an error.
-                                    msg("record %s: data offset smaller than "\
-                                        "fixed header length: %s, bailing "\
+                                    msg("record %s: data offset smaller than "
+                                        "fixed header length: %s, bailing "
                                         "out" % (record_idx, data_offset))
                                     break
 
                                 buf = fd.read(remaining_header_size)
                                 if not buf:
-                                    msg("remaining header corrupt in record "\
+                                    msg("remaining header corrupt in record "
                                         "%s" % record_idx)
                                     break
 
@@ -754,17 +754,17 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
                                         buf[blockette_start+2:blockette_start+4])
 
                                     if blockette_id == \
-                                        DATA_ONLY_BLOCKETTE_NUMBER:
+                                            DATA_ONLY_BLOCKETTE_NUMBER:
 
                                         b1000_found = True
                                         break
 
                                     elif next_blockette_start == 0:
                                         # no blockettes follow
-                                        msg("record %s: no blockettes follow "\
+                                        msg("record %s: no blockettes follow "
                                             "after blockette %s at pos %s" % (
-                                            record_idx, blockette_id,
-                                            blockette_start))
+                                                record_idx, blockette_id,
+                                                blockette_start))
                                         break
 
                                     else:
@@ -772,7 +772,7 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
 
                                 # blockette 1000 not found
                                 if not b1000_found:
-                                    msg("record %s: blockette 1000 not found,"\
+                                    msg("record %s: blockette 1000 not found,"
                                         " stop reading" % record_idx)
                                     break
 
@@ -780,8 +780,8 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
                                 record_size_exponent_idx = blockette_start + 6
                                 record_size_exponent, = struct.unpack(
                                     b'!B',
-                                    buf[record_size_exponent_idx:\
-                                    record_size_exponent_idx+1])
+                                    buf[record_size_exponent_idx:
+                                        record_size_exponent_idx+1])
 
                                 remaining_record_size = \
                                     2**record_size_exponent - curr_size
@@ -789,7 +789,7 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
                                 # read remainder of record (data section)
                                 buf = fd.read(remaining_record_size)
                                 if not buf:
-                                    msg("cannot read data section of record "\
+                                    msg("cannot read data section of record "
                                         "%s" % record_idx)
                                     break
 
@@ -797,10 +797,13 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
 
                                 # collect network IDs
                                 try:
-                                    net = record[18:20].decode('ascii').rstrip()
+                                    net = record[18:20].decode(
+                                        'ascii').rstrip()
                                     sta = record[8:13].decode('ascii').rstrip()
-                                    loc = record[13:15].decode('ascii').rstrip()
-                                    cha = record[15:18].decode('ascii').rstrip()
+                                    loc = record[13:15].decode(
+                                        'ascii').rstrip()
+                                    cha = record[15:18].decode(
+                                        'ascii').rstrip()
 
                                 except UnicodeDecodeError:
                                     msg("invalid miniseed record")
@@ -987,7 +990,8 @@ def route(url, cred, authdata, postdata, dest, chans_to_check, timeout,
 
                         if check:
                             nslc = line.split()[:4]
-                            if nslc[2] == '--': nslc[2] = ''
+                            if nslc[2] == '--':
+                                nslc[2] = ''
                             chans2.add('.'.join(nslc))
 
         finally:
@@ -1055,7 +1059,7 @@ def get_citation(nets, options):
         postdata += "%s * * * %d-01-01T00:00:00Z %d-12-31T23:59:59Z\n" \
                     % (net, year, year)
 
-    qp = { 'service': 'station', 'level': 'network', 'format': 'text' }
+    qp = {'service': 'station', 'level': 'network', 'format': 'text'}
     url = RoutingURL(urlparse.urlparse(options.url), qp)
     dest = io.BytesIO()
 
@@ -1119,16 +1123,16 @@ def main():
             qp[option.dest] = value
 
     parser = optparse.OptionParser(
-            usage="Usage: %prog [-h|--help] [OPTIONS] -o file",
-            version="%prog " + VERSION,
-            add_help_option=False)
+        usage="Usage: %prog [-h|--help] [OPTIONS] -o file",
+        version="%prog " + VERSION,
+        add_help_option=False)
 
     parser.set_defaults(
-            url="http://geofon.gfz-potsdam.de/eidaws/routing/1/",
-            timeout=600,
-            retries=10,
-            retry_wait=60,
-            threads=5)
+        url="http://geofon.gfz-potsdam.de/eidaws/routing/1/",
+        timeout=600,
+        retries=10,
+        retry_wait=60,
+        threads=5)
 
     parser.add_option("-h", "--help", action="store_true", default=False,
                       help="show help message and exit")
@@ -1335,7 +1339,8 @@ def main():
             if postdata:
                 for line in postdata.splitlines():
                     nslc = line.split()[:4]
-                    if nslc[2] == '--': nslc[2] = ''
+                    if nslc[2] == '--':
+                        nslc[2] = ''
                     chans_to_check.add('.'.join(nslc))
 
             else:
@@ -1348,7 +1353,8 @@ def main():
                     for s in sta.split(','):
                         for l in loc.split(','):
                             for c in cha.split(','):
-                                if l == '--': l = ''
+                                if l == '--':
+                                    l = ''
                                 chans_to_check.add('.'.join((n, s, l, c)))
 
         url = RoutingURL(urlparse.urlparse(options.url), qp)
@@ -1359,11 +1365,11 @@ def main():
                      options.threads, options.verbose)
 
         if nets and not options.no_citation:
-              msg("retrieving network citation info", options.verbose)
-              get_citation(nets, options)
+            msg("retrieving network citation info", options.verbose)
+            get_citation(nets, options)
 
         else:
-              msg("", options.verbose)
+            msg("", options.verbose)
 
         msg("In case of problems with your request, plese use the contact "
             "form at\n\n"
@@ -1380,4 +1386,3 @@ def main():
 if __name__ == "__main__":
     __doc__ %= {"prog": sys.argv[0]}
     sys.exit(main())
-

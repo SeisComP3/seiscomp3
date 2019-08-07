@@ -14,6 +14,7 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import seiscomp3.bindings2cfg, sys
+import seiscomp3.bindings2cfg
+import sys
 
 sys.exit(seiscomp3.bindings2cfg.main())

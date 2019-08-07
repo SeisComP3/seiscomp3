@@ -12,21 +12,26 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import sys, optparse
-import seiscomp3.Seismology, seiscomp3.Core, seiscomp3.IO
+import sys
+import optparse
+import seiscomp3.Seismology
+import seiscomp3.Core
+import seiscomp3.IO
+
 
 class MyOptionParser(optparse.OptionParser):
     def format_epilog(self, formatter):
         return self.epilog
+
 
 def str2time(timestring):
     """
     Liberally accept many time string formats and convert them to a
     seiscomp3.Core.Time
     """
-    
+
     timestring = timestring.strip()
-    for c in ["-","/",":", "T", "Z"]:
+    for c in ["-", "/", ":", "T", "Z"]:
         timestring = timestring.replace(c, " ")
     timestring = timestring.split()
     assert 3 <= len(timestring) <= 6
@@ -65,7 +70,7 @@ def RecordInput(filename=None, datatype=seiscomp3.Core.Array.INT):
         raise IOError, "failed 2"
 
     input = seiscomp3.IO.RecordInput(
-                    stream, datatype, seiscomp3.Core.Record.SAVE_RAW)
+        stream, datatype, seiscomp3.Core.Record.SAVE_RAW)
 
     while 1:
         rec = input.next()
@@ -73,7 +78,6 @@ def RecordInput(filename=None, datatype=seiscomp3.Core.Array.INT):
             raise StopIteration
 
         yield rec
-
 
 
 tmin = str2time("1970-01-01 00:00:00")
@@ -89,11 +93,16 @@ cat f1.mseed f2.mseed f3.mseed |
 scmssort -v -t '2007-03-28 15:48~2007-03-28 16:18' > sorted.mseed
 """
 
-p = MyOptionParser(usage="%prog [options] [files | < ] > ", description=description, epilog=epilog)
-p.add_option("-t", "--time-window", action="store", help="specify time window (as one -properly quoted- string). Times are of course UTC and separated by a tilde ~")
-p.add_option("-E", "--sort-by-end-time", action="store_true", help="sort according to record end time; default is start time")
-p.add_option("-u", "--uniqueness", action="store_true", help="ensure uniqueness of output, i.e. skip duplicate records")
-p.add_option("-v", "--verbose", action="store_true", help="run in verbose mode")
+p = MyOptionParser(
+    usage="%prog [options] [files | < ] > ", description=description, epilog=epilog)
+p.add_option("-t", "--time-window", action="store",
+             help="specify time window (as one -properly quoted- string). Times are of course UTC and separated by a tilde ~")
+p.add_option("-E", "--sort-by-end-time", action="store_true",
+             help="sort according to record end time; default is start time")
+p.add_option("-u", "--uniqueness", action="store_true",
+             help="ensure uniqueness of output, i.e. skip duplicate records")
+p.add_option("-v", "--verbose", action="store_true",
+             help="run in verbose mode")
 
 (opt, filenames) = p.parse_args()
 
@@ -103,19 +112,23 @@ if opt.time_window:
 if opt.verbose:
     sys.stderr.write("Time window: %s~%s\n" % (time2str(tmin), time2str(tmax)))
 
+
 def _time(rec):
     if opt.sort_by_end_time:
         return seiscomp3.Core.Time(rec.endTime())
     return seiscomp3.Core.Time(rec.startTime())
 
+
 def _in_time_window(rec, tmin, tmax):
     return rec.endTime() >= tmin and rec.startTime() <= tmax
 
+
 def _valid_record(rec):
-    return rec is not None # may get more complicated ;)
+    return rec is not None  # may get more complicated ;)
+
 
 if not filenames:
-    filenames = [ "-" ]
+    filenames = ["-"]
 
 if filenames:
     first = None
@@ -133,8 +146,8 @@ if filenames:
             t = _time(rec)
             if first is None:
                 first = t
-            t = float(t-first) # float needs less memory
-            time_raw.append( (t,raw) )
+            t = float(t-first)  # float needs less memory
+            time_raw.append((t, raw))
 
     if opt.verbose:
         sys.stderr.write("sorting records\n")
@@ -146,7 +159,7 @@ if filenames:
     for item in time_raw:
         if opt.uniqueness and item == previous:
             continue
-        t,raw = item        
+        t, raw = item
         sys.stdout.write(raw)
         previous = item
 

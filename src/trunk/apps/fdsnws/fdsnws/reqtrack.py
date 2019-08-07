@@ -26,8 +26,10 @@ class RequestTrackerDB(object):
         self.arclinkRequest.setRequestID(req_id)
         self.arclinkRequest.setUserID(str(user))
         self.arclinkRequest.setClientID(appName)
-        if user_ip: self.arclinkRequest.setUserIP(user_ip)
-        if client_ip: self.arclinkRequest.setClientIP(client_ip)
+        if user_ip:
+            self.arclinkRequest.setUserIP(user_ip)
+        if client_ip:
+            self.arclinkRequest.setClientIP(client_ip)
         self.arclinkRequest.setType(req_type)
         self.arclinkRequest.setLabel(label)
         self.arclinkRequest.setHeader(header)
@@ -39,15 +41,13 @@ class RequestTrackerDB(object):
         self.requestLines = []
         self.statusLines = []
 
-
     def send(self):
         msg = DataModel.Notifier.GetMessage(True)
         if msg:
             self.msgConn.send("LOGGING", msg)
 
-
     def line_status(self, start_time, end_time, network, station, channel,
-        location, restricted, net_class, shared, constraints, volume, status, size, message):
+                    location, restricted, net_class, shared, constraints, volume, status, size, message):
         if network is None or network == "":
             network = "."
         if station is None or station == "":
@@ -66,16 +66,19 @@ class RequestTrackerDB(object):
         if isinstance(constraints, list):
             constr = " ".join(constraints)
         else:
-            constr = " ".join([ a+"="+b for (a, b) in constraints.iteritems() ])
+            constr = " ".join([a+"="+b for (a, b) in constraints.iteritems()])
 
         arclinkRequestLine = DataModel.ArclinkRequestLine()
         arclinkRequestLine.setStart(start_time)
         arclinkRequestLine.setEnd(end_time)
-        arclinkRequestLine.setStreamID(DataModel.WaveformStreamID(network[:8], station[:8], location[:8], channel[:8], ""))
+        arclinkRequestLine.setStreamID(DataModel.WaveformStreamID(
+            network[:8], station[:8], location[:8], channel[:8], ""))
         arclinkRequestLine.setConstraints(constr)
-        if isinstance(restricted, bool): arclinkRequestLine.setRestricted(restricted)
+        if isinstance(restricted, bool):
+            arclinkRequestLine.setRestricted(restricted)
         arclinkRequestLine.setNetClass(net_class)
-        if isinstance(shared, bool):arclinkRequestLine.setShared(shared)
+        if isinstance(shared, bool):
+            arclinkRequestLine.setShared(shared)
         #
         arclinkStatusLine = DataModel.ArclinkStatusLine()
         arclinkStatusLine.setVolumeID(volume)
@@ -88,8 +91,8 @@ class RequestTrackerDB(object):
 
         self.averageTimeWindow += end_time - start_time
         self.totalLineCount += 1
-        if status == "OK": self.okLineCount += 1
-
+        if status == "OK":
+            self.okLineCount += 1
 
     def volume_status(self, volume, status, size, message):
         if volume is None:
@@ -106,7 +109,6 @@ class RequestTrackerDB(object):
         arclinkStatusLine.setMessage(message)
         self.statusLines.append(arclinkStatusLine)
 
-
     @callFromThread
     @enableNotifier
     def request_status(self, status, message):
@@ -119,8 +121,10 @@ class RequestTrackerDB(object):
         ars = DataModel.ArclinkRequestSummary()
         tw = self.averageTimeWindow.seconds()
         if self.totalLineCount > 0:
-            tw = self.averageTimeWindow.seconds() / self.totalLineCount # avarage request time window
-        if tw >= 2**31: tw = -1 # prevent 32bit int overflow
+            # avarage request time window
+            tw = self.averageTimeWindow.seconds() / self.totalLineCount
+        if tw >= 2**31:
+            tw = -1  # prevent 32bit int overflow
         ars.setAverageTimeWindow(tw)
         ars.setTotalLineCount(self.totalLineCount)
         ars.setOkLineCount(self.okLineCount)
@@ -137,11 +141,8 @@ class RequestTrackerDB(object):
 
         self.send()
 
-
     def __verseed_errors(self, volume):
         pass
 
     def verseed(self, volume, file):
         pass
-
-

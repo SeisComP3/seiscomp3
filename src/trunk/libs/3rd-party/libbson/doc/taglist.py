@@ -67,7 +67,7 @@ class TaglistDirective(Directive):
         section += nodes.title(title, title)
 
         text = nodes.paragraph()
-        text += [nodes.Text(":tag:`%s`"%t) for t in tl.tags ]
+        text += [nodes.Text(":tag:`%s`" % t) for t in tl.tags]
         self.state.nested_parse(text, 0, section)
 
         section += [tl]
