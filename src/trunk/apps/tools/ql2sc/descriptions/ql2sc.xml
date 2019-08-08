@@ -23,14 +23,19 @@
 			</parameter>
 			<parameter name="hosts" type="list:string">
 				<description>
-					Registration of QuakeLink hosts.
+					Registration of the host profiles defining the connection
+					parameters to the QuakeLink hosts.
 				</description>
 			</parameter>
 			<group name="host">
+				<description>
+				Definition of host profiles. For each host profile a connection
+				to one QuakeLink server can established. The profiles must be registered
+				in 'hosts' to apply them.
+				</description>
 				<struct type="quakelink server profile" link="hosts">
 					<description>
-						For each host profile a connection to a QuakeLink
-						server is established.
+						Provide the connection parameters to one QuakeLink server.
 					</description>
 					<parameter name="url" type="string" default="ql://localhost:18010">
 						<description>
@@ -47,7 +52,8 @@
 						</description>
 					</parameter>
 					<parameter name="native" type="boolean" default="false">
-						<description>Request native data instead of XML format. Native data export may be disabled on some hosts.</description>
+						<description>Request native data instead of XML format.
+						Native data export may be disabled on some hosts.</description>
 					</parameter>
 					<parameter name="syncEventAttributes" type="boolean" default="true">
 						<description>
@@ -61,7 +67,7 @@
 					</parameter>
 					<group name="data">
 						<description>
-							QuakeLink options specifying which XML components to fetch.
+							Specify the XML components to fetch.
 							Note: These options are not used if 'native' data is requested.
 						</description>
 						<parameter name="picks" type="boolean" default="true">
