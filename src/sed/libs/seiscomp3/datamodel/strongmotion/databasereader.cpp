@@ -52,8 +52,6 @@ StrongMotionParameters* StrongMotionReader::loadStrongMotionParameters() {
 
 	load(strongMotionParameters);
 
-	SEISCOMP_DEBUG("objects in cache: %d", getCacheSize());
-	
 	return strongMotionParameters;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
