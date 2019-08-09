@@ -1,6 +1,15 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch15
+
+* fdsnws
+
+  * Reduce QuakeML exporter warnings: do not report a warning if the event does not reference
+    a preferred magnitude and reduce log level of event type mapping from warning to debug
+  * Expose matchtimeseries WADL parameter only if data availability information is enabled
+    via config
+  * Disable data availability information by default
+  * Add request logging for dataselect
 
 * seedlink
 
@@ -11,8 +20,6 @@
 * scolv
 
   * Fix event type list preparation in combination with `olv.commonEventTypes`.
-
-## Release 2018.327 patch15
 
 * ql2sc
 
@@ -26,31 +33,18 @@
 
   * Add simple script to dump public objects
 
-* scmag
+* Nuttli magnitude
 
-  * Avoid setting a network magnitude to NaN (not supported with any database)
-    and use 0 instead. In order to detect if a network magnitude is valid one could
-    use the station count (0 == invalid). But that is in general a hack for the
-    time being and the correct solution is to naje the Magnitude.value an
-    optional quantity.
-
-* GUI
-
-  * Improve spectrogram rendering speed
-  * Normalize spectrogram spectral amplitudes with respect to
-    sampling rate
+  * Fix phase priority parsing and fix crash
+  * Do not apply default uncertainties to Vmin/Vmax 
 
 * scdispatch
 
   * Fix routing table lookup when dealing with merge operation
 
-* ql2sc
+* trunk
 
-  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
-    on long idle periods.
-  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
-    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
-  * Add event attribute synchronization per input host
+  * Migration scripts for scwfparam db extension added thanks to Philipp Kaestli / ETHZ
 
 * scmag
 
@@ -70,7 +64,7 @@
 
 * sh2proc
 
-  * Add parameters parsed from Seismic Handler to SeisComP3.·
+  * Add parameters parsed from Seismic Handler to SeisComP3. 
     Thanks to Klaus Stammler for providing valuable information on Seismic Handler.
 
 * trunk
@@ -83,7 +77,7 @@
 
 * scevtstreams
 
-  * Add ```--input``` and ```--format``` options to read event parameters·
+  * Add ```--input``` and ```--format``` options to read event parameters 
     from file
   * Add asymmetric time margins
 
@@ -126,14 +120,6 @@
     * Require valid user if network or station is restricted
     * Stop iteration at network or station level if restricted flag but
       no user is present 
-
-* fdsnws
-
-  * Fix dataselect restricted handling with respect to station service
-
-    * Require valid user if network or station is restricted
-    * Stop iteration at network or station level if restricted flag but
-      no user is present
 
   * Implement service specific version numbers 
 
