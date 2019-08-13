@@ -15,6 +15,7 @@
 
   * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
+  * Work around EarthData WNRO bug
 
 * scolv
 
@@ -26,6 +27,7 @@
     on long idle periods.
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+  * Add event attribute synchronization per input host
 
 * python-apps
 
@@ -43,6 +45,22 @@
 * trunk
 
   * Migration scripts for scwfparam db extension added thanks to Philipp Kaestli / ETHZ
+  * Fix LocSAT locator implementation to correctly send the initial hypocenter
+    parameters to libloc
+
+* scmag
+
+  * Avoid setting a network magnitude to NaN (not supported with any database)
+    and use 0 instead. In order to detect if a network magnitude is valid one could
+    use the station count (0 == invalid). But that is in general a hack for the
+    time being and the correct solution is to naje the Magnitude.value an
+    optional quantity.
+
+* GUI
+
+  * Improve spectrogram rendering speed
+  * Normalize spectrogram spectral amplitudes with respect to
+    sampling rate
 
 ## Release 2018.327 patch14
 
@@ -69,23 +87,10 @@
 
   * Add ```--warning``` flag to output a warning for standard deviations of
     network magnitudes exceeding the provided value.
-  * Avoid setting a network magnitude to NaN (not supported with any database)
-    and use 0 instead. In order to detect if a network magnitude is valid one could
-    use the station count (0 == invalid). But that is in general a hack for the
-    time being and the correct solution is to naje the Magnitude.value an
-    optional quantity.
 
 * GUI
 
   * Fix spectrogram rendering with logarithmic scale
-
-* ql2sc
-
-  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
-    on long idle periods.
-  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
-    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
-  * Add event attribute synchronization per input host
 
 ## Release 2018.327 patch13
 
@@ -404,7 +409,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     }
     ```
     Namespaces can be nested.
-  * Remov LocSAT unused configuration option to use the location rms as
+  * Remove LocSAT unused configuration option to use the location rms as
     time error
   * Add LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
     which can be configured via the configuration files or during runtime in
