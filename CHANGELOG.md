@@ -45,6 +45,8 @@
 * trunk
 
   * Migration scripts for scwfparam db extension added thanks to Philipp Kaestli / ETHZ
+  * Fix LocSAT locator implementation to correctly send the initial hypocenter
+    parameters to libloc
 
 * scmag
 
@@ -407,7 +409,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     }
     ```
     Namespaces can be nested.
-  * Remov LocSAT unused configuration option to use the location rms as
+  * Remove LocSAT unused configuration option to use the location rms as
     time error
   * Add LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
     which can be configured via the configuration files or during runtime in
