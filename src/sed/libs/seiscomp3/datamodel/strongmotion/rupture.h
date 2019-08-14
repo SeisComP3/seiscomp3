@@ -128,6 +128,10 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		RealQuantity& slipVelocity();
 		const RealQuantity& slipVelocity() const;
 
+		void setStrike(const OPT(RealQuantity)& strike);
+		RealQuantity& strike();
+		const RealQuantity& strike() const;
+
 		void setLength(const OPT(RealQuantity)& length);
 		RealQuantity& length();
 		const RealQuantity& length() const;
@@ -199,6 +203,7 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		OPT(bool) _shallowAsperity;
 		OPT(LiteratureSource) _literatureSource;
 		OPT(RealQuantity) _slipVelocity;
+		OPT(RealQuantity) _strike;
 		OPT(RealQuantity) _length;
 		OPT(RealQuantity) _area;
 		OPT(RealQuantity) _ruptureVelocity;
