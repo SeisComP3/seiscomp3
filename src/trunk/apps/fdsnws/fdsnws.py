@@ -789,6 +789,7 @@ class FDSNWS(Application):
             self._accessLog = Log(self._accessLogFile)
 
         # request logger if requested
+        self._requestLog = None
         if self._requestLogFile:
             # import here, so we don't depend on GeoIP if request log is not needed
             from seiscomp3.fdsnws.reqlog import RequestLog
