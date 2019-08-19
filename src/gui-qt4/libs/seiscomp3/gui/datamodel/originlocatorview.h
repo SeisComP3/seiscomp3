@@ -219,6 +219,8 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void locatorRequested();
 		void computeMagnitudesRequested();
 
+		void baseEventSet();
+
 		//! When a new origin has been set inside the view this signal
 		//! is emitted. The bool flag signal whether a new origin has been
 		//! created or not
@@ -259,6 +261,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void setMagnitudeCalculationEnabled(bool);
 		void computeMagnitudes();
 		void magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*);
+		void magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*);
 
 		void mergeOrigins(QList<Seiscomp::DataModel::Origin*>);
 		void setLocalAmplitudes(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*);
@@ -330,6 +333,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void showWaveforms();
 		void relocate();
 		void commit(bool associate = true);
+		void customCommit();
 		void commitFocalMechanism(bool withMT = false, QPoint pos = QPoint(0, 0));
 		void commitWithOptions();
 
@@ -411,6 +415,10 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		                 const std::string &action,
 		                 const std::string &params);
 
+		DataModel::Notifier *
+		createJournal(const std::string &objectID, const std::string &action,
+		              const std::string &params);
+
 		void setBaseEvent(DataModel::Event *e);
 		void resetCustomLabels();
 
@@ -418,6 +426,9 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void activateSelectedArrivals(Seiscomp::Seismology::LocatorInterface::Flags flags,
 		                              bool activate);
 		void renameArrivals();
+
+		void commitWithOptions(const void *options);
+
 
 	private:
 		typedef QPair<QLabel*,QLabel*> ScriptLabel;

@@ -613,6 +613,9 @@ MainFrame::MainFrame(){
 	connect(_originLocator, SIGNAL(magnitudesAdded(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        _magnitudes, SLOT(reload()));
 
+	connect(_magnitudes, SIGNAL(magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*)),
+	        _originLocator, SLOT(magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*)));
+
 	connect(_originLocator, SIGNAL(artificalOriginCreated(Seiscomp::DataModel::Origin*)),
 	        this, SLOT(setArtificialOrigin(Seiscomp::DataModel::Origin*)));
 

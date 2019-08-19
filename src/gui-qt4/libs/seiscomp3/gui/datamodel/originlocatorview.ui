@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>1071</width>
-    <height>778</height>
+    <height>782</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -984,7 +984,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="groupBox_2" >
+    <widget class="QFrame" name="toolButtonGroupBox" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>5</hsizetype>
