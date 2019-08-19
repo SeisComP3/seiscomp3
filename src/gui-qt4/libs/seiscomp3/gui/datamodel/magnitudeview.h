@@ -182,6 +182,7 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		MapWidget* map() const;
 
 		void setPreferredMagnitudeID(const std::string &);
+
 		bool setDefaultAggregationType(const std::string &);
 
 
@@ -189,6 +190,7 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void localAmplitudesAvailable(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*);
 		void magnitudeUpdated(const QString &, Seiscomp::DataModel::Object*);
 		void magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*);
+		void magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*);
 		void requestClose();
 
 
@@ -233,6 +235,8 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void changeMagnitudeState(int id, bool state);
 		void changeStationState(int id, bool state);
 		void dataChanged(const QModelIndex&, const QModelIndex&);
+		void selectPreferredMagnitude(int idx);
+		void tabStateChanged(int state);
 		void updateContent();
 
 		void closeTab(int idx);
@@ -287,6 +291,7 @@ class SC_GUI_API MagnitudeView : public QWidget {
 
 		void computeMagnitude(DataModel::Magnitude *magnitude, const std::string &aggType);
 		bool editSelectionFilter();
+		void resetPreferredMagnitudeSelection();
 
 
 	private:

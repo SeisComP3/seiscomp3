@@ -69,6 +69,63 @@ using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Math;
 
 
+namespace {
+
+
+struct CommitOptions {
+	CommitOptions()
+	: valid(false)
+	, forceEventAssociation(false)
+	, fixOrigin(false)
+	, returnToEventList(false) {}
+
+	bool                       valid;
+	bool                       forceEventAssociation;
+	bool                       fixOrigin;
+	bool                       returnToEventList;
+	OPT(EventType)             eventType;
+	OPT(EventTypeCertainty)    eventTypeCertainty;
+	OPT(OPT(EvaluationStatus)) originStatus;
+	OPT(string)                magnitudeType;
+	string                     eventName;
+	string                     eventComment;
+};
+
+
+QString toString(const CommitOptions &opts) {
+	QString s = QString(
+		"Force event association: %1\n"
+		"Fix origin: %2\n"
+		"Return to list: %3"
+	)
+	.arg(opts.forceEventAssociation ? "yes" : "no")
+	.arg(opts.fixOrigin ? "yes" : "no")
+	.arg(opts.returnToEventList ? "yes" : "no");
+
+	if ( opts.eventType )
+		s += QString("\nEvent type: %1").arg(opts.eventType->toString());
+	if ( opts.eventTypeCertainty )
+		s += QString("\nEvent type certainty: %1").arg(opts.eventTypeCertainty->toString());
+	if ( opts.originStatus )
+		s += QString("\nOrigin status: %1").arg((*opts.originStatus)->toString());
+	if ( opts.magnitudeType ) {
+		if ( !opts.magnitudeType->empty() )
+			s += QString("\nMagnitude type: %1").arg(opts.magnitudeType->c_str());
+		else
+			s += QString("\nUnfix magnitude type");
+	}
+	if ( !opts.eventName.empty() )
+		s += QString("\nEvent name: %1").arg(opts.eventName.c_str());
+	if ( !opts.eventComment.empty() )
+		s += QString("\nEvent comment: %1").arg(opts.eventComment.c_str());
+
+	return s;
+}
+
+
+}
+
+
 namespace Seiscomp {
 namespace Gui {
 
@@ -308,9 +365,9 @@ class RenamePhases : public QDialog {
 };
 
 
-class CommitOptions : public QDialog {
+class OriginCommitOptions : public QDialog {
 	public:
-		CommitOptions(QWidget *parent = 0, Qt::WindowFlags f = 0)
+		OriginCommitOptions(QWidget *parent = 0, Qt::WindowFlags f = 0)
 		: QDialog(parent, f) {
 			ui.setupUi(this);
 
@@ -2394,6 +2451,8 @@ void OriginLocatorView::init() {
 	_commitMenu = new QMenu(this);
 	_actionCommitOptions = _commitMenu->addAction("With additional options...");
 
+	_ui.btnCommit->setMenu(_commitMenu);
+
 	_ui.editFixedDepth->setValidator(new QDoubleValidator(0, 1000.0, 3, _ui.editFixedDepth));
 	_ui.editDistanceCutOff->setValidator(new QDoubleValidator(0, 25000.0, 3, _ui.editFixedDepth));
 	_ui.editDistanceCutOff->setText("1000");
@@ -2692,6 +2751,147 @@ void OriginLocatorView::init() {
 		}
 	}
 	catch ( ... ) {}
+
+	// Commit bags
+	set<string> profiles;
+	string customConfigPrefix = "olv.customCommits.";
+	Seiscomp::Config::SymbolTable::iterator it = SCApp->configuration().symbolTable()->begin();
+	for ( ; it != SCApp->configuration().symbolTable()->end(); ++it ) {
+		const string &param = (*it)->name;
+		if ( param.compare(0, customConfigPrefix.size(), customConfigPrefix) ) continue;
+		size_t pos = param.find('.', customConfigPrefix.size());
+		if ( pos == string::npos ) continue;
+		string profile = param.substr(customConfigPrefix.size(), pos-customConfigPrefix.size());
+		if ( profiles.find(profile) != profiles.end() ) continue;
+		profiles.insert(profile);
+
+		QLayout *toolBarLayout = _ui.toolButtonGroupBox->layout()->itemAt(1)->layout();
+		string prefix = customConfigPrefix + profile + ".";
+
+		try {
+			if ( !SCApp->configGetBool(prefix + "enable") )
+				continue;
+		}
+		catch ( ...) {}
+
+		CommitOptions customOptions;
+		// Configure the commit+ button
+		try {
+			customOptions.forceEventAssociation = SCApp->configGetBool(prefix + "forceEventAssociation");
+		}
+		catch ( ... ) {}
+
+		try {
+			customOptions.fixOrigin = SCApp->configGetBool(prefix + "fixOrigin");
+		}
+		catch ( ... ) {}
+
+		try {
+			customOptions.returnToEventList = SCApp->configGetBool(prefix + "returnToEventList");
+		}
+		catch ( ... ) {}
+
+		try {
+			EventType et;
+			if ( et.fromString(SCApp->configGetString(prefix + "eventType")) )
+				customOptions.eventType = et;
+			else {
+				QMessageBox::critical(this, "Error",
+				                      QString("Invalid '%1eventType': %2")
+				                      .arg(prefix.c_str())
+				                      .arg(SCApp->configGetString("olv.commit.bulk.eventType").c_str()));
+				continue;
+			}
+		}
+		catch ( ... ) {}
+
+		try {
+			EventTypeCertainty etc;
+			if ( etc.fromString(SCApp->configGetString(prefix + "eventTypeCertainty")) )
+				customOptions.eventTypeCertainty = etc;
+			else {
+				QMessageBox::critical(this, "Error",
+				                      QString("Invalid '%1eventTypeCertainty': %2")
+				                      .arg(prefix.c_str())
+				                      .arg(SCApp->configGetString("olv.commit.bulk.eventTypeCertainty").c_str()));
+				continue;
+			}
+		}
+		catch ( ... ) {}
+
+		try {
+			EvaluationStatus stat;
+			string strStat = SCApp->configGetString(prefix + "originStatus");
+			if ( strStat.empty() )
+				customOptions.originStatus = OPT(EvaluationStatus)();
+			else if ( stat.fromString(strStat) )
+				customOptions.originStatus = OPT(EvaluationStatus)(stat);
+			else {
+				QMessageBox::critical(this, "Error",
+				                      QString("Invalid '%1originStatus': %2")
+				                      .arg(prefix.c_str())
+				                      .arg(SCApp->configGetString("olv.commit.bulk.originStatus").c_str()));
+				continue;
+			}
+		}
+		catch ( ... ) {}
+
+		try {
+			customOptions.magnitudeType = SCApp->configGetString(prefix + "magnitudeType");
+		}
+		catch ( ... ) {}
+
+		try {
+			customOptions.eventName = SCApp->configGetString(prefix + "eventName");
+		}
+		catch ( ... ) {}
+
+		try {
+			customOptions.eventComment = SCApp->configGetString(prefix + "eventComment");
+		}
+		catch ( ... ) {}
+
+		QToolButton *button = new QToolButton(_ui.toolButtonGroupBox);
+
+		try {
+			button->setText(SCApp->configGetString(prefix + "label").c_str());
+		}
+		catch ( ...) {
+			button->setText(QString("Commit #%1").arg(profiles.size()));
+		}
+
+		try {
+			QColor col = SCApp->configGetColor(prefix + "color", QColor());
+			if ( col.isValid() ) {
+				QPalette pal = button->palette();
+				pal.setColor(QPalette::Button, col);
+				button->setPalette(pal);
+			}
+		}
+		catch ( ...) {}
+
+		try {
+			QColor col = SCApp->configGetColor(prefix + "colorText", QColor());
+			if ( col.isValid() ) {
+				QPalette pal = button->palette();
+				pal.setColor(QPalette::ButtonText, col);
+				button->setPalette(pal);
+			}
+		}
+		catch ( ...) {}
+
+		customOptions.valid = true;
+		button->setProperty("customCommit", QVariant::fromValue<CommitOptions>(customOptions));
+
+		try {
+			if ( SCApp->configGetBool(prefix + "tooltip") )
+				button->setToolTip(toString(customOptions));
+		}
+		catch ( ... ) {}
+
+		toolBarLayout->addWidget(button);
+		connect(button, SIGNAL(clicked()), this, SLOT(customCommit()));
+	}
 
 	resetCustomLabels();
 }
@@ -3560,8 +3760,8 @@ void OriginLocatorView::setPickerView(PickerView* picker) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginLocatorView::addObject(const QString& parentID, Seiscomp::DataModel::Object *o) {
-	if ( _baseEvent && _currentOrigin ) {
+void OriginLocatorView::addObject(const QString &parentID, Seiscomp::DataModel::Object *o) {
+	if ( _currentOrigin && _baseEvent ) {
 		OriginReferencePtr ref = OriginReference::Cast(o);
 		if ( ref && parentID == _baseEvent->publicID().c_str() ) {
 			OriginPtr o = Origin::Find(ref->originID());
@@ -3625,13 +3825,17 @@ void OriginLocatorView::setOrigin(Seiscomp::DataModel::Origin* o) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::setBaseEvent(DataModel::Event *e) {
-	_baseEvent = e;
+	if ( !_baseEvent && e ) {
+		_baseEvent = e;
+		emit baseEventSet();
+	}
+	else
+		_baseEvent = e;
+
 	_preferredFocMech = string();
 
 	//static_cast<PlotWidget*>(_residuals)->setPreferredFM(355,60,41);
 	//return;
-
-	_ui.btnCommit->setMenu(_baseEvent?_commitMenu:NULL);
 
 	if ( _baseEvent ) {
 		_ui.labelEventID->setText(_baseEvent->publicID().c_str());
@@ -5269,6 +5473,18 @@ void OriginLocatorView::magnitudeRemoved(const QString &id, Seiscomp::DataModel:
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::magnitudeSelected(const QString &id, Seiscomp::DataModel::Magnitude *mag) {
+	if ( mag )
+		_actionCommitOptions->setProperty("EvPrefMagType", QString(mag->type().c_str()));
+	else
+		_actionCommitOptions->setProperty("EvPrefMagType", QVariant());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::pushUndo() {
 	_undoList.push(
 		OriginMemento(
@@ -5680,7 +5896,7 @@ void OriginLocatorView::commit(bool associate) {
 		}
 	}
 
-	if ( /*_currentOrigin == _baseOrigin || */ !_localOrigin )
+	if ( !_localOrigin )
 		emit updatedOrigin(_currentOrigin.get());
 	else
 		emit committedOrigin(_currentOrigin.get(),
@@ -5710,6 +5926,56 @@ void OriginLocatorView::commit(bool associate) {
 
 	emit undoStateChanged(!_undoList.isEmpty());
 	emit redoStateChanged(!_redoList.isEmpty());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::customCommit() {
+	CommitOptions customOptions = sender()->property("customCommit").value<CommitOptions>();
+
+	QString fixedMagnitudeType = _actionCommitOptions->property("EvPrefMagType").toString();
+	if ( !fixedMagnitudeType.isEmpty() ) {
+		QMessageBox::StandardButton res = QMessageBox::NoButton;
+
+		// Is there a magnitude type override
+		if ( customOptions.magnitudeType ) {
+			if ( *customOptions.magnitudeType != fixedMagnitudeType.toStdString() ) {
+				res = QMessageBox::question(this,
+					tr("Magnitude type"),
+					tr("The commit requests to set the preferred magnitude type to '%1' "
+					   "whereas the new preferred magnitude '%2' is currently selected.\n"
+					   "Would you like to proceed with your selection?")
+					.arg(customOptions.magnitudeType->c_str())
+					.arg(fixedMagnitudeType),
+					QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
+				);
+			}
+		}
+		else {
+			res = QMessageBox::question(this,
+				tr("Magnitude type"),
+				tr("The new preferred magnitude '%1' is currently selected.\n"
+				   "Would you like to proceed with your selection?")
+				.arg(fixedMagnitudeType),
+				QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
+			);
+		}
+
+		if ( res == QMessageBox::Cancel )
+			return;
+
+		if ( res == QMessageBox::Yes )
+			customOptions.magnitudeType = fixedMagnitudeType.toStdString();
+	}
+
+	if ( customOptions.valid )
+		commitWithOptions(&customOptions);
+	else
+		QMessageBox::critical(this, "Internal Error",
+		                      tr("No options connected with commit button"));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -5829,9 +6095,8 @@ void OriginLocatorView::commitFocalMechanism(bool withMT, QPoint pos) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::commitWithOptions() {
-	CommitOptions dlg;
+	OriginCommitOptions dlg;
 	int idx;
-	string eqName, eqComment;
 
 	try {
 		if ( SCApp->configGetBool("olv.commit.forceEventAssociation") == false ) {
@@ -5846,6 +6111,14 @@ void OriginLocatorView::commitWithOptions() {
 		}
 	}
 	catch ( ... ) {}
+
+	QString fixedMagnitudeType = _actionCommitOptions->property("EvPrefMagType").toString();
+	if ( fixedMagnitudeType.isEmpty() ) {
+		dlg.ui.cbFixMagnitudeType->setEnabled(false);
+		dlg.ui.cbFixMagnitudeType->setVisible(false);
+	}
+	else
+		dlg.ui.cbFixMagnitudeType->setText(dlg.ui.cbFixMagnitudeType->text().arg(fixedMagnitudeType));
 
 	vector<string> commentOptions;
 	try {
@@ -5872,11 +6145,12 @@ void OriginLocatorView::commitWithOptions() {
 		if ( idx >= 0 ) dlg.ui.comboEventTypes->setCurrentIndex(idx);
 	}
 
-	if ( !_baseEvent ) {
-		dlg.ui.cbAssociate->setText(QString(dlg.ui.cbAssociate->text()).arg("[]"));
-		dlg.ui.frameEventOptions->setEnabled(false);
+	if ( !_baseEvent || !_localOrigin ) {
+		dlg.ui.cbAssociate->setVisible(false);
+		dlg.ui.cbAssociate->setEnabled(false);
 	}
-	else {
+
+	if ( _baseEvent ) {
 		dlg.ui.cbAssociate->setText(QString(dlg.ui.cbAssociate->text()).arg(_baseEvent->publicID().c_str()));
 
 		idx = -1;
@@ -5906,32 +6180,32 @@ void OriginLocatorView::commitWithOptions() {
 		// Fill earthquake name
 		for ( size_t i = 0; i < _baseEvent->eventDescriptionCount(); ++i ) {
 			if ( _baseEvent->eventDescription(i)->type() == EARTHQUAKE_NAME ) {
-				eqName = _baseEvent->eventDescription(i)->text();
-				dlg.ui.editEQName->setText(eqName.c_str());
+				dlg.ui.editEQName->setText(_baseEvent->eventDescription(i)->text().c_str());
 				break;
 			}
 		}
 
 		// Fill operator's comment
 		for ( size_t i = 0; i < _baseEvent->commentCount(); ++i ) {
+			string eventComment;
 			if ( _baseEvent->comment(i)->id() == "Operator" ) {
-				eqComment = _baseEvent->comment(i)->text();
+				eventComment = _baseEvent->comment(i)->text();
 				if ( commentOptions.empty() ) {
-					dlg.ui.editEQComment->setText(eqComment.c_str());
+					dlg.ui.editEQComment->setText(eventComment.c_str());
 				}
-				else if ( !eqComment.empty() ) {
+				else if ( !eventComment.empty() ) {
 					// search for current comment in list of available options,
 					// add and select it in case it is not present
 					int idx = -1, i = 1;
 					for ( vector<string>::const_iterator it = commentOptions.begin();
 					      it != commentOptions.end(); ++it, ++i ) {
-						if ( *it == eqComment ) {
+						if ( *it == eventComment ) {
 							idx = i;
 							break;
 						}
 					}
 					if ( idx < 0 ) {
-						dlg.ui.comboEQComment->insertItem(1, eqComment.c_str());
+						dlg.ui.comboEQComment->insertItem(1, eventComment.c_str());
 						idx = 1;
 					}
 					dlg.ui.comboEQComment->setCurrentIndex(idx);
@@ -5955,74 +6229,197 @@ void OriginLocatorView::commitWithOptions() {
 	if ( idx != -1 )
 		dlg.ui.comboOriginStates->setCurrentIndex(idx);
 
-	// If a new origin is about to be sent, deactive the
-	// update option since updating is not possible.
-	if ( _currentOrigin != _baseOrigin )
-		dlg.ui.cbUpdateOrigin->setEnabled(false);
-
 	if ( dlg.exec() == QDialog::Rejected )
 		return;
 
-	if ( dlg.ui.cbUpdateOrigin->isChecked() ) {
-		if ( !_newOriginStatus.fromString(qPrintable(dlg.ui.comboOriginStates->currentText())) )
+	CommitOptions options;
+
+	options.forceEventAssociation = dlg.ui.cbAssociate->isEnabled() && dlg.ui.cbAssociate->isChecked();
+	options.fixOrigin = dlg.ui.cbFixSolution->isChecked();
+	options.returnToEventList = dlg.ui.cbBackToEventList->isChecked();
+
+	if ( dlg.ui.comboEventTypes->currentIndex() > 0 ) {
+		EventType type;
+		if ( type.fromString(dlg.ui.comboEventTypes->currentText().toStdString()) )
+			options.eventType = type;
+		else {
+			QMessageBox::critical(this, "Internal Error", "Invalid event type selected");
+			return;
+		}
+	}
+
+	if ( dlg.ui.comboEventTypeCertainty->currentIndex() > 0 ) {
+		EventTypeCertainty typeCertainty;
+		if ( typeCertainty.fromString(dlg.ui.comboEventTypeCertainty->currentText().toStdString()) )
+			options.eventTypeCertainty = typeCertainty;
+		else {
+			QMessageBox::critical(this, "Internal Error", "Invalid event type certainty selected");
+			return;
+		}
+	}
+
+	if ( dlg.ui.comboOriginStates->currentIndex() > 0 ) {
+		EvaluationStatus originStatus;
+		if ( originStatus.fromString(dlg.ui.comboOriginStates->currentText().toStdString()) )
+			options.originStatus = OPT(EvaluationStatus)(originStatus);
+		else {
+			QMessageBox::critical(this, "Internal Error", "Invalid origin evaluation status selected");
+			return;
+		}
+	}
+
+	if ( dlg.ui.cbFixMagnitudeType->isEnabled() ) {
+		if ( dlg.ui.cbFixMagnitudeType->isChecked() )
+			options.magnitudeType = fixedMagnitudeType.toStdString();
+	}
+
+	options.eventName = dlg.ui.editEQName->text().toStdString();
+
+	if ( commentOptions.empty() )
+		options.eventComment = dlg.ui.editEQComment->text().toStdString();
+	else
+		options.eventComment = dlg.ui.comboEQComment->currentText().toStdString();
+
+	commitWithOptions(&options);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::commitWithOptions(const void *options_ptr) {
+	const CommitOptions &options = *reinterpret_cast<const CommitOptions*>(options_ptr);
+	if ( options.originStatus ) {
+		if ( _localOrigin ) {
+			_currentOrigin->setEvaluationStatus(*options.originStatus);
+
+			// Do not override the status in commit
+			_newOriginStatus = EvaluationStatus::Quantity;
+			commit(options.forceEventAssociation);
 			_newOriginStatus = CONFIRMED;
+		}
+		else {
+			OPT(EvaluationStatus) os;
+			try { os = _currentOrigin->evaluationStatus(); } catch ( ... ) {}
 
-		if ( dlg.ui.comboOriginStates->currentIndex() > 0 )
-			_currentOrigin->setEvaluationStatus(_newOriginStatus);
-		else
-			_currentOrigin->setEvaluationStatus(Core::None);
+			if ( os != *options.originStatus ) {
+				_currentOrigin->setEvaluationStatus(*options.originStatus);
 
-		// Do not override the status in commit
-		_newOriginStatus = EvaluationStatus::Quantity;
-		commit(dlg.ui.cbAssociate->isChecked());
-		_newOriginStatus = CONFIRMED;
+				_newOriginStatus = EvaluationStatus::Quantity;
+				commit();
+				_newOriginStatus = CONFIRMED;
+			}
+		}
+	}
+
+	// wait for event
+	if ( !_baseEvent || (!options.forceEventAssociation && _localOrigin) ) {
+		QProgressDialog progress("Origin has not been associated with an event yet.\n"
+		                         "Waiting for event association ...\n"
+		                         "Hint: scevent should run",
+		                         "Cancel", 0, 0);
+		progress.setAutoClose(true);
+		progress.setWindowModality(Qt::ApplicationModal);
+		connect(this, SIGNAL(baseEventSet()), &progress, SLOT(cancel()));
+		progress.exec();
 	}
 
 	// Do event specific things
 	if ( _baseEvent ) {
-		std::string type, newType, typeCertainty, newTypeCertainty;
+		string type, newType,typeCertainty, newTypeCertainty;
+		string name, comment;
 
-		if ( dlg.ui.comboEventTypes->currentIndex() > 0 )
-			newType = dlg.ui.comboEventTypes->currentText().toStdString();
+		if ( options.eventType )
+			newType = options.eventType->toString();
 
-		try {
-			type = _baseEvent->type().toString();
-		}
+		try { type = _baseEvent->type().toString(); }
 		catch ( ... ) {}
 
-		if ( dlg.ui.comboEventTypeCertainty->currentIndex() > 0 )
-			newTypeCertainty = dlg.ui.comboEventTypeCertainty->currentText().toStdString();
+		if ( options.eventTypeCertainty )
+			newTypeCertainty = options.eventTypeCertainty->toString();
 
-		try {
-			typeCertainty = _baseEvent->typeCertainty().toString();
-		}
+		try { typeCertainty = _baseEvent->typeCertainty().toString(); }
 		catch ( ... ) {}
 
-		bool ok = true;
+		EventDescription *desc = _baseEvent->eventDescription(EventDescriptionIndex(EARTHQUAKE_NAME));
+		if ( desc )
+			name = desc->text();
 
-		string newEQComment = commentOptions.empty()?
-		                      dlg.ui.editEQComment->text().toStdString() :
-		                      dlg.ui.comboEQComment->currentText().toStdString();
-		if ( ok && eqComment != newEQComment ) {
-			ok = sendJournal(_baseEvent->publicID(), "EvOpComment", newEQComment);
+		Comment *cmt = _baseEvent->comment(CommentIndex("Operator"));
+		if ( cmt )
+			comment = cmt->text();
+
+		NotifierMessagePtr nm = new NotifierMessage;
+
+		if ( comment != options.eventComment )
+			nm->attach(createJournal(_baseEvent->publicID(), "EvOpComment", options.eventComment));
+
+		if ( name != options.eventName )
+			nm->attach(createJournal(_baseEvent->publicID(), "EvName", options.eventName));
+
+		if ( type != newType )
+			nm->attach(createJournal(_baseEvent->publicID(), "EvType", newType));
+
+		if ( typeCertainty != newTypeCertainty )
+			nm->attach(createJournal(_baseEvent->publicID(), "EvTypeCertainty", newTypeCertainty));
+
+		if ( options.fixOrigin )
+			nm->attach(createJournal(_baseEvent->publicID(), "EvPrefOrgID", _currentOrigin->publicID()));
+
+		if ( options.magnitudeType ) {
+			if ( !options.magnitudeType->empty() ) {
+				// Only attach the fix command if the requested type is not fixed already
+				if ( _reader ) {
+					DatabaseIterator it;
+					string lastFix;
+					it = _reader->getJournalAction(_baseEvent->publicID(), "EvPrefMagType");
+					while ( *it ) {
+						lastFix = JournalEntry::Cast(*it)->parameters();
+						++it;
+					}
+					it.close();
+
+					if ( lastFix != *options.magnitudeType )
+						nm->attach(createJournal(_baseEvent->publicID(), "EvPrefMagType", *options.magnitudeType));
+				}
+				else
+					nm->attach(createJournal(_baseEvent->publicID(), "EvPrefMagType", *options.magnitudeType));
+			}
+			else {
+				// Only attach the unfix command if currently a type is fixed
+				if ( _reader ) {
+					DatabaseIterator it;
+					string lastFix;
+					it = _reader->getJournalAction(_baseEvent->publicID(), "EvPrefMagType");
+					while ( *it ) {
+						lastFix = JournalEntry::Cast(*it)->parameters();
+						++it;
+					}
+					it.close();
+
+					if ( !lastFix.empty() )
+						nm->attach(createJournal(_baseEvent->publicID(), "EvPrefMagType", ""));
+				}
+				else
+					nm->attach(createJournal(_baseEvent->publicID(), "EvPrefMagType", ""));
+			}
 		}
 
-		if ( ok && eqName != dlg.ui.editEQName->text().toStdString() ) {
-			eqName = dlg.ui.editEQName->text().toStdString();
-			ok = sendJournal(_baseEvent->publicID(), "EvName", eqName);
+		if ( !nm->empty() ) {
+			if ( SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get()) ) {
+				NotifierMessage::iterator it;
+				for ( it = nm->begin(); it != nm->end(); ++ it )
+					SCApp->emitNotifier(it->get());
+			}
 		}
-
-		if ( ok && (type != newType) )
-			ok = sendJournal(_baseEvent->publicID(), "EvType", newType);
-
-		if ( ok && (typeCertainty != newTypeCertainty) )
-			ok = sendJournal(_baseEvent->publicID(), "EvTypeCertainty", newTypeCertainty);
-
-		if ( ok && dlg.ui.cbFixSolution->isChecked() && dlg.ui.cbAssociate->isChecked() )
-			sendJournal(_baseEvent->publicID(), "EvPrefOrgID", _currentOrigin->publicID());
+		else {
+			QMessageBox::information(this, tr("Update"),
+			                         tr("Event is already up to date, nothing to do"));
+		}
 	}
 
-	if ( dlg.ui.cbBackToEventList->isChecked() )
+	if ( options.returnToEventList )
 		emit eventListRequested();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -6031,9 +6428,10 @@ void OriginLocatorView::commitWithOptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginLocatorView::sendJournal(const std::string &objectID,
-                                    const std::string &action,
-                                    const std::string &params) {
+DataModel::Notifier *
+OriginLocatorView::createJournal(const std::string &objectID,
+                                 const std::string &action,
+                                 const std::string &params) {
 	/*
 	if ( _updateLocalEPInstance ) {
 		NotifierPtr notifier;
@@ -6059,18 +6457,31 @@ bool OriginLocatorView::sendJournal(const std::string &objectID,
 
 		if ( notifier ) SCApp->emitNotifier(notifier.get());
 	}
-	else */{
+	else */ {
 		JournalEntryPtr entry = new JournalEntry;
 		entry->setObjectID(objectID);
 		entry->setAction(action);
 		entry->setParameters(params);
 		entry->setSender(SCApp->author());
 		entry->setCreated(Core::Time::GMT());
+		return new Notifier("Journaling", OP_ADD, entry.get());
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
-		NotifierMessagePtr nm = new NotifierMessage;
-		nm->attach(n.get());
-		return SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get());
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool OriginLocatorView::sendJournal(const std::string &objectID,
+                                    const std::string &action,
+                                    const std::string &params) {
+	NotifierPtr n = createJournal(objectID, action, params);
+	NotifierMessagePtr nm = new NotifierMessage;
+	nm->attach(n.get());
+	if ( SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get()) ) {
+		SCApp->emitNotifier(n.get());
+		return true;
 	}
 
 	return false;
@@ -6579,3 +6990,6 @@ void OriginLocatorView::evaluateOrigin(Seiscomp::DataModel::Origin *org,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
+
+
+Q_DECLARE_METATYPE(CommitOptions)
