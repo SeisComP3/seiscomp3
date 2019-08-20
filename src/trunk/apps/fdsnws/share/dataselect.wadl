@@ -1,5 +1,8 @@
-<application xmlns="http://wadl.dev.java.net/2009/02"
-		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://www.w3.org/Submission/wadl/wadl.xsd"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns="http://wadl.dev.java.net/2009/02">
 	<resources base="/fdsnws/dataselect/1">
 		<resource path="query">
 			<method href="#queryGET"/>
@@ -8,13 +11,6 @@
 		<resource path="queryauth">
 			<method href="#queryGET"/>
 			<method href="#queryPOST"/>
-		</resource>
-		<resource path="auth">
-			<method name="POST">
-				<response>
-					<representation mediaType="text/plain"/>
-				</response>
-			</method>
 		</resource>
 		<resource path="version">
 			<method name="GET">

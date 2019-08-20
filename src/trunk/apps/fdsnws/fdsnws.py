@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-################################################################################
+###############################################################################
 # Copyright (C) 2013-2014 by gempa GmbH
 #
 # FDSNWS -- Implements FDSN Web Service interface, see
@@ -10,10 +10,11 @@
 #   fdsnws-dataselect
 #   fdsnws-event
 #   fdsnws-station
+#   fdsnws-availability
 #
 # Author:  Stephan Herrnkind
 # Email:   herrnkind@gempa.de
-################################################################################
+###############################################################################
 
 
 import os
@@ -41,16 +42,20 @@ except ImportError, e:
     sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
 
 from seiscomp3.fdsnws import utils
-from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, FDSNDataSelectAuthRealm
+from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, \
+     FDSNDataSelectAuthRealm
 from seiscomp3.fdsnws.dataselect import VERSION as DataSelectVersion
 from seiscomp3.fdsnws.event import FDSNEvent
 from seiscomp3.fdsnws.event import VERSION as EventVersion
 from seiscomp3.fdsnws.station import FDSNStation
 from seiscomp3.fdsnws.station import VERSION as StationVersion
-from seiscomp3.fdsnws.availability import AvailabilityExtent, AvailabilityQuery
+from seiscomp3.fdsnws.availability import FDSNAvailabilityQuery, \
+     FDSNAvailabilityQueryRealm, FDSNAvailabilityQueryAuthRealm, \
+     FDSNAvailabilityExtent, FDSNAvailabilityExtentRealm, \
+     FDSNAvailabilityExtentAuthRealm
 from seiscomp3.fdsnws.availability import VERSION as AvailabilityVersion
-from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
-    Site, ServiceVersion, AuthResource, WADLFilter
+from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, \
+     NoResource, Site, ServiceVersion, AuthResource, WADLFilter
 from seiscomp3.fdsnws.log import Log
 
 
@@ -68,7 +73,7 @@ def logSC3(entry):
         pass
 
 
-################################################################################
+###############################################################################
 # Fixes bug of DigestCredentialFactory by overriding decode method,
 # see http://twistedmatrix.com/trac/ticket/6445
 class BugfixedDigest(credentials.DigestCredentialFactory):
@@ -113,7 +118,7 @@ class BugfixedDigest(credentials.DigestCredentialFactory):
                                                    auth)
 
 
-################################################################################
+###############################################################################
 # Make CORS work with queryauth
 class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
     def __init__(self, *args, **kwargs):
@@ -128,52 +133,52 @@ class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
             return guard.HTTPAuthSessionWrapper.render(self, request)
 
 
-################################################################################
+###############################################################################
 class UsernamePasswordChecker(object):
     implements(checkers.ICredentialsChecker)
 
     credentialInterfaces = (credentials.IUsernamePassword,
                             credentials.IUsernameHashedPassword)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __init__(self, userdb):
         self.__userdb = userdb
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __cbPasswordMatch(self, matched, username):
         if matched:
             return username
         else:
             return failure.Failure(error.UnauthorizedLogin())
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def requestAvatarId(self, credentials):
         return defer.maybeDeferred(self.__userdb.checkPassword, credentials) \
             .addCallback(self.__cbPasswordMatch, str(credentials.username))
 
 
-################################################################################
+###############################################################################
 class UserDB(object):
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __init__(self):
         self.__users = {}
         self.__blacklist = set()
         task.LoopingCall(self.__expireUsers).start(60, False)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __expireUsers(self):
         for (name, (password, attributes, expires)) in self.__users.items():
             if time.time() > expires:
                 Logging.info("de-registering %s" % name)
                 del self.__users[name]
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def blacklistUser(self, name):
         Logging.info("blacklisting %s" % name)
         self.__blacklist.add(name)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def addUser(self, name, attributes, expires, data):
         try:
             password = self.__users[name][0]
@@ -187,7 +192,7 @@ class UserDB(object):
         self.__users[name] = (password, attributes, expires)
         return password
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def checkPassword(self, credentials):
         try:
             pw = self.__users[str(credentials.username)][0]
@@ -197,11 +202,11 @@ class UserDB(object):
 
         return credentials.checkPassword(pw)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def getAttributes(self, name):
         return self.__users[name][1]
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def dump(self):
         Logging.info("known users:")
 
@@ -209,14 +214,14 @@ class UserDB(object):
             Logging.info(" %s %s %d" % (name, user[1], user[2]))
 
 
-################################################################################
+###############################################################################
 class Access(object):
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __init__(self):
         self.__access = {}
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def initFromSC3Routing(self, routing):
         for i in xrange(routing.accessCount()):
             acc = routing.access(i)
@@ -236,12 +241,12 @@ class Access(object):
             self.__access.setdefault((net, sta, loc, cha), []) \
                 .append((user, start, end))
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __matchTime(self, t1, t2, accessStart, accessEnd):
         return (not accessStart or (t1 and t1 >= accessStart)) and \
             (not accessEnd or (t2 and t2 <= accessEnd))
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __matchEmail(self, emailAddress, accessUser):
         defaultPrefix = "mail:"
 
@@ -252,11 +257,11 @@ class Access(object):
                 (accessUser[:1] == '@' and emailAddress[:1] != '@' and
                  emailAddress.upper().endswith(accessUser.upper())))
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __matchAttribute(self, attribute, accessUser):
         return (attribute.upper() == accessUser.upper())
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def authorize(self, user, net, sta, loc, cha, t1, t2):
         if user['blacklisted']:
             return False
@@ -295,10 +300,10 @@ class Access(object):
         return False
 
 
-################################################################################
+###############################################################################
 class DataAvailabilityCache(object):
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __init__(self, app, da, validUntil):
         self._da = da
         self._validUntil = validUntil
@@ -326,8 +331,9 @@ class DataAvailabilityCache(object):
 
             # create a list of (extent, oid, restricted) tuples sorted by stream
             self._extentsSorted = [(e, app.query().getCachedId(e), res)
-                                   for wid, (e, res) in sorted(self._extents.iteritems(),
-                                                               key=lambda t: t[0])]
+                                   for wid, (e, res) in sorted(
+                                       self._extents.iteritems(),
+                                       key=lambda t: t[0])]
 
             # create a dictionary of object ID to extents
             self._extentsOID = dict((oid, (e, res))
@@ -335,11 +341,11 @@ class DataAvailabilityCache(object):
 
         Logging.info("loaded %i extents" % len(self._extents))
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def validUntil(self):
         return self._validUntil
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def extent(self, net, sta, loc, cha):
         wid = "%s.%s.%s.%s" % (net, sta, loc, cha)
         if wid in self._extents:
@@ -347,27 +353,27 @@ class DataAvailabilityCache(object):
 
         return None
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def extents(self):
         return self._extents
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def extentsSorted(self):
         return self._extentsSorted
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def extentsOID(self):
         return self._extentsOID
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def dataAvailability(self):
         return self._da
 
 
-################################################################################
+###############################################################################
 class FDSNWS(Application):
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def __init__(self):
         Application.__init__(self, len(sys.argv), sys.argv)
         self.setMessagingEnabled(True)
@@ -421,12 +427,13 @@ class FDSNWS(Application):
         self._authBlacklist = []
 
         self._userdb = UserDB()
-        self._access = Access()
+        self._access = None
+        self._checker = None
 
         # Leave signal handling to us
         Application.HandleSignals(False, False)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def initConfiguration(self):
         if not Application.initConfiguration(self):
             return False
@@ -675,9 +682,9 @@ class FDSNWS(Application):
         except Exception:
             pass
 
-        # If the database connection is passed via command line or configuration
-        # file then messaging is disabled. Messaging is only used to get
-        # the configured database connection URI.
+        # If the database connection is passed via command line or
+        # configuration file then messaging is disabled. Messaging is only used
+        # to get the configured database connection URI.
         if self.databaseURI() != "":
             self.setMessagingEnabled(self._trackdbEnabled)
         else:
@@ -692,7 +699,7 @@ class FDSNWS(Application):
 
         return True
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # Signal handling in Python and fork in wrapped C++ code is not a good
     # combination. Without digging too much into the problem, forking the
     # process with os.fork() helps
@@ -705,7 +712,7 @@ class FDSNWS(Application):
         elif cp > 0:
             sys.exit(0)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def getDACache(self):
         if not self._daEnabled:
             return None
@@ -748,13 +755,13 @@ class FDSNWS(Application):
 
         return types
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _formatEventTypes(self, types):
         return ",".join(["unknown" if i < 0 else
                          DataModel.EEventTypeNames.name(i)
                          for i in sorted(types)])
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _site(self):
         modeStr = None
         if self._evaluationMode is not None:
@@ -871,7 +878,12 @@ class FDSNWS(Application):
             if not retn:
                 return None
 
-        self._access = Access()
+        if self._authEnabled:
+            self._access = Access()
+            self._checker = UsernamePasswordChecker(self._userdb)
+        else:
+            self.access = Access() if self._useArclinkAccess else None
+            self._checker = checkers.FilePasswordDB(self._htpasswd)
 
         if self._serveDataSelect and self._useArclinkAccess:
             self._access.initFromSC3Routing(self.query().loadRouting())
@@ -906,15 +918,30 @@ class FDSNWS(Application):
             dataselect1 = DirectoryResource(lstFile, DataSelectVersion)
             dataselect.putChild('1', dataselect1)
 
+            # query
             dataselect1.putChild('query', FDSNDataSelect(
                 dataSelectInv, self._recordBulkSize))
+
+            # queryauth
+            if self._authEnabled:
+                realm = FDSNDataSelectAuthRealm(dataSelectInv,
+                    self._recordBulkSize, self._access, self._userdb)
+            else:
+                realm = FDSNDataSelectRealm(dataSelectInv,
+                    self._recordBulkSize, self._access)
             msg = 'authorization for restricted time series data required'
-            authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
+            authSession = self._getAuthSessionWrapper(realm, msg)
             dataselect1.putChild('queryauth', authSession)
+
+            # version
             dataselect1.putChild('version', ServiceVersion(DataSelectVersion))
             fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
             fileRes.childNotFound = NoResource(DataSelectVersion)
+
+            # application.wadl
             dataselect1.putChild('application.wadl', fileRes)
+
+            # builder
             fileRes = static.File(os.path.join(
                 shareDir, 'dataselect-builder.html'))
             fileRes.childNotFound = NoResource(DataSelectVersion)
@@ -932,23 +959,34 @@ class FDSNWS(Application):
             event1 = DirectoryResource(lstFile, EventVersion)
             event.putChild('1', event1)
 
+            # query
             event1.putChild('query', FDSNEvent(self._hideAuthor,
                                                self._evaluationMode,
                                                self._eventTypeWhitelist,
                                                self._eventTypeBlacklist,
                                                self._eventFormats))
+
+            # catalogs
             fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
             fileRes.childNotFound = NoResource(EventVersion)
             event1.putChild('catalogs', fileRes)
+
+            # contributors
             fileRes = static.File(os.path.join(shareDir, 'contributors.xml'))
             fileRes.childNotFound = NoResource(EventVersion)
             event1.putChild('contributors', fileRes)
+
+            # version
             event1.putChild('version', ServiceVersion(EventVersion))
             fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
             fileRes.childNotFound = NoResource(EventVersion)
+
+            # application.wadl
             event1.putChild('application.wadl', fileRes)
             fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
             fileRes.childNotFound = NoResource(EventVersion)
+
+            # builder
             event1.putChild('builder', fileRes)
 
         # station
@@ -959,13 +997,16 @@ class FDSNWS(Application):
             station1 = DirectoryResource(lstFile, StationVersion)
             station.putChild('1', station1)
 
+            # query
             station1.putChild('query', FDSNStation(stationInv,
                                                    self._allowRestricted,
                                                    self._queryObjects,
                                                    self._daEnabled))
+
+            # version
             station1.putChild('version', ServiceVersion(StationVersion))
 
-            # wadl, optionally filtered
+            # application.wadl
             filterList = [] if self._daEnabled else ['name="matchtimeseries"']
             try:
                 fileRes = WADLFilter(os.path.join(shareDir, 'station.wadl'),
@@ -974,6 +1015,7 @@ class FDSNWS(Application):
                 fileRes = NoResource(StationVersion)
             station1.putChild('application.wadl', fileRes)
 
+            # builder
             fileRes = static.File(os.path.join(
                 shareDir, 'station-builder.html'))
             fileRes.childNotFound = NoResource(StationVersion)
@@ -1006,29 +1048,60 @@ class FDSNWS(Application):
             else:
                 self._openStreams = None
 
-            ext = ListingResource()
-            prefix.putChild('ext', ext)
             availability = ListingResource(AvailabilityVersion)
-            ext.putChild('availability', availability)
+            prefix.putChild('availability', availability)
             lstFile = os.path.join(shareDir, 'availability.html')
             availability1 = DirectoryResource(lstFile, AvailabilityVersion)
             availability.putChild('1', availability1)
 
-            availability1.putChild('extent', AvailabilityExtent())
-            availability1.putChild('query', AvailabilityQuery())
+            # query
+            availability1.putChild('query', FDSNAvailabilityQuery())
+
+            # queryauth
+            if self._authEnabled:
+                realm = FDSNAvailabilityQueryAuthRealm(self._access,
+                                                       self._userdb)
+            else:
+                realm = FDSNAvailabilityQueryRealm(self._access)
+            msg = 'authorization for restricted availability segment data ' \
+                  'required'
+            authSession = self._getAuthSessionWrapper(realm, msg)
+            availability1.putChild('queryauth', authSession)
+
+            # extent
+            availability1.putChild('extent', FDSNAvailabilityExtent())
+
+            # extentauth
+            if self._authEnabled:
+                realm = FDSNAvailabilityExtentAuthRealm(self._access,
+                                                        self._userdb)
+            else:
+                realm = FDSNAvailabilityExtentRealm(self._access)
+            msg = 'authorization for restricted availability extent data ' \
+                  'required'
+            authSession = self._getAuthSessionWrapper(realm, msg)
+            availability1.putChild('extentauth', authSession)
+
+            # version
             availability1.putChild(
                 'version', ServiceVersion(AvailabilityVersion))
-            fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
+
+            # application.wadl
+            fileRes = static.File(os.path.join(shareDir, 'availability.wadl'))
             fileRes.childNotFound = NoResource(AvailabilityVersion)
-            availability1.putChild('availability.wadl', fileRes)
+            availability1.putChild('application.wadl', fileRes)
+
+            # builder-query
             fileRes = static.File(os.path.join(
-                shareDir, 'availability-extent-builder.html'))
+                shareDir, 'availability-builder-query.html'))
+            fileRes.childNotFound = NoResource(AvailabilityVersion)
+            availability1.putChild('builder-query', fileRes)
+
+            # builder-extent
+            fileRes = static.File(os.path.join(
+                shareDir, 'availability-builder-extent.html'))
             fileRes.childNotFound = NoResource(AvailabilityVersion)
             availability1.putChild('builder-extent', fileRes)
-            fileRes = static.File(os.path.join(
-                shareDir, 'availability-builder.html'))
-            fileRes.childNotFound = NoResource(AvailabilityVersion)
-            availability1.putChild('builder', fileRes)
 
         # static files
         fileRes = static.File(os.path.join(shareDir, 'js'))
@@ -1043,7 +1116,7 @@ class FDSNWS(Application):
 
         return Site(root)
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _reloadTask(self):
         if not self.__sighup:
             return
@@ -1064,12 +1137,12 @@ class FDSNWS(Application):
 
         self._userdb.dump()
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _sighupHandler(self, signum, frame):
         Logging.info("SIGHUP received")
         self.__sighup = True
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def run(self):
         retn = False
         try:
@@ -1103,7 +1176,7 @@ class FDSNWS(Application):
 
         return retn
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _cloneInventory(self, inv):
         wasEnabled = DataModel.PublicObject.IsRegistrationEnabled()
         DataModel.PublicObject.SetRegistrationEnabled(False)
@@ -1132,7 +1205,7 @@ class FDSNWS(Application):
         DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
         return inv2
 
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     def _filterInventory(self, inv, fileName, serviceName=""):
         if not fileName:
             return True
@@ -1349,25 +1422,9 @@ class FDSNWS(Application):
 
         return True
 
-    #---------------------------------------------------------------------------
-    def _getAuthSessionWrapper(self, inv, msg):
-        if self._useArclinkAccess:
-            access = self._access
-
-        else:
-            access = None
-
-        if self._authEnabled:  # auth extension
-            access = self._access  # requires useArclinkAccess for security reasons
-            realm = FDSNDataSelectAuthRealm(
-                inv, self._recordBulkSize, access, self._userdb)
-            checker = UsernamePasswordChecker(self._userdb)
-
-        else:  # htpasswd
-            realm = FDSNDataSelectRealm(inv, self._recordBulkSize, access)
-            checker = checkers.FilePasswordDB(self._htpasswd)
-
-        p = portal.Portal(realm, [checker])
+    #--------------------------------------------------------------------------
+    def _getAuthSessionWrapper(self, realm, msg):
+        p = portal.Portal(realm, [self._checker])
         f = guard.DigestCredentialFactory('MD5', msg)
         f.digest = BugfixedDigest('MD5', msg)
         return HTTPAuthSessionWrapper(p, [f])
@@ -1377,4 +1434,4 @@ app = FDSNWS()
 sys.exit(app())
 
 
-# vim: ts=4 et
+# vim: ts=4 et tw=79

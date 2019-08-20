@@ -13,7 +13,7 @@ function serialize(form, loc='query') {
 		// the queryauth input is treated separately
 		if ( element.name === 'queryauth' ) {
 			if ( element.checked ) {
-				query = 'queryauth';
+				query = element.value;
 			}
 			continue;
 		}

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="author" content="gempa GmbH">
   <title>SeisComP3 - Data Availability</title>
-  <link rel="stylesheet" type="text/css" href="../../../css/fdsnws.css">
-  <link rel="stylesheet" type="text/css" href="../../../js/tcal/tcal.css">
-  <script type="text/javascript" src="../../../js/tcal/tcal.js"></script>
-  <script type="text/javascript" src="../../../js/fdsnws-query.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../css/fdsnws.css">
+  <link rel="stylesheet" type="text/css" href="../../js/tcal/tcal.css">
+  <script type="text/javascript" src="../../js/tcal/tcal.js"></script>
+  <script type="text/javascript" src="../../js/fdsnws-query.js"></script>
   <script type="text/javascript">
     A_TCALCONF['format'] = 'Y-m-dT00:00:00';
 
@@ -15,6 +15,7 @@
   </script>
 </head>
 <body>
+  <p><a href="./">Parent Directory</a></p>
   <h1>SeisComP3 Data Availability /query - URL Builder</h1>
   <form id="query-form" action="query" method="GET">
   <fieldset>
@@ -60,16 +61,26 @@
     </table>
   </fieldset>
   <fieldset>
-    <legend>Merge options</legend>
+    <legend>Service specific constrains</legend>
     <table class="builder">
       <tbody>
         <tr>
-          <td>Merge quality</td>
-          <td><input type="checkbox" name="mergequality" value="true" /></td>
+          <td>Merge properties</td>
+          <td>
+            <select name="merge" multiple>
+              <option value="samplerate">Sample rate</option>
+              <option value="quality">Quality</option>
+              <option value="overlap">Overlap</option>
+            </select>
+          </td>
         </tr>
         <tr>
-          <td>Merge sample rate</td>
-          <td><input type="checkbox" name="mergesamplerate" value="true" /></td>
+          <td>Gap merge tolerance</td>
+          <td><input type="number" name="mergegaps" min="0" value="" placeholder="0.0" /></td>
+        </tr>
+        <tr>
+          <td>Authentication</td>
+          <td><input type="checkbox" name="queryauth" value="queryauth"/></td>
         </tr>
       </tbody>
     </table>
@@ -78,6 +89,22 @@
     <legend>Output control</legend>
     <table class="builder">
       <tbody>
+        <tr>
+          <td>Order by</td>
+          <td>
+            <select name="orderby">
+              <option value="">Stream ID (default)</option>
+              <option value="timespancount">Number of timespans (ascending)</option>
+              <option value="timespancount_desc">Number of timespans (descending)</option>
+              <option value="latestupdate">Update date (ascending)</option>
+              <option value="latestupdate_desc">Update date (descending)</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Limit</td>
+          <td><input type="number" name="limit" min="0" step="10" value="" placeholder="100" /></td>
+        </tr>
         <tr>
           <td>Include restricted</td>
           <td><input type="checkbox" name="includerestricted" value="true" /></td>
@@ -89,7 +116,7 @@
               <option value="">Text (default)</option>
               <option value="geocsv">GEO CSV</option>
               <option value="json">JSON</option>
-              <option value="sync">Sync</option>
+              <option value="request">Request</option>
             </select>
           </td>
         </tr>
@@ -98,8 +125,12 @@
           <td><input type="checkbox" name="nodata" value="404" checked="checked" /></td>
         </tr>
         <tr>
-          <td>Show last update</td>
-          <td><input type="checkbox" name="showlastupdate" value="true" /></td>
+          <td>Show</td>
+          <td>
+            <select name="show" multiple>
+              <option value="latestupdate">Latest update</option>
+            </select>
+          </td>
         </tr>
         <tr>
           <td>Exclude too large</td>

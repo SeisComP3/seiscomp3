@@ -26,7 +26,7 @@ try:
 except ImportError, e:
     sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.2.3"
+VERSION = "1.2.4"
 
 ################################################################################
 
@@ -174,6 +174,7 @@ class ListingResource(BaseResource):
   <title>SeisComP3 FDSNWS Implementation</title>
 </head>
 <body>
+  <p><a href="../">Parent Directory</a></p>
   <h1>SeisComP3 FDSNWS Web Service</h1>
   <p>Index of %s</p>
   <ul>

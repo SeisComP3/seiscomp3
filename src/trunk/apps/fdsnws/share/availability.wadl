@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://www.w3.org/Submission/wadl/wadl.xsd"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns="http://wadl.dev.java.net/2009/02">
+	<resources base="/fdsnws/availability/1">
+		<resource path="query">
+			<method href="#queryGET"/>
+			<method href="#queryPOST"/>
+		</resource>
+		<resource path="queryauth">
+			<method href="#queryGET"/>
+			<method href="#queryPOST"/>
+		</resource>
+		<resource path="extent">
+			<method href="#extentGET"/>
+			<method href="#extentPOST"/>
+		</resource>
+		<resource path="extentauth">
+			<method href="#extentGET"/>
+			<method href="#extentPOST"/>
+		</resource>
+		<resource path="version">
+			<method name="GET">
+				<response>
+					<representation mediaType="text/plain"/>
+				</response>
+			</method>
+		</resource>
+		<resource path="application.wadl">
+			<method name="GET">
+				<response>
+					<representation mediaType="application/xml"/>
+				</response>
+			</method>
+		</resource>
+	</resources>
+	<method name="GET" id="queryGET">
+		<request>
+			<param name="starttime" style="query" type="xsd:dateTime"/>
+			<param name="endtime" style="query" type="xsd:dateTime"/>
+			<param name="network" style="query" type="xsd:string"/>
+			<param name="station" style="query" type="xsd:string"/>
+			<param name="location" style="query" type="xsd:string"/>
+			<param name="channel" style="query" type="xsd:string"/>
+			<param name="quality" style="query" type="xsd:string"/>
+			<param name="merge" style="query" type="xsd:string" repeating="true">
+				<option value="samplerate"/>
+				<option value="quality"/>
+				<option value="overlap"/>
+			</param>
+			<param name="orderby" style="query" type="xsd:string" default="nslc_time_quality_samplerate">
+				<option value="nslc_time_quality_samplerate"/>
+				<option value="latestupdate"/>
+				<option value="latestupdate_desc"/>
+				<option value="timespancount"/>
+				<option value="timespancount_desc"/>
+			</param>
+			<param name="limit" style="query" type="xsd:int"/>
+			<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
+			<param name="format" style="query" type="xsd:string" default="text">
+				<option value="text" mediaType="text/plain"/>
+				<option value="geocsv" mediaType="application/csv"/>
+				<option value="json" mediaType="application/json"/>
+				<option value="request" mediaType="text/plain"/>
+			</param>
+			<param name="nodata" style="query" type="xsd:int" default="204">
+				<option value="204"/>
+				<option value="404"/>
+			</param>
+			<param name="show" style="query" type="xsd:string">
+				<option value="latestupdate"/>
+			</param>
+			<param name="mergegaps" style="query" type="xsd:float" default="0.0"/>
+			<!-- additional non standard parameter -->
+			<param name="excludetoolarge" style="query" type="xsd:boolean" default="true"/>
+		</request>
+		<response status="200">
+			<representation mediaType="text/plain"/>
+			<representation mediaType="application/csv"/>
+			<representation mediaType="application/json"/>
+		</response>
+		<response status="204 400 401 403 404 413 414 500 503">
+			<representation mediaType="text/plain"/>
+		</response>
+	</method>
+	<method name="POST" id="queryPOST">
+		<response status="200">
+			<representation mediaType="application/vnd.fdsn.mseed"/>
+		</response>
+		<response status="204 400 401 403 404 413 414 500 503">
+			<representation mediaType="text/plain"/>
+		</response>
+	</method>
+	<method name="GET" id="extentGET">
+		<request>
+			<param name="starttime" style="query" type="xsd:dateTime"/>
+			<param name="endtime" style="query" type="xsd:dateTime"/>
+			<param name="network" style="query" type="xsd:string"/>
+			<param name="station" style="query" type="xsd:string"/>
+			<param name="location" style="query" type="xsd:string"/>
+			<param name="channel" style="query" type="xsd:string"/>
+			<param name="quality" style="query" type="xsd:string"/>
+			<param name="merge" style="query" type="xsd:string" repeating="true">
+				<option value="samplerate"/>
+				<option value="quality"/>
+			</param>
+			<param name="orderby" style="query" type="xsd:string" default="nslc_time_quality_samplerate">
+				<option value="nslc_time_quality_samplerate"/>
+				<option value="latestupdate"/>
+				<option value="latestupdate_desc"/>
+				<option value="timespancount"/>
+				<option value="timespancount_desc"/>
+			</param>
+			<param name="limit" style="query" type="xsd:int"/>
+			<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
+			<param name="format" style="query" type="xsd:string" default="text">
+				<option value="text" mediaType="text/plain"/>
+				<option value="geocsv" mediaType="application/csv"/>
+				<option value="json" mediaType="application/json"/>
+				<option value="request" mediaType="text/plain"/>
+			</param>
+			<param name="nodata" style="query" type="xsd:int" default="204">
+				<option value="204"/>
+				<option value="404"/>
+			</param>
+		</request>
+		<response status="200">
+			<representation mediaType="text/plain"/>
+			<representation mediaType="application/csv"/>
+			<representation mediaType="application/json"/>
+		</response>
+		<response status="204 400 401 403 404 413 414 500 503">
+			<representation mediaType="text/plain"/>
+		</response>
+	</method>
+	<method name="POST" id="extentPOST">
+		<response status="200">
+			<representation mediaType="application/vnd.fdsn.mseed"/>
+		</response>
+		<response status="204 400 401 403 404 413 414 500 503">
+			<representation mediaType="text/plain"/>
+		</response>
+	</method>
+</application>
