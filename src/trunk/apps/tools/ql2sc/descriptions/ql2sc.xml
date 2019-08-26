@@ -3,7 +3,7 @@
 	<module name="ql2sc" category="Utilities">
 		<description>QuakeLink (gempa GmbH) to SeisComP3 event parameter exchange</description>
 		<configuration>
-			<parameter name="backLog" type="int" default="1800">
+			<parameter name="backLog" type="int" default="1800" unit="s">
 				<description>
 					Number of seconds to fetch missed updates on start up.
 				</description>
