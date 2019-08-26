@@ -1,0 +1,2 @@
+#EventID|Time|Latitude|Longitude|Depth/km|Author|Catalog|Contributor|ContributorID|MagType|Magnitude|MagAuthor|EventLocationName|EventType
+rs2019qsodmc|2019-08-25T17:28:52.37413|-7.916882|159.243103|63.71457291|scolv@user||gempa|rs2019qsodmc|M|5.283150143|scmag@mars|Solomon Islands|earthquake

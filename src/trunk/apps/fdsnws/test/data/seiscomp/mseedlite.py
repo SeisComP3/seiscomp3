@@ -1,0 +1,1 @@
+../../../../../../utils/libs/python/seiscomp/mseedlite.py

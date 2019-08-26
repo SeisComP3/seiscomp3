@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp xmlns="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.11" version="0.11">
+  <EventParameters>
+    <origin publicID="Origin/20190826002935.184037.286503">
+      <time>
+        <value>2019-08-25T17:28:52.37413Z</value>
+        <uncertainty>0.5867292285</uncertainty>
+      </time>
+      <latitude>
+        <value>-7.916882038</value>
+        <uncertainty>2.897164106</uncertainty>
+      </latitude>
+      <longitude>
+        <value>159.243103</value>
+        <uncertainty>3.474297523</uncertainty>
+      </longitude>
+      <depth>
+        <value>63.71457291</value>
+        <uncertainty>6.368777752</uncertainty>
+      </depth>
+      <methodID>LOCSAT</methodID>
+      <earthModelID>iasp91</earthModelID>
+      <quality>
+        <associatedPhaseCount>127</associatedPhaseCount>
+        <usedPhaseCount>46</usedPhaseCount>
+        <associatedStationCount>127</associatedStationCount>
+        <usedStationCount>46</usedStationCount>
+        <depthPhaseCount>0</depthPhaseCount>
+        <standardError>1.155741985</standardError>
+        <azimuthalGap>63.34012222</azimuthalGap>
+        <maximumDistance>73.40821075</maximumDistance>
+        <minimumDistance>1.664754272</minimumDistance>
+        <medianDistance>40.32049942</medianDistance>
+      </quality>
+      <uncertainty>
+        <minHorizontalUncertainty>6.156744957</minHorizontalUncertainty>
+        <maxHorizontalUncertainty>7.510982513</maxHorizontalUncertainty>
+        <azimuthMaxHorizontalUncertainty>101.8503952</azimuthMaxHorizontalUncertainty>
+        <preferredDescription>horizontal uncertainty</preferredDescription>
+      </uncertainty>
+      <evaluationMode>manual</evaluationMode>
+      <evaluationStatus>confirmed</evaluationStatus>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:35.184417Z</creationTime>
+        <modificationTime>2019-08-26T00:29:42.563602Z</modificationTime>
+      </creationInfo>
+      <magnitude publicID="Origin/20190826002935.184037.286503/netMag/M">
+        <magnitude>
+          <value>5.283150143</value>
+        </magnitude>
+        <type>M</type>
+        <methodID>weighted average</methodID>
+        <stationCount>32</stationCount>
+        <creationInfo>
+          <agencyID>gempa</agencyID>
+          <author>scmag@mars</author>
+          <creationTime>2019-08-26T00:29:48.972817Z</creationTime>
+          <modificationTime>2019-08-26T00:29:49.005702Z</modificationTime>
+        </creationInfo>
+      </magnitude>
+    </origin>
+    <event publicID="rs2019qsodmc">
+      <preferredOriginID>Origin/20190826002935.184037.286503</preferredOriginID>
+      <preferredMagnitudeID>Origin/20190826002935.184037.286503/netMag/M</preferredMagnitudeID>
+      <preferredFocalMechanismID>FocalMechanism/20190825181659.570749.275061</preferredFocalMechanismID>
+      <type>earthquake</type>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scevent@mars</author>
+        <creationTime>2019-08-25T17:36:07.108647Z</creationTime>
+        <modificationTime>2019-08-26T00:29:49.016316Z</modificationTime>
+      </creationInfo>
+      <description>
+        <text>Solomon Islands</text>
+        <type>region name</type>
+      </description>
+      <originReference>Origin/20190826002935.184037.286503</originReference>
+    </event>
+  </EventParameters>
+</seiscomp>

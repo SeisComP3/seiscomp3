@@ -108,7 +108,7 @@ class _AvailabilityRequestOptions(RequestOptions):
         # merge (optional)
         for v in self.getListValues(self.PMerge, True):
             if v not in self.VMerge:
-                self.raiseValueError(v)
+                self.raiseValueError(self.PMerge[0])
 
             if v == self.VMergeSampleRate:
                 self.mergeSampleRate = True
@@ -225,6 +225,7 @@ class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
         _AvailabilityRequestOptions.__init__(self, args)
         self.service = 'availability-query'
 
+        self.orderBy = None
         self.mergeGaps = None
         self.excludeTooLarge = None
 
@@ -246,6 +247,13 @@ class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
         self.excludeTooLarge = self.parseBool(self.PExcludeTooLarge)
         if self.excludeTooLarge is None:
             self.excludeTooLarge = True
+
+        if not self.channel:
+            raise ValueError, 'Request contains no selections'
+
+        if self.orderBy:
+            raise ValueError, "orderby not supported for query request"
+
 
 
 ###############################################################################
@@ -275,8 +283,6 @@ class _Availability(BaseResource):
         ro = self._createRequestOptions(req.args)
         try:
             ro.parse()
-            if not ro.channel:
-                raise ValueError, 'Request contains no selections'
 
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)
@@ -1367,7 +1373,7 @@ class FDSNAvailabilityQuery(_Availability):
                      s.sampleRate() == seg.sampleRate()) and \
                     ((ro.mergeGaps is None and diff <= jitter) or \
                      (diff <= ro.mergeGaps)) and \
-                    (-diff <= jitter or ro.mergeOverap):
+                    (-diff <= jitter or ro.mergeOverlap):
 
                     seg.setEnd(s.end())
                     if s.updated() > seg.updated():

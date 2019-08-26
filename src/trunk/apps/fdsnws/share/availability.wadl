@@ -49,13 +49,14 @@
 				<option value="quality"/>
 				<option value="overlap"/>
 			</param>
+			<!-- not supported 
 			<param name="orderby" style="query" type="xsd:string" default="nslc_time_quality_samplerate">
 				<option value="nslc_time_quality_samplerate"/>
 				<option value="latestupdate"/>
 				<option value="latestupdate_desc"/>
 				<option value="timespancount"/>
 				<option value="timespancount_desc"/>
-			</param>
+			</param-->
 			<param name="limit" style="query" type="xsd:int"/>
 			<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
 			<param name="format" style="query" type="xsd:string" default="text">

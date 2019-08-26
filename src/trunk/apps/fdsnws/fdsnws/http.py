@@ -95,9 +95,11 @@ class ServiceVersion(resource.Resource):
     #---------------------------------------------------------------------------
     def __init__(self, version):
         self.version = version
+        self.type = 'text/plain'
 
     #---------------------------------------------------------------------------
     def render(self, request):
+        request.setHeader(b'content-type', b'text/plain')
         return self.version
 
 

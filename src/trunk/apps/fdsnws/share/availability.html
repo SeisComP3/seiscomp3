@@ -46,6 +46,9 @@
     <em>json</em> format will return the exact time windows extracted from the
     waveform archive.
     </li>
+    <li><em>orderby</em> parameter not implemented for query request (to save
+    memory the data is streamed from the database, to support the merge operation,
+    the data needs to be ordered by time)</li>
     <li>additional request parameters:
       <ul>
         <li><em>excludetoolarge</em> (query): boolean, default: <em>true</em></li>

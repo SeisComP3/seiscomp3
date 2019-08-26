@@ -1,0 +1,4 @@
+#N  S      L   C    Q   SampleRate  Earliest                     Latest                       Updated                TimeSpans  Restriction
+AM  R187C  00  HDF  M        100.0  2019-08-20T10:02:04.778422Z  2019-08-22T16:02:04.778422Z  2019-08-22T16:02:04Z           5  OPEN       
+AM  R187C  00  HDF  Q         80.0  2019-08-19T16:02:04.778422Z  2019-08-20T01:01:54.778422Z  2019-08-27T00:00:00Z           1  OPEN       
+AM  R187C  00  HDF  Q        100.0  2019-08-20T01:02:04.778422Z  2019-08-20T10:01:54.778422Z  2019-08-27T00:00:00Z           1  OPEN       
