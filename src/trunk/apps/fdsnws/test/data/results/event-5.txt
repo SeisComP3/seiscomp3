@@ -1,0 +1,3909 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp xmlns="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.11" version="0.11">
+  <EventParameters>
+    <pick publicID="Pick/20190825174903.571047.568546">
+      <time>
+        <value>2019-08-25T17:47:53.219538Z</value>
+      </time>
+      <waveformID networkCode="CM" stationCode="RUS" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:03.571066Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174822.190318.568218">
+      <time>
+        <value>2019-08-25T17:47:51.649997Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="MORC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:22.190343Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174155.479047.565291">
+      <time>
+        <value>2019-08-25T17:41:35.41Z</value>
+      </time>
+      <waveformID networkCode="NY" stationCode="MMPY" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:55.479076Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173603.532652.833429">
+      <time>
+        <value>2019-08-25T17:35:59.171999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RC144" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:36:03.532679Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276561.286491">
+      <time>
+        <value>2019-08-25T17:34:25.964658Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="WR8" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276622Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174245.049339.565615">
+      <time>
+        <value>2019-08-25T17:41:54.38Z</value>
+      </time>
+      <waveformID networkCode="IW" stationCode="PLID" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:45.049363Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174901.952226.568528">
+      <time>
+        <value>2019-08-25T17:48:03.254999Z</value>
+      </time>
+      <waveformID networkCode="GB" stationCode="CLGH" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:01.952258Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.491287.568149">
+      <time>
+        <value>2019-08-25T17:47:51.845Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="PSZ" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:14.491315Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173559.856418.562566">
+      <time>
+        <value>2019-08-25T17:34:45.975Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="STKA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:59.856443Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173338.746468.831846">
+      <time>
+        <value>2019-08-25T17:33:25.308Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R9A9D" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:33:38.746507Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174402.349831.566278">
+      <time>
+        <value>2019-08-25T17:41:42.944538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MAKZ" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:02.349853Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174838.791688.568330">
+      <time>
+        <value>2019-08-25T17:47:57.27Z</value>
+      </time>
+      <waveformID networkCode="HT" stationCode="AGG" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:38.791714Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173443.747652.561868">
+      <time>
+        <value>2019-08-25T17:33:57.269538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="ARMA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:43.747679Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173915.450476.564049">
+      <time>
+        <value>2019-08-25T17:38:14.719538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="INCN" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:15.450508Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174518.955274.566841">
+      <time>
+        <value>2019-08-25T17:42:03.88Z</value>
+      </time>
+      <waveformID networkCode="AE" stationCode="U15A" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:45:18.955294Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.145128.568141">
+      <time>
+        <value>2019-08-25T17:48:03.425Z</value>
+      </time>
+      <waveformID networkCode="CH" stationCode="BNALP" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:14.145155Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174838.776143.568327">
+      <time>
+        <value>2019-08-25T17:47:50.3Z</value>
+      </time>
+      <waveformID networkCode="HT" stationCode="ALN" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:38.776172Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276958.286492">
+      <time>
+        <value>2019-08-25T17:35:29.649143Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="FITZ" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.277018Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174844.44648.568385">
+      <time>
+        <value>2019-08-25T17:47:42.044538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="ANTO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:44.446507Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174056.650403.564856">
+      <time>
+        <value>2019-08-25T17:39:58.019538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="SBA" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:40:56.650428Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174237.103236.565531">
+      <time>
+        <value>2019-08-25T17:41:53.06Z</value>
+      </time>
+      <waveformID networkCode="NN" stationCode="SHP" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:37.103279Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174855.688075.568458">
+      <time>
+        <value>2019-08-25T17:47:37.569538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="OTAV" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:55.688105Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174202.857906.565373">
+      <time>
+        <value>2019-08-25T17:41:42.5483Z</value>
+      </time>
+      <waveformID networkCode="NN" stationCode="DSP" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:02.857925Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173853.007321.563923">
+      <time>
+        <value>2019-08-25T17:38:06.319538Z</value>
+      </time>
+      <waveformID networkCode="KG" stationCode="TJN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:38:53.007346Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173503.227431.562050">
+      <time>
+        <value>2019-08-25T17:33:55.919538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="QLP" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:03.227456Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173728.349027.563214">
+      <time>
+        <value>2019-08-25T17:36:22.769538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MBWA" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:28.349053Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174036.752051.564681">
+      <time>
+        <value>2019-08-25T17:39:38.269538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="CASY" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:40:36.752079Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174046.577773.564774">
+      <time>
+        <value>2019-08-25T17:39:54.275Z</value>
+      </time>
+      <waveformID networkCode="GT" stationCode="VNDA" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:40:46.577797Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174120.451884.565023">
+      <time>
+        <value>2019-08-25T17:40:11.819538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="ULN" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:20.451909Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276124.286490">
+      <time>
+        <value>2019-08-25T17:33:16.383462Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="GENI" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276185Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174827.264432.568259">
+      <time>
+        <value>2019-08-25T17:48:13.894539Z</value>
+      </time>
+      <waveformID networkCode="CU" stationCode="GRGR" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:27.264457Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174753.002608.841561">
+      <time>
+        <value>2019-08-25T17:47:46.73Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R038C" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:53.002641Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174159.757698.565354">
+      <time>
+        <value>2019-08-25T17:41:06.844539Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="COLA" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:59.757727Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174824.245344.568227">
+      <time>
+        <value>2019-08-25T17:48:08.669535Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="BNI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:24.24537Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174940.962993.568845">
+      <time>
+        <value>2019-08-25T17:47:57.875Z</value>
+      </time>
+      <waveformID networkCode="GT" stationCode="CPUP" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:40.963021Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174401.173096.566266">
+      <time>
+        <value>2019-08-25T17:41:55.15Z</value>
+      </time>
+      <waveformID networkCode="AE" stationCode="113A" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:01.173122Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173337.411453.561373">
+      <time>
+        <value>2019-08-25T17:32:30.8Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="DZM" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:33:37.41148Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174148.690687.565228">
+      <time>
+        <value>2019-08-25T17:41:04.719538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="TIXI" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:48.690713Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173557.987344.833354">
+      <time>
+        <value>2019-08-25T17:35:45.636Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R4D20" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:57.987374Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174740.867545.841407">
+      <time>
+        <value>2019-08-25T17:47:30.542Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3F9B" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:40.867579Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174826.202001.568249">
+      <time>
+        <value>2019-08-25T17:48:02.6Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="SSB" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:26.202027Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173411.975789.561617">
+      <time>
+        <value>2019-08-25T17:32:48.644538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="COEN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:11.975819Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174853.410933.568441">
+      <time>
+        <value>2019-08-25T17:48:25.545Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="MTE" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:53.410958Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174314.50883.838245">
+      <time>
+        <value>2019-08-25T17:43:03.809Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RC069" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:43:14.508865Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173423.187256.561739">
+      <time>
+        <value>2019-08-25T17:33:49.894536Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="QIS" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:23.187286Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174400.131947.566254">
+      <time>
+        <value>2019-08-25T17:43:06.154999Z</value>
+      </time>
+      <waveformID networkCode="OK" stationCode="CSTR" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:00.131978Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174839.609366.568334">
+      <time>
+        <value>2019-08-25T17:48:20.069538Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="WDD" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:39.609395Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173758.054777.563533">
+      <time>
+        <value>2019-08-25T17:37:12.944538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MUN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:58.054805Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173646.547499.833925">
+      <time>
+        <value>2019-08-25T17:36:39.588Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3D3B" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:36:46.547519Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276006.286489">
+      <time>
+        <value>2019-08-25T17:33:08.52118Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="KWJN" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276069Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173748.721045.834642">
+      <time>
+        <value>2019-08-25T17:37:40.074Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R30D5" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:37:48.721082Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174857.486368.568484">
+      <time>
+        <value>2019-08-25T17:47:56.1195Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="KHC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:57.486389Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173523.777295.832976">
+      <time>
+        <value>2019-08-25T17:35:02.664999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RD8BC" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:23.777326Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174935.499843.568797">
+      <time>
+        <value>2019-08-25T17:48:20.069538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="BBSR" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:35.499866Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173625.198675.562757">
+      <time>
+        <value>2019-08-25T17:35:56.3375Z</value>
+      </time>
+      <waveformID networkCode="IA" stationCode="EDFI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:25.198699Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173755.870671.563456">
+      <time>
+        <value>2019-08-25T17:37:28.119538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MAJO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:55.870697Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173926.249689.564157">
+      <time>
+        <value>2019-08-25T17:39:06.619538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="GSI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:26.249715Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173358.907157.561538">
+      <time>
+        <value>2019-08-25T17:32:54.694538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="CTAO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:33:58.907192Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.178253.568143">
+      <time>
+        <value>2019-08-25T17:47:53.944537Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="JAVC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:14.17828Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825183719.605853.591832">
+      <time>
+        <value>2019-08-25T17:48:35.268393Z</value>
+      </time>
+      <waveformID networkCode="ON" stationCode="GUA01" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T18:37:19.605882Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173757.035471.563517">
+      <time>
+        <value>2019-08-25T17:37:25.3Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JMN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:57.035503Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174240.250167.565561">
+      <time>
+        <value>2019-08-25T17:41:21.65Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MAW" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:40.250193Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173531.383145.562409">
+      <time>
+        <value>2019-08-25T17:34:25.419538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="CMSA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:31.383173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.275766.286488">
+      <time>
+        <value>2019-08-25T17:32:37.072051Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="TARA" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.275833Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173745.693707.834604">
+      <time>
+        <value>2019-08-25T17:37:33.758Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R55F8" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:37:45.693738Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.01411.841843">
+      <time>
+        <value>2019-08-25T17:48:07.153999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RB411" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:18.014128Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.505198.841800">
+      <time>
+        <value>2019-08-25T17:48:02.023Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R8F35" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:14.505228Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173721.087929.563157">
+      <time>
+        <value>2019-08-25T17:36:56.769538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="JAGI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:21.087956Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174741.885919.841422">
+      <time>
+        <value>2019-08-25T17:47:27.515999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RB8D5" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:41.88595Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174714.488284.567659">
+      <time>
+        <value>2019-08-25T17:42:09.175Z</value>
+      </time>
+      <waveformID networkCode="CN" stationCode="YKAW3" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:47:14.488319Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173633.867187.562808">
+      <time>
+        <value>2019-08-25T17:35:19.294538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="BBOO" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:33.867208Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174846.773478.568404">
+      <time>
+        <value>2019-08-25T17:47:51.995Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="KRLC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:46.773503Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174102.23646.564892">
+      <time>
+        <value>2019-08-25T17:40:02.7984Z</value>
+      </time>
+      <waveformID networkCode="MM" stationCode="TMU" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:02.236483Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174306.47313.565802">
+      <time>
+        <value>2019-08-25T17:42:51.075Z</value>
+      </time>
+      <waveformID networkCode="OK" stationCode="HTCH" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:06.473159Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173606.968796.562599">
+      <time>
+        <value>2019-08-25T17:35:09.019538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="HTT" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:06.96882Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174230.443217.837774">
+      <time>
+        <value>2019-08-25T17:42:22.273Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R350D" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:42:30.443247Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174329.868618.566011">
+      <time>
+        <value>2019-08-25T17:41:06.0684Z</value>
+      </time>
+      <waveformID networkCode="AK" stationCode="CCB" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:29.868643Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173420.793377.832306">
+      <time>
+        <value>2019-08-25T17:34:11.425999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RCCE6" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:34:20.793413Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.415871.841853">
+      <time>
+        <value>2019-08-25T17:48:11.387Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R5F74" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:18.415893Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173403.050178.561567">
+      <time>
+        <value>2019-08-25T17:33:33.7875Z</value>
+      </time>
+      <waveformID networkCode="IA" stationCode="SMPI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:03.050197Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173537.248582.562460">
+      <time>
+        <value>2019-08-25T17:34:38.069538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MTN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:37.248611Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173654.645723.563002">
+      <time>
+        <value>2019-08-25T17:36:28.219539Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="PLAI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:54.645749Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174138.918438.565161">
+      <time>
+        <value>2019-08-25T17:40:17.719538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="YAK" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:38.918468Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174802.029115.841665">
+      <time>
+        <value>2019-08-25T17:47:50.818999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RA736" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:02.029143Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173926.952345.564163">
+      <time>
+        <value>2019-08-25T17:38:48.22186Z</value>
+      </time>
+      <waveformID networkCode="MY" stationCode="IPM" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:26.952371Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174816.798144.841825">
+      <time>
+        <value>2019-08-25T17:48:08.998999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RDC44" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:16.798173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825182040.983296.583448">
+      <time>
+        <value>2019-08-25T17:48:27.908391Z</value>
+      </time>
+      <waveformID networkCode="ON" stationCode="RIB01" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T18:20:40.983322Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174757.185685.841609">
+      <time>
+        <value>2019-08-25T17:47:51.434999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R404C" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:57.185714Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174303.683441.565768">
+      <time>
+        <value>2019-08-25T17:41:45.169536Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="KURK" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:03.683476Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174104.45576.564923">
+      <time>
+        <value>2019-08-25T17:39:42.119539Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MA2" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:41:04.455786Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174904.636418.568567">
+      <time>
+        <value>2019-08-25T17:48:33.45Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="MPG" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:04.636447Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174803.477402.568047">
+      <time>
+        <value>2019-08-25T17:47:47.15Z</value>
+      </time>
+      <waveformID networkCode="CX" stationCode="HMBCX" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:03.477428Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173556.591972.833336">
+      <time>
+        <value>2019-08-25T17:35:45.617999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3967" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:56.592008Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173927.857161.564170">
+      <time>
+        <value>2019-08-25T17:38:52.950001Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="DRV" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:27.857184Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174150.55893.837319">
+      <time>
+        <value>2019-08-25T17:41:43.099Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RAA7F" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:41:50.558959Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173736.78943.563286">
+      <time>
+        <value>2019-08-25T17:36:43.994538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MEEK" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:36.789458Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174926.946583.568704">
+      <time>
+        <value>2019-08-25T17:48:40.35Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="TAM" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:26.94661Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173202.377967.560549">
+      <time>
+        <value>2019-08-25T17:29:16.969538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="HNR" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:32:02.377994Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.277074.286493">
+      <time>
+        <value>2019-08-25T17:35:35.152741Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="SOEI" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.277132Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.304733.568173">
+      <time>
+        <value>2019-08-25T17:47:57.694535Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="TUE" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:18.304772Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174819.847064.568190">
+      <time>
+        <value>2019-08-25T17:47:50.295Z</value>
+      </time>
+      <waveformID networkCode="AF" stationCode="CVNA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:19.84709Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174802.937949.841677">
+      <time>
+        <value>2019-08-25T17:47:56.538Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R9F16" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:02.937976Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174839.63127.568338">
+      <time>
+        <value>2019-08-25T17:47:49.319538Z</value>
+      </time>
+      <waveformID networkCode="CM" stationCode="HEL" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:39.6313Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174602.292675.567180">
+      <time>
+        <value>2019-08-25T17:43:05.423393Z</value>
+      </time>
+      <waveformID networkCode="MX" stationCode="TLIG" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:46:02.292701Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173755.756075.563451">
+      <time>
+        <value>2019-08-25T17:37:25.2Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JGF" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:55.756096Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173951.877921.564328">
+      <time>
+        <value>2019-08-25T17:39:28.219538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="CHTO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:51.877943Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174203.380775.565376">
+      <time>
+        <value>2019-08-25T17:41:06.619538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="QSPA" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:03.380798Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.275504.286487">
+      <time>
+        <value>2019-08-25T17:31:44.394761Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="PMG" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.275638Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173500.409539.562024">
+      <time>
+        <value>2019-08-25T17:34:28.869538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="GUMO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:00.409581Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173758.043344.563528">
+      <time>
+        <value>2019-08-25T17:37:07.294538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MORW" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:58.043368Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174209.213258.565419">
+      <time>
+        <value>2019-08-25T17:41:12.83Z</value>
+      </time>
+      <waveformID networkCode="CN" stationCode="YUK2" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:09.213286Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174334.120275.566055">
+      <time>
+        <value>2019-08-25T17:40:49.0000Z</value>
+      </time>
+      <waveformID networkCode="IO" stationCode="EVN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:34.1203Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174745.263956.841464">
+      <time>
+        <value>2019-08-25T17:47:30.272Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R976A" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:45.263997Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174930.286038.568740">
+      <time>
+        <value>2019-08-25T17:48:24.169538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="PAB" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:30.286071Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173750.785409.563403">
+      <time>
+        <value>2019-08-25T17:37:24.861303Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="INU" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:50.785433Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173756.141362.563491">
+      <time>
+        <value>2019-08-25T17:37:10.394538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="NWAO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:56.141382Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173426.119421.832384">
+      <time>
+        <value>2019-08-25T17:34:11.768Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R9475" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:34:26.119453Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173628.406049.562797">
+      <time>
+        <value>2019-08-25T17:36:15.119538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="TOLI2" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:28.406069Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174908.681692.568582">
+      <time>
+        <value>2019-08-25T17:48:02.52Z</value>
+      </time>
+      <waveformID networkCode="GR" stationCode="GRA1" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:08.68173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174836.055994.568300">
+      <time>
+        <value>2019-08-25T17:47:56.1377Z</value>
+      </time>
+      <waveformID networkCode="HT" stationCode="FNA" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:36.056027Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174853.239021.568438">
+      <time>
+        <value>2019-08-25T17:48:02.569539Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="GRFO" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:53.239055Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174901.454071.568525">
+      <time>
+        <value>2019-08-25T17:48:23.5127Z</value>
+      </time>
+      <waveformID networkCode="ES" stationCode="EMUR" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:01.454113Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173522.36573.562300">
+      <time>
+        <value>2019-08-25T17:34:45.069538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="CNB" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:22.365772Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173843.183059.563822">
+      <time>
+        <value>2019-08-25T17:37:32.55Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JNU" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:38:43.18308Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173434.786123.561813">
+      <time>
+        <value>2019-08-25T17:33:30.219538Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="MSVF" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:34.786148Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173354.689615.561488">
+      <time>
+        <value>2019-08-25T17:33:11.294538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="EIDS" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:33:54.68964Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174903.11772.568539">
+      <time>
+        <value>2019-08-25T17:48:15.55Z</value>
+      </time>
+      <waveformID networkCode="CA" stationCode="CTRE" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:03.11775Z</creationTime>
+      </creationInfo>
+    </pick>
+    <origin publicID="Origin/20190826002935.184037.286503">
+      <time>
+        <value>2019-08-25T17:28:52.37413Z</value>
+        <uncertainty>0.5867292285</uncertainty>
+      </time>
+      <latitude>
+        <value>-7.916882038</value>
+        <uncertainty>2.897164106</uncertainty>
+      </latitude>
+      <longitude>
+        <value>159.243103</value>
+        <uncertainty>3.474297523</uncertainty>
+      </longitude>
+      <depth>
+        <value>63.71457291</value>
+        <uncertainty>6.368777752</uncertainty>
+      </depth>
+      <methodID>LOCSAT</methodID>
+      <earthModelID>iasp91</earthModelID>
+      <quality>
+        <associatedPhaseCount>127</associatedPhaseCount>
+        <usedPhaseCount>46</usedPhaseCount>
+        <associatedStationCount>127</associatedStationCount>
+        <usedStationCount>46</usedStationCount>
+        <depthPhaseCount>0</depthPhaseCount>
+        <standardError>1.155741985</standardError>
+        <azimuthalGap>63.34012222</azimuthalGap>
+        <maximumDistance>73.40821075</maximumDistance>
+        <minimumDistance>1.664754272</minimumDistance>
+        <medianDistance>40.32049942</medianDistance>
+      </quality>
+      <uncertainty>
+        <minHorizontalUncertainty>6.156744957</minHorizontalUncertainty>
+        <maxHorizontalUncertainty>7.510982513</maxHorizontalUncertainty>
+        <azimuthMaxHorizontalUncertainty>101.8503952</azimuthMaxHorizontalUncertainty>
+        <preferredDescription>horizontal uncertainty</preferredDescription>
+      </uncertainty>
+      <evaluationMode>manual</evaluationMode>
+      <evaluationStatus>confirmed</evaluationStatus>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:35.184417Z</creationTime>
+        <modificationTime>2019-08-26T00:29:42.563602Z</modificationTime>
+      </creationInfo>
+      <arrival>
+        <pickID>Pick/20190825173202.377967.560549</pickID>
+        <phase>P</phase>
+        <azimuth>155.3221893</azimuth>
+        <distance>1.664754272</distance>
+        <timeResidual>-2.440612793</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173337.411453.561373</pickID>
+        <phase>P</phase>
+        <azimuth>154.5368347</azimuth>
+        <distance>15.69016933</distance>
+        <timeResidual>1.220682144</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173338.746468.831846</pickID>
+        <phase>P</phase>
+        <azimuth>196.0702209</azimuth>
+        <distance>20.34526253</distance>
+        <timeResidual>1.726129532</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173354.689615.561488</pickID>
+        <phase>P</phase>
+        <azimuth>203.206192</azimuth>
+        <distance>19.02190781</distance>
+        <timeResidual>2.096735001</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173358.907157.561538</pickID>
+        <phase>P</phase>
+        <azimuth>224.7763519</azimuth>
+        <distance>17.45317268</distance>
+        <timeResidual>3.164575577</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173403.050178.561567</pickID>
+        <phase>P</phase>
+        <azimuth>285.0185852</azimuth>
+        <distance>21.28079033</distance>
+        <timeResidual>-0.02800559998</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173411.975789.561617</pickID>
+        <phase>P</phase>
+        <azimuth>247.7797546</azimuth>
+        <distance>16.87413597</distance>
+        <timeResidual>4.145273209</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173420.793377.832306</pickID>
+        <phase>P</phase>
+        <azimuth>200.6172028</azimuth>
+        <distance>25.03927612</distance>
+        <timeResidual>0.7648105621</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173423.187256.561739</pickID>
+        <phase>P</phase>
+        <azimuth>234.4519196</azimuth>
+        <distance>22.77242088</distance>
+        <timeResidual>0.2925510406</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173426.119421.832384</pickID>
+        <phase>P</phase>
+        <azimuth>200.6134644</azimuth>
+        <distance>25.0539608</distance>
+        <timeResidual>0.9736423492</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173434.786123.561813</pickID>
+        <phase>P</phase>
+        <azimuth>119.8924332</azimuth>
+        <distance>20.7584362</distance>
+        <timeResidual>2.078500748</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173443.747652.561868</pickID>
+        <phase>P</phase>
+        <azimuth>196.6837463</azimuth>
+        <distance>23.49498558</distance>
+        <timeResidual>0.7456150055</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173500.409539.562024</pickID>
+        <phase>P</phase>
+        <azimuth>326.1677551</azimuth>
+        <distance>25.69495392</distance>
+        <timeResidual>12.13767433</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173503.227431.562050</pickID>
+        <phase>P</phase>
+        <azimuth>215.711853</azimuth>
+        <distance>23.40752983</distance>
+        <timeResidual>0.1640110016</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173522.36573.562300</pickID>
+        <phase>P</phase>
+        <azimuth>196.9700928</azimuth>
+        <distance>28.73530006</distance>
+        <timeResidual>1.265604019</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173523.777295.832976</pickID>
+        <phase>P</phase>
+        <azimuth>197.3057098</azimuth>
+        <distance>28.8892231</distance>
+        <timeResidual>17.49527931</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173531.383145.562409</pickID>
+        <phase>P</phase>
+        <azimuth>206.4579315</azimuth>
+        <distance>26.68352509</distance>
+        <timeResidual>-0.1092128754</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173537.248582.562460</pickID>
+        <phase>P</phase>
+        <azimuth>257.593811</azimuth>
+        <distance>28.06819344</distance>
+        <timeResidual>-0.06847190857</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173556.591972.833336</pickID>
+        <phase>P</phase>
+        <azimuth>161.1280823</azimuth>
+        <distance>35.92131424</distance>
+        <timeResidual>-0.8460903168</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173557.987344.833354</pickID>
+        <phase>P</phase>
+        <azimuth>161.1285248</azimuth>
+        <distance>35.92152023</distance>
+        <timeResidual>-0.8298549652</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173559.856418.562566</pickID>
+        <phase>P</phase>
+        <azimuth>212.1946411</azimuth>
+        <distance>28.95326424</distance>
+        <timeResidual>0.1785678864</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173603.532652.833429</pickID>
+        <phase>P</phase>
+        <azimuth>163.7364655</azimuth>
+        <distance>37.53075409</distance>
+        <timeResidual>-0.931936264</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173606.968796.562599</pickID>
+        <phase>P</phase>
+        <azimuth>213.674118</azimuth>
+        <distance>31.58588982</distance>
+        <timeResidual>0.001718521118</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173625.198675.562757</pickID>
+        <phase>P</phase>
+        <azimuth>265.9679871</azimuth>
+        <distance>37.15599442</distance>
+        <timeResidual>-1.041707993</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173628.406049.562797</pickID>
+        <phase>P</phase>
+        <azimuth>281.4720154</azimuth>
+        <distance>39.3864975</distance>
+        <timeResidual>-1.009115219</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173633.867187.562808</pickID>
+        <phase>P</phase>
+        <azimuth>217.7429352</azimuth>
+        <distance>32.7938118</distance>
+        <timeResidual>-0.3056850433</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173646.547499.833925</pickID>
+        <phase>P</phase>
+        <azimuth>298.1165161</azimuth>
+        <distance>42.06290817</distance>
+        <timeResidual>1.467844009</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173654.645723.563002</pickID>
+        <phase>P</phase>
+        <azimuth>265.6582336</azimuth>
+        <distance>41.02027893</distance>
+        <timeResidual>-1.420614243</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173721.087929.563157</pickID>
+        <phase>P</phase>
+        <azimuth>265.9673157</azimuth>
+        <distance>44.61540222</distance>
+        <timeResidual>-1.989034653</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173728.349027.563214</pickID>
+        <phase>P</phase>
+        <azimuth>246.6034088</azimuth>
+        <distance>40.32049942</distance>
+        <timeResidual>-1.002065659</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173736.78943.563286</pickID>
+        <phase>P</phase>
+        <azimuth>239.1013947</azimuth>
+        <distance>42.78368378</distance>
+        <timeResidual>0.1334323883</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173745.693707.834604</pickID>
+        <phase>P</phase>
+        <azimuth>310.3605652</azimuth>
+        <distance>48.97641373</distance>
+        <timeResidual>1.104440689</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173748.721045.834642</pickID>
+        <phase>P</phase>
+        <azimuth>266.7311096</azimuth>
+        <distance>48.3601799</distance>
+        <timeResidual>11.95170021</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173750.785409.563403</pickID>
+        <phase>P</phase>
+        <azimuth>335.3704529</azimuth>
+        <distance>47.86683655</distance>
+        <timeResidual>0.9732761383</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173755.756075.563451</pickID>
+        <phase>P</phase>
+        <azimuth>335.8511047</azimuth>
+        <distance>47.95314407</distance>
+        <timeResidual>0.6493015289</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173755.870671.563456</pickID>
+        <phase>P</phase>
+        <azimuth>337.2712402</azimuth>
+        <distance>48.43940735</distance>
+        <timeResidual>-0.1640834808</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173756.141362.563491</pickID>
+        <phase>P</phase>
+        <azimuth>231.3296051</azimuth>
+        <distance>46.1235199</distance>
+        <timeResidual>-0.02806663513</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173757.035471.563517</pickID>
+        <phase>P</phase>
+        <azimuth>331.2423096</azimuth>
+        <distance>47.90955353</distance>
+        <timeResidual>1.048868179</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173758.043344.563528</pickID>
+        <phase>P</phase>
+        <azimuth>236.8454437</azimuth>
+        <distance>45.71212387</distance>
+        <timeResidual>0.05005836487</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173758.054777.563533</pickID>
+        <phase>P</phase>
+        <azimuth>232.996933</azimuth>
+        <distance>46.57101822</distance>
+        <timeResidual>-1.005880356</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173843.183059.563822</pickID>
+        <phase>P</phase>
+        <azimuth>328.0715942</azimuth>
+        <distance>48.92643356</distance>
+        <timeResidual>0.4562168121</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173853.007321.563923</pickID>
+        <phase>P</phase>
+        <azimuth>327.8728333</azimuth>
+        <distance>53.26965714</distance>
+        <timeResidual>1.687509537</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173915.450476.564049</pickID>
+        <phase>P</phase>
+        <azimuth>328.2079468</azimuth>
+        <distance>54.48797989</distance>
+        <timeResidual>1.209177017</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173926.249689.564157</pickID>
+        <phase>P</phase>
+        <azimuth>275.6663513</azimuth>
+        <distance>62.16614532</distance>
+        <timeResidual>-1.024465561</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173926.952345.564163</pickID>
+        <phase>P</phase>
+        <azimuth>279.9520264</azimuth>
+        <distance>59.36598206</distance>
+        <timeResidual>-0.3434963226</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173927.857161.564170</pickID>
+        <phase>P</phase>
+        <azimuth>188.7074432</azimuth>
+        <distance>60.12747192</distance>
+        <timeResidual>0.113779068</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825173951.877921.564328</pickID>
+        <phase>P</phase>
+        <azimuth>294.8910217</azimuth>
+        <distance>65.09899139</distance>
+        <timeResidual>1.364023209</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174036.752051.564681</pickID>
+        <phase>P</phase>
+        <azimuth>199.2709045</azimuth>
+        <distance>67.07126617</distance>
+        <timeResidual>-0.3947048187</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174046.577773.564774</pickID>
+        <phase>P</phase>
+        <azimuth>179.3944702</azimuth>
+        <distance>69.58492279</distance>
+        <timeResidual>0.03699684143</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174056.650403.564856</pickID>
+        <phase>P</phase>
+        <azimuth>178.3108215</azimuth>
+        <distance>70.01511383</distance>
+        <timeResidual>1.140756607</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174102.23646.564892</pickID>
+        <phase>P</phase>
+        <azimuth>298.9337769</azimuth>
+        <distance>70.90289307</distance>
+        <timeResidual>-0.443655014</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174104.45576.564923</pickID>
+        <phase>P</phase>
+        <azimuth>355.3481445</azimuth>
+        <distance>67.61321259</distance>
+        <timeResidual>0.02271461487</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174120.451884.565023</pickID>
+        <phase>P</phase>
+        <azimuth>326.005249</azimuth>
+        <distance>72.07620239</distance>
+        <timeResidual>2.027902603</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174138.918438.565161</pickID>
+        <phase>P</phase>
+        <azimuth>345.9535217</azimuth>
+        <distance>73.40821075</distance>
+        <timeResidual>0.3379001617</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174148.690687.565228</pickID>
+        <phase>P</phase>
+        <azimuth>350.6817322</azimuth>
+        <distance>81.88667297</distance>
+        <timeResidual>0.3062839508</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174150.55893.837319</pickID>
+        <phase>P</phase>
+        <azimuth>51.65330124</azimuth>
+        <distance>86.84907532</distance>
+        <timeResidual>12.85096169</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174155.479047.565291</pickID>
+        <phase>P</phase>
+        <azimuth>25.68237305</azimuth>
+        <distance>87.75876617</distance>
+        <timeResidual>1.400217056</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174159.757698.565354</pickID>
+        <phase>P</phase>
+        <azimuth>20.08982468</azimuth>
+        <distance>82.44851685</distance>
+        <timeResidual>-0.6187038422</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174202.857906.565373</pickID>
+        <phase>P</phase>
+        <azimuth>52.23337936</azimuth>
+        <distance>89.05860901</distance>
+        <timeResidual>1.801095963</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174203.380775.565376</pickID>
+        <phase>P</phase>
+        <azimuth>180.0184631</azimuth>
+        <distance>82.06625366</distance>
+        <timeResidual>1.283334732</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174209.213258.565419</pickID>
+        <phase>P</phase>
+        <azimuth>24.47213936</azimuth>
+        <distance>83.35206604</distance>
+        <timeResidual>0.6363620758</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174230.443217.837774</pickID>
+        <phase>P</phase>
+        <azimuth>49.58916092</azimuth>
+        <distance>94.28715515</distance>
+        <timeResidual>17.4329319</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174237.103236.565531</pickID>
+        <phase>P</phase>
+        <azimuth>53.46526718</azimuth>
+        <distance>91.13549805</distance>
+        <timeResidual>2.614450455</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174240.250167.565561</pickID>
+        <phase>P</phase>
+        <azimuth>202.4693756</azimuth>
+        <distance>85.16666412</distance>
+        <timeResidual>0.2800388336</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174245.049339.565615</pickID>
+        <phase>P</phase>
+        <azimuth>44.89478302</azimuth>
+        <distance>91.85948181</distance>
+        <timeResidual>0.8003635406</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174303.683441.565768</pickID>
+        <phase>P</phase>
+        <azimuth>321.1541748</azimuth>
+        <distance>90.17295837</distance>
+        <timeResidual>-0.4500026703</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174306.47313.565802</pickID>
+        <phase>P</phase>
+        <azimuth>54.91781235</azimuth>
+        <distance>104.6485825</distance>
+        <timeResidual>0.2609348297</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174314.50883.838245</pickID>
+        <phase>P</phase>
+        <azimuth>45.60927582</azimuth>
+        <distance>107.9191132</distance>
+        <timeResidual>-1.522390366</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174329.868618.566011</pickID>
+        <phase>P</phase>
+        <azimuth>20.2889576</azimuth>
+        <distance>82.32939911</distance>
+        <timeResidual>-0.7789821625</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174334.120275.566055</pickID>
+        <phase>P</phase>
+        <azimuth>300.589325</azimuth>
+        <distance>78.42316437</distance>
+        <timeResidual>2.258371353</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174400.131947.566254</pickID>
+        <phase>P</phase>
+        <azimuth>55.30418777</azimuth>
+        <distance>104.3634796</distance>
+        <timeResidual>16.60651588</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174401.173096.566266</pickID>
+        <phase>P</phase>
+        <azimuth>57.32308197</azimuth>
+        <distance>91.71259308</distance>
+        <timeResidual>1.945871353</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174402.349831.566278</pickID>
+        <phase>P</phase>
+        <azimuth>317.8674011</azimuth>
+        <distance>87.10321045</distance>
+        <timeResidual>11.69880104</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174518.955274.566841</pickID>
+        <phase>P</phase>
+        <azimuth>53.86649323</azimuth>
+        <distance>93.41130829</distance>
+        <timeResidual>2.941232681</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174602.292675.567180</pickID>
+        <phase>P</phase>
+        <azimuth>73.87805176</azimuth>
+        <distance>103.9209976</distance>
+        <timeResidual>17.83905983</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174714.488284.567659</pickID>
+        <phase>P</phase>
+        <azimuth>27.65134811</azimuth>
+        <distance>95.1883316</distance>
+        <timeResidual>0.7600803375</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174740.867545.841407</pickID>
+        <phase>PKP</phase>
+        <azimuth>45.08187103</azimuth>
+        <distance>117.7125854</distance>
+        <timeResidual>-0.5775661469</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174741.885919.841422</pickID>
+        <phase>PKP</phase>
+        <azimuth>82.2617569</azimuth>
+        <distance>116.6603012</distance>
+        <timeResidual>-1.566579819</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174745.263956.841464</pickID>
+        <phase>PKP</phase>
+        <azimuth>64.61512756</azimuth>
+        <distance>120.729866</distance>
+        <timeResidual>-6.687307358</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174753.002608.841561</pickID>
+        <phase>PKP</phase>
+        <azimuth>334.5148926</azimuth>
+        <distance>127.5953598</distance>
+        <timeResidual>-3.480031967</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174757.185685.841609</pickID>
+        <phase>PKP</phase>
+        <azimuth>43.68954086</azimuth>
+        <distance>123.884201</distance>
+        <timeResidual>8.378610611</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174802.029115.841665</pickID>
+        <phase>PKP</phase>
+        <azimuth>47.14973068</azimuth>
+        <distance>122.123024</distance>
+        <timeResidual>11.16510963</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174802.937949.841677</pickID>
+        <phase>PKP</phase>
+        <azimuth>337.7501221</azimuth>
+        <distance>126.2950134</distance>
+        <timeResidual>8.831003189</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174803.477402.568047</pickID>
+        <phase>PKP</phase>
+        <azimuth>120.928215</azimuth>
+        <distance>124.149086</distance>
+        <timeResidual>3.582223892</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174814.145128.568141</pickID>
+        <phase>PKP</phase>
+        <azimuth>332.3569336</azimuth>
+        <distance>133.8604431</distance>
+        <timeResidual>1.238595963</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174814.178253.568143</pickID>
+        <phase>PKP</phase>
+        <azimuth>328.622467</azimuth>
+        <distance>127.9698868</distance>
+        <timeResidual>3.014352798</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174814.491287.568149</pickID>
+        <phase>PKP</phase>
+        <azimuth>326.5437622</azimuth>
+        <distance>127.3585129</distance>
+        <timeResidual>2.090646744</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174814.505198.841800</pickID>
+        <phase>PKP</phase>
+        <azimuth>338.460083</azimuth>
+        <distance>135.0928497</distance>
+        <timeResidual>-2.495779037</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174816.798144.841825</pickID>
+        <phase>PKP</phase>
+        <azimuth>37.83986664</azimuth>
+        <distance>127.203125</distance>
+        <timeResidual>19.54340553</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174818.01411.841843</pickID>
+        <phase>PKP</phase>
+        <azimuth>333.4438782</azimuth>
+        <distance>132.3452759</distance>
+        <timeResidual>7.847482681</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174818.304733.568173</pickID>
+        <phase>PKP</phase>
+        <azimuth>331.3356628</azimuth>
+        <distance>133.723465</distance>
+        <timeResidual>-4.231985092</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174818.415871.841853</pickID>
+        <phase>PKP</phase>
+        <azimuth>336.7022705</azimuth>
+        <distance>131.2329254</distance>
+        <timeResidual>14.20282936</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174819.847064.568190</pickID>
+        <phase>PKP</phase>
+        <azimuth>222.5990295</azimuth>
+        <distance>124.9079819</distance>
+        <timeResidual>5.262521744</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174822.190318.568218</pickID>
+        <phase>PKP</phase>
+        <azimuth>329.5913696</azimuth>
+        <distance>127.4570312</distance>
+        <timeResidual>1.706003189</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174824.245344.568227</pickID>
+        <phase>PKP</phase>
+        <azimuth>331.9390564</azimuth>
+        <distance>136.0312195</distance>
+        <timeResidual>2.38202858</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174826.202001.568249</pickID>
+        <phase>PKP</phase>
+        <azimuth>333.8369141</azimuth>
+        <distance>136.8209381</distance>
+        <timeResidual>-5.170217514</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174827.264432.568259</pickID>
+        <phase>PKP</phase>
+        <azimuth>80.62462616</azimuth>
+        <distance>139.5385284</distance>
+        <timeResidual>1.065134048</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174836.055994.568300</pickID>
+        <phase>PKP</phase>
+        <azimuth>318.08255</azimuth>
+        <distance>130.3013763</distance>
+        <timeResidual>0.7353000641</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174838.776143.568327</pickID>
+        <phase>PKP</phase>
+        <azimuth>316.1361389</azimuth>
+        <distance>127.1016159</distance>
+        <timeResidual>1.039865494</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174838.791688.568330</pickID>
+        <phase>PKP</phase>
+        <azimuth>315.5931396</azimuth>
+        <distance>130.4885406</distance>
+        <timeResidual>1.509225845</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174839.609366.568334</pickID>
+        <phase>PKP</phase>
+        <azimuth>316.0392456</azimuth>
+        <distance>137.461441</distance>
+        <timeResidual>11.10016823</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174839.63127.568338</pickID>
+        <phase>PKP</phase>
+        <azimuth>87.99573517</azimuth>
+        <distance>125.6313782</distance>
+        <timeResidual>2.891794205</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174844.44648.568385</pickID>
+        <phase>PKP</phase>
+        <azimuth>312.6319885</azimuth>
+        <distance>122.7052689</distance>
+        <timeResidual>1.26508522</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174846.773478.568404</pickID>
+        <phase>PKP</phase>
+        <azimuth>330.2784424</azimuth>
+        <distance>127.6431808</distance>
+        <timeResidual>1.693063736</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174853.239021.568438</pickID>
+        <phase>PKP</phase>
+        <azimuth>333.0987549</azimuth>
+        <distance>130.5232849</distance>
+        <timeResidual>6.742380142</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174853.410933.568441</pickID>
+        <phase>PKP</phase>
+        <azimuth>342.0177917</azimuth>
+        <distance>145.5695496</distance>
+        <timeResidual>1.849924088</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174855.688075.568458</pickID>
+        <phase>PKP</phase>
+        <azimuth>94.67034912</azimuth>
+        <distance>122.003746</distance>
+        <timeResidual>-1.853689194</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174857.486368.568484</pickID>
+        <phase>PKP</phase>
+        <azimuth>331.1574402</azimuth>
+        <distance>129.8264313</distance>
+        <timeResidual>1.626291275</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174901.454071.568525</pickID>
+        <phase>PKP</phase>
+        <azimuth>332.2669373</azimuth>
+        <distance>145.3642883</distance>
+        <timeResidual>0.1765842438</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174901.952226.568528</pickID>
+        <phase>PKP</phase>
+        <azimuth>348.8016968</azimuth>
+        <distance>131.5300446</distance>
+        <timeResidual>5.5032444</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174903.11772.568539</pickID>
+        <phase>PKP</phase>
+        <azimuth>334.4817505</azimuth>
+        <distance>140.8208923</distance>
+        <timeResidual>0.3623752594</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174903.571047.568546</pickID>
+        <phase>PKP</phase>
+        <azimuth>88.70198822</azimuth>
+        <distance>128.0403748</distance>
+        <timeResidual>2.153879166</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174904.636418.568567</pickID>
+        <phase>PKP</phase>
+        <azimuth>93.05471802</azimuth>
+        <distance>148.2016449</distance>
+        <timeResidual>5.2454319</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174908.681692.568582</pickID>
+        <phase>PKP</phase>
+        <azimuth>333.0987854</azimuth>
+        <distance>130.5219421</distance>
+        <timeResidual>6.695383072</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174926.946583.568704</pickID>
+        <phase>PKP</phase>
+        <azimuth>303.2884827</azimuth>
+        <distance>150.7322235</distance>
+        <timeResidual>7.996774673</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174930.286038.568740</pickID>
+        <phase>PKP</phase>
+        <azimuth>337.4770508</azimuth>
+        <distance>145.2382812</distance>
+        <timeResidual>1.05390358</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174935.499843.568797</pickID>
+        <phase>PKP</phase>
+        <azimuth>52.87734985</azimuth>
+        <distance>132.5720215</distance>
+        <timeResidual>20.33124733</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825174940.962993.568845</pickID>
+        <phase>PKP</phase>
+        <azimuth>135.0473938</azimuth>
+        <distance>130.8112793</distance>
+        <timeResidual>1.496896744</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825182040.983296.583448</pickID>
+        <phase>PKP</phase>
+        <azimuth>144.6476135</azimuth>
+        <distance>146.7333527</distance>
+        <timeResidual>2.197336197</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190825183719.605853.591832</pickID>
+        <phase>PKP</phase>
+        <azimuth>142.3060608</azimuth>
+        <distance>149.2134094</distance>
+        <timeResidual>5.380807877</timeResidual>
+        <timeUsed>false</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>0</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.275504.286487</pickID>
+        <phase>P</phase>
+        <azimuth>262.0653076</azimuth>
+        <distance>12.03769207</distance>
+        <timeResidual>3.192270279</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.275766.286488</pickID>
+        <phase>P</phase>
+        <azimuth>56.55231094</azimuth>
+        <distance>16.4606781</distance>
+        <timeResidual>-2.300848007</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.276006.286489</pickID>
+        <phase>P</phase>
+        <azimuth>25.95789719</azimuth>
+        <distance>18.98314476</distance>
+        <timeResidual>-0.3319911957</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.276124.286490</pickID>
+        <phase>P</phase>
+        <azimuth>284.539978</azimuth>
+        <distance>19.71140862</distance>
+        <timeResidual>-0.4647579193</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.276561.286491</pickID>
+        <phase>P</phase>
+        <azimuth>240.8952026</azimuth>
+        <distance>26.78323364</distance>
+        <timeResidual>-0.6046962738</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.276958.286492</pickID>
+        <phase>P</phase>
+        <azimuth>249.4375153</azimuth>
+        <distance>34.20870972</distance>
+        <timeResidual>-2.432729721</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <arrival>
+        <pickID>Pick/20190826002933.277074.286493</pickID>
+        <phase>P</phase>
+        <azimuth>264.3164062</azimuth>
+        <distance>34.59994888</distance>
+        <timeResidual>-0.3674221039</timeResidual>
+        <timeUsed>true</timeUsed>
+        <horizontalSlownessUsed>false</horizontalSlownessUsed>
+        <backazimuthUsed>false</backazimuthUsed>
+        <weight>1</weight>
+      </arrival>
+      <magnitude publicID="Origin/20190826002935.184037.286503/netMag/M">
+        <magnitude>
+          <value>5.283150143</value>
+        </magnitude>
+        <type>M</type>
+        <methodID>weighted average</methodID>
+        <stationCount>32</stationCount>
+        <creationInfo>
+          <agencyID>gempa</agencyID>
+          <author>scmag@mars</author>
+          <creationTime>2019-08-26T00:29:48.972817Z</creationTime>
+          <modificationTime>2019-08-26T00:29:49.005702Z</modificationTime>
+        </creationInfo>
+      </magnitude>
+    </origin>
+    <origin publicID="Origin/20190825181659.570808.275062">
+      <time>
+        <value>2019-08-25T17:28:46.790123Z</value>
+      </time>
+      <latitude>
+        <value>-7.875273228</value>
+      </latitude>
+      <longitude>
+        <value>159.0639191</value>
+      </longitude>
+      <depth>
+        <value>45</value>
+      </depth>
+      <methodID>FocalMechanism</methodID>
+      <earthModelID>qseis_ak135f_continental</earthModelID>
+      <quality>
+        <usedPhaseCount>20</usedPhaseCount>
+        <associatedStationCount>32</associatedStationCount>
+        <usedStationCount>20</usedStationCount>
+        <azimuthalGap>142.3520705</azimuthalGap>
+        <maximumDistance>48.33289858</maximumDistance>
+        <minimumDistance>1.782230831</minimumDistance>
+      </quality>
+      <type>hypocenter</type>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautomt@mars</author>
+        <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+      </creationInfo>
+      <magnitude publicID="Magnitude/20190825181659.570829.275063">
+        <magnitude>
+          <value>5.38203634</value>
+        </magnitude>
+        <type>Mw</type>
+        <methodID>MT</methodID>
+        <stationCount>20</stationCount>
+        <azimuthalGap>142.3520705</azimuthalGap>
+        <creationInfo>
+          <agencyID>gempa</agencyID>
+          <author>scautomt@mars</author>
+          <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+        </creationInfo>
+      </magnitude>
+    </origin>
+    <focalMechanism publicID="FocalMechanism/20190825181659.570749.275061">
+      <triggeringOriginID>Origin/20190825174800.005517.1640715</triggeringOriginID>
+      <nodalPlanes>
+        <nodalPlane1>
+          <strike>
+            <value>154.6041956</value>
+          </strike>
+          <dip>
+            <value>51.75933069</value>
+          </dip>
+          <rake>
+            <value>86.04786441</value>
+          </rake>
+        </nodalPlane1>
+        <nodalPlane2>
+          <strike>
+            <value>340.9730405</value>
+          </strike>
+          <dip>
+            <value>38.41323096</value>
+          </dip>
+          <rake>
+            <value>94.99824607</value>
+          </rake>
+        </nodalPlane2>
+      </nodalPlanes>
+      <principalAxes>
+        <tAxis>
+          <azimuth>
+            <value>42.28883333</value>
+          </azimuth>
+          <plunge>
+            <value>82.62559987</value>
+          </plunge>
+          <length>
+            <value>1.273081524e+17</value>
+          </length>
+        </tAxis>
+        <pAxis>
+          <azimuth>
+            <value>247.4167955</value>
+          </azimuth>
+          <plunge>
+            <value>6.683136892</value>
+          </plunge>
+          <length>
+            <value>-1.232531226e+17</value>
+          </length>
+        </pAxis>
+        <nAxis>
+          <azimuth>
+            <value>157.0528286</value>
+          </azimuth>
+          <plunge>
+            <value>3.103133339</value>
+          </plunge>
+          <length>
+            <value>-4.055029736e+15</value>
+          </length>
+        </nAxis>
+      </principalAxes>
+      <azimuthalGap>142.3520705</azimuthalGap>
+      <misfit>0.01129129175</misfit>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautomt@mars</author>
+        <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+      </creationInfo>
+      <momentTensor publicID="MomentTensor/20190825181659.570853.275064">
+        <derivedOriginID>Origin/20190825181659.570808.275062</derivedOriginID>
+        <momentMagnitudeID>Magnitude/20190825181659.570829.275063</momentMagnitudeID>
+        <scalarMoment>
+          <value>1.253298471e+17</value>
+        </scalarMoment>
+        <tensor>
+          <Mrr>
+            <value>1.235296158e+17</value>
+          </Mrr>
+          <Mtt>
+            <value>-2.021136429e+16</value>
+          </Mtt>
+          <Mpp>
+            <value>-1.033182515e+17</value>
+          </Mpp>
+          <Mrt>
+            <value>1.766083416e+16</value>
+          </Mrt>
+          <Mrp>
+            <value>-2.397263454e+16</value>
+          </Mrp>
+          <Mtp>
+            <value>4.061545462e+16</value>
+          </Mtp>
+        </tensor>
+        <varianceReduction>0.9887087083</varianceReduction>
+        <doubleCouple>0.9362958356</doubleCouple>
+        <clvd>0.06370416442</clvd>
+        <greensFunctionID>sc3gf1d:/qseis_ak135f_continental</greensFunctionID>
+        <filterID>BP 20s-50s</filterID>
+        <creationInfo>
+          <agencyID>gempa</agencyID>
+          <author>scautomt@mars</author>
+          <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+        </creationInfo>
+        <dataUsed>
+          <waveType>body waves</waveType>
+          <stationCount>20</stationCount>
+          <componentCount>20</componentCount>
+        </dataUsed>
+        <phaseSetting code="P" lowerPeriod="20" upperPeriod="50" minimumSNR="1" maximumTimeShift="5"/>
+        <phaseSetting code="R" lowerPeriod="20" upperPeriod="50" minimumSNR="1" maximumTimeShift="5"/>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570896.275065" active="true" weight="1">
+          <waveformID networkCode="IU" stationCode="HNR" locationCode="00" channelCode="BH">
+            <resourceURI>IU.HNR</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>-0.5</timeShift>
+            <dataTimeWindow>28.32763275 128.1340835</dataTimeWindow>
+            <misfit>0.009067230225</misfit>
+            <snr>342.7497559</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570923.275066" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="COEN" channelCode="BH">
+            <resourceURI>AU.COEN</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>4.5</timeShift>
+            <dataTimeWindow>231.246344 336.6902161</dataTimeWindow>
+            <misfit>0.6450802231</misfit>
+            <snr>13.02679348</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>442.566862 988.033885</dataTimeWindow>
+            <misfit>0.9176737499</misfit>
+            <snr>15.03323174</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570943.275067" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="EIDS" channelCode="BH">
+            <resourceURI>AU.EIDS</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>1.5</timeShift>
+            <dataTimeWindow>257.8891726 364.3879395</dataTimeWindow>
+            <misfit>0.6298160172</misfit>
+            <snr>12.09135437</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>502.4990783 1114.118779</dataTimeWindow>
+            <misfit>0.9624471283</misfit>
+            <snr>11.64560413</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570961.275068" active="true" weight="1">
+          <waveformID networkCode="II" stationCode="MSVF" locationCode="00" channelCode="BH">
+            <resourceURI>II.MSVF</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>-2.5</timeShift>
+            <dataTimeWindow>279.0916686 385.5856018</dataTimeWindow>
+            <misfit>0.3504393005</misfit>
+            <snr>2.188723564</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>553.891297 1219.987386</dataTimeWindow>
+            <misfit>0.941020174</misfit>
+            <snr>2.942663908</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570977.275069" active="true" weight="1">
+          <waveformID networkCode="IA" stationCode="SMPI" channelCode="BH">
+            <resourceURI>IA.SMPI</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>-0.5</timeShift>
+            <dataTimeWindow>280.9317468 387.3782959</dataTimeWindow>
+            <misfit>0.4124621582</misfit>
+            <snr>11.43133259</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>558.2745271 1229.048616</dataTimeWindow>
+            <misfit>0.672781105</misfit>
+            <snr>3.822461367</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.570993.275070" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="QIS" channelCode="BH">
+            <resourceURI>AU.QIS</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>297.4496596 404.0471497</dataTimeWindow>
+            <misfit>0.3279541779</misfit>
+            <snr>12.93316269</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>599.3872638 1313.297707</dataTimeWindow>
+            <misfit>0.905042696</misfit>
+            <snr>4.089625835</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571008.275071" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="QLP" channelCode="BH">
+            <resourceURI>AU.QLP</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>4.5</timeShift>
+            <dataTimeWindow>304.5578571 411.3094788</dataTimeWindow>
+            <misfit>0.3324668121</misfit>
+            <snr>4.254720688</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>617.5291794 1350.293804</dataTimeWindow>
+            <misfit>0.8949632454</misfit>
+            <snr>9.690876961</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571023.275072" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="ARMA" channelCode="BH">
+            <resourceURI>AU.ARMA</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>4.5</timeShift>
+            <dataTimeWindow>305.8506902 412.8502502</dataTimeWindow>
+            <misfit>0.2907333374</misfit>
+            <snr>5.74441433</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>621.3984723 1357.961103</dataTimeWindow>
+            <misfit>0.9880755246</misfit>
+            <snr>2.964281559</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571038.275073" active="true" weight="1">
+          <waveformID networkCode="IU" stationCode="GUMO" locationCode="00" channelCode="BH">
+            <resourceURI>IU.GUMO</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>1.5</timeShift>
+            <dataTimeWindow>324.9037681 432.1459961</dataTimeWindow>
+            <misfit>0.3055422211</misfit>
+            <snr>8.41095829</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>676.3786416 1467.591261</dataTimeWindow>
+            <misfit>0.9841343117</misfit>
+            <snr>8.198413849</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571054.275074" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="CMSA" channelCode="BH">
+            <resourceURI>AU.CMSA</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>1.5</timeShift>
+            <dataTimeWindow>334.5400425 441.926178</dataTimeWindow>
+            <misfit>0.2009951019</misfit>
+            <snr>3.010169506</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>704.952057 1524.300809</dataTimeWindow>
+            <misfit>0.9534193468</misfit>
+            <snr>9.114449501</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.57107.275075" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="CNB" channelCode="BH">
+            <resourceURI>AU.CNB</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>353.10076 460.5838013</dataTimeWindow>
+            <misfit>0.3015035248</misfit>
+            <snr>2.952639818</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>760.0306407 1633.600739</dataTimeWindow>
+            <misfit>0.9432522869</misfit>
+            <snr>3.504962206</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571084.275076" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="STKA" channelCode="BH">
+            <resourceURI>AU.STKA</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>4.5</timeShift>
+            <dataTimeWindow>354.6736447 462.1017761</dataTimeWindow>
+            <misfit>0.6561175537</misfit>
+            <snr>3.955438375</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>764.5443503 1642.609735</dataTimeWindow>
+            <misfit>0.8996833038</misfit>
+            <snr>7.280364513</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571099.275077" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="HTT" channelCode="BH">
+            <resourceURI>AU.HTT</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>377.8763056 485.3449402</dataTimeWindow>
+            <misfit>0.3448522186</misfit>
+            <snr>3.992225647</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>834.0856358 1780.378186</dataTimeWindow>
+            <misfit>0.7456096458</misfit>
+            <snr>8.927103996</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571114.275078" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="BBOO" channelCode="BH">
+            <resourceURI>AU.BBOO</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>-1.5</timeShift>
+            <dataTimeWindow>388.3658293 495.8334961</dataTimeWindow>
+            <misfit>0.3656766129</misfit>
+            <snr>3.136481047</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>865.7303752 1843.000836</dataTimeWindow>
+            <misfit>0.564186058</misfit>
+            <snr>10.09209633</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571128.275079" active="true" weight="1">
+          <waveformID networkCode="GE" stationCode="TOLI2" channelCode="BH">
+            <resourceURI>GE.TOLI2</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>444.0879896 551.3750916</dataTimeWindow>
+            <misfit>0.3720947647</misfit>
+            <snr>2.597169876</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1037.354668 2180.084434</dataTimeWindow>
+            <misfit>0.8662150669</misfit>
+            <snr>2.670901775</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571144.275080" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="MORW" channelCode="BH">
+            <resourceURI>AU.MORW</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>-0.5</timeShift>
+            <dataTimeWindow>495.7827094 603.382019</dataTimeWindow>
+            <misfit>0.4285454941</misfit>
+            <snr>1.551349282</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1206.221989 2506.788029</dataTimeWindow>
+            <misfit>0.4567035294</misfit>
+            <snr>3.836587191</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571158.275081" active="true" weight="1">
+          <waveformID networkCode="AU" stationCode="MUN" channelCode="BH">
+            <resourceURI>AU.MUN</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>502.5755002 610.2363281</dataTimeWindow>
+            <misfit>0.4574979019</misfit>
+            <snr>2.97025013</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1229.190224 2550.985739</dataTimeWindow>
+            <misfit>0.4293135452</misfit>
+            <snr>3.578342676</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571175.275082" active="true" weight="1">
+          <waveformID networkCode="JP" stationCode="JMN" channelCode="BH">
+            <resourceURI>JP.JMN</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>4.5</timeShift>
+            <dataTimeWindow>512.859498 620.6641235</dataTimeWindow>
+            <misfit>0.2144156647</misfit>
+            <snr>3.89260149</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1264.483277 2618.746238</dataTimeWindow>
+            <misfit>0.9676908755</misfit>
+            <snr>8.125287056</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.57119.275083" active="true" weight="1">
+          <waveformID networkCode="JP" stationCode="JGF" channelCode="BH">
+            <resourceURI>JP.JGF</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>513.2473951 621.0906982</dataTimeWindow>
+            <misfit>0.2623890686</misfit>
+            <snr>4.496490002</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1265.936308 2621.500469</dataTimeWindow>
+            <misfit>0.9486398554</misfit>
+            <snr>4.624100208</snr>
+          </component>
+        </stationMomentTensorContribution>
+        <stationMomentTensorContribution publicID="MomentTensorStationContribution/20190825181659.571204.275084" active="true" weight="1">
+          <waveformID networkCode="IU" stationCode="MAJO" locationCode="00" channelCode="BH">
+            <resourceURI>IU.MAJO</resourceURI>
+          </waveformID>
+          <component phaseCode="P" component="0" active="true">
+            <weight>1</weight>
+            <timeShift>3.5</timeShift>
+            <dataTimeWindow>517.0166021 624.8868408</dataTimeWindow>
+            <misfit>0.2229838562</misfit>
+            <snr>5.975471973</snr>
+          </component>
+          <component phaseCode="R" component="0" active="false">
+            <weight>1</weight>
+            <timeShift>0</timeShift>
+            <dataTimeWindow>1278.899025 2646.380109</dataTimeWindow>
+            <misfit>0.9460981989</misfit>
+            <snr>4.054911137</snr>
+          </component>
+        </stationMomentTensorContribution>
+      </momentTensor>
+    </focalMechanism>
+    <event publicID="rs2019qsodmc">
+      <preferredOriginID>Origin/20190826002935.184037.286503</preferredOriginID>
+      <preferredMagnitudeID>Origin/20190826002935.184037.286503/netMag/M</preferredMagnitudeID>
+      <preferredFocalMechanismID>FocalMechanism/20190825181659.570749.275061</preferredFocalMechanismID>
+      <type>earthquake</type>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scevent@mars</author>
+        <creationTime>2019-08-25T17:36:07.108647Z</creationTime>
+        <modificationTime>2019-08-26T00:29:49.016316Z</modificationTime>
+      </creationInfo>
+      <description>
+        <text>Solomon Islands</text>
+        <type>region name</type>
+      </description>
+      <originReference>Origin/20190826002935.184037.286503</originReference>
+      <focalMechanismReference>FocalMechanism/20190825181659.570749.275061</focalMechanismReference>
+    </event>
+  </EventParameters>
+</seiscomp>

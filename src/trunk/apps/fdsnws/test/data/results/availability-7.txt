@@ -1,0 +1,6 @@
+#dataset: GeoCSV 2.0
+#delimiter: |
+#field_unit: unitless|unitless|unitless|unitless|unitless |hertz |ISO_8601|ISO_8601|ISO_8601|unitless|unitless
+#field_type: string|string|string|string|string |float |datetime|datetime|datetime|integer|string
+Network|Station|Location|Channel|Quality|SampleRate|Earliest|Latest|Updated|TimeSpans|Restriction
+AM|R0F05|00|SHZ|M|50.0|2019-08-19T16:02:04.778422Z|2019-08-22T16:02:04.778422Z|2019-08-22T16:02:04Z|7|RESTRICTED
