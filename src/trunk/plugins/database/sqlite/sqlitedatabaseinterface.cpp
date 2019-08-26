@@ -290,7 +290,7 @@ bool SQLiteDatabase::escape(std::string &out, const std::string &in) {
 		switch ( *in_buf ) {
 			case '\'':
 				out_buf[j++] = '\'';
-				out_buf[j++]   = '\'';
+				out_buf[j++] = '\'';
 				break;
 			default:
 				out_buf[j++] = *in_buf;
@@ -300,7 +300,7 @@ bool SQLiteDatabase::escape(std::string &out, const std::string &in) {
 
 	out_buf[j] = '\0';
 	out.resize(j);
-	return j;
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
