@@ -475,7 +475,9 @@ hptime2timestr(hptime_t hptime, char *timestr, flag subseconds, char* datepath) 
 } /* End of ms_hptime2isotimestr() */
 
 static void record_handler (char *record, int reclen, void *handlerdata) {
-    if (send_mseed(station_name, record, reclen) < 0) {
+    char sta_id[11];
+    snprintf(sta_id, 11, "%s.%s", station_network, station_name);
+    if (send_mseed(sta_id, record, reclen) < 0) {
         logprintf(ERROR_FLAG, "Error sending data to seedlink!\n");
         exit(1);
     }

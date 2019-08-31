@@ -615,7 +615,11 @@ import_filter( char *msg, int msgLen )
     }
 
     /* Send the data to the controlling SeedLink server */
-    send_raw_depoch (trh2->sta, trh2->chan, trh2->starttime, 0, 100, int_samples, trh2->nsamp);
+    {
+      char sta_id[11];
+      snprintf(sta_id, 11, "%s.%s", trh2->net, trh2->sta);
+      send_raw_depoch (sta_id, trh2->chan, trh2->starttime, 0, 100, int_samples, trh2->nsamp);
+    }
 
     /* Print samples to STDERR if verbosity is 3 or higher */
     if ( verbose >= 3 && int_samples != NULL )

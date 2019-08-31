@@ -21,7 +21,7 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.sadc.proc')
     except: seedlink.setParam('sources.sadc.proc', 'sadc_100')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.sadc.comport')
 
 
   # Flush does nothing

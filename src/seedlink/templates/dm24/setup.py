@@ -18,7 +18,7 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.dm24.proc')
     except: seedlink.setParam('sources.dm24.proc', 'dm24_20')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.dm24.comport')
 
 
   # Flush does nothing

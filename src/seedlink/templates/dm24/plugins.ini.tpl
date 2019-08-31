@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[dm24_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for Guralp DM24 digitizer
 

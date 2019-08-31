@@ -1,7 +1,7 @@
 import os
 
 '''
-Plugin handler for the EarthData PS6-24 plugin.
+Plugin handler for the MK6 plugin.
 '''
 class SeedlinkPluginHandler:
   # Create defaults

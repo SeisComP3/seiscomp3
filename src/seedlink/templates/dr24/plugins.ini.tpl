@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[dr24_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for Geotech DR24 digitizer
 

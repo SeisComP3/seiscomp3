@@ -18,7 +18,7 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.edata.proc')
     except: seedlink.setParam('sources.edata.proc', 'edata_100')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.edata.comport')
 
 
   # Flush does nothing

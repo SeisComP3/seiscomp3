@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[${seedlink.source.id}_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for the Earth Data PS2400/PS6-24 digitizer (firmware >= 2.23)
 

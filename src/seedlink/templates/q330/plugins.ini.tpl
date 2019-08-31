@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[${seedlink.source.id}_$seedlink.station.id]
+[$seedlink.source.id]
 
 station=$seedlink.station.id
 udpaddr=$sources.q330.address

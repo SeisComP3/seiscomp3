@@ -10,16 +10,13 @@ class SeedlinkPluginHandler:
 
   def push(self, seedlink):
     # Check and set defaults
-    try: seedlink.param('sources.echopro.station')
-    except: seedlink.setParam('sources.echopro.station', 'BER')
-
-    try: seedlink.param('sources.echopro.comport')
-    except: seedlink.setParam('sources.echopro.comport', '/dev/ttyS0') 
+    try: seedlink.param('sources.echopro_3ch100hz.comport')
+    except: seedlink.setParam('sources.echopro_3ch100hz.comport', '/dev/ttyS0') 
     
-    try: seedlink.param('sources.echopro.proc')
-    except: seedlink.setParam('sources.echopro.proc', 'echopro_100')
+    try: seedlink.param('sources.echopro_3ch100hz.proc')
+    except: seedlink.setParam('sources.echopro_3ch100hz.proc', 'echopro_100')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.echopro_3ch100hz.comport')
 
   # Flush does nothing
   def flush(self, seedlink): pass

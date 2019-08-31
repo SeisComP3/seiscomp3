@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
-	<binding module="seedlink" name="orb" category="sources">
+	<binding module="seedlink" name="antelope" category="sources">
 		<description>Antelope ORB (TCP/IP)</description>
 		<configuration>
 			<parameter name="address" type="string">

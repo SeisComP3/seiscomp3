@@ -314,7 +314,8 @@ class Module(TemplateModule):
         self._read_station_config(self.station_config_file)
 
         # Generate plugin independent parameters
-        self._set('seedlink.station.id', station_id)
+        #self._set('seedlink.station.id', station_id)
+        self._set('seedlink.station.id', self.net + '.' + self.sta)
         self._set('seedlink.station.code', self.sta)
         self._set('seedlink.station.network', self.net)
         self._set('seedlink.station.access', self._get('access'))

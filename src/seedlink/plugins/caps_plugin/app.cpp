@@ -584,7 +584,7 @@ bool App::storeRawPacket(RawDataRecord &rec) {
 	int32_t dataSize = rec.buffer()->size() / sizeof(int32_t);
 
 	SessionTableItem *item = _currentItem;
-	return send_raw_depoch(item->sta.c_str(), item->cha.c_str(),
+	return send_raw_depoch((item->net + "." + item->sta).c_str(), item->cha.c_str(),
 	                       rec.startTime(), 0, -1, data, dataSize);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -619,7 +619,7 @@ bool App::storeMSEEDPacket(MSEEDDataRecord &rec) {
 		return true;
 	}
 
-	int r = send_mseed(item->sta.c_str(), rec.data()->data(), rec.data()->size());
+	int r = send_mseed((item->net + "." + item->sta).c_str(), rec.data()->data(), rec.data()->size());
 	if ( r <= 0 ) {
 		LogError("Link to SeedLink broken: %d: %s", r, strerror(r));
 		return false;

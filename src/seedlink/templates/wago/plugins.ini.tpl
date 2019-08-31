@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[IO_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for WAGO I/O Controller
 

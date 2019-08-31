@@ -6,6 +6,7 @@ Plugin handler for the NRTS plugin.
 class SeedlinkPluginHandler:
   # Create defaults
   def __init__(self):
+    self.__channels = set()
     pass
 
   def push(self, seedlink):
@@ -20,10 +21,13 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.naqs.proc')
     except: seedlink.setParam('sources.naqs.proc', 'naqs_bb40_sm100')
 
-    # Key is address (one instance per address)
-    return address + ":" + str(port)
+    self.__channels.add(seedlink.param('seedlink.station.code'))
+
+    # Key is address and network code
+    return (address + ":" + str(port), seedlink.param('seedlink.station.network'))
 
 
   # Flush does nothing
   def flush(self, seedlink):
+    seedlink.setParam('sources.naqs.channels', ",".join(self.__channels))
     pass

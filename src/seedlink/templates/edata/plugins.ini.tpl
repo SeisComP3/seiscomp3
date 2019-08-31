@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[ED_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for EarthData PS6-24 digitizer
 

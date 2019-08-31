@@ -67,6 +67,7 @@ void swab8 (double *in);
 
 /* It's ugly, but simplifies things greatly */
 extern ChannelList channelList;
+extern char *network;
 
 /**************************************************************************
 
@@ -550,13 +551,17 @@ processData(char* buffer, int length )
     return;
   }
   *chan++ = '\0';
-  
-  /* Send it off to the controlling SeedLink server */
-  if ( send_raw_depoch(sta, chan, pTime, 0, -1, pDataPtr, pNSamp) < 0 ) {
-    gen_log(1,0, "cannot send data to seedlink: %s", strerror(errno));
-    exit(1);
+
+  {
+    char sta_id[11];
+    snprintf(sta_id, 11, "%s.%s", network, sta);
+    /* Send it off to the controlling SeedLink server */
+    if ( send_raw_depoch(sta_id, chan, pTime, 0, -1, pDataPtr, pNSamp) < 0 ) {
+      gen_log(1,0, "cannot send data to seedlink: %s", strerror(errno));
+      exit(1);
+    }
   }
-  
+
   /* print out header and/or data for different packet types */
   gen_log(0,2, "Received uncompressed data for stream %ld (%s_%s)\n",
 	  pKey, sta, chan);

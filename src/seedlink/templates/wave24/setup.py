@@ -18,7 +18,7 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.wave24.proc')
     except: seedlink.setParam('sources.wave24.proc', 'wave24bb')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.wave24.comport')
 
 
   # Flush does nothing
