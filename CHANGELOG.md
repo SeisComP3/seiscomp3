@@ -258,6 +258,16 @@
 
 ## Release 2018.327 patch7
 
+```SC_API_VERSION 13.0.0```
+
+* trunk
+
+  * Database _oid columns for MySQL and SQLite3 have changed to BIGINT (64bit)
+  * Codebase has changed to support 64bit _oid columns which breaks binary
+    compatibility with API 12
+
+## Release YYYY.ddd
+
 ```SC_API_VERSION 12.1.0```
 
 * trunk
