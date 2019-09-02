@@ -50,7 +50,7 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 		virtual bool beginQuery(const char* query);
 		virtual void endQuery();
 
-		virtual unsigned long lastInsertId(const char* table);
+		virtual OID lastInsertId(const char* table);
 		virtual uint64_t numberOfAffectedRows();
 
 		virtual bool fetchRow();

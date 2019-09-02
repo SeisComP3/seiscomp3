@@ -66,6 +66,15 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
  class SC_SYSTEM_CORE_API DatabaseInterface : public Seiscomp::Core::BaseObject {
 	DECLARE_SC_CLASS(DatabaseInterface);
 
+
+	// ------------------------------------------------------------------
+	//  Public types
+	// ------------------------------------------------------------------
+	public:
+		typedef uint64_t OID;
+		static const OID INVALID_OID;
+
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -171,7 +180,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		    @return The last generated ID > 0 or 0 of there hasn't been
 		            created an ID yet.
 		  */
-		virtual unsigned long lastInsertId(const char* table) = 0;
+		virtual OID lastInsertId(const char* table) = 0;
 
 		/** Returns the number of rows affected by a SQL statement.
 		    This function should only be used after a UPDATE or DELETE

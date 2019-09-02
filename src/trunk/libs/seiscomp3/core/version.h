@@ -39,6 +39,7 @@ namespace Core {
  API Changelog
  ******************************************************************************
  "13.0.0"   0x0D0000
+   - Changed database oid type to 64bit
    - Added virtual Seiscomp::IO::Database::escape
 
  "12.2.0"   0x0C0200

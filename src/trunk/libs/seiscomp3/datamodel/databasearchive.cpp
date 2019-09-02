@@ -774,7 +774,7 @@ DatabaseIterator DatabaseArchive::getObjects(const std::string &parentID,
 	}
 
 	if ( !parentID.empty() ) {
-		unsigned long parentID_ = publicObjectId(parentID);
+		OID parentID_ = publicObjectId(parentID);
 		if ( !parentID_ ) {
 			SEISCOMP_INFO("parent object with id '%s' not found in database", parentID.c_str());
 			return DatabaseIterator();
@@ -799,7 +799,7 @@ DatabaseIterator DatabaseArchive::getObjects(const PublicObject *parent,
 		return DatabaseIterator();
 	}
 
-	unsigned long parentID = getCachedId(parent);
+	OID parentID = getCachedId(parent);
 	if ( !parentID && parent ) {
 		parentID = publicObjectId(parent->publicID());
 		if ( !parentID ) {
@@ -919,7 +919,7 @@ size_t DatabaseArchive::getObjectCount(const PublicObject *parent,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
+DatabaseIterator DatabaseArchive::getObjectIterator(OID parentID,
                                                     const RTTI &classType,
                                                     bool ignorePublicObject) {
 	if ( !validInterface() ) {
@@ -1376,8 +1376,8 @@ void DatabaseArchive::renderValues(const AttributeMap &attributes) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::publicObjectId(const std::string &publicId) {
-	unsigned long id = 0;
+DatabaseArchive::OID DatabaseArchive::publicObjectId(const std::string &publicId) {
+	OID id = 0;
 	std::stringstream ss;
 	ss << "select _oid from " << PublicObject::ClassName()
 	   << " where " << _publicIDColumn << "='" << toSQL(_db.get(), publicId) << "'";
@@ -1397,7 +1397,7 @@ unsigned long DatabaseArchive::publicObjectId(const std::string &publicId) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::objectId(Object *object, const std::string &parentID) {
+DatabaseArchive::OID DatabaseArchive::objectId(Object *object, const std::string &parentID) {
 	PublicObject* publicObject = PublicObject::Cast(object);
 	if ( publicObject )
 		return publicObjectId(publicObject->publicID());
@@ -1412,7 +1412,7 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 
 	resetAttributePrefix();
 
-	unsigned long iParentID = 0;
+	OID iParentID = 0;
 
 	PublicObject* parentObject = object->parent();
 	if ( parentObject != NULL ) {
@@ -1424,7 +1424,7 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 			else {
 				SEISCOMP_ERROR("objectID: parent object with publicID '%s' has not been "
 				               "found in the database", parentObject->publicID().c_str());
-				return (long unsigned int)-1;
+				return IO::DatabaseInterface::INVALID_OID;
 			}
 		}
 	}
@@ -1433,12 +1433,12 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 		if ( !iParentID ) {
 			SEISCOMP_ERROR("objectID: parent object with publicID '%s' has not been "
 			               "found in the database", parentID.c_str());
-			return (long unsigned int)-1;
+			return IO::DatabaseInterface::INVALID_OID;
 		}
 	}
 	else {
 		SEISCOMP_ERROR("objectID: no parent object given");
-		return (long unsigned int)-1;
+		return IO::DatabaseInterface::INVALID_OID;
 	}
 
 	_isReading = false;
@@ -1447,7 +1447,7 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 	object->serialize(*this);
 	if ( !_validObject ) {
 		SEISCOMP_ERROR("failed to query for object");
-		return -1;
+		return IO::DatabaseInterface::INVALID_OID;
 	}
 
 	if ( _indexAttributes.empty() ) {
@@ -1478,9 +1478,9 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 	_isReading = true;
 
 	if ( !_db->beginQuery(ss.str().c_str()) )
-		return -1;
+		return IO::DatabaseInterface::INVALID_OID;
 
-	unsigned long id = (long unsigned int)-1;
+	OID id = IO::DatabaseInterface::INVALID_OID;
 
 	if ( _db->fetchRow() )
 		fromString(id, (const char*)_db->getRowField(0));
@@ -1495,7 +1495,7 @@ unsigned long DatabaseArchive::objectId(Object *object, const std::string &paren
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::insertObject() {
+DatabaseArchive::OID DatabaseArchive::insertObject() {
 	std::stringstream ss;
 	ss << "insert into " << Object::ClassName() << "(_oid) values("
 	   << _db->defaultValue() << ")";
@@ -1511,10 +1511,10 @@ unsigned long DatabaseArchive::insertObject() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long DatabaseArchive::insertPublicObject(const std::string &publicId) {
+DatabaseArchive::OID DatabaseArchive::insertPublicObject(const std::string &publicId) {
 	if ( publicId.empty() ) return 0;
 
-	unsigned long objectId = insertObject();
+	OID objectId = insertObject();
 	if ( objectId == 0 )
 		return 0;
 
@@ -1570,7 +1570,7 @@ bool DatabaseArchive::insertRow(const std::string &table,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool DatabaseArchive::deleteObject(unsigned long id) {
+bool DatabaseArchive::deleteObject(OID id) {
 	std::stringstream ss;
 	ss << "delete from " << Object::ClassName()
 	   << " where _oid=" << id;
@@ -1601,7 +1601,7 @@ bool DatabaseArchive::write(Object* object, const std::string &parentId) {
 
 	resetAttributePrefix();
 
-	unsigned long objectId;
+	OID objectId;
 	PublicObject* publicObject = PublicObject::Cast(object);
 	if ( publicObject != NULL ) {
 		if ( publicObjectId(publicObject->publicID()) > 0 ) {
@@ -1642,7 +1642,7 @@ bool DatabaseArchive::write(Object* object, const std::string &parentId) {
 
 	PublicObject* parentObject = object->parent();
 	if ( parentObject != NULL ) {
-		unsigned long iParentId = getCachedId(parentObject);
+		OID iParentId = getCachedId(parentObject);
 		if ( iParentId == 0 ) {
 			iParentId = publicObjectId(parentObject->publicID());
 			if ( iParentId )
@@ -1661,7 +1661,7 @@ bool DatabaseArchive::write(Object* object, const std::string &parentId) {
 	}
 	else if ( !parentId.empty() ) {
 		//_rootAttributes["_parent_oid"] = "(select _oid from " + std::string(PublicObject::ClassName()) + " where publicID='" + parentId + "')";
-		unsigned long iParentId = publicObjectId(parentId);
+		OID iParentId = publicObjectId(parentId);
 		if ( iParentId ) {
 			_rootAttributes["_parent_oid"] = toString(iParentId);
 			success = insertRow(object->className(), *_objectAttributes);
@@ -1712,8 +1712,8 @@ bool DatabaseArchive::update(Object *object, const std::string &parentID) {
 
 	resetAttributePrefix();
 
-	unsigned long iParentID = 0;
-	unsigned long iPublicID = 0;
+	OID iParentID = 0;
+	OID iPublicID = 0;
 
 	PublicObject* parentObject = object->parent();
 	if ( parentObject != NULL ) {
@@ -1830,11 +1830,11 @@ bool DatabaseArchive::remove(Object *object, const std::string &parentID) {
 		return false;
 	}
 
-	int objectID = getCachedId(object);
-	if ( objectID == 0 )
+	OID objectID = getCachedId(object);
+	if ( objectID == IO::DatabaseInterface::INVALID_OID )
 		objectID = objectId(object, parentID);
 
-	if ( objectID <= 0 ) {
+	if ( objectID == IO::DatabaseInterface::INVALID_OID ) {
 		SEISCOMP_WARNING("remove: object '%s' has not been found in database",
 		                 object->className());
 		return true;
@@ -1977,7 +1977,7 @@ bool DatabaseArchive::locateObjectByName(const char *name, const char *targetCla
 			return false;
 		}
 
-		unsigned long childId;
+		OID childId;
 		fromString(childId, _field);
 		SEISCOMP_DEBUG("should read child table '%s' with _oid=%ld", targetClass, childId);
 	}
@@ -2104,8 +2104,8 @@ void DatabaseArchive::serialize(SerializeDispatcher &disp) {
 			if ( !insertRow(_currentChildTable->first,
 			                _currentChildTable->second) )
 				return;
-	
-			write((int)_db->lastInsertId(Object::ClassName()));
+
+			writeAttrib(toString(_db->lastInsertId(Object::ClassName())));
 		}
 		else {
 			std::string backupPrefix(_currentAttributePrefix);
@@ -2188,7 +2188,7 @@ void DatabaseArchive::onObjectDestroyed(Object *object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int DatabaseArchive::getCachedId(const Object *o) const {
+DatabaseArchive::OID DatabaseArchive::getCachedId(const Object *o) const {
 	ObjectIdMap::const_iterator it = _objectIdCache.find(o);
 	if ( it == _objectIdCache.end() )
 		return 0;
@@ -2200,7 +2200,7 @@ int DatabaseArchive::getCachedId(const Object *o) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void DatabaseArchive::registerId(const Object *o, int id) {
+void DatabaseArchive::registerId(const Object *o, OID id) {
 	_objectIdCache[o] = id;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2245,7 +2245,7 @@ void DatabaseArchive::removeId(Object *o) {
 	ObjectIdMap::iterator it = _objectIdCache.find(o);
 	if ( it != _objectIdCache.end() ) {
 		if ( debug ) {
-			SEISCOMP_DEBUG("Object removed from cache with id: %d", (*it).second);
+			SEISCOMP_DEBUG("Object removed from cache with id: %ld", (*it).second);
 			if ( debug == 1 )
 				SEISCOMP_DEBUG("This message will not be repeated for other objects");
 			--debug;
