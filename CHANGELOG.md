@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch16
 
 * fdsnws
 
