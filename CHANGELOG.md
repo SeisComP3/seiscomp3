@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* fdsnws
+
+  * Fix regression with respect to event type mapping. An empty event type
+    was mapped to "other event".
+
+
 ## Release 2018.327 patch15
 
 * fdsnws
