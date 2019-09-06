@@ -55,6 +55,13 @@ import_array();
 
 enum(Seiscomp::Core::GreensFunctionComponent);
 
+/* There is a bytes() method in Array we don't want to wrap.
+ * Using the same name bytes() to do something different is not
+ * quite optimal and thus may change.
+ */
+%ignore Seiscomp::Array::bytes() const;
+%ignore Seiscomp::Array::str() const;
+
 %include "seiscomp3/core/status.h"
 %include "seiscomp3/core/array.h"
 %include "seiscomp3/core/bitset.h"
@@ -146,9 +153,40 @@ enum(Seiscomp::Core::GreensFunctionComponent);
 			Py_RETURN_NONE;
 	}
 
+	PyObject* bytes() {
+		PyObject *b;
+		switch ( self->dataType() ) {
+			case Seiscomp::Array::CHAR:
+%#if PY_MAJOR_VERSION == 2
+				b = PyString_FromStringAndSize((char*)self->data(), self->size());
+				//Py_INCREF(b);
+				return b;
+%#elif PY_MAJOR_VERSION >= 3
+				b = PyBytes_FromStringAndSize((char*)self->data(), self->size());
+				//Py_INCREF(b);
+				return b;
+%#else
+				SWIG_exception(SWIG_TypeError, "unsupported Python version");
+%#endif
+			default:
+				SWIG_exception(SWIG_TypeError, "unsupported array type");
+				goto fail;
+		}
+		fail:
+			Py_RETURN_NONE;
+	}
 	%pythoncode %{
+		def str(self):
+			""" For backwards compatibility """
+			return self.bytes()
+
 		def __str__(self):
-			return self.str()
+			""" For backwards compatibility """
+			return self.bytes()
+
+		def __bytes__(self):
+			return self.bytes()
+
 		def numeric(self):
 			import sys
 			sys.stderr.write("Use of Array.numeric() is deprecated - use numpy() instead\n")
@@ -209,4 +247,3 @@ enum(Seiscomp::Core::GreensFunctionComponent);
 			return o
 	%}
 };
-
