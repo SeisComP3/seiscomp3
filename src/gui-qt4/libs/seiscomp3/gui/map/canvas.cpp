@@ -883,7 +883,7 @@ size_t Canvas::drawFeature(QPainter &painter, const Geo::GeoFeature *f,
 	if ( f->closedPolygon() && filled ) {
 		if ( nSubFeat > 0 ) {
 			QPainterPath path;
-			bool firstForward = true;
+			bool firstForward;
 
 			for ( size_t i = 0; i <= nSubFeat; ++i, startIdx = endIdx ) {
 				endIdx = (i == nSubFeat ? f->vertices().size() : f->subFeatures()[i]);
@@ -892,6 +892,7 @@ size_t Canvas::drawFeature(QPainter &painter, const Geo::GeoFeature *f,
 					if ( !_projection->project(path, endIdx - startIdx, &f->vertices()[startIdx], true, effectiveRoughness, clipHint) )
 						continue;
 					gotFirstPath = true;
+					firstForward = Geo::GeoFeature::area(&f->vertices()[startIdx], endIdx-startIdx) > 0;
 				}
 				else {
 					QPainterPath subPath;
@@ -899,7 +900,6 @@ size_t Canvas::drawFeature(QPainter &painter, const Geo::GeoFeature *f,
 						continue;
 
 					bool forward = Geo::GeoFeature::area(&f->vertices()[startIdx], endIdx-startIdx) > 0;
-					if ( i == 0 ) firstForward = forward;
 					forward = firstForward == forward;
 
 					if ( forward )
