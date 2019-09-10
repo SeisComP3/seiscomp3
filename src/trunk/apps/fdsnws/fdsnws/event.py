@@ -308,7 +308,7 @@ class FDSNEvent(BaseResource):
         # Create database query
         db = DatabaseInterface.Open(Application.Instance().databaseURI())
         if db is None:
-            msg = "could not connect to database: %s" % dbq.errorMsg()
+            msg = "could not connect to database"
             return self.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
         dbq = DataModel.DatabaseQuery(db)
