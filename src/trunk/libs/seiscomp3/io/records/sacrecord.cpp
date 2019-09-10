@@ -258,7 +258,7 @@ void SACRecord::read(std::istream &in) {
 
 	FloatArrayPtr ar = new FloatArray(header.npts);
 
-	std::streamsize n = ar->size()*ar->bytes();
+	std::streamsize n = ar->size()*ar->elementSize();
 
 	if ( !in.read((char*)ar->typedData(), n) )
 		throw Core::StreamException("stream underflow while reading SAC time series");
@@ -311,7 +311,7 @@ void SACRecord::write(std::ostream &out) {
 	if ( !out.write((char*)&header, header_size) )
 		throw Core::StreamException("stream error while writing SAC header");
 
-	if ( !out.write((char*)ar->typedData(), ar->bytes()*ar->size()) )
+	if ( !out.write((char*)ar->typedData(), ar->elementSize()*ar->size()) )
 		throw Core::StreamException("stream error while writing SAC time series");
 }
 

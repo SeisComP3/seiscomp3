@@ -132,7 +132,7 @@ const T* TypedArray<T>::typedData() const {
 }
 
 template<typename T>
-int TypedArray<T>::bytes() const {
+int TypedArray<T>::elementSize() const {
 	return sizeof(T);
 }
 

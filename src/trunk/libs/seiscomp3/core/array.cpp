@@ -30,7 +30,7 @@ Array* Array::clone() const {
 }
 
 std::string Array::str() const {
-	return std::string(static_cast<const char*>(data()), size()*bytes());
+	return std::string(static_cast<const char*>(data()), size()*elementSize());
 }
 
 
