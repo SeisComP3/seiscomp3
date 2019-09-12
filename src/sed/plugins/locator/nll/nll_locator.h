@@ -6,6 +6,8 @@
 * released under the SeisComP Public License.                              *
 ***************************************************************************/
 
+#ifndef __SEISCOMP_NLL_LOC_PLUGIN_H__
+#define __SEISCOMP_NLL_LOC_PLUGIN_H__
 
 #include <seiscomp3/core/plugin.h>
 #include <seiscomp3/seismology/locatorinterface.h>
@@ -135,3 +137,5 @@ class NLLocator : public Seiscomp::Seismology::LocatorInterface {
 }
 
 }
+
+#endif
