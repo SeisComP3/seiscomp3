@@ -7,6 +7,10 @@
   * Fix regression with respect to event type mapping. An empty event type
     was mapped to "other event".
 
+* trunk
+
+  * Renamed Array::bytes() -> elementSize()
+  * Added Array.bytes() to Python wrappers (only)
 
 ## Release 2018.327 patch15
 
