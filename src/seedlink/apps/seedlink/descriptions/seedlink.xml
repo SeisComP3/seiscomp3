@@ -63,6 +63,16 @@
 					Same as window_extraction for trusted IP addresses.
 				</description>
 			</parameter>
+			<parameter name="websocket" type="boolean" default="false">
+				<description>
+					Allow websocket connections.
+				</description>
+			</parameter>
+			<parameter name="websocket_trusted" type="boolean" default="false">
+				<description>
+					Same as websocket for trusted IP addresses.
+				</description>
+			</parameter>
 			<parameter name="msrtsimul" type="boolean" default="false">
 				<description>
 					If activated Seedlink uses the mseedfifo to read records and

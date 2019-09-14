@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/reftek_plugin$seedlink._dae
              timeout = 0
              start_retry = 60
              shutdown_wait = 60
+             proc = "$sources.reftek.proc"
 

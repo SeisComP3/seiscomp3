@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/caps_plugin -I $sources.cap
              timeout = 0
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.caps.proc"
 

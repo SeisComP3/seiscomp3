@@ -33,11 +33,17 @@ stream_check = "$stream_check"
 gap_check_pattern = "$gap_check_pattern"
 gap_treshold = "$gap_treshold"
 
-* Disable window extraction from arbitrary Internet hosts
+* Allow time window requests from arbitrary Internet hosts
 window_extraction = "$window_extraction"
 
-* Enable window extraction from trusted hosts
+* Allow time window requests from trusted hosts
 window_extraction_trusted = "$window_extraction_trusted"
+
+* Allow websocket connections from arbitrary Internet hosts
+websocket = "$websocket"
+
+* Allow websocket connections from trusted hosts
+websocket_trusted = "$websocket_trusted"
 
 * INFO provided to arbitrary Internet hosts: ID, CAPABILITIES, STATIONS,
 * STREAMS

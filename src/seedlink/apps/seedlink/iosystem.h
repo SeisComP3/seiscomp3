@@ -310,6 +310,7 @@ rc_ptr<ConnectionManager> make_conn_manager(const string &daemon_name,
   rc_ptr<MasterMonitor> monitor, bool rlog, int max_conn,
   int max_conn_per_ip, int trusted_info_level, int untrusted_info_level,
   bool trusted_window_extraction, bool untrusted_window_extraction,
+  bool trusted_websocket, bool untrusted_websocket,
   int max_bps, int to_sec, int to_usec);
 
 } // namespace IOSystem_private
