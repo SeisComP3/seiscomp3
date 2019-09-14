@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd = "$seedlink.plugin_dir/wave24_plugin -p $sources
              timeout = 600
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.wave24.proc"
 

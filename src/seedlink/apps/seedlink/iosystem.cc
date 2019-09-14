@@ -53,6 +53,7 @@ extern "C" {
 #include "descriptor.h"
 #include "buffer.h"
 #include "diag.h"
+#include "wstools.h"
 
 #ifdef LONGWORD_64BIT
 #define LONG long
@@ -77,7 +78,7 @@ using namespace Utilities;
 // Conflicts with definition in libslink.h
 // const char *const SIGNATURE         = "SL";
 const int         IOSIZE            = 520;
-const int         CMDLEN            = 100;
+const int         CMDLEN            = 140;
 
 #ifdef FD_REALLOC
 const int         FD_REALLOC_LIMIT    = 1024 * 1024;
@@ -329,6 +330,8 @@ class BufferStoreImpl: public BufferStore
     BufferStoreImplPartner &partner;
     BufferImpl *buf_head, *buf_free, *buf_first, *buf_queue;
     Sequence seq;
+    int bufsize;
+    int nbufs;
 
     void next_buffer();
     
@@ -373,25 +376,22 @@ class BufferStoreImpl: public BufferStore
       }
 
   public:
-    BufferStoreImpl(BufferStoreImplPartner &partner_init, int bufsize,
-      int nbufs);
+    BufferStoreImpl(BufferStoreImplPartner &partner_init, int bufsize_init,
+      int nbufs_init);
     ~BufferStoreImpl();
     Buffer *get_buffer();
     void queue_buffer(Buffer *buf1);
     void load_buffers(int fd);
     void create_blank_buffers(int n);
+    void enlarge(int newsize);
     
     BufferImpl *first() const
       {
         return buf_first;
       }
 
-    int n_records() const
+    int size() const
       {
-        int nbufs = 0;
-        for(const BufferImpl* p = buf_first; p; p = p->nextptr)
-            ++nbufs;
-
         return nbufs;
       }
 
@@ -406,8 +406,9 @@ class BufferStoreImpl: public BufferStore
       }
   };
 
-BufferStoreImpl::BufferStoreImpl(BufferStoreImplPartner &partner_init, int bufsize,
-  int nbufs): partner(partner_init), buf_first(NULL), seq(0)
+BufferStoreImpl::BufferStoreImpl(BufferStoreImplPartner &partner_init, int bufsize_init,
+  int nbufs_init): partner(partner_init), buf_first(NULL), seq(0), bufsize(bufsize_init),
+  nbufs(nbufs_init)
   {
     internal_check(nbufs >= 2);
     
@@ -497,6 +498,18 @@ void BufferStoreImpl::create_blank_buffers(int n)
         memset(buf->dataptr, 0, buf->size);
         next_buffer();
         partner.new_buffer(buf);
+      }
+  }
+
+void BufferStoreImpl::enlarge(int newsize)
+  {
+    internal_check(buf_free != NULL);
+
+    while(nbufs < newsize)
+      {
+        BufferImpl* buf = new BufferImpl(bufsize);
+        insert_buffer_after(buf, buf_free);
+        ++nbufs;
       }
   }
 
@@ -797,6 +810,9 @@ class ConnectionState: private ConnectionStateBase
     int stations_active;
     int stations_ready;
     bool batchmode;
+    bool ws_enabled;
+    string ws_key;
+    string ws_buf;
 
     ConnectionState(const string &host_init, int port_init, bool rlog,
       const Stream &logs, int clientfd_init, bool window_extraction_init):
@@ -804,16 +820,27 @@ class ConnectionState: private ConnectionStateBase
       host(host_init), port(port_init),
       window_extraction(window_extraction_init), multi(false),
       handshaking_done(false), have_response(false), stations_active(0),
-      stations_ready(0), batchmode(false) {}
+      stations_ready(0), batchmode(false), ws_enabled(false) {}
 
     void response(const string &str);
+    void ws_accept();
+    void ws_close();
+    void ws_pong(const void *vptr, size_t n);
+    ssize_t writen(const void *vptr, size_t n);
+    ssize_t send_response();
+    ssize_t send(const void *vptr, size_t ni, bool flush = true);
+
   };
 
 void ConnectionState::response(const string &str)
   {
     if (!batchmode)
       {
-        response_str = str;
+        if(ws_enabled)
+            response_str = string("\x82") + char(str.length()) + str;
+        else
+            response_str = str;
+
         have_response = true;
         fds.set_write(clientfd);
       }
@@ -821,6 +848,94 @@ void ConnectionState::response(const string &str)
       {
         if (str == "ERROR")
           logs(LOG_ERR) << "BATCH mode: Request failed" << endl;
+      }
+  }
+
+void ConnectionState::ws_accept()
+  {
+    string buf = ws_key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    uint8_t digest[20];
+    char cdigest[30];
+
+    sha1digest(digest, NULL, (uint8_t *)buf.c_str(), buf.length());
+    apr_base64_encode_binary(cdigest, (const unsigned char *)digest, 20);
+
+    response_str = \
+        "HTTP/1.1 101 Switching Protocols\r\n" \
+        "Upgrade: websocket\r\n" \
+        "Connection: Upgrade\r\n" \
+        "Sec-WebSocket-Accept: " + string(cdigest) + "\r\n\r\n";
+
+    have_response = true;
+    fds.set_write(clientfd);
+  }
+
+void ConnectionState::ws_close()
+  {
+    response_str = string("\x88") + char(0);
+    have_response = true;
+    fds.set_write(clientfd);
+  }
+
+void ConnectionState::ws_pong(const void *vptr, size_t n)
+  {
+    response_str = string("\x8a") + char(n) + string((char *)vptr, n);
+    have_response = true;
+    fds.set_write(clientfd);
+  }
+
+ssize_t ConnectionState::writen(const void *vptr, size_t n)
+  {
+    ssize_t nwritten;
+    size_t nleft = n;
+    const char *ptr = (const char *) vptr;
+
+    while (nleft > 0)
+      {
+        if ((nwritten = write(clientfd, ptr, nleft)) <= 0)
+            return nwritten;
+
+        nleft -= nwritten;
+        ptr += nwritten;
+      }
+
+    return n;
+  }
+
+ssize_t ConnectionState::send_response()
+  {
+    have_response = false;
+    return writen(response_str.data(), response_str.size());
+  }
+
+ssize_t ConnectionState::send(const void *vptr, size_t n, bool flush)
+  {
+    if(ws_enabled) {
+        ws_buf += string((char *)vptr, n);
+
+        if(flush)
+          {
+            size_t sz = ws_buf.size();
+            string response;
+
+            if(sz < 126)
+                response = string("\x82") + char(sz) + ws_buf;
+            else
+                response = string("\x82\x7e") + char(sz >> 8) + char(sz & 0xff) + ws_buf;
+
+            ws_buf = "";
+
+            ssize_t nwritten = writen(response.data(), response.size());
+
+            if(nwritten <= 0)
+                return nwritten;
+          }
+
+        return n;
+      }
+    else
+      {
+        return writen(vptr, n);
       }
   }
 
@@ -877,24 +992,6 @@ void StationConnectionState::reset_queue()
 //    ready = false;
   }
 
-ssize_t writen(int fd, const void *vptr, size_t n)
-  {
-    ssize_t nwritten;
-    size_t nleft = n;
-    const char *ptr = (const char *) vptr;   
-
-    while (nleft > 0)
-      {
-        if ((nwritten = write(fd, ptr, nleft)) <= 0)
-            return(nwritten);
-
-        nleft -= nwritten;
-        ptr += nwritten;
-      }
-    
-    return(n);
-  }
-
 //*****************************************************************************
 // StationConnection
 //*****************************************************************************
@@ -918,7 +1015,7 @@ class StationConnection
     list<StationConnectionState *>::iterator station_link;
     enum DeliveryResult { Ok, Retry, Fail };
   
-    ssize_t write_zeros(int fd, int count);
+    ssize_t write_zeros(int count);
     DeliveryResult do_deliver();
 
   public:
@@ -958,12 +1055,12 @@ class StationConnection
       }
   };
 
-ssize_t StationConnection::write_zeros(int fd, int count)
+ssize_t StationConnection::write_zeros(int count)
   {
     static char zero_buf[IOSIZE];
 
     internal_check(count <= IOSIZE);
-    return writen(fd, zero_buf, count);
+    return sx.cx.send(zero_buf, count);
   }
 
 StationConnection::DeliveryResult StationConnection::do_deliver()
@@ -977,7 +1074,7 @@ StationConnection::DeliveryResult StationConnection::do_deliver()
     
     if(sx.discard)
       {
-        if(write_zeros(sx.cx.clientfd, size) <= 0) return Fail;
+        if(write_zeros(size) <= 0) return Fail;
         sx.bufpos = (sx.bufpos + size) % (1 << MSEED_RECLEN);
         return Ok;
       }
@@ -1070,7 +1167,7 @@ StationConnection::DeliveryResult StationConnection::do_deliver()
           }
         
         if(sx.cx.stations_active == 0)
-            writen(sx.cx.clientfd, "END", 3);
+            sx.cx.send("END", 3);
 
         return Ok;
       }
@@ -1086,7 +1183,7 @@ StationConnection::DeliveryResult StationConnection::do_deliver()
             sseqstr << SIGNATURE << sx.seq;
         
             string seqstr = sseqstr.str();
-            if(writen(sx.cx.clientfd, seqstr.c_str(), seqstr.length()) <= 0)
+            if(sx.cx.send(seqstr.c_str(), seqstr.length(), false) <= 0)
                 return Fail;
           }
         else
@@ -1101,7 +1198,7 @@ StationConnection::DeliveryResult StationConnection::do_deliver()
           }
       }
 
-    if(writen(sx.cx.clientfd, dataptr, size) <= 0) return Fail;
+    if(sx.cx.send(dataptr, size) <= 0) return Fail;
     fds.clear_write2(sx.cx.clientfd);
 
     sx.bufpos = (sx.bufpos + size) % (1 << MSEED_RECLEN);
@@ -1903,10 +2000,14 @@ class Connection
     char cmdbuf[CMDLEN + 1];
     int cmdwp;
     bool invalid;
+    bool ws_init;
+    bool ws_handshaking;
     list<rc_ptr<MessageBuffer> > msg_bufs;
     list<rc_ptr<InfoBuffer> > info_bufs;
 
     bool parse_request(const char *cmdstr);
+    bool input_plain();
+    bool input_ws();
     bool input();
     bool request(const vector<string> &cmdvec);
     bool deliver();
@@ -1919,13 +2020,14 @@ class Connection
   public:
     Connection(unsigned int ipaddr_init, const string &host, int port,
       rc_ptr<StationIO> default_station, const string &default_network_id_init,
-      bool rlog, int info_level_init, bool window_extraction,
+      bool rlog, int info_level_init, bool window_extraction, bool websocket,
       rc_ptr<MasterMonitor> monitor_init,
       map<StationDescriptor, rc_ptr<StationIO> > &stations_init,
       const Stream &logs, int fd):
       cx(host, port, rlog, logs, fd, window_extraction), ipaddr(ipaddr_init),
       default_network_id(default_network_id_init), info_level(info_level_init),
-      monitor(monitor_init), stations(stations_init), cmdwp(0), invalid(false)
+      monitor(monitor_init), stations(stations_init), cmdwp(0), invalid(false),
+      ws_init(websocket), ws_handshaking(false)
       {
         current_station = requested_stations.insert(make_pair(default_station->station_key,
           default_station->connection_instance(cx))).first;
@@ -1958,28 +2060,21 @@ bool Connection::parse_request(const char *cmdstr)
     const char *p = cmdstr;
     int arglen = 0;
 
-    while(p += arglen, p += strspn(p, " "), arglen = strcspn(p, " "))
+    while(p += arglen, p += strspn(p, ": "), arglen = strcspn(p, ": "))
         cmdvec.push_back(string(p, arglen));
 
-    if(cmdvec.size() > 0) return request(cmdvec);
-    return false;
+    return request(cmdvec);
   }
 
-bool Connection::input()
+bool Connection::input_plain()
   {
-    int bytes_read;
-    if((bytes_read = read(cx.clientfd, &cmdbuf[cmdwp], CMDLEN - cmdwp)) <= 0)
-        return true;
-
-    for(int i = 0; i < bytes_read; ++i, ++cmdwp)
-        if(cmdbuf[cmdwp] == 0) break;
-
-    cmdbuf[cmdwp] = 0;
-
     bool disconnect = false;
     int cmdrp = 0, cmdlen, seplen;
-    while(!disconnect && (cmdlen = strcspn(cmdbuf + cmdrp, "\r\n"),
-      seplen = strspn(cmdbuf + cmdrp + cmdlen, "\r\n")))
+
+    while(!disconnect && (cmdrp += strspn(cmdbuf + cmdrp, "\n"),
+      cmdlen = strcspn(cmdbuf + cmdrp, "\r\n"),
+      seplen = (cmdbuf[cmdrp + cmdlen] == '\r'),
+      seplen += (cmdbuf[cmdrp + cmdlen + seplen] == '\n')))
       {
         cmdbuf[cmdrp + cmdlen] = 0;
         disconnect = parse_request(cmdbuf + cmdrp);
@@ -1988,14 +2083,110 @@ bool Connection::input()
     
     if(cmdlen >= CMDLEN)
       {
-        logs(LOG_WARNING) << "command buffer overflow" << endl;
-        cmdwp = cmdrp = 0;
-        return disconnect;
+        logs(LOG_WARNING) << "command is too long" << endl;
+        return true;
       }
         
-    memmove(cmdbuf, cmdbuf + cmdrp, cmdlen);
+    memmove(cmdbuf, cmdbuf + cmdrp, cmdwp - cmdrp);
     cmdwp -= cmdrp;
-    cmdrp = 0;
+
+    return disconnect;
+  }
+
+bool Connection::input_ws()
+  {
+    bool disconnect = false;
+    int cmdrp = 0;
+
+    while(!disconnect && cmdwp - cmdrp >= 2)
+      {
+        if(~cmdbuf[cmdrp] & 0x80)
+          {
+            cx.logs(LOG_ERR) << "websocket FIN flag is not set" << endl;
+            disconnect = true;
+            break;
+          }
+
+        if(~cmdbuf[cmdrp + 1] & 0x80)
+          {
+            cx.logs(LOG_ERR) << "websocket mask is not set" << endl;
+            disconnect = true;
+            break;
+          }
+
+        int length = cmdbuf[cmdrp + 1] & 0x7f;
+
+        if(length >= 126)
+          {
+            cx.logs(LOG_ERR) << "websocket frame is too large" << endl;
+            disconnect = true;
+            break;
+          }
+
+        int totallength = length + 6;
+
+        if(cmdwp - cmdrp < totallength)
+            break;
+
+        int opcode = cmdbuf[cmdrp] & 0xf;
+
+        if(opcode == 0x8)  // close
+          {
+            cx.ws_close();
+          }
+        else if(opcode != 0xa)  // ignore pong
+          {
+            char* mask = cmdbuf + cmdrp + 2;
+            char* data = cmdbuf + cmdrp + 6;
+
+            for(int i = 0; i < length; ++i)
+                data[i] ^= mask[i & 3];
+
+            if(opcode == 0x9)  // ping
+              {
+                cx.ws_pong(data, length);
+              }
+            else
+              {
+                int i = length;
+
+                while(i > 0 && (data[i - 1] == '\r' || data[i - 1] == '\n'))
+                    --i;
+
+                disconnect = parse_request(string(data, i).c_str());
+              }
+          }
+
+        cmdrp += totallength;
+      }
+
+    memmove(cmdbuf, cmdbuf + cmdrp, cmdwp - cmdrp);
+    cmdwp -= cmdrp;
+
+    return disconnect;
+  }
+
+bool Connection::input()
+  {
+    int bytes_read;
+    if((bytes_read = read(cx.clientfd, &cmdbuf[cmdwp], CMDLEN - cmdwp)) <= 0)
+        return true;
+
+    bool disconnect = false;
+
+    if(cx.ws_enabled)
+      {
+        cmdwp += bytes_read;
+        disconnect = input_ws();
+      }
+    else
+      {
+        for(int i = 0; i < bytes_read; ++i, ++cmdwp)
+            if(cmdbuf[cmdwp] == 0) break;
+
+        cmdbuf[cmdwp] = 0;
+        disconnect = input_plain();
+      }
 
     return disconnect;
   }
@@ -2097,6 +2288,59 @@ bool Connection::request(const vector<string> &cmdvec)
     msg_bufs.clear();
     info_bufs.clear();
     
+    if(ws_handshaking)
+      {
+        if(cmdvec.size() == 0)
+          {
+            ws_handshaking = false;
+
+            if(cx.ws_key.length() > 0)
+              {
+                cx.logs(LOG_INFO) << "accepting websocket" << endl;
+                cx.ws_accept();
+                cx.ws_enabled = true;
+              }
+            else
+              {
+                cx.logs(LOG_ERR) << "missing websocket key" << endl;
+                return true;
+              }
+          }
+        else if(!strcasecmp(cmdvec[0].c_str(), "SEC-WEBSOCKET-KEY"))
+          {
+            if(cmdvec.size() == 2)
+              {
+                cx.ws_key = cmdvec[1];
+              }
+            else
+              {
+                cx.request_invalid(cmdvec);
+                return true;
+              }
+          }
+
+        return false;
+      }
+    else
+      {
+        if(cmdvec.size() == 0)
+          {
+            return false;
+          }
+
+        if(ws_init)
+          {
+            ws_init = false;
+
+            if(!strcasecmp(cmdvec[0].c_str(), "GET"))
+              {
+                cx.request_ok(cmdvec);
+                ws_handshaking = true;
+                return false;
+              }
+          }
+      }
+
     if(!strcasecmp(cmdvec[0].c_str(), "BYE"))
       {
         if(cmdvec.size() == 1)
@@ -2147,8 +2391,7 @@ bool Connection::deliver()
   {
     if(cx.have_response)
       {
-        if(writen(cx.clientfd, cx.response_str.c_str(),
-          cx.response_str.length()) <= 0)
+        if(cx.send_response() <= 0)
             return true;
         
 //        map<StationDescriptor, rc_ptr<StationConnection> >::iterator i;
@@ -2156,7 +2399,6 @@ bool Connection::deliver()
 //            i->second->reset();
 
         cx.handshaking_done = false;
-        cx.have_response = false;
         return false;
       }
     
@@ -2168,10 +2410,10 @@ bool Connection::deliver()
         rc_ptr<MessageBuffer> buf = msg_bufs.front();
         msg_bufs.pop_front();
     
-        if(writen(cx.clientfd, buf->data(), buf->size()) <= 0)
+        if(cx.send(buf->data(), buf->size()) <= 0)
             return true;
 
-        if(msg_bufs.empty() && writen(cx.clientfd, "END", 3) <= 0)
+        if(msg_bufs.empty() && cx.send("END", 3) <= 0)
             return true;
         
         return false;
@@ -2186,10 +2428,10 @@ bool Connection::deliver()
         sseqstr << SIGNATURE << "INFO " << (info_bufs.empty() ? " ": "*");
     
         string seqstr = sseqstr.str();
-        if(writen(cx.clientfd, seqstr.c_str(), seqstr.length()) <= 0)
+        if(cx.send(seqstr.c_str(), seqstr.length(), false) <= 0)
             return true;
 
-        if(writen(cx.clientfd, buf->data(), (1 << MSEED_RECLEN)) <= 0)
+        if(cx.send(buf->data(), (1 << MSEED_RECLEN)) <= 0)
             return true;
 
         return false;
@@ -2258,6 +2500,8 @@ class ConnectionManagerImpl: public ConnectionManager
     int untrusted_info_level;
     bool trusted_window_extraction;
     bool untrusted_window_extraction;
+    bool trusted_websocket;
+    bool untrusted_websocket;
     int listenfd;
     struct timeval timeout;
     struct timeval throttle;
@@ -2283,8 +2527,8 @@ class ConnectionManagerImpl: public ConnectionManager
       rc_ptr<MasterMonitor> monitor_init, bool rlog_init, int max_conn_init,
       int max_conn_per_ip_init, int trusted_info_level_init,
       int untrusted_info_level_init, bool trusted_window_extraction_init,
-      bool untrusted_window_extraction_init, int max_bps, int to_sec,
-      int to_usec);
+      bool untrusted_window_extraction_init, bool trusted_websocket_init,
+      bool untrusted_websocket_init, int max_bps, int to_sec, int to_usec);
       
     rc_ptr<BufferStore> register_station(const string &station_key,
       const string &station_name, const string &network_id,
@@ -2303,7 +2547,8 @@ ConnectionManagerImpl::ConnectionManagerImpl(const string &daemon_name_init,
   rc_ptr<MasterMonitor> monitor_init, bool rlog_init, int max_conn_init,
   int max_conn_per_ip_init, int trusted_info_level_init,
   int untrusted_info_level_init, bool trusted_window_extraction_init,
-  bool untrusted_window_extraction_init, int max_bps, int to_sec, int to_usec):
+  bool untrusted_window_extraction_init, bool trusted_websocket_init,
+  bool untrusted_websocket_init, int max_bps, int to_sec, int to_usec):
   daemon_name(daemon_name_init), software_ident(software_ident_init),
   default_network_id(default_network_id_init), rlog(rlog_init),
   max_conn(max_conn_init), max_conn_per_ip(max_conn_per_ip_init),
@@ -2311,6 +2556,8 @@ ConnectionManagerImpl::ConnectionManagerImpl(const string &daemon_name_init,
   untrusted_info_level(untrusted_info_level_init),
   trusted_window_extraction(trusted_window_extraction_init),
   untrusted_window_extraction(untrusted_window_extraction_init),
+  trusted_websocket(trusted_websocket_init),
+  untrusted_websocket(untrusted_websocket_init),
   listenfd(-1), monitor(monitor_init)
   {
     handler = new ConnectionHandler;
@@ -2321,6 +2568,9 @@ ConnectionManagerImpl::ConnectionManagerImpl(const string &daemon_name_init,
     if(untrusted_window_extraction) monitor->add_capability("window-extraction", false);
     else if(trusted_window_extraction) monitor->add_capability("window-extraction", true);
     
+    if(untrusted_websocket) monitor->add_capability("websocket", false);
+    else if(trusted_websocket) monitor->add_capability("websocket", true);
+
     for(int i = 0; i < N_InfoLevel; ++i)
       {
         if(i <= untrusted_info_level)
@@ -2435,22 +2685,25 @@ void ConnectionManagerImpl::client_connect()
     
     int info_level;
     bool window_extraction;
+    bool websocket;
 
     if(monitor->iptrusted(ipaddr))
       {
         info_level = max(trusted_info_level, untrusted_info_level);
         window_extraction = trusted_window_extraction || untrusted_window_extraction;
+        websocket = trusted_websocket || untrusted_websocket;
       }
     else
       {
         info_level = untrusted_info_level;
         window_extraction = untrusted_window_extraction;
+        websocket = untrusted_websocket;
       }
         
     // check for default_station == NULL (no stations registered)...
     rc_ptr<Connection> conn = new Connection(ipaddr, host, port,
       default_station, default_network_id, rlog, info_level,
-      window_extraction, monitor, stations,
+      window_extraction, websocket, monitor, stations,
       CPPStreams::logs.stream(string(host) + ":" + to_string(port) + " : "),
       clientfd);
 
@@ -2606,12 +2859,14 @@ rc_ptr<ConnectionManager> make_conn_manager(const string &daemon_name,
   rc_ptr<MasterMonitor> monitor, bool rlog, int max_conn,
   int max_conn_per_ip, int trusted_info_level, int untrusted_info_level,
   bool trusted_window_extraction, bool untrusted_window_extraction,
+  bool trusted_websocket, bool untrusted_websocket,
   int max_bps, int to_sec, int to_usec)
   {
     return new ConnectionManagerImpl(daemon_name, software_ident,
       default_network_id, monitor, rlog, max_conn, max_conn_per_ip,
       trusted_info_level, untrusted_info_level, trusted_window_extraction,
-      untrusted_window_extraction, max_bps, to_sec, to_usec);
+      untrusted_window_extraction, trusted_websocket, untrusted_websocket,
+      max_bps, to_sec, to_usec);
   }
 
 } // namespace IOSystem_private

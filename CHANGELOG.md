@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* seedlink
+
+  * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
+  * Fix config to properly support multiple sources (plugins) per station
+  * Use unambiguous station ID (net.station)
+
 ## Release 2018.327 patch16
 
 * fdsnws

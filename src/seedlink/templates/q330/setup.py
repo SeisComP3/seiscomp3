@@ -24,6 +24,9 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.q330.auth')
     except: seedlink.setParam('sources.q330.auth', '0x00')
 
+    try: seedlink.param('sources.q330.proc')
+    except: seedlink.setParam('sources.q330.proc', '')
+
     # Evaluate udp port
     if seedlink._get('sources.q330.udpport').lower() == "auto":
       try: udpbase = int(seedlink._get('plugins.q330.udpbase', False))

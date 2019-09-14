@@ -277,8 +277,6 @@ class Module(TemplateModule):
                (self._get('seedlink.station.id'), self._get('seedlink.station.description'))
         ini += '             name = "%s"\n' % self._get('seedlink.station.code')
         ini += '             network = "%s"\n' % self._get('seedlink.station.network')
-        if self._get('seedlink.station.sproc'):
-            ini += '             proc = "%s"\n' % self._get('seedlink.station.sproc')
         if self._get('seedlink.station.access'):
             ini += '             access = "%s"\n' % self._get('seedlink.station.access').replace(',',' ')
         if self._get('seedlink.station.blanks'):
@@ -319,7 +317,6 @@ class Module(TemplateModule):
         self._set('seedlink.station.code', self.sta)
         self._set('seedlink.station.network', self.net)
         self._set('seedlink.station.access', self._get('access'))
-        self._set('seedlink.station.sproc', self._get('proc'))
         self._set('seedlink.station.blanks', self._get('blanks'))
         self._set('seedlink.station.encoding', self._get('encoding'))
         self._set('seedlink.station.buffers', self._get('buffers'))
@@ -365,12 +362,9 @@ class Module(TemplateModule):
         # If real-time simulation is activated do not parse the sources
         # and force the usage of the mseedfifo_plugin
         if self.msrtsimul:
-            self._set('seedlink.station.sproc', '')
             station_dict[(self.net, self.sta)] = self._generateStationForIni()
             self._getPluginHandler('mseedfifo')
             return
-
-        station_sproc = set()
 
         for source_type in self._get('sources').split(','):
             if not source_type: continue
@@ -460,7 +454,6 @@ class Module(TemplateModule):
                     self.sproc_used = True
                     sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
                     if sproc:
-                        station_sproc.add(sproc_name)
                         self.sproc[sproc_name] = sproc
                     else:
                         print "WARNING: cannot find streams_%s.tpl" % sproc_name
@@ -482,19 +475,6 @@ class Module(TemplateModule):
             # Set original parameters
             self.station_params = station_params
 
-        if len(station_sproc) > 1:
-            data = '  <proc name="%s">\n' % (",".join(station_sproc),)
-            for name in station_sproc:
-                data += '    <using proc="%s"/>\n' % (name,)
-
-            data += '  </proc>\n'
-
-            self._set('seedlink.station.sproc', ",".join(station_sproc))
-            self.combined_sproc[",".join(station_sproc)] = data
-
-        elif station_sproc:
-            self._set('seedlink.station.sproc', list(station_sproc)[0])
-
         # Create station section for seedlink.ini
         station_dict[(self.net, self.sta)] = self._generateStationForIni()
 
@@ -503,7 +483,6 @@ class Module(TemplateModule):
         self.seedlink_station = {}
         self.plugins_ini = {}
         self.sproc = {}
-        self.combined_sproc = {}
         self.plugins = {}
         self.sproc_used = False
         self.station_count = 0
@@ -589,6 +568,8 @@ class Module(TemplateModule):
         self._set_default("stream_check", "true", False)
         self._set_default("window_extraction", "true", False)
         self._set_default("window_extraction_trusted", "true", False)
+        self._set_default("websocket", "false", False)
+        self._set_default("websocket_trusted", "false", False)
 
         self._set_default("buffers", "100", False)
         self._set_default("segments", "50", False)
@@ -666,6 +647,16 @@ class Module(TemplateModule):
         else:
             self._set("window_extraction_trusted", "disabled", False)
 
+        if self._get("websocket", False).lower() == "true":
+            self._set("websocket", "enabled", False)
+        else:
+            self._set("websocket", "disabled", False)
+
+        if self._get("websocket_trusted", False).lower() == "true":
+            self._set("websocket_trusted", "enabled", False)
+        else:
+            self._set("websocket_trusted", "disabled", False)
+
         if self._get("request_log", False).lower() == "true":
             self._set("request_log", "enabled", False)
         else:
@@ -708,9 +699,6 @@ class Module(TemplateModule):
             fd.write('<streams>\n')
 
             for i in self.sproc.itervalues():
-                fd.write(i)
-
-            for i in self.combined_sproc.itervalues():
                 fd.write(i)
 
             fd.write('</streams>\n')

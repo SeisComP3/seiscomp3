@@ -31,6 +31,8 @@ class BufferStore
   public:
     virtual Buffer *get_buffer() =0;
     virtual void queue_buffer(Buffer *buf) =0;
+    virtual int size() const { return 0; }
+    virtual void enlarge(int newsize) {}
     virtual ~BufferStore() {}
   };
 

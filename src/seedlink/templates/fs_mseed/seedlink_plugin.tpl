@@ -3,4 +3,5 @@ plugin ${seedlink.source.id} cmd = "$seedlink.plugin_dir/fs_plugin$seedlink._dae
              timeout = 1200
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.fs_mseed.proc"
 

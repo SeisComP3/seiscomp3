@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/naqs_plugin -v -t 300 -n $s
              timeout = 600
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.naqs.proc"
 
