@@ -1926,6 +1926,26 @@ class Diff2(_object):
 Diff2_swigregister = _DataModel.Diff2_swigregister
 Diff2_swigregister(Diff2)
 
+class Diff3(Diff2):
+    """Proxy of C++ Seiscomp::DataModel::Diff3 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Diff2]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Diff3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Diff2]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Diff3, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _DataModel.delete_Diff3
+    __del__ = lambda self: None
+Diff3_swigregister = _DataModel.Diff3_swigregister
+Diff3_swigregister(Diff3)
+
 HORIZONTAL = _DataModel.HORIZONTAL
 ELLIPSE = _DataModel.ELLIPSE
 ELLIPSOID = _DataModel.ELLIPSOID
