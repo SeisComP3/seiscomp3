@@ -47,6 +47,7 @@ class SC_SYSTEM_CORE_API GeoFeature : public Core::BaseObject {
 		           unsigned int rank);
 		virtual ~GeoFeature();
 
+	public:
 		void setName(const std::string &name) { _name = name; }
 		const std::string &name() const { return _name; }
 
@@ -68,6 +69,12 @@ class SC_SYSTEM_CORE_API GeoFeature : public Core::BaseObject {
 		// Inverts the point order from counter-clockwise to clockwise or
 		// vice versa.
 		void invertOrder();
+
+		/**
+		 * @brief Sorts all subfeatures according to their area and containment
+		 *        from largest to smallest.
+		 */
+		void sort();
 
 		/**
 		 * @brief Sets an arbitrary pointer for user data. It is not touched
