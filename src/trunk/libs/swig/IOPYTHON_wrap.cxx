@@ -10207,6 +10207,69 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_DatabaseInterface_escape(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::DatabaseInterface *arg1 = (Seiscomp::IO::DatabaseInterface *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:DatabaseInterface_escape",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__DatabaseInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DatabaseInterface_escape" "', argument " "1"" of type '" "Seiscomp::IO::DatabaseInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::DatabaseInterface * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "DatabaseInterface_escape" "', argument " "2"" of type '" "std::string &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DatabaseInterface_escape" "', argument " "2"" of type '" "std::string &""'"); 
+  }
+  arg2 = reinterpret_cast< std::string * >(argp2);
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res3 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "DatabaseInterface_escape" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DatabaseInterface_escape" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try {
+      result = (bool)(arg1)->escape(*arg2,(std::string const &)*arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_DatabaseInterface_columnPrefix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::DatabaseInterface *arg1 = (Seiscomp::IO::DatabaseInterface *) 0 ;
@@ -35956,6 +36019,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DatabaseInterface_getRowFieldSize", _wrap_DatabaseInterface_getRowFieldSize, METH_VARARGS, (char *)"DatabaseInterface_getRowFieldSize(DatabaseInterface self, int index) -> size_t"},
 	 { (char *)"DatabaseInterface_timeToString", _wrap_DatabaseInterface_timeToString, METH_VARARGS, (char *)"DatabaseInterface_timeToString(DatabaseInterface self, Time arg3) -> string"},
 	 { (char *)"DatabaseInterface_stringToTime", _wrap_DatabaseInterface_stringToTime, METH_VARARGS, (char *)"DatabaseInterface_stringToTime(DatabaseInterface self, char const * arg3) -> Time"},
+	 { (char *)"DatabaseInterface_escape", _wrap_DatabaseInterface_escape, METH_VARARGS, (char *)"DatabaseInterface_escape(DatabaseInterface self, string out, string arg4) -> bool"},
 	 { (char *)"DatabaseInterface_columnPrefix", _wrap_DatabaseInterface_columnPrefix, METH_VARARGS, (char *)"DatabaseInterface_columnPrefix(DatabaseInterface self) -> string"},
 	 { (char *)"DatabaseInterface_convertColumnName", _wrap_DatabaseInterface_convertColumnName, METH_VARARGS, (char *)"DatabaseInterface_convertColumnName(DatabaseInterface self, string name) -> string"},
 	 { (char *)"DatabaseInterface_swigregister", DatabaseInterface_swigregister, METH_VARARGS, NULL},

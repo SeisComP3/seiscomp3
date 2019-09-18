@@ -505,6 +505,11 @@ class DatabaseInterface(seiscomp3.Core.BaseObject):
         return _IO.DatabaseInterface_stringToTime(self, arg2)
 
 
+    def escape(self, out, arg3):
+        """escape(DatabaseInterface self, string out, string arg3) -> bool"""
+        return _IO.DatabaseInterface_escape(self, out, arg3)
+
+
     def columnPrefix(self):
         """columnPrefix(DatabaseInterface self) -> string"""
         return _IO.DatabaseInterface_columnPrefix(self)

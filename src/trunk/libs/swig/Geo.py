@@ -597,6 +597,11 @@ class GeoFeature(seiscomp3.Core.BaseObject):
         return _Geo.GeoFeature_invertOrder(self)
 
 
+    def sort(self):
+        """sort(GeoFeature self)"""
+        return _Geo.GeoFeature_sort(self)
+
+
     def setUserData(self, arg2):
         """setUserData(GeoFeature self, void * arg2)"""
         return _Geo.GeoFeature_setUserData(self, arg2)

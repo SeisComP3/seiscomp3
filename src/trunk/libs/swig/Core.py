@@ -1288,8 +1288,8 @@ class Array(BaseObject):
     def clear(self):
         return _Core.Array_clear(self)
 
-    def bytes(self):
-        return _Core.Array_bytes(self)
+    def elementSize(self):
+        return _Core.Array_elementSize(self)
 
     def append(self, arg2):
         return _Core.Array_append(self, arg2)
@@ -1297,17 +1297,26 @@ class Array(BaseObject):
     def slice(self, m, n):
         return _Core.Array_slice(self, m, n)
 
-    def str(self):
-        return _Core.Array_str(self)
-
     def numpy(self):
         return _Core.Array_numpy(self)
 
     def setNumpy(self, obj):
         return _Core.Array_setNumpy(self, obj)
 
+    def bytes(self):
+        return _Core.Array_bytes(self)
+
+    def str(self):
+    	""" For backwards compatibility """
+    	return self.bytes()
+
     def __str__(self):
-    	return self.str()
+    	""" For backwards compatibility """
+    	return self.bytes()
+
+    def __bytes__(self):
+    	return self.bytes()
+
     def numeric(self):
     	import sys
     	sys.stderr.write("Use of Array.numeric() is deprecated - use numpy() instead\n")
@@ -2143,8 +2152,8 @@ class CharArrayT(Array):
     def size(self):
         return _Core.CharArrayT_size(self)
 
-    def bytes(self):
-        return _Core.CharArrayT_bytes(self)
+    def elementSize(self):
+        return _Core.CharArrayT_elementSize(self)
 
     def resize(self, size):
         return _Core.CharArrayT_resize(self, size)
@@ -2261,8 +2270,8 @@ class IntArrayT(Array):
     def size(self):
         return _Core.IntArrayT_size(self)
 
-    def bytes(self):
-        return _Core.IntArrayT_bytes(self)
+    def elementSize(self):
+        return _Core.IntArrayT_elementSize(self)
 
     def resize(self, size):
         return _Core.IntArrayT_resize(self, size)
@@ -2379,8 +2388,8 @@ class FloatArrayT(Array):
     def size(self):
         return _Core.FloatArrayT_size(self)
 
-    def bytes(self):
-        return _Core.FloatArrayT_bytes(self)
+    def elementSize(self):
+        return _Core.FloatArrayT_elementSize(self)
 
     def resize(self, size):
         return _Core.FloatArrayT_resize(self, size)
@@ -2497,8 +2506,8 @@ class DoubleArrayT(Array):
     def size(self):
         return _Core.DoubleArrayT_size(self)
 
-    def bytes(self):
-        return _Core.DoubleArrayT_bytes(self)
+    def elementSize(self):
+        return _Core.DoubleArrayT_elementSize(self)
 
     def resize(self, size):
         return _Core.DoubleArrayT_resize(self, size)
@@ -2615,8 +2624,8 @@ class ComplexFloatArray(Array):
     def size(self):
         return _Core.ComplexFloatArray_size(self)
 
-    def bytes(self):
-        return _Core.ComplexFloatArray_bytes(self)
+    def elementSize(self):
+        return _Core.ComplexFloatArray_elementSize(self)
 
     def resize(self, size):
         return _Core.ComplexFloatArray_resize(self, size)
@@ -2733,8 +2742,8 @@ class ComplexDoubleArray(Array):
     def size(self):
         return _Core.ComplexDoubleArray_size(self)
 
-    def bytes(self):
-        return _Core.ComplexDoubleArray_bytes(self)
+    def elementSize(self):
+        return _Core.ComplexDoubleArray_elementSize(self)
 
     def resize(self, size):
         return _Core.ComplexDoubleArray_resize(self, size)
@@ -2851,8 +2860,8 @@ class DateTimeArray(Array):
     def size(self):
         return _Core.DateTimeArray_size(self)
 
-    def bytes(self):
-        return _Core.DateTimeArray_bytes(self)
+    def elementSize(self):
+        return _Core.DateTimeArray_elementSize(self)
 
     def resize(self, size):
         return _Core.DateTimeArray_resize(self, size)
@@ -2969,8 +2978,8 @@ class StringArray(Array):
     def size(self):
         return _Core.StringArray_size(self)
 
-    def bytes(self):
-        return _Core.StringArray_bytes(self)
+    def elementSize(self):
+        return _Core.StringArray_elementSize(self)
 
     def resize(self, size):
         return _Core.StringArray_resize(self, size)

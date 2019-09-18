@@ -4007,6 +4007,28 @@ SWIGINTERN PyObject *Seiscomp_Array_setNumpy(Seiscomp::Array *self,PyObject *obj
 		fail:
 			Py_RETURN_NONE;
 	}
+SWIGINTERN PyObject *Seiscomp_Array_bytes(Seiscomp::Array *self){
+		PyObject *b;
+		switch ( self->dataType() ) {
+			case Seiscomp::Array::CHAR:
+#if PY_MAJOR_VERSION == 2
+				b = PyString_FromStringAndSize((char*)self->data(), self->size());
+				//Py_INCREF(b);
+				return b;
+#elif PY_MAJOR_VERSION >= 3
+				b = PyBytes_FromStringAndSize((char*)self->data(), self->size());
+				//Py_INCREF(b);
+				return b;
+#else
+				SWIG_exception(SWIG_TypeError, "unsupported Python version");
+#endif
+			default:
+				SWIG_exception(SWIG_TypeError, "unsupported array type");
+				goto fail;
+		}
+		fail:
+			Py_RETURN_NONE;
+	}
 SWIGINTERN void Seiscomp_Core_MessageIterator_step(Seiscomp::Core::MessageIterator *self){
 		++(*self);
 	}
@@ -17759,7 +17781,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Array_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Array_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
   void *argp1 = 0 ;
@@ -17767,15 +17789,15 @@ SWIGINTERN PyObject *_wrap_Array_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject 
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:Array_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:Array_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Array_bytes" "', argument " "1"" of type '" "Seiscomp::Array const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Array_elementSize" "', argument " "1"" of type '" "Seiscomp::Array const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::Array * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::Array const *)arg1)->bytes();
+      result = (int)((Seiscomp::Array const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -17890,41 +17912,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Array_str(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:Array_str",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Array_str" "', argument " "1"" of type '" "Seiscomp::Array const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Array * >(argp1);
-  {
-    try {
-      result = ((Seiscomp::Array const *)arg1)->str();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Array_numpy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
@@ -17980,6 +17967,41 @@ SWIGINTERN PyObject *_wrap_Array_setNumpy(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try {
       result = (PyObject *)Seiscomp_Array_setNumpy(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Array_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Array_bytes",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Array_bytes" "', argument " "1"" of type '" "Seiscomp::Array *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Array * >(argp1);
+  {
+    try {
+      result = (PyObject *)Seiscomp_Array_bytes(arg1);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -28145,7 +28167,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_CharArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_CharArrayT_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< char > *arg1 = (Seiscomp::TypedArray< char > *) 0 ;
   void *argp1 = 0 ;
@@ -28153,15 +28175,15 @@ SWIGINTERN PyObject *_wrap_CharArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:CharArrayT_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:CharArrayT_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_char_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CharArrayT_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< char > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CharArrayT_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< char > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< char > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< char > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< char > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -30202,7 +30224,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_IntArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_IntArrayT_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< int > *arg1 = (Seiscomp::TypedArray< int > *) 0 ;
   void *argp1 = 0 ;
@@ -30210,15 +30232,15 @@ SWIGINTERN PyObject *_wrap_IntArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:IntArrayT_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:IntArrayT_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_int_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IntArrayT_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< int > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IntArrayT_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< int > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< int > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< int > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< int > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32255,7 +32277,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FloatArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_FloatArrayT_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< float > *arg1 = (Seiscomp::TypedArray< float > *) 0 ;
   void *argp1 = 0 ;
@@ -32263,15 +32285,15 @@ SWIGINTERN PyObject *_wrap_FloatArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:FloatArrayT_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:FloatArrayT_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_float_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatArrayT_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< float > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FloatArrayT_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< float > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< float > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< float > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< float > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -34308,7 +34330,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_DoubleArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_DoubleArrayT_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< double > *arg1 = (Seiscomp::TypedArray< double > *) 0 ;
   void *argp1 = 0 ;
@@ -34316,15 +34338,15 @@ SWIGINTERN PyObject *_wrap_DoubleArrayT_bytes(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:DoubleArrayT_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:DoubleArrayT_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DoubleArrayT_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DoubleArrayT_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< double > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< double > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< double > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< double > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -36361,7 +36383,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComplexFloatArray_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_ComplexFloatArray_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< std::complex< float > > *arg1 = (Seiscomp::TypedArray< std::complex< float > > *) 0 ;
   void *argp1 = 0 ;
@@ -36369,15 +36391,15 @@ SWIGINTERN PyObject *_wrap_ComplexFloatArray_bytes(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:ComplexFloatArray_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:ComplexFloatArray_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComplexFloatArray_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::complex< float > > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComplexFloatArray_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::complex< float > > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< std::complex< float > > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< std::complex< float > > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< std::complex< float > > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -38414,7 +38436,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComplexDoubleArray_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_ComplexDoubleArray_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< std::complex< double > > *arg1 = (Seiscomp::TypedArray< std::complex< double > > *) 0 ;
   void *argp1 = 0 ;
@@ -38422,15 +38444,15 @@ SWIGINTERN PyObject *_wrap_ComplexDoubleArray_bytes(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:ComplexDoubleArray_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:ComplexDoubleArray_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComplexDoubleArray_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::complex< double > > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComplexDoubleArray_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::complex< double > > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< std::complex< double > > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< std::complex< double > > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< std::complex< double > > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -40467,7 +40489,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_DateTimeArray_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_DateTimeArray_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< Seiscomp::Core::Time > *arg1 = (Seiscomp::TypedArray< Seiscomp::Core::Time > *) 0 ;
   void *argp1 = 0 ;
@@ -40475,15 +40497,15 @@ SWIGINTERN PyObject *_wrap_DateTimeArray_bytes(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:DateTimeArray_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:DateTimeArray_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTimeArray_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< Seiscomp::Core::Time > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTimeArray_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< Seiscomp::Core::Time > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< Seiscomp::Core::Time > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< Seiscomp::Core::Time > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< Seiscomp::Core::Time > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -42540,7 +42562,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_StringArray_bytes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_StringArray_elementSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::TypedArray< std::string > *arg1 = (Seiscomp::TypedArray< std::string > *) 0 ;
   void *argp1 = 0 ;
@@ -42548,15 +42570,15 @@ SWIGINTERN PyObject *_wrap_StringArray_bytes(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj0 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:StringArray_bytes",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:StringArray_elementSize",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StringArray_bytes" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::string > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StringArray_elementSize" "', argument " "1"" of type '" "Seiscomp::TypedArray< std::string > const *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::TypedArray< std::string > * >(argp1);
   {
     try {
-      result = (int)((Seiscomp::TypedArray< std::string > const *)arg1)->bytes();
+      result = (int)((Seiscomp::TypedArray< std::string > const *)arg1)->elementSize();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -48578,12 +48600,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Array_size", _wrap_Array_size, METH_VARARGS, NULL},
 	 { (char *)"Array_resize", _wrap_Array_resize, METH_VARARGS, NULL},
 	 { (char *)"Array_clear", _wrap_Array_clear, METH_VARARGS, NULL},
-	 { (char *)"Array_bytes", _wrap_Array_bytes, METH_VARARGS, NULL},
+	 { (char *)"Array_elementSize", _wrap_Array_elementSize, METH_VARARGS, NULL},
 	 { (char *)"Array_append", _wrap_Array_append, METH_VARARGS, NULL},
 	 { (char *)"Array_slice", _wrap_Array_slice, METH_VARARGS, NULL},
-	 { (char *)"Array_str", _wrap_Array_str, METH_VARARGS, NULL},
 	 { (char *)"Array_numpy", _wrap_Array_numpy, METH_VARARGS, NULL},
 	 { (char *)"Array_setNumpy", _wrap_Array_setNumpy, METH_VARARGS, NULL},
+	 { (char *)"Array_bytes", _wrap_Array_bytes, METH_VARARGS, NULL},
 	 { (char *)"Array_swigregister", Array_swigregister, METH_VARARGS, NULL},
 	 { (char *)"BitSet_ClassName", _wrap_BitSet_ClassName, METH_VARARGS, NULL},
 	 { (char *)"BitSet_TypeInfo", _wrap_BitSet_TypeInfo, METH_VARARGS, NULL},
@@ -48764,7 +48786,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CharArrayT_data", _wrap_CharArrayT_data, METH_VARARGS, NULL},
 	 { (char *)"CharArrayT_typedData", _wrap_CharArrayT_typedData, METH_VARARGS, NULL},
 	 { (char *)"CharArrayT_size", _wrap_CharArrayT_size, METH_VARARGS, NULL},
-	 { (char *)"CharArrayT_bytes", _wrap_CharArrayT_bytes, METH_VARARGS, NULL},
+	 { (char *)"CharArrayT_elementSize", _wrap_CharArrayT_elementSize, METH_VARARGS, NULL},
 	 { (char *)"CharArrayT_resize", _wrap_CharArrayT_resize, METH_VARARGS, NULL},
 	 { (char *)"CharArrayT_clear", _wrap_CharArrayT_clear, METH_VARARGS, NULL},
 	 { (char *)"CharArrayT_fill", _wrap_CharArrayT_fill, METH_VARARGS, NULL},
@@ -48793,7 +48815,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"IntArrayT_data", _wrap_IntArrayT_data, METH_VARARGS, NULL},
 	 { (char *)"IntArrayT_typedData", _wrap_IntArrayT_typedData, METH_VARARGS, NULL},
 	 { (char *)"IntArrayT_size", _wrap_IntArrayT_size, METH_VARARGS, NULL},
-	 { (char *)"IntArrayT_bytes", _wrap_IntArrayT_bytes, METH_VARARGS, NULL},
+	 { (char *)"IntArrayT_elementSize", _wrap_IntArrayT_elementSize, METH_VARARGS, NULL},
 	 { (char *)"IntArrayT_resize", _wrap_IntArrayT_resize, METH_VARARGS, NULL},
 	 { (char *)"IntArrayT_clear", _wrap_IntArrayT_clear, METH_VARARGS, NULL},
 	 { (char *)"IntArrayT_fill", _wrap_IntArrayT_fill, METH_VARARGS, NULL},
@@ -48822,7 +48844,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FloatArrayT_data", _wrap_FloatArrayT_data, METH_VARARGS, NULL},
 	 { (char *)"FloatArrayT_typedData", _wrap_FloatArrayT_typedData, METH_VARARGS, NULL},
 	 { (char *)"FloatArrayT_size", _wrap_FloatArrayT_size, METH_VARARGS, NULL},
-	 { (char *)"FloatArrayT_bytes", _wrap_FloatArrayT_bytes, METH_VARARGS, NULL},
+	 { (char *)"FloatArrayT_elementSize", _wrap_FloatArrayT_elementSize, METH_VARARGS, NULL},
 	 { (char *)"FloatArrayT_resize", _wrap_FloatArrayT_resize, METH_VARARGS, NULL},
 	 { (char *)"FloatArrayT_clear", _wrap_FloatArrayT_clear, METH_VARARGS, NULL},
 	 { (char *)"FloatArrayT_fill", _wrap_FloatArrayT_fill, METH_VARARGS, NULL},
@@ -48851,7 +48873,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DoubleArrayT_data", _wrap_DoubleArrayT_data, METH_VARARGS, NULL},
 	 { (char *)"DoubleArrayT_typedData", _wrap_DoubleArrayT_typedData, METH_VARARGS, NULL},
 	 { (char *)"DoubleArrayT_size", _wrap_DoubleArrayT_size, METH_VARARGS, NULL},
-	 { (char *)"DoubleArrayT_bytes", _wrap_DoubleArrayT_bytes, METH_VARARGS, NULL},
+	 { (char *)"DoubleArrayT_elementSize", _wrap_DoubleArrayT_elementSize, METH_VARARGS, NULL},
 	 { (char *)"DoubleArrayT_resize", _wrap_DoubleArrayT_resize, METH_VARARGS, NULL},
 	 { (char *)"DoubleArrayT_clear", _wrap_DoubleArrayT_clear, METH_VARARGS, NULL},
 	 { (char *)"DoubleArrayT_fill", _wrap_DoubleArrayT_fill, METH_VARARGS, NULL},
@@ -48880,7 +48902,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexFloatArray_data", _wrap_ComplexFloatArray_data, METH_VARARGS, NULL},
 	 { (char *)"ComplexFloatArray_typedData", _wrap_ComplexFloatArray_typedData, METH_VARARGS, NULL},
 	 { (char *)"ComplexFloatArray_size", _wrap_ComplexFloatArray_size, METH_VARARGS, NULL},
-	 { (char *)"ComplexFloatArray_bytes", _wrap_ComplexFloatArray_bytes, METH_VARARGS, NULL},
+	 { (char *)"ComplexFloatArray_elementSize", _wrap_ComplexFloatArray_elementSize, METH_VARARGS, NULL},
 	 { (char *)"ComplexFloatArray_resize", _wrap_ComplexFloatArray_resize, METH_VARARGS, NULL},
 	 { (char *)"ComplexFloatArray_clear", _wrap_ComplexFloatArray_clear, METH_VARARGS, NULL},
 	 { (char *)"ComplexFloatArray_fill", _wrap_ComplexFloatArray_fill, METH_VARARGS, NULL},
@@ -48909,7 +48931,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComplexDoubleArray_data", _wrap_ComplexDoubleArray_data, METH_VARARGS, NULL},
 	 { (char *)"ComplexDoubleArray_typedData", _wrap_ComplexDoubleArray_typedData, METH_VARARGS, NULL},
 	 { (char *)"ComplexDoubleArray_size", _wrap_ComplexDoubleArray_size, METH_VARARGS, NULL},
-	 { (char *)"ComplexDoubleArray_bytes", _wrap_ComplexDoubleArray_bytes, METH_VARARGS, NULL},
+	 { (char *)"ComplexDoubleArray_elementSize", _wrap_ComplexDoubleArray_elementSize, METH_VARARGS, NULL},
 	 { (char *)"ComplexDoubleArray_resize", _wrap_ComplexDoubleArray_resize, METH_VARARGS, NULL},
 	 { (char *)"ComplexDoubleArray_clear", _wrap_ComplexDoubleArray_clear, METH_VARARGS, NULL},
 	 { (char *)"ComplexDoubleArray_fill", _wrap_ComplexDoubleArray_fill, METH_VARARGS, NULL},
@@ -48938,7 +48960,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTimeArray_data", _wrap_DateTimeArray_data, METH_VARARGS, NULL},
 	 { (char *)"DateTimeArray_typedData", _wrap_DateTimeArray_typedData, METH_VARARGS, NULL},
 	 { (char *)"DateTimeArray_size", _wrap_DateTimeArray_size, METH_VARARGS, NULL},
-	 { (char *)"DateTimeArray_bytes", _wrap_DateTimeArray_bytes, METH_VARARGS, NULL},
+	 { (char *)"DateTimeArray_elementSize", _wrap_DateTimeArray_elementSize, METH_VARARGS, NULL},
 	 { (char *)"DateTimeArray_resize", _wrap_DateTimeArray_resize, METH_VARARGS, NULL},
 	 { (char *)"DateTimeArray_clear", _wrap_DateTimeArray_clear, METH_VARARGS, NULL},
 	 { (char *)"DateTimeArray_fill", _wrap_DateTimeArray_fill, METH_VARARGS, NULL},
@@ -48967,7 +48989,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StringArray_data", _wrap_StringArray_data, METH_VARARGS, NULL},
 	 { (char *)"StringArray_typedData", _wrap_StringArray_typedData, METH_VARARGS, NULL},
 	 { (char *)"StringArray_size", _wrap_StringArray_size, METH_VARARGS, NULL},
-	 { (char *)"StringArray_bytes", _wrap_StringArray_bytes, METH_VARARGS, NULL},
+	 { (char *)"StringArray_elementSize", _wrap_StringArray_elementSize, METH_VARARGS, NULL},
 	 { (char *)"StringArray_resize", _wrap_StringArray_resize, METH_VARARGS, NULL},
 	 { (char *)"StringArray_clear", _wrap_StringArray_clear, METH_VARARGS, NULL},
 	 { (char *)"StringArray_fill", _wrap_StringArray_fill, METH_VARARGS, NULL},
@@ -50567,7 +50589,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"TimeSpan_MaxTime",Swig_var_TimeSpan_MaxTime_get, Swig_var_TimeSpan_MaxTime_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Time_Null",Swig_var_Time_Null_get, Swig_var_Time_Null_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0C0100)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0D0000)));
   SWIG_addvarlink(SWIG_globals(),(char *)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));

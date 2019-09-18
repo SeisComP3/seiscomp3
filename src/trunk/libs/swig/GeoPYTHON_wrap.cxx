@@ -10518,6 +10518,40 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GeoFeature_sort(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Geo::GeoFeature *arg1 = (Seiscomp::Geo::GeoFeature *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoFeature_sort",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Geo__GeoFeature, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoFeature_sort" "', argument " "1"" of type '" "Seiscomp::Geo::GeoFeature *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Geo::GeoFeature * >(argp1);
+  {
+    try {
+      (arg1)->sort();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GeoFeature_setUserData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Geo::GeoFeature *arg1 = (Seiscomp::Geo::GeoFeature *) 0 ;
@@ -21515,6 +21549,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GeoFeature_setClosedPolygon", _wrap_GeoFeature_setClosedPolygon, METH_VARARGS, (char *)"GeoFeature_setClosedPolygon(GeoFeature self, bool closed)"},
 	 { (char *)"GeoFeature_updateBoundingBox", _wrap_GeoFeature_updateBoundingBox, METH_VARARGS, (char *)"GeoFeature_updateBoundingBox(GeoFeature self)"},
 	 { (char *)"GeoFeature_invertOrder", _wrap_GeoFeature_invertOrder, METH_VARARGS, (char *)"GeoFeature_invertOrder(GeoFeature self)"},
+	 { (char *)"GeoFeature_sort", _wrap_GeoFeature_sort, METH_VARARGS, (char *)"GeoFeature_sort(GeoFeature self)"},
 	 { (char *)"GeoFeature_setUserData", _wrap_GeoFeature_setUserData, METH_VARARGS, (char *)"GeoFeature_setUserData(GeoFeature self, void * arg3)"},
 	 { (char *)"GeoFeature_userData", _wrap_GeoFeature_userData, METH_VARARGS, (char *)"GeoFeature_userData(GeoFeature self) -> void *"},
 	 { (char *)"GeoFeature_vertices", _wrap_GeoFeature_vertices, METH_VARARGS, (char *)"GeoFeature_vertices(GeoFeature self) -> Vertices"},
