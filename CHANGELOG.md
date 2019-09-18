@@ -8,6 +8,13 @@
   * Fix config to properly support multiple sources (plugins) per station
   * Use unambiguous station ID (net.station)
 
+* fdsnws
+
+  * Implement fdsnws-availability-1.0.0
+  * Fix crash if database is not configured correctly
+  * Add tests
+  * Bug fixes
+
 ## Release 2018.327 patch16
 
 * fdsnws
