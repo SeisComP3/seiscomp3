@@ -21,6 +21,10 @@
   * Increase default maximum map tile cache to 128mb
   * Fix rendering of geofeatures with more than one subfeature
 
+* ql2sc
+
+  * Add --ep option and fix ping-pong effect with two cross-connected systems
+
 ## Release 2018.327 patch16
 
 * fdsnws

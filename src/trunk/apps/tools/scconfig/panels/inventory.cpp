@@ -565,10 +565,10 @@ InventoryPanel::InventoryPanel(QWidget *parent)
 
 	a = folderViewTools->addAction("Test sync");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(testSync()));
-	a = folderViewTools->addAction("Sync");
-	connect(a, SIGNAL(triggered(bool)), this, SLOT(sync()));
 	a = folderViewTools->addAction("Sync keys");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(syncKeys()));
+	a = folderViewTools->addAction("Sync");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(sync()));
 
 	l->addWidget(folderViewTools);
 	l->addWidget(_folderView);
