@@ -20,6 +20,7 @@
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/object.h>
 #include <seiscomp3/datamodel/types.h>
+#include <seiscomp3/datamodel/creationinfo.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -105,6 +106,49 @@ double quantityUncertainty(const T &o) {
 		return (o.lowerUncertainty() + o.upperUncertainty()) * 0.5;
 	}
 }
+
+
+/**
+ * Sets the creation time or modification time of an object.
+ * If no creationInfo is set then it will create an empty
+ * object and set the creation time. If a creationInfo is
+ * present, it will set the modification time if the creation
+ * time is not yet set. Otherwise it sets the creation time.
+ */
+template <typename T>
+void touch(T &o) {
+	Core::Time now = Core::Time::GMT();
+
+	try {
+		CreationInfo &ci = o.creationInfo();
+		try {
+			ci.modificationTime();
+			ci.setModificationTime(now);
+		}
+		catch ( ... ) {
+			// No modification time set
+			try {
+				ci.creationTime();
+				ci.setModificationTime(now);
+			}
+			catch ( ... ) {
+				// No creation time set
+				ci.setCreationTime(now);
+			}
+		}
+	}
+	catch ( ... ) {
+		o.setCreationInfo(CreationInfo());
+		o.creationInfo().setCreationTime(now);
+	}
+}
+
+
+template <typename T>
+void touch(T *o) {
+	touch(*o);
+}
+
 
 MAKEENUM(
 	InventoryError,

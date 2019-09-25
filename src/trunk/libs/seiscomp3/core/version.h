@@ -42,6 +42,7 @@ namespace Core {
    - Added virtual Seiscomp::IO::Database::escape
    - Renamed Seiscomp::Array::bytes() to elementSize()
    - Added enums ZEP and REP to Seiscomp::Core::GreensfunctionComponent
+   - Added Seiscomp::DataModel::touch(obj)
 
  "12.2.0"   0x0C0200
    - Added ArtificialEventParametersMessage
