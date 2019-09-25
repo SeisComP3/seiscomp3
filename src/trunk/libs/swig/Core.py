@@ -1634,6 +1634,8 @@ RDS = _Core.RDS
 RDD = _Core.RDD
 TSS = _Core.TSS
 TDS = _Core.TDS
+ZEP = _Core.ZEP
+REP = _Core.REP
 EGreensFunctionComponentQuantity = _Core.EGreensFunctionComponentQuantity
 class EGreensFunctionComponentNames(_object):
     __swig_setmethods__ = {}

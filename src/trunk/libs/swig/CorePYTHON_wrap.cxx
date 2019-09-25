@@ -50635,6 +50635,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "RDD",SWIG_From_int(static_cast< int >(Seiscomp::Core::RDD)));
   SWIG_Python_SetConstant(d, "TSS",SWIG_From_int(static_cast< int >(Seiscomp::Core::TSS)));
   SWIG_Python_SetConstant(d, "TDS",SWIG_From_int(static_cast< int >(Seiscomp::Core::TDS)));
+  SWIG_Python_SetConstant(d, "ZEP",SWIG_From_int(static_cast< int >(Seiscomp::Core::ZEP)));
+  SWIG_Python_SetConstant(d, "REP",SWIG_From_int(static_cast< int >(Seiscomp::Core::REP)));
   SWIG_Python_SetConstant(d, "EGreensFunctionComponentQuantity",SWIG_From_int(static_cast< int >(Seiscomp::Core::EGreensFunctionComponentQuantity)));
   SWIG_addvarlink(SWIG_globals(),(char *)"CharArrayT_ArrayType",Swig_var_CharArrayT_ArrayType_get, Swig_var_CharArrayT_ArrayType_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"IntArrayT_ArrayType",Swig_var_IntArrayT_ArrayType_get, Swig_var_IntArrayT_ArrayType_set);
