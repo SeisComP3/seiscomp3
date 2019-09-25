@@ -110,6 +110,20 @@ class Diff2 {
 };
 
 
+class Diff3 : public Diff2 {
+	public:
+		void diff(Seiscomp::DataModel::Object *o1, Seiscomp::DataModel::Object *o2,
+		          const std::string &o1ParentID, Notifiers &notifiers,
+		          LogNode *logNode = NULL);
+
+
+	protected:
+		virtual bool confirmUpdate(const Core::BaseObject *localO,
+		                           const Core::BaseObject *remoteO,
+		                           LogNode *node) = 0;
+};
+
+
 } // ns DataModel
 } // ns Seiscomp
 

@@ -43,11 +43,11 @@ typedef Diff2::PropertyIndex PropertyIndex;
 
 
 // operation to string
-string op2str(DataModel::Operation operation) {
+string op2str(Operation operation) {
 	switch (operation) {
-		case DataModel::OP_UPDATE: return "UPDATE";
-		case DataModel::OP_ADD:    return "ADD";
-		case DataModel::OP_REMOVE: return "REMOVE";
+		case OP_UPDATE: return "UPDATE";
+		case OP_ADD:    return "ADD";
+		case OP_REMOVE: return "REMOVE";
 		default:                   return "UNDEFINED";
 	}
 }
@@ -187,14 +187,26 @@ bool compare(const Core::BaseObject *o1, const Core::BaseObject *o2,
 
 
 } // anonymous
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Diff2::Diff2() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Diff2::~Diff2() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Diff2::LogNode::write(ostream &os, int padding, int indent,
                            bool ignoreFirstPad) const {
 	if ( !ignoreFirstPad )
@@ -211,12 +223,15 @@ void Diff2::LogNode::write(ostream &os, int padding, int indent,
 
 	return;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
-void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Diff2::diff(Object* o1, Object* o2,
                  const string& o1ParentID,
-                 vector<DataModel::NotifierPtr>& notifiers,
+                 vector<NotifierPtr>& notifiers,
                  LogNode *parentLogNode) {
 	// Both objects empty, nothing to compare here
 	if ( !o1 && !o2 ) return;
@@ -229,7 +244,7 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 
 	// No element on the left -> ADD
 	if ( !o1 ) {
-		AppendNotifier(notifiers, DataModel::OP_ADD, o2, o1ParentID);
+		AppendNotifier(notifiers, OP_ADD, o2, o1ParentID);
 		if ( parentLogNode && notifiers.size() > ns )
 			createLogNodes(parentLogNode, o1ParentID,
 			               notifiers.begin()+ns, notifiers.end());
@@ -238,7 +253,7 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 
 	// No element on the right -> REMOVE
 	if ( !o2 ) {
-		AppendNotifier(notifiers, DataModel::OP_REMOVE, o1, o1ParentID);
+		AppendNotifier(notifiers, OP_REMOVE, o1, o1ParentID);
 		if ( notifiers.size() > ns )
 			createLogNodes(parentLogNode, o1ParentID,
 			               notifiers.begin()+ns, notifiers.end());
@@ -251,7 +266,7 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 	if ( parentLogNode )
 		logNode = new LogNode(o2t(o1), parentLogNode->level());
 
-	DataModel::PublicObject *o1PO = DataModel::PublicObject::Cast(o1);
+	PublicObject *o1PO = PublicObject::Cast(o1);
 
 	// Iterate over all properties
 	for ( size_t i = 0; i < o1->meta()->propertyCount(); ++i ) {
@@ -267,9 +282,9 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 			bool status = compareNonArrayProperty(prop, o1, o2, logNode.get());
 
 			if ( !updateAdded && !status ) {
-				notifiers.push_back(new DataModel::Notifier(o1ParentID, DataModel::OP_UPDATE, o2));
+				notifiers.push_back(new Notifier(o1ParentID, OP_UPDATE, o2));
 				updateAdded = true;
-				if ( logNode ) logNode->setMessage(op2str(DataModel::OP_UPDATE));
+				if ( logNode ) logNode->setMessage(op2str(OP_UPDATE));
 			}
 
 			continue;
@@ -283,33 +298,33 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 		// each element of one array must be searched among all elements
 		// of the other array. PublicObjects are identified based on their
 		// publicID, other Objects are compared by their index fields.
-		map<string, DataModel::PublicObject*> o2POChilds;
-		vector<DataModel::Object*> o2Childs;
+		map<string, PublicObject*> o2POChilds;
+		vector<Object*> o2Childs;
 		for ( size_t i_o2 = 0; i_o2 < prop->arrayElementCount(o2); ++i_o2 ) {
 			Core::BaseObject* bo = const_cast<Core::BaseObject*>(prop->arrayObject(o2, i_o2));
 
-			DataModel::PublicObject* po = DataModel::PublicObject::Cast(bo);
+			PublicObject* po = PublicObject::Cast(bo);
 			if ( po )
 				o2POChilds[po->publicID()] = po;
 			else
-				o2Childs.push_back(DataModel::Object::Cast(bo));
+				o2Childs.push_back(Object::Cast(bo));
 		}
 
 		// For each element of o1 array search counterpart in o2
 		for ( size_t i_o1 = 0; i_o1 < prop->arrayElementCount(o1); ++i_o1 ) {
 			Core::BaseObject* bo = const_cast<Core::BaseObject*>(prop->arrayObject(o1, i_o1));
-			DataModel::Object *o1Child = DataModel::Object::Cast(bo);
-			DataModel::Object *o2Child = NULL;
-			DataModel::PublicObject *po = DataModel::PublicObject::Cast(bo);
+			Object *o1Child = Object::Cast(bo);
+			Object *o2Child = NULL;
+			PublicObject *po = PublicObject::Cast(bo);
 			if ( po ) {
-				map<string, DataModel::PublicObject*>::iterator it = o2POChilds.find(po->publicID());
+				map<string, PublicObject*>::iterator it = o2POChilds.find(po->publicID());
 				if ( it != o2POChilds.end() ) {
 					o2Child = it->second;
 					o2POChilds.erase(it);
 				}
 			}
 			else {
-				for ( vector<DataModel::Object*>::iterator it = o2Childs.begin();
+				for ( vector<Object*>::iterator it = o2Childs.begin();
 				      it != o2Childs.end(); ++it ) {
 					if ( compare(o1Child, *it, true) ) {
 						o2Child = *it;
@@ -323,10 +338,10 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 		}
 
 		// Add all elements of o2 array which have no counterpart in o1
-		for ( map<string, DataModel::PublicObject*>::iterator it = o2POChilds.begin();
+		for ( map<string, PublicObject*>::iterator it = o2POChilds.begin();
 		      it != o2POChilds.end(); ++it )
 			diff(NULL, it->second, o1PO->publicID(), notifiers, logNode.get());
-		for ( vector<DataModel::Object*>::iterator it = o2Childs.begin();
+		for ( vector<Object*>::iterator it = o2Childs.begin();
 		      it != o2Childs.end(); ++it )
 			diff(NULL, *it, o1PO->publicID(), notifiers, logNode.get());
 	}
@@ -335,11 +350,14 @@ void Diff2::diff(DataModel::Object* o1, DataModel::Object* o2,
 	     (logNode->level() == LogNode::ALL || logNode->childCount()) )
 		parentLogNode->addChild(logNode.get());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-NotifierMessage *Diff2::diff2Message(Seiscomp::DataModel::Object *o1,
-                                     Seiscomp::DataModel::Object *o2,
-                                     const std::string &o1ParentID, LogNode *logNode) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+NotifierMessage *Diff2::diff2Message(Object *o1, Object *o2,
+                                     const string &o1ParentID, LogNode *) {
 	std::vector<NotifierPtr> diffList;
 	LogNode log;
 	log.setLevel(LogNode::DIFFERENCES);
@@ -355,20 +373,24 @@ NotifierMessage *Diff2::diff2Message(Seiscomp::DataModel::Object *o1,
 
 	return msg;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string Diff2::o2t(const Core::BaseObject *o) const {
 	stringstream title;
 	title << o->className() << " ";
 
 	// PublicObject -> use public ID as title
-	const DataModel::PublicObject *po = DataModel::PublicObject::ConstCast(o);
+	const PublicObject *po = PublicObject::ConstCast(o);
 	if ( po ) {
 		title << po->publicID();
 		return title.str();
 	}
 
-	// not a DataModel::PublicObject -> concat all index values
+	// not a PublicObject -> concat all index values
 	for ( size_t i = 0; i < o->meta()->propertyCount(); ++i ) {
 		const Core::MetaProperty* prop = o->meta()->property(i);
 
@@ -403,37 +425,42 @@ std::string Diff2::o2t(const Core::BaseObject *o) const {
 
 		if ( prop->type() == "ComplexArray") {
 			Core::BaseObject* bo1 = boost::any_cast<Core::BaseObject*>(value);
-			DataModel::ComplexArray *ca = DataModel::ComplexArray::Cast(bo1);
+			ComplexArray *ca = ComplexArray::Cast(bo1);
 			title << "[ComplexArray of " << ca->content().size() << " elements]";
 		}
 
 		if ( prop->type() == "RealArray") {
 			Core::BaseObject* bo1 = boost::any_cast<Core::BaseObject*>(value);
-			DataModel::RealArray *ra = DataModel::RealArray::Cast(bo1);
+			RealArray *ra = RealArray::Cast(bo1);
 			title << "[ComplexArray of " << ra->content().size() << " elements]";
 		}
 
 		if ( prop->type() == "Blob") {
 			Core::BaseObject* bo1 = boost::any_cast<Core::BaseObject*>(value);
-			DataModel::Blob *ba = DataModel::Blob::Cast(bo1);
+			Blob *ba = Blob::Cast(bo1);
 			title << "[Blob: " << ba << "]";
 		}
 	}
 
 	return title.str();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Diff2::createLogNodes(LogNode *rootLogNode, const string &rootID,
                            Notifiers::const_iterator begin,
                            Notifiers::const_iterator end) {
 	typedef map<string, LogNodePtr> PublicIDNodes;
 	PublicIDNodes nodeMap;
+	Notifiers::const_iterator nit;
 
-	for ( ; begin != end; ++begin ) {
+	for ( nit = begin; nit != end; ++nit ) {
 		LogNode *parentLogNode;
-		DataModel::Notifier *n = begin->get();
-		DataModel::Object *o = n->object();
+		Notifier *n = nit->get();
+		Object *o = n->object();
 		string op = op2str(n->operation());
 
 		// get publicID of parent object
@@ -455,7 +482,7 @@ void Diff2::createLogNodes(LogNode *rootLogNode, const string &rootID,
 		}
 
 		// check if node already exists
-		DataModel::PublicObject *po = DataModel::PublicObject::Cast((*begin)->object());
+		PublicObject *po = PublicObject::Cast((*nit)->object());
 		if ( po ) {
 			const string &pID = po->publicID();
 			PublicIDNodes::iterator it = nodeMap.find(pID);
@@ -471,13 +498,176 @@ void Diff2::createLogNodes(LogNode *rootLogNode, const string &rootID,
 		else if ( parentLogNode )
 			parentLogNode->addChild(o2t(o), op);
 	}
+
+	for ( nit = begin; nit != end; ++nit ) {
+		LogNode *logNode, *parentLogNode;
+		Object *o = (*nit)->object();
+		PublicObject *po = PublicObject::Cast(o);
+
+		if ( !po ) continue;
+		PublicIDNodes::iterator it = nodeMap.find(po->publicID());
+		if ( it == nodeMap.end() ) continue;
+		logNode = it->second.get();
+		if ( logNode->parent() ) continue;
+
+		string parentID;
+		if ( o->parent() ) parentID = o->parent()->publicID();
+
+		if ( parentID == rootID )
+			parentLogNode = rootLogNode;
+		else {
+			it = nodeMap.find(parentID);
+			if ( it != nodeMap.end() ) {
+				parentLogNode = it->second.get();
+			}
+		}
+
+		if ( parentLogNode )
+			parentLogNode->addChild(logNode);
+	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Diff2::blocked(const Core::BaseObject *o, LogNode *node, bool local) {
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Diff3::diff(Object *o1, Object *o2,
+                 const string &o1ParentID, Notifiers &notifiers,
+                 LogNode *parentLogNode) {
+	// Both objects empty, nothing to compare here
+	if ( !o1 && !o2 ) return;
+
+	size_t ns = notifiers.size();
+
+	// Filter object
+	if ( o1 && blocked(o1, parentLogNode, true) ) return;
+	if ( o2 && blocked(o2, parentLogNode, false) ) return;
+
+	// No element on the left -> ADD
+	if ( !o1 ) {
+		AppendNotifier(notifiers, OP_ADD, o2, o1ParentID);
+		if ( parentLogNode && notifiers.size() > ns )
+			createLogNodes(parentLogNode, o1ParentID,
+			               notifiers.begin()+ns, notifiers.end());
+		return;
+	}
+
+	// No element on the right -> REMOVE
+	if ( !o2 ) {
+		AppendNotifier(notifiers, OP_REMOVE, o1, o1ParentID);
+		if ( parentLogNode && notifiers.size() > ns )
+			createLogNodes(parentLogNode, o1ParentID,
+			               notifiers.begin()+ns, notifiers.end());
+		return;
+	}
+
+	// UPDATE?
+	bool updateAdded = false;
+	LogNodePtr logNode;
+	if ( parentLogNode )
+		logNode = new LogNode(o2t(o1), parentLogNode->level());
+
+	PublicObject *o1PO = PublicObject::Cast(o1);
+
+	// Iterate over all properties
+	for ( size_t i = 0; i < o1->meta()->propertyCount(); ++i ) {
+		const Core::MetaProperty* prop = o1->meta()->property(i);
+
+		// Non array property
+		if ( !prop->isArray() ) {
+			// property has to be compared if no difference was detected so far
+			// or log level requires output
+			if ( updateAdded &&
+			     (!logNode || logNode->level() == LogNode::OPERATIONS) )
+				continue;
+			bool status = compareNonArrayProperty(prop, o1, o2, logNode.get());
+
+			if ( !updateAdded && !status ) {
+				if ( confirmUpdate(o1, o2, logNode.get()) ) {
+					notifiers.push_back(new Notifier(o1ParentID, OP_UPDATE, o2));
+					if ( logNode ) logNode->setMessage(op2str(OP_UPDATE));
+				}
+				updateAdded = true;
+			}
+
+			continue;
+		}
+
+		// only PublicObjects contain array properties
+		if ( !o1PO ) continue;
+
+		// Array property:
+		// The order of elements of a class array is arbitrary, hence
+		// each element of one array must be searched among all elements
+		// of the other array. PublicObjects are identified based on their
+		// publicID, other Objects are compared by their index fields.
+		map<string, PublicObject*> o2POChilds;
+		vector<Object*> o2Childs;
+		for ( size_t i_o2 = 0; i_o2 < prop->arrayElementCount(o2); ++i_o2 ) {
+			Core::BaseObject* bo = const_cast<Core::BaseObject*>(prop->arrayObject(o2, i_o2));
+
+			PublicObject *po = PublicObject::Cast(bo);
+			if ( po )
+				o2POChilds[po->publicID()] = po;
+			else
+				o2Childs.push_back(Object::Cast(bo));
+		}
+
+		// For each element of o1 array search counterpart in o2
+		for ( size_t i_o1 = 0; i_o1 < prop->arrayElementCount(o1); ++i_o1 ) {
+			Core::BaseObject* bo = const_cast<Core::BaseObject*>(prop->arrayObject(o1, i_o1));
+			Object *o1Child = Object::Cast(bo);
+			Object *o2Child = NULL;
+			PublicObject *po = PublicObject::Cast(bo);
+			if ( po ) {
+				map<string, PublicObject*>::iterator it = o2POChilds.find(po->publicID());
+				if ( it != o2POChilds.end() ) {
+					o2Child = it->second;
+					o2POChilds.erase(it);
+				}
+			}
+			else {
+				for ( vector<Object*>::iterator it = o2Childs.begin();
+				      it != o2Childs.end(); ++it ) {
+					if ( compare(o1Child, *it, true) ) {
+						o2Child = *it;
+						o2Childs.erase(it);
+						break;
+					}
+				}
+			}
+
+			diff(o1Child, o2Child, o1PO->publicID(), notifiers, logNode.get());
+		}
+
+		// Add all elements of o2 array which have no counterpart in o1
+		for ( map<string, PublicObject*>::iterator it = o2POChilds.begin();
+		      it != o2POChilds.end(); ++it )
+			diff(NULL, it->second, o1PO->publicID(), notifiers, logNode.get());
+		for ( vector<Object*>::iterator it = o2Childs.begin();
+		      it != o2Childs.end(); ++it )
+			diff(NULL, *it, o1PO->publicID(), notifiers, logNode.get());
+	}
+
+	if ( parentLogNode && logNode &&
+	     (logNode->level() == LogNode::ALL || logNode->childCount()) )
+		parentLogNode->addChild(logNode.get());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // ns DataModel
 } // ns Seiscomp
