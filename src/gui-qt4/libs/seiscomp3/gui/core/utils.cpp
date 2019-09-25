@@ -99,14 +99,29 @@ bool fromString(QColor& value, const std::string& str) {
 		}
 	}
 	else {
-		if ( col.size() != 6 && col.size() != 8 ) {
-			colorConvertError = std::string("invalid color ") + col + ": expected 6 or 8 characters";
+		if ( col.size() != 3 && col.size() != 4
+		 && col.size() != 6 && col.size() != 8 ) {
+			colorConvertError = std::string("invalid color ") + col + ": expected 3, 4, 6 or 8 characters";
 			return false;
 		}
 
-		int readItems = sscanf(col.c_str(), "%2X%2X%2X%2X", 
-				(unsigned int*)&red, (unsigned int*)&green, 
-				(unsigned int*)&blue, (unsigned int*)&alpha);
+		int readItems;
+
+		if ( col.size() > 4 )
+			readItems = sscanf(col.c_str(), "%2X%2X%2X%2X",
+					(unsigned int*)&red, (unsigned int*)&green,
+					(unsigned int*)&blue, (unsigned int*)&alpha);
+		else {
+			readItems = sscanf(col.c_str(), "%1X%1X%1X%1X",
+					(unsigned int*)&red, (unsigned int*)&green,
+					(unsigned int*)&blue, (unsigned int*)&alpha);
+			red = (red << 4) | red;
+			green = (green << 4) | green;
+			blue = (blue << 4) | blue;
+			if ( readItems > 3 )
+				alpha = (alpha << 4) | alpha;
+		}
+
 		if ( readItems < 3 ) {
 			colorConvertError = std::string("invalid color ") + col + ": wrong format";
 			return false;
