@@ -104,6 +104,9 @@ bool Config::init() {
 		try { cfg.syncEventAttributes = app->configGetBool(prefix + "syncEventAttributes"); }
 		catch ( ... ) { cfg.syncEventAttributes = true; }
 
+		try { cfg.syncPreferred = app->configGetBool(prefix + "syncPreferred"); }
+		catch ( ... ) { cfg.syncPreferred = false; }
+
 		// data options
 		bool isSet;
 		string dataPrefix = prefix + "data.";

@@ -28,14 +28,15 @@ namespace QL2SC {
 typedef std::map<std::string, std::string> RoutingTable;
 
 struct HostConfig {
-	std::string     host;
-	std::string     url;
-	bool            gzip;
-	bool            native;
-	int             options;
-	std::string     filter;
-	RoutingTable    routingTable;
-	bool            syncEventAttributes;
+	std::string  host;
+	std::string  url;
+	bool         gzip;
+	bool         native;
+	int          options;
+	std::string  filter;
+	RoutingTable routingTable;
+	bool         syncEventAttributes;
+	bool         syncPreferred;
 };
 
 typedef std::vector<HostConfig> HostConfigs;
