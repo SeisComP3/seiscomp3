@@ -6,22 +6,36 @@
 
   * Added Array.bytes() to Python wrappers (only)
 
-* GUI
-
-  * Increase default maximum map tile cache to 128mb
-
 * seedlink
 
   * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
   * Fix config to properly support multiple sources (plugins) per station
   * Use unambiguous station ID (net.station)
 
+## Release 2018.327 patch17
+
 * fdsnws
 
   * Implement fdsnws-availability-1.0.0
+  * Add event type filter and text output column
   * Fix crash if database is not configured correctly
   * Add tests
   * Bug fixes
+
+* scolv
+
+  * Enable custom commit profiles to be added as buttons
+  * Allow to select the preferred magnitude prior to committing
+    a solution in the magnitude tab
+
+* GUI
+
+  * Increase default maximum map tile cache to 128mb
+  * Fix rendering of geofeatures with more than one subfeature
+
+* ql2sc
+
+  * Add --ep option and fix ping-pong effect with two cross-connected systems
 
 ## Release 2018.327 patch16
 
