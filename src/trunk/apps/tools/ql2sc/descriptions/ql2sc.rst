@@ -214,9 +214,39 @@ happen that the imported event id is different from the event id of the local
 system. The input host configuration parameter :confval:`syncEventAttributes`
 controls that behaviour. It is set to true by default which means that imported
 event attributes are going to be imported as well. ql2sc does not update
-directly the attributes but commandates scevent is as many cases as possible
+directly the attributes but commandates scevent in as many cases as possible
 to do so. To find the matching local event it takes the first occurrence which
 has associated the currently imported preferred origin.
+
+Limitations
+-----------
+
+There are limitations to this process to avoid infinite loops when cross
+connecting two systems. Prior to sending the commands to scevent to change a
+particular attribute ql2sc checks if that attribute has been set already by
+another module (via JournalEntry database table). If not then ql2sc is allowed
+to request an attribute change otherwise not. To illustrate the issue take the
+following example:
+
+scolv connected to system ``A`` changes the event type to 'earthquake'. ql2sc
+of system ``B`` checks if the event type of the local event has been changed
+already which is not the case and it requests that change. System ``A``
+changes the event type again to 'unset'. ql2sc of system ``B`` notices that
+someone has already changed the event type and it was ql2sc itself. It requests
+again a change.
+
+scolv connected to system ``B`` changes the event type to 'earthquake' again.
+ql2sc of system ``A`` notices that ``scolv@A`` has already changed the
+event type and ignores the request.
+
+That simple case would not create an infinite loop even if ``ql2sc@A`` would
+accept the last change. The situation changes immediately if two subsequent
+attribute changes are being received by ``ql2sc@B`` while both of them are
+already applied on system ``A``. ``ql2sc@B`` would "restore" the old state due
+to the first received update and then apply the "final" state due to the
+second update. Each update triggers again an update at system ``A`` and the
+states start flapping. Without the described check there wouldn't be a well
+defined exit condition.
 
 
 Caveats
