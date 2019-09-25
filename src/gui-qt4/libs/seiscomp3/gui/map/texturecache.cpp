@@ -89,7 +89,7 @@ TextureCache::TextureCache(TileStore *tree, bool mercatorProjected) {
 	_mapTree = tree;
 	_isMercatorProjected = mercatorProjected;
 	_storedBytes = 0;
-	_textureCacheLimit = 32*1024*1024; // 32mb cache limit
+	_textureCacheLimit = 128*1024*1024; // 128mb cache limit
 	_lastTile[0] = _lastTile[1] = NULL;
 	_currentIndex = 0;
 	_currentTick = 0;

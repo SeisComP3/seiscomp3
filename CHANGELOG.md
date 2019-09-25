@@ -2,6 +2,14 @@
 
 ## Release YYYY.ddd
 
+* trunk
+
+  * Added Array.bytes() to Python wrappers (only)
+
+* GUI
+
+  * Increase default maximum map tile cache to 128mb
+
 * seedlink
 
   * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
