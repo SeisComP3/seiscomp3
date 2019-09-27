@@ -15,6 +15,8 @@
   * Enable custom commit profiles to be added as buttons
   * Allow to select the preferred magnitude prior to committing
     a solution in the magnitude tab
+  * Fix picker metadata resolver if pick has been made on a single
+    component
 
 * GUI
 
