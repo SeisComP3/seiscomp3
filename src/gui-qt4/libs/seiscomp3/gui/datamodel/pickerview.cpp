@@ -4403,11 +4403,13 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 			if ( sta )
 				loc = findSensorLocation(sta, streamID.locationCode(), origin->time());
 
+			Stream *cha = Client::Inventory::Instance()->getStream(pick.get());
+
 			double dist;
 			try { dist = arrival->distance(); }
 			catch ( ... ) { dist = 0; }
 
-			RecordViewItem* item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false);
+			RecordViewItem* item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false, cha);
 
 			// A new item has been inserted
 			if ( item != NULL ) {
@@ -4568,11 +4570,13 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* o) {
 					if ( sta )
 						loc = findSensorLocation(sta, pick->waveformID().locationCode(), _origin->time());
 
+					Stream *cha = Client::Inventory::Instance()->getStream(pick);
+
 					double dist;
 					try { dist = _origin->arrival(i)->distance(); }
 					catch ( ... ) { dist = 0; }
 
-					item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false);
+					item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false, cha);
 					if ( item ) {
 						_stations.insert((pick->waveformID().networkCode() + "." +
 						                  pick->waveformID().stationCode()).c_str());
