@@ -652,6 +652,15 @@ DataModel::SensorLocation* Inventory::getSensorLocation(const DataModel::Pick *p
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::Stream* Inventory::getStream(const DataModel::Pick *pick) const {
+	return DataModel::getStream(_inventory.get(), pick);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const {
 	DataModel::SensorLocation *loc = getSensorLocation(pick);
 	if ( loc == NULL )
