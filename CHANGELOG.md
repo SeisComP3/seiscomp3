@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* trunk
+
+  * Added option --origin-id-suffix to name relocated origins
+    using the original publicID plus the specified suffix
+
 ## Release 2018.327 patch17
 
 * fdsnws
