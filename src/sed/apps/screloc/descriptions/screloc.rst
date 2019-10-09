@@ -41,6 +41,11 @@ The following example configuration shows a setup of screloc for
    # Define the locator algorithm to use
    reloc.locator = NonLinLoc
 
+   # Define a suffix to append to the publicID's of relocated
+   # origins. If not defined, a new publicID will be generated
+   # automatically.
+   reloc.originIDSuffix = "#relocated"
+
    ########################################################
    ################ NonLinLoc configuration################
    ########################################################
@@ -94,7 +99,7 @@ Examples
 * Run screloc to with a specific velocity model given in a profile by :ref:`NonLinLoc <global_nonlinloc>`.
   Use a specific userID and authorID for uniquely recognizing the relocation.
   Changing the priority in :ref:`scevent` before running the example, e.g. to
-  TIME_AUTOMTIC, sets the latest origin (which will be created by screloc) to preferred.
+  TIME_AUTOMATIC, sets the latest origin (which will be created by screloc) to preferred.
 
   .. code-block:: sh
 

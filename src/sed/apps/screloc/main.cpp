@@ -71,6 +71,8 @@ class Reloc : public Client::Application {
 			                                       "This option should not be mixed with --dump.", &_epFile);
 			commandline().addOption("Input", "replace", "Used in combination with --ep and defines if origins are to be replaced "
 			                                            "by their relocated counterparts or just added to the output.");
+			commandline().addGroup("Output");
+			commandline().addOption("Output", "origin-id-suffix", "create origin ID from that of the onput origin plus the specfied suffix", &_originIDSuffix);
 		}
 
 
@@ -95,6 +97,9 @@ class Reloc : public Client::Application {
 			catch ( ... ) {}
 
 			try { _useWeight = configGetBool("reloc.useWeight"); }
+			catch ( ... ) {}
+
+			try { _originIDSuffix = configGetString("reloc.originIDSuffix"); }
 			catch ( ... ) {}
 
 			if ( !_epFile.empty() )
@@ -144,7 +149,9 @@ class Reloc : public Client::Application {
 						continue;
 					}
 
+					std::string publicID = org->publicID();
 					OriginPtr newOrg;
+					SEISCOMP_INFO_S("Processing origin " + publicID);
 					try {
 						newOrg = process(org.get());
 						if ( !newOrg ) {
@@ -155,6 +162,11 @@ class Reloc : public Client::Application {
 					catch ( std::exception &e ) {
 						std::cerr << "ERROR: " << e.what() << std::endl;
 						continue;
+					}
+					if ( !_originIDSuffix.empty()) {
+						SEISCOMP_DEBUG_S("Changed origin ID from " + publicID);
+						newOrg->setPublicID(publicID+_originIDSuffix);
+						SEISCOMP_DEBUG_S("                    to " + newOrg->publicID());
 					}
 
 					// Log warning messages
@@ -207,7 +219,8 @@ class Reloc : public Client::Application {
 
 				for ( int i = 0; i < numberOfOrigins; ++i ) {
 					OriginPtr org = ep->origin(i);
-					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+					std::string publicID = org->publicID();
+					SEISCOMP_INFO_S("Processing origin " + publicID);
 					try {
 						org = process(org.get());
 					}
@@ -215,6 +228,12 @@ class Reloc : public Client::Application {
 						std::cerr << "ERROR: " << e.what() << std::endl;
 						continue;
 					}
+					if ( !_originIDSuffix.empty()) {
+						SEISCOMP_DEBUG_S("Changed origin ID from " + publicID);
+						org->setPublicID(publicID+_originIDSuffix);
+						SEISCOMP_DEBUG_S("                    to " + org->publicID());
+					}
+
 
 					if ( org ) {
 						if ( replace ) {
@@ -428,6 +447,7 @@ class Reloc : public Client::Application {
 
 	private:
 		std::vector<std::string>   _originIDs;
+		std::string                _originIDSuffix;
 		std::string                _locatorType;
 		std::string                _locatorProfile;
 		bool                       _ignoreRejected;

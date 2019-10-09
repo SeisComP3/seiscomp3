@@ -4,6 +4,8 @@
 
 * trunk
 
+  * Added option --origin-id-suffix to name relocated origins
+    using the original publicID plus the specified suffix
   * Added Array.bytes() to Python wrappers (only)
 
 * seedlink

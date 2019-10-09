@@ -33,6 +33,13 @@
 					weight.
 					</description>
 				</parameter>
+				<parameter name="originIDSuffix" type="string">
+					<description>
+					Suffix to append to the publicID's of relocated origins. This
+					helps to identify pairs of origins before and after relocation.
+					If not defined, a new publicID will be generated automatically.
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 		<command-line>
