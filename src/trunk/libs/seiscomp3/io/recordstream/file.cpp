@@ -214,7 +214,7 @@ Record *File::next() {
 	if ( !*_current )
 		return NULL;
 
-	while ( true ) {
+	while ( !_closeRequested ) {
 		Record *rec = _factory->create();
 		if ( rec == NULL )
 			return NULL;
