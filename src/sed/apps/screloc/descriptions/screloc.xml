@@ -41,8 +41,10 @@
 				</parameter>
 				<parameter name="originIDSuffix" type="string">
 					<description>
-					Suffix to append to the publicID's of relocated origins. This
+					Suffix appended to the publicID of the origin to be relocated
+					to form the new publicID. This
 					helps to identify pairs of origins before and after relocation.
+					However, new publicIDs are unrelated to the time of creation.
 					If not defined, a new publicID will be generated automatically.
 					</description>
 				</parameter>
@@ -92,19 +94,19 @@
 
 			<group name="Mode">
 				<option long-flag="test">
-					<description>test mode, do not send any message</description>
+					<description>Test mode, do not send any message</description>
 				</option>
 			</group>
 
 			<group name="Input">
 				<option flag="O" long-flag="origin-id" argument="arg">
-					<description>reprocess the origin and send a message unless test mode is activated</description>
+					<description>Reprocess the origin and send a message unless test mode is activated</description>
 				</option>
 				<option long-flag="locator" argument="arg">
-					<description>the locator type to use</description>
+					<description>The locator type to use</description>
 				</option>
 				<option long-flag="use-weight" argument="arg" default="0">
-					<description>use current picks weight</description>
+					<description>Use current picks weight</description>
 				</option>
 				<option long-flag="evaluation-mode" argument="arg">
 					<description>set origin evaluation mode: &quot;AUTOMATIC&quot; or &quot;MANUAL&quot;</description>

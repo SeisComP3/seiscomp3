@@ -41,9 +41,11 @@ The following example configuration shows a setup of screloc for
    # Define the locator algorithm to use
    reloc.locator = NonLinLoc
 
-   # Define a suffix to append to the publicID's of relocated
-   # origins. If not defined, a new publicID will be generated
-   # automatically.
+   # Define a suffix appended to the publicID of the origin to be relocated
+   # to form the new publicID.
+   # This helps to identify pairs of origins before and after relocation.
+   # However, new publicIDs are unrelated to the time of creation.
+   # If not defined, a new publicID will be generated automatically.
    reloc.originIDSuffix = "#relocated"
 
    ########################################################
