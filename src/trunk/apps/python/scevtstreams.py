@@ -237,9 +237,9 @@ class EventStreams(seiscomp3.Client.Application):
                 sys.stderr.write(
                     "Could not find picks for event " + self.eventID)
                 if self.inputFile == None:
-                    sys.stderr.write("in database\n")
+                    sys.stderr.write(" in database\n")
                 else:
-                    sys.stderr.write("in input file " + self.inputFile + "\n")
+                    sys.stderr.write(" in input file " + self.inputFile + "\n")
 
             for pick in picks:
                 if minTime is None:
