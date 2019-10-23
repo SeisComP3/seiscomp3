@@ -3167,7 +3167,45 @@ bool Application::forkProcess() {
 		return false;
 	}
 
-	// Ensure future opens won't allocate controlling TTYs.
+	// Ensure future opens won't allocate controlling TTYs. The user Nominal Animal
+	// gave a good explaination about the usage of the SIGHUP signal in combination
+	// with daemon processes in his post on stack overlow:
+	//
+	// https://stackoverflow.com/questions/53672944/sighup-signal-handling-to-deamonize-a-command-in-unix-system-programming
+	//
+	// "Yes, the parent process forks a child process, and that child does setsid()
+	// so that it will be the process group leader (and the only process) in the new
+	// process group, and have no controlling terminal. That last part is the key.
+	//
+	// (If there was a reason why the child process should run in the same process
+	// group as the parent process, one could use int fd = open("/dev/tty", O_RDWR);
+	// if (fd != -1) ioctl(fd, TIOCNOTTY); to detach from the controlling terminal.
+	// setsid() is easier, and it is usually preferable to have the child run in a
+	// new process group anyway, as it and its children can be sent a signal without
+	// affecting any other processes.)
+	// Now, whenever a process that has no controlling terminal opens a terminal
+	// device (a tty or a pseudo-tty), that device will become its controlling terminal
+	// (unless the O_NOCTTY flag was used when opening the device).
+	// Whenever the controlling terminal is disconnected, a SIGHUP signal is delivered
+	// to each process having that terminal as their controlling terminal.
+	// (That SIG_UP thing is just a typo. Signal names do not have an underscore,
+	// only the special handlers SIG_DFL, SIG_IGN, and SIG_ERR do.)
+
+	// If the daemon process opens a terminal device for any reason -- for example,
+	// because a library wants to print an error message to a console, and opens /dev/tty1
+	// or similar to do so --, the daemon will inadvertently acquire a controlling terminal.
+	// Other than interposing open(), fopen(), opendir(), and so on, to ensure their
+	// underlying open() flags will include O_NOCTTY, there is not much a daemon can do to
+	// ensure it will not inadvertently acquire a controlling terminal. Instead, the easier
+	// option is to just assume that it might, and simply ensure that that does not cause
+	// too much trouble. To avoid the most typical issue, dying from SIGHUP when the controlling
+	// terminal is disconnected, the daemon process can simply ignore the delivery of the
+	// SIGHUP signal."
+
+	// In short, it is a belt-and-suspenders approach. The setsid() detaches the process
+	// from the controlling terminal; and SIGHUP is ignored in case the daemon inadvertently
+	// acquires a controlling terminal by opening a tty device without using the O_NOCTTY flag."
+
 	struct sigaction sa;
 	sa.sa_handler = SIG_IGN;
 	sigemptyset(&sa.sa_mask);
