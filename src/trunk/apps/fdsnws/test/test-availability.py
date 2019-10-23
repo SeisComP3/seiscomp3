@@ -31,48 +31,37 @@ class TestAvailability(FDSNWSTest):
         dAuth = HTTPDigestAuth('sysop', 'sysop')
 
         i = 1
+        # (contentType, URL, ignoreChars, concurrent)
         tests = [
-            (ctTXT, 'extent', []),
-            (ctTXT, 'extent?merge=samplerate', []),
-            (ctTXT, 'extent?merge=quality', []),
-            (ctTXT, 'extent?merge=quality,samplerate', []),
-            (ctTXT, 'extent?starttime=2019-08-20T00:00:00&' \
-             'orderby=latestupdate', []),
-            (ctTXT, 'extent?network=AM&channel=HDF&' \
-             'orderby=timespancount_desc', []),
-            (ctCSV, 'extentauth?station=R0F05&orderby=latestupdate_desc&' \
-             'includerestricted=true&format=geocsv', []),
-            (ctTXT, 'extent?orderby=latestupdate_desc&format=request', []),
-            (ctJSON, 'extentauth?orderby=latestupdate_desc&' \
-             'includerestricted=true&format=json&merge=quality', [(12,32)]),
-            (ctTXT, 'query?net=AM', []),
-            (ctTXT, 'query?net=AM&mergegaps=10.0', []),
-            (ctTXT, 'query?net=AM&mergegaps=10.0&merge=overlap', []),
-            (ctTXT, 'query?net=AM&mergegaps=10.0&merge=overlap,samplerate',
-             []),
-            (ctTXT, 'query?net=AM&mergegaps=10.0&' \
-             'merge=overlap,samplerate,quality', []),
-            (ctTXT, 'query?net=AM&show=latestupdate&limit=3', []),
-            (ctCSV, 'query?net=AM&format=geocsv&show=latestupdate', []),
-            (ctJSON, 'query?net=AM&format=json&show=latestupdate', [(12,32)]),
-            (ctJSON, 'query?net=AM&channel=HDF&format=json&' \
-             'merge=quality,samplerate,overlap&latestupdate', [(12,32)]),
-            (ctTXT, 'query?net=AM&format=request', []),
-            (ctTXT, 'queryauth?net=AM&station=R0F05&includerestricted=true',
-             []),
+            ('extent', ctTXT, [], False),
+            ('extent?merge=samplerate', ctTXT, [], False),
+            ('extent?merge=quality', ctTXT, [], True),
+            ('extent?merge=quality,samplerate', ctTXT, [], False),
+            ('extent?starttime=2019-08-20T00:00:00&orderby=latestupdate', ctTXT, [], False),
+            ('extent?network=AM&channel=HDF&orderby=timespancount_desc', ctTXT, [], False),
+            ('extentauth?station=R0F05&orderby=latestupdate_desc&includerestricted=true&format=geocsv', ctCSV, [], False),
+            ('extent?orderby=latestupdate_desc&format=request', ctTXT, [], False),
+            ('extentauth?orderby=latestupdate_desc&includerestricted=true&format=json&merge=quality', ctJSON, [(12,32)], True),
+            ('query?net=AM', ctTXT, [], False),
+            ('query?net=AM&mergegaps=10.0', ctTXT, [], False),
+            ('query?net=AM&mergegaps=10.0&merge=overlap', ctTXT, [], False),
+            ('query?net=AM&mergegaps=10.0&merge=overlap,samplerate', ctTXT, [], True),
+            ('query?net=AM&mergegaps=10.0&merge=overlap,samplerate,quality', ctTXT, [], False),
+            ('query?net=AM&show=latestupdate&limit=3', ctTXT, [], False),
+            ('query?net=AM&format=geocsv&show=latestupdate', ctCSV, [], False),
+            ('query?net=AM&format=json&show=latestupdate', ctJSON, [(12,32)], False),
+            ('query?net=AM&channel=HDF&format=json&merge=quality,samplerate,overlap&latestupdate', ctJSON, [(12,32)], False),
+            ('query?net=AM&format=request', ctTXT, [], False),
+            ('queryauth?net=AM&station=R0F05&includerestricted=true', ctTXT, [], True),
 
         ]
-        for test in tests:
-            ct, q, ignoreRanges = test
+        for q, ct, ignoreRanges, concurrent in tests:
             auth = None
             if q.startswith('queryauth') or q.startswith('extentauth'):
                 auth = dAuth
-            self.testGET('{}{}'.format(query, q), ct, auth=auth,
-                         dataFile=resFile.format(i), testID=i,
-                         ignoreRanges=ignoreRanges)
+            self.testGET('{}{}'.format(query, q), ct, ignoreRanges, concurrent,
+                         auth=auth, dataFile=resFile.format(i), testID=i)
             i += 1
-
-
 
 
 #------------------------------------------------------------------------------

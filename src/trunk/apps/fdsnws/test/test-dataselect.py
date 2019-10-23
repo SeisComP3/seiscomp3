@@ -34,18 +34,15 @@ class TestDataSelect(FDSNWSTest):
                      retCode=403, testID=i)
         i += 1
         tests = [
-            '?channel=EHZ',
-            '?net=AM&sta=R187C&loc=00&cha=EHZ&starttime=2019-08-02T18:00:30&' \
-                'endtime=2019-08-02T18:00:40',
-            'auth?network=AM&station=R0F05&starttime=2019-08-02T12:00:00',
+            ('?channel=EHZ', False),
+            ('?net=AM&sta=R187C&loc=00&cha=EHZ&starttime=2019-08-02T18:00:30&endtime=2019-08-02T18:00:40', False),
+            ('auth?network=AM&station=R0F05&starttime=2019-08-02T12:00:00', True),
         ]
-        for test in tests:
-            self.testGET('{}{}'.format(query, test), ctMSeed,
+        for q, concurrent in tests:
+            self.testGET('{}{}'.format(query, q), ctMSeed, [], concurrent,
                          dataFile=resFile.format(i), testID=i,
-                         auth=dAuth if test.startswith('auth') else None)
+                         auth=dAuth if q.startswith('auth') else None)
             i += 1
-
-
 
 
 #------------------------------------------------------------------------------
