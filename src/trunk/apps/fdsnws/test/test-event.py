@@ -28,24 +28,19 @@ class TestEvent(FDSNWSTest):
 
         i = 1
         tests = [
-            (ctTXT, '?format=text'),
-            (ctTXT, '?format=text&minmag=3&mindepth=20&minlon=150'),
-            (ctTXT, '?format=text&eventtype=earthquake,unknown'),
-            (ctXML, '?format=sc3ml&eventid=rs2019qsodmc&formatted=true'),
-            (ctXML, '?format=sc3ml&includeallorigins=true' \
-                    '&includeallmagnitudes=true&includearrivals=true' \
-                    '&includefocalmechanism=true&includestationmts=true' \
-                    '&includecomments=true&eventid=rs2019qsodmc' \
-                    '&formatted=true'),
-            (ctXML, ''),
-            (ctXML, '?format=qml-rt'),
-            (ctTXT, '?format=csv'),
+            ('?format=text', ctTXT, False),
+            ('?format=text&minmag=3&mindepth=20&minlon=150', ctTXT, False),
+            ('?format=text&eventtype=earthquake,unknown', ctTXT, False),
+            ('?format=sc3ml&eventid=rs2019qsodmc&formatted=true', ctXML, True),
+            ('?format=sc3ml&includeallorigins=true&includeallmagnitudes=true&includearrivals=true&includefocalmechanism=true&includestationmts=true&includecomments=true&eventid=rs2019qsodmc&formatted=true', ctXML, False),
+            ('', ctXML, False),
+            ('?format=qml-rt', ctXML, False),
+            ('?format=csv', ctTXT, False),
         ]
-        for test in tests:
-            self.testGET('{}{}'.format(query, test[1]), test[0],
+        for q, ct, concurrent in tests:
+            self.testGET('{}{}'.format(query, q), ct, [], concurrent,
                          dataFile='{}{}.txt'.format(resFile, i), testID=i)
             i += 1
-
 
 
 

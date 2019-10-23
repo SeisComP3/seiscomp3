@@ -28,22 +28,16 @@ class TestStation(FDSNWSTest):
 
         i = 1
         tests = [
-            (ctTXT, '?format=text&level=channel'),
-            (ctTXT, '?format=text&includerestricted=false'),
-            (ctTXT, '?format=text&startbefore=2019-07-01'),
-            (ctXML, '?level=channel&includeavailability=true', [(172,198,7,0)]),
-            (ctXML, '?format=sc3ml&network=AM&station=R0F05&location=00' \
-                    '&channel=SHZ&latitude=52&longitude=13&maxradius=0.5' \
-                    '&level=response&includeavailability=true'),
+            ('?format=text&level=channel', ctTXT, [], False),
+            ('?format=text&includerestricted=false', ctTXT, [], True),
+            ('?format=text&startbefore=2019-07-01', ctTXT, [], False),
+            ('?level=channel&includeavailability=true', ctXML, [(172,198,7,0)], False),
+            ('?format=sc3ml&network=AM&station=R0F05&location=00&channel=SHZ&latitude=52&longitude=13&maxradius=0.5&level=response&includeavailability=true', ctXML, [], True),
         ]
-        for test in tests:
-            ignoreRanges = [] if len(test) < 3 else test[2]
-            self.testGET('{}{}'.format(query, test[1]), test[0],
-                         dataFile='{}{}.txt'.format(resFile, i), testID=i,
-                         ignoreRanges=ignoreRanges)
+        for q, ct, ignoreRanges, concurrent in tests:
+            self.testGET('{}{}'.format(query, q), ct, ignoreRanges, concurrent,
+                         dataFile='{}{}.txt'.format(resFile, i), testID=i)
             i += 1
-
-
 
 
 #------------------------------------------------------------------------------

@@ -18,6 +18,13 @@ import sys
 import time
 import traceback
 
+from threading import Thread
+
+if sys.version_info[0] < 3:
+    from Queue import Queue
+else:
+    from queue import Queue
+
 from datetime import datetime, timedelta
 
 
@@ -124,8 +131,7 @@ class FDSNWSTest:
     def command(self):
         return [
             'python', '{}/../../fdsnws.py'.format(self.rootdir),
-            '--verbosity=4',
-            '--plugins=dbsqlite3,fdsnxml',
+            '--debug', '--plugins=dbsqlite3,fdsnxml',
             '--database=sqlite3://{}/seiscomp3.sqlite3'.format(self.rootdir),
             '--serveAvailability=true', '--dataAvailability.enable=true',
             '--agencyID=Test',
@@ -203,9 +209,6 @@ class FDSNWSTest:
                 # search range end in data
                 else:
                     pos = got[iGot:iGot+varLen+1].find(exp)
-                    print('{}: iGot: {}, varLen: {}, exp: {}, pos: {}'
-                          .format(got[iGot:iGot+rLeft], iGot, varLen, exp,
-                                  pos))
                     if pos >= 0:
                         iGot += pos
                         continue
@@ -226,12 +229,26 @@ class FDSNWSTest:
 
 
     #--------------------------------------------------------------------------
-    def testGET(self, url, contentType='text/html', data=None,
-                dataFile=None, retCode=200, testID=None, ignoreRanges=[],
-                auth=None, diffContent=True):
-        if testID is not None:
-            print('#{} '.format(testID), end='')
-        print('{}: '.format(url), end='')
+    def testGET(self, url, contentType='text/html', ignoreRanges=[],
+                concurrent=False, retCode=200, testID=None, auth=None,
+                data=None, dataFile=None, diffContent=True, silent=False):
+        if concurrent:
+            self.testGETConcurrent(url, contentType, data, dataFile, retCode,
+                                   testID, ignoreRanges, auth, diffContent)
+        else:
+            self.testGETOneShot(url, contentType, data, dataFile, retCode,
+                                testID, ignoreRanges, auth, diffContent,
+                                silent)
+
+
+    #--------------------------------------------------------------------------
+    def testGETOneShot(self, url, contentType='text/html', data=None,
+                       dataFile=None, retCode=200, testID=None, ignoreRanges=[],
+                       auth=None, diffContent=True, silent=False):
+        if not silent:
+            if testID is not None:
+                print('#{} '.format(testID), end='')
+            print('{}: '.format(url), end='')
         stream = False if dataFile is None else True
         r = requests.get(url, stream=stream, auth=auth)
         if r.status_code != retCode:
@@ -261,8 +278,67 @@ class FDSNWSTest:
                                      'got {}'.format(len(expected),
                                                      len(r.content)))
 
-        print('OK')
+        if not silent:
+            print('OK')
         sys.stdout.flush()
+
+
+    #--------------------------------------------------------------------------
+    def testGETConcurrent(self, url, contentType='text/html', data=None,
+                          dataFile=None, retCode=200, testID=None,
+                          ignoreRanges=[], auth=None, diffContent=True,
+                          repetitions=1000, numThreads=10):
+        if testID is not None:
+            print('#{} '.format(testID), end='')
+        print('concurrent [{}/{}] {}: '.format(repetitions, numThreads, url),
+              end='')
+        sys.stdout.flush()
+
+        def doWork():
+            while True:
+                try:
+                    i = q.get()
+                    if i is None:
+                        break
+                    self.testGETOneShot(url, contentType, data, dataFile,
+                                        retCode, testID, ignoreRanges, auth,
+                                        diffContent, True)
+                    print('.', end='')
+                    sys.stdout.flush()
+                except ValueError as e:
+                    errors.append("error in job #{}: {}".format(i, str(e)))
+                finally:
+                    q.task_done()
+
+        # queue
+        q = Queue()
+        errors = []
+
+        # start worker threads
+        threads = []
+        for i in range(numThreads):
+            t = Thread(target=doWork)
+            t.start()
+            threads.append(t)
+
+        # populate queue with work
+        for i in range(repetitions):
+            q.put(i)
+        q.join()
+
+        # stop worker
+        for i in range(numThreads):
+            q.put(None)
+        for t in threads:
+            t.join()
+
+        if errors:
+            raise ValueError("{} errors occured, first one is: {}".format(
+                             len(errors), errors[0]))
+
+        print(' OK')
+        sys.stdout.flush()
+
 
 
 # vim: ts=4 et tw=79
