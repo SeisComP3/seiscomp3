@@ -1128,10 +1128,8 @@ class FDSNWS(Application):
 
     #--------------------------------------------------------------------------
     def _reloadTask(self):
-        if not self.__sighup:
+        if not self.__reloadRequested:
             return
-
-        self.__sighup = False
 
         Logging.info("reloading inventory")
         self.reloadInventory()
@@ -1140,17 +1138,33 @@ class FDSNWS(Application):
 
         if site:
             self.__tcpPort.factory = site
+
+            # remove reload file
+            try:
+                reloadfile = os.path.join(Environment.Instance().installDir(),
+                                          'var', 'run',
+                                          '{}.reload'.format(self.name()))
+                if os.path.isfile(reloadfile):
+                    os.remove(reloadfile)
+            except Exception, e:
+                Logging.warning("error processing reload file: {}".format(
+                                str(e)))
+
             Logging.info("reload successful")
 
         else:
             Logging.info("reload failed")
 
         self._userdb.dump()
+        self.__reloadRequested = False
 
     #--------------------------------------------------------------------------
     def _sighupHandler(self, signum, frame):
-        Logging.info("SIGHUP received")
-        self.__sighup = True
+        if self.__reloadRequested:
+            Logging.info("SIGHUP received, reload already in progress")
+        else:
+            Logging.info("SIGHUP received, reload scheduled")
+            self.__reloadRequested = True
 
     #--------------------------------------------------------------------------
     def run(self):
@@ -1171,9 +1185,9 @@ class FDSNWS(Application):
                                                self._listenAddress)
 
             # setup signal handler
-            self.__sighup = False
+            self.__reloadRequested = False
             signal.signal(signal.SIGHUP, self._sighupHandler)
-            task.LoopingCall(self._reloadTask).start(60, False)
+            task.LoopingCall(self._reloadTask).start(1, False)
 
             # start processing
             Logging.info("start listening")

@@ -1,4 +1,4 @@
-set -l seiscompCommands install-deps setup shell enable disable start stop restart check status list exec update-config alias print help
+set -l seiscompCommands install-deps setup shell enable disable start stop restart reload check status list exec update-config alias print help
 
 function __fish_seiscomp_needs_command
   set cmd (commandline -opc)
@@ -41,6 +41,7 @@ complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "disable" -d "Disa
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "start" -d "Starts all enabled modules or a list of modules given"
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "stop" -d  "Stops all enabled modules or a list of modules given"
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "restart" -d "Restarts all enabled modules or a list of modules given"
+complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "reloads" -d "Reloads all enabled modules or a list of modules given"
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "check" -d "Checks if a started module is still running"
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "list" -d "Prints the status of all or a list of modules"
 complete -f -c seiscomp -n "__fish_seiscomp_needs_command" -a "exec" -d "Executes a command like calling a command from commandline"
@@ -65,6 +66,6 @@ complete -f -c seiscomp -n "__fish_seiscomp_using_command alias" -a "create remo
 complete -f -c seiscomp -n "__fish_seiscomp_using_command list" -a "modules aliases enabled disabled"
 
 # complete modules
-for mcmd in enable disable start stop restart check status update-config
+for mcmd in enable disable start stop restart reload check status update-config
     complete -f -c seiscomp -n "__fish_seiscomp_using_command $mcmd" -a "(__fish_seiscomp_modules)"
 end

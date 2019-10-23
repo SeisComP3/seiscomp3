@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 
-import os, sys, signal, subprocess, pipes, glob, shutil, imp, traceback
+from __future__ import division, print_function
+
+import glob
+import imp
+import os
+import pipes
+import shutil
+import signal
+import subprocess
+import sys
+import traceback
 
 if sys.platform == "darwin":
     SysLibraryPathVar = "DYLD_FALLBACK_LIBRARY_PATH"
@@ -369,6 +379,33 @@ def on_restart_help(args):
   print("Examples:")
   print("seiscomp restart")
   print("seiscomp restart seedlink slarchive")
+
+
+def on_reload(args, flags):
+  if len(args) == 0:
+    for mod in mods:
+      # Reload not supported by kernel modules
+      if isinstance(mod, seiscomp3.Kernel.CoreModule):
+        continue
+
+      if shouldModuleRun(mod.name):
+        mod.reload()
+  else:
+    for mod in mods:
+      if mod.name in args or len(args) == 0:
+        mod.reload()
+
+  return 0
+
+
+def on_reload_help(args):
+  print("Reloads all enabled modules or a list of modules given.")
+  print("This operation is module specific and implemented only for some")
+  print("modules.")
+  print()
+  print("Examples:")
+  print("seiscomp reload")
+  print("seiscomp reload fdsnws")
 
 
 def on_check(args, flags):
@@ -880,6 +917,7 @@ allowed_actions = [
   "start",
   "stop",
   "restart",
+  "reload",
   "check",
   "status",
   "list",

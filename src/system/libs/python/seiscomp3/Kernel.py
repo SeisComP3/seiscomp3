@@ -302,6 +302,8 @@ class Module:
         self.isConfigModule = False
         # Set default timeout when stopping a module to 10 seconds before killing it
         self.killTimeout = 10
+        # Set default timeout when reloading a module to 10 seconds
+        self.reloadTimeout = 10
 
     def _get_start_params(self):
         # Run as daemon
@@ -336,6 +338,10 @@ class Module:
         self.env.log("shutting down %s" % self.name)
         # Default timeout to 10 seconds
         return self.env.stop(self.name, self.killTimeout)
+
+    def reload(self):
+        self.env.log("reload not supported by %s" % self.name)
+        return 1
 
     # Check is the same as start. If a module should be checked
     # is decided by the control script which check the existence
