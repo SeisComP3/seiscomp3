@@ -23,6 +23,10 @@
 #include <mysql/errmsg.h>
 #endif
 
+#if LIBMYSQL_VERSION_ID >= 80000
+typedef bool my_bool;
+#endif
+
 
 namespace Seiscomp {
 namespace Database {
