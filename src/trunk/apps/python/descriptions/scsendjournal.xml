@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scsendjournal" category="Utilities" standalone="true">
+		<description>
+		Send journaling information to the messaging to manipulate event parameter objects.
+		</description>
+		<command-line>
+			<synopsis>
+			scsendjournal [opts] {objectID} {action} [parameters]
+			</synopsis>
+			<description>
+
+			</description>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+			   <optionReference>messaging#user</optionReference>
+			   <optionReference>messaging#host</optionReference>
+			   <optionReference>messaging#timeout</optionReference>
+			   <optionReference>messaging#primary-group</optionReference>
+			   <optionReference>messaging#subscribe-group</optionReference>
+			   <optionReference>messaging#encoding</optionReference>
+			   <optionReference>messaging#start-stop-msg</optionReference>
+		   </group>
+		</command-line>
+	</module>
+</seiscomp>
