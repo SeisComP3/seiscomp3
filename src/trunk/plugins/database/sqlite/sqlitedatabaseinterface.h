@@ -51,7 +51,7 @@ class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 		virtual void endQuery();
 
 		virtual const char* defaultValue() const;
-		virtual unsigned long lastInsertId(const char*);
+		virtual OID lastInsertId(const char*);
 		virtual uint64_t numberOfAffectedRows();
 
 		virtual bool fetchRow();

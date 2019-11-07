@@ -29,6 +29,7 @@ using namespace std;
 
 
 IMPLEMENT_SC_ABSTRACT_CLASS(DatabaseInterface, "DatabaseInterface");
+const DatabaseInterface::OID DatabaseInterface::INVALID_OID = 0;
 
 
 DatabaseInterface::DatabaseInterface() : _timeout(0) {}

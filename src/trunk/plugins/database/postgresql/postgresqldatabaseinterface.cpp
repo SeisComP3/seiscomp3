@@ -274,7 +274,7 @@ void PostgreSQLDatabase::endQuery() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long PostgreSQLDatabase::lastInsertId(const char* table) {
+IO::DatabaseInterface::OID PostgreSQLDatabase::lastInsertId(const char* table) {
 	if ( !beginQuery((std::string("select currval('") + table + "_seq')").c_str()) )
 		return 0;
 
@@ -282,7 +282,7 @@ unsigned long PostgreSQLDatabase::lastInsertId(const char* table) {
 
 	endQuery();
 
-	return value?atoi(value):0;
+	return OID(value?atoll(value):IO::DatabaseInterface::INVALID_OID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
