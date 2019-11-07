@@ -89,7 +89,7 @@ Parameter and query profile files
 
    .. code-block:: sh
 
-        queries = time, mag_time, space_time, all, space_mag_time, event, fm_space_time, picks, assoc_picks, pref_assoc_picks, sta_net_mag, sta_net_mag_type, delta_sta_net_mag, delta_sta_net_mag_type
+        queries = time, mag_time, space_time, all, space_mag_time, event, fm_space_time, picks, stationPicks, assoc_picks, pref_assoc_picks, sta_net_mag, sta_net_mag_type, delta_sta_net_mag, delta_sta_net_mag_type
 
         query.time.description = "Events in time range"
         query.time = "select PEvent.publicID, Origin.time_value, round(Origin.latitude_value,4), round(Origin.longitude_value,4), round(Origin.depth_value, 1), round(Magnitude.magnitude_value, 1), Magnitude.type, Origin.quality_usedPhaseCount, Origin.quality_usedStationCount, Event.typeCertainty, Event.type, Origin.creationInfo_author from Origin, PublicObject as POrigin, Event, PublicObject as PEvent, Magnitude, PublicObject as PMagnitude where Event._oid=PEvent._oid and Origin._oid=POrigin._oid and Magnitude._oid=PMagnitude._oid and PMagnitude.publicID=Event.preferredMagnitudeID and POrigin.publicID=Event.preferredOriginID and Origin.time_value >= '##startTime##' and Origin.time_value <= '##endTime##';"
@@ -114,6 +114,9 @@ Parameter and query profile files
 
         query.picks.description = "List number of picks per station in a certain timespan"
         query.picks = "SELECT waveformID_networkCode AS Network, waveformID_stationCode AS Station, COUNT(_oid) AS Picks, MIN(time_value) AS Start, MAX(time_value) AS End FROM Pick WHERE time_value >= '##startTime##' AND time_value <= '##endTime##' GROUP BY waveformID_networkCode, waveformID_stationCode;"
+
+        query.stationPicks.description = "List the picks and phase hints per station in a certain timespan"
+        query.stationPicks = "select PPick.publicID, Pick.phaseHint_code from Pick, PublicObject as PPick where Pick._oid = PPick._oid and waveformID_networkCode = '##netCode##' and waveformID_stationCode = '##staCode##' and time_value >= '##startTime##' and time_value <= '##endTime##';"
 
         query.assoc_picks.description = "list number of associated picks per station in a certain time span"
         query.assoc_picks = "SELECT Pick.waveformID_networkCode AS Network, Pick.waveformID_stationCode AS Station, COUNT(DISTINCT(Pick._oid)) AS Picks, MIN(Pick.time_value) AS Start, MAX(Pick.time_value) AS End FROM Pick, PublicObject PPick, Arrival WHERE Pick._oid = PPick._oid AND PPick.publicID = Arrival.pickID AND Pick.time_value >= '##startTime##' AND Pick.time_value <= '##endTime##' GROUP BY Pick.waveformID_networkCode, Pick.waveformID_stationCode;"
