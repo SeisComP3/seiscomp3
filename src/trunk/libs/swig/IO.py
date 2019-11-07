@@ -451,7 +451,7 @@ class DatabaseInterface(seiscomp3.Core.BaseObject):
 
 
     def lastInsertId(self, table):
-        """lastInsertId(DatabaseInterface self, char const * table) -> unsigned long"""
+        """lastInsertId(DatabaseInterface self, char const * table) -> Seiscomp::IO::DatabaseInterface::OID"""
         return _IO.DatabaseInterface_lastInsertId(self, table)
 
 
@@ -543,6 +543,7 @@ def DatabaseInterface_ConstCast(*args):
     DatabaseInterface_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DatabaseInterface
     """
     return _IO.DatabaseInterface_ConstCast(*args)
+DatabaseInterface.INVALID_OID = _IO.cvar.DatabaseInterface_INVALID_OID
 
 def DatabaseInterface_Create(service):
     """DatabaseInterface_Create(char const * service) -> DatabaseInterface"""

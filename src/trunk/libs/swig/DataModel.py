@@ -884,12 +884,12 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
 
 
     def oid(self):
-        """oid(DatabaseIterator self) -> int"""
+        """oid(DatabaseIterator self) -> Seiscomp::DataModel::DatabaseIterator::OID"""
         return _DataModel.DatabaseIterator_oid(self)
 
 
     def parentOid(self):
-        """parentOid(DatabaseIterator self) -> int"""
+        """parentOid(DatabaseIterator self) -> Seiscomp::DataModel::DatabaseIterator::OID"""
         return _DataModel.DatabaseIterator_parentOid(self)
 
 
@@ -1052,7 +1052,7 @@ class DatabaseArchive(Observer):
 
 
     def getCachedId(self, arg2):
-        """getCachedId(DatabaseArchive self, Object arg2) -> int"""
+        """getCachedId(DatabaseArchive self, Object arg2) -> Seiscomp::DataModel::DatabaseArchive::OID"""
         return _DataModel.DatabaseArchive_getCachedId(self, arg2)
 
 
