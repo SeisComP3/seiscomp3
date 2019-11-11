@@ -33,6 +33,12 @@
 					weight.
 					</description>
 				</parameter>
+				<parameter name="adoptFixedDepth" type="boolean" default="false">
+					<description>
+					If the input origin's depth is fixed then it will be fixed
+					during the relocation process as well.
+					</description>
+				</parameter>
 				<parameter name="originIDSuffix" type="string">
 					<description>
 					Suffix to append to the publicID's of relocated origins. This
