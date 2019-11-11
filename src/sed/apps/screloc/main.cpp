@@ -53,6 +53,7 @@ class Reloc : public Client::Application {
 
 			_useWeight = false;
 			_originEvaluationMode = "AUTOMATIC";
+			_adoptFixedDepth = false;
 		}
 
 
@@ -94,6 +95,9 @@ class Reloc : public Client::Application {
 			catch ( ... ) {}
 
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
+			catch ( ... ) {}
+
+			try { _adoptFixedDepth = configGetBool("reloc.adoptFixedDepth"); }
 			catch ( ... ) {}
 
 			try { _useWeight = configGetBool("reloc.useWeight"); }
@@ -376,6 +380,22 @@ class Reloc : public Client::Application {
 				picks.push_back(pick.get());
 			}
 
+			_locator->useFixedDepth(false);
+
+			if ( _adoptFixedDepth ) {
+				try {
+					if ( org->depthType() == OPERATOR_ASSIGNED )
+						_locator->setFixedDepth(org->depth().value());
+				}
+				catch ( ... ) {}
+
+				try {
+					if ( org->depth().uncertainty() == 0.0 )
+						_locator->setFixedDepth(org->depth().value());
+				}
+				catch ( ... ) {}
+			}
+
 			OriginPtr newOrg = _locator->relocate(org);
 			if ( newOrg ) {
 				if ( _originEvaluationMode == "AUTOMATIC" )
@@ -452,6 +472,7 @@ class Reloc : public Client::Application {
 		std::string                _locatorProfile;
 		bool                       _ignoreRejected;
 		bool                       _allowPreliminary;
+		bool                       _adoptFixedDepth;
 		LocatorInterfacePtr        _locator;
 		PublicObjectTimeSpanBuffer _cache;
 		ObjectLog                 *_inputOrgs;
