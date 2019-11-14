@@ -1626,7 +1626,18 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			if ( _keepWeights ) {
 				// Use preset weights
 				if ( averageMethod.type == Median || averageMethod.type == TrimmedMedian ) {
-					val = Math::Statistics::median(mv);
+					vector<double> significantValues;
+					for ( size_t i = 0; i < mv.size(); ++i ) {
+						if ( weights[i] > 0.0 )
+							significantValues.push_back(mv[i]);
+					}
+
+					// A median for zero values is not defined
+					if ( significantValues.empty() )
+						return false;
+
+					val = Math::Statistics::median(significantValues);
+
 					stdev = 0;
 					double cumw = 0.0;
 					for ( size_t i = 0; i < mv.size(); ++i ) {
