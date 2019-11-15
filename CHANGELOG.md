@@ -2,6 +2,14 @@
 
 ## Release YYYY.ddd
 
+* scconfig
+
+  * Add Check inventory button to inventory panel of scconfig
+
+* scsendjournal
+
+  * Added documentation
+
 * trunk
 
   * Added option --origin-id-suffix to name relocated origins

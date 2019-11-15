@@ -105,6 +105,7 @@ class InventoryPanel : public ConfiguratorPanel {
 		void inspectFile();
 
 		void import();
+		void testInventory();
 		void testSync();
 		void sync();
 		void syncKeys();

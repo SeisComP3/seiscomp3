@@ -559,15 +559,23 @@ InventoryPanel::InventoryPanel(QWidget *parent)
 	folderViewTools->addSeparator();
 
 	a = folderViewTools->addAction("Import");
+	a->setToolTip("Import inventory files in SC3ML or other supported formats.");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(import()));
 
 	folderViewTools->addSeparator();
 
-	a = folderViewTools->addAction("Test sync");
-	connect(a, SIGNAL(triggered(bool)), this, SLOT(testSync()));
+	a = folderViewTools->addAction("Check inventory");
+	a->setToolTip("Check consistency of all inventory files and report conflicts.\nApplies: scinv check");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(testInventory()));
 	a = folderViewTools->addAction("Sync keys");
+	a->setToolTip("Synchronize key files from inventory. Delete key files from non-existing stations.\nApplies: scinv keys");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(syncKeys()));
+	folderViewTools->addSeparator();
+	a = folderViewTools->addAction("Test sync");
+	a->setToolTip("Test synchronization of key files and sending to the messaging.\nApplies: scinv sync --test");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(testSync()));
 	a = folderViewTools->addAction("Sync");
+	a->setToolTip("Synchronize all key files and send to the messaging.\nApplies: scinv sync");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(sync()));
 
 	l->addWidget(folderViewTools);
@@ -768,6 +776,12 @@ void InventoryPanel::import() {
 	refresh();
 }
 
+
+
+
+void InventoryPanel::testInventory() {
+	runSCProc("scinv", QStringList() << "check");
+}
 
 void InventoryPanel::testSync() {
 	runSCProc("scinv", QStringList() << "sync" << "--test");
