@@ -2229,8 +2229,9 @@ void DatabaseArchive::serializeObject(Object *obj) {
 	if ( _db != NULL && isReading() ) {
 		int idId = _db->findColumn("_oid");
 		if ( idId != -1 ) {
-			fromString(idId, (const char*)_db->getRowField(idId));
-			registerId(obj, idId);
+			OID oid;
+			fromString(oid, (const char*)_db->getRowField(idId));
+			registerId(obj, oid);
 		}
 	}
 }
