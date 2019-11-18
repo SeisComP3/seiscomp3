@@ -262,8 +262,7 @@ class FDSNEvent(BaseResource):
 
     #---------------------------------------------------------------------------
     def render_OPTIONS(self, req):
-        req.setHeader('Access-Control-Allow-Origin', '*')
-        req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        req.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
         req.setHeader('Access-Control-Allow-Headers',
                       'Accept, Content-Type, X-Requested-With, Origin')
         req.setHeader('Content-Type', 'text/plain')

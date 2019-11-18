@@ -21,6 +21,7 @@ import os
 import time
 import datetime
 import sys
+
 try:
     import dateutil.parser
 except ImportError, e:
@@ -290,16 +291,43 @@ class AuthResource(BaseResource):
 
 ################################################################################
 class Site(server.Site):
+    def __init__(self, resource, corsOrigins):
+        server.Site.__init__(self, resource)
+        self._corsOrigins = corsOrigins
 
     #---------------------------------------------------------------------------
     def getResourceFor(self, request):
         Logging.debug("request (%s): %s" % (request.getClientIP(),
                                             request.uri))
         request.setHeader('Server', "SeisComP3-FDSNWS/%s" % VERSION)
-        request.setHeader('Access-Control-Allow-Origin', '*')
         request.setHeader('Access-Control-Allow-Headers', 'Authorization')
         request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
+
+        self.setAllowOrigin(request)
+
         return server.Site.getResourceFor(self, request)
+
+    #---------------------------------------------------------------------------
+    def setAllowOrigin(self, req):
+        # no allowed origin: no response header
+        lenOrigins = len(self._corsOrigins)
+        if lenOrigins == 0:
+            return
+
+        # one origin: add header
+        if lenOrigins == 1:
+            req.setHeader('Access-Control-Allow-Origin', self._corsOrigins[0])
+            return
+
+        # more than one origin: check current origin against allowed origins
+        # and return the current origin on match.
+        origin = req.getHeader('Origin')
+        if origin in self._corsOrigins:
+            req.setHeader('Access-Control-Allow-Origin', origin)
+
+            # Set Vary header to let the browser know that the response depends
+            # on the request. Certain cache strategies should be disabled.
+            req.setHeader('Vary', 'Origin')
 
 
 # vim: ts=4 et
