@@ -392,6 +392,7 @@ class FDSNWS(Application):
         self._htpasswd = '@CONFIGDIR@/fdsnws.htpasswd'
         self._accessLogFile = ''
         self._requestLogFile = ''
+        self._corsOrigins = [ '*' ]
 
         self._allowRestricted = True
         self._useArclinkAccess = False
@@ -502,6 +503,13 @@ class FDSNWS(Application):
         try:
             self._requestLogFile = Environment.Instance().absolutePath(
                 self.configGetString('requestLog'))
+        except Exception:
+            pass
+
+        # list of allowed CORS origins
+        try:
+            self._corsOrigins = filter(None,
+                                       self.configGetStrings('corsOrigins'))
         except Exception:
             pass
 
@@ -794,6 +802,7 @@ class FDSNWS(Application):
                       "  connections     : %i\n"
                       "  htpasswd        : %s\n"
                       "  accessLog       : %s\n"
+                      "  CORS origins    : %s\n"
                       "  queryObjects    : %i\n"
                       "  realtimeGap     : %s\n"
                       "  samples (M)     : %s\n"
@@ -824,7 +833,8 @@ class FDSNWS(Application):
                           self._serveDataSelect, self._serveEvent,
                           self._serveStation, self._serveAvailability,
                           self._listenAddress, self._port, self._connections,
-                          self._htpasswd, self._accessLogFile, self._queryObjects,
+                          self._htpasswd, self._accessLogFile,
+                          str(self._corsOrigins), self._queryObjects,
                           self._realtimeGap, self._samplesM, self._recordBulkSize,
                           self._allowRestricted, self._useArclinkAccess,
                           self._hideAuthor, modeStr, self._daEnabled,
@@ -1114,7 +1124,7 @@ class FDSNWS(Application):
         fileRes.hideInListing = True
         prefix.putChild('css', fileRes)
 
-        return Site(root)
+        return Site(root, self._corsOrigins)
 
     #--------------------------------------------------------------------------
     def _reloadTask(self):

@@ -108,6 +108,15 @@
 				Path to request log file. If unset no request log is created.
 				</description>
 			</parameter>
+			<parameter name="corsOrigins" type="list:string:" default="*">
+				<description>
+				List of domain names Cross-Origin Resource Sharing (CORS)
+				request may originate from. A value of '*' allows any web page
+				to embed your service. An empty value will switch of CORS
+				requests entirely. An example of multiple domains might be:
+				'https://test.domain.de, https://production.domain.de'.
+				</description>
+			</parameter>
 			<parameter name="allowRestricted" type="boolean" default="true">
 				<description>
 				Enables/disables access to restricted inventory data.
