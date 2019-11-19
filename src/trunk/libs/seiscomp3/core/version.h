@@ -45,8 +45,14 @@ namespace Core {
    - Added Seiscomp::DataModel::touch(obj)
    - Changed database oid type to 64bit
 
- "12.2.0"   0x0C0200
+ "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage
+
+ "12.2.0"   0x0C0200
+   - Added Application::waitEvent
+
+ "12.1.1"   0x0C0101
+   - Fixed RecordWidget::mouseMoveEvent to not ignore handled events
 
  "12.1.0"   0x0C0100
    - Fixed RecordWidget emitting of traceUpdated signal if the record slot to
