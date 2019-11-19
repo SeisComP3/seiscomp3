@@ -4,13 +4,13 @@
 
 * scconfig
 
-  * Add Check inventory button to inventory panel of scconfig
+  * Added "Check inventory" button to inventory panel of scconfig
 
 * scsendjournal
 
   * Added documentation
 
-* trunk
+* screloc
 
   * Added option --origin-id-suffix to name relocated origins
     using the original publicID plus the specified suffix
