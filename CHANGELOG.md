@@ -7,6 +7,11 @@
   * Fixed region filter with event list which did not work correctly
   * Added configuration paraemeter 'recenterMap' to control map centering
 
+* scqc
+
+  * Added description of plugin configuration parameters. Default for writing
+   to the database is false.
+
 * scconfig
 
   * Added "Check inventory" button to inventory panel of scconfig

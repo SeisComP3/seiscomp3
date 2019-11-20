@@ -108,7 +108,7 @@ void QcConfig::setQcConfig(const string &pluginName) {
 	_buffer = boost::lexical_cast<int>(value);
 
 
-	value = readConfig(pluginName,"archive.interval","3600");
+	value = readConfig(pluginName,"archive.interval","-1");
 	_archiveInterval = boost::lexical_cast<int>(value);
 
 	value = readConfig(pluginName,"archive.buffer","3600");
@@ -125,14 +125,14 @@ void QcConfig::setQcConfig(const string &pluginName) {
 	_reportTimeout =  boost::lexical_cast<int>(value);
 
 
-	value = readConfig(pluginName,"alert.interval","0");
+	value = readConfig(pluginName,"alert.interval","-1");
 	_alertInterval =  boost::lexical_cast<int>(value);
 
-	value = readConfig(pluginName,"alert.buffer","60");
+	value = readConfig(pluginName,"alert.buffer","1800");
 	_alertBuffer =  boost::lexical_cast<int>(value);
 
 
-	value = readConfig(pluginName,"alert.thresholds","120");    
+	value = readConfig(pluginName,"alert.thresholds","150");
 	boost::tokenizer<boost::char_separator<char> > ttok(value,boost::char_separator<char>(", "));
 	for (boost::tokenizer<boost::char_separator<char> >::iterator it = ttok.begin(); it != ttok.end(); ++it)
 		_alertThresholds.push_back(boost::lexical_cast<int>(*it));
