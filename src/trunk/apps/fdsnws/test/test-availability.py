@@ -44,7 +44,7 @@ class TestAvailability(FDSNWSTest):
              'includerestricted=true&format=geocsv', []),
             (ctTXT, 'extent?orderby=latestupdate_desc&format=request', []),
             (ctJSON, 'extentauth?orderby=latestupdate_desc&' \
-             'includerestricted=true&format=json&merge=quality', [(12,30)]),
+             'includerestricted=true&format=json&merge=quality', [(12,32)]),
             (ctTXT, 'query?net=AM', []),
             (ctTXT, 'query?net=AM&mergegaps=10.0', []),
             (ctTXT, 'query?net=AM&mergegaps=10.0&merge=overlap', []),
@@ -54,9 +54,9 @@ class TestAvailability(FDSNWSTest):
              'merge=overlap,samplerate,quality', []),
             (ctTXT, 'query?net=AM&show=latestupdate&limit=3', []),
             (ctCSV, 'query?net=AM&format=geocsv&show=latestupdate', []),
-            (ctJSON, 'query?net=AM&format=json&show=latestupdate', [(12,30)]),
+            (ctJSON, 'query?net=AM&format=json&show=latestupdate', [(12,32)]),
             (ctJSON, 'query?net=AM&channel=HDF&format=json&' \
-             'merge=quality,samplerate,overlap&latestupdate', [(12,30)]),
+             'merge=quality,samplerate,overlap&latestupdate', [(12,32)]),
             (ctTXT, 'query?net=AM&format=request', []),
             (ctTXT, 'queryauth?net=AM&station=R0F05&includerestricted=true',
              []),

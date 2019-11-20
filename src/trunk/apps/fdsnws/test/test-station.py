@@ -31,7 +31,7 @@ class TestStation(FDSNWSTest):
             (ctTXT, '?format=text&level=channel'),
             (ctTXT, '?format=text&includerestricted=false'),
             (ctTXT, '?format=text&startbefore=2019-07-01'),
-            (ctXML, '?level=channel&includeavailability=true', [(172,197)]),
+            (ctXML, '?level=channel&includeavailability=true', [(172,198,7,0)]),
             (ctXML, '?format=sc3ml&network=AM&station=R0F05&location=00' \
                     '&channel=SHZ&latitude=52&longitude=13&maxradius=0.5' \
                     '&level=response&includeavailability=true'),
