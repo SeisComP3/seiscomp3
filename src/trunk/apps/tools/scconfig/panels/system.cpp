@@ -94,7 +94,8 @@ SystemPanel::SystemPanel(QWidget *parent)
 
 	l->addWidget(_helpLabel);
 
-	QAction *a = _cmdToolBar->addAction("Update");
+	QAction *a = _cmdToolBar->addAction("Refresh");
+	a->setToolTip("Refresh the state of the modules");
 #if QT_VERSION >= 0x040400
 	a->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
 #endif
@@ -103,29 +104,40 @@ SystemPanel::SystemPanel(QWidget *parent)
 	_cmdToolBar->addSeparator();
 	//_cmdToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
-	_start = _cmdToolBar->addAction("Start");
+	a = _cmdToolBar->addAction("Start");
+	a->setToolTip("Start modules");
 #if QT_VERSION >= 0x040400
-	_start->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+	a->setIcon(QIcon(":/res/icons/start.png"));
 #endif
-	connect(_start, SIGNAL(triggered(bool)), this, SLOT(start()));
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(start()));
 
-	_stop = _cmdToolBar->addAction("Stop");
+	a = _cmdToolBar->addAction("Stop");
+	a->setToolTip("Stop modules");
 #if QT_VERSION >= 0x040400
-	_stop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+	a->setIcon(QIcon(":/res/icons/stop.png"));
 #endif
-	connect(_stop, SIGNAL(triggered(bool)), this, SLOT(stop()));
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(stop()));
 
-	_restart = _cmdToolBar->addAction("Restart");
+	a = _cmdToolBar->addAction("Restart");
+	a->setToolTip("Stop and start modules");
 #if QT_VERSION >= 0x040400
-	_restart->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+	a->setIcon(QIcon(":/res/icons/restart.png"));
 #endif
-	connect(_restart, SIGNAL(triggered(bool)), this, SLOT(restart()));
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(restart()));
 
-	_check = _cmdToolBar->addAction("Check");
+	a = _cmdToolBar->addAction("Check");
+	a->setToolTip("Restart modules which stopped unexpectedly");
 #if QT_VERSION >= 0x040400
-	_check->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+	a->setIcon(QIcon(":/res/icons/check.png"));
 #endif
-	connect(_check, SIGNAL(triggered(bool)), this, SLOT(check()));
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(check()));
+
+	a = _cmdToolBar->addAction("Reload");
+	a->setToolTip("Reload the module configuration and apply during runtime of the module. Not supported by all modules.");
+#if QT_VERSION >= 0x040400
+	a->setIcon(QIcon(":/res/icons/reload.png"));
+#endif
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(reload()));
 
 	_cmdToolBar->addSeparator();
 
@@ -139,9 +151,10 @@ SystemPanel::SystemPanel(QWidget *parent)
 
 	_cmdToolBar->addSeparator();
 
-	_updateConfig = _cmdToolBar->addAction("Update configuration");
-	_updateConfig->setIcon(QIcon(":/res/icons/update-config.png"));
-	connect(_updateConfig, SIGNAL(triggered(bool)), this, SLOT(updateConfig()));
+	a = _cmdToolBar->addAction("Update configuration");
+	a->setIcon(QIcon(":/res/icons/update-config.png"));
+	a->setToolTip("Synchronize inventory, keys and bindings. Sent bindings configuration to messaging for writing to the database.");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(updateConfig()));
 
 	QSplitter *splitter = new QSplitter(Qt::Horizontal);
 	splitter->setHandleWidth(1);
@@ -431,6 +444,9 @@ void SystemPanel::restart() {
 	runSeiscomp(QStringList() << "restart");
 }
 
+void SystemPanel::reload() {
+	runSeiscomp(QStringList() << "reload");
+}
 
 void SystemPanel::check() {
 	runSeiscomp(QStringList() << "check");
