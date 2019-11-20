@@ -16,6 +16,7 @@ import socket
 import subprocess
 import sys
 import time
+import traceback
 
 from datetime import datetime, timedelta
 
@@ -40,7 +41,7 @@ class FDSNWSTest:
         try:
             self.test()
         except Exception as e:
-            print(str(e))
+            traceback.print_exc()
 
             self._stopService()
             return 1
@@ -135,25 +136,90 @@ class FDSNWSTest:
 
 
     #--------------------------------------------------------------------------
-    def diff(self, expected, got, offset, ignoreRanges):
+    def diff(self, expected, got, ignoreRanges):
         if expected == got:
             return (None, None)
-        len1 = len(got)
-        len2 = len(expected)
-        if len1 != len2:
-            return (min(len1,len2)+offset, 'read {} bytes, expected {}'.format(
-                        len1+offset, len2+offset))
+        lenExp = minLen = maxLen = len(expected)
+        lenGot = len(got)
+        for r in ignoreRanges:
+            if len(r) > 2:
+                minLen -= r[2]
+            if len(r) > 3:
+                maxLen += r[3]
 
-        for i in range(0, len1):
-            if expected[i] != got[i]:
-                ignore = False
-                for r in ignoreRanges:
-                    if i >= r[0] and i <= r[1]:
-                        ignore = True
-                        break
-                if not ignore:
-                    return (i+offset, '... [{}] != [{}] ...'.format(
-                            got[max(i-10,0):i+10], expected[max(i-10,0):i+10]))
+        if lenGot == 0 and minLen <= 0:
+            return (None, None)
+        if lenGot < minLen or lenGot > maxLen:
+            return (min(lenExp,lenGot), 'read {} bytes, expected {}'.format(
+                        lenGot, minLen if minLen == maxLen \
+                                else '{}-{}'.format(minLen, maxLen)))
+
+        # offset between got and expected index may result from variable length
+        # result data, e.g. microseconds of time stamps
+        iGot = iExp = 0
+        while iExp < lenExp:
+            if iGot >= lenGot:
+                iGot = lenGot + 1
+                break
+
+            if got[iGot] == expected[iExp]:
+                iExp += 1
+                iGot += 1
+                continue
+
+            # bytes do not match, check ignore Range
+            ignoreRange = None
+            for r in ignoreRanges:
+                if iExp >= r[0] and iExp < r[1]:
+                    ignoreRange = r
+                    break
+
+            if ignoreRange:
+                rStart = ignoreRange[0]
+                rEnd = ignoreRange[1]
+                rLeft = rEnd - iExp
+                rFewer = ignoreRange[2] if len(ignoreRange) > 2 else 0
+                rMore = ignoreRange[3] if len(ignoreRange) > 3 else 0
+                varLen = rFewer + rMore
+
+                # advance expected pointer behind range
+                iExp = rEnd
+                exp = expected[iExp] if iExp < lenExp else None
+
+                # static range length: advance got pointer behind range
+                if varLen == 0:
+                    iGot += rLeft
+                    continue
+
+                # dynamic ignore range length: search end of range indicated
+                # by current exp pointer but limited by rLenDiff
+                iGot += min(rLeft, rLeft - rFewer)
+
+                # expected data ends on ignore range
+                if exp == None:
+                    iGot += min(lenGot-iGot, varLen)
+                    continue
+
+                # search range end in data
+                else:
+                    pos = got[iGot:iGot+varLen+1].find(exp)
+                    print('{}: iGot: {}, varLen: {}, exp: {}, pos: {}'
+                          .format(got[iGot:iGot+rLeft], iGot, varLen, exp,
+                                  pos))
+                    if pos >= 0:
+                        iGot += pos
+                        continue
+
+            return (iGot, '... [ {} ] != [ {} ] ...'.format(
+                    got[max(0, iGot-10):min(lenGot, iGot+11)],
+                    expected[max(0, iExp-10):min(lenExp, iExp+11)]))
+
+        if iGot < lenGot:
+            return (lenGot, 'read {} more bytes than expected'.format(
+                            lenGot-iGot))
+        elif iGot > lenGot:
+            return (lenGot, 'read {} fewer bytes than expected'.format(
+                            iGot-lenGot))
 
         # should not happen
         return (None, None)
@@ -176,25 +242,18 @@ class FDSNWSTest:
             raise ValueError('Invalid content type, expected "{}", got "{}"' \
                              .format(contentType, r.headers['content-type']))
 
+        expected = None
         if data is not None:
-            errPos, errMsg = self.diff(r.content, data, 0, ignoreRanges)
+            expected = data
+        elif dataFile is not None:
+            with open(dataFile, 'rb') as f:
+                expected = f.read()
+
+        if expected is not None:
+            errPos, errMsg = self.diff(expected, r.content, ignoreRanges)
             if errPos is not None:
                 raise ValueError('Unexpected content at byte {}: {}'.format(
                                  errPos, errMsg))
-        elif dataFile is not None:
-            bufSize = 4096
-            bytesRead = 0
-            with open(dataFile, 'rb') as f:
-                while True:
-                    b1 = r.raw.read(bufSize)
-                    b2 = f.read(bufSize)
-                    errPos, errMsg = self.diff(b1, b2, bytesRead, ignoreRanges)
-                    if errPos is not None:
-                        raise ValueError('Unexpected content at byte {}: {}'\
-                                         .format(errPos, errMsg))
-                    if not b1:
-                        break
-                    bytesRead += len(b1)
 
         print('OK')
         sys.stdout.flush()
