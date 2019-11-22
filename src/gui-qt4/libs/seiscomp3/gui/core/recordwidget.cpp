@@ -3703,7 +3703,8 @@ void RecordWidget::mouseMoveEvent(QMouseEvent *event) {
 					emit selectedTimeRangeChanged(_cursorPos, _startDragPos);
 			}
 		}
-		event->ignore();
+		else
+			event->ignore();
 	}
 
 	/*
