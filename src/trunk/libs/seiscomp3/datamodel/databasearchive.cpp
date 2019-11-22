@@ -18,8 +18,10 @@
 #include <seiscomp3/datamodel/stream.h>
 #include <seiscomp3/logging/log.h>
 
+#define __STDC_FORMAT_MACROS
 #include <iostream>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <strings.h>
 
 
@@ -143,7 +145,13 @@ bool strtobool(bool &val, const char *str) {
 
 
 DatabaseIterator::DatabaseIterator(DatabaseArchive *database, const RTTI *rtti)
-: _rtti(rtti), _reader(database), _count(0), _oid(-1), _parent_oid(-1), _cached(false) {
+: _rtti(rtti)
+, _reader(database)
+, _count(0)
+, _oid(IO::DatabaseInterface::INVALID_OID)
+, _parent_oid(IO::DatabaseInterface::INVALID_OID)
+, _cached(false)
+{
 	_object = fetch();
 	if ( !_object && _reader ) operator++();
 }
@@ -154,8 +162,13 @@ DatabaseIterator::DatabaseIterator(DatabaseArchive *database, const RTTI *rtti)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator::DatabaseIterator()
-: _rtti(NULL), _reader(NULL), _count(0), _object(NULL), _oid(-1), _parent_oid(-1), _cached(false) {
-}
+: _rtti(NULL)
+, _reader(NULL)
+, _count(0)
+, _object(NULL)
+, _oid(IO::DatabaseInterface::INVALID_OID)
+, _parent_oid(IO::DatabaseInterface::INVALID_OID)
+, _cached(false) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -163,10 +176,15 @@ DatabaseIterator::DatabaseIterator()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator::DatabaseIterator(const DatabaseIterator &iter)
-: Seiscomp::Core::BaseObject(), _rtti(iter._rtti), _reader(iter._reader),
-  _count(iter._count), _oid(iter._oid),
-  _parent_oid(iter._parent_oid), _cached(iter._cached),
-  _lastModified(iter._lastModified) {
+: Seiscomp::Core::BaseObject()
+, _rtti(iter._rtti)
+, _reader(iter._reader)
+, _count(iter._count)
+, _oid(iter._oid)
+, _parent_oid(iter._parent_oid)
+, _cached(iter._cached)
+, _lastModified(iter._lastModified)
+{
 	_object = iter._object;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1574,7 +1592,7 @@ bool DatabaseArchive::deleteObject(OID id) {
 	std::stringstream ss;
 	ss << "delete from " << Object::ClassName()
 	   << " where _oid=" << id;
-	SEISCOMP_DEBUG("deleting object with id %lld", id);
+	SEISCOMP_DEBUG("deleting object with id %" PRIu64, id);
 	return _db->execute(ss.str().c_str());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1979,7 +1997,7 @@ bool DatabaseArchive::locateObjectByName(const char *name, const char *targetCla
 
 		OID childId;
 		fromString(childId, _field);
-		SEISCOMP_DEBUG("should read child table '%s' with _oid=%lld", targetClass, childId);
+		SEISCOMP_DEBUG("should read child table '%s' with _oid=%" PRIu64, targetClass, childId);
 	}
 	
 	return _field != NULL;
@@ -2246,7 +2264,7 @@ void DatabaseArchive::removeId(Object *o) {
 	ObjectIdMap::iterator it = _objectIdCache.find(o);
 	if ( it != _objectIdCache.end() ) {
 		if ( debug ) {
-			SEISCOMP_DEBUG("Object removed from cache with id: %lld", (*it).second);
+			SEISCOMP_DEBUG("Object removed from cache with id: %" PRIu64, (*it).second);
 			if ( debug == 1 )
 				SEISCOMP_DEBUG("This message will not be repeated for other objects");
 			--debug;
