@@ -17,33 +17,14 @@
 namespace Seiscomp {
 namespace Core {
 	class BaseObject;
+
+	inline void intrusive_ptr_add_ref(BaseObject *p);
+	inline void intrusive_ptr_release(BaseObject *p);
+	inline void intrusive_ptr_add_ref(const BaseObject *p);
+	inline void intrusive_ptr_release(const BaseObject *p);
 }
 }
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_add_ref(Seiscomp::Core::BaseObject *p);
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_release(Seiscomp::Core::BaseObject *p);
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_add_ref(const Seiscomp::Core::BaseObject *p);
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_release(const Seiscomp::Core::BaseObject *p);
 
 #include <seiscomp3/core/defs.h>
 #include <seiscomp3/core/rtti.h>
@@ -255,15 +236,7 @@ class SC_SYSTEM_CORE_API BaseObject {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_add_ref(Seiscomp::Core::BaseObject *p) {
+inline void intrusive_ptr_add_ref(BaseObject *p) {
 	p->incrementReferenceCount();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -272,7 +245,7 @@ inline void intrusive_ptr_add_ref(Seiscomp::Core::BaseObject *p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_release(Seiscomp::Core::BaseObject *p) {
+inline void intrusive_ptr_release(BaseObject *p) {
 	p->decrementReferenceCount();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -281,7 +254,7 @@ inline void intrusive_ptr_release(Seiscomp::Core::BaseObject *p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_add_ref(const Seiscomp::Core::BaseObject *p) {
+inline void intrusive_ptr_add_ref(const BaseObject *p) {
 	p->incrementReferenceCount();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -290,8 +263,16 @@ inline void intrusive_ptr_add_ref(const Seiscomp::Core::BaseObject *p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline void intrusive_ptr_release(const Seiscomp::Core::BaseObject *p) {
+inline void intrusive_ptr_release(const BaseObject *p) {
 	p->decrementReferenceCount();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+}
 }
 
 
