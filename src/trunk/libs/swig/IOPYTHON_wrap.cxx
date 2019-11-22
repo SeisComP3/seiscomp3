@@ -3652,49 +3652,55 @@ namespace Swig {
 #define SWIGTYPE_p_iostate swig_types[198]
 #define SWIGTYPE_p_iterator swig_types[199]
 #define SWIGTYPE_p_long swig_types[200]
-#define SWIGTYPE_p_off_type swig_types[201]
-#define SWIGTYPE_p_openmode swig_types[202]
-#define SWIGTYPE_p_p_PyObject swig_types[203]
-#define SWIGTYPE_p_p_void swig_types[204]
-#define SWIGTYPE_p_pos_type swig_types[205]
-#define SWIGTYPE_p_reference swig_types[206]
-#define SWIGTYPE_p_seekdir swig_types[207]
-#define SWIGTYPE_p_size_t swig_types[208]
-#define SWIGTYPE_p_size_type swig_types[209]
-#define SWIGTYPE_p_state_type swig_types[210]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t swig_types[211]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[212]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[213]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[214]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[215]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[216]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[217]
-#define SWIGTYPE_p_std__exception swig_types[218]
-#define SWIGTYPE_p_std__invalid_argument swig_types[219]
-#define SWIGTYPE_p_std__ios_base swig_types[220]
-#define SWIGTYPE_p_std__istream swig_types[221]
-#define SWIGTYPE_p_std__listT_double_t swig_types[222]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[223]
-#define SWIGTYPE_p_std__locale swig_types[224]
-#define SWIGTYPE_p_std__ostream swig_types[225]
-#define SWIGTYPE_p_std__streambuf swig_types[226]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t swig_types[227]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[228]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[229]
-#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[230]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[231]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[232]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[233]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[234]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[235]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[236]
-#define SWIGTYPE_p_time_t swig_types[237]
-#define SWIGTYPE_p_traits_type swig_types[238]
-#define SWIGTYPE_p_uint64_t swig_types[239]
-#define SWIGTYPE_p_value_type swig_types[240]
-#define SWIGTYPE_p_void swig_types[241]
-static swig_type_info *swig_types[243];
-static swig_module_info swig_module = {swig_types, 242, 0, 0, 0, 0};
+#define SWIGTYPE_p_long_long swig_types[201]
+#define SWIGTYPE_p_off_type swig_types[202]
+#define SWIGTYPE_p_openmode swig_types[203]
+#define SWIGTYPE_p_p_PyObject swig_types[204]
+#define SWIGTYPE_p_p_void swig_types[205]
+#define SWIGTYPE_p_pos_type swig_types[206]
+#define SWIGTYPE_p_reference swig_types[207]
+#define SWIGTYPE_p_seekdir swig_types[208]
+#define SWIGTYPE_p_short swig_types[209]
+#define SWIGTYPE_p_signed_char swig_types[210]
+#define SWIGTYPE_p_size_t swig_types[211]
+#define SWIGTYPE_p_size_type swig_types[212]
+#define SWIGTYPE_p_state_type swig_types[213]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t swig_types[214]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[215]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[216]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[217]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[218]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[219]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[220]
+#define SWIGTYPE_p_std__exception swig_types[221]
+#define SWIGTYPE_p_std__invalid_argument swig_types[222]
+#define SWIGTYPE_p_std__ios_base swig_types[223]
+#define SWIGTYPE_p_std__istream swig_types[224]
+#define SWIGTYPE_p_std__listT_double_t swig_types[225]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[226]
+#define SWIGTYPE_p_std__locale swig_types[227]
+#define SWIGTYPE_p_std__ostream swig_types[228]
+#define SWIGTYPE_p_std__streambuf swig_types[229]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t swig_types[230]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_std__allocatorT_Seiscomp__Core__Time_t_t swig_types[231]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[232]
+#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[233]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[234]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[235]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[236]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[237]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[238]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[239]
+#define SWIGTYPE_p_time_t swig_types[240]
+#define SWIGTYPE_p_traits_type swig_types[241]
+#define SWIGTYPE_p_unsigned_char swig_types[242]
+#define SWIGTYPE_p_unsigned_int swig_types[243]
+#define SWIGTYPE_p_unsigned_long_long swig_types[244]
+#define SWIGTYPE_p_unsigned_short swig_types[245]
+#define SWIGTYPE_p_value_type swig_types[246]
+#define SWIGTYPE_p_void swig_types[247]
+static swig_type_info *swig_types[249];
+static swig_module_info swig_module = {swig_types, 248, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9255,7 +9261,7 @@ SWIGINTERN int Swig_var_DatabaseInterface_INVALID_OID_set(PyObject *) {
 SWIGINTERN PyObject *Swig_var_DatabaseInterface_INVALID_OID_get(void) {
   PyObject *pyobj = 0;
   
-  pyobj = SWIG_NewPointerObj(SWIG_as_voidptr(&Seiscomp::IO::DatabaseInterface::INVALID_OID), SWIGTYPE_p_uint64_t,  0 );
+  pyobj = SWIG_From_unsigned_SS_long_SS_long(static_cast< unsigned long long >(Seiscomp::IO::DatabaseInterface::INVALID_OID));
   return pyobj;
 }
 
@@ -9779,7 +9785,7 @@ SWIGINTERN PyObject *_wrap_DatabaseInterface_lastInsertId(PyObject *SWIGUNUSEDPA
   arg2 = reinterpret_cast< char * >(buf2);
   {
     try {
-      result = (arg1)->lastInsertId((char const *)arg2);
+      result = (Seiscomp::IO::DatabaseInterface::OID)(arg1)->lastInsertId((char const *)arg2);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -9791,7 +9797,7 @@ SWIGINTERN PyObject *_wrap_DatabaseInterface_lastInsertId(PyObject *SWIGUNUSEDPA
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj((new Seiscomp::IO::DatabaseInterface::OID(static_cast< const Seiscomp::IO::DatabaseInterface::OID& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_unsigned_SS_long_SS_long(static_cast< unsigned long long >(result));
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
@@ -9816,7 +9822,7 @@ SWIGINTERN PyObject *_wrap_DatabaseInterface_numberOfAffectedRows(PyObject *SWIG
   arg1 = reinterpret_cast< Seiscomp::IO::DatabaseInterface * >(argp1);
   {
     try {
-      result = (arg1)->numberOfAffectedRows();
+      result = (uint64_t)(arg1)->numberOfAffectedRows();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -9828,7 +9834,7 @@ SWIGINTERN PyObject *_wrap_DatabaseInterface_numberOfAffectedRows(PyObject *SWIG
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_unsigned_SS_long_SS_long(static_cast< unsigned long long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -37508,11 +37514,12 @@ static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)
 static swig_type_info _swigt__p_f_enum_std__ios_base__event_r_std__ios_base_int__void = {"_p_f_enum_std__ios_base__event_r_std__ios_base_int__void", "void (*)(enum std::ios_base::event,std::ios_base &,int)|std::ios_base::event_callback", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_fmtflags = {"_p_fmtflags", "fmtflags *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int_type = {"_p_int_type", "int_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iostate = {"_p_iostate", "iostate *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "long *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_type = {"_p_off_type", "off_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_openmode = {"_p_openmode", "openmode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
@@ -37520,6 +37527,8 @@ static swig_type_info _swigt__p_p_void = {"_p_p_void", "void **", 0, 0, (void*)0
 static swig_type_info _swigt__p_pos_type = {"_p_pos_type", "pos_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_reference = {"_p_reference", "reference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_seekdir = {"_p_seekdir", "seekdir *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "std::streamsize *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_state_type = {"_p_state_type", "state_type *", 0, 0, (void*)0, 0};
@@ -37553,7 +37562,10 @@ static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_std__allocat
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_time_t = {"_p_time_t", "time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_traits_type = {"_p_traits_type", "traits_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|Seiscomp::IO::DatabaseInterface::OID *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|uint_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *|uint_least16_t *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
@@ -37759,6 +37771,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_iostate,
   &_swigt__p_iterator,
   &_swigt__p_long,
+  &_swigt__p_long_long,
   &_swigt__p_off_type,
   &_swigt__p_openmode,
   &_swigt__p_p_PyObject,
@@ -37766,6 +37779,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_pos_type,
   &_swigt__p_reference,
   &_swigt__p_seekdir,
+  &_swigt__p_short,
+  &_swigt__p_signed_char,
   &_swigt__p_size_t,
   &_swigt__p_size_type,
   &_swigt__p_state_type,
@@ -37797,7 +37812,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_time_t,
   &_swigt__p_traits_type,
-  &_swigt__p_uint64_t,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long_long,
+  &_swigt__p_unsigned_short,
   &_swigt__p_value_type,
   &_swigt__p_void,
 };
@@ -38001,6 +38019,7 @@ static swig_cast_info _swigc__p_int_type[] = {  {&_swigt__p_int_type, 0, 0, 0},{
 static swig_cast_info _swigc__p_iostate[] = {  {&_swigt__p_iostate, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_type[] = {  {&_swigt__p_off_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_openmode[] = {  {&_swigt__p_openmode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
@@ -38008,6 +38027,8 @@ static swig_cast_info _swigc__p_p_void[] = {  {&_swigt__p_p_void, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_pos_type[] = {  {&_swigt__p_pos_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_reference[] = {  {&_swigt__p_reference, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_seekdir[] = {  {&_swigt__p_seekdir, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_state_type[] = {  {&_swigt__p_state_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -38041,7 +38062,10 @@ static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_std__allocat
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_time_t[] = {  {&_swigt__p_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_traits_type[] = {  {&_swigt__p_traits_type, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
@@ -38247,6 +38271,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_iostate,
   _swigc__p_iterator,
   _swigc__p_long,
+  _swigc__p_long_long,
   _swigc__p_off_type,
   _swigc__p_openmode,
   _swigc__p_p_PyObject,
@@ -38254,6 +38279,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_pos_type,
   _swigc__p_reference,
   _swigc__p_seekdir,
+  _swigc__p_short,
+  _swigc__p_signed_char,
   _swigc__p_size_t,
   _swigc__p_size_type,
   _swigc__p_state_type,
@@ -38285,7 +38312,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_time_t,
   _swigc__p_traits_type,
-  _swigc__p_uint64_t,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long_long,
+  _swigc__p_unsigned_short,
   _swigc__p_value_type,
   _swigc__p_void,
 };

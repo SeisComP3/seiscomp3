@@ -786,6 +786,11 @@ class Application(seiscomp3.Core.InterruptibleObject):
         return _Client.Application_sync(self, syncID)
 
 
+    def waitEvent(self):
+        """waitEvent(Application self) -> bool"""
+        return _Client.Application_waitEvent(self)
+
+
     def setDaemonEnabled(self, enable):
         """setDaemonEnabled(Application self, bool enable)"""
         return _Client.Application_setDaemonEnabled(self, enable)
