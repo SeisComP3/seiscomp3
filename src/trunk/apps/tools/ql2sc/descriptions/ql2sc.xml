@@ -21,6 +21,14 @@
 					the messaging system.
 				</description>
 			</parameter>
+			<parameter name="eventAssociationTimeout" type="int" default="10" unit="s">
+				<description>
+					If event synchronisation is enabled and an incoming origin
+					is not yet associated with an event on the target machine
+					then this timeout defines the maximum number of seconds to
+					wait for an association.
+				</description>
+			</parameter>
 			<parameter name="hosts" type="list:string">
 				<description>
 					Registration of the host profiles defining the connection

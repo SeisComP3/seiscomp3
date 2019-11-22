@@ -332,10 +332,12 @@ bool checkUpdateOnTimeStamps(const T *remoteO, const T *localO) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 App::App(int argc, char **argv)
 : Client::Application(argc, argv)
+, _waitForEventIDTimeout(0)
 , _test(false) {
 	setDatabaseEnabled(true, true);
 	setMessagingEnabled(true);
 	setPrimaryMessagingGroup("EVENT");
+	addMessagingSubscription("EVENT");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -377,7 +379,7 @@ bool App::init() {
 	if ( !_config.init() )
 		return false;
 
-	int notificationID = -1;
+	int notificationID = -2;
 	for ( HostConfigs::const_iterator it = _config.hosts.begin();
 	      it != _config.hosts.end(); ++it, --notificationID ) {
 		SEISCOMP_INFO("Initializing host '%s'", it->host.c_str());
@@ -395,8 +397,7 @@ bool App::init() {
 	Util::createPath(baseDir);
 	readLastUpdates();
 
-	_cache.setBufferSize(_config.cacheSize);
-	_cache.setDatabaseArchive(query());
+	enableTimer(1);
 
 	return true;
 }
@@ -531,9 +532,25 @@ void App::done() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::feed(QLClient *client, IO::QuakeLink::Response *response) {
+	_clientPublishMutex.lock();
+
+	Client::Notification n(client->notificationID(), response);
+	if ( !_queue.push(n) ) {
+		_clientPublishMutex.unlock();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::dispatchNotification(int type, Core::BaseObject *obj) {
 	if ( type >= 0 ) return false;
-	size_t index = -type - 1;
+	if ( type == -1 ) return true;
+
+	size_t index = -type - 2;
 	if ( index >= _clients.size() ) return false;
 
 	QLClient *client = _clients[index];
@@ -545,7 +562,12 @@ bool App::dispatchNotification(int type, Core::BaseObject *obj) {
 		return true;
 	}
 
-	return dispatchResponse(client, msg);
+	bool res = dispatchResponse(client, msg);
+
+	// Allow new responses
+	_clientPublishMutex.unlock();
+
+	return res;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -693,8 +715,27 @@ bool App::dispatchResponse(QLClient *client, const IO::QuakeLink::Response *msg)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::addObject(const string& parentID, Object *obj) {
 	PublicObject *po = PublicObject::Cast(obj);
-	if ( po )
-		_cache.feed(po);
+	if ( po ) {
+		Event *event = Event::Cast(po);
+		if ( !event )
+			_cache.feed(po);
+	}
+	else if ( !_waitForEventIDOriginID.empty() ) {
+		OriginReference *ref = OriginReference::Cast(obj);
+		if ( ref ) {
+			if ( ref->originID() == _waitForEventIDOriginID )
+				originAssociatedWithEvent(parentID, ref->originID());
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::updateObject(const std::string& parentID, DataModel::Object *obj) {
+	addObject(parentID, obj);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -713,23 +754,76 @@ void App::removeObject(const string& parentID, Object *obj) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::handleTimeout() {
+	if ( _waitForEventIDTimeout > 0 ) {
+		--_waitForEventIDTimeout;
+		if ( _waitForEventIDTimeout <= 0 ) {
+			_waitForEventIDOriginID = string();
+			// Just wake up the event queue
+			sendNotification(Client::Notification(-1));
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <class T>
 void App::diffPO(T *remotePO, const string &parentID, Notifiers &notifiers,
                  LogNode *logNode) {
 	if ( remotePO == NULL ) return;
 
 	// search corresponding object in cache
-	T *localPO = T::Cast(_cache.find(remotePO->typeInfo(), remotePO->publicID()));
+	typename Core::SmartPointer<T>::Impl localPO;
+	localPO = T::Cast(_cache.find(remotePO->typeInfo(), remotePO->publicID()));
 
 	// if object was not found in cache but loaded from database, all of its
 	// child objects have to be loaded too
 	if ( localPO && !_cache.cached() && query() ) {
-		query()->load(localPO);
-		PublicObjectCacheFeeder(_cache).feed(localPO, true);
+		query()->load(localPO.get());
+		PublicObjectCacheFeeder(_cache).feed(localPO.get(), true);
 	}
 
 	MyDiff diff;
-	diff.diff(localPO, remotePO, parentID, notifiers, logNode);
+	diff.diff(localPO.get(), remotePO, parentID, notifiers, logNode);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::originAssociatedWithEvent(const std::string &eventID,
+                                    const std::string &originID) {
+	_waitForEventIDOriginID = string();
+	_waitForEventIDTimeout = 0;
+	_waitForEventIDResult = eventID;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+string App::waitForEventAssociation(const std::string &originID, int timeout) {
+	// Setup state variables
+	_waitForEventIDOriginID = originID;
+	_waitForEventIDResult = string();
+	// Wait a least 10 seconds for event association
+	_waitForEventIDTimeout = timeout;
+
+	while ( !_waitForEventIDOriginID.empty() ) {
+		if ( !waitEvent() ) break;
+		if ( !_waitForEventIDResult.empty() ) {
+			return _waitForEventIDResult;
+		}
+
+		idle();
+	}
+
+	return string();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -762,9 +856,25 @@ void App::syncEvent(const EventParameters *ep, const Event *event,
 
 	EventPtr targetEvent = query()->getEvent(event->preferredOriginID());
 	if ( !targetEvent ) {
-		SEISCOMP_WARNING("No event found for origin %s, skipping attribute sync",
-		                 event->preferredOriginID().c_str());
-		return;
+		SEISCOMP_DEBUG("No event found for origin %s, need to wait",
+		               event->preferredOriginID().c_str());
+		string eventID = waitForEventAssociation(event->preferredOriginID(),
+		                                         _config.maxWaitForEventIDTimeout);
+		if ( eventID.empty() ) {
+			SEISCOMP_ERROR("Event association timeout reached, skipping event synchronisation for input event %s",
+			               event->publicID().c_str());
+			return;
+		}
+
+		SEISCOMP_DEBUG("Origin %s has been associated with event %s",
+		               event->preferredOriginID().c_str(), eventID.c_str());
+
+		targetEvent = static_cast<Event*>(query()->getObject(Event::TypeInfo(), eventID));
+		if ( !targetEvent ) {
+			SEISCOMP_ERROR("Failed to read target event %s from database, skipping event synchronisation for input event %s",
+			               eventID.c_str(), event->publicID().c_str());
+			return;
+		}
 	}
 
 	query()->loadComments(targetEvent.get());
@@ -1117,6 +1227,9 @@ bool App::sendNotifiers(const Notifiers &notifiers, const RoutingTable &routing)
 		              add + update + remove, add, update, remove,
 		              ss.str().c_str());
 	}
+
+	// Sync with messaging
+	sync();
 
 	return true;
 }
