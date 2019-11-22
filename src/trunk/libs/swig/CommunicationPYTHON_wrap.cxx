@@ -3118,14 +3118,20 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_char swig_types[109]
 #define SWIGTYPE_p_const_iterator swig_types[110]
 #define SWIGTYPE_p_int swig_types[111]
-#define SWIGTYPE_p_int64_t swig_types[112]
-#define SWIGTYPE_p_iterator swig_types[113]
-#define SWIGTYPE_p_long swig_types[114]
+#define SWIGTYPE_p_iterator swig_types[112]
+#define SWIGTYPE_p_long swig_types[113]
+#define SWIGTYPE_p_long_long swig_types[114]
 #define SWIGTYPE_p_p_Seiscomp__Communication__NetworkMessage swig_types[115]
 #define SWIGTYPE_p_p_Seiscomp__Communication__ServiceMessage swig_types[116]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[117]
-static swig_type_info *swig_types[119];
-static swig_module_info swig_module = {swig_types, 118, 0, 0, 0, 0};
+#define SWIGTYPE_p_short swig_types[117]
+#define SWIGTYPE_p_signed_char swig_types[118]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[119]
+#define SWIGTYPE_p_unsigned_char swig_types[120]
+#define SWIGTYPE_p_unsigned_int swig_types[121]
+#define SWIGTYPE_p_unsigned_long_long swig_types[122]
+#define SWIGTYPE_p_unsigned_short swig_types[123]
+static swig_type_info *swig_types[125];
+static swig_module_info swig_module = {swig_types, 124, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3698,6 +3704,63 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   if (val) *val = r ? true : false;
   return SWIG_OK;
 }
+
+
+#if defined(LLONG_MAX) && !defined(SWIG_LONG_LONG_AVAILABLE)
+#  define SWIG_LONG_LONG_AVAILABLE
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERN int
+SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
+{
+  int res = SWIG_TypeError;
+  if (PyLong_Check(obj)) {
+    long long v = PyLong_AsLongLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+      res = SWIG_OverflowError;
+    }
+  } else {
+    long v;
+    res = SWIG_AsVal_long (obj,&v);
+    if (SWIG_IsOK(res)) {
+      if (val) *val = v;
+      return res;
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    const double mant_max = 1LL << DBL_MANT_DIG;
+    const double mant_min = -mant_max;
+    double d;
+    res = SWIG_AsVal_double (obj,&d);
+    if (SWIG_IsOK(res) && !SWIG_CanCastAsInteger(&d, mant_min, mant_max))
+      return SWIG_OverflowError;
+    if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, mant_min, mant_max)) {
+      if (val) *val = (long long)(d);
+      return SWIG_AddCast(res);
+    }
+    res = SWIG_TypeError;
+  }
+#endif
+  return res;
+}
+#endif
+
+
+#ifdef SWIG_LONG_LONG_AVAILABLE
+SWIGINTERNINLINE PyObject* 
+SWIG_From_long_SS_long  (long long value)
+{
+  return ((value < LONG_MIN) || (value > LONG_MAX)) ?
+    PyLong_FromLongLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -11688,8 +11751,8 @@ SWIGINTERN PyObject *_wrap_NetworkInterface_setSequenceNumber(PyObject *SWIGUNUS
   int64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  long long val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -11699,19 +11762,11 @@ SWIGINTERN PyObject *_wrap_NetworkInterface_setSequenceNumber(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NetworkInterface_setSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::NetworkInterface *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::Communication::NetworkInterface * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NetworkInterface_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NetworkInterface_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "NetworkInterface_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
+  } 
+  arg2 = static_cast< int64_t >(val2);
   {
     try {
       (arg1)->setSequenceNumber(arg2);
@@ -11749,7 +11804,7 @@ SWIGINTERN PyObject *_wrap_NetworkInterface_getSequenceNumber(PyObject *SWIGUNUS
   arg1 = reinterpret_cast< Seiscomp::Communication::NetworkInterface * >(argp1);
   {
     try {
-      result = ((Seiscomp::Communication::NetworkInterface const *)arg1)->getSequenceNumber();
+      result = (int64_t)((Seiscomp::Communication::NetworkInterface const *)arg1)->getSequenceNumber();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -11761,7 +11816,7 @@ SWIGINTERN PyObject *_wrap_NetworkInterface_getSequenceNumber(PyObject *SWIGUNUS
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -13976,8 +14031,8 @@ SWIGINTERN PyObject *_wrap_SystemConnection_setSequenceNumber(PyObject *SWIGUNUS
   int64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  long long val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -13987,19 +14042,11 @@ SWIGINTERN PyObject *_wrap_SystemConnection_setSequenceNumber(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SystemConnection_setSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::SystemConnection *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::Communication::SystemConnection * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SystemConnection_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SystemConnection_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SystemConnection_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
+  } 
+  arg2 = static_cast< int64_t >(val2);
   {
     try {
       (arg1)->setSequenceNumber(arg2);
@@ -14037,7 +14084,7 @@ SWIGINTERN PyObject *_wrap_SystemConnection_getSequenceNumber(PyObject *SWIGUNUS
   arg1 = reinterpret_cast< Seiscomp::Communication::SystemConnection * >(argp1);
   {
     try {
-      result = ((Seiscomp::Communication::SystemConnection const *)arg1)->getSequenceNumber();
+      result = (int64_t)((Seiscomp::Communication::SystemConnection const *)arg1)->getSequenceNumber();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -14049,7 +14096,7 @@ SWIGINTERN PyObject *_wrap_SystemConnection_getSequenceNumber(PyObject *SWIGUNUS
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -16593,13 +16640,19 @@ static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (voi
 static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "long *|time_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_Seiscomp__Communication__NetworkMessage = {"_p_p_Seiscomp__Communication__NetworkMessage", "Seiscomp::Communication::NetworkMessage **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_Seiscomp__Communication__ServiceMessage = {"_p_p_Seiscomp__Communication__ServiceMessage", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_t = {"_p_std__vectorT_std__string_t", "std::vector< std::string > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|uint_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *|uint_least16_t *|uint16_t *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Archive,
@@ -16714,12 +16767,18 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_const_iterator,
   &_swigt__p_int,
-  &_swigt__p_int64_t,
   &_swigt__p_iterator,
   &_swigt__p_long,
+  &_swigt__p_long_long,
   &_swigt__p_p_Seiscomp__Communication__NetworkMessage,
   &_swigt__p_p_Seiscomp__Communication__ServiceMessage,
+  &_swigt__p_short,
+  &_swigt__p_signed_char,
   &_swigt__p_std__vectorT_std__string_t,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long_long,
+  &_swigt__p_unsigned_short,
 };
 
 static swig_cast_info _swigc__p_Archive[] = {  {&_swigt__p_Archive, 0, 0, 0},{0, 0, 0, 0}};
@@ -16834,12 +16893,18 @@ static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_Seiscomp__Communication__ServiceMessage[] = {{&_swigt__p_p_Seiscomp__Communication__ServiceMessage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_Seiscomp__Communication__NetworkMessage[] = {  {&_swigt__p_p_Seiscomp__Communication__NetworkMessage, 0, 0, 0},  {&_swigt__p_p_Seiscomp__Communication__ServiceMessage, _p_p_Seiscomp__Communication__ServiceMessageTo_p_p_Seiscomp__Communication__NetworkMessage, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_t[] = {  {&_swigt__p_std__vectorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Archive,
@@ -16954,12 +17019,18 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_const_iterator,
   _swigc__p_int,
-  _swigc__p_int64_t,
   _swigc__p_iterator,
   _swigc__p_long,
+  _swigc__p_long_long,
   _swigc__p_p_Seiscomp__Communication__NetworkMessage,
   _swigc__p_p_Seiscomp__Communication__ServiceMessage,
+  _swigc__p_short,
+  _swigc__p_signed_char,
   _swigc__p_std__vectorT_std__string_t,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long_long,
+  _swigc__p_unsigned_short,
 };
 
 

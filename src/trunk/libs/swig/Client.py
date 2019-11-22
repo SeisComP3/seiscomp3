@@ -786,6 +786,11 @@ class Application(seiscomp3.Core.InterruptibleObject):
         return _Client.Application_sync(self, syncID)
 
 
+    def waitEvent(self):
+        """waitEvent(Application self) -> bool"""
+        return _Client.Application_waitEvent(self)
+
+
     def setDaemonEnabled(self, enable):
         """setDaemonEnabled(Application self, bool enable)"""
         return _Client.Application_setDaemonEnabled(self, enable)
@@ -1716,14 +1721,6 @@ class Inventory(_object):
         return _Client.Inventory_stationLocation(self, networkCode, stationCode, arg4)
 
 
-    def getStream(self, networkCode, stationCode, locationCode, channelCode, arg6, error=None):
-        """
-        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6, Seiscomp::DataModel::InventoryError * error=None) -> Stream
-        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6) -> Stream
-        """
-        return _Client.Inventory_getStream(self, networkCode, stationCode, locationCode, channelCode, arg6, error)
-
-
     def getStation(self, *args):
         """
         getStation(Inventory self, std::string const & networkCode, std::string const & stationCode, Time arg4, Seiscomp::DataModel::InventoryError * error=None) -> Station
@@ -1740,6 +1737,15 @@ class Inventory(_object):
         getSensorLocation(Inventory self, Pick arg2) -> SensorLocation
         """
         return _Client.Inventory_getSensorLocation(self, *args)
+
+
+    def getStream(self, *args):
+        """
+        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6, Seiscomp::DataModel::InventoryError * error=None) -> Stream
+        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6) -> Stream
+        getStream(Inventory self, Pick arg2) -> Stream
+        """
+        return _Client.Inventory_getStream(self, *args)
 
 
     def getThreeComponents(self, *args):

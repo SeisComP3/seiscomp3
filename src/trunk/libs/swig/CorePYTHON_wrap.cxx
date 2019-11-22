@@ -3110,43 +3110,50 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_float swig_types[101]
 #define SWIGTYPE_p_int swig_types[102]
 #define SWIGTYPE_p_iterator swig_types[103]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[104]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[105]
-#define SWIGTYPE_p_std__exception swig_types[106]
-#define SWIGTYPE_p_std__istream swig_types[107]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[108]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[109]
-#define SWIGTYPE_p_std__ostream swig_types[110]
-#define SWIGTYPE_p_std__string swig_types[111]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[112]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[113]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[114]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[115]
-#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[116]
-#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[117]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[118]
-#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[119]
-#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[120]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[121]
-#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[122]
-#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[123]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[124]
-#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[125]
-#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[126]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[127]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[128]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[129]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[130]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[131]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[132]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[133]
-#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[134]
-#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[135]
-#define SWIGTYPE_p_time_t swig_types[136]
-#define SWIGTYPE_p_timeval swig_types[137]
-#define SWIGTYPE_p_void swig_types[138]
-static swig_type_info *swig_types[140];
-static swig_module_info swig_module = {swig_types, 139, 0, 0, 0, 0};
+#define SWIGTYPE_p_long_long swig_types[104]
+#define SWIGTYPE_p_short swig_types[105]
+#define SWIGTYPE_p_signed_char swig_types[106]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[107]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[108]
+#define SWIGTYPE_p_std__exception swig_types[109]
+#define SWIGTYPE_p_std__istream swig_types[110]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[111]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[112]
+#define SWIGTYPE_p_std__ostream swig_types[113]
+#define SWIGTYPE_p_std__string swig_types[114]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[115]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[116]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[117]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[118]
+#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[119]
+#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[120]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[121]
+#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[122]
+#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[123]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[124]
+#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[125]
+#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[126]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[127]
+#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[128]
+#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[129]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[130]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[131]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[132]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[133]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[134]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[135]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[136]
+#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[137]
+#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[138]
+#define SWIGTYPE_p_time_t swig_types[139]
+#define SWIGTYPE_p_timeval swig_types[140]
+#define SWIGTYPE_p_unsigned_char swig_types[141]
+#define SWIGTYPE_p_unsigned_int swig_types[142]
+#define SWIGTYPE_p_unsigned_long_long swig_types[143]
+#define SWIGTYPE_p_unsigned_short swig_types[144]
+#define SWIGTYPE_p_void swig_types[145]
+static swig_type_info *swig_types[147];
+static swig_module_info swig_module = {swig_types, 146, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3272,6 +3279,9 @@ namespace swig {
 
 #include <typeinfo>
 #include <stdexcept>
+
+
+#include <stdint.h>		// Use the C99 official header
 
 
 #include <string>
@@ -47336,8 +47346,11 @@ static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__complexT_double_t = {"_p_std__complexT_double_t", "std::complex< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__complexT_float_t = {"_p_std__complexT_float_t", "std::complex< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__exception = {"_p_std__exception", "std::exception *", 0, 0, (void*)0, 0};
@@ -47372,6 +47385,10 @@ static swig_type_info _swigt__p_std__vectorT_std__string_t__const_iterator = {"_
 static swig_type_info _swigt__p_std__vectorT_std__string_t__iterator = {"_p_std__vectorT_std__string_t__iterator", "std::vector< std::string >::iterator *|Seiscomp::TypedArray< std::string >::iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_time_t = {"_p_time_t", "time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_timeval = {"_p_timeval", "timeval *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|uint_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *|uint_least16_t *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -47479,6 +47496,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_float,
   &_swigt__p_int,
   &_swigt__p_iterator,
+  &_swigt__p_long_long,
+  &_swigt__p_short,
+  &_swigt__p_signed_char,
   &_swigt__p_std__complexT_double_t,
   &_swigt__p_std__complexT_float_t,
   &_swigt__p_std__exception,
@@ -47513,6 +47533,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__vectorT_std__string_t__iterator,
   &_swigt__p_time_t,
   &_swigt__p_timeval,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long_long,
+  &_swigt__p_unsigned_short,
   &_swigt__p_void,
 };
 
@@ -47620,6 +47644,9 @@ static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__complexT_double_t[] = {  {&_swigt__p_std__complexT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__complexT_float_t[] = {  {&_swigt__p_std__complexT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__exception[] = {  {&_swigt__p_Seiscomp__Core__ValueError, _p_Seiscomp__Core__ValueErrorTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ClassNotFound, _p_Seiscomp__Core__ClassNotFoundTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__GeneralException, _p_Seiscomp__Core__GeneralExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__MemoryException, _p_Seiscomp__Core__MemoryExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__StreamException, _p_Seiscomp__Core__StreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__EndOfStreamException, _p_Seiscomp__Core__EndOfStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeConversionException, _p_Seiscomp__Core__TypeConversionExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__OverflowException, _p_Seiscomp__Core__OverflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__UnderflowException, _p_Seiscomp__Core__UnderflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueException, _p_Seiscomp__Core__ValueExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeException, _p_Seiscomp__Core__TypeExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_std__exception, 0, 0, 0},  {&_swigt__p_Seiscomp__Core___private__OperationInterrupted, _p_Seiscomp__Core___private__OperationInterruptedTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__DuplicateClassname, _p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception, 0, 0},{0, 0, 0, 0}};
@@ -47654,6 +47681,10 @@ static swig_cast_info _swigc__p_std__vectorT_std__string_t__const_iterator[] = {
 static swig_cast_info _swigc__p_std__vectorT_std__string_t__iterator[] = {  {&_swigt__p_std__vectorT_std__string_t__iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_time_t[] = {  {&_swigt__p_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_timeval[] = {  {&_swigt__p_timeval, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -47761,6 +47792,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_float,
   _swigc__p_int,
   _swigc__p_iterator,
+  _swigc__p_long_long,
+  _swigc__p_short,
+  _swigc__p_signed_char,
   _swigc__p_std__complexT_double_t,
   _swigc__p_std__complexT_float_t,
   _swigc__p_std__exception,
@@ -47795,6 +47829,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__vectorT_std__string_t__iterator,
   _swigc__p_time_t,
   _swigc__p_timeval,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long_long,
+  _swigc__p_unsigned_short,
   _swigc__p_void,
 };
 
@@ -48496,7 +48534,7 @@ SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char *)"TimeSpan_MaxTime",Swig_var_TimeSpan_MaxTime_get, Swig_var_TimeSpan_MaxTime_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Time_Null",Swig_var_Time_Null_get, Swig_var_Time_Null_set);
   SWIG_addvarlink(SWIG_globals(),(char *)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0C0100)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0C0200)));
   SWIG_addvarlink(SWIG_globals(),(char *)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));
