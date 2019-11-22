@@ -294,6 +294,11 @@
 							comments with spaces, e.g. &quot;Blast on Monday morning&quot;.
 							</description>
 						</parameter>
+						<parameter name="returnToEventList" type="boolean" default="false">
+							<description>
+							Whether to return to the event list after committing or not.
+							</description>
+						</parameter>
 						<parameter name="label" type="string" default="Commit+">
 							<description>
 							The commit button label. Use quotes for labels with
