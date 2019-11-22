@@ -35,7 +35,7 @@ extern "C" {
 
 void distaz2_(double *lat1, double *lon1, double *lat2, double *lon2, double *delta, double *azi1, double *azi2);
 int setup_tttables_dir(const char *new_dir);
-double compute_ttime(double distance, double depth, char *phase, int extrapolate, int *errorflag);
+double compute_ttime(double distance, double depth, char *phase, int extrapolate, double *dtdel, int *errorflag);
 int num_phases();
 char **phase_types();
 
@@ -150,7 +150,8 @@ TravelTimeList *Locsat::compute(double delta, double depth) {
 	for ( int i = 0; i < nphases; ++i ) {
 		char *phase = phases[i];
 		int errorflag = 0;
-		double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &errorflag);
+		double dtdel;
+		double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &dtdel, &errorflag);
 		if (errorflag != 0)
 			continue;
 		// This comparison is there to also skip NaN values
@@ -166,7 +167,7 @@ TravelTimeList *Locsat::compute(double delta, double depth) {
 		else*/
 			takeoff = 0;
 
-		ttlist->push_back(TravelTime(phase, ttime, 0, 0, 0, takeoff));
+		ttlist->push_back(TravelTime(phase, ttime, dtdel, 0, 0, takeoff));
 	}
 
 	ttlist->sortByTime();
@@ -181,11 +182,12 @@ TravelTimeList *Locsat::compute(double delta, double depth) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TravelTime Locsat::compute(const char *phase, double delta, double depth) {
 	int errorflag=0;
-	double ttime = compute_ttime(delta, depth, const_cast<char*>(phase), 0, &errorflag);
+	double dtdel;
+	double ttime = compute_ttime(delta, depth, const_cast<char*>(phase), 0, &dtdel, &errorflag);
 	if ( errorflag!=0 ) throw NoPhaseError();
 	if ( !(ttime > 0) ) throw NoPhaseError();
 
-	return TravelTime(phase, ttime, 0, 0, 0, 0);
+	return TravelTime(phase, ttime, dtdel, 0, 0, 0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -253,11 +255,12 @@ TravelTime Locsat::computeFirst(double delta, double depth) {
 	char **phases = phase_types();
 	char *phase = phases[_Pindex];
 	int errorflag=0;
-	double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &errorflag);
+	double dtdel;
+	double ttime = compute_ttime(delta, depth, phase, EXTRAPOLATE, &dtdel, &errorflag);
 	if ( ttime < 0 ) throw NoPhaseError();
 	if ( errorflag!=0 ) throw NoPhaseError();
 
-	return TravelTime(phase, ttime, 0, 0, 0, 0);
+	return TravelTime(phase, ttime, dtdel, 0, 0, 0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
