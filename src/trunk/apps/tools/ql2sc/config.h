@@ -45,10 +45,10 @@ struct Config {
 	bool init();
 	void format(std::stringstream &ss, const RoutingTable &table) const;
 
-	size_t                                      cacheSize;
-	int                                         batchSize;
-	size_t                                      backLog;
-	HostConfigs                                 hosts;
+	int          batchSize;
+	size_t       backLog;
+	int          maxWaitForEventIDTimeout;
+	HostConfigs  hosts;
 };
 
 } // ns QL2SC

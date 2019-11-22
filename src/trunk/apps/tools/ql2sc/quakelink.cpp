@@ -17,8 +17,8 @@
 #define SEISCOMP_COMPONENT QL2SC
 
 #include "quakelink.h"
+#include "app.h"
 
-#include <seiscomp3/client/application.h>
 #include <seiscomp3/logging/log.h>
 
 #include <boost/bind.hpp>
@@ -51,8 +51,8 @@ boost::posix_time::time_duration wait(const Core::Time &until) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QLClient::QLClient(int notificationID, const HostConfig *config, size_t backLog)
- : IO::QuakeLink::Connection(), _notificationID(notificationID), _config(config),
-   _backLog(backLog), _thread(NULL) {
+: IO::QuakeLink::Connection(), _notificationID(notificationID), _config(config)
+, _backLog(backLog), _thread(NULL) {
 	setLogPrefix("[QL " + _config->host + "] ");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -131,8 +131,7 @@ void QLClient::setLastUpdate(const Core::Time &time) {
 void QLClient::processResponse(IO::QuakeLink::Response *response) {
 	SEISCOMP_INFO("%sreceived message, size: %lu)", _logPrefix.c_str(),
 	              (unsigned long)response->length);
-	SCCoreApp->sendNotification(Client::Notification(
-	                            _notificationID, response));
+	((App*)SCCoreApp)->feed(this, response);
 	++_stats.messages;
 	_stats.payloadBytes += response->length;
 }

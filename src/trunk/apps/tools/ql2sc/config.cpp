@@ -58,16 +58,12 @@ bool Config::init() {
 	}
 	catch ( ... ) { backLog = 1800; }
 
-	// number of cached objects
-	try {
-		int i = app->configGetInt("cacheSize");
-		cacheSize = i < 0 ? 0 : (size_t)i;
-	}
-	catch ( ... ) { cacheSize = 5000; }
-
 	// maximum number of notifiers per message
 	try { batchSize = app->configGetInt("batchSize"); }
 	catch ( ... ) { batchSize = 2000; }
+
+	try { maxWaitForEventIDTimeout = app->configGetInt("eventAssociationTimeout"); }
+	catch ( ... ) { maxWaitForEventIDTimeout = 10; }
 
 	// host configurations
 	hosts.clear();

@@ -45,10 +45,20 @@ namespace IO {
 
 namespace QL2SC {
 
+
+class SC_SYSTEM_CORE_API NoCache : public DataModel::PublicObjectCache {
+	public:
+		bool feed(DataModel::PublicObject* po) { return true; }
+};
+
+
 class App : public Client::Application {
 	public:
 		App(int argc, char **argv);
 		~App();
+
+	public:
+		void feed(QLClient *client, IO::QuakeLink::Response *response);
 
 	protected:
 		typedef std::vector<QLClient*> QLClients;
@@ -64,7 +74,9 @@ class App : public Client::Application {
 
 		virtual bool dispatchNotification(int type, BaseObject *obj);
 		virtual void addObject(const std::string& parentID, DataModel::Object *obj);
+		virtual void updateObject(const std::string& parentID, DataModel::Object *obj);
 		virtual void removeObject(const std::string& parentID, DataModel::Object *obj);
+		virtual void handleTimeout();
 
 		bool dispatchResponse(QLClient *client, const IO::QuakeLink::Response *response);
 
@@ -87,13 +99,21 @@ class App : public Client::Application {
 		                                            const std::string &action,
 		                                            const std::string &params);
 
+		std::string waitForEventAssociation(const std::string &originID, int timeout);
+		void originAssociatedWithEvent(const std::string &eventID,
+		                               const std::string &originID);
+
 	private:
-		Config                                      _config;
-		QLClients                                   _clients;
-		DataModel::PublicObjectRingBuffer           _cache;
-		std::string                                 _lastUpdateFile;
-		std::vector<std::string>                    _ep;
-		bool                                        _test;
+		Config                   _config;
+		QLClients                _clients;
+		NoCache                  _cache;
+		boost::mutex             _clientPublishMutex;
+		std::string              _lastUpdateFile;
+		std::string              _waitForEventIDOriginID;
+		std::string              _waitForEventIDResult;
+		int                      _waitForEventIDTimeout;
+		std::vector<std::string> _ep;
+		bool                     _test;
 };
 
 } // ns QL2SC
