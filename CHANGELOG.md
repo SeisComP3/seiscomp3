@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* scesv
+
+  * Fixed region filter with event list which did not work correctly
+
 * scconfig
 
   * Added "Check inventory" button to inventory panel of scconfig

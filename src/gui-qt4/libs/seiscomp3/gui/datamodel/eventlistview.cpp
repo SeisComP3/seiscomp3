@@ -2465,13 +2465,20 @@ bool EventListView::updateHideState(QTreeWidgetItem *item) {
 
 	if ( !hide && _hideOutsideRegion && _regionIndex >= 0 ) {
 		const Region &reg = _filterRegions[_regionIndex];
-		Origin *org = Origin::Find(event->preferredOriginID());
-		if ( !org )
+		double lat = item->data(_itemConfig.columnMap[COL_LAT], Qt::UserRole).toDouble();
+		double lon = item->data(_itemConfig.columnMap[COL_LON], Qt::UserRole).toDouble();
+		if ( lat < reg.minLat || lat > reg.maxLat )
 			hide = true;
-		else
-			if ( org->latitude().value() < reg.minLat || org->latitude().value() > reg.maxLat ||
-			     org->longitude().value() < reg.minLong || org->longitude().value() > reg.maxLong )
-				hide = true;
+		else {
+			if ( reg.minLong <= reg.maxLong ) {
+				if ( lon < reg.minLong || lon > reg.maxLong )
+					hide = true;
+			}
+			else {
+				if ( lon < reg.minLong && lon > reg.maxLong )
+					hide = true;
+			}
+		}
 	}
 
 	if ( hide != _treeWidget->isItemHidden(item) ) {
