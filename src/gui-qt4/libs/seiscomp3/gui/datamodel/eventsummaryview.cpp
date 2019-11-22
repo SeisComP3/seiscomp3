@@ -979,6 +979,9 @@ void EventSummaryView::init() {
 	try { _minHotspotPopulation = SCApp->configGetDouble("poi.minPopulation"); } catch ( ... ) {}
 	try { _showLastAutomaticSolution = SCApp->configGetBool("showLastAutomaticSolution"); } catch ( ... ) {}
 	try { _showOnlyMostRecentEvent = SCApp->configGetBool("showOnlyMostRecentEvent"); } catch ( ... ) {}
+	try { _recenterMapConfig = SCApp->configGetBool("recenterMap"); } catch ( ... ) {
+		_recenterMapConfig = true;
+	}
 	try {
 		if ( SCApp->configGetBool("enableFixAutomaticSolutions") )
 			ui.btnSwitchToAutomatic->setVisible(true);
@@ -2291,7 +2294,7 @@ void EventSummaryView::updateMap(bool realignView){
 	_map->setOrigin(_currentOrigin.get());
 
 	if ( _currentOrigin && realignView ) {
-		if ( _recenterMap ) {
+		if ( _recenterMap && _recenterMapConfig ) {
 			double radius = 30;
 			try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
 			catch ( ... ) {}

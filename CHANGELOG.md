@@ -5,6 +5,7 @@
 * scesv
 
   * Fixed region filter with event list which did not work correctly
+  * Added configuration paraemeter 'recenterMap' to control map centering
 
 * scconfig
 

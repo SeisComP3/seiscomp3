@@ -278,6 +278,7 @@ class SC_GUI_API EventSummaryView : public QWidget
 		bool _autoSelect;
 		bool _displayFocMechs;
 		bool _recenterMap;
+		bool _recenterMapConfig;
 		bool _ignoreOtherEvents;
 		bool _showLastAutomaticSolution;
 		bool _showOnlyMostRecentEvent;

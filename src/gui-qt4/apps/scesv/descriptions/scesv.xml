@@ -8,6 +8,48 @@
 					Number of days to preload if scesv is started.
 				</description>
 			</parameter>
+			<parameter name="showLastAutomaticSolution" type="boolean" default="false">
+				<description>
+					If enabled, the last automatic solution is displayed next to the
+					current solution in the summary panel. If the last automatic
+					solution differs from the current solution it is displayed
+					in red. If both solutions match it is displayed in gray.
+				</description>
+			</parameter>
+			<parameter name="showOnlyMostRecentEvent" type="boolean" default="true">
+				<description>
+					If enabled only the most recent event is shown even if an update of
+					an older event is being received.
+				</description>
+			</parameter>
+			<parameter name="recenterMap" type="boolean" default="true">
+				<description>
+					If enabled, the map is centered around the most recent event event.
+				</description>
+			</parameter>
+			<parameter name="enableFixAutomaticSolutions" type="boolean" default="false">
+				<description>
+					If enabled, an additional button is displayed which allows to switch back
+					the latest automatic solution. This button triggers an command for
+					scevent to prioritize automatic solutions until the next manual
+					solution is available.
+				</description>
+			</parameter>
+			<parameter name="visibleMagnitudes" type="list:string" default="M,MLv,mb,mB,Mw(mB)">
+				<description>
+					A list of magnitude types to be displayed.
+				</description>
+			</parameter>
+			<parameter name="button0" type="string">
+				<description>
+					Label of button0 which triggers script0.
+				</description>
+			</parameter>
+			<parameter name="button1" type="string">
+				<description>
+					Label of button1 which triggers script1.
+				</description>
+			</parameter>
 			<group name="scripts">
 				<parameter name="script0" type="string">
 					<description>
@@ -139,43 +181,6 @@
 					</description>
 				</parameter>
 			</group>
-			<parameter name="showLastAutomaticSolution" type="boolean" default="false">
-				<description>
-					If enabled the last automatic solution is displayed next to the
-					current solution in the summary panel. If the last automatic
-					solution differs from the current solution it is displayed
-					in red. If both solutions match it is displayed in gray.
-				</description>
-			</parameter>
-			<parameter name="showOnlyMostRecentEvent" type="boolean" default="true">
-				<description>
-					If enabled only the most recent event is shown even if an update of
-					an older event is being received.
-				</description>
-			</parameter>
-			<parameter name="enableFixAutomaticSolutions" type="boolean" default="false">
-				<description>
-					If enabled an additional button is displayed which allows to switch back
-					the latest automatic solution. This button triggers an command for
-					scevent to prioritize automatic solutions until the next manual
-					solution is available.
-				</description>
-			</parameter>
-			<parameter name="visibleMagnitudes" type="list:string" default="M,MLv,mb,mB,Mw(mB)">
-				<description>
-					A list of magnitude types to be displayed.
-				</description>
-			</parameter>
-			<parameter name="button0" type="string">
-				<description>
-					Label of button0 which triggers script0.
-				</description>
-			</parameter>
-			<parameter name="button1" type="string">
-				<description>
-					Label of button1 which triggers script1.
-				</description>
-			</parameter>
 		</configuration>
 	</module>
 </seiscomp>
