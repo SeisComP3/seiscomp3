@@ -93,7 +93,7 @@ MSeedRecord::MSeedRecord(MSRecord *rec, Array::DataType dt, Hint h)
 		if (_hint == DATA_ONLY)
 			try {
 				_setDataAttributes(rec->reclen,rec->record);
-			} catch (LibmseedException e) {
+			} catch (LibmseedException &e) {
 				_nsamp = 0;
 				_fsamp = 0;
 				_data = NULL;
@@ -191,7 +191,7 @@ MSeedRecord::~MSeedRecord() {}
 void MSeedRecord::setNetworkCode(std::string net) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
-		char tmp[2];
+		char tmp[3];
 		strncpy(tmp, net.c_str(), 2);
 		memcpy(header->network, tmp, 2);
 	}
@@ -207,7 +207,7 @@ void MSeedRecord::setNetworkCode(std::string net) {
 void MSeedRecord::setStationCode(std::string sta) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
-		char tmp[5];
+		char tmp[6];
 		strncpy(tmp, sta.c_str(), 5);
 		memcpy(header->station, tmp, 5);
 	}
@@ -223,7 +223,7 @@ void MSeedRecord::setStationCode(std::string sta) {
 void MSeedRecord::setLocationCode(std::string loc) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
-		char tmp[2];
+		char tmp[3];
 		strncpy(tmp, loc.c_str(), 2);
 		memcpy(header->location, tmp, 2);
 	}
@@ -239,7 +239,7 @@ void MSeedRecord::setLocationCode(std::string loc) {
 void MSeedRecord::setChannelCode(std::string cha) {
 	if ( _hint == SAVE_RAW ) {
 		struct fsdh_s *header = reinterpret_cast<struct fsdh_s *>(_raw.typedData());
-		char tmp[3];
+		char tmp[4];
 		strncpy(tmp, cha.c_str(), 3);
 		memcpy(header->channel, tmp, 3);
 	}
