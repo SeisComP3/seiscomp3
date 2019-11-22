@@ -1045,7 +1045,7 @@ int find_phase(const char *phase) {
 }
 
 
-double compute_ttime(double distance, double depth, char *phase, int extrapolate, int *errorflag) {
+double compute_ttime(double distance, double depth, char *phase, int extrapolate, double *rdtdel, int *errorflag) {
 	int ileft, jz, nz;
 	float zfoc = depth;
 	float bad_sample = -1.0;
@@ -1084,6 +1084,9 @@ double compute_ttime(double distance, double depth, char *phase, int extrapolate
 	*errorflag = 0;
 	if (iext != 0 || jext != 0 || ibad != 0)
 		*errorflag = 1;
+
+	if (rdtdel)
+		*rdtdel = dtdel;
 
 	return (tcal);
 }
