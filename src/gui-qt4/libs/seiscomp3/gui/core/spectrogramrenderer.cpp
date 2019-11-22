@@ -425,7 +425,7 @@ void SpectrogramRenderer::fillRow(SpecImage &img, ComplexDoubleArray *spec,
 	int ofs = img.data.width();
 	int n = spec->size();
 	double maxFreq = img.maximumFrequency;
-	double norm = _scale * double(img.dt);
+	double norm = _scale * 0.5 / img.maximumFrequency;
 
 	// Goto nth column
 	rgb += column;
