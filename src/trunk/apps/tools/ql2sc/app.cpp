@@ -397,6 +397,8 @@ bool App::init() {
 	Util::createPath(baseDir);
 	readLastUpdates();
 
+	_cache.setDatabaseArchive(query());
+
 	enableTimer(1);
 
 	return true;
