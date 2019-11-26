@@ -1297,6 +1297,9 @@ class Array(BaseObject):
     def slice(self, m, n):
         return _Core.Array_slice(self, m, n)
 
+    def str(self):
+        return _Core.Array_str(self)
+
     def numpy(self):
         return _Core.Array_numpy(self)
 
@@ -1892,13 +1895,17 @@ class MessageIterator(_object):
     def step(self):
         return _Core.MessageIterator_step(self)
 
-    def next(self):
+    def __next__(self):
     	o = self.get()
     	if not o:
     		raise StopIteration
 
     	self.step()
     	return o
+
+    # for Python 2 compatibility
+    def next(self):
+    	return self.__next__()
 
 MessageIterator_swigregister = _Core.MessageIterator_swigregister
 MessageIterator_swigregister(MessageIterator)

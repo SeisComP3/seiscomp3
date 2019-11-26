@@ -17922,6 +17922,41 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Array_str(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Array_str",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Array, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Array_str" "', argument " "1"" of type '" "Seiscomp::Array const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Array * >(argp1);
+  {
+    try {
+      result = ((Seiscomp::Array const *)arg1)->str();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Array_numpy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Array *arg1 = (Seiscomp::Array *) 0 ;
@@ -48613,6 +48648,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Array_elementSize", _wrap_Array_elementSize, METH_VARARGS, NULL},
 	 { (char *)"Array_append", _wrap_Array_append, METH_VARARGS, NULL},
 	 { (char *)"Array_slice", _wrap_Array_slice, METH_VARARGS, NULL},
+	 { (char *)"Array_str", _wrap_Array_str, METH_VARARGS, NULL},
 	 { (char *)"Array_numpy", _wrap_Array_numpy, METH_VARARGS, NULL},
 	 { (char *)"Array_setNumpy", _wrap_Array_setNumpy, METH_VARARGS, NULL},
 	 { (char *)"Array_bytes", _wrap_Array_bytes, METH_VARARGS, NULL},

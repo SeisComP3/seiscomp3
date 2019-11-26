@@ -863,11 +863,6 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
         return _DataModel.DatabaseIterator_valid(self)
 
 
-    def next(self):
-        """next(DatabaseIterator self) -> bool"""
-        return _DataModel.DatabaseIterator_next(self)
-
-
     def close(self):
         """close(DatabaseIterator self)"""
         return _DataModel.DatabaseIterator_close(self)
@@ -906,13 +901,17 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         o = self.get()
         if not o:
             raise StopIteration
 
         self.step()
         return o
+
+    # for Python 2 compatibility
+    def next(self):
+        return self.__next__()
 
 DatabaseIterator_swigregister = _DataModel.DatabaseIterator_swigregister
 DatabaseIterator_swigregister(DatabaseIterator)
