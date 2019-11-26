@@ -7,7 +7,10 @@
 # Email:   herrnkind@gempa.de
 ################################################################################
 
+from __future__ import absolute_import, division, print_function
+
 import socket
+import sys
 import traceback
 
 from twisted.internet import reactor, defer
@@ -17,6 +20,31 @@ from seiscomp3 import Logging
 from seiscomp3.Client import Application
 from seiscomp3.Core import Time
 from seiscomp3.IO import ExportSink
+
+#-------------------------------------------------------------------------------
+# Converts a unicode string to a byte string
+b_str = lambda s: s.encode('utf-8')
+
+
+#-------------------------------------------------------------------------------
+# Converts a byte string to a unicode string
+u_str = lambda s: s.decode('utf-8', 'replace')
+
+
+#-------------------------------------------------------------------------------
+# Python version depended string conversion
+if sys.version_info[0] < 3:
+    py2bstr = b_str
+    py2ustr = u_str
+    py3bstr = str
+    py3ustr = str
+    py3ustrlist = lambda l: l
+else:
+    py2bstr = str
+    py2ustr = str
+    py3bstr = b_str
+    py3ustr = u_str
+    py3ustrlist = lambda l: [ u_str(x) for x in l ]
 
 
 #-------------------------------------------------------------------------------
@@ -29,8 +57,14 @@ def isRestricted(obj):
 
 
 #-------------------------------------------------------------------------------
-# Thread-safe write of data using reactor main thread
+# Thread-safe write of string data using reactor main thread
 def writeTS(req, data):
+    reactor.callFromThread(req.write, py3bstr(data))
+
+
+#-------------------------------------------------------------------------------
+# Thread-safe write of binary data using reactor main thread
+def writeTSBin(req, data):
     reactor.callFromThread(req.write, data)
 
 

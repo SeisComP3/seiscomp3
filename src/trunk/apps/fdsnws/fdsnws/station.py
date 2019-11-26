@@ -22,6 +22,9 @@
 # Email:   herrnkind@gempa.de
 ################################################################################
 
+from __future__ import absolute_import, division, print_function
+from future.utils import iteritems
+
 from twisted.internet.threads import deferToThread
 from twisted.web import http, resource, server
 
@@ -30,9 +33,9 @@ from seiscomp3.Client import Application
 from seiscomp3.Core import Time
 from seiscomp3.IO import Exporter, ExportObjectList
 
-from http import BaseResource
-from request import RequestOptions
-import utils
+from .http import BaseResource
+from .request import RequestOptions
+from . import utils
 
 VERSION = "1.1.2"
 
@@ -48,7 +51,7 @@ class _StationRequestOptions(RequestOptions):
     MinTime = Time(0, 1)
 
     VText = ['text']
-    OutputFormats = Exporters.keys() + VText
+    OutputFormats = list(Exporters) + VText
 
     PLevel = ['level']
     PIncludeRestricted = ['includerestricted']
@@ -104,7 +107,7 @@ class _StationRequestOptions(RequestOptions):
         # includeRestricted (optional)
         self.restricted = self.parseBool(self.PIncludeRestricted)
 
-        # includeAvailability (optional)
+        # includeAvailability (optionalsc3ml)
         self.availability = self.parseBool(self.PIncludeAvailability)
 
         # updatedAfter (optional), currently not supported
@@ -118,7 +121,7 @@ class _StationRequestOptions(RequestOptions):
 
     #---------------------------------------------------------------------------
     def networkIter(self, inv, matchTime=False):
-        for i in xrange(inv.networkCount()):
+        for i in range(inv.networkCount()):
             net = inv.network(i)
 
             for ro in self.streams:
@@ -140,7 +143,7 @@ class _StationRequestOptions(RequestOptions):
 
     #---------------------------------------------------------------------------
     def stationIter(self, net, matchTime=False):
-        for i in xrange(net.stationCount()):
+        for i in range(net.stationCount()):
             sta = net.station(i)
 
             # geographic location
@@ -173,7 +176,7 @@ class _StationRequestOptions(RequestOptions):
 
     #---------------------------------------------------------------------------
     def locationIter(self, net, sta, matchTime=False):
-        for i in xrange(sta.sensorLocationCount()):
+        for i in range(sta.sensorLocationCount()):
             loc = sta.sensorLocation(i)
 
             for ro in self.streams:
@@ -197,7 +200,7 @@ class _StationRequestOptions(RequestOptions):
 
     #---------------------------------------------------------------------------
     def streamIter(self, net, sta, loc, matchTime, dac):
-        for i in xrange(loc.streamCount()):
+        for i in range(loc.streamCount()):
             stream = loc.stream(i)
 
             for ro in self.streams:
@@ -245,7 +248,7 @@ class FDSNStation(BaseResource):
         self._resLevelCount = inv.responsePAZCount() + inv.responseFIRCount() \
             + inv.responsePolynomialCount() + inv.responseIIRCount() \
             + inv.responseFAPCount()
-        for i in xrange(inv.dataloggerCount()):
+        for i in range(inv.dataloggerCount()):
             self._resLevelCount += inv.datalogger(i).decimationCount()
 
     #---------------------------------------------------------------------------
@@ -264,7 +267,7 @@ class FDSNStation(BaseResource):
             ro.parse()
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)
-        except ValueError, e:
+        except ValueError as e:
             Logging.warning(str(e))
             return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
@@ -277,7 +280,7 @@ class FDSNStation(BaseResource):
         try:
             ro.parsePOST(req.content)
             ro.parse()
-        except ValueError, e:
+        except ValueError as e:
             Logging.warning(str(e))
             return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
@@ -339,7 +342,7 @@ class FDSNStation(BaseResource):
 
         DataModel.PublicObject.SetRegistrationEnabled(False)
         newInv = DataModel.Inventory()
-        dataloggers, sensors, extents = set(), set(), set()
+        dataloggers, sensors, extents = set(), set(), {}
 
         skipRestricted = not self._allowRestricted or \
             (ro.restricted is not None and not ro.restricted)
@@ -355,7 +358,7 @@ class FDSNStation(BaseResource):
             newNet = DataModel.Network(net)
 
             # Copy comments
-            for i in xrange(net.commentCount()):
+            for i in range(net.commentCount()):
                 newNet.add(DataModel.Comment(net.comment(i)))
 
             # iterate over inventory stations of current network
@@ -380,12 +383,14 @@ class FDSNStation(BaseResource):
                             return False
                         dataloggers |= d
                         sensors |= s
-                        extents |= e
+                        for k, v in iteritems(e):
+                            if k not in extents:
+                                extents[k] = v
                 elif self._matchStation(net, sta, ro, dac):
                     if ro.includeSta:
                         newSta = DataModel.Station(sta)
                         # Copy comments
-                        for i in xrange(sta.commentCount()):
+                        for i in range(sta.commentCount()):
                             newSta.add(DataModel.Comment(sta.comment(i)))
                         newNet.add(newSta)
                     else:
@@ -403,9 +408,7 @@ class FDSNStation(BaseResource):
         # Return 204 if no matching inventory was found
         if newInv.networkCount() == 0:
             msg = "no matching inventory found"
-            data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
-            if data:
-                utils.writeTS(req, data)
+            self.writeErrorPage(req, http.NO_CONTENT, msg, ro)
             return True
 
         # Copy references (dataloggers, responses, sensors)
@@ -429,8 +432,9 @@ class FDSNStation(BaseResource):
         if len(extents) > 0:
             objCount += 1
             da = DataModel.DataAvailability()
-            for e in extents:
-                da.add(DataModel.DataExtent(e))
+            for k, v in iteritems(extents):
+                objCount += 1
+                da.add(DataModel.DataExtent(v))
             objOut = ExportObjectList()
             objOut.append(newInv)
             objOut.append(da)
@@ -439,12 +443,12 @@ class FDSNStation(BaseResource):
         if not exp.write(sink, objOut):
             return False
 
-        Logging.debug("%s: returned %iNet, %iSta, %iLoc, %iCha, "
-                      "%iDL, %iDec, %iSen, %iRes, %iDAExt (total objects/"
-                      "bytes: %i/%i) " % (ro.service, newInv.networkCount(),
-                                          staCount, locCount, chaCount, newInv.dataloggerCount(),
-                                          decCount, newInv.sensorCount(), resCount, extCount,
-                                          objCount, sink.written))
+        Logging.debug("%s: returned %iNet, %iSta, %iLoc, %iCha, %iDL, %iDec, "
+                      "%iSen, %iRes, %iDAExt (total objects/chars: %i/%i)" % (
+                      ro.service, newInv.networkCount(), staCount, locCount,
+                      chaCount, newInv.dataloggerCount(), decCount,
+                      newInv.sensorCount(), resCount, extCount, objCount,
+                      sink.written))
         utils.accessLog(req, ro, http.OK, sink.written, None)
         return True
 
@@ -620,8 +624,8 @@ class FDSNStation(BaseResource):
                                 scaleUnit = ''
                             try:
                                 sr = str(stream.sampleRateNumerator() /
-                                         float(stream.sampleRateDenominator()))
-                            except ValueError, ZeroDevisionError:
+                                         stream.sampleRateDenominator())
+                            except ValueError as ZeroDevisionError:
                                 sr = ''
 
                             start, end = self._formatEpoch(stream)
@@ -644,9 +648,7 @@ class FDSNStation(BaseResource):
         # Return 204 if no matching inventory was found
         if len(lines) == 0:
             msg = "no matching inventory found"
-            data = self.renderErrorPage(req, http.NO_CONTENT, msg, ro)
-            if data:
-                utils.writeTS(req, data)
+            self.writeErrorPage(req, http.NO_CONTENT, msg, ro)
             return False
 
         utils.writeTS(req, data)
@@ -680,18 +682,18 @@ class FDSNStation(BaseResource):
     @staticmethod
     def _processStation(newNet, net, sta, ro, dac, skipRestricted):
         chaCount = 0
-        dataloggers, sensors, extents = set(), set(), set()
+        dataloggers, sensors, extents = set(), set(), {}
         newSta = DataModel.Station(sta)
         includeAvailability = dac is not None and ro.availability
 
         # Copy comments
-        for i in xrange(sta.commentCount()):
+        for i in range(sta.commentCount()):
             newSta.add(DataModel.Comment(sta.comment(i)))
 
         for loc in ro.locationIter(net, sta, True):
             newLoc = DataModel.SensorLocation(loc)
             # Copy comments
-            for i in xrange(loc.commentCount()):
+            for i in range(loc.commentCount()):
                 newLoc.add(DataModel.Comment(loc.comment(i)))
 
             for stream in ro.streamIter(net, sta, loc, True, dac):
@@ -699,7 +701,7 @@ class FDSNStation(BaseResource):
                     continue
                 newCha = DataModel.Stream(stream)
                 # Copy comments
-                for i in xrange(stream.commentCount()):
+                for i in range(stream.commentCount()):
                     newCha.add(DataModel.Comment(stream.comment(i)))
                 newLoc.add(newCha)
                 dataloggers.add(stream.datalogger())
@@ -707,8 +709,8 @@ class FDSNStation(BaseResource):
                 if includeAvailability:
                     ext = dac.extent(net.code(), sta.code(), loc.code(),
                                      stream.code())
-                    if ext is not None:
-                        extents.add(ext)
+                    if ext is not None and ext.publicID() not in extents:
+                        extents[ext.publicID()] = ext
 
             if newLoc.streamCount() > 0:
                 newSta.add(newLoc)
@@ -731,7 +733,7 @@ class FDSNStation(BaseResource):
         decCount = 0
 
         # datalogger
-        for i in xrange(inv.dataloggerCount()):
+        for i in range(inv.dataloggerCount()):
             if req._disconnected:
                 return None
             logger = inv.datalogger(i)
@@ -741,7 +743,7 @@ class FDSNStation(BaseResource):
             newInv.add(newLogger)
             # decimations are only needed for responses
             if ro.includeRes:
-                for j in xrange(logger.decimationCount()):
+                for j in range(logger.decimationCount()):
                     decimation = logger.decimation(j)
                     newLogger.add(DataModel.Decimation(decimation))
 
@@ -765,7 +767,7 @@ class FDSNStation(BaseResource):
             return None
 
         # sensor
-        for i in xrange(inv.sensorCount()):
+        for i in range(inv.sensorCount()):
             if req._disconnected:
                 return None
             sensor = inv.sensor(i)
@@ -791,31 +793,31 @@ class FDSNStation(BaseResource):
         if ro.includeRes:
             if req._disconnected:
                 return None
-            for i in xrange(inv.responsePAZCount()):
+            for i in range(inv.responsePAZCount()):
                 resp = inv.responsePAZ(i)
                 if resp.publicID() in responses:
                     newInv.add(DataModel.ResponsePAZ(resp))
             if req._disconnected:
                 return None
-            for i in xrange(inv.responseFIRCount()):
+            for i in range(inv.responseFIRCount()):
                 resp = inv.responseFIR(i)
                 if resp.publicID() in responses:
                     newInv.add(DataModel.ResponseFIR(resp))
             if req._disconnected:
                 return None
-            for i in xrange(inv.responsePolynomialCount()):
+            for i in range(inv.responsePolynomialCount()):
                 resp = inv.responsePolynomial(i)
                 if resp.publicID() in responses:
                     newInv.add(DataModel.ResponsePolynomial(resp))
             if req._disconnected:
                 return None
-            for i in xrange(inv.responseFAPCount()):
+            for i in range(inv.responseFAPCount()):
                 resp = inv.responseFAP(i)
                 if resp.publicID() in responses:
                     newInv.add(DataModel.ResponseFAP(resp))
             if req._disconnected:
                 return None
-            for i in xrange(inv.responseIIRCount()):
+            for i in range(inv.responseIIRCount()):
                 resp = inv.responseIIR(i)
                 if resp.publicID() in responses:
                     newInv.add(DataModel.ResponseIIR(resp))

@@ -14,27 +14,36 @@
 # Email:   herrnkind@gempa.de
 ################################################################################
 
+from __future__ import absolute_import, division, print_function
+
+import sys
+import time
+import dateutil.parser
+
+if sys.version_info[0] < 3:
+    from cStringIO import StringIO as BytesIO
+else:
+    from io import BytesIO
+
 from twisted.cred import portal
 from twisted.web import http, resource, server
 from twisted.internet import interfaces, reactor
 
-from zope.interface import implements
+from zope.interface import implementer
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
 from seiscomp3.Core import Array, Record, Time
 from seiscomp3.IO import RecordInput, RecordStream
 
-from http import HTTP, BaseResource
-from request import RequestOptions
-import utils
-
-import time
-import dateutil.parser
-import cStringIO
-from reqtrack import RequestTrackerDB
-from fastsds import SDS
 from seiscomp import mseedlite
+
+from .http import HTTP, BaseResource
+from .request import RequestOptions
+from . import utils
+
+from .reqtrack import RequestTrackerDB
+from .fastsds import SDS
 
 VERSION = "1.1.0"
 
@@ -119,8 +128,8 @@ class _MyRecordStream(object):
                           endt, restricted, archNet))
 
     def __override_network(self, data, net):
-        inp = cStringIO.StringIO(data)
-        out = cStringIO.StringIO()
+        inp = BytesIO(data)
+        out = BytesIO()
 
         for rec in mseedlite.Input(inp):
             rec.net = net
@@ -164,7 +173,7 @@ class _MyRecordStream(object):
                         try:
                             yield self.__override_network(data, net)
 
-                        except Exception, e:
+                        except Exception as e:
                             Logging.error(
                                 "could not override network code: %s" % str(e))
 
@@ -180,13 +189,13 @@ class _MyRecordStream(object):
                 eof = False
 
                 while not eof:
-                    data = ""
+                    data = b""
 
                     while len(data) < self.__bufferSize:
                         try:
                             rec = rsInput.next()
 
-                        except Exception, e:
+                        except Exception as e:
                             Logging.error("%s" % str(e))
                             eof = True
                             break
@@ -207,7 +216,7 @@ class _MyRecordStream(object):
                             try:
                                 yield self.__override_network(data, net)
 
-                            except Exception, e:
+                            except Exception as e:
                                 Logging.error("could not override network " \
                                               "code: %s" % str(e))
 
@@ -226,8 +235,8 @@ class _MyRecordStream(object):
 
 
 ################################################################################
+@implementer(interfaces.IPushProducer)
 class _WaveformProducer(object):
-    implements(interfaces.IPushProducer)
 
     def __init__(self, req, ro, rs, fileName, trackerList):
         self.req = req
@@ -290,7 +299,7 @@ class _WaveformProducer(object):
 
     def _collectData(self):
         try:
-            reactor.callFromThread(self._flush, self.it.next())
+            reactor.callFromThread(self._flush, next(self.it))
 
         except StopIteration:
             reactor.callFromThread(self._finish)
@@ -322,8 +331,8 @@ class _WaveformProducer(object):
 
 
 ################################################################################
+@implementer(portal.IRealm)
 class FDSNDataSelectRealm(object):
-    implements(portal.IRealm)
 
     #---------------------------------------------------------------------------
     def __init__(self, inv, bufferSize, access):
@@ -343,8 +352,8 @@ class FDSNDataSelectRealm(object):
 
 
 ################################################################################
+@implementer(portal.IRealm)
 class FDSNDataSelectAuthRealm(object):
-    implements(portal.IRealm)
 
     #---------------------------------------------------------------------------
     def __init__(self, inv, bufferSize, access, userdb):
@@ -394,7 +403,7 @@ class FDSNDataSelect(BaseResource):
             ro.parse()
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)
-        except ValueError, e:
+        except ValueError as e:
             Logging.warning(str(e))
             return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
@@ -408,7 +417,7 @@ class FDSNDataSelect(BaseResource):
         try:
             ro.parsePOST(req.content)
             ro.parse()
-        except ValueError, e:
+        except ValueError as e:
             Logging.warning(str(e))
             return self.renderErrorPage(req, http.BAD_REQUEST, str(e), ro)
 
@@ -416,7 +425,7 @@ class FDSNDataSelect(BaseResource):
 
     #-----------------------------------------------------------------------
     def _networkIter(self, ro):
-        for i in xrange(self.__inv.networkCount()):
+        for i in range(self.__inv.networkCount()):
             net = self.__inv.network(i)
 
             # network code
@@ -436,7 +445,7 @@ class FDSNDataSelect(BaseResource):
 
     #---------------------------------------------------------------------------
     def _stationIter(self, net, ro):
-        for i in xrange(net.stationCount()):
+        for i in range(net.stationCount()):
             sta = net.station(i)
 
             # station code
@@ -456,7 +465,7 @@ class FDSNDataSelect(BaseResource):
 
     #---------------------------------------------------------------------------
     def _locationIter(self, sta, ro):
-        for i in xrange(sta.sensorLocationCount()):
+        for i in range(sta.sensorLocationCount()):
             loc = sta.sensorLocation(i)
 
             # location code
@@ -476,7 +485,7 @@ class FDSNDataSelect(BaseResource):
 
     #---------------------------------------------------------------------------
     def _streamIter(self, loc, ro):
-        for i in xrange(loc.streamCount()):
+        for i in range(loc.streamCount()):
             stream = loc.stream(i)
 
             # stream code

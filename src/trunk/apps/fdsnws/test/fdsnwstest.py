@@ -7,7 +7,7 @@
 # Email:   herrnkind@gempa.de
 ###############################################################################
 
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import os
 import requests
@@ -20,6 +20,7 @@ import traceback
 
 from datetime import datetime, timedelta
 
+from fdsnws.utils import py3bstr
 
 ###############################################################################
 class FDSNWSTest:
@@ -81,7 +82,7 @@ class FDSNWSTest:
             self.fdErr = open('fdsnws.stderr', 'w')
             self.service = subprocess.Popen(cmd, stdout=self.fdOut,
                                             stderr=self.fdErr)
-        except Exception, e:
+        except Exception as e:
             print('failed to start FDSNWS service:', str(e))
             return False
 
@@ -244,10 +245,11 @@ class FDSNWSTest:
 
         expected = None
         if data is not None:
-            expected = data
+            expected = py3bstr(data)
         elif dataFile is not None:
             with open(dataFile, 'rb') as f:
                 expected = f.read()
+
 
         if expected is not None:
             errPos, errMsg = self.diff(expected, r.content, ignoreRanges)

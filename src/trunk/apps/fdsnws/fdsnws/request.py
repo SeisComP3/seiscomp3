@@ -7,13 +7,19 @@
 # Email:   herrnkind@gempa.de
 ################################################################################
 
+from __future__ import absolute_import, division, print_function
+from future.utils import iteritems
+
 import fnmatch
 import math
 import re
+
 from twisted.web import http
 
 from seiscomp3.Core import Time
 from seiscomp3 import Logging, Math
+
+from .utils import py3ustr, py3ustrlist
 
 
 class RequestOptions:
@@ -249,8 +255,8 @@ class RequestOptions:
         # transform keys to lower case
         self._args = {}
         if args is not None:
-            for key in args.keys():
-                self._args[key.lower()] = args[key]
+            for k, v in iteritems(args):
+                self._args[py3ustr(k.lower())] = py3ustrlist(v)
 
         self.streams = []  # 1 entry for GET, multipl
 
@@ -323,8 +329,8 @@ class RequestOptions:
         b.maxLat = self.parseFloat(self.PMaxLat, -90, 90)
         if b.minLat is not None and b.maxLat is not None and \
            b.minLat > b.maxLat:
-            raise ValueError, "%s exceeds %s" % (
-                self.PMinLat[0], self.PMaxLat[0])
+            raise ValueError("%s exceeds %s" % (self.PMinLat[0],
+                                                self.PMaxLat[0]))
 
         b.minLon = self.parseFloat(self.PMinLon, -180, 180)
         b.maxLon = self.parseFloat(self.PMaxLon, -180, 180)
@@ -341,8 +347,8 @@ class RequestOptions:
         c.maxRad = self.parseFloat(self.PMaxRadius, 0, 180)
         if c.minRad is not None and c.maxRad is not None and \
            c.minRad > c.maxRad:
-            raise ValueError, "%s exceeds %s" % (
-                self.PMinRadius[0], self.PMaxRadius[0])
+            raise ValueError("%s exceeds %s" % (self.PMinRadius[0],
+                                                self.PMaxRadius[0]))
 
         hasBCircleRadParam = c.minRad is not None or c.maxRad is not None
         hasBCircleParam = c.lat is not None or c.lon is not None or \
@@ -350,8 +356,8 @@ class RequestOptions:
 
         # bounding box and bounding circle may not be combined
         if hasBBoxParam and hasBCircleParam:
-            raise ValueError, "bounding box and bounding circle parameters " \
-                              "may not be combined"
+            raise ValueError("bounding box and bounding circle parameters " \
+                             "may not be combined")
         elif hasBBoxParam:
             self.geo = RequestOptions.Geo()
             self.geo.bBox = b
@@ -372,12 +378,12 @@ class RequestOptions:
                 minStr = str(minValue)
             if maxValue is not None:
                 maxStr = str(maxValue)
-            raise ValueError, "parameter not in domain [%s,%s]: %s" % (
-                              minStr, maxStr, key)
+            raise ValueError("parameter not in domain [%s,%s]: %s" % (
+                             minStr, maxStr, key))
 
     #---------------------------------------------------------------------------
     def raiseValueError(self, key):
-        raise ValueError, "invalid value in parameter: %s" % key
+        raise ValueError("invalid value in parameter: %s" % key)
 
     #---------------------------------------------------------------------------
     def getFirstValue(self, keys):
@@ -422,7 +428,7 @@ class RequestOptions:
         try:
             i = int(value)
         except ValueError:
-            raise ValueError, "invalid integer value in parameter: %s" % key
+            raise ValueError("invalid integer value in parameter: %s" % key)
         self._assertValueRange(key, i, minValue, maxValue)
         return i
 
@@ -434,13 +440,13 @@ class RequestOptions:
             return None
 
         if self.FloatChars(value):
-            raise ValueError, "invalid characters in float parameter: %s " \
-                              "(scientific notation forbidden by spec)" % key
+            raise ValueError("invalid characters in float parameter: %s " \
+                             "(scientific notation forbidden by spec)" % key)
 
         try:
             f = float(value)
         except ValueError:
-            raise ValueError, "invalid float value in parameter: %s" % key
+            raise ValueError("invalid float value in parameter: %s" % key)
         self._assertValueRange(key, f, minValue, maxValue)
         return f
 
@@ -457,7 +463,7 @@ class RequestOptions:
         if value in self.BooleanFalseValues:
             return False
 
-        raise ValueError, "invalid boolean value in parameter: %s" % key
+        raise ValueError("invalid boolean value in parameter: %s" % key)
 
     #---------------------------------------------------------------------------
     def parseTimeStr(self, keys):
@@ -474,7 +480,7 @@ class RequestOptions:
                 break
 
         if not timeValid:
-            raise ValueError, "invalid date format in parameter: %s" % key
+            raise ValueError("invalid date format in parameter: %s" % key)
 
         return time
 
@@ -494,8 +500,8 @@ class RequestOptions:
 
                 if (useExtChars and self.ChannelExtChars(v)) or \
                    (not useExtChars and self.ChannelChars(v)):
-                    raise ValueError, "invalid characters in parameter: " \
-                                      "%s" % keys[0]
+                    raise ValueError("invalid characters in parameter: " \
+                                     "%s" % keys[0])
                 values.append(v)
 
         return values
@@ -532,24 +538,24 @@ class RequestOptions:
                 # time parameters not allowed in POST header
                 for p in self.TimeParams:
                     if p == key:
-                        raise ValueError, "time parameter in line %i not " \
-                                          "allowed in POST request" % nLine
+                        raise ValueError("time parameter in line %i not " \
+                                         "allowed in POST request" % nLine)
 
                 # stream parameters not allowed in POST header
                 for p in self.StreamParams:
                     if p == key:
-                        raise ValueError, "stream parameter in line %i not " \
-                                          "allowed in POST request" % nLine
+                        raise ValueError("stream parameter in line %i not " \
+                                         "allowed in POST request" % nLine)
 
-                raise ValueError, "invalid parameter in line %i" % nLine
+                raise ValueError("invalid parameter in line %i" % nLine)
 
             else:
                 # stream parameters
                 toks = line.split()
                 nToks = len(toks)
                 if nToks != 5 and nToks != 6:
-                    raise ValueError, "invalid number of stream components " \
-                                      "in line %i" % nLine
+                    raise ValueError("invalid number of stream components " \
+                                     "in line %i" % nLine)
 
                 ro = RequestOptions()
 
@@ -563,16 +569,16 @@ class RequestOptions:
                 msg = "invalid %s value in line %i"
                 for net in ro.channel.net:
                     if ro.ChannelChars(net):
-                        raise ValueError, msg % ('network', nLine)
+                        raise ValueError(msg % ('network', nLine))
                 for sta in ro.channel.sta:
                     if ro.ChannelChars(sta):
-                        raise ValueError, msg % ('station', nLine)
+                        raise ValueError(msg % ('station', nLine))
                 for loc in ro.channel.loc:
                     if loc != "--" and ro.ChannelChars(loc):
-                        raise ValueError, msg % ('location', nLine)
+                        raise ValueError(msg % ('location', nLine))
                 for cha in ro.channel.cha:
                     if ro.ChannelChars(cha):
-                        raise ValueError, msg % ('channel', nLine)
+                        raise ValueError(msg % ('channel', nLine))
 
                 # start/end time
                 ro.time = RequestOptions.Time()
@@ -594,7 +600,7 @@ class RequestOptions:
                 self.streams.append(ro)
 
         if len(self.streams) == 0:
-            raise ValueError, "at least one stream line is required"
+            raise ValueError("at least one stream line is required")
 
 
 # vim: ts=4 et

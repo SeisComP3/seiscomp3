@@ -7,11 +7,17 @@
 # Email:   herrnkind@gempa.de
 ################################################################################
 
+from __future__ import absolute_import, division, print_function
+
 import os
-import Queue
 import sys
 import time
 import threading
+
+if sys.version_info[0] < 3:
+    from Queue import Queue
+else:
+    from queue import Queue
 
 #-------------------------------------------------------------------------------
 
@@ -32,7 +38,7 @@ class Log:
         self._basePath = os.path.dirname(filePath)
         self._fileName = os.path.basename(filePath)
         self._archiveSize = archiveSize
-        self._queue = Queue.Queue()
+        self._queue = Queue()
         self._lastLogTime = None
         self._fd = None
 
@@ -68,8 +74,8 @@ class Log:
                 if os.path.isfile(src):
                     os.rename(pattern % (i-1), pattern % i)
             os.rename(self._filePath, pattern % 1)
-        except Exception, e:
-            print >> sys.stderr, "failed to rotate access log: %s\n" % str(e)
+        except Exception as e:
+            print("failed to rotate access log: %s\n" % str(e), file=sys.stderr)
 
         self._fd = open(self._filePath, 'w')
 
@@ -89,8 +95,8 @@ class Log:
             self._fd.write("%s\n" % msg)
             self._fd.flush()
             self._lastLogTime = now
-        except Exception, e:
-            print >> sys.stderr, "access log: %s\n" % str(e)
+        except Exception as e:
+            print("access log: %s\n" % str(e), file=sys.stderr)
 
 
 # vim: ts=4 et

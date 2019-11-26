@@ -7,9 +7,12 @@
 # Email:   javier@gfz-potsdam.de
 ################################################################################
 
-import os
+from __future__ import absolute_import, division, print_function
+
 import datetime
 import fnmatch
+import os
+
 from seiscomp import mseedlite
 from seiscomp3 import Logging
 
@@ -19,7 +22,7 @@ if hasattr(datetime.timedelta, "total_seconds"):
         return td.total_seconds()
 else:
     def _total_seconds(td):
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) // 10**6
 
 
 class SDS(object):
@@ -118,7 +121,7 @@ class SDS(object):
 
         msFile.seek(-reclen, 2)
         rec = mseedlite.Record(msFile)
-        recEnd = msFile.tell() / reclen - 1
+        recEnd = msFile.tell() // reclen - 1
         timeEnd = rec.begin_time
 
         if rec.end_time <= startt:

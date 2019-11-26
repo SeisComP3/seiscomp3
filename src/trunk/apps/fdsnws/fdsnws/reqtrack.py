@@ -1,3 +1,6 @@
+from __future__ import absolute_import, division, print_function
+from future.utils import iteritems
+
 from twisted.internet import reactor
 from seiscomp3 import Core, Communication, DataModel
 
@@ -66,7 +69,7 @@ class RequestTrackerDB(object):
         if isinstance(constraints, list):
             constr = " ".join(constraints)
         else:
-            constr = " ".join([a+"="+b for (a, b) in constraints.iteritems()])
+            constr = " ".join([a+"="+b for (a, b) in iteritems(constraints)])
 
         arclinkRequestLine = DataModel.ArclinkRequestLine()
         arclinkRequestLine.setStart(start_time)
@@ -122,7 +125,7 @@ class RequestTrackerDB(object):
         tw = self.averageTimeWindow.seconds()
         if self.totalLineCount > 0:
             # avarage request time window
-            tw = self.averageTimeWindow.seconds() / self.totalLineCount
+            tw = self.averageTimeWindow.seconds() // self.totalLineCount
         if tw >= 2**31:
             tw = -1  # prevent 32bit int overflow
         ars.setAverageTimeWindow(tw)
