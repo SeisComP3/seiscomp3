@@ -28,6 +28,7 @@
 #
 # 2018/08/29 Stephan Herrnkind
 # dist-in-km option: Print distances in kilometer instead of degree
+from __future__ import print_function
 
 import sys
 import seiscomp3.Client
