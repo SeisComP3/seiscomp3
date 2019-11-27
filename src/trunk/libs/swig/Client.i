@@ -74,6 +74,18 @@
   catch (Swig::DirectorException &e) { SWIG_fail; }
 }
 
+%feature("pythonprepend") Seiscomp::Client::Application::Application(int argc, char** argv) %{
+    argv = [ bytes(a.encode()) for a in argv ]
+%}
+
+%feature("pythonprepend") Seiscomp::Client::StreamApplication::StreamApplication(int argc, char** argv) %{
+    argv = [ bytes(a.encode()) for a in argv ]
+%}
+
+%feature("pythonprepend") Seiscomp::Client::CommandLine::parse(int argc, char** argv) %{
+    argv = [ bytes(a.encode()) for a in argv ]
+%}
+
 %include "stl.i"
 %include "std_vector.i"
 %include "std_string.i"
