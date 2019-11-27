@@ -54,6 +54,7 @@ class Reloc : public Client::Application {
 			_useWeight = false;
 			_originEvaluationMode = "AUTOMATIC";
 			_adoptFixedDepth = false;
+			_repeatedRelocationCount = 1;
 		}
 
 
@@ -74,6 +75,9 @@ class Reloc : public Client::Application {
 			                                            "by their relocated counterparts or just added to the output.");
 			commandline().addGroup("Output");
 			commandline().addOption("Output", "origin-id-suffix", "create origin ID from that of the onput origin plus the specfied suffix", &_originIDSuffix);
+			commandline().addGroup("Profiling");
+			commandline().addOption("Profiling", "measure-relocation-time", "measure and log the time it takes to run each relocation");
+			commandline().addOption("Profiling", "repeated-relocations", "improve measurement of relocation time by running each relocation multiple times", &_repeatedRelocationCount);
 		}
 
 
@@ -84,6 +88,8 @@ class Reloc : public Client::Application {
 
 			_ignoreRejected = false;
 			_allowPreliminary = false;
+			if (_repeatedRelocationCount < 1)
+				_repeatedRelocationCount = 1;
 
 			try { _locatorType = configGetString("reloc.locator"); }
 			catch ( ... ) {}
@@ -396,7 +402,14 @@ class Reloc : public Client::Application {
 				catch ( ... ) {}
 			}
 
-			OriginPtr newOrg = _locator->relocate(org);
+			OriginPtr newOrg;
+			Seiscomp::Util::StopWatch timer;
+			timer.restart();
+
+			for (size_t i=0; i<_repeatedRelocationCount; i++)
+				newOrg = _locator->relocate(org);
+			double seconds = (double) timer.elapsed() / _repeatedRelocationCount;
+
 			if ( newOrg ) {
 				if ( _originEvaluationMode == "AUTOMATIC" )
 					newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
@@ -416,6 +429,11 @@ class Reloc : public Client::Application {
 
 				ci->setAgencyID(agencyID());
 				ci->setAuthor(author());
+			}
+
+			if ( commandline().hasOption("measure-relocation-time") ) {
+				double milliseconds = 1000.*seconds;
+				SEISCOMP_INFO("relocation of %s took %.3f ms", org->publicID().c_str(), milliseconds);
 			}
 
 			if ( commandline().hasOption("dump") ) {
@@ -480,6 +498,7 @@ class Reloc : public Client::Application {
 		bool                       _useWeight;
 		std::string                _originEvaluationMode;
 		std::string                _epFile;
+		size_t                     _repeatedRelocationCount;
 };
 
 
