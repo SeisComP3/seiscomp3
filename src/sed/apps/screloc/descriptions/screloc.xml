@@ -128,6 +128,14 @@
 					</description>
 				</option>
 			</group>
+			<group name="Profiling">
+				<option long-flag="measure-relocation-time">
+					<description>Measure the time spent in a single relocation</description>
+				</option>
+				<option long-flag="repeated-relocations" argument="arg">
+					<description>improve measurement of relocation time by running each relocation multiple times. Specify the number of relocations, e.g. 100.</description>
+				</option>
+			</group>
 		</command-line>
 	</module>
 </seiscomp>
