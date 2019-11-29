@@ -168,16 +168,9 @@ Verify that everything is properly set up in the script `@DATADIR@/hypo71/run.sh
    cd ${HYPO71PC_HOME}/
 
    # Executing binary with input file as argument
-   ./$HYPO71PC_BINARY < input
+   ${SEISCOMP_ROOT}/bin/$HYPO71PC_BINARY < input
 
-
-Add a symlink from the Hypo71PC binary to the hypo71 working directory :
-
-.. code-block:: sh
-
-   ln -s ${HOME}/seiscomp3/bin/Hypo71PC ${HOME}/seiscomp3/share/hypo71/Hypo71PC
-
-Verify that everything is properly set up in the file `${HOME}/seiscomp3/share/hypo71/input`
+Verify that everything is properly set up in the file `${SEISCOMP_ROOT}/share/hypo71/input`
 
 .. code-block:: sh
 
@@ -187,7 +180,7 @@ Verify that everything is properly set up in the file `${HOME}/seiscomp3/share/h
 
 Notice the 3 blank lines at the end of "input" file, those are not to be removed.
 
-Finally set-up your Hypo71 profile (${HOME}/seiscomp3/share/hypo71/profiles/profile.a.conf
+Finally set-up your Hypo71 profile (${SEISCOMP_ROOT}/share/hypo71/profiles/profile.a.conf)
 
 .. code-block:: sh
 
