@@ -36,8 +36,8 @@
 				</option>
 				<option flag="d" long-flag="dump">
 					<description>
-					Set export (dump) mode. Records are fetched from an archive and
-					stored in a file (or pipe).
+					Set export (dump) mode. Records are retrieved from an archive and
+					written to standard output.
 					</description>
 				</option>
 				<option flag="l" long-flag="list" argument="file">

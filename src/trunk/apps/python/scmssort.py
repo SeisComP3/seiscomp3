@@ -75,7 +75,7 @@ def RecordInput(filename=None):
     while True:
         rec = next(inp)
         if not rec:
-            raise StopIteration
+            return
         yield rec
 
 
@@ -151,11 +151,20 @@ if filenames:
     if opt.verbose:
         sys.stderr.write("writing output\n")
     previous = None
+
+    out = sys.stdout
+    try:
+        # needed in Python 3, fails in Python 2
+        out = out.buffer
+    except AttributeError:
+        # assuming this is Python 2, nothing to be done
+        pass
+
     for item in time_raw:
         if opt.uniqueness and item == previous:
             continue
         t, raw = item
-        sys.stdout.buffer.write(raw)
+        out.write(raw)
         previous = item
 
     if opt.verbose:

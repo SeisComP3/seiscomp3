@@ -244,6 +244,10 @@ class StreamIterator:
             self.current = self.record.startTime()
             self.currentEnd = self.record.endTime()
 
+    def next(self):
+        # needed for Python 2 only
+        return self.__next__()
+
     def __next__(self):
         while True:
             self.record, self.index = self.archive.readRecord(
@@ -283,6 +287,10 @@ class StreamIterator:
                 return -1
             return 0
 
+    def __lt__(self, other):
+        if self.__cmp__(other) < 0:
+            return True
+        return False
 
 class ArchiveIterator:
     def __init__(self, ar, sortByEndTime):
@@ -317,29 +325,26 @@ class ArchiveIterator:
 
 
 class Copy:
-    def __init__(self, it):
-        self.iterator = it
+    def __init__(self, archiveIterator):
+        self.archiveIterator = archiveIterator
 
     def __iter__(self):
-        for stream in self.iterator.streams:
+        for stream in self.archiveIterator.streams:
             rec = stream.record
             while rec:
                 yield rec
                 rec = next(stream)
 
-        raise StopIteration
-
 
 class Sorter:
-    def __init__(self, it):
-        self.iterator = it
+    def __init__(self, archiveIterator):
+        self.archiveIterator = archiveIterator
 
     def __iter__(self):
         while 1:
-            rec = self.iterator.nextSort()
+            rec = self.archiveIterator.nextSort()
             if not rec:
-                raise StopIteration
-
+                return
             yield rec
 
 
@@ -601,7 +606,19 @@ if verbose:
     else:
         sys.stderr.write("Mode: IMPORT\n")
 
-it = ArchiveIterator(archive, endtime)
+archiveIterator = ArchiveIterator(archive, endtime)
+
+if dump:
+    stdout = True
+
+if stdout:
+    out = sys.stdout
+    try:
+        # needed in Python 3, fails in Python 2
+        out = out.buffer
+    except AttributeError:
+        # assuming this is Python 2, nothing to be done
+        pass
 
 if dump:
     if listFile:
@@ -610,24 +627,25 @@ if dump:
             if verbose:
                 sys.stderr.write("adding stream: %s.%s.%s.%s\n" % (
                     stream[2], stream[3], stream[4], stream[5]))
-            it.append(stream[0], stream[1], stream[2],
-                      stream[3], stream[4], stream[5])
+            archiveIterator.append(
+                stream[0], stream[1], stream[2],
+                stream[3], stream[4], stream[5])
     else:
         if networks == "*":
-            it.append(tmin, tmax, "*", "*", "*", channels)
+            archiveIterator.append(tmin, tmax, "*", "*", "*", channels)
         else:
             items = networks.split(",")
             for n in items:
                 n = n.strip()
-                it.append(tmin, tmax, n, "*", "*", channels)
+                archiveIterator.append(tmin, tmax, n, "*", "*", channels)
 
     stime = None
     realTime = seiscomp3.Core.Time.GMT()
 
     if sort:
-        records = Sorter(it)
+        records = Sorter(archiveIterator)
     else:
-        records = Copy(it)
+        records = Copy(archiveIterator)
 
     for rec in records:
         # skip corrupt records
@@ -657,11 +675,10 @@ if dump:
 
         if verbose:
             etime = rec.endTime()
-            sys.stderr.write("%s %s %s %s\n" % (rec.streamID(
-            ), seiscomp3.Core.Time.LocalTime().iso(), rec.startTime().iso(), etime.iso()))
+            sys.stderr.write("%s %s %s %s\n" % (rec.streamID(), seiscomp3.Core.Time.LocalTime().iso(), rec.startTime().iso(), etime.iso()))
 
         if test == False:
-            sys.stdout.write(rec.raw().str())
+            out.write(rec.raw().str())
 
 else:
     env = seiscomp3.System.Environment.Instance()
@@ -711,7 +728,7 @@ else:
     try:
         for rec in input:
             if stdout:
-                sys.stdout.write(rec.raw().str())
+                out.write(rec.raw().str())
                 continue
 
             dir, file = archive.location(rec.startTime(), rec.networkCode(
