@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp xmlns="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.11" version="0.11">
   <EventParameters>
-    <pick publicID="Pick/20190825174903.571047.568546">
+    <pick publicID="Pick/20190825173202.377967.560549">
       <time>
-        <value>2019-08-25T17:47:53.219538Z</value>
+        <value>2019-08-25T17:29:16.969538Z</value>
       </time>
-      <waveformID networkCode="CM" stationCode="RUS" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="HNR" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -13,14 +13,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:03.571066Z</creationTime>
+        <creationTime>2019-08-25T17:32:02.377994Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174822.190318.568218">
+    <pick publicID="Pick/20190825173337.411453.561373">
       <time>
-        <value>2019-08-25T17:47:51.649997Z</value>
+        <value>2019-08-25T17:32:30.8Z</value>
       </time>
-      <waveformID networkCode="GE" stationCode="MORC" channelCode="BHZ"/>
+      <waveformID networkCode="G" stationCode="DZM" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -28,111 +28,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:22.190343Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174155.479047.565291">
-      <time>
-        <value>2019-08-25T17:41:35.41Z</value>
-      </time>
-      <waveformID networkCode="NY" stationCode="MMPY" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:41:55.479076Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173603.532652.833429">
-      <time>
-        <value>2019-08-25T17:35:59.171999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RC144" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:36:03.532679Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.276561.286491">
-      <time>
-        <value>2019-08-25T17:34:25.964658Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="WR8" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.276622Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174245.049339.565615">
-      <time>
-        <value>2019-08-25T17:41:54.38Z</value>
-      </time>
-      <waveformID networkCode="IW" stationCode="PLID" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:42:45.049363Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174901.952226.568528">
-      <time>
-        <value>2019-08-25T17:48:03.254999Z</value>
-      </time>
-      <waveformID networkCode="GB" stationCode="CLGH" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:01.952258Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174814.491287.568149">
-      <time>
-        <value>2019-08-25T17:47:51.845Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="PSZ" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:14.491315Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173559.856418.562566">
-      <time>
-        <value>2019-08-25T17:34:45.975Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="STKA" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:35:59.856443Z</creationTime>
+        <creationTime>2019-08-25T17:33:37.41148Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825173338.746468.831846">
@@ -150,11 +46,11 @@
         <creationTime>2019-08-25T17:33:38.746507Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174402.349831.566278">
+    <pick publicID="Pick/20190825173354.689615.561488">
       <time>
-        <value>2019-08-25T17:41:42.944538Z</value>
+        <value>2019-08-25T17:33:11.294538Z</value>
       </time>
-      <waveformID networkCode="IU" stationCode="MAKZ" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="AU" stationCode="EIDS" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -162,14 +58,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:44:02.349853Z</creationTime>
+        <creationTime>2019-08-25T17:33:54.68964Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174838.791688.568330">
+    <pick publicID="Pick/20190825173358.907157.561538">
       <time>
-        <value>2019-08-25T17:47:57.27Z</value>
+        <value>2019-08-25T17:32:54.694538Z</value>
       </time>
-      <waveformID networkCode="HT" stationCode="AGG" channelCode="HHZ"/>
+      <waveformID networkCode="IU" stationCode="CTAO" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -177,7 +73,97 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:38.791714Z</creationTime>
+        <creationTime>2019-08-25T17:33:58.907192Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173403.050178.561567">
+      <time>
+        <value>2019-08-25T17:33:33.7875Z</value>
+      </time>
+      <waveformID networkCode="IA" stationCode="SMPI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:03.050197Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173411.975789.561617">
+      <time>
+        <value>2019-08-25T17:32:48.644538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="COEN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:11.975819Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173420.793377.832306">
+      <time>
+        <value>2019-08-25T17:34:11.425999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RCCE6" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:34:20.793413Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173423.187256.561739">
+      <time>
+        <value>2019-08-25T17:33:49.894536Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="QIS" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:23.187286Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173426.119421.832384">
+      <time>
+        <value>2019-08-25T17:34:11.768Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R9475" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:34:26.119453Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173434.786123.561813">
+      <time>
+        <value>2019-08-25T17:33:30.219538Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="MSVF" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:34:34.786148Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825173443.747652.561868">
@@ -195,11 +181,11 @@
         <creationTime>2019-08-25T17:34:43.747679Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173915.450476.564049">
+    <pick publicID="Pick/20190825173500.409539.562024">
       <time>
-        <value>2019-08-25T17:38:14.719538Z</value>
+        <value>2019-08-25T17:34:28.869538Z</value>
       </time>
-      <waveformID networkCode="IU" stationCode="INCN" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="GUMO" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -207,156 +193,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:39:15.450508Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174518.955274.566841">
-      <time>
-        <value>2019-08-25T17:42:03.88Z</value>
-      </time>
-      <waveformID networkCode="AE" stationCode="U15A" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:45:18.955294Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174814.145128.568141">
-      <time>
-        <value>2019-08-25T17:48:03.425Z</value>
-      </time>
-      <waveformID networkCode="CH" stationCode="BNALP" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:14.145155Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174838.776143.568327">
-      <time>
-        <value>2019-08-25T17:47:50.3Z</value>
-      </time>
-      <waveformID networkCode="HT" stationCode="ALN" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:38.776172Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.276958.286492">
-      <time>
-        <value>2019-08-25T17:35:29.649143Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="FITZ" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.277018Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174844.44648.568385">
-      <time>
-        <value>2019-08-25T17:47:42.044538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="ANTO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:44.446507Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174056.650403.564856">
-      <time>
-        <value>2019-08-25T17:39:58.019538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="SBA" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:40:56.650428Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174237.103236.565531">
-      <time>
-        <value>2019-08-25T17:41:53.06Z</value>
-      </time>
-      <waveformID networkCode="NN" stationCode="SHP" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:42:37.103279Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174855.688075.568458">
-      <time>
-        <value>2019-08-25T17:47:37.569538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="OTAV" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:55.688105Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174202.857906.565373">
-      <time>
-        <value>2019-08-25T17:41:42.5483Z</value>
-      </time>
-      <waveformID networkCode="NN" stationCode="DSP" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:42:02.857925Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173853.007321.563923">
-      <time>
-        <value>2019-08-25T17:38:06.319538Z</value>
-      </time>
-      <waveformID networkCode="KG" stationCode="TJN" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:38:53.007346Z</creationTime>
+        <creationTime>2019-08-25T17:35:00.409581Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825173503.227431.562050">
@@ -374,6 +211,231 @@
         <creationTime>2019-08-25T17:35:03.227456Z</creationTime>
       </creationInfo>
     </pick>
+    <pick publicID="Pick/20190825173522.36573.562300">
+      <time>
+        <value>2019-08-25T17:34:45.069538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="CNB" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:22.365772Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173523.777295.832976">
+      <time>
+        <value>2019-08-25T17:35:02.664999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RD8BC" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:23.777326Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173531.383145.562409">
+      <time>
+        <value>2019-08-25T17:34:25.419538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="CMSA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:31.383173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173537.248582.562460">
+      <time>
+        <value>2019-08-25T17:34:38.069538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MTN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:37.248611Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173556.591972.833336">
+      <time>
+        <value>2019-08-25T17:35:45.617999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3967" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:56.592008Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173557.987344.833354">
+      <time>
+        <value>2019-08-25T17:35:45.636Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R4D20" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:35:57.987374Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173559.856418.562566">
+      <time>
+        <value>2019-08-25T17:34:45.975Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="STKA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:35:59.856443Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173603.532652.833429">
+      <time>
+        <value>2019-08-25T17:35:59.171999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RC144" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:36:03.532679Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173606.968796.562599">
+      <time>
+        <value>2019-08-25T17:35:09.019538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="HTT" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:06.96882Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173625.198675.562757">
+      <time>
+        <value>2019-08-25T17:35:56.3375Z</value>
+      </time>
+      <waveformID networkCode="IA" stationCode="EDFI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:25.198699Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173628.406049.562797">
+      <time>
+        <value>2019-08-25T17:36:15.119538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="TOLI2" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:28.406069Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173633.867187.562808">
+      <time>
+        <value>2019-08-25T17:35:19.294538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="BBOO" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:33.867208Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173646.547499.833925">
+      <time>
+        <value>2019-08-25T17:36:39.588Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3D3B" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:36:46.547519Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173654.645723.563002">
+      <time>
+        <value>2019-08-25T17:36:28.219539Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="PLAI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:36:54.645749Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173721.087929.563157">
+      <time>
+        <value>2019-08-25T17:36:56.769538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="JAGI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:21.087956Z</creationTime>
+      </creationInfo>
+    </pick>
     <pick publicID="Pick/20190825173728.349027.563214">
       <time>
         <value>2019-08-25T17:36:22.769538Z</value>
@@ -387,6 +449,261 @@
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
         <creationTime>2019-08-25T17:37:28.349053Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173736.78943.563286">
+      <time>
+        <value>2019-08-25T17:36:43.994538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MEEK" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:36.789458Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173745.693707.834604">
+      <time>
+        <value>2019-08-25T17:37:33.758Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R55F8" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:37:45.693738Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173748.721045.834642">
+      <time>
+        <value>2019-08-25T17:37:40.074Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R30D5" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:37:48.721082Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173750.785409.563403">
+      <time>
+        <value>2019-08-25T17:37:24.861303Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="INU" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:50.785433Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173755.756075.563451">
+      <time>
+        <value>2019-08-25T17:37:25.2Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JGF" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:55.756096Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173755.870671.563456">
+      <time>
+        <value>2019-08-25T17:37:28.119538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MAJO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:55.870697Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173756.141362.563491">
+      <time>
+        <value>2019-08-25T17:37:10.394538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="NWAO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:56.141382Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173757.035471.563517">
+      <time>
+        <value>2019-08-25T17:37:25.3Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JMN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:57.035503Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173758.043344.563528">
+      <time>
+        <value>2019-08-25T17:37:07.294538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MORW" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:58.043368Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173758.054777.563533">
+      <time>
+        <value>2019-08-25T17:37:12.944538Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MUN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:37:58.054805Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173843.183059.563822">
+      <time>
+        <value>2019-08-25T17:37:32.55Z</value>
+      </time>
+      <waveformID networkCode="JP" stationCode="JNU" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:38:43.18308Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173853.007321.563923">
+      <time>
+        <value>2019-08-25T17:38:06.319538Z</value>
+      </time>
+      <waveformID networkCode="KG" stationCode="TJN" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:38:53.007346Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173915.450476.564049">
+      <time>
+        <value>2019-08-25T17:38:14.719538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="INCN" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:15.450508Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173926.249689.564157">
+      <time>
+        <value>2019-08-25T17:39:06.619538Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="GSI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:26.249715Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173926.952345.564163">
+      <time>
+        <value>2019-08-25T17:38:48.22186Z</value>
+      </time>
+      <waveformID networkCode="MY" stationCode="IPM" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:26.952371Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173927.857161.564170">
+      <time>
+        <value>2019-08-25T17:38:52.950001Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="DRV" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:27.857184Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825173951.877921.564328">
+      <time>
+        <value>2019-08-25T17:39:28.219538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="CHTO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:39:51.877943Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174036.752051.564681">
@@ -419,11 +736,11 @@
         <creationTime>2019-08-25T17:40:46.577797Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174120.451884.565023">
+    <pick publicID="Pick/20190825174056.650403.564856">
       <time>
-        <value>2019-08-25T17:40:11.819538Z</value>
+        <value>2019-08-25T17:39:58.019538Z</value>
       </time>
-      <waveformID networkCode="IU" stationCode="ULN" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="SBA" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -431,649 +748,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:41:20.451909Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.276124.286490">
-      <time>
-        <value>2019-08-25T17:33:16.383462Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="GENI" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.276185Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174827.264432.568259">
-      <time>
-        <value>2019-08-25T17:48:13.894539Z</value>
-      </time>
-      <waveformID networkCode="CU" stationCode="GRGR" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:27.264457Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174753.002608.841561">
-      <time>
-        <value>2019-08-25T17:47:46.73Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R038C" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:47:53.002641Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174159.757698.565354">
-      <time>
-        <value>2019-08-25T17:41:06.844539Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="COLA" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:41:59.757727Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174824.245344.568227">
-      <time>
-        <value>2019-08-25T17:48:08.669535Z</value>
-      </time>
-      <waveformID networkCode="MN" stationCode="BNI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:24.24537Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174940.962993.568845">
-      <time>
-        <value>2019-08-25T17:47:57.875Z</value>
-      </time>
-      <waveformID networkCode="GT" stationCode="CPUP" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:40.963021Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174401.173096.566266">
-      <time>
-        <value>2019-08-25T17:41:55.15Z</value>
-      </time>
-      <waveformID networkCode="AE" stationCode="113A" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:44:01.173122Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173337.411453.561373">
-      <time>
-        <value>2019-08-25T17:32:30.8Z</value>
-      </time>
-      <waveformID networkCode="G" stationCode="DZM" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:33:37.41148Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174148.690687.565228">
-      <time>
-        <value>2019-08-25T17:41:04.719538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="TIXI" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:41:48.690713Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173557.987344.833354">
-      <time>
-        <value>2019-08-25T17:35:45.636Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R4D20" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:35:57.987374Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174740.867545.841407">
-      <time>
-        <value>2019-08-25T17:47:30.542Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R3F9B" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:47:40.867579Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174826.202001.568249">
-      <time>
-        <value>2019-08-25T17:48:02.6Z</value>
-      </time>
-      <waveformID networkCode="G" stationCode="SSB" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:26.202027Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173411.975789.561617">
-      <time>
-        <value>2019-08-25T17:32:48.644538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="COEN" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:34:11.975819Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174853.410933.568441">
-      <time>
-        <value>2019-08-25T17:48:25.545Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="MTE" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:53.410958Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174314.50883.838245">
-      <time>
-        <value>2019-08-25T17:43:03.809Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RC069" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:43:14.508865Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173423.187256.561739">
-      <time>
-        <value>2019-08-25T17:33:49.894536Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="QIS" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:34:23.187286Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174400.131947.566254">
-      <time>
-        <value>2019-08-25T17:43:06.154999Z</value>
-      </time>
-      <waveformID networkCode="OK" stationCode="CSTR" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:44:00.131978Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174839.609366.568334">
-      <time>
-        <value>2019-08-25T17:48:20.069538Z</value>
-      </time>
-      <waveformID networkCode="MN" stationCode="WDD" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:39.609395Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173758.054777.563533">
-      <time>
-        <value>2019-08-25T17:37:12.944538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="MUN" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:58.054805Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173646.547499.833925">
-      <time>
-        <value>2019-08-25T17:36:39.588Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R3D3B" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:36:46.547519Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.276006.286489">
-      <time>
-        <value>2019-08-25T17:33:08.52118Z</value>
-      </time>
-      <waveformID networkCode="II" stationCode="KWJN" locationCode="00" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.276069Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173748.721045.834642">
-      <time>
-        <value>2019-08-25T17:37:40.074Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R30D5" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:37:48.721082Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174857.486368.568484">
-      <time>
-        <value>2019-08-25T17:47:56.1195Z</value>
-      </time>
-      <waveformID networkCode="CZ" stationCode="KHC" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:57.486389Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173523.777295.832976">
-      <time>
-        <value>2019-08-25T17:35:02.664999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RD8BC" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:35:23.777326Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174935.499843.568797">
-      <time>
-        <value>2019-08-25T17:48:20.069538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="BBSR" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:35.499866Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173625.198675.562757">
-      <time>
-        <value>2019-08-25T17:35:56.3375Z</value>
-      </time>
-      <waveformID networkCode="IA" stationCode="EDFI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:36:25.198699Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173755.870671.563456">
-      <time>
-        <value>2019-08-25T17:37:28.119538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="MAJO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:55.870697Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173926.249689.564157">
-      <time>
-        <value>2019-08-25T17:39:06.619538Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="GSI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:39:26.249715Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173358.907157.561538">
-      <time>
-        <value>2019-08-25T17:32:54.694538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="CTAO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:33:58.907192Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174814.178253.568143">
-      <time>
-        <value>2019-08-25T17:47:53.944537Z</value>
-      </time>
-      <waveformID networkCode="CZ" stationCode="JAVC" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:14.17828Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825183719.605853.591832">
-      <time>
-        <value>2019-08-25T17:48:35.268393Z</value>
-      </time>
-      <waveformID networkCode="ON" stationCode="GUA01" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T18:37:19.605882Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173757.035471.563517">
-      <time>
-        <value>2019-08-25T17:37:25.3Z</value>
-      </time>
-      <waveformID networkCode="JP" stationCode="JMN" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:57.035503Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174240.250167.565561">
-      <time>
-        <value>2019-08-25T17:41:21.65Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="MAW" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:42:40.250193Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173531.383145.562409">
-      <time>
-        <value>2019-08-25T17:34:25.419538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="CMSA" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:35:31.383173Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.275766.286488">
-      <time>
-        <value>2019-08-25T17:32:37.072051Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="TARA" locationCode="00" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.275833Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173745.693707.834604">
-      <time>
-        <value>2019-08-25T17:37:33.758Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R55F8" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:37:45.693738Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174818.01411.841843">
-      <time>
-        <value>2019-08-25T17:48:07.153999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RB411" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:18.014128Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174814.505198.841800">
-      <time>
-        <value>2019-08-25T17:48:02.023Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R8F35" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:14.505228Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173721.087929.563157">
-      <time>
-        <value>2019-08-25T17:36:56.769538Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="JAGI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:21.087956Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174741.885919.841422">
-      <time>
-        <value>2019-08-25T17:47:27.515999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RB8D5" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:47:41.88595Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174714.488284.567659">
-      <time>
-        <value>2019-08-25T17:42:09.175Z</value>
-      </time>
-      <waveformID networkCode="CN" stationCode="YKAW3" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:47:14.488319Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173633.867187.562808">
-      <time>
-        <value>2019-08-25T17:35:19.294538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="BBOO" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:36:33.867208Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174846.773478.568404">
-      <time>
-        <value>2019-08-25T17:47:51.995Z</value>
-      </time>
-      <waveformID networkCode="CZ" stationCode="KRLC" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:46.773503Z</creationTime>
+        <creationTime>2019-08-25T17:40:56.650428Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174102.23646.564892">
@@ -1091,11 +766,11 @@
         <creationTime>2019-08-25T17:41:02.236483Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174306.47313.565802">
+    <pick publicID="Pick/20190825174104.45576.564923">
       <time>
-        <value>2019-08-25T17:42:51.075Z</value>
+        <value>2019-08-25T17:39:42.119539Z</value>
       </time>
-      <waveformID networkCode="OK" stationCode="HTCH" channelCode="HHZ"/>
+      <waveformID networkCode="IU" stationCode="MA2" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1103,14 +778,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:43:06.473159Z</creationTime>
+        <creationTime>2019-08-25T17:41:04.455786Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173606.968796.562599">
+    <pick publicID="Pick/20190825174120.451884.565023">
       <time>
-        <value>2019-08-25T17:35:09.019538Z</value>
+        <value>2019-08-25T17:40:11.819538Z</value>
       </time>
-      <waveformID networkCode="AU" stationCode="HTT" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="ULN" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1118,112 +793,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:36:06.96882Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174230.443217.837774">
-      <time>
-        <value>2019-08-25T17:42:22.273Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R350D" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:42:30.443247Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174329.868618.566011">
-      <time>
-        <value>2019-08-25T17:41:06.0684Z</value>
-      </time>
-      <waveformID networkCode="AK" stationCode="CCB" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:43:29.868643Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173420.793377.832306">
-      <time>
-        <value>2019-08-25T17:34:11.425999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RCCE6" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:34:20.793413Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174818.415871.841853">
-      <time>
-        <value>2019-08-25T17:48:11.387Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R5F74" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:18.415893Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173403.050178.561567">
-      <time>
-        <value>2019-08-25T17:33:33.7875Z</value>
-      </time>
-      <waveformID networkCode="IA" stationCode="SMPI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:34:03.050197Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173537.248582.562460">
-      <time>
-        <value>2019-08-25T17:34:38.069538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="MTN" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:35:37.248611Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173654.645723.563002">
-      <time>
-        <value>2019-08-25T17:36:28.219539Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="PLAI" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:36:54.645749Z</creationTime>
+        <creationTime>2019-08-25T17:41:20.451909Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174138.918438.565161">
@@ -1241,26 +811,11 @@
         <creationTime>2019-08-25T17:41:38.918468Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174802.029115.841665">
+    <pick publicID="Pick/20190825174148.690687.565228">
       <time>
-        <value>2019-08-25T17:47:50.818999Z</value>
+        <value>2019-08-25T17:41:04.719538Z</value>
       </time>
-      <waveformID networkCode="AM" stationCode="RA736" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:02.029143Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173926.952345.564163">
-      <time>
-        <value>2019-08-25T17:38:48.22186Z</value>
-      </time>
-      <waveformID networkCode="MY" stationCode="IPM" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="TIXI" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1268,142 +823,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:39:26.952371Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174816.798144.841825">
-      <time>
-        <value>2019-08-25T17:48:08.998999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="RDC44" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:16.798173Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825182040.983296.583448">
-      <time>
-        <value>2019-08-25T17:48:27.908391Z</value>
-      </time>
-      <waveformID networkCode="ON" stationCode="RIB01" channelCode="HHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T18:20:40.983322Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174757.185685.841609">
-      <time>
-        <value>2019-08-25T17:47:51.434999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R404C" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:47:57.185714Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174303.683441.565768">
-      <time>
-        <value>2019-08-25T17:41:45.169536Z</value>
-      </time>
-      <waveformID networkCode="II" stationCode="KURK" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:43:03.683476Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174104.45576.564923">
-      <time>
-        <value>2019-08-25T17:39:42.119539Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="MA2" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:41:04.455786Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174904.636418.568567">
-      <time>
-        <value>2019-08-25T17:48:33.45Z</value>
-      </time>
-      <waveformID networkCode="G" stationCode="MPG" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:04.636447Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174803.477402.568047">
-      <time>
-        <value>2019-08-25T17:47:47.15Z</value>
-      </time>
-      <waveformID networkCode="CX" stationCode="HMBCX" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:03.477428Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173556.591972.833336">
-      <time>
-        <value>2019-08-25T17:35:45.617999Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R3967" locationCode="00" channelCode="SHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:35:56.592008Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173927.857161.564170">
-      <time>
-        <value>2019-08-25T17:38:52.950001Z</value>
-      </time>
-      <waveformID networkCode="G" stationCode="DRV" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:39:27.857184Z</creationTime>
+        <creationTime>2019-08-25T17:41:48.690713Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174150.55893.837319">
@@ -1421,11 +841,11 @@
         <creationTime>2019-08-25T17:41:50.558959Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173736.78943.563286">
+    <pick publicID="Pick/20190825174155.479047.565291">
       <time>
-        <value>2019-08-25T17:36:43.994538Z</value>
+        <value>2019-08-25T17:41:35.41Z</value>
       </time>
-      <waveformID networkCode="AU" stationCode="MEEK" channelCode="BHZ"/>
+      <waveformID networkCode="NY" stationCode="MMPY" channelCode="HHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1433,14 +853,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:36.789458Z</creationTime>
+        <creationTime>2019-08-25T17:41:55.479076Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174926.946583.568704">
+    <pick publicID="Pick/20190825174159.757698.565354">
       <time>
-        <value>2019-08-25T17:48:40.35Z</value>
+        <value>2019-08-25T17:41:06.844539Z</value>
       </time>
-      <waveformID networkCode="G" stationCode="TAM" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="IU" stationCode="COLA" locationCode="00" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1448,14 +868,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:26.94661Z</creationTime>
+        <creationTime>2019-08-25T17:41:59.757727Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173202.377967.560549">
+    <pick publicID="Pick/20190825174202.857906.565373">
       <time>
-        <value>2019-08-25T17:29:16.969538Z</value>
+        <value>2019-08-25T17:41:42.5483Z</value>
       </time>
-      <waveformID networkCode="IU" stationCode="HNR" locationCode="00" channelCode="BHZ"/>
+      <waveformID networkCode="NN" stationCode="DSP" channelCode="HHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1463,126 +883,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:32:02.377994Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190826002933.277074.286493">
-      <time>
-        <value>2019-08-25T17:35:35.152741Z</value>
-      </time>
-      <waveformID networkCode="GE" stationCode="SOEI" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.277132Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174818.304733.568173">
-      <time>
-        <value>2019-08-25T17:47:57.694535Z</value>
-      </time>
-      <waveformID networkCode="MN" stationCode="TUE" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:18.304772Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174819.847064.568190">
-      <time>
-        <value>2019-08-25T17:47:50.295Z</value>
-      </time>
-      <waveformID networkCode="AF" stationCode="CVNA" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:19.84709Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174802.937949.841677">
-      <time>
-        <value>2019-08-25T17:47:56.538Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R9F16" locationCode="00" channelCode="EHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>autopick_v</author>
-        <creationTime>2019-08-25T17:48:02.937976Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174839.63127.568338">
-      <time>
-        <value>2019-08-25T17:47:49.319538Z</value>
-      </time>
-      <waveformID networkCode="CM" stationCode="HEL" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:48:39.6313Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825174602.292675.567180">
-      <time>
-        <value>2019-08-25T17:43:05.423393Z</value>
-      </time>
-      <waveformID networkCode="MX" stationCode="TLIG" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:46:02.292701Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173755.756075.563451">
-      <time>
-        <value>2019-08-25T17:37:25.2Z</value>
-      </time>
-      <waveformID networkCode="JP" stationCode="JGF" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:55.756096Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173951.877921.564328">
-      <time>
-        <value>2019-08-25T17:39:28.219538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="CHTO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:39:51.877943Z</creationTime>
+        <creationTime>2019-08-25T17:42:02.857925Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174203.380775.565376">
@@ -1600,50 +901,6 @@
         <creationTime>2019-08-25T17:42:03.380798Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190826002933.275504.286487">
-      <time>
-        <value>2019-08-25T17:31:44.394761Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="PMG" locationCode="00" channelCode="BHZ"/>
-      <filterID>BW(4,1,5)</filterID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>manual</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scolv@user</author>
-        <creationTime>2019-08-26T00:29:33.275638Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173500.409539.562024">
-      <time>
-        <value>2019-08-25T17:34:28.869538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="GUMO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:35:00.409581Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173758.043344.563528">
-      <time>
-        <value>2019-08-25T17:37:07.294538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="MORW" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:58.043368Z</creationTime>
-      </creationInfo>
-    </pick>
     <pick publicID="Pick/20190825174209.213258.565419">
       <time>
         <value>2019-08-25T17:41:12.83Z</value>
@@ -1657,6 +914,126 @@
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
         <creationTime>2019-08-25T17:42:09.213286Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174230.443217.837774">
+      <time>
+        <value>2019-08-25T17:42:22.273Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R350D" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:42:30.443247Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174237.103236.565531">
+      <time>
+        <value>2019-08-25T17:41:53.06Z</value>
+      </time>
+      <waveformID networkCode="NN" stationCode="SHP" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:37.103279Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174240.250167.565561">
+      <time>
+        <value>2019-08-25T17:41:21.65Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="MAW" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:40.250193Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174245.049339.565615">
+      <time>
+        <value>2019-08-25T17:41:54.38Z</value>
+      </time>
+      <waveformID networkCode="IW" stationCode="PLID" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:42:45.049363Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174303.683441.565768">
+      <time>
+        <value>2019-08-25T17:41:45.169536Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="KURK" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:03.683476Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174306.47313.565802">
+      <time>
+        <value>2019-08-25T17:42:51.075Z</value>
+      </time>
+      <waveformID networkCode="OK" stationCode="HTCH" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:06.473159Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174314.50883.838245">
+      <time>
+        <value>2019-08-25T17:43:03.809Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RC069" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:43:14.508865Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174329.868618.566011">
+      <time>
+        <value>2019-08-25T17:41:06.0684Z</value>
+      </time>
+      <waveformID networkCode="AK" stationCode="CCB" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:43:29.868643Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174334.120275.566055">
@@ -1674,6 +1051,126 @@
         <creationTime>2019-08-25T17:43:34.1203Z</creationTime>
       </creationInfo>
     </pick>
+    <pick publicID="Pick/20190825174400.131947.566254">
+      <time>
+        <value>2019-08-25T17:43:06.154999Z</value>
+      </time>
+      <waveformID networkCode="OK" stationCode="CSTR" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:00.131978Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174401.173096.566266">
+      <time>
+        <value>2019-08-25T17:41:55.15Z</value>
+      </time>
+      <waveformID networkCode="AE" stationCode="113A" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:01.173122Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174402.349831.566278">
+      <time>
+        <value>2019-08-25T17:41:42.944538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="MAKZ" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:44:02.349853Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174518.955274.566841">
+      <time>
+        <value>2019-08-25T17:42:03.88Z</value>
+      </time>
+      <waveformID networkCode="AE" stationCode="U15A" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:45:18.955294Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174602.292675.567180">
+      <time>
+        <value>2019-08-25T17:43:05.423393Z</value>
+      </time>
+      <waveformID networkCode="MX" stationCode="TLIG" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:46:02.292701Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174714.488284.567659">
+      <time>
+        <value>2019-08-25T17:42:09.175Z</value>
+      </time>
+      <waveformID networkCode="CN" stationCode="YKAW3" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:47:14.488319Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174740.867545.841407">
+      <time>
+        <value>2019-08-25T17:47:30.542Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R3F9B" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:40.867579Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174741.885919.841422">
+      <time>
+        <value>2019-08-25T17:47:27.515999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RB8D5" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:41.88595Z</creationTime>
+      </creationInfo>
+    </pick>
     <pick publicID="Pick/20190825174745.263956.841464">
       <time>
         <value>2019-08-25T17:47:30.272Z</value>
@@ -1689,56 +1186,11 @@
         <creationTime>2019-08-25T17:47:45.263997Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174930.286038.568740">
+    <pick publicID="Pick/20190825174753.002608.841561">
       <time>
-        <value>2019-08-25T17:48:24.169538Z</value>
+        <value>2019-08-25T17:47:46.73Z</value>
       </time>
-      <waveformID networkCode="IU" stationCode="PAB" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:30.286071Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173750.785409.563403">
-      <time>
-        <value>2019-08-25T17:37:24.861303Z</value>
-      </time>
-      <waveformID networkCode="G" stationCode="INU" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:50.785433Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173756.141362.563491">
-      <time>
-        <value>2019-08-25T17:37:10.394538Z</value>
-      </time>
-      <waveformID networkCode="IU" stationCode="NWAO" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:37:56.141382Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173426.119421.832384">
-      <time>
-        <value>2019-08-25T17:34:11.768Z</value>
-      </time>
-      <waveformID networkCode="AM" stationCode="R9475" locationCode="00" channelCode="SHZ"/>
+      <waveformID networkCode="AM" stationCode="R038C" locationCode="00" channelCode="SHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1746,14 +1198,59 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>autopick_v</author>
-        <creationTime>2019-08-25T17:34:26.119453Z</creationTime>
+        <creationTime>2019-08-25T17:47:53.002641Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173628.406049.562797">
+    <pick publicID="Pick/20190825174757.185685.841609">
       <time>
-        <value>2019-08-25T17:36:15.119538Z</value>
+        <value>2019-08-25T17:47:51.434999Z</value>
       </time>
-      <waveformID networkCode="GE" stationCode="TOLI2" channelCode="BHZ"/>
+      <waveformID networkCode="AM" stationCode="R404C" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:47:57.185714Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174802.029115.841665">
+      <time>
+        <value>2019-08-25T17:47:50.818999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RA736" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:02.029143Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174802.937949.841677">
+      <time>
+        <value>2019-08-25T17:47:56.538Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R9F16" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:02.937976Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174803.477402.568047">
+      <time>
+        <value>2019-08-25T17:47:47.15Z</value>
+      </time>
+      <waveformID networkCode="CX" stationCode="HMBCX" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1761,14 +1258,14 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:36:28.406069Z</creationTime>
+        <creationTime>2019-08-25T17:48:03.477428Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825174908.681692.568582">
+    <pick publicID="Pick/20190825174814.145128.568141">
       <time>
-        <value>2019-08-25T17:48:02.52Z</value>
+        <value>2019-08-25T17:48:03.425Z</value>
       </time>
-      <waveformID networkCode="GR" stationCode="GRA1" channelCode="BHZ"/>
+      <waveformID networkCode="CH" stationCode="BNALP" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1776,7 +1273,187 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:49:08.68173Z</creationTime>
+        <creationTime>2019-08-25T17:48:14.145155Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.178253.568143">
+      <time>
+        <value>2019-08-25T17:47:53.944537Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="JAVC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:14.17828Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.491287.568149">
+      <time>
+        <value>2019-08-25T17:47:51.845Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="PSZ" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:14.491315Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174814.505198.841800">
+      <time>
+        <value>2019-08-25T17:48:02.023Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R8F35" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:14.505228Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174816.798144.841825">
+      <time>
+        <value>2019-08-25T17:48:08.998999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RDC44" locationCode="00" channelCode="EHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:16.798173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.01411.841843">
+      <time>
+        <value>2019-08-25T17:48:07.153999Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="RB411" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:18.014128Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.304733.568173">
+      <time>
+        <value>2019-08-25T17:47:57.694535Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="TUE" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:18.304772Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174818.415871.841853">
+      <time>
+        <value>2019-08-25T17:48:11.387Z</value>
+      </time>
+      <waveformID networkCode="AM" stationCode="R5F74" locationCode="00" channelCode="SHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>autopick_v</author>
+        <creationTime>2019-08-25T17:48:18.415893Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174819.847064.568190">
+      <time>
+        <value>2019-08-25T17:47:50.295Z</value>
+      </time>
+      <waveformID networkCode="AF" stationCode="CVNA" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:19.84709Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174822.190318.568218">
+      <time>
+        <value>2019-08-25T17:47:51.649997Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="MORC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:22.190343Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174824.245344.568227">
+      <time>
+        <value>2019-08-25T17:48:08.669535Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="BNI" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:24.24537Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174826.202001.568249">
+      <time>
+        <value>2019-08-25T17:48:02.6Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="SSB" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:26.202027Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174827.264432.568259">
+      <time>
+        <value>2019-08-25T17:48:13.894539Z</value>
+      </time>
+      <waveformID networkCode="CU" stationCode="GRGR" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:27.264457Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174836.055994.568300">
@@ -1794,6 +1471,96 @@
         <creationTime>2019-08-25T17:48:36.056027Z</creationTime>
       </creationInfo>
     </pick>
+    <pick publicID="Pick/20190825174838.776143.568327">
+      <time>
+        <value>2019-08-25T17:47:50.3Z</value>
+      </time>
+      <waveformID networkCode="HT" stationCode="ALN" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:38.776172Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174838.791688.568330">
+      <time>
+        <value>2019-08-25T17:47:57.27Z</value>
+      </time>
+      <waveformID networkCode="HT" stationCode="AGG" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:38.791714Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174839.609366.568334">
+      <time>
+        <value>2019-08-25T17:48:20.069538Z</value>
+      </time>
+      <waveformID networkCode="MN" stationCode="WDD" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:39.609395Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174839.63127.568338">
+      <time>
+        <value>2019-08-25T17:47:49.319538Z</value>
+      </time>
+      <waveformID networkCode="CM" stationCode="HEL" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:39.6313Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174844.44648.568385">
+      <time>
+        <value>2019-08-25T17:47:42.044538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="ANTO" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:44.446507Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174846.773478.568404">
+      <time>
+        <value>2019-08-25T17:47:51.995Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="KRLC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:46.773503Z</creationTime>
+      </creationInfo>
+    </pick>
     <pick publicID="Pick/20190825174853.239021.568438">
       <time>
         <value>2019-08-25T17:48:02.569539Z</value>
@@ -1807,6 +1574,51 @@
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
         <creationTime>2019-08-25T17:48:53.239055Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174853.410933.568441">
+      <time>
+        <value>2019-08-25T17:48:25.545Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="MTE" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:53.410958Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174855.688075.568458">
+      <time>
+        <value>2019-08-25T17:47:37.569538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="OTAV" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:55.688105Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174857.486368.568484">
+      <time>
+        <value>2019-08-25T17:47:56.1195Z</value>
+      </time>
+      <waveformID networkCode="CZ" stationCode="KHC" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:48:57.486389Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174901.454071.568525">
@@ -1824,11 +1636,11 @@
         <creationTime>2019-08-25T17:49:01.454113Z</creationTime>
       </creationInfo>
     </pick>
-    <pick publicID="Pick/20190825173522.36573.562300">
+    <pick publicID="Pick/20190825174901.952226.568528">
       <time>
-        <value>2019-08-25T17:34:45.069538Z</value>
+        <value>2019-08-25T17:48:03.254999Z</value>
       </time>
-      <waveformID networkCode="AU" stationCode="CNB" channelCode="BHZ"/>
+      <waveformID networkCode="GB" stationCode="CLGH" channelCode="BHZ"/>
       <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
       <methodID>AIC</methodID>
       <phaseHint>P</phaseHint>
@@ -1836,52 +1648,7 @@
       <creationInfo>
         <agencyID>gempa</agencyID>
         <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:35:22.365772Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173843.183059.563822">
-      <time>
-        <value>2019-08-25T17:37:32.55Z</value>
-      </time>
-      <waveformID networkCode="JP" stationCode="JNU" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:38:43.18308Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173434.786123.561813">
-      <time>
-        <value>2019-08-25T17:33:30.219538Z</value>
-      </time>
-      <waveformID networkCode="II" stationCode="MSVF" locationCode="00" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:34:34.786148Z</creationTime>
-      </creationInfo>
-    </pick>
-    <pick publicID="Pick/20190825173354.689615.561488">
-      <time>
-        <value>2019-08-25T17:33:11.294538Z</value>
-      </time>
-      <waveformID networkCode="AU" stationCode="EIDS" channelCode="BHZ"/>
-      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
-      <methodID>AIC</methodID>
-      <phaseHint>P</phaseHint>
-      <evaluationMode>automatic</evaluationMode>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautopick@mars</author>
-        <creationTime>2019-08-25T17:33:54.68964Z</creationTime>
+        <creationTime>2019-08-25T17:49:01.952258Z</creationTime>
       </creationInfo>
     </pick>
     <pick publicID="Pick/20190825174903.11772.568539">
@@ -1899,6 +1666,283 @@
         <creationTime>2019-08-25T17:49:03.11775Z</creationTime>
       </creationInfo>
     </pick>
+    <pick publicID="Pick/20190825174903.571047.568546">
+      <time>
+        <value>2019-08-25T17:47:53.219538Z</value>
+      </time>
+      <waveformID networkCode="CM" stationCode="RUS" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:03.571066Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174904.636418.568567">
+      <time>
+        <value>2019-08-25T17:48:33.45Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="MPG" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:04.636447Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174908.681692.568582">
+      <time>
+        <value>2019-08-25T17:48:02.52Z</value>
+      </time>
+      <waveformID networkCode="GR" stationCode="GRA1" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:08.68173Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174926.946583.568704">
+      <time>
+        <value>2019-08-25T17:48:40.35Z</value>
+      </time>
+      <waveformID networkCode="G" stationCode="TAM" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:26.94661Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174930.286038.568740">
+      <time>
+        <value>2019-08-25T17:48:24.169538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="PAB" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:30.286071Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174935.499843.568797">
+      <time>
+        <value>2019-08-25T17:48:20.069538Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="BBSR" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:35.499866Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825174940.962993.568845">
+      <time>
+        <value>2019-08-25T17:47:57.875Z</value>
+      </time>
+      <waveformID networkCode="GT" stationCode="CPUP" locationCode="00" channelCode="BHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T17:49:40.963021Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825182040.983296.583448">
+      <time>
+        <value>2019-08-25T17:48:27.908391Z</value>
+      </time>
+      <waveformID networkCode="ON" stationCode="RIB01" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T18:20:40.983322Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190825183719.605853.591832">
+      <time>
+        <value>2019-08-25T17:48:35.268393Z</value>
+      </time>
+      <waveformID networkCode="ON" stationCode="GUA01" channelCode="HHZ"/>
+      <filterID>ITAPER(4)&gt;&gt;BW(4,1,10)</filterID>
+      <methodID>AIC</methodID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>automatic</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautopick@mars</author>
+        <creationTime>2019-08-25T18:37:19.605882Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.275504.286487">
+      <time>
+        <value>2019-08-25T17:31:44.394761Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="PMG" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.275638Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.275766.286488">
+      <time>
+        <value>2019-08-25T17:32:37.072051Z</value>
+      </time>
+      <waveformID networkCode="IU" stationCode="TARA" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.275833Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276006.286489">
+      <time>
+        <value>2019-08-25T17:33:08.52118Z</value>
+      </time>
+      <waveformID networkCode="II" stationCode="KWJN" locationCode="00" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276069Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276124.286490">
+      <time>
+        <value>2019-08-25T17:33:16.383462Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="GENI" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276185Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276561.286491">
+      <time>
+        <value>2019-08-25T17:34:25.964658Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="WR8" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.276622Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.276958.286492">
+      <time>
+        <value>2019-08-25T17:35:29.649143Z</value>
+      </time>
+      <waveformID networkCode="AU" stationCode="FITZ" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.277018Z</creationTime>
+      </creationInfo>
+    </pick>
+    <pick publicID="Pick/20190826002933.277074.286493">
+      <time>
+        <value>2019-08-25T17:35:35.152741Z</value>
+      </time>
+      <waveformID networkCode="GE" stationCode="SOEI" channelCode="BHZ"/>
+      <filterID>BW(4,1,5)</filterID>
+      <phaseHint>P</phaseHint>
+      <evaluationMode>manual</evaluationMode>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scolv@user</author>
+        <creationTime>2019-08-26T00:29:33.277132Z</creationTime>
+      </creationInfo>
+    </pick>
+    <origin publicID="Origin/20190825181659.570808.275062">
+      <time>
+        <value>2019-08-25T17:28:46.790123Z</value>
+      </time>
+      <latitude>
+        <value>-7.875273228</value>
+      </latitude>
+      <longitude>
+        <value>159.0639191</value>
+      </longitude>
+      <depth>
+        <value>45</value>
+      </depth>
+      <methodID>FocalMechanism</methodID>
+      <earthModelID>qseis_ak135f_continental</earthModelID>
+      <quality>
+        <usedPhaseCount>20</usedPhaseCount>
+        <associatedStationCount>32</associatedStationCount>
+        <usedStationCount>20</usedStationCount>
+        <azimuthalGap>142.3520705</azimuthalGap>
+        <maximumDistance>48.33289858</maximumDistance>
+        <minimumDistance>1.782230831</minimumDistance>
+      </quality>
+      <type>hypocenter</type>
+      <creationInfo>
+        <agencyID>gempa</agencyID>
+        <author>scautomt@mars</author>
+        <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+      </creationInfo>
+      <magnitude publicID="Magnitude/20190825181659.570829.275063">
+        <magnitude>
+          <value>5.38203634</value>
+        </magnitude>
+        <type>Mw</type>
+        <methodID>MT</methodID>
+        <stationCount>20</stationCount>
+        <azimuthalGap>142.3520705</azimuthalGap>
+        <creationInfo>
+          <agencyID>gempa</agencyID>
+          <author>scautomt@mars</author>
+          <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
+        </creationInfo>
+      </magnitude>
+    </origin>
     <origin publicID="Origin/20190826002935.184037.286503">
       <time>
         <value>2019-08-25T17:28:52.37413Z</value>
@@ -3353,50 +3397,6 @@
           <author>scmag@mars</author>
           <creationTime>2019-08-26T00:29:48.972817Z</creationTime>
           <modificationTime>2019-08-26T00:29:49.005702Z</modificationTime>
-        </creationInfo>
-      </magnitude>
-    </origin>
-    <origin publicID="Origin/20190825181659.570808.275062">
-      <time>
-        <value>2019-08-25T17:28:46.790123Z</value>
-      </time>
-      <latitude>
-        <value>-7.875273228</value>
-      </latitude>
-      <longitude>
-        <value>159.0639191</value>
-      </longitude>
-      <depth>
-        <value>45</value>
-      </depth>
-      <methodID>FocalMechanism</methodID>
-      <earthModelID>qseis_ak135f_continental</earthModelID>
-      <quality>
-        <usedPhaseCount>20</usedPhaseCount>
-        <associatedStationCount>32</associatedStationCount>
-        <usedStationCount>20</usedStationCount>
-        <azimuthalGap>142.3520705</azimuthalGap>
-        <maximumDistance>48.33289858</maximumDistance>
-        <minimumDistance>1.782230831</minimumDistance>
-      </quality>
-      <type>hypocenter</type>
-      <creationInfo>
-        <agencyID>gempa</agencyID>
-        <author>scautomt@mars</author>
-        <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
-      </creationInfo>
-      <magnitude publicID="Magnitude/20190825181659.570829.275063">
-        <magnitude>
-          <value>5.38203634</value>
-        </magnitude>
-        <type>Mw</type>
-        <methodID>MT</methodID>
-        <stationCount>20</stationCount>
-        <azimuthalGap>142.3520705</azimuthalGap>
-        <creationInfo>
-          <agencyID>gempa</agencyID>
-          <author>scautomt@mars</author>
-          <creationTime>2019-08-25T18:16:59.570711Z</creationTime>
         </creationInfo>
       </magnitude>
     </origin>
