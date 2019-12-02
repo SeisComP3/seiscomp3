@@ -468,7 +468,7 @@ class FDSNEvent(BaseResource):
                         originIDs.add(oID)
 
             # origins
-            for oID in originIDs:
+            for oID in sorted(originIDs):
                 if req._disconnected:
                     return False
                 obj = dbq.getObject(DataModel.Origin.TypeInfo(), oID)
@@ -533,7 +533,7 @@ class FDSNEvent(BaseResource):
             if not self.checkObjects(req, objCount, maxObj):
                 return False
 
-            for pickID in pickIDs:
+            for pickID in sorted(pickIDs):
                 obj = dbq.getObject(DataModel.Pick.TypeInfo(), pickID)
                 pick = DataModel.Pick.Cast(obj)
                 if pick is not None:

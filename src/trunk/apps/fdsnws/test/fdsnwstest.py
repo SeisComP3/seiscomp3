@@ -229,7 +229,7 @@ class FDSNWSTest:
     #--------------------------------------------------------------------------
     def testGET(self, url, contentType='text/html', data=None,
                 dataFile=None, retCode=200, testID=None, ignoreRanges=[],
-                auth=None):
+                auth=None, diffContent=True):
         if testID is not None:
             print('#{} '.format(testID), end='')
         print('{}: '.format(url), end='')
@@ -252,10 +252,16 @@ class FDSNWSTest:
 
 
         if expected is not None:
-            errPos, errMsg = self.diff(expected, r.content, ignoreRanges)
-            if errPos is not None:
-                raise ValueError('Unexpected content at byte {}: {}'.format(
-                                 errPos, errMsg))
+            if diffContent:
+                errPos, errMsg = self.diff(expected, r.content, ignoreRanges)
+                if errPos is not None:
+                    raise ValueError('Unexpected content at byte {}: {}'.format(
+                                     errPos, errMsg))
+            else:
+                if len(expected) != len(r.content):
+                    raise ValueError('Unexpected content length, expected {}, '
+                                     'got {}'.format(len(expected),
+                                                     len(r.content)))
 
         print('OK')
         sys.stdout.flush()
