@@ -1367,7 +1367,7 @@ class FDSNAvailabilityQuery(_Availability):
                     (ro.mergeSampleRate or
                      s.sampleRate() == seg.sampleRate()) and \
                     ((ro.mergeGaps is None and diff <= jitter) or \
-                     (diff <= ro.mergeGaps)) and \
+                     (ro.mergeGaps is not None and diff <= ro.mergeGaps)) and \
                     (-diff <= jitter or ro.mergeOverlap):
 
                     seg.setEnd(s.end())
