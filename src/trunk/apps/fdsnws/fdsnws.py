@@ -853,7 +853,7 @@ class FDSNWS(Application):
             self._checker = UsernamePasswordChecker(self._userdb)
         else:
             self.access = Access() if self._useArclinkAccess else None
-            self._checker = checkers.FilePasswordDB(self._htpasswd)
+            self._checker = checkers.FilePasswordDB(self._htpasswd, cache=True)
 
         if self._serveDataSelect and self._useArclinkAccess:
             self._access.initFromSC3Routing(self.query().loadRouting())
