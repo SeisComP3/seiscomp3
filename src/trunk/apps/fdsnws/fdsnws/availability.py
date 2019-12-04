@@ -16,6 +16,8 @@ from __future__ import absolute_import, division, print_function
 from future.utils import iteritems
 from functools import cmp_to_key
 
+from collections import OrderedDict
+
 from twisted.cred import portal
 from twisted.internet.threads import deferToThread
 from twisted.web import http, resource, server
@@ -1005,7 +1007,7 @@ class FDSNAvailabilityQuery(_Availability):
                             byteCount += writeSegments(sg.segments)
 
                     ext = line[0]
-                    segGroups = {}
+                    segGroups = OrderedDict()
                     segGroups[s.sampleRate()] = SegGroup([s], s.updated())
                 else:
                     if s.sampleRate() in segGroups:
@@ -1079,7 +1081,7 @@ class FDSNAvailabilityQuery(_Availability):
                             byteCount += writeSegments(sg.segments)
 
                     ext = line[0]
-                    segGroups = {}
+                    segGroups = OrderedDict()
                     segGroups[s.quality()] = SegGroup([s], s.updated())
                 else:
                     if s.quality() in segGroups:
@@ -1153,7 +1155,7 @@ class FDSNAvailabilityQuery(_Availability):
                             byteCount += writeSegments(sg.segments)
 
                     ext = line[0]
-                    segGroups = {}
+                    segGroups = OrderedDict()
                     segGroups[(s.quality(), s.sampleRate())] = \
                         SegGroup([s], s.updated())
                 else:
