@@ -1019,9 +1019,18 @@ class RecordInput(seiscomp3.Core.BaseObject):
         while 1:
             rec = self.next()
             if not rec:
-                raise StopIteration
-
+                return
             yield rec
+
+    def __next__(self):
+        rec = self.next()
+        if not rec:
+            return
+        return rec
+
+    ## for Python 2 compatibility
+    #def next(self):
+    #    return self.__next__()
 
     __swig_destroy__ = _IO.delete_RecordInput
     __del__ = lambda self: None

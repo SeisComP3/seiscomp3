@@ -203,6 +203,10 @@ class CommandLine(_object):
 
     def parse(self, argc, argv):
         """parse(CommandLine self, int argc, char ** argv) -> bool"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         return _Client.CommandLine_parse(self, argc, argv)
 
 
@@ -593,6 +597,10 @@ class Application(seiscomp3.Core.InterruptibleObject):
 
     def __init__(self, argc, argv):
         """__init__(Seiscomp::Client::Application self, int argc, char ** argv) -> Application"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         if self.__class__ == Application:
             _self = None
         else:
@@ -1356,6 +1364,10 @@ class StreamApplication(Application):
 
     def __init__(self, argc, argv):
         """__init__(Seiscomp::Client::StreamApplication self, int argc, char ** argv) -> StreamApplication"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         if self.__class__ == StreamApplication:
             _self = None
         else:
