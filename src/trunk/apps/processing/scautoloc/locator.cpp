@@ -32,20 +32,11 @@ using namespace std;
 
 namespace Autoloc {
 
-Locator::Locator()
-{
-	_count = 0;
-	_usingFixedDepth = false;
-	_minDepth = 5;
-	setFixedDepth(_minDepth, _usingFixedDepth);
+MySensorLocationDelegate::~MySensorLocationDelegate() {
+	_sensorLocations.clear();
 }
 
-Locator::~Locator()
-{
-	SEISCOMP_INFO("Locator instance called %d times", _count);
-}
-
-void Locator::setStation(const Autoloc::Station *station) {
+void MySensorLocationDelegate::setStation(const Autoloc::Station *station) {
 	string key = station->net + "." + station->code;
 
 	Seiscomp::DataModel::SensorLocationPtr
@@ -54,24 +45,53 @@ void Locator::setStation(const Autoloc::Station *station) {
 	sloc->setLatitude(  station->lat  );
 	sloc->setLongitude( station->lon  );
 	sloc->setElevation( station->alt  );
-	_sensorsLocSAT.insert(pair<string,Seiscomp::DataModel::SensorLocationPtr>(key, sloc));
+	_sensorLocations.insert(pair<string,Seiscomp::DataModel::SensorLocationPtr>(key, sloc));
 }
 
-
 Seiscomp::DataModel::SensorLocation *
-Locator::getSensorLocation(Seiscomp::DataModel::Pick *pick) const {
-	if ( _sensorsLocSAT.empty() )
-		return LocSAT::getSensorLocation(pick);
-
+MySensorLocationDelegate::getSensorLocation(Seiscomp::DataModel::Pick *pick) const {
 	if ( !pick ) return NULL;
 
 	std::string key = pick->waveformID().networkCode() + "." + pick->waveformID().stationCode();
 
-	SensorLocationList::const_iterator it = _sensorsLocSAT.find(key);
-	if ( it != _sensorsLocSAT.end() )
+	SensorLocationList::const_iterator it = _sensorLocations.find(key);
+	if ( it != _sensorLocations.end() )
 		return it->second.get();
 
 	return NULL;
+}
+
+Locator::Locator()
+{
+}
+
+bool Locator::init()
+{
+	const std::string locator = "LOCSAT";
+	_sc3locator =
+		Seiscomp::Seismology::LocatorInterface::Create(locator.c_str());
+	if (!_sc3locator) {
+		SEISCOMP_ERROR_S("Could not create "+locator+" instance");
+		exit(-1);
+	}
+	_sc3locator->useFixedDepth(false);
+	_locatorCallCounter = 0;
+	_minDepth = 5;
+	setFixedDepth(_minDepth, false);
+
+	sensorLocationDelegate = new MySensorLocationDelegate;
+	_sc3locator->setSensorLocationDelegate(sensorLocationDelegate.get());
+
+	return true;
+}
+
+Locator::~Locator()
+{
+	SEISCOMP_INFO("Locator instance called %ld times", _locatorCallCounter);
+}
+
+void Locator::setStation(const Autoloc::Station *station) {
+	sensorLocationDelegate->setStation(station);
 }
 
 
@@ -96,7 +116,7 @@ static bool hasFixedDepth(const Origin *origin)
 
 Origin *Locator::relocate(const Origin *origin)
 {
-	_count++;
+	_locatorCallCounter++;
 
 // vvvvvvvvvvvvvvvvv
 // FIXME: This is still needed, but it would be better to get rid of it!
@@ -117,7 +137,7 @@ Origin *Locator::relocate(const Origin *origin)
 
 	if (relo->dep <= _minDepth &&
 	    relo->depthType != Origin::DepthManuallyFixed &&
-	    ! usingFixedDepth()) {
+	    ! _sc3locator->usingFixedDepth()) {
 
 			// relocate again, this time fixing the depth to _minDepth
 			// NOTE: This reconfigures the locator temporarily!
@@ -139,16 +159,6 @@ Origin *Locator::relocate(const Origin *origin)
 	OriginQuality &q = relo->quality;
 	if ( ! determineAzimuthalGaps(relo, &q.aziGapPrimary, &q.aziGapSecondary))
 		q.aziGapPrimary = q.aziGapSecondary = 360.;
-
-	OriginErrorEllipsoid &e = relo->errorEllipsoid;
-	e.sdobs         = errorEllipsoid().sdobs;
-	double norm     = 1./e.sdobs;
-	e.semiMajorAxis = norm*errorEllipsoid().smajax;
-	e.semiMinorAxis = norm*errorEllipsoid().sminax;
-	e.strike        = norm*errorEllipsoid().strike;
-	e.sdepth        = norm*errorEllipsoid().sdepth;
-	e.stime         = norm*errorEllipsoid().stime;
-	e.conf          = errorEllipsoid().conf;
 
 	return relo;
 }
@@ -213,9 +223,9 @@ Origin* Locator::_sc3relocate(const Origin *origin)
 		// FIXME| It is strange: sometimes LocSAT requires a second
 		// FIXME| invocation to produce a decent result. Reason TBD
 		Seiscomp::DataModel::OriginPtr temp;
-		temp    = Seiscomp::LocSAT::relocate(sc3origin.get());
+		temp    = _sc3locator->relocate(sc3origin.get());
 		if (!temp) return NULL;
-		sc3relo = Seiscomp::LocSAT::relocate(temp.get());
+		sc3relo = _sc3locator->relocate(temp.get());
 		if (!sc3relo) return NULL;
 	}
 	catch(Seiscomp::Seismology::LocatorException) {
@@ -293,6 +303,12 @@ Origin* Locator::_sc3relocate(const Origin *origin)
 		}
 */
 	}
+
+	relo->error.sdobs  = 1; // FIXME
+	double norm        = 1./relo->error.sdobs;
+	relo->error.sdepth = norm*sc3relo->depth().uncertainty() * 1.8;
+	relo->error.stime  = norm*sc3relo->time().uncertainty()  * 1.8;
+	relo->error.conf   = 0; // FIXME
 
 	return relo;
 }

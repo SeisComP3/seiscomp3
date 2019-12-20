@@ -23,6 +23,7 @@
 #include "autoloc.h"
 
 using namespace std;
+
 namespace Autoloc {
 
 static bool valid(const Pick *pick)
@@ -83,6 +84,9 @@ Autoloc3::~Autoloc3()
 
 bool Autoloc3::init()
 {
+        if ( ! _relocator.init())
+                return false;
+
 	_relocator.setMinimumDepth(_config.minimumDepth);
 
 	if ( ! _config.staConfFile.empty()) {
@@ -91,6 +95,11 @@ bool Autoloc3::init()
 		if ( ! _stationConfig.read(_config.staConfFile) )
 		    return false;
 	}
+
+        if ( ! _nucleator.init())
+                return false;
+
+	setLocatorProfile(_config.locatorProfile);
 
 	return true; // ready to start processing
 }
@@ -2782,7 +2791,6 @@ void Autoloc3::setLocatorProfile(const string &profile) {
 
 void Autoloc3::setConfig(const Config &config) {
 	_config = config;
-	setLocatorProfile(_config.locatorProfile);
 }
 
 
@@ -2934,16 +2942,16 @@ bool Autoloc3::_depthIsResolvable(Origin *origin)
 	if (relo) {
 #ifdef EXTRA_DEBUGGING
 		SEISCOMP_DEBUG("_depthIsResolvable for origin %ld: dep=%.1f smaj=%.1f sdep=%.1f stim=%.1f",
-			       origin->id, relo->dep, relo->errorEllipsoid.semiMajorAxis, relo->errorEllipsoid.sdepth, relo->errorEllipsoid.stime);
+			       origin->id, relo->dep, relo->error.semiMajorAxis, relo->error.sdepth, relo->error.stime);
 #endif
-		if (relo->errorEllipsoid.sdepth > 0.) {
-			if (relo->errorEllipsoid.sdepth < 15*relo->errorEllipsoid.stime) {
+		if (relo->error.sdepth > 0.) {
+			if (relo->error.sdepth < 15*relo->error.stime) {
 #ifdef EXTRA_DEBUGGING
 				SEISCOMP_DEBUG("_depthIsResolvable passed for origin %ld (using new criterion A)", origin->id);
 #endif
 				return true;
 			}
-			if (relo->errorEllipsoid.sdepth < 0.7*relo->dep) {
+			if (relo->error.sdepth < 0.7*relo->dep) {
 #ifdef EXTRA_DEBUGGING
 				SEISCOMP_DEBUG("_depthIsResolvable passed for origin %ld (using new criterion B)", origin->id);
 #endif

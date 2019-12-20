@@ -181,12 +181,12 @@ class OriginQuality
 
 
 
-class OriginErrorEllipsoid
+class OriginError
 {
   public:
-	OriginErrorEllipsoid() : semiMajorAxis(0), semiMinorAxis(0), strike(0), sdepth(0), stime(0), sdobs(0), conf(0) {}
+	OriginError() : sdepth(0), stime(0), sdobs(0), conf(0) {}
 
-	double semiMajorAxis, semiMinorAxis, strike, sdepth, stime, sdobs, conf;
+	double sdepth, stime, sdobs, conf;
 };
 
 
@@ -264,7 +264,7 @@ class Origin : public Hypocenter {
 	DepthType depthType;
 	ArrivalVector arrivals;
 	OriginQuality quality;
-	OriginErrorEllipsoid errorEllipsoid;
+	OriginError error;
 
   public:
 	Seiscomp::DataModel::OriginCPtr sc3manual;

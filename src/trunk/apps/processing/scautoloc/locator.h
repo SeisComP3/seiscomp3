@@ -13,8 +13,8 @@
 
 
 
-#ifndef _SEISCOMP_AUTOLOC_LOCATOR_
-#define _SEISCOMP_AUTOLOC_LOCATOR_
+#ifndef SEISCOMP_AUTOLOC_LOCATOR
+#define SEISCOMP_AUTOLOC_LOCATOR
 #include <string>
 #include <map>
 
@@ -23,33 +23,57 @@
 
 namespace Autoloc {
 
-class Locator : public Seiscomp::LocSAT {
+DEFINE_SMARTPOINTER(MySensorLocationDelegate);
+
+class MySensorLocationDelegate : public Seiscomp::Seismology::SensorLocationDelegate
+{
+	public:
+		~MySensorLocationDelegate();
+	public:
+		virtual Seiscomp::DataModel::SensorLocation* getSensorLocation(Seiscomp::DataModel::Pick *pick) const;
+		void setStation(const Station *station);
+	private:
+		typedef std::map<std::string, Seiscomp::DataModel::SensorLocationPtr> SensorLocationList;
+		SensorLocationList _sensorLocations;
+};
+
+class Locator {
 	public:
 		Locator();
 		~Locator();
 
+		bool init();
 		void setStation(const Station *station);
 		void setMinimumDepth(double);
+
+		void setFixedDepth(double depth, bool use=true) {
+			_sc3locator->setFixedDepth(depth, use);
+		}
+
+		void useFixedDepth(bool use=true) {
+			_sc3locator->useFixedDepth(use);
+		}
+
+		void setProfile(const std::string &name) {
+			_sc3locator->setProfile(name);
+		}
 
 	public:
 		Origin *relocate(const Origin *origin);
 
-
-	protected:
-		Seiscomp::DataModel::SensorLocation *getSensorLocation(Seiscomp::DataModel::Pick *pick) const;
 
 	private:
 		// this is the SC3-level relocate
 		Origin *_sc3relocate(const Origin *origin);
 
 	private:
-		typedef std::map<std::string, Seiscomp::DataModel::SensorLocationPtr> SensorLocationList;
+		Seiscomp::Seismology::LocatorInterfacePtr _sc3locator;
 
-		SensorLocationList _sensorsLocSAT;
+		MySensorLocationDelegatePtr sensorLocationDelegate;
+
 		double _minDepth;
 
-		// count the relocate() calls
-		int _count;
+		size_t _locatorCallCounter;
 };
 
 

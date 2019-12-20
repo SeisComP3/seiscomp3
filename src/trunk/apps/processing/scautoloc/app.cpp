@@ -203,8 +203,6 @@ bool App::validateParameters() {
 
 	_config.maxResidualKeep = 3*_config.maxResidualUse;
 
-	setConfig(_config);
-
 	return Client::Application::validateParameters();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -342,6 +340,7 @@ bool App::init() {
 	_outputOrgs = addOutputObjectLog("origin", primaryMessagingGroup());
 
 	SEISCOMP_INFO("Starting Autoloc");
+	setConfig(_config);
 	dumpConfig();
 	if ( ! setGridFile(_gridConfigFile) )
 		return false;

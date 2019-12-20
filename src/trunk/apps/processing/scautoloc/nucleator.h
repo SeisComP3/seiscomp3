@@ -33,6 +33,7 @@ namespace Autoloc {
 class Nucleator
 {
 	public:
+		virtual bool init() = 0;
 		virtual void setStation(const Station *station);
 	public:
 		virtual bool feed(const Pick *pick) = 0;
@@ -68,6 +69,7 @@ class GridSearch : public Nucleator
 {
 	public:
 		GridSearch();
+		virtual bool init();
 
 	public:
 		// Configuration parameters controlling the behaviour of the Nucleator
