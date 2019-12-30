@@ -2,6 +2,13 @@
 
 ## Release YYYY.ddd
 
+* scqcv
+
+  * Expose more configuration parameters to scconfig
+  * Change the default value of streams.cumulative to false to show
+    only stream configured in streams.codes
+  * Correct some default values of the parameter "parameter"
+
 * scesv
 
   * Fixed region filter with event list which did not work correctly
@@ -11,6 +18,7 @@
 
   * Added description of plugin configuration parameters. Default for writing
    to the database is false.
+  * Added more QC parameters to the documentation
 
 * scconfig
 

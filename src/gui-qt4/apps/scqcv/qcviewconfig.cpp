@@ -97,7 +97,7 @@ bool QcViewConfig::init() {
 	catch (Seiscomp::Config::Exception &) {_streamWidgetLength = 600.0;}
 
 	try { _cumulative = _app->configGetBool("streams.cumulative");}
-	catch (Seiscomp::Config::Exception &) {_cumulative = true;}
+	catch (Seiscomp::Config::Exception &) {_cumulative = false;}
 
 	return true;
 }
