@@ -253,7 +253,7 @@ QcItemView::QcItemView(QWidget *parent)
 
 	QGroupBox* infoWidget = new QGroupBox(this);
 	infoWidget->setTitle("Detailed Info");
-	infoWidget->setToolTip("Displays detailed Qc Parameter Info for the selected Stream");
+	infoWidget->setToolTip("Displays detailed QC Parameter Info for the selected Stream");
 	infoWidget->setFlat(false);
 	_infoWidget = infoWidget;
 	_infoWidget->hide();
