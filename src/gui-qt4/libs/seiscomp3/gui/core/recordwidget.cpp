@@ -4386,8 +4386,9 @@ RecordMarker *RecordWidget::takeMarker(int pos) {
 
 	if ( pos >= 0 ) {
 		RecordMarker *m = _marker[pos];
-		if ( m == _activeMarker )
-			_activeMarker = NULL;
+		if ( m == _activeMarker ) {
+			setCurrentMarker(NULL);
+		}
 		if ( m == _hoveredMarker )
 			_hoveredMarker = NULL;
 		m->setParent(NULL);
