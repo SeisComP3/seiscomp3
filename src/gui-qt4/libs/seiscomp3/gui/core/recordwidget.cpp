@@ -2591,14 +2591,15 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 	painter.setClipRect(rect);
 	painter.translate(_canvasRect.left(), _canvasRect.top());
 
-	if ( hasFocus() ) {
-		bg = blend(bg, palette().color(QPalette::Highlight), 90);
-		painter.fillRect(rect, bg);
-	}
-
 	int sel_xmin = int((_smin-_tmin)*_pixelPerSecond),
-	    sel_xmax = int((_smax-_tmin)*_pixelPerSecond),
-	    sel_w = sel_xmax - sel_xmin;
+	    sel_xmax = int((_smax-_tmin)*_pixelPerSecond);
+
+	if ( sel_xmin < 0 ) sel_xmin = 0;
+	if ( sel_xmin > _canvasRect.width() ) sel_xmin = _canvasRect.width();
+	if ( sel_xmax < 0 ) sel_xmax = 0;
+	if ( sel_xmax > _canvasRect.width() ) sel_xmax = _canvasRect.width();
+
+	int sel_w = sel_xmax - sel_xmin;
 
 	bool emitUpdated = false;
 
