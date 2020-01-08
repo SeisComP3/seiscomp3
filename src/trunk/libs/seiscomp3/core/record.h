@@ -50,7 +50,15 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 			SAVE_RAW,
 			H_QUANTITY
 		};
-	
+
+		//! This enum was introduced with API 13
+		enum Authentication {
+			NOT_SIGNED,
+			SIGNATURE_VALIDATED,
+			SIGNATURE_VALIDATION_FAILED,
+			A_QUANTITY
+		};
+
 
 	// ----------------------------------------------------------------------
 	//  X'truction
@@ -142,7 +150,27 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 
 		//! Sets the hint used for data operations
 		void setHint(Hint h);
-	
+
+		/**
+		 * @brief Sets the authentication state.
+		 * This function was introduced with API 13.
+		 * @param auth The authentication status
+		 */
+		void setAuthentication(Authentication auth);
+
+		//! This function was introduced with API 13
+		Authentication authentication() const;
+
+		/**
+		 * @brief Sets the authentication authority
+		 * This function was introduced with API 13.
+		 * @param authority The authority which signed the record
+		 */
+		void setAuthority(const std::string &authority);
+
+		//! This function was introduced with API 13
+		const std::string &authority() const;
+
 
 	// ----------------------------------------------------------------------
 	//  Public data access
@@ -190,6 +218,8 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 		int             _nsamp;
 		double          _fsamp;
 		int             _timequal;
+		Authentication  _authenticationStatus;
+		std::string     _authority;
 };
 
 
@@ -197,6 +227,15 @@ DEFINE_INTERFACE_FACTORY(Record);
 
 #define REGISTER_RECORD(Class, Service) \
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Record, Class> __##Class##InterfaceFactory__(Service)
+
+
+inline Record::Authentication Record::authentication() const {
+	return _authenticationStatus;
+}
+
+inline const std::string &Record::authority() const {
+	return _authority;
+}
 
 
 }

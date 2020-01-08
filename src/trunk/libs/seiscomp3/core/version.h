@@ -44,6 +44,7 @@ namespace Core {
    - Added enums ZEP and REP to Seiscomp::Core::GreensfunctionComponent
    - Added Seiscomp::DataModel::touch(obj)
    - Changed database oid type to 64bit
+   - Added Record::authentication and Record::authority
 
  "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage
