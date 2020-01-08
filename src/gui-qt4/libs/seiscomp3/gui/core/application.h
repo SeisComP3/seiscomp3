@@ -36,6 +36,8 @@
 #define SCApp (Seiscomp::Gui::Application::Instance())
 #define SCScheme (SCApp->scheme())
 
+class QAbstractItemView;
+class QHeaderView;
 class QSplashScreen;
 
 namespace Seiscomp {
@@ -91,8 +93,7 @@ struct MessageGroups {
 };
 
 
-class SC_GUI_API Application : public QApplication,
-                               public Client::Application {
+class SC_GUI_API Application : public QObject, public Client::Application {
 	Q_OBJECT
 
 	public:
@@ -130,6 +131,12 @@ class SC_GUI_API Application : public QApplication,
 			                         INTERPRETE_NOTIFIER
 		};
 
+		enum Type {
+			//! Console application
+			Tty,
+			//! GUI client application
+			GuiClient
+		};
 
 	public:
 		Application(int& argc, char **argv, int flags = DEFAULT, Type type = GuiClient);
@@ -147,6 +154,8 @@ class SC_GUI_API Application : public QApplication,
 		//! Copies all selected items of specified item view to clipboard as CSV
 		static void copyToClipboard(const QAbstractItemView* view,
 		                            const QHeaderView *header = NULL);
+
+		Type type() const;
 
 		void setDatabaseSOHInterval(int secs);
 
@@ -195,6 +204,12 @@ class SC_GUI_API Application : public QApplication,
 		//! This method allows to emit notifier locally. They are not being sent over
 		//! the messaging but interpreted and signalled to other local components.
 		void emitNotifier(Seiscomp::DataModel::Notifier* n);
+
+		QFont font() const;
+		void setFont(const QFont &font);
+
+		QPalette palette() const;
+		void setPalette(const QPalette &pal);
 
 	protected:
 		virtual bool init();
@@ -270,11 +285,17 @@ class SC_GUI_API Application : public QApplication,
 		void createSettingsDialog();
 		ConnectionDialog *cdlg();
 
+	protected:
+		Type                _type;
+		QCoreApplication   *_app;
+		QFont               _font;
+		QPalette            _palette;
+
 
 	private:
 		static Application* _instance;
 
-		Scheme              _scheme;
+		Scheme             *_scheme;
 		mutable QSettings  *_settings;
 		QTimer              _timerSOH;
 		Core::Time          _lastSOH;

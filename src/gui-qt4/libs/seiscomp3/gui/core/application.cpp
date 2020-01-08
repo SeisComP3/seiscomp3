@@ -28,8 +28,13 @@
 #include <seiscomp3/utils/files.h>
 #include <seiscomp3/utils/misc.h>
 
-#include <QSplashScreen>
+#include <QHeaderView>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
 #include <QMessageBox>
+#include <QSplashScreen>
+
 #include <set>
 #include <iostream>
 #include <string>
@@ -226,8 +231,7 @@ Application* Application::_instance = NULL;
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Application::Application(int& argc, char **argv, int flags, Type type)
-: QApplication(argc, argv, type)
-, Client::Application(argc, argv)
+    : QObject(), Client::Application(argc, argv)
 , _settings(NULL)
 , _intervalSOH(60)
 , _readOnlyMessaging(false)
@@ -236,9 +240,13 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 , _dlgConnection(NULL)
 , _settingsOpened(false)
 , _flags(flags) {
-
-	if ( type == Tty )
+	_type = type;
+	if ( type == Tty ) {
 		_flags &= ~SHOW_SPLASH;
+		_app = new QCoreApplication(argc, argv, flags);
+	}
+	else
+		_app = new QApplication(argc, argv, flags);
 
 	setDaemonEnabled(false);
 
@@ -251,9 +259,15 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 
 	_instance = this;
 
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+	// Sceme must be created after the instance has been initialized
+	// because it uses SCApp pointer
+	_scheme = new Scheme();
+
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+#if QT_VERSION < 0x050000
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+#endif
 
 	_guiGroup = "GUI";
 	_thread = NULL;
@@ -307,6 +321,8 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 Application::~Application() {
 	if ( _dlgConnection ) delete _dlgConnection;
 	if ( _settings ) delete _settings;
+	if ( _scheme ) delete _scheme;
+	if ( _app ) delete _app;
 #ifndef WIN32
 	close(_signalSocketFd[0]);
 	close(_signalSocketFd[1]);
@@ -332,6 +348,15 @@ bool Application::minQtVersion(const char *ver) {
 	QString sq = qVersion();
 	return ((sq.section('.',0,0).toInt()<<16)+(sq.section('.',1,1).toInt()<<8)+sq.section('.',2,2).toInt()>=
 	       (s.section('.',0,0).toInt()<<16)+(s.section('.',1,1).toInt()<<8)+s.section('.',2,2).toInt());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Application::Type Application::type() const {
+	return _type;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -527,7 +552,7 @@ void Application::setDatabaseSOHInterval(int secs) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme& Application::scheme() {
-	return _scheme;
+	return *_scheme;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -802,10 +827,10 @@ bool Application::initConfiguration() {
 		return false;
 
 	QPalette pal;
-	_scheme.colors.background = pal.color(QPalette::Window);
-	_scheme.fetch();
+	_scheme->colors.background = pal.color(QPalette::Window);
+	_scheme->fetch();
 
-	pal.setColor(QPalette::Window, _scheme.colors.background);
+	pal.setColor(QPalette::Window, _scheme->colors.background);
 #if QT_VERSION >= 0x040300
 	// Keep original Qt settings for buttons. This can be achieved by
 	// using a custom StyleSheet:
@@ -814,7 +839,10 @@ bool Application::initConfiguration() {
 	//  QPushButton { background-color: red }
 	//pal.setColor(QPalette::Button, _scheme.colors.background.lighter(110));
 #endif
-	setPalette(pal);
+
+	if ( _type == GuiClient) {
+		dynamic_cast<QApplication*>(_app)->setPalette(pal);
+	}
 
 	try { _mapsDesc.location = configGetString("map.location").c_str(); }
 	catch (...) { _mapsDesc.location = "@DATADIR@/maps/world%s.png"; }
@@ -885,8 +913,8 @@ bool Application::initConfiguration() {
 	}
 	catch (...) {}
 
-	setOrganizationName(agencyID().c_str());
-	setApplicationName(name().c_str());
+	_app->setOrganizationName(agencyID().c_str());
+	_app->setApplicationName(name().c_str());
 
 	return true;
 }
@@ -959,7 +987,7 @@ bool Application::validateParameters() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::initSubscriptions() {
-	if ( type() == QApplication::Tty )
+	if ( _type == Tty )
 		return Client::Application::initSubscriptions();
 	else
 		return true;
@@ -988,7 +1016,7 @@ bool Application::initLicense() {
 		License::printWarning(std::cout);
 		std::cout << std::endl << "Exiting..." << std::endl;
 
-		if ( type() != QApplication::Tty ) {
+		if ( _type != Tty ) {
 			std::stringstream ss;
 			License::printWarning(ss);
 			QMessageBox::critical(NULL, "License error",
@@ -1054,10 +1082,10 @@ bool Application::init() {
 
 	if ( _intervalSOH > 0 ) _timerSOH.setInterval(_intervalSOH*1000);
 
-	if ( !result && (_exitRequested || (type() == QApplication::Tty)) )
+	if ( !result && (_exitRequested || (_type == Tty)) )
 		return false;
 
-	if ( isMessagingEnabled() && (type() != QApplication::Tty) ) {
+	if ( isMessagingEnabled() && (_type != Tty) ) {
 		if ( !cdlg()->hasConnectionChanged() ) {
 			const set<string>& subscriptions = subscribedGroups();
 			QStringList groups;
@@ -1072,7 +1100,7 @@ bool Application::init() {
 		}
 	}
 
-	if ( isDatabaseEnabled() && (type() != QApplication::Tty) ) {
+	if ( isDatabaseEnabled() && (_type != Tty) ) {
 		cdlg()->setDefaultDatabaseParameters(_db.c_str());
 
 		if ( !cdlg()->hasDatabaseChanged() )
@@ -1081,7 +1109,7 @@ bool Application::init() {
 		cdlg()->connectToDatabase();
 	}
 
-	if ( !_settingsOpened && isMessagingEnabled() && (type() != QApplication::Tty) )
+	if ( !_settingsOpened && isMessagingEnabled() && (_type != Tty) )
 		cdlg()->connectToMessaging();
 
 	/*
@@ -1130,7 +1158,8 @@ ConnectionDialog *Application::cdlg() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::createSettingsDialog() {
 	if ( _dlgConnection ) return;
-	if ( type() == QApplication::Tty )
+
+	if ( _type == Tty )
 		return;
 
 	_dlgConnection = new ConnectionDialog(&_connection, &_database);
@@ -1152,7 +1181,7 @@ void Application::createSettingsDialog() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::handleInitializationError(Stage stage) {
-	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) ) {
+	if ( (_type == Tty) || (stage != MESSAGING && stage != DATABASE) ) {
 		if ( stage == PLUGINS ) {
 			std::cerr << "Failed to load plugins: check the log for more details" << std::endl;
 			this->exit(1);
@@ -1210,8 +1239,7 @@ bool Application::run() {
 	startMessageThread();
 	if ( _thread ) _thread->setReconnectOnErrorEnabled(true);
 
-	connect(this, SIGNAL(lastWindowClosed()),
-	        this, SLOT(closedLastWindow()));
+	connect(_app, SIGNAL(lastWindowClosed()), this, SLOT(closedLastWindow()));
 
 	connect(&_timerSOH, SIGNAL(timeout()), this, SLOT(timerSOH()));
 	_lastSOH = Core::Time::LocalTime();
@@ -1253,7 +1281,7 @@ void Application::showMessage(const char* msg) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::showWarning(const char* msg) {
-	if ( type() != QApplication::Tty )
+	if ( _type != Tty )
 		QMessageBox::warning(NULL, "Warning", msg);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1264,7 +1292,7 @@ void Application::showWarning(const char* msg) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::notify(QObject *receiver, QEvent *e) {
 	try {
-		return QApplication::notify(receiver, e);
+		return _app->notify(receiver, e);
 	}
 	catch ( std::exception &e ) {
 		SEISCOMP_ERROR("An exception occurred while calling an event handler: %s", e.what());
@@ -1296,7 +1324,8 @@ bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 	bool result = false;
 
 	if ( _readOnlyMessaging ) {
-		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		QMessageBox::critical(dynamic_cast<QApplication*>(_app)->activeWindow(),
+		                      tr("Read-only connection"),
 		                      tr("This is a read-only session. No message has been sent."));
 		return false;
 	}
@@ -1311,7 +1340,7 @@ bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 
 	if ( result ) return true;
 
-	QMessageBox msgBox(activeWindow());
+	QMessageBox msgBox(dynamic_cast<QApplication*>(_app)->activeWindow());
 	QPushButton *settingsButton = msgBox.addButton(tr("Setup connection"), QMessageBox::ActionRole);
 	QPushButton *retryButton = msgBox.addButton(tr("Retry"), QMessageBox::ActionRole);
 	QPushButton *abortButton = msgBox.addButton(QMessageBox::Abort);
@@ -1614,7 +1643,7 @@ void Application::emitNotifier(Notifier* n) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::onConnectionEstablished() {
-	if ( type() != QApplication::Tty)
+	if ( _type != Tty)
 		cdlg()->connectToMessaging();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1624,7 +1653,7 @@ void Application::onConnectionEstablished() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::onConnectionLost() {
-	if ( type() != QApplication::Tty)
+	if ( _type != Tty)
 		cdlg()->onConnectionError(0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1634,7 +1663,7 @@ void Application::onConnectionLost() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::connectionError(int code) {
-	if ( type() == QApplication::Tty) return;
+	if ( _type == Tty) return;
 
 	if ( _connection && !_connection->isConnected() ) {
 		SEISCOMP_ERROR("Connection went away...");
@@ -1658,7 +1687,9 @@ void Application::objectDestroyed(QObject* o) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Application::closedLastWindow() {}
+void Application::closedLastWindow() {
+	if ( _app ) _app->quit();
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -1669,7 +1700,7 @@ void Application::exit(int returnCode) {
 	if ( _thread )
 		_thread->setReconnectOnErrorEnabled(false);
 
-	if ( qApp ) qApp->quit();
+	if ( _app ) _app->exit(returnCode);
 
 	Client::Application::exit(returnCode);
 
@@ -1710,7 +1741,8 @@ void Application::sendCommand(Command command, const std::string& parameter) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::sendCommand(Command command, const std::string& parameter, Core::BaseObject *obj) {
 	if ( _readOnlyMessaging ) {
-		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		QMessageBox::critical(dynamic_cast<QApplication*>(_app)->activeWindow(),
+		                      tr("Read-only connection"),
 		                      tr("This is a read-only session. No message has been sent."));
 		return;
 	}
@@ -1729,6 +1761,62 @@ void Application::sendCommand(Command command, const std::string& parameter, Cor
 	cmsg->setObject(obj);
 	if ( connection() )
 		connection()->send(_guiGroup, cmsg.get());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QFont Application::font() const {
+	if ( _type == Tty ) {
+		return _font;
+	}
+	else {
+		return dynamic_cast<QApplication*>(_app)->font();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::setFont(const QFont &font) {
+	if ( _type == Tty ) {
+		_font = font;
+	}
+	else {
+		return dynamic_cast<QApplication*>(_app)->setFont(font);
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QPalette Application::palette() const {
+	if ( _type == Tty ) {
+		return _palette;
+	}
+	else {
+		return dynamic_cast<QApplication*>(_app)->palette();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::setPalette(const QPalette &pal) {
+	if ( _type == Tty ) {
+		_palette = pal;
+	}
+	else {
+		return dynamic_cast<QApplication*>(_app)->setPalette(pal);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
