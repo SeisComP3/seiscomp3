@@ -28,11 +28,11 @@ extern "C" {
 }
 
 
-namespace Gempa {
+namespace Seiscomp {
 namespace Plugins {
 
 
-class ILoc : public Seiscomp::Seismology::LocatorInterface {
+class ILoc : public Seismology::LocatorInterface {
 	// ----------------------------------------------------------------------
 	//  X'truction
 	// ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ class ILoc : public Seiscomp::Seismology::LocatorInterface {
 	// ----------------------------------------------------------------------
 	public:
 		//! Initializes the locator.
-		virtual bool init(const Seiscomp::Config::Config &config);
+		virtual bool init(const Config::Config &config);
 
 		//! Returns supported parameters to be changed.
 		virtual IDList parameters() const;
@@ -71,13 +71,13 @@ class ILoc : public Seiscomp::Seismology::LocatorInterface {
 		//! Capability enums.
 		virtual int capabilities() const;
 
-		virtual Seiscomp::DataModel::Origin *locate(PickList &pickList)
+		virtual DataModel::Origin *locate(PickList &pickList)
 		;
 
-		virtual Seiscomp::DataModel::Origin *locate(PickList &pickList,
-		                                            double initLat, double initLon, double initDepth,
-		                                            const Seiscomp::Core::Time &initTime);
-		virtual Seiscomp::DataModel::Origin *relocate(const Seiscomp::DataModel::Origin *origin);
+		virtual DataModel::Origin *locate(PickList &pickList,
+		                                  double initLat, double initLon, double initDepth,
+		                                  const Core::Time &initTime);
+		virtual DataModel::Origin *relocate(const DataModel::Origin *origin);
 
 		virtual std::string lastMessage(MessageType) const;
 
@@ -87,7 +87,8 @@ class ILoc : public Seiscomp::Seismology::LocatorInterface {
 	// ----------------------------------------------------------------------
 	private:
 		void prepareAuxFiles();
-		Seiscomp::DataModel::Origin *fromPicks(PickList &picks);
+		void initProfiles(const Config::Config *config, const std::string &auxdir);
+		DataModel::Origin *fromPicks(PickList &picks);
 
 
 	// ----------------------------------------------------------------------
@@ -117,22 +118,22 @@ class ILoc : public Seiscomp::Seismology::LocatorInterface {
 			bool         valid;
 		};
 
-		ILOC_CONF            _config;
-		AuxData              _aux;
-		bool                 _auxDirty;
+		std::vector<ILOC_CONF> _profileConfigs;
+		ILOC_CONF             *_currentConfig;
+		AuxData                _aux;
+		bool                   _auxDirty;
 
-		IDList               _profiles;
-		void                *_params;
+		IDList                 _profiles;
 		//! Minimum arrival weight to regard an arrival as defining,
 		//! default is 0.5
-		double               _minArrivalWeight;
-		double               _defaultPickUncertainty;
-		bool                 _usePickUncertainties;
-		bool                 _fixTime;
-		bool                 _fixLocation;
+		double                 _minArrivalWeight;
+		double                 _defaultPickUncertainty;
+		bool                   _usePickUncertainties;
+		bool                   _fixTime;
+		bool                   _fixLocation;
 
-		std::string          _tablePrefix;
-		std::string          _tableDir;
+		std::string            _tablePrefix;
+		std::string            _tableDir;
 };
 
 
