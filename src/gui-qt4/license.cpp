@@ -265,7 +265,6 @@ bool isValid() {
 		EVP_PKEY* pkey=X509_get_pubkey(x509);
 		if ( !pkey ) {
 			X509_free(x509);
-			EVP_cleanup();
 			cerr << "FATAL ERROR: License verification has failed: " << path.string() << endl;
 			return false;
 		}
@@ -274,7 +273,6 @@ bool isValid() {
 		if ( res != 1 ) {
 			X509_free(x509);
 			EVP_PKEY_free(pkey);
-			EVP_cleanup();
 			cerr << "FATAL ERROR: License verification has failed: " << path.string() << endl;
 			return false;
 		}
@@ -287,8 +285,6 @@ bool isValid() {
 
 		EVP_PKEY_free(pkey);
 		X509_free(x509);
-
-		EVP_cleanup();
 
 		return true;
 	}
