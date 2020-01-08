@@ -600,72 +600,63 @@ bool App::dispatchResponse(QLClient *client, const IO::QuakeLink::Response *msg)
 			SEISCOMP_ERROR("Content-Type of message not set to text");
 			return false;
 		}
-		// search event to delete in cache
-		Event *event = Event::Cast(_cache.find(Event::TypeInfo(), msg->data));
 
-		// if event was not found in cache but loaded from database, all of its
-		// child objects have to be loaded too
-		if ( event && !_cache.cached() && query() ) {
-			query()->load(event);
-			PublicObjectCacheFeeder(_cache).feed(event, true);
-		}
-
-		MyDiff diff;
-		diff.diff(event, NULL, "EventParameters", notifiers, logNode.get());
+		// Event removal will be ignored
+		return true;
 	}
+
 	// event update
-	else {
-		if ( msg->type != IO::QuakeLink::ctXML ) {
-			SEISCOMP_ERROR("Content-Type of message not set to XML");
-			return false;
-		}
+	if ( msg->type != IO::QuakeLink::ctXML ) {
+		SEISCOMP_ERROR("Content-Type of message not set to XML");
+		return false;
+	}
 
-		if ( !loadEventParam(ep, msg->data, msg->gzip) ) return false;
+	if ( !loadEventParam(ep, msg->data, msg->gzip) )
+		return false;
 
-		const string &epID = ep->publicID();
+	const string &epID = ep->publicID();
 
-		// check if routing for EventParameters exists
-		string epRouting;
-		rt_it = routing.find(ep->typeInfo().className());
-		if ( rt_it != routing.end() ) epRouting = rt_it->second;
+	// check if routing for EventParameters exists
+	string epRouting;
+	rt_it = routing.find(ep->typeInfo().className());
+	if ( rt_it != routing.end() ) epRouting = rt_it->second;
 
-		// Picks
-		if ( !epRouting.empty() ||
-		     routing.find(Pick::TypeInfo().className()) != routing.end() ) {
-			for ( size_t i = 0; i < ep->pickCount(); ++i )
-				diffPO(ep->pick(i), epID, notifiers, logNode.get());
-		}
+	// Picks
+	if ( !epRouting.empty() ||
+		 routing.find(Pick::TypeInfo().className()) != routing.end() ) {
+		for ( size_t i = 0; i < ep->pickCount(); ++i )
+			diffPO(ep->pick(i), epID, notifiers, logNode.get());
+	}
 
-		// Amplitudes
-		if ( !epRouting.empty() ||
-		     routing.find(Amplitude::TypeInfo().className()) != routing.end() ) {
-			for ( size_t i = 0; i < ep->amplitudeCount(); ++i )
-				diffPO(ep->amplitude(i), epID, notifiers, logNode.get());
-		}
+	// Amplitudes
+	if ( !epRouting.empty() ||
+		 routing.find(Amplitude::TypeInfo().className()) != routing.end() ) {
+		for ( size_t i = 0; i < ep->amplitudeCount(); ++i )
+			diffPO(ep->amplitude(i), epID, notifiers, logNode.get());
+	}
 
-		// Origins
-		if ( !epRouting.empty() ||
-		     routing.find(Origin::TypeInfo().className()) != routing.end() ) {
-			for ( size_t i = 0; i < ep->originCount(); ++i )
-				diffPO(ep->origin(i), epID, notifiers, logNode.get());
-		}
+	// Origins
+	if ( !epRouting.empty() ||
+		 routing.find(Origin::TypeInfo().className()) != routing.end() ) {
+		for ( size_t i = 0; i < ep->originCount(); ++i )
+			diffPO(ep->origin(i), epID, notifiers, logNode.get());
+	}
 
-		// FocalMechanisms
-		if ( !epRouting.empty() ||
-		     routing.find(FocalMechanism::TypeInfo().className()) != routing.end() ) {
-			for ( size_t i = 0; i < ep->focalMechanismCount(); ++i )
-				diffPO(ep->focalMechanism(i), epID, notifiers, logNode.get());
-		}
+	// FocalMechanisms
+	if ( !epRouting.empty() ||
+		 routing.find(FocalMechanism::TypeInfo().className()) != routing.end() ) {
+		for ( size_t i = 0; i < ep->focalMechanismCount(); ++i )
+			diffPO(ep->focalMechanism(i), epID, notifiers, logNode.get());
+	}
 
-		// Events
-		if ( !epRouting.empty() ||
-		     routing.find(Event::TypeInfo().className()) != routing.end() ) {
-			RoutingTable::const_iterator it;
-			it = routing.find(Event::TypeInfo().className());
-			if ( it != routing.end() && !it->second.empty() ) {
-				for ( size_t i = 0; i < ep->eventCount(); ++i )
-					diffPO(ep->event(i), epID, notifiers, logNode.get());
-			}
+	// Events
+	if ( !epRouting.empty() ||
+		 routing.find(Event::TypeInfo().className()) != routing.end() ) {
+		RoutingTable::const_iterator it;
+		it = routing.find(Event::TypeInfo().className());
+		if ( it != routing.end() && !it->second.empty() ) {
+			for ( size_t i = 0; i < ep->eventCount(); ++i )
+				diffPO(ep->event(i), epID, notifiers, logNode.get());
 		}
 	}
 
