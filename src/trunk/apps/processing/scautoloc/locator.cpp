@@ -159,6 +159,12 @@ Origin* Locator::_sc3relocate(const Origin *origin)
 	// convert origin to SC3, relocate, and convert the result back
 
 	Seiscomp::DataModel::OriginPtr sc3origin = convertToSC3(origin);
+	if ( sc3origin==NULL ) {
+		// give up
+		SEISCOMP_ERROR("Unexpected failure to relocate origin");
+		return NULL;
+	}
+
 	Seiscomp::DataModel::TimeQuantity sc3tq;
 	Seiscomp::DataModel::RealQuantity sc3rq;
 
@@ -184,8 +190,7 @@ Origin* Locator::_sc3relocate(const Origin *origin)
 		const Seiscomp::DataModel::Phase phase(arr.phase);
 
 		Seiscomp::DataModel::PickPtr
-			sc3pick = Seiscomp::DataModel::Pick::Cast(
-				Seiscomp::DataModel::PublicObject::Find(arr.pick->id));
+			sc3pick = Seiscomp::DataModel::Pick::Find(arr.pick->id);
 
 		if ( sc3pick == NULL ) {
 			sc3pick = Seiscomp::DataModel::Pick::Create(arr.pick->id);

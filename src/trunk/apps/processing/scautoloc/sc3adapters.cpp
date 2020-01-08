@@ -139,12 +139,16 @@ Seiscomp::DataModel::Origin *Autoloc::convertToSC3(const Autoloc::Origin* origin
 		sc3arr->setWeight(arr.excluded == Arrival::NotExcluded ? 1. : 0.);
 		sc3arr->setPhase(phase);
 
-		Seiscomp::DataModel::PickPtr sc3pick
-		    = Seiscomp::DataModel::Pick::Cast(
-		        Seiscomp::DataModel::PublicObject::Find(arr.pick->id));
+		Seiscomp::DataModel::PickPtr sc3pick =
+		        Seiscomp::DataModel::Pick::Find(arr.pick->id);
 
 		if ( sc3pick == NULL ) {
 			sc3pick = Seiscomp::DataModel::Pick::Create(arr.pick->id);
+			if ( sc3pick == NULL ) {
+				// This should never occur - if it does we give up!
+				SEISCOMP_ERROR_S("Failed to create pick "+arr.pick->id);
+				return NULL;
+			}
 			const Autoloc::Station *sta = arr.pick->station();
 			Seiscomp::DataModel::WaveformStreamID wfid(sta->net, sta->code, "", "XYZ", "");
 			sc3pick->setWaveformID(wfid);
@@ -223,7 +227,7 @@ Autoloc::Origin *Seiscomp::Applications::Autoloc::App::convertFromSC3(const Seis
 
 		const std::string &pickID = sc3origin->arrival(i)->pickID();
 /*
-		Seiscomp::DataModel::Pick *sc3pick = Seiscomp::DataModel::Pick::Cast( Seiscomp::DataModel::PublicObject::Find(pickID) );
+		Seiscomp::DataModel::Pick *sc3pick = Seiscomp::DataModel::Pick::Find(pickID);
 		if ( ! sc3pick) {
 			SEISCOMP_ERROR_S("Pick " + pickID + " not found - cannot convert origin");
 			delete origin;
