@@ -21476,6 +21476,169 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Record_setAuthentication(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
+  Seiscomp::Record::Authentication arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Record_setAuthentication",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Record_setAuthentication" "', argument " "1"" of type '" "Seiscomp::Record *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Record_setAuthentication" "', argument " "2"" of type '" "Seiscomp::Record::Authentication""'");
+  } 
+  arg2 = static_cast< Seiscomp::Record::Authentication >(val2);
+  {
+    try {
+      (arg1)->setAuthentication(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Record_authentication(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Record::Authentication result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Record_authentication",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Record_authentication" "', argument " "1"" of type '" "Seiscomp::Record const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Record::Authentication)((Seiscomp::Record const *)arg1)->authentication();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Record_setAuthority(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Record_setAuthority",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Record_setAuthority" "', argument " "1"" of type '" "Seiscomp::Record *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Record_setAuthority" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Record_setAuthority" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      (arg1)->setAuthority((std::string const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Record_authority(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Record_authority",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Record_authority" "', argument " "1"" of type '" "Seiscomp::Record const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
+  {
+    try {
+      result = (std::string *) &((Seiscomp::Record const *)arg1)->authority();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Record_data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
@@ -48717,6 +48880,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Record_dataType", _wrap_Record_dataType, METH_VARARGS, NULL},
 	 { (char *)"Record_setDataType", _wrap_Record_setDataType, METH_VARARGS, NULL},
 	 { (char *)"Record_setHint", _wrap_Record_setHint, METH_VARARGS, NULL},
+	 { (char *)"Record_setAuthentication", _wrap_Record_setAuthentication, METH_VARARGS, NULL},
+	 { (char *)"Record_authentication", _wrap_Record_authentication, METH_VARARGS, NULL},
+	 { (char *)"Record_setAuthority", _wrap_Record_setAuthority, METH_VARARGS, NULL},
+	 { (char *)"Record_authority", _wrap_Record_authority, METH_VARARGS, NULL},
 	 { (char *)"Record_data", _wrap_Record_data, METH_VARARGS, NULL},
 	 { (char *)"Record_raw", _wrap_Record_raw, METH_VARARGS, NULL},
 	 { (char *)"Record_copy", _wrap_Record_copy, METH_VARARGS, NULL},
@@ -50701,6 +50868,10 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "Record_DATA_ONLY",SWIG_From_int(static_cast< int >(Seiscomp::Record::DATA_ONLY)));
   SWIG_Python_SetConstant(d, "Record_SAVE_RAW",SWIG_From_int(static_cast< int >(Seiscomp::Record::SAVE_RAW)));
   SWIG_Python_SetConstant(d, "Record_H_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Record::H_QUANTITY)));
+  SWIG_Python_SetConstant(d, "Record_NOT_SIGNED",SWIG_From_int(static_cast< int >(Seiscomp::Record::NOT_SIGNED)));
+  SWIG_Python_SetConstant(d, "Record_SIGNATURE_VALIDATED",SWIG_From_int(static_cast< int >(Seiscomp::Record::SIGNATURE_VALIDATED)));
+  SWIG_Python_SetConstant(d, "Record_SIGNATURE_VALIDATION_FAILED",SWIG_From_int(static_cast< int >(Seiscomp::Record::SIGNATURE_VALIDATION_FAILED)));
+  SWIG_Python_SetConstant(d, "Record_A_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Record::A_QUANTITY)));
   SWIG_Python_SetConstant(d, "ZSS",SWIG_From_int(static_cast< int >(Seiscomp::Core::ZSS)));
   SWIG_Python_SetConstant(d, "ZDS",SWIG_From_int(static_cast< int >(Seiscomp::Core::ZDS)));
   SWIG_Python_SetConstant(d, "ZDD",SWIG_From_int(static_cast< int >(Seiscomp::Core::ZDD)));

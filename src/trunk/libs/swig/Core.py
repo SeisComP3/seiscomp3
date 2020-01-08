@@ -1527,6 +1527,10 @@ class Record(BaseObject):
     DATA_ONLY = _Core.Record_DATA_ONLY
     SAVE_RAW = _Core.Record_SAVE_RAW
     H_QUANTITY = _Core.Record_H_QUANTITY
+    NOT_SIGNED = _Core.Record_NOT_SIGNED
+    SIGNATURE_VALIDATED = _Core.Record_SIGNATURE_VALIDATED
+    SIGNATURE_VALIDATION_FAILED = _Core.Record_SIGNATURE_VALIDATION_FAILED
+    A_QUANTITY = _Core.Record_A_QUANTITY
     __swig_destroy__ = _Core.delete_Record
     __del__ = lambda self: None
 
@@ -1589,6 +1593,18 @@ class Record(BaseObject):
 
     def setHint(self, h):
         return _Core.Record_setHint(self, h)
+
+    def setAuthentication(self, auth):
+        return _Core.Record_setAuthentication(self, auth)
+
+    def authentication(self):
+        return _Core.Record_authentication(self)
+
+    def setAuthority(self, authority):
+        return _Core.Record_setAuthority(self, authority)
+
+    def authority(self):
+        return _Core.Record_authority(self)
 
     def data(self):
         return _Core.Record_data(self)
