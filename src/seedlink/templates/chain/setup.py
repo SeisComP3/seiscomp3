@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, glob
 
 '''
@@ -259,10 +260,10 @@ class SeedlinkPluginHandler:
       else:
         # If no groups are configured, delete chainX.xml
         try: os.remove(chainxml)
-        except: print "Warning: %s could not be removed" % chainxml
+        except: print("Warning: %s could not be removed" % chainxml)
 
     files = glob.glob(os.path.join(seedlink.config_dir, "chain*"))
     for f in files:
       if chains.has_key(f): continue
       try: os.remove(f)
-      except: print "Warning: %s could not be removed" % f
+      except: print("Warning: %s could not be removed" % f)
