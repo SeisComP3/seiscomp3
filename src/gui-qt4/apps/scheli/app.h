@@ -36,7 +36,7 @@ class HCApp : public Gui::Application {
 	Q_OBJECT
 
 	public:
-		HCApp(int& argc, char** argv, int flags = DEFAULT, Type type = QApplication::GuiClient);
+		HCApp(int& argc, char** argv, int flags = DEFAULT, Type type = GuiClient);
 		~HCApp();
 
 	protected:

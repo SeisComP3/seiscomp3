@@ -549,14 +549,14 @@ int main(int argc, char** argv) {
 
 	{
 		int flags = Gui::Application::DEFAULT | Gui::Application::LOAD_STATIONS;
-		Gui::Application::Type type = QApplication::GuiClient;
+		Gui::Application::Type type = Gui::Application::GuiClient;
 
 		if ( argc >= 2 && strcmp(argv[1], "capture") == 0 ) {
 			if ( Gui::Application::minQtVersion("4.3.0") )
 				// Qt 4.2.x crashes when rendering text with console
 				// applications so we enable console application only if
 				// at least Qt 4.3.0 is installed.
-				type = QApplication::Tty;
+				type = Gui::Application::Tty;
 			else
 				std::cerr << "WARNING: Need Qt 4.3.0 to capture images without "
 				             "a running X session." << std::endl;

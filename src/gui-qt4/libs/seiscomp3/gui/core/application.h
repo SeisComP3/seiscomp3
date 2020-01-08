@@ -132,7 +132,7 @@ class SC_GUI_API Application : public QApplication,
 
 
 	public:
-		Application(int& argc, char **argv, int flags = DEFAULT, Type type = QApplication::GuiClient);
+		Application(int& argc, char **argv, int flags = DEFAULT, Type type = GuiClient);
 		virtual ~Application();
 
 

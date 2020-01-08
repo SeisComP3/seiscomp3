@@ -25,7 +25,7 @@ using namespace Seiscomp::Gui;
  */
 int main(int argc, char* argv[])
 {
-	Application::Type type = QApplication::Tty;
+	Application::Type type = Application::Tty;
 
 	SendEvent app(argc, argv, type);
 	

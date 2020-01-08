@@ -237,7 +237,7 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 , _settingsOpened(false)
 , _flags(flags) {
 
-	if ( type == QApplication::Tty )
+	if ( type == Tty )
 		_flags &= ~SHOW_SPLASH;
 
 	setDaemonEnabled(false);
