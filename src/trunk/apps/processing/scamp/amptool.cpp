@@ -956,7 +956,7 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 		if ( proc->streamConfig(components[i]).gain == 0.0 ) {
 			SEISCOMP_LOG(_errorChannel, "no gain found for %s -> ignoring Arrival %s",
 			             streamIDs[i].c_str(), pick->publicID().c_str());
-			_report << "   - " << proc->type().c_str() << " [gain not found]" << std::endl;
+			_report << "     - " << proc->type().c_str() << " [gain not found]" << std::endl;
 			return -1;
 		}
 	}
@@ -971,7 +971,7 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 			pick->waveformID().locationCode(),
 			pick->waveformID().channelCode().substr(0,2),
 			&configuration(), params)) ) {
-		_report << "   - " << proc->type().c_str() << " [setup failed]" << std::endl;
+		_report << "     - " << proc->type().c_str() << " [setup failed]" << std::endl;
 		return -1;
 	}
 
