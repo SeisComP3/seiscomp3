@@ -29,8 +29,8 @@ using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Gui;
 
 
-SendEvent::SendEvent(int& argc, char **argv, Seiscomp::Gui::Application::Type type)
-: Application(argc, argv, 0, type) {
+SendEvent::SendEvent(int& argc, char **argv)
+: Application(argc, argv, 0, Application::Tty) {
 	setMessagingEnabled(true);
 	setMessagingUsername("scsendevt");
 	setDatabaseEnabled(true,false);
@@ -43,30 +43,28 @@ SendEvent::SendEvent(int& argc, char **argv, Seiscomp::Gui::Application::Type ty
 
 
 bool SendEvent::run() {
-
-        if ( !_eventID.empty() ) {
-
-        	PublicObjectPtr po = SCApp->query()->loadObject(Event::TypeInfo(), _eventID);
-        	EventPtr e = Event::Cast(po);
-        	if ( !e ) {
-			SEISCOMP_WARNING("Event %s has not been found.\n", _eventID.c_str());
-			cerr << "Warning: EventID " << _eventID.c_str() << " has not been found.\n";
-                	return false;
-        	}
+	if ( !_eventID.empty() ) {
+		PublicObjectPtr po = SCApp->query()->loadObject(Event::TypeInfo(), _eventID);
+		EventPtr e = Event::Cast(po);
+		if ( !e ) {
+		SEISCOMP_WARNING("Event %s has not been found.\n", _eventID.c_str());
+		cerr << "Warning: EventID " << _eventID.c_str() << " has not been found.\n";
+			return false;
+		}
 
 		// Workaround for not to open window QMessageBox in the Application::sendCommand
 		// when application is commandline
-		if ( commandTarget().empty() && SCApp->type() == QApplication::Tty ) {
-                	cerr << "WARNING: \n"
-                            "\tVariable <commands.target> is not set. To disable sending commands \n"
-                            "\tto all connected clients, set a proper target. You can use \n"
-                            "\tregular expressions to specify a group of clients (HINT: all = '.*$').\n\n";
-                	return false;
+		if ( commandTarget().empty() && type() == Tty ) {
+			cerr << "WARNING: \n"
+			        "\tVariable <commands.target> is not set. To disable sending commands \n"
+			        "\tto all connected clients, set a proper target. You can use \n"
+			        "\tregular expressions to specify a group of clients (HINT: all = '.*$').\n\n";
+			return false;
 		}
 
-        	SCApp->sendCommand(Gui::CM_SHOW_ORIGIN, e->preferredOriginID());
+		SCApp->sendCommand(Gui::CM_SHOW_ORIGIN, e->preferredOriginID());
 		return true;
-	} 
+	}
 
 	cerr << "must specify event using '-E eventID'\n";
 	return false;

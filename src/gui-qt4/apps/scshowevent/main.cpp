@@ -10,25 +10,16 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-#include <iostream>
 
 #include "sendevent.h"
 
-
-using namespace std;
-using namespace Seiscomp;
-using namespace Seiscomp::Gui;
 
 /*
  * Usage: scsendevent -E <eventID> 
  *        otherwise type: sctestclient --help
  */
-int main(int argc, char* argv[])
-{
-	Application::Type type = Application::Tty;
-
-	SendEvent app(argc, argv, type);
-	
+int main(int argc, char* argv[]) {
+	SendEvent app(argc, argv);
 	return app();
 }
 

@@ -24,7 +24,7 @@ class SendEvent : public Seiscomp::Gui::Application {
 	Q_OBJECT
 
 	public:
-		SendEvent(int& argc, char **argv, Seiscomp::Gui::Application::Type);
+		SendEvent(int& argc, char **argv);
 
 		void createCommandLineDescription();
 
