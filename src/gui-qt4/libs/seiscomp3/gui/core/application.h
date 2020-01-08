@@ -254,6 +254,7 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 
 	public slots:
 		void showSettings();
+		void quit();
 
 
 	private slots:
