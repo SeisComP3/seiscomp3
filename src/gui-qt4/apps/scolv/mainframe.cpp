@@ -782,7 +782,7 @@ MainFrame::MainFrame(){
 	        _originLocator, SLOT(createArtificialOrigin()));
 	connect(_ui.actionOpen, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
 	connect(_ui.actionSave, SIGNAL(triggered(bool)), this, SLOT(fileSave()));
-	connect(_ui.actionQuit, SIGNAL(triggered(bool)), SCApp, SLOT(quit()));
+	connect(_ui.actionQuit, SIGNAL(triggered(bool)), qApp, SLOT(quit()));
 
 	connect(_eventList, SIGNAL(originSelected(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        this, SLOT(setData(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));

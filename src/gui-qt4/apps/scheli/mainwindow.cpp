@@ -51,7 +51,7 @@ MainWindow::MainWindow() {
 	_ui.frameHeli->setLayout(layout);
 	layout->addWidget(_heliWidget);
 
-	connect(_ui.actionQuit, SIGNAL(triggered(bool)), SCApp, SLOT(quit()));
+	connect(_ui.actionQuit, SIGNAL(triggered(bool)), qApp, SLOT(quit()));
 	connect(&_timer, SIGNAL(timeout()), this, SLOT(advanceTime()));
 
 	/*
