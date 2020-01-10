@@ -70,9 +70,10 @@ def stationCount(org, minArrivalWeight):
     count = 0
     for i in range(org.arrivalCount()):
         arr = org.arrival(i)
-        #   if arr.weight()> 0.5:
-        if arr.weight() >= minArrivalWeight:
-            count += 1
+        try:
+            if arr.weight() >= minArrivalWeight:
+                count += 1
+        except ValueError: pass
     return count
 
 
@@ -111,11 +112,13 @@ class Bulletin(object):
             from seiscomp3 import Math
             for i in range(org.arrivalCount()):
                 arr = org.arrival(i)
-                dist_arr.append((Math.deg2km(arr.distance()), arr))
+                try: dist_arr.append((Math.deg2km(arr.distance()), arr))
+                except ValueError: pass
         else:
             for i in range(org.arrivalCount()):
                 arr = org.arrival(i)
-                dist_arr.append((arr.distance(), arr))
+                try: dist_arr.append((arr.distance(), arr))
+                except ValueError: pass
         return sorted(dist_arr, key=lambda a:a[0])
 
     def _getPicks(self, org):
@@ -148,11 +151,13 @@ class Bulletin(object):
         except:
             depthPhaseCount = 0
             for dist, arr in dist_arr:
-                wt = arr.weight()
-                pha = arr.phase().code()
-                #  if (pha[0] in ["p","s"] and wt >= 0.5 ):
-                if (pha[0] in ["p", "s"] and wt >= self.minArrivalWeight):
-                    depthPhaseCount += 1
+                try:
+                    wt = arr.weight()
+                    pha = arr.phase().code()
+                    #  if (pha[0] in ["p","s"] and wt >= 0.5 ):
+                    if (pha[0] in ["p", "s"] and wt >= self.minArrivalWeight):
+                        depthPhaseCount += 1
+                except ValueError: pass
 
         txt = ""
 
@@ -445,7 +450,8 @@ class Bulletin(object):
                 except:
                     res = "  N/A"
             dist_azi[net+"_"+sta] = (dist, azi)
-            wt = arr.weight()
+            try: wt = arr.weight()
+            except ValueError: wt = 0.0
             pha = arr.phase().code()
             flag = "X "[wt > 0.1]
             try:
@@ -711,8 +717,10 @@ class Bulletin(object):
         lineFMT += " %s%s\n"
 
         for dist, arr in dist_arr:
-            if arr.weight() < self.minArrivalWeight:
-                continue
+            try:
+                if arr.weight() < self.minArrivalWeight:
+                    continue
+            except ValueError: continue
 
             p = seiscomp3.DataModel.Pick.Find(arr.pickID())
             if p is None:
