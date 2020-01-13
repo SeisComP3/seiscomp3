@@ -282,34 +282,71 @@ const std::string GeoFeatureSet::initStatus(const std::string &directory,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /** Reads the BNA-header, e.g. "segment name","rank 3",123 */
-bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
-                                  unsigned int& points, bool& isClosed,
-                                  std::string& error, const std::string &line) const {
-	size_t pos1, pos2;
+bool GeoFeatureSet::readBNAHeader(std::string &segment, unsigned int &rank,
+                                  GeoFeature::Attributes &attributes,
+                                  unsigned int &points, bool &isClosed,
+                                  std::string &error, const std::string &line) const {
+	size_t pos1, pos2, colonPos;
 	std::string tmpStr;
+	unsigned int nFields(0);
 
-	// segment
+	rank = 1;
+
+	// segment name
 	if ( (pos1 = line.find('"')) == std::string::npos ||
 	     (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
 		error = "missing quote sign in first header field";
 		return false;
 	}
+	++nFields;
 	segment = line.substr(pos1+1, pos2-pos1-1);
 	Core::trim(segment);
 
-	// rank
-	if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ||
-	     (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
-		error = "missing quote sign in second header field";
-		return false;
-	}
-	tmpStr = line.substr(pos1+1, pos2-pos1-1);
+	// read more header fields, BNA allows 2-4 of them
+	while ( nFields < 4 ) {
+		if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ||
+			 (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
+			// BNA needs at least 2 header fields
+			if ( nFields >= 2 ) {
+				break;
+			}
 
-	if ( tmpStr.length() >= 6 && strncmp(tmpStr.c_str(), "rank ", 5) == 0 ) {
-		rank = atoi(tmpStr.substr(5, tmpStr.length()-5).c_str());
-	}
-	else {
-		rank = 1;
+			error = "missing quote sign in second header field";
+			return false;
+		}
+		++nFields;
+		tmpStr = line.substr(pos1+1, pos2-pos1-1);
+		Core::trim(tmpStr);
+
+		// rank is a special identifier
+		if ( tmpStr.length() >= 6 && strncmp(tmpStr.c_str(), "rank ", 5) == 0 ) {
+			int tmp(0);
+			tmp = atoi(tmpStr.substr(5, tmpStr.length()-5).c_str());
+			if ( tmp > 1 ) {
+				rank = static_cast<unsigned int>(tmp);
+				continue;
+			}
+		}
+
+		// read list of key value parameter into parameter map, e.g.
+		// "foo1: bar1, foo2: bar2"
+		if ( tmpStr.find(':') != std::string::npos ) {
+			std::vector<std::string> keyValues;
+			Seiscomp::Core::split(keyValues, tmpStr.c_str(), ",");
+
+			for ( std::vector<std::string>::const_iterator it = keyValues.begin();
+				  it != keyValues.end(); ++it ) {
+
+				if ( (colonPos = it->find(':')) == std::string::npos )
+					continue;
+
+				std::string key(it->substr(0, colonPos));
+				std::string value;
+				if ( colonPos < it->size()-1 )
+					value = it->substr(colonPos+1);
+				attributes[Core::trim(key)] = Core::trim(value);
+			}
+		}
 	}
 
 	// points
@@ -326,11 +363,11 @@ bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
 		return false;
 	}
 	if ( p >= 0 ) {
-		points = p;
+		points = static_cast<unsigned int>(p);
 		isClosed = true;
 	}
 	else {
-		points = -p;
+		points = static_cast<unsigned int>(-p);
 		isClosed = false;
 	}
 	return true;
@@ -394,6 +431,7 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 	bool isClosed;
 	GeoCoordinate v;
 	bool startSubFeature;
+	GeoFeature::Attributes attributes;
 
 	bool fileValid = true;
 
@@ -406,7 +444,7 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 			continue;
 		}
 
-		if ( !readBNAHeader(segment, rank, points, isClosed, error, line) ) {
+		if ( !readBNAHeader(segment, rank, attributes, points, isClosed, error, line) ) {
 			SEISCOMP_ERROR("error reading BNA header in file %s at line %i: %s",
 			               filename.c_str(), lineNum, error.c_str());
 			fileValid = false;
@@ -414,7 +452,7 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 		}
 		startSubFeature = false;
 
-		feature = new GeoFeature(segment, category, rank);
+		feature = new GeoFeature(segment, category, rank, attributes);
 		features.push_back(feature);
 		if ( isClosed )
 			feature->setClosedPolygon(true);

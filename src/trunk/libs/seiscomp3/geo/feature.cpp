@@ -45,6 +45,19 @@ GeoFeature::GeoFeature(const std::string& name, const Category* category,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeature::GeoFeature(const std::string &name, const Category* category,
+                       unsigned int rank, const Attributes &attributes)
+: _name(name)
+, _category(category)
+, _userData(NULL)
+, _rank(rank)
+, _attributes(attributes)
+, _closedPolygon(false) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GeoFeature::~GeoFeature() {
 	_vertices.clear();
 }
