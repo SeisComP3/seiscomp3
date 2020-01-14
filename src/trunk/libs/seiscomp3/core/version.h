@@ -55,6 +55,7 @@ namespace Core {
 
  "12.1.1"   0x0C0101
    - Fixed RecordWidget::mouseMoveEvent to not ignore handled events
+   - Fixed libtau wrapper setModel initialization bug
 
  "12.1.0"   0x0C0100
    - Fixed RecordWidget emitting of traceUpdated signal if the record slot to
