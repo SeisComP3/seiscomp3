@@ -77,12 +77,14 @@ struct CommitOptions {
 	: valid(false)
 	, forceEventAssociation(false)
 	, fixOrigin(false)
-	, returnToEventList(false) {}
+	, returnToEventList(false)
+	, askForConfirmation(false) {}
 
 	bool                       valid;
 	bool                       forceEventAssociation;
 	bool                       fixOrigin;
 	bool                       returnToEventList;
+	bool                       askForConfirmation;
 	OPT(EventType)             eventType;
 	OPT(EventTypeCertainty)    eventTypeCertainty;
 	OPT(OPT(EvaluationStatus)) originStatus;
@@ -96,11 +98,13 @@ QString toString(const CommitOptions &opts) {
 	QString s = QString(
 		"Force event association: %1\n"
 		"Fix origin: %2\n"
-		"Return to list: %3"
+		"Return to list: %3\n"
+		"Ask for confirmation: %4\n"
 	)
 	.arg(opts.forceEventAssociation ? "yes" : "no")
 	.arg(opts.fixOrigin ? "yes" : "no")
-	.arg(opts.returnToEventList ? "yes" : "no");
+	.arg(opts.returnToEventList ? "yes" : "no")
+	.arg(opts.askForConfirmation ? "yes" : "no");
 
 	if ( opts.eventType )
 		s += QString("\nEvent type: %1").arg(opts.eventType->toString());
@@ -436,8 +440,144 @@ class OriginCommitOptions : public QDialog {
 			ui.comboEQComment->setVisible(false);
 		}
 
+
+		void setOptions(const CommitOptions &options, const Event *event, bool isLocalOrigin) {
+			ui.cbAssociate->setChecked(options.forceEventAssociation);
+			ui.cbFixSolution->setChecked(options.fixOrigin);
+
+			if ( !options.magnitudeType || options.magnitudeType->empty() ) {
+				ui.cbFixMagnitudeType->setEnabled(false);
+				ui.cbFixMagnitudeType->setVisible(false);
+			}
+			else
+				ui.cbFixMagnitudeType->setText(ui.cbFixMagnitudeType->text().arg(options.magnitudeType->c_str()));
+
+			try {
+				commentOptions = SCApp->configGetStrings("olv.commit.eventCommentOptions");
+				if ( !commentOptions.empty() ) {
+					ui.editEQComment->setVisible(false);
+					ui.comboEQComment->setVisible(true);
+
+					for ( vector<string>::const_iterator it = commentOptions.begin();
+					      it != commentOptions.end(); ++it ) {
+						ui.comboEQComment->addItem(it->c_str());
+						if ( options.eventComment == *it )
+							ui.comboEQComment->setCurrentIndex(ui.comboEQComment->count() - 1);
+					}
+				}
+			}
+			catch ( ... ) {}
+
+			ui.cbBackToEventList->setChecked(options.returnToEventList);
+
+			if ( !event || !isLocalOrigin ) {
+				ui.cbAssociate->setVisible(false);
+				ui.cbAssociate->setEnabled(false);
+			}
+
+			if ( options.eventType ) {
+				int idx = ui.comboEventTypes->findText(options.eventType->toString());
+				if ( idx != -1 )
+					ui.comboEventTypes->setCurrentIndex(idx);
+			}
+
+			if ( options.eventTypeCertainty ) {
+				int idx = ui.comboEventTypeCertainty->findText(options.eventTypeCertainty->toString());
+				if ( idx != -1 )
+					ui.comboEventTypeCertainty->setCurrentIndex(idx);
+			}
+
+			// Populate earthquake name
+			if ( !options.eventName.empty() )
+				ui.editEQName->setText(options.eventName.c_str());
+
+			// Fill operator's comment
+			if ( !options.eventComment.empty() ) {
+				if ( commentOptions.empty() ) {
+					ui.editEQComment->setText(options.eventComment.c_str());
+				}
+				else {
+					// search for current comment in list of available options,
+					// add and select it in case it is not present
+					int idx = -1, i = 1;
+					for ( vector<string>::const_iterator it = commentOptions.begin();
+					      it != commentOptions.end(); ++it, ++i ) {
+						if ( *it == options.eventComment ) {
+							idx = i;
+							break;
+						}
+					}
+					if ( idx < 0 ) {
+						ui.comboEQComment->insertItem(1, options.eventComment.c_str());
+						idx = 1;
+					}
+					ui.comboEQComment->setCurrentIndex(idx);
+				}
+			}
+
+			if ( event ) {
+				ui.cbAssociate->setText(QString(ui.cbAssociate->text()).arg(event->publicID().c_str()));
+			}
+
+			if ( options.originStatus && *options.originStatus ) {
+				int idx = ui.comboOriginStates->findText((*options.originStatus)->toString());
+				if ( idx != -1 )
+					ui.comboOriginStates->setCurrentIndex(idx);
+			}
+		}
+
+		bool getOptions(CommitOptions &options) {
+			options.forceEventAssociation = ui.cbAssociate->isEnabled() && ui.cbAssociate->isChecked();
+			options.fixOrigin = ui.cbFixSolution->isChecked();
+			options.returnToEventList = ui.cbBackToEventList->isChecked();
+
+			if ( ui.comboEventTypes->currentIndex() > 0 ) {
+				EventType type;
+				if ( type.fromString(ui.comboEventTypes->currentText().toStdString()) )
+					options.eventType = type;
+				else {
+					QMessageBox::critical(this, "Internal Error", "Invalid event type selected");
+					return false;
+				}
+			}
+
+			if ( ui.comboEventTypeCertainty->currentIndex() > 0 ) {
+				EventTypeCertainty typeCertainty;
+				if ( typeCertainty.fromString(ui.comboEventTypeCertainty->currentText().toStdString()) )
+					options.eventTypeCertainty = typeCertainty;
+				else {
+					QMessageBox::critical(this, "Internal Error", "Invalid event type certainty selected");
+					return false;
+				}
+			}
+
+			if ( ui.comboOriginStates->currentIndex() > 0 ) {
+				EvaluationStatus originStatus;
+				if ( originStatus.fromString(ui.comboOriginStates->currentText().toStdString()) )
+					options.originStatus = OPT(EvaluationStatus)(originStatus);
+				else {
+					QMessageBox::critical(this, "Internal Error", "Invalid origin evaluation status selected");
+					return false;
+				}
+			}
+
+			if ( !ui.cbFixMagnitudeType->isEnabled() || !ui.cbFixMagnitudeType->isChecked() )
+				options.magnitudeType = Core::None;
+
+			options.eventName = ui.editEQName->text().toStdString();
+
+			if ( commentOptions.empty() )
+				options.eventComment = ui.editEQComment->text().toStdString();
+			else
+				options.eventComment = ui.comboEQComment->currentText().toStdString();
+
+			return true;
+		}
+
+
 	public:
 		Ui::OriginCommitOptions ui;
+		vector<string> commentOptions;
 };
 
 
@@ -2792,6 +2932,11 @@ void OriginLocatorView::init() {
 		catch ( ... ) {}
 
 		try {
+			customOptions.askForConfirmation = SCApp->configGetBool(prefix + "askForConfirmation");
+		}
+		catch ( ... ) {}
+
+		try {
 			EventType et;
 			if ( et.fromString(SCApp->configGetString(prefix + "eventType")) )
 				customOptions.eventType = et;
@@ -3903,7 +4048,7 @@ bool OriginLocatorView::setOrigin(DataModel::Origin* o, DataModel::Event* e,
 		                              "When setting the new origin your modifications get lost.\n"
 		                              "Do you really want to continue?"),
 		                           QMessageBox::Yes, QMessageBox::No) == QMessageBox::No )
-		return false;
+			return false;
 	}
 
 	// Reset plot filter if a new event has been loaded
@@ -5935,6 +6080,8 @@ void OriginLocatorView::commit(bool associate) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::customCommit() {
 	CommitOptions customOptions = sender()->property("customCommit").value<CommitOptions>();
+	if ( QApplication::keyboardModifiers() == Qt::ShiftModifier )
+		customOptions.askForConfirmation = true;
 
 	QString fixedMagnitudeType = _actionCommitOptions->property("EvPrefMagType").toString();
 	if ( !fixedMagnitudeType.isEmpty() ) {
@@ -6096,80 +6243,33 @@ void OriginLocatorView::commitFocalMechanism(bool withMT, QPoint pos) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::commitWithOptions() {
 	OriginCommitOptions dlg;
-	int idx;
+	CommitOptions options;
 
+	// Setup options
 	try {
-		if ( SCApp->configGetBool("olv.commit.forceEventAssociation") == false ) {
-			dlg.ui.cbAssociate->setChecked(false);
-		}
+		options.forceEventAssociation = SCApp->configGetBool("olv.commit.forceEventAssociation");
 	}
 	catch ( ... ) {}
 
 	try {
-		if ( SCApp->configGetBool("olv.commit.fixOrigin") == false ) {
-			dlg.ui.cbFixSolution->setChecked(false);
-		}
+		options.fixOrigin = SCApp->configGetBool("olv.commit.fixOrigin");
 	}
 	catch ( ... ) {}
 
-	QString fixedMagnitudeType = _actionCommitOptions->property("EvPrefMagType").toString();
-	if ( fixedMagnitudeType.isEmpty() ) {
-		dlg.ui.cbFixMagnitudeType->setEnabled(false);
-		dlg.ui.cbFixMagnitudeType->setVisible(false);
-	}
-	else
-		dlg.ui.cbFixMagnitudeType->setText(dlg.ui.cbFixMagnitudeType->text().arg(fixedMagnitudeType));
-
-	vector<string> commentOptions;
-	try {
-		commentOptions = SCApp->configGetStrings("olv.commit.eventCommentOptions");
-		if ( !commentOptions.empty() ) {
-			dlg.ui.editEQComment->setVisible(false);
-			dlg.ui.comboEQComment->setVisible(true);
-
-			for ( vector<string>::const_iterator it = commentOptions.begin();
-			      it != commentOptions.end(); ++it ) {
-				dlg.ui.comboEQComment->addItem(it->c_str());
-			}
-		}
-	}
-	catch ( ... ) {}
+	options.magnitudeType = _actionCommitOptions->property("EvPrefMagType").toString().toStdString();
 
 	try {
-		dlg.ui.cbBackToEventList->setChecked(SCApp->configGetBool("olv.commit.returnToEventList"));
+		options.returnToEventList = SCApp->configGetBool("olv.commit.returnToEventList");
 	}
 	catch ( ... ) {}
 
-	if ( _defaultEventType ) {
-		int idx = dlg.ui.comboEventTypes->findText(_defaultEventType->toString());
-		if ( idx >= 0 ) dlg.ui.comboEventTypes->setCurrentIndex(idx);
-	}
-
-	if ( !_baseEvent || !_localOrigin ) {
-		dlg.ui.cbAssociate->setVisible(false);
-		dlg.ui.cbAssociate->setEnabled(false);
-	}
+	options.eventType = _defaultEventType;
 
 	if ( _baseEvent ) {
-		dlg.ui.cbAssociate->setText(QString(dlg.ui.cbAssociate->text()).arg(_baseEvent->publicID().c_str()));
-
-		idx = -1;
-		try {
-			idx = dlg.ui.comboEventTypes->findText(_baseEvent->type().toString());
-		}
+		try { options.eventType = _baseEvent->type(); }
 		catch ( ... ) {}
-
-		if ( idx != -1 )
-			dlg.ui.comboEventTypes->setCurrentIndex(idx);
-
-		idx = -1;
-		try {
-			idx = dlg.ui.comboEventTypeCertainty->findText(_baseEvent->typeCertainty().toString());
-		}
+		try { options.eventTypeCertainty = _baseEvent->typeCertainty(); }
 		catch ( ... ) {}
-
-		if ( idx != -1 )
-			dlg.ui.comboEventTypeCertainty->setCurrentIndex(idx);
 
 		if ( _reader && _baseEvent->eventDescriptionCount() == 0 )
 			_reader->loadEventDescriptions(_baseEvent.get());
@@ -6180,107 +6280,37 @@ void OriginLocatorView::commitWithOptions() {
 		// Fill earthquake name
 		for ( size_t i = 0; i < _baseEvent->eventDescriptionCount(); ++i ) {
 			if ( _baseEvent->eventDescription(i)->type() == EARTHQUAKE_NAME ) {
-				dlg.ui.editEQName->setText(_baseEvent->eventDescription(i)->text().c_str());
+				options.eventName = _baseEvent->eventDescription(i)->text().c_str();
 				break;
 			}
 		}
 
 		// Fill operator's comment
 		for ( size_t i = 0; i < _baseEvent->commentCount(); ++i ) {
-			string eventComment;
 			if ( _baseEvent->comment(i)->id() == "Operator" ) {
-				eventComment = _baseEvent->comment(i)->text();
-				if ( commentOptions.empty() ) {
-					dlg.ui.editEQComment->setText(eventComment.c_str());
-				}
-				else if ( !eventComment.empty() ) {
-					// search for current comment in list of available options,
-					// add and select it in case it is not present
-					int idx = -1, i = 1;
-					for ( vector<string>::const_iterator it = commentOptions.begin();
-					      it != commentOptions.end(); ++it, ++i ) {
-						if ( *it == eventComment ) {
-							idx = i;
-							break;
-						}
-					}
-					if ( idx < 0 ) {
-						dlg.ui.comboEQComment->insertItem(1, eventComment.c_str());
-						idx = 1;
-					}
-					dlg.ui.comboEQComment->setCurrentIndex(idx);
-				}
-
+				options.eventComment = _baseEvent->comment(i)->text();
 				break;
 			}
 		}
 	}
 
-	idx = -1;
 	try {
-		idx = dlg.ui.comboOriginStates->findText(_currentOrigin->evaluationStatus().toString());
-		if ( idx == -1 )
-			idx = dlg.ui.comboOriginStates->findText(EvaluationStatus::NameDispatcher::name(CONFIRMED));
+		options.originStatus = _currentOrigin->evaluationStatus();
 	}
 	catch ( ... ) {
-		idx = dlg.ui.comboOriginStates->findText(EvaluationStatus::NameDispatcher::name(CONFIRMED));
+		options.originStatus = OPT(EvaluationStatus)(CONFIRMED);
 	}
 
-	if ( idx != -1 )
-		dlg.ui.comboOriginStates->setCurrentIndex(idx);
+	options.askForConfirmation = false;
+
+	// Populate dialog
+	dlg.setOptions(options, _baseEvent.get(), _localOrigin);
 
 	if ( dlg.exec() == QDialog::Rejected )
 		return;
 
-	CommitOptions options;
-
-	options.forceEventAssociation = dlg.ui.cbAssociate->isEnabled() && dlg.ui.cbAssociate->isChecked();
-	options.fixOrigin = dlg.ui.cbFixSolution->isChecked();
-	options.returnToEventList = dlg.ui.cbBackToEventList->isChecked();
-
-	if ( dlg.ui.comboEventTypes->currentIndex() > 0 ) {
-		EventType type;
-		if ( type.fromString(dlg.ui.comboEventTypes->currentText().toStdString()) )
-			options.eventType = type;
-		else {
-			QMessageBox::critical(this, "Internal Error", "Invalid event type selected");
-			return;
-		}
-	}
-
-	if ( dlg.ui.comboEventTypeCertainty->currentIndex() > 0 ) {
-		EventTypeCertainty typeCertainty;
-		if ( typeCertainty.fromString(dlg.ui.comboEventTypeCertainty->currentText().toStdString()) )
-			options.eventTypeCertainty = typeCertainty;
-		else {
-			QMessageBox::critical(this, "Internal Error", "Invalid event type certainty selected");
-			return;
-		}
-	}
-
-	if ( dlg.ui.comboOriginStates->currentIndex() > 0 ) {
-		EvaluationStatus originStatus;
-		if ( originStatus.fromString(dlg.ui.comboOriginStates->currentText().toStdString()) )
-			options.originStatus = OPT(EvaluationStatus)(originStatus);
-		else {
-			QMessageBox::critical(this, "Internal Error", "Invalid origin evaluation status selected");
-			return;
-		}
-	}
-
-	if ( dlg.ui.cbFixMagnitudeType->isEnabled() ) {
-		if ( dlg.ui.cbFixMagnitudeType->isChecked() )
-			options.magnitudeType = fixedMagnitudeType.toStdString();
-	}
-
-	options.eventName = dlg.ui.editEQName->text().toStdString();
-
-	if ( commentOptions.empty() )
-		options.eventComment = dlg.ui.editEQComment->text().toStdString();
-	else
-		options.eventComment = dlg.ui.comboEQComment->currentText().toStdString();
-
-	commitWithOptions(&options);
+	if ( dlg.getOptions(options) )
+		commitWithOptions(&options);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -6288,8 +6318,24 @@ void OriginLocatorView::commitWithOptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginLocatorView::commitWithOptions(const void *options_ptr) {
-	const CommitOptions &options = *reinterpret_cast<const CommitOptions*>(options_ptr);
+void OriginLocatorView::commitWithOptions(const void *data_ptr) {
+	const CommitOptions *options_ptr = reinterpret_cast<const CommitOptions*>(data_ptr);
+	CommitOptions tmp;
+
+	if ( options_ptr->askForConfirmation ) {
+		OriginCommitOptions dlg;
+		tmp = *options_ptr;
+		dlg.setOptions(tmp, _baseEvent.get(), _localOrigin);
+		if ( dlg.exec() != QDialog::Accepted )
+			return;
+		if ( !dlg.getOptions(tmp) )
+			return;
+
+		options_ptr = &tmp;
+	}
+
+	const CommitOptions &options = *options_ptr;
+
 	if ( options.originStatus ) {
 		if ( _localOrigin ) {
 			_currentOrigin->setEvaluationStatus(*options.originStatus);
