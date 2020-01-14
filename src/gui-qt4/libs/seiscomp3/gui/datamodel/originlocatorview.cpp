@@ -3060,8 +3060,8 @@ void OriginLocatorView::locatorChanged(const QString &text) {
 
 	_locator = Seismology::LocatorInterfaceFactory::Create(_ui.cbLocator->currentText().toStdString().c_str());
 	if ( !_locator ) {
-		_ui.cbLocatorProfile->clear();
 		_ui.cbLocatorProfile->setEnabled(false);
+		return;
 	}
 
 	_locator->init(SCApp->configuration());
