@@ -310,6 +310,9 @@ void EventSummary::init() {
 	setupFont(_ui.state, SCScheme.fonts.base);
 	setupFont(_ui.mode, SCScheme.fonts.base);
 
+	setupFont(_ui.type, SCScheme.fonts.base);
+	_ui.type->installEventFilter(drawFilter);
+
 	_magnitudeRows = new QVBoxLayout(_ui.magnitudes);
 	_magnitudeRows->setMargin(0);
 	_magnitudeRows->setSpacing(layout()->spacing());
@@ -1062,13 +1065,26 @@ void EventSummary::updateContent() {
 
 	updateOrigin();
 
+	std::string eventType;
 	if ( _currentEvent ) {
 		setText(_ui.eventID, _currentEvent->publicID().c_str());
 		_ui.eventID->setToolTip(_currentEvent->publicID().c_str());
+		try { eventType = _currentEvent->type().toString(); }
+		catch ( Core::ValueException& ) {}
 	}
 	else {
 		_ui.eventID->setText("-");
 		_ui.eventID->setToolTip("");
+	}
+
+	if ( eventType.empty() ) {
+		_ui.type->setText("");
+		_ui.type->setVisible(false);
+	}
+	else {
+		setText(_ui.type, eventType.c_str());
+		_ui.type->setVisible(true);
+		_ui.type->setToolTip(eventType.c_str());
 	}
 
 	resetMagnitudes();
