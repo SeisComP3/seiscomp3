@@ -299,6 +299,14 @@
 							Whether to return to the event list after committing or not.
 							</description>
 						</parameter>
+						<parameter name="askForConfirmation" type="boolean" default="false">
+							<description>
+							Whether to ask for confirmation or not. If set to true
+							then the &quot;commit with options&quot; dialog will
+							pop up with the options to be applied pre-populated.
+							Cancelling the dialog will abort the commit procedure.
+							</description>
+						</parameter>
 						<parameter name="label" type="string" default="Commit+">
 							<description>
 							The commit button label. Use quotes for labels with

@@ -14,6 +14,12 @@
   * Fixed region filter with event list which did not work correctly
   * Added configuration paraemeter 'recenterMap' to control map centering
 
+* scolv
+
+  * Add option `askForConfirmation` to custom commits to allow
+    inspection of the options to be applied.
+  * Open dialog when a custom commit is activated together with shift key.
+
 * scqc
 
   * Added description of plugin configuration parameters. Default for writing
