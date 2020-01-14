@@ -19,6 +19,7 @@
   * Add option `askForConfirmation` to custom commits to allow
     inspection of the options to be applied.
   * Open dialog when a custom commit is activated together with shift key.
+  * Add event type to left hand summary panel
 
 * scqc
 
