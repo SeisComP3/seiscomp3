@@ -1799,10 +1799,23 @@ void MagnitudeView::computeMagnitudes() {
 			typeChecks.append(check);
 		}
 
-		vl->addLayout(grid);
-		vl->addStretch();
+		QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+		grid->addItem(spacer, _availableMagTypes->size(), 0);
+		grid->setColumnStretch(0, 0);
+		grid->setColumnStretch(1, 1);
+		grid->setMargin(0);
 
-		hl->insertStretch(0);
+		QWidget *typeSelections = new QWidget;
+		typeSelections->setLayout(grid);
+
+		QScrollArea *scrollArea = new QScrollArea;
+		scrollArea->setFrameShape(QFrame::NoFrame);
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setWidget(typeSelections);
+		scrollArea->setWidgetResizable(true);
+
+		vl->addWidget(scrollArea);
+
 		hl->insertLayout(0, vl);
 
 		QLabel *info = new QLabel;
