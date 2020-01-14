@@ -94,6 +94,7 @@ void LibTau::initPath(const std::string &model) {
 	if ( _model != model ) {
 		if ( _initialized ) {
 			tabout(&_handle);
+			_depth = -1;
 			_initialized = false;
 		}
 	}
@@ -112,6 +113,7 @@ void LibTau::initPath(const std::string &model) {
 			throw FileNotFoundError(errmsg.str());
 		}
 
+		_depth = -1;
 		_initialized = true;
 		brnset(&_handle, "all");
 	}
