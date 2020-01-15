@@ -107,6 +107,55 @@ SC_SYSTEM_CORE_API
 int split(std::vector<std::string> &tokens, const char *source,
           const char *delimiter, bool compressOn = true);
 
+/**
+ * @brief Splits a string into several tokens separated by a specific delimeter.
+ *        The delimeter is ignored if it occurs in a quoted string or if it is
+ *        protected by a backslash. Likewise quotes may be proceted by a
+ *        backslash. By default, leading and trailing white spaces will be
+ *        trimmed if they occure outside of a quoted string and if they are not
+ *        protected by a backslash.
+ * @param tokens Result vector containing the individual tokens
+ * @param source The source string
+ * @param delimiter Delimeter to spit the string at
+ * @param compressOn If enabled, adjacent separators are merged together.
+ *        Otherwise, every two separators delimit a token.
+ * @param trim Request triming of whitespaces
+ * @param whitespace Sequence of characters to interpret as a white space
+ * @param quotes Sequence of characters to interpret as a quote
+ * @return Number of tokens found
+ */
+SC_SYSTEM_CORE_API
+size_t splitExt(std::vector<std::string> &tokens, const char *source,
+                const char *delimiter = ",", bool compressOn = true,
+                bool trim = true, const char *whitespaces = " \t\n\v\f\r",
+                const char *quotes = "\"'");
+
+
+/**
+ * @brief Splits a string into several tokens separated by a specific delimeter.
+ *        The delimeter is ignored if it occurs in a quoted string or if it is
+ *        protected by a backslash. Likewise quotes may be proceted by a
+ *        backslash. By default, leading and trailing white spaces will be
+ *        trimmed if they occure outside of a quoted string and if they are not
+ *        protected by a backslash.
+ * @param lenSource Returns remaining length of source string
+ * @param lenTok Returns length of current token
+ * @param source The source string
+ * @param delimFound Returns whether the delimiter was found
+ * @param delimiter Delimeter to spit the string at
+ * @param trim Request triming of whitespaces
+ * @param whitespace Sequence of characters to interpret as a white space
+ * @param quotes Sequence of characters to interpret as a quote
+ * @return Pointer to the next token within the source string, length of the
+ *         token and number of remaining characters in the source string.
+ */
+SC_SYSTEM_CORE_API
+const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
+                        bool &delimFound, const char *delimiter = ",",
+                        bool trim = true,
+                        const char *whitespaces = " \t\n\v\f\r",
+                        const char *quotes = "\"'");
+
 SC_SYSTEM_CORE_API bool isEmpty(const char*);
 
 /**
@@ -141,7 +190,6 @@ SC_SYSTEM_CORE_API bool wildcmp(const char *wild, const char *str);
 SC_SYSTEM_CORE_API bool wildcmp(const std::string &wild, const std::string &str);
 SC_SYSTEM_CORE_API bool wildicmp(const char *wild, const char *str);
 SC_SYSTEM_CORE_API bool wildicmp(const std::string &wild, const std::string &str);
-
 
 }
 }

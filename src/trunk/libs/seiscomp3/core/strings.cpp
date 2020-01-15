@@ -357,6 +357,107 @@ int split(std::vector<std::string>& tokens, const char* source, const char* deli
 }
 
 
+size_t splitExt(std::vector<std::string> &tokens, const char *source,
+                const char *delimiter, bool compressOn, bool trim,
+                const char *whitespaces, const char *quotes) {
+	tokens.clear();
+	size_t lenTok;
+	size_t lenSource = strlen(source);
+	bool delimFound = false;
+	const char *tok = NULL;
+	while ( lenSource > 0 ) {
+		tok = tokenizeExt(lenTok, lenSource, source, delimFound, delimiter,
+		                  trim, whitespaces, quotes);
+		if ( tok != NULL ) {
+			tokens.push_back(std::string(tok, lenTok));
+		}
+		else if ( tokens.empty() || !compressOn ) {
+			tokens.push_back("");
+		}
+	}
+	if ( delimFound )
+		tokens.push_back("");
+
+	return tokens.size();
+}
+
+
+const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
+                        bool &delimFound, const char *delimiter, bool trim,
+                        const char *whitespaces, const char *quotes) {
+	lenTok = 0;
+	delimFound = false;
+
+	const char *tok = NULL;
+	size_t delimLen = strlen(delimiter);
+	size_t trailing_spaces = 0;
+	char quote = 0;
+
+	bool protect = false;
+
+
+	for ( ; lenSource && *source != 0; --lenSource, ++source ) {
+		// check for unprotected delimeter outside of quotes
+		if ( lenSource >= delimLen and quote == 0 and !protect and
+		     strncmp(source, delimiter, delimLen) == 0 ) {
+			lenSource -= delimLen;
+			source += delimLen;
+			delimFound = true;
+			lenTok -= trailing_spaces;
+			return tok;
+		}
+
+		// check for protected character
+		if ( *source == '\\' ) {
+			protect = !protect;
+			if ( lenTok == 0 )
+				tok = source;
+			else
+				trailing_spaces = 0;
+
+			++lenTok;
+			continue;
+		}
+
+
+		// check for terminating quote character
+		if ( *source == quote ) {
+			if ( !protect )
+				quote = 0;
+		}
+		// check for beginning quote
+		else if ( quote == 0 and strchr(quotes, *source) != NULL ) {
+			quote = *source;
+			trailing_spaces = 0;
+		}
+		// trimming outside unprotected characters outside of quotes
+		else if ( trim ) {
+			if ( !quote and !protect and strchr(whitespaces, *source) != NULL ) {
+				// trim leading white spaces
+				if ( lenTok == 0 )
+					continue;
+				// count trailing spaces
+				else
+					++trailing_spaces;
+			}
+			else {
+				trailing_spaces = 0;
+			}
+		}
+
+		// mark begining of string
+		if ( lenTok == 0 )
+			tok = source;
+
+		++lenTok;
+		protect = false;
+	}
+
+	lenTok -= trailing_spaces;
+	return tok;
+}
+
+
 bool isEmpty(const char* str) {
 	return str == NULL || *str == '\0';
 }
@@ -486,6 +587,7 @@ starCheck:
 bool wildicmp(const std::string &wild, const std::string &str) {
 	return wildicmp(wild.c_str(), str.c_str());
 }
+
 
 
 } // namespace Core
