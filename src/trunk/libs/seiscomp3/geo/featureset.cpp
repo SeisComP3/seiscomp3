@@ -29,9 +29,11 @@
 #include <sstream>
 #include <errno.h>
 
-
-using namespace Seiscomp::Geo;
 namespace fs = boost::filesystem;
+using namespace std;
+
+namespace Seiscomp {
+namespace Geo {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -103,9 +105,8 @@ GeoFeatureSet::~GeoFeatureSet() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool GeoFeatureSet::registerObserver(GeoFeatureSetObserver *observer) {
-	ObserverList::iterator it = std::find(_observers.begin(),
-	                                      _observers.end(),
-	                                      observer);
+	ObserverList::iterator it = find(_observers.begin(), _observers.end(),
+	                                 observer);
 	if ( it != _observers.end() )
 		return false;
 
@@ -120,9 +121,8 @@ bool GeoFeatureSet::registerObserver(GeoFeatureSetObserver *observer) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool GeoFeatureSet::unregisterObserver(GeoFeatureSetObserver *observer) {
-	ObserverList::iterator it = std::find(_observers.begin(),
-	                                      _observers.end(),
-	                                      observer);
+	ObserverList::iterator it = find(_observers.begin(), _observers.end(),
+	                                 observer);
 	if ( it == _observers.end() )
 		return false;
 
@@ -158,7 +158,7 @@ void GeoFeatureSet::clear() {
 void GeoFeatureSet::load() {
 	clear();
 
-	Seiscomp::Environment* env = Seiscomp::Environment::Instance();
+	Environment* env = Environment::Instance();
 	if ( !readBNADir(env->configDir() + "/bna") )
 		readBNADir(env->shareDir() + "/bna");
 
@@ -172,7 +172,7 @@ void GeoFeatureSet::load() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
+size_t GeoFeatureSet::readBNADir(const string& dirPath) {
 	// Clear the current GeoFeatureSet
 	clear();
 
@@ -193,7 +193,7 @@ size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 	              (Core::Time::GMT()-start).length());
 
 	// Sort the features according to their rank
- 	std::sort(_features.begin(), _features.end(), compareByRank);
+ 	sort(_features.begin(), _features.end(), compareByRank);
 
 	return fileCount;
 }
@@ -214,7 +214,7 @@ size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
 		fs::directory_iterator end_itd;
 		fs::directory_iterator itd(directory);
 
-		std::string fileName;
+		string fileName;
 		for ( ; itd != end_itd; ++itd ) {
 			fileName = SC_FS_IT_LEAF(itd);
 
@@ -232,7 +232,7 @@ size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
 				SEISCOMP_ERROR("Error reading file: %s", SC_FS_IT_STR(itd).c_str());
 		}
 	}
-	catch (const std::exception& ex) {}
+	catch (const exception& ex) {}
 
 	return fileCount;
 }
@@ -242,7 +242,7 @@ size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Category* GeoFeatureSet::addNewCategory(const std::string name,
+Category* GeoFeatureSet::addNewCategory(const string name,
                                         const Category* parent) {
 	Category* category = new Category(_categories.size(),
 		parent == NULL || parent->name == "" ? name :
@@ -257,17 +257,17 @@ Category* GeoFeatureSet::addNewCategory(const std::string name,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string GeoFeatureSet::initStatus(const std::string &directory,
-                                            unsigned int fileCount) const {
+const string GeoFeatureSet::initStatus(const string &directory,
+                                       unsigned int fileCount) const {
 	unsigned int vertexCount = 0;
 
-	std::vector<GeoFeature*>::const_iterator itf;
+	vector<GeoFeature*>::const_iterator itf;
 
 	for ( itf = _features.begin(); itf != _features.end(); ++itf ) {
 		vertexCount += (*itf)->vertices().size();
 	}
 
-	std::ostringstream buffer;
+	ostringstream buffer;
 	buffer << "Read " << _features.size()
 	       << " segment(s) with a total number of "
 	       << vertexCount << " vertice(s) from " << fileCount
@@ -282,48 +282,36 @@ const std::string GeoFeatureSet::initStatus(const std::string &directory,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /** Reads the BNA-header, e.g. "segment name","rank 3",123 */
-bool GeoFeatureSet::readBNAHeader(std::string &segment, unsigned int &rank,
+bool GeoFeatureSet::readBNAHeader(string &segment, unsigned int &rank,
                                   GeoFeature::Attributes &attributes,
                                   unsigned int &points, bool &isClosed,
-                                  std::string &error, const std::string &line) const {
-	size_t pos1, pos2, colonPos;
-	std::string tmpStr;
-	unsigned int nFields(0);
-
+                                  string &error, const string &line) const {
 	rank = 1;
 	attributes.clear();
 	points = 0;
+	vector<string> fields;
 
-	// segment name
-	if ( (pos1 = line.find('"')) == std::string::npos ||
-	     (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
-		error = "missing quote sign in first header field";
+	// read 3-5 header fields separated by a comma where the first 2-4 fields
+	// must start and end on a quote (") and the last field represent a number
+	if ( Core::splitExt(fields, line.c_str(), ",", false, true) < 3 ) {
+		error = "BNA requires at least 2 header fields";
 		return false;
 	}
-	++nFields;
-	segment = line.substr(pos1+1, pos2-pos1-1);
-	Core::trim(segment);
+	else if ( fields.size() > 5 ) {
+		error = "BNA allows at most 5 header fields";
+		return false;
+	}
 
-	// read more header fields, BNA allows 2-4 of them
-	while ( nFields < 4 ) {
-		if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ||
-			 (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
-			// BNA needs at least 2 header fields
-			if ( nFields >= 2 ) {
-				break;
-			}
+	// read segment name from first field
+	vector<string>::iterator it = fields.begin();
+	segment = Core::trim(*it);
 
-			error = "missing quote sign in second header field";
-			return false;
-		}
-		++nFields;
-		tmpStr = line.substr(pos1+1, pos2-pos1-1);
-		Core::trim(tmpStr);
-
+	// read rank and attributes from next fields
+	for ( ; it != fields.end()-1; ++it ) {
 		// rank is a special identifier
-		if ( tmpStr.length() >= 6 && strncmp(tmpStr.c_str(), "rank ", 5) == 0 ) {
+		if ( it->length() >= 6 && strncmp(it->c_str(), "rank ", 5) == 0 ) {
 			int tmp(0);
-			tmp = atoi(tmpStr.substr(5, tmpStr.length()-5).c_str());
+			tmp = atoi(it->c_str()+5);
 			if ( tmp > 1 ) {
 				rank = static_cast<unsigned int>(tmp);
 				continue;
@@ -332,35 +320,26 @@ bool GeoFeatureSet::readBNAHeader(std::string &segment, unsigned int &rank,
 
 		// read list of key value parameter into parameter map, e.g.
 		// "foo1: bar1, foo2: bar2"
-		if ( tmpStr.find(':') != std::string::npos ) {
-			std::vector<std::string> keyValues;
-			Seiscomp::Core::split(keyValues, tmpStr.c_str(), ",");
-
-			for ( std::vector<std::string>::const_iterator it = keyValues.begin();
-				  it != keyValues.end(); ++it ) {
-
-				if ( (colonPos = it->find(':')) == std::string::npos )
-					continue;
-
-				std::string key(it->substr(0, colonPos));
-				std::string value;
-				if ( colonPos < it->size()-1 )
-					value = it->substr(colonPos+1);
-				attributes[Core::trim(key)] = Core::trim(value);
-			}
+		char *source = const_cast<char *>(it->c_str());
+		size_t sourceLen = it->size();
+		const char *key, *value;
+		size_t keyLen, valueLen;
+		char delimFound = 0;
+		while ( sourceLen > 0 ) {
+			key = Core::tokenizeUnescape(keyLen, sourceLen, source, delimFound, ":");
+			if ( key == NULL || !sourceLen || !delimFound )
+				break;
+			value = Core::tokenizeUnescape(valueLen, sourceLen, source, delimFound, ",");
+			if ( value != NULL )
+				attributes[string(key, keyLen)] = string(value, valueLen);
+			else
+				attributes[string(key, keyLen)] = "";
 		}
 	}
 
 	// points
-	if ( (pos1 = line.rfind(',')) == std::string::npos || pos1 <= pos2 ) {
-		error = "could not find position of length field";
-		return false;
-	}
-	tmpStr = line.substr(pos1+1);
-
-	Seiscomp::Core::trim(tmpStr);
 	int p;
-	if ( !Seiscomp::Core::fromString(p, tmpStr) ) {
+	if ( !Core::fromString(p, *it) ) {
 		error = "invalid number format in length field";
 		return false;
 	}
@@ -412,11 +391,11 @@ bool GeoFeatureSet::readBNAHeader(std::string &segment, unsigned int &rank,
  *   7,7 --end of island #2
  *   2,2 --end of main area
  */
-bool GeoFeatureSet::readBNAFile(const std::string &filename,
+bool GeoFeatureSet::readBNAFile(const string &filename,
                                 const Category *category) {
 	SEISCOMP_DEBUG("Reading segments from file: %s", filename.c_str());
 
-	std::ifstream infile(filename.c_str());
+	ifstream infile(filename.c_str());
 
 	if ( infile.fail() ) {
 		SEISCOMP_WARNING("Could not open segment file for reading: %s",
@@ -424,10 +403,10 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 		return false;
 	}
 
-	std::vector<GeoFeature*> features;
+	vector<GeoFeature*> features;
 	GeoFeature *feature;
 	unsigned int lineNum = 0, rank, points;
-	std::string line, segment, error;
+	string line, segment, error;
 	const char *nptr;
 	char *endptr;
 	bool isClosed;
@@ -441,7 +420,7 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 		++lineNum;
 
 		// read BNA header
-		std::getline(infile, line);
+		getline(infile, line);
 		if ( Core::trim(line).empty() ) {
 			continue;
 		}
@@ -472,7 +451,7 @@ bool GeoFeatureSet::readBNAFile(const std::string &filename,
 				// read next line
 				if ( infile.good() ) {
 					++lineNum;
-					std::getline(infile, line);
+					getline(infile, line);
 					nptr = line.c_str();
 				}
 				else {
@@ -599,7 +578,9 @@ bool GeoFeatureSet::addFeature(GeoFeature *feature) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const bool GeoFeatureSet::compareByRank(const GeoFeature* gf1,
-                                        const GeoFeature* gf2 ) {
+bool GeoFeatureSet::compareByRank(const GeoFeature* gf1, const GeoFeature* gf2) {
   	return gf1->rank() < gf2->rank();
 }
+
+} // ns Geo
+} // ns Seiscomp

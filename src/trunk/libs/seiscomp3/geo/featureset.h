@@ -110,8 +110,7 @@ class SC_SYSTEM_CORE_API GeoFeatureSet : public Core::BaseObject {
 		                   const std::string &line) const;
 
 		/** Compares two GeoFeatures by their rank */
-		static const bool compareByRank(const GeoFeature* gf1,
-		                                const GeoFeature* gf2);
+		static bool compareByRank(const GeoFeature* gf1, const GeoFeature* gf2);
 
 		/**
 		 * Creates and inserts a new Category object into the Category vector.
