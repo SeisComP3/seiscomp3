@@ -291,6 +291,8 @@ bool GeoFeatureSet::readBNAHeader(std::string &segment, unsigned int &rank,
 	unsigned int nFields(0);
 
 	rank = 1;
+	attributes.clear();
+	points = 0;
 
 	// segment name
 	if ( (pos1 = line.find('"')) == std::string::npos ||
