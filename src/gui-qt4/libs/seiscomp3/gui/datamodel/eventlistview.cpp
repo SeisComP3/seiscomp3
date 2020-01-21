@@ -2875,6 +2875,7 @@ void EventListView::readFromDatabase(const Filter &filter) {
 	if ( _withOrigins ) numberOfSteps -= eventDiff*20;
 	if ( _withFocalMechanisms ) numberOfSteps -= eventDiff*20;
 
+	if (numberOfSteps == 0 ) numberOfSteps+=1;
 	progress.setRange(0, numberOfSteps);
 
 	// Read comments
