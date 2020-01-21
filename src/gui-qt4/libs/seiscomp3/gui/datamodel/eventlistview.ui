@@ -102,6 +102,124 @@
           </property>
          </widget>
         </item>
+	<item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>32</width>
+            <height>29</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+	<item>
+	 <widget class="QCheckBox" name="cbFilterMagnitudes" >
+	  <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>8</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>Enable/Disable events selection using the magnitude range min: "min." max: "max:"</string>
+          </property>
+          <property name="text" >
+           <string>Select magnitude</string>
+          </property>
+          <property name="checked" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+	<item>
+         <widget class="QComboBox" name="lstMagnitudeMethod" >
+	  <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>Choose the method for magnitude selection.</string>
+          </property>
+          <property name="sizeAdjustPolicy" >
+           <enum>QComboBox::AdjustToContents</enum>
+          </property>
+	 </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="minmagLabel" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>min.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="minmagBox" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimum" >
+           <number>0.0</number>
+          </property>
+	  <property name="decimals" >
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+	<item>
+         <widget class="QLabel" name="maxmagLabel" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>max.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="maxmagBox" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+	  <property name="minimum" >
+           <number>0.0</number>
+          </property>
+	  <property name="decimals" >
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
         <item>
          <spacer>
           <property name="orientation" >

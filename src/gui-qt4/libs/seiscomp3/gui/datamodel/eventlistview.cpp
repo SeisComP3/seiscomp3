@@ -1987,6 +1987,35 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	try { _ui.cbFilterRegions->setChecked(SCApp->configGetBool("eventlist.filter.regions.enabled")); }
 	catch ( ... ) {}
 
+	try { 
+	        _selectMagnitudeRange=SCApp->configGetBool("eventlist.filter.magnitudes.enabled");
+		_ui.cbFilterMagnitudes->setChecked(_selectMagnitudeRange);
+		_ui.lstMagnitudeMethod->addItem("min./max.");
+		_ui.lstMagnitudeMethod->addItem("min.");
+		_ui.lstMagnitudeMethod->addItem("max.");
+	}
+	catch ( ... ) {
+	        _selectMagnitudeRange = false;
+		_ui.cbFilterMagnitudes->hide();
+	}
+
+	try { _magnitudeMethod = SCApp->configGetInt("eventlist.filter.magnitudes.method"); }
+	catch ( ... ) {
+	        // Default method is min. 
+	        _magnitudeMethod = 1;
+	}
+	
+	try { _ui.minmagBox->setValue(SCApp->configGetDouble("eventlist.filter.magnitudes.minimum")); }
+	catch ( ... ) {
+	        _ui.minmagBox->setValue(_ui.minmagBox->minimum());
+	}
+
+	try { _ui.maxmagBox->setValue(SCApp->configGetDouble("eventlist.filter.magnitudes.maximum")); }
+	catch ( ... ) {
+	        _ui.maxmagBox->setValue(_ui.maxmagBox->minimum());
+	}
+	
+
 	try {
 		_itemConfig.customColumn = SCApp->configGetInt("eventlist.customColumn.pos");
 	}
@@ -2289,6 +2318,13 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 
 	_autoSelect = false;
 
+
+	connect(_ui.cbFilterMagnitudes, SIGNAL(stateChanged(int)), this,  SLOT(onUseMagRange(int)));
+
+	onUseMagRange(_ui.cbFilterMagnitudes->checkState());
+
+	connect(_ui.lstMagnitudeMethod, SIGNAL(currentIndexChanged(int)),this, SLOT(magnitudeSelectionChanged(int)));
+
 	connect(_ui.cbHideOther, SIGNAL(stateChanged(int)), this,  SLOT(onShowOtherEvents(int)));
 	_hideOtherEvents = _ui.cbHideOther->checkState() == Qt::Checked;
 
@@ -2365,6 +2401,21 @@ void EventListView::indicatorResized(const QSize &size) {
 	);
 }
 
+void EventListView::onUseMagRange(int checked) {
+	_selectMagnitudeRange = checked == Qt::Checked;
+	if (_selectMagnitudeRange) {
+		_ui.lstMagnitudeMethod->show();
+		_ui.lstMagnitudeMethod->setCurrentIndex(_magnitudeMethod);
+		magnitudeSelectionChanged(_magnitudeMethod);
+	} 
+	else {
+		_ui.lstMagnitudeMethod->hide();
+		_ui.minmagLabel->hide();
+		_ui.minmagBox->hide();
+		_ui.maxmagLabel->hide();
+		_ui.maxmagBox->hide();
+	}
+}
 
 void EventListView::onShowOtherEvents(int checked) {
 	_hideOtherEvents = checked == Qt::Checked;
@@ -2723,6 +2774,32 @@ void EventListView::selectEventFM(const QString &url) {
 }
 
 
+void EventListView::magnitudeSelectionChanged(int index) {
+        _magnitudeMethod = index;	
+	switch (_magnitudeMethod) {
+	case 0:
+	  _ui.minmagLabel->show();
+	  _ui.minmagBox->show();
+	  _ui.maxmagLabel->show();
+	  _ui.maxmagBox->show();
+	  break;
+	case 1:
+	  _ui.minmagLabel->hide();
+	  _ui.minmagBox->show();
+	  _ui.maxmagLabel->hide();
+	  _ui.maxmagBox->hide();
+	  break;
+	case 2:
+	  _ui.minmagLabel->hide();
+	  _ui.minmagBox->hide();
+	  _ui.maxmagLabel->hide();
+	  _ui.maxmagBox->show();
+	  break;
+	}
+}
+
+
+
 void EventListView::regionSelectionChanged(int index) {
 	_regionIndex = index;
 
@@ -2789,10 +2866,44 @@ void EventListView::selectEventID(const std::string& publicID) {
 }
 
 
+void EventListView::readMagnitudeRange() {
+   if (_selectMagnitudeRange == false ) {
+     _filter.minMagnitude = None;
+     _filter.maxMagnitude = None;
+   }
+   else {
+     switch(_magnitudeMethod) {
+       // min/max
+     case 0:
+       if ( _ui.minmagBox->value() >= _ui.maxmagBox->value() ) {
+	 _filter.minMagnitude = _ui.minmagBox->value();
+	 _filter.maxMagnitude = None;
+       }
+       else {
+	 _filter.minMagnitude = _ui.minmagBox->value();
+	 _filter.maxMagnitude = _ui.maxmagBox->value();
+       }
+       break;
+       // min
+     case 1: 
+        _filter.minMagnitude = _ui.minmagBox->value();
+	_filter.maxMagnitude = None;
+        break;
+	// max
+     case 2: 
+       _filter.minMagnitude = None;
+       _filter.maxMagnitude = _ui.maxmagBox->value();
+       break;  
+     }
+   }
+}
+
+
 void EventListView::readLastDays() {
 	_filter.endTime = Core::Time::GMT();
 	_filter.startTime = _filter.endTime - Core::TimeSpan(_ui.spinBox->value()*86400);
 	setInterval(Core::TimeWindow(_filter.startTime, _filter.endTime));
+	readMagnitudeRange();
 	readFromDatabase(_filter);
 }
 
@@ -2810,7 +2921,7 @@ void EventListView::readInterval() {
 	                             _ui.dateTimeEditEnd->time().hour(),
 	                             _ui.dateTimeEditEnd->time().minute(),
 	                             _ui.dateTimeEditEnd->time().second());
-
+	readMagnitudeRange();
 	readFromDatabase(_filter);
 }
 
@@ -2874,7 +2985,7 @@ void EventListView::readFromDatabase(const Filter &filter) {
 
 	if ( _withOrigins ) numberOfSteps -= eventDiff*20;
 	if ( _withFocalMechanisms ) numberOfSteps -= eventDiff*20;
-
+	
 	if (numberOfSteps == 0 ) numberOfSteps+=1;
 	progress.setRange(0, numberOfSteps);
 

@@ -178,9 +178,11 @@ class SC_GUI_API EventListView : public QWidget {
 		void itemPressed(QTreeWidgetItem*,int);
 		void copyRowToClipboard();
 
+		void readMagnitudeRange();
 		void readLastDays();
 		void readInterval();
 
+		void onUseMagRange(int checked);
 		void onShowOtherEvents(int checked);
 		void onShowForeignEvents(int checked);
 		void onHideOutsideRegion(int checked);
@@ -192,6 +194,7 @@ class SC_GUI_API EventListView : public QWidget {
 		void headerContextMenuRequested(const QPoint &);
 		void waitDialogDestroyed(QObject *o);
 
+		void magnitudeSelectionChanged(int index);
 		void regionSelectionChanged(int index);
 		void changeRegion();
 
@@ -303,6 +306,8 @@ class SC_GUI_API EventListView : public QWidget {
 		bool                                _checkEventAgency;
 		bool                                _showOnlyLatestPerAgency;
 		int                                 _regionIndex;
+		bool                                _selectMagnitudeRange;
+		int                                 _magnitudeMethod;
 };
 
 

@@ -1144,6 +1144,28 @@
 							</description>
 						</parameter>
 					</group>
+					<group name="magnitudes">
+						<parameter name="enabled" type="boolean" default="false">
+							<description>
+							Enable/Disable magnitude range filtering.
+							</description>
+						</parameter>
+						<parameter name="method" type="int" default="1">
+							<description>
+							Method of magnitude selection, defined by an integer [ 0 for &quot;min./max.&quot; ; 1 = &quot;min.&quot; ; 2 = &quot;max.&quot; ]
+							</description>
+						</parameter>
+						<parameter name="minimum" type="double" default="5.0">
+							<description>
+							Minimum magnitude used to filter event list request.
+							</description>
+						</parameter>
+						<parameter name="maximum" type="double" default="12.0">
+							<description>
+							Maximum magnitude used to filter event list request.
+							</description>
+						</parameter>
+					</group>
 				</group>
 				<group name="scripts">
 					<parameter name="columns" type="list:string">
