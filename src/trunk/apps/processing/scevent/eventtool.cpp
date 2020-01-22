@@ -700,8 +700,9 @@ void EventTool::handleTimeout() {
 		OriginPtr org = Origin::Cast(it->obj);
 		EventInformationPtr info;
 		if ( org ) {
-			SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s",
-			             org->publicID().c_str());
+			SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s (no event "
+			             "creation before %i s)", org->publicID().c_str(),
+			             it->timeout + DELAY_CHECK_INTERVAL);
 			info = associateOrigin(org.get(), false);
 		}
 		else {
@@ -1742,7 +1743,8 @@ EventInformationPtr EventTool::associateOriginCheckDelay(DataModel::Origin *orig
 		}
 
 		// Filter to delay the origin passes
-		SEISCOMP_LOG(_infoChannel, "Origin %s delayed", origin->publicID().c_str());
+		SEISCOMP_LOG(_infoChannel, "Origin %s delayed for %i s",
+		             origin->publicID().c_str(), _config.delayTimeSpan);
 		_delayBuffer.push_back(DelayedObject(origin, _config.delayTimeSpan));
 
 		return NULL;
