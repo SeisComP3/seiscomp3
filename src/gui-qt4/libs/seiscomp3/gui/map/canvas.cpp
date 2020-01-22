@@ -160,10 +160,10 @@ bool Canvas::LegendArea::mouseReleaseEvent(QMouseEvent *e) {
 			newIndex = findNext(true);
 
 		if ( newIndex != currentIndex ) {
-			at(currentIndex)->setVisible(false);
+			at(currentIndex).legend->setVisible(false);
 			currentIndex = newIndex;
 			if ( currentIndex != -1 )
-				at(currentIndex)->setVisible(true);
+				at(currentIndex).legend->setVisible(true);
 		}
 
 		return true;
@@ -194,7 +194,7 @@ int Canvas::LegendArea::findNext(bool forward) const {
 					index = numberOfLegends-1;
 			}
 
-			Legend *legend = at(index);
+			Legend *legend = at(index).legend;
 			if ( legend->isEnabled() &&
 				(legend->layer() == NULL || legend->layer()->isVisible()) )
 				return index;
@@ -202,7 +202,7 @@ int Canvas::LegendArea::findNext(bool forward) const {
 	}
 	else {
 		for ( int i = 0; i < numberOfLegends; ++i ) {
-			Legend *legend = at(i);
+			Legend *legend = at(i).legend;
 			if ( legend->isEnabled() &&
 				(legend->layer() == NULL || legend->layer()->isVisible()) )
 				return i;
@@ -345,9 +345,12 @@ void Canvas::setSize(int w, int h) {
 
 	updateBuffer();
 
-	foreach ( const LegendArea &area, _legendAreas ) {
-		foreach ( Seiscomp::Gui::Map::Legend *legend, area )
-			legend->contextResizeEvent(_buffer.size());
+	LegendAreas::iterator it;
+	for ( it = _legendAreas.begin(); it != _legendAreas.end(); ++it ) {
+		LegendArea &area = it.value();
+		int count = area.count();
+		for ( int i = 0; i < count; ++i )
+			area[i].dirty = true;
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -563,13 +566,13 @@ void Canvas::setDrawLegends(bool e) {
 
 	foreach ( const LegendArea& area, _legendAreas ) {
 		if ( !e ) {
-			foreach (Seiscomp::Gui::Map::Legend* legend, area) {
-				legend->setVisible(false);
+			foreach (const LegendItem &item, area) {
+				item.legend->setVisible(false);
 			}
 		}
 		else {
 			if ( area.currentIndex != -1 )
-				area[area.currentIndex]->setVisible(true);
+				area[area.currentIndex].legend->setVisible(true);
 		}
 	}
 
@@ -1122,7 +1125,7 @@ void Canvas::drawLegends(QPainter& painter) {
 				if ( area.currentIndex == -1 ) continue;
 			}
 			else {
-				legend = area[area.currentIndex];
+				legend = area[area.currentIndex].legend;
 				if ( !legend->isEnabled() || ((legend->layer() != NULL) && !legend->layer()->isVisible()) ) {
 					if ( legend->isVisible() ) legend->setVisible(false);
 					area.currentIndex = area.findNext();
@@ -1130,9 +1133,15 @@ void Canvas::drawLegends(QPainter& painter) {
 				}
 			}
 
-			legend = area[area.currentIndex];
+			legend = area[area.currentIndex].legend;
 
 			if ( !legend->isVisible() ) legend->setVisible(true);
+
+			if ( area[area.currentIndex].dirty ) {
+				// TODO: Inject painter into contextResizeEvent
+				legend->contextResizeEvent(size());
+				area[area.currentIndex].dirty = false;
+			}
 
 			QRect decorationRect(0, 0, 52, 22);
 			const QString &title = legend->title();
@@ -1254,10 +1263,16 @@ void Canvas::drawLegends(QPainter& painter) {
 			it->decorationRects[1] = QRect();
 
 			for ( LegendArea::iterator lit = area.begin(); lit != area.end(); ++lit ) {
-				legend = *lit;
+				legend = lit->legend;
 
 				if ( !legend->isEnabled() ) continue;
 				if ( !legend->isVisible() ) legend->setVisible(true);
+
+				if ( area[area.currentIndex].dirty ) {
+					// TODO: Inject painter into contextResizeEvent
+					legend->contextResizeEvent(size());
+					area[area.currentIndex].dirty = false;
+				}
 
 				QRect decorationRect(0, 0, 52, 22);
 				const QString &title = legend->title();
@@ -1399,7 +1414,7 @@ void Canvas::onLegendAdded(Legend *legend) {
 		it = _legendAreas.insert(legend->alignment(), LegendArea());
 
 	LegendArea &area = *it;
-	area.append(legend);
+	area.append(LegendItem(legend));
 	if ( legend->layer() && legend->layer()->isVisible() &&
 	     legend->isEnabled() && area.currentIndex == -1 )
 		area.currentIndex = area.findNext();
@@ -1408,8 +1423,6 @@ void Canvas::onLegendAdded(Legend *legend) {
 	        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
 	connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
 	        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
-
-	legend->contextResizeEvent(_buffer.size());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1420,7 +1433,7 @@ void Canvas::onLegendAdded(Legend *legend) {
 void Canvas::onLegendRemoved(Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it != _legendAreas.end() ) {
-		int index = it->indexOf(legend);
+		int index = it->find(legend);
 		if ( index != -1 )
 			it->remove(index);
 	}
@@ -1534,7 +1547,7 @@ void Canvas::removeLayer(Layer* layer) {
 		bool changed = false;
 		Legends::iterator tmpIt = legends.begin();
 		while ( tmpIt != legends.end() ) {
-			if ( layer == (*tmpIt)->layer() ) {
+			if ( layer == (*tmpIt).legend->layer() ) {
 				tmpIt = legends.erase(tmpIt);
 				changed = true;
 			}
@@ -1851,13 +1864,13 @@ void Canvas::bringToFront(Seiscomp::Gui::Map::Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
 
-	int index = it->indexOf(legend);
+	int index = it->find(legend);
 	if ( index == -1 ) return;
 	if ( index == it->currentIndex ) return;
 
 	const Legends& legends = *it;
 	if ( it->currentIndex > 0 && legends.count() > it->currentIndex )
-		legends[it->currentIndex]->setVisible(false);
+		legends[it->currentIndex].legend->setVisible(false);
 
 	it->currentIndex = index;
 }
@@ -1871,7 +1884,7 @@ void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) 
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
 
-	int index = it->indexOf(legend);
+	int index = it->find(legend);
 	if ( index == -1 ) return;
 
 	it->currentIndex = -1;
