@@ -16,6 +16,11 @@
 					is set to true.
 				</description>
 			</parameter>
+			<parameter name="visibleMagnitudes" type="list:string" default="M,MLv,mb,mB,Mw(mB)">
+				<description>
+					A list of magnitude types to be displayed in the summary widget (F8).
+				</description>
+			</parameter>
 			<group name="scripts">
 				<parameter name="export" type="string">
 					<description>
