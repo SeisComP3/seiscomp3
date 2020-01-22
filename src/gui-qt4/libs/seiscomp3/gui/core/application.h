@@ -11,7 +11,6 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_GUI_APPLICATION_H__
 #define __SEISCOMP_GUI_APPLICATION_H__
 
@@ -211,6 +210,7 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 		QPalette palette() const;
 		void setPalette(const QPalette &pal);
 
+
 	protected:
 		virtual bool init();
 		virtual bool run();
@@ -286,16 +286,15 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 		void createSettingsDialog();
 		ConnectionDialog *cdlg();
 
+
 	protected:
-		Type                _type;
-		QCoreApplication   *_app;
-		QFont               _font;
-		QPalette            _palette;
+		QApplication       *_app;
 
 
 	private:
-		static Application* _instance;
+		static Application *_instance;
 
+		Type                _type;
 		Scheme             *_scheme;
 		mutable QSettings  *_settings;
 		QTimer              _timerSOH;
@@ -311,13 +310,13 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 		std::string         _guiGroup;
 		std::string         _commandTargetClient;
 
-		QWidget*            _mainWidget;
-		QSplashScreen*      _splash;
-		ConnectionDialog*   _dlgConnection;
+		QWidget            *_mainWidget;
+		QSplashScreen      *_splash;
+		ConnectionDialog   *_dlgConnection;
 		bool                _settingsOpened;
 		bool                _filterCommands;
 
-		MessageThread*      _thread;
+		MessageThread      *_thread;
 		int                 _flags;
 
 		QSocketNotifier    *_signalNotifier;

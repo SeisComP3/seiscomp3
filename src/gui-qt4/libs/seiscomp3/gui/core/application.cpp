@@ -11,7 +11,6 @@
  ***************************************************************************/
 
 
-
 #define SEISCOMP_COMPONENT Application
 
 #include <seiscomp3/core/system.h>
@@ -1781,12 +1780,7 @@ void Application::sendCommand(Command command, const std::string& parameter, Cor
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QFont Application::font() const {
-	if ( _type == Tty ) {
-		return _font;
-	}
-	else {
-		return dynamic_cast<QApplication*>(_app)->font();
-	}
+	return _app->font();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1795,12 +1789,7 @@ QFont Application::font() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::setFont(const QFont &font) {
-	if ( _type == Tty ) {
-		_font = font;
-	}
-	else {
-		return dynamic_cast<QApplication*>(_app)->setFont(font);
-	}
+	_app->setFont(font);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1809,12 +1798,7 @@ void Application::setFont(const QFont &font) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QPalette Application::palette() const {
-	if ( _type == Tty ) {
-		return _palette;
-	}
-	else {
-		return dynamic_cast<QApplication*>(_app)->palette();
-	}
+	return _app->palette();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1823,12 +1807,7 @@ QPalette Application::palette() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::setPalette(const QPalette &pal) {
-	if ( _type == Tty ) {
-		_palette = pal;
-	}
-	else {
-		return dynamic_cast<QApplication*>(_app)->setPalette(pal);
-	}
+	_app->setPalette(pal);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
