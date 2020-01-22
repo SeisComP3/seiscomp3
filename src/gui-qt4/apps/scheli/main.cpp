@@ -252,7 +252,7 @@ bool HCApp::validateParameters() {
 		_streamCodes.push_back(_streamID);
 	}
 
-	if ( (type() == QApplication::Tty) && _outputFilename.empty() ) {
+	if ( (type() == Application::Tty) && _outputFilename.empty() ) {
 		std::cerr << "ERROR: Output filename empty" << std::endl;
 		return false;
 	}
@@ -289,7 +289,7 @@ bool HCApp::validateParameters() {
 
 
 bool HCApp::handleInitializationError(Stage stage) {
-	if ( type() == QApplication::Tty )
+	if ( type() == Application::Tty )
 		return false;
 	return Application::handleInitializationError(stage);
 }
@@ -308,7 +308,7 @@ bool HCApp::init() {
 
 
 bool HCApp::run() {
-	if ( type() == QApplication::Tty ) {
+	if ( type() == Application::Tty ) {
 		Core::Time endTime = _endTime.valid()?_endTime:Core::Time::GMT();
 
 		for ( size_t i = 0; i < _streamCodes.size(); ++i ) {
