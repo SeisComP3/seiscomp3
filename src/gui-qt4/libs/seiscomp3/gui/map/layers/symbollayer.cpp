@@ -196,6 +196,25 @@ void SymbolLayer::sortByLatitude() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void SymbolLayer::setVisible(bool v) {
+	bool wasVisible = isVisible();
+	Layer::setVisible(v);
+	if ( isVisible() != wasVisible ) {
+		// Tell the symbols to update e.g. annotation visibility
+		foreach ( Symbol *s, _symbols ) {
+			s->layerVisibilityChanged(isVisible());
+		}
+
+		if ( isVisible() )
+			update();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SymbolLayer::calculateMapPosition(const Canvas *canvas) {
 	foreach ( Symbol *s, _symbols )
 		s->calculateMapPosition(canvas);

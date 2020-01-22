@@ -561,6 +561,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 				_measurePoints.push_back(p);
 			}
 			_measurePoints.push_back(p);
+			unsetCursor();
+			setToolTip(QString());
 			update();
 			return;
 		}
@@ -610,8 +612,39 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 		_canvas.projection()->unproject(_measurePoints.last(), event->pos());
 		update();
 	}
-	else if ( !_canvas.filterMouseMoveEvent(event) )
-		_zoomControls->setVisible(_zoomControls->geometry().contains(event->pos()));
+	else {
+		if ( !_canvas.filterMouseMoveEvent(event) )
+			_zoomControls->setVisible(_zoomControls->geometry().contains(event->pos()));
+
+		bool hasLayerCursor = false;
+		bool hasLayerToolTip = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
+		// Check for tooltips
+		int count = _canvas.layerCount();
+
+		for ( int i = count-1; i >= 0; --i ) {
+			Map::Layer *l = _canvas.layer(i);
+			if ( l && !l->toolTip().isEmpty() ) {
+				setToolTip(l->toolTip());
+				hasLayerToolTip = true;
+				break;
+			}
+		}
+
+		if ( !hasLayerToolTip )
+			setToolTip(QString());
+	}
 }
 
 
@@ -626,6 +659,19 @@ void MapWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 
 void MapWidget::keyPressEvent(QKeyEvent* e) {
 	if ( _canvas.filterKeyPressEvent(e) ) {
+		bool hasLayerCursor = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
 		e->accept();
 		return;
 	}
@@ -677,6 +723,19 @@ void MapWidget::keyPressEvent(QKeyEvent* e) {
 
 void MapWidget::keyReleaseEvent(QKeyEvent *e) {
 	if ( _canvas.filterKeyReleaseEvent(e) ) {
+		bool hasLayerCursor = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
 		e->accept();
 		return;
 	}

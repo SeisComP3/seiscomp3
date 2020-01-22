@@ -46,6 +46,14 @@ namespace Core {
    - Changed database oid type to 64bit
    - Added Record::authentication and Record::authority
    - Seiscomp::Gui::Application does not inherit from QApplication anymore
+   - Added Seiscomp::Gui::Map::Symbol::layerVisibilityChanged
+   - Added Seiscomp::Gui::Map::Layer::setToolTip
+   - Added Seiscomp::Gui::Map::Layer::toolTip
+   - Added Seiscomp::Gui::Map::Layer::hasCursorShape
+   - Added Seiscomp::Gui::Map::Layer::cursorShape
+   - Added Seiscomp::Gui::Map::Layer::setCursorShape
+   - Added Seiscomp::Gui::Map::Layer::unsetCursorShape
+   - Added Seiscomp::Gui::Map::Layer::update
 
  "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage

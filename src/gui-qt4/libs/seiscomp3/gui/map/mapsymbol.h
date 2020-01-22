@@ -184,6 +184,12 @@ class SC_GUI_API Symbol {
 		 */
 		virtual void customDraw(const Map::Canvas *canvas, QPainter &painter) = 0;
 
+		/**
+		 * @brief Notifies the symbol that the layer visibility has changed.
+		 * @param v The current visibility
+		 */
+		virtual void layerVisibilityChanged(bool v);
+
 
 	// ----------------------------------------------------------------------
 	// Protected symbol interface

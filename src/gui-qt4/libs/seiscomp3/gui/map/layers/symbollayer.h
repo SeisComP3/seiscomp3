@@ -81,6 +81,7 @@ class SC_GUI_API SymbolLayer : public Layer {
 	//  Layer interface
 	// ----------------------------------------------------------------------
 	public:
+		virtual void setVisible(bool);
 		virtual void calculateMapPosition(const Canvas *canvas);
 		virtual bool isInside(const QMouseEvent *event, const QPointF &geoPos);
 		virtual void draw(const Canvas *canvas, QPainter &p);

@@ -71,6 +71,16 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual ~Layer();
 
 	public:
+		void setToolTip(const QString &toolTip);
+		const QString &toolTip() const { return _toolTip; }
+
+		bool hasCursorShape() const { return _hasCustomShape; }
+		const Qt::CursorShape &cursorShape() const { return _cursorShape; }
+		void setCursorShape(const Qt::CursorShape &);
+		void unsetCursorShape();
+
+		void update(const UpdateHints & = UpdateHints());
+
 		virtual void setConfig(const std::string &/*config*/) {}
 		virtual void init(const Config::Config&);
 		virtual void draw(const Canvas*, QPainter&) {}
@@ -159,13 +169,17 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		void updateRequested(const Layer::UpdateHints& = UpdateHints());
 
 	private:
-		Canvas  *_canvas;
-		QString  _name;
-		QString  _description;
-		bool     _visible;
-		bool     _antiAliasing;
-		Legends  _legends;
-		bool     _dirty;
+		QString         _toolTip;
+		Qt::CursorShape _cursorShape;
+		bool            _hasCustomShape;
+
+		Canvas         *_canvas;
+		QString         _name;
+		QString         _description;
+		bool            _visible;
+		bool            _antiAliasing;
+		Legends         _legends;
+		bool            _dirty;
 
 	friend class Canvas;
 };
