@@ -540,6 +540,8 @@ class OriginCommitOptions : public QDialog {
 					return false;
 				}
 			}
+			else
+				options.eventType = Core::None;
 
 			if ( ui.comboEventTypeCertainty->currentIndex() > 0 ) {
 				EventTypeCertainty typeCertainty;
@@ -550,6 +552,8 @@ class OriginCommitOptions : public QDialog {
 					return false;
 				}
 			}
+			else
+				options.eventTypeCertainty = Core::None;
 
 			if ( ui.comboOriginStates->currentIndex() > 0 ) {
 				EvaluationStatus originStatus;
@@ -559,6 +563,10 @@ class OriginCommitOptions : public QDialog {
 					QMessageBox::critical(this, "Internal Error", "Invalid origin evaluation status selected");
 					return false;
 				}
+			}
+			else {
+				OPT(EvaluationStatus) none;
+				options.originStatus = none;
 			}
 
 			if ( !ui.cbFixMagnitudeType->isEnabled() || !ui.cbFixMagnitudeType->isChecked() )
@@ -3906,20 +3914,50 @@ void OriginLocatorView::setPickerView(PickerView* picker) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::addObject(const QString &parentID, Seiscomp::DataModel::Object *o) {
-	if ( _currentOrigin && _baseEvent ) {
+	if ( _currentOrigin ) {
 		OriginReferencePtr ref = OriginReference::Cast(o);
-		if ( ref && parentID == _baseEvent->publicID().c_str() ) {
-			OriginPtr o = Origin::Find(ref->originID());
-			if ( o && (o->arrivalCount() > _currentOrigin->arrivalCount()) )
-				startBlinking(QColor(128,255,0), _ui.btnImportAllArrivals);
-		}
-	}
+		if ( ref ) {
+			if ( _baseEvent ) {
+				if ( parentID == _baseEvent->publicID().c_str() ) {
+					OriginPtr o = Origin::Find(ref->originID());
+					if ( o && (o->arrivalCount() > _currentOrigin->arrivalCount()) )
+						startBlinking(QColor(128,255,0), _ui.btnImportAllArrivals);
 
-	if ( _displayComment && _currentOrigin ) {
-		if ( parentID == _currentOrigin->publicID().c_str() ) {
-			Comment *comment = Comment::Cast(o);
-			if ( comment && comment->id() == _displayCommentID )
-				_ui.labelComment->setText(comment->text().c_str());
+					if ( ref->originID() == _currentOrigin->publicID() )
+						emit baseEventSet();
+				}
+				else if ( ref->originID() == _currentOrigin->publicID() ) {
+					// Current origin is associated with another event, load it
+					EventPtr evt = Event::Find(parentID.toStdString());
+					if ( !evt && _reader )
+						evt = Event::Cast(_reader->loadObject(Event::TypeInfo(), parentID.toStdString()));
+
+					if ( evt ) {
+						QMessageBox::information(this, tr("Event change"),
+						                         tr("The current origin was associated to another event than the current.\n"
+						                            "Event %1 is being loaded.").arg(parentID));
+						setBaseEvent(evt.get());
+						emit baseEventSet();
+					}
+					else {
+						QMessageBox::warning(this, tr("Event change"),
+						                     tr("The current origin was associated to another event than the current.\n"
+						                        "Unfortunately event %1 could not be loaded.").arg(parentID));
+						emit baseEventRejected();
+					}
+				}
+			}
+			else if ( ref->originID() == _currentOrigin->publicID() ) {
+				// Set base event
+			}
+		}
+
+		if ( _displayComment ) {
+			if ( parentID == _currentOrigin->publicID().c_str() ) {
+				Comment *comment = Comment::Cast(o);
+				if ( comment && comment->id() == _displayCommentID )
+					_ui.labelComment->setText(comment->text().c_str());
+			}
 		}
 	}
 }
@@ -3989,11 +4027,10 @@ void OriginLocatorView::setBaseEvent(DataModel::Event *e) {
 	else {
 		_ui.labelEventID->setText("-");
 		_ui.labelEventID->setToolTip("");
-	}
 
-	if ( _baseEvent == NULL ) {
 		static_cast<PlotWidget*>(_residuals)->set(90,90,0);
 		static_cast<PlotWidget*>(_residuals)->resetPreferredFM();
+
 		return;
 	}
 
@@ -6335,6 +6372,7 @@ void OriginLocatorView::commitWithOptions(const void *data_ptr) {
 	}
 
 	const CommitOptions &options = *options_ptr;
+	bool isLocalOrigin = _localOrigin;
 
 	if ( options.originStatus ) {
 		if ( _localOrigin ) {
@@ -6360,15 +6398,18 @@ void OriginLocatorView::commitWithOptions(const void *data_ptr) {
 	}
 
 	// wait for event
-	if ( !_baseEvent || (!options.forceEventAssociation && _localOrigin) ) {
+	if ( !_baseEvent || (!options.forceEventAssociation && isLocalOrigin) ) {
+		cerr << "Wait for association" << endl;
 		QProgressDialog progress("Origin has not been associated with an event yet.\n"
 		                         "Waiting for event association ...\n"
 		                         "Hint: scevent should run",
 		                         "Cancel", 0, 0);
 		progress.setAutoClose(true);
 		progress.setWindowModality(Qt::ApplicationModal);
-		connect(this, SIGNAL(baseEventSet()), &progress, SLOT(cancel()));
-		progress.exec();
+		connect(this, SIGNAL(baseEventSet()), &progress, SLOT(accept()));
+		connect(this, SIGNAL(baseEventRejected()), &progress, SLOT(reject()));
+		if ( progress.exec() != QDialog::Accepted )
+			return;
 	}
 
 	// Do event specific things
