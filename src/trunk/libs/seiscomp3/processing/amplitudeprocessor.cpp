@@ -656,6 +656,7 @@ bool AmplitudeProcessor::computeNoise(const DoubleArray &data, int i1, int i2, d
 	}
 
 	DoubleArrayPtr d = static_cast<DoubleArray*>(data.slice(i1, i2));
+	if ( !d ) return false;
 
 	double ofs, amp;
 
