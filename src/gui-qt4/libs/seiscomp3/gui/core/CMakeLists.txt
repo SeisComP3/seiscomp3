@@ -11,6 +11,7 @@ SET(
 		locator.cpp
 		mainwindow.cpp
 		messagethread.cpp
+		optionaldoublespinbox.cpp
 		recordpolyline.cpp
 		recordstreamthread.cpp
 		recordview.cpp
@@ -75,6 +76,7 @@ SET(
 		uncertainties.h
 		spectrogramwidget.h
 		spectrumwidget.h
+		optionaldoublespinbox.h
 )
 
 SET(

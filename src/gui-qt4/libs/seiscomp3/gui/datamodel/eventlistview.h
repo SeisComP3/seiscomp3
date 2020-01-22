@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -56,6 +56,7 @@ namespace Private {
 class EventTreeItem;
 class OriginTreeItem;
 class FocalMechanismTreeItem;
+class EventFilterWidget;
 
 }
 
@@ -279,6 +280,7 @@ class SC_GUI_API EventListView : public QWidget {
 
 	private:
 		::Ui::EventListView                 _ui;
+		Private::EventFilterWidget         *_filterWidget;
 		ItemConfig                          _itemConfig;
 		FilterRegions                       _filterRegions;
 		QTreeWidget                        *_treeWidget;

@@ -63,6 +63,7 @@ SET(GUI_DATAMODEL_MOC_HEADERS
 )
 
 SET(GUI_DATAMODEL_UI
+	eventfilterwidget.ui
 	eventlistview.ui
 	eventlistviewregionfilterdialog.ui
 	eventsummaryview.ui

@@ -20,6 +20,7 @@
 #include <seiscomp3/gui/core/scheme.h>
 #include <seiscomp3/gui/datamodel/publicobjectevaluator.h>
 #include <seiscomp3/gui/datamodel/utils.h>
+#include <seiscomp3/gui/datamodel/ui_eventfilterwidget.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -1865,6 +1866,63 @@ struct ConfigProcessColumn {
 };
 
 
+class EventFilterWidget : public QWidget {
+	public:
+		EventFilterWidget(QWidget *parent = 0)
+		: QWidget(parent) {
+			_ui.setupUi(this);
+		}
+
+	public:
+		void setFilter(const EventListView::Filter &filter) {
+			_ui.fromLatitude->setValue(filter.minLatitude ? *filter.minLatitude : _ui.fromLatitude->minimum());
+			_ui.fromLongitude->setValue(filter.minLongitude ? *filter.minLongitude : _ui.fromLongitude->minimum());
+			_ui.fromDepth->setValue(filter.minDepth ? *filter.minDepth : _ui.fromDepth->minimum());
+			_ui.fromMagnitude->setValue(filter.minMagnitude ? *filter.minMagnitude : _ui.fromMagnitude->minimum());
+		}
+
+		/**
+		 * Returns a filter structure according to the current settings.
+		 */
+		EventListView::Filter filter() const {
+			EventListView::Filter f;
+
+			if ( _ui.fromLatitude->isValid() )
+				f.minLatitude = _ui.fromLatitude->value();
+			if ( _ui.toLatitude->isValid() )
+				f.maxLatitude = _ui.toLatitude->value();
+
+			if ( _ui.fromLongitude->isValid() )
+				f.minLongitude = _ui.fromLongitude->value();
+			if ( _ui.toLongitude->isValid() )
+				f.maxLongitude = _ui.toLongitude->value();
+
+			if ( _ui.fromDepth->isValid() )
+				f.minDepth = _ui.fromDepth->value();
+			if ( _ui.toDepth->isValid() )
+				f.maxDepth = _ui.toDepth->value();
+
+			if ( _ui.fromMagnitude->isValid() )
+				f.minMagnitude = _ui.fromMagnitude->value();
+			if ( _ui.toMagnitude->isValid() )
+				f.maxMagnitude = _ui.toMagnitude->value();
+
+			return f;
+		}
+
+	private:
+		Ui::EventFilter _ui;
+};
+
+
+// Helper class to allow proper positioning of the tool buttons menu
+class CustomWidgetMenu : public QMenu {
+	public:
+		CustomWidgetMenu(QWidget *parent = 0) : QMenu(parent) {}
+
+	public:
+		QSize sizeHint() const { return QWidget::sizeHint(); }
+};
 
 
 }
@@ -1879,7 +1937,6 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
    _withOrigins(withOrigins), _withFocalMechanisms(withFocalMechanisms),
    _blockSelection(false), _blockRemovingOfExpiredEvents(false) {
 	_ui.setupUi(this);
-	_ui.btnFilter->setVisible(false);
 
 	_regionIndex = 0;
 	_commandWaitDialog = NULL;
@@ -2240,6 +2297,24 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	}
 	catch ( ... ) {}
 
+	// Initialize database filter
+	try { _filter.minLatitude = SCApp->configGetDouble("eventlist.filter.database.minlat"); }
+	catch ( ... ) {}
+	try { _filter.maxLatitude = SCApp->configGetDouble("eventlist.filter.database.maxlat"); }
+	catch ( ... ) {}
+	try { _filter.minLongitude = SCApp->configGetDouble("eventlist.filter.database.minlon"); }
+	catch ( ... ) {}
+	try { _filter.maxLongitude = SCApp->configGetDouble("eventlist.filter.database.maxlon"); }
+	catch ( ... ) {}
+	try { _filter.minDepth = SCApp->configGetDouble("eventlist.filter.database.mindepth"); }
+	catch ( ... ) {}
+	try { _filter.maxDepth = SCApp->configGetDouble("eventlist.filter.database.maxdepth"); }
+	catch ( ... ) {}
+	try { _filter.minMagnitude = SCApp->configGetDouble("eventlist.filter.database.minmag"); }
+	catch ( ... ) {}
+	try { _filter.maxMagnitude = SCApp->configGetDouble("eventlist.filter.database.maxmag"); }
+	catch ( ... ) {}
+
 	for ( int i = 0; i < _filterRegions.size(); ++i )
 		_ui.lstFilterRegions->addItem(_filterRegions[i].name);
 
@@ -2248,6 +2323,18 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 		_ui.lstFilterRegions->setCurrentIndex(_regionIndex);
 		_ui.btnChangeRegion->hide();
 	}
+
+	_ui.btnFilter->setPopupMode(QToolButton::InstantPopup);
+
+	_filterWidget = new EventFilterWidget;
+	_filterWidget->setFilter(_filter);
+
+	QVBoxLayout *vl = new QVBoxLayout;
+	vl->addWidget(_filterWidget);
+
+	QMenu *menu = new CustomWidgetMenu(_ui.btnFilter);
+	menu->setLayout(vl);
+	_ui.btnFilter->setMenu(menu);
 
 	connect(_ui.lstFilterRegions, SIGNAL(currentIndexChanged(int)),
 	        this, SLOT(regionSelectionChanged(int)));
@@ -2797,6 +2884,7 @@ void EventListView::selectEventID(const std::string& publicID) {
 
 
 void EventListView::readLastDays() {
+	_filter = _filterWidget->filter();
 	_filter.endTime = Core::Time::GMT();
 	_filter.startTime = _filter.endTime - Core::TimeSpan(_ui.spinBox->value()*86400);
 	setInterval(Core::TimeWindow(_filter.startTime, _filter.endTime));
@@ -2804,6 +2892,7 @@ void EventListView::readLastDays() {
 }
 
 void EventListView::readInterval() {
+	_filter = _filterWidget->filter();
 	_filter.startTime = Core::Time(_ui.dateTimeEditStart->date().year(),
 	                               _ui.dateTimeEditStart->date().month(),
 	                               _ui.dateTimeEditStart->date().day(),

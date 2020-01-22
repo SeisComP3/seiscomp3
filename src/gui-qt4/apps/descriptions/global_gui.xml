@@ -1144,6 +1144,19 @@
 							</description>
 						</parameter>
 					</group>
+					<group name="database">
+						<description>
+						Pre-set options to filter an event list request.
+						</description>
+						<parameter name="minlat" type="double" unit="deg"/>
+						<parameter name="maxlat" type="double" unit="deg"/>
+						<parameter name="minlon" type="double" unit="deg"/>
+						<parameter name="maxlon" type="double" unit="deg"/>
+						<parameter name="mindepth" type="double" unit="km"/>
+						<parameter name="maxdepth" type="double" unit="km"/>
+						<parameter name="minmag" type="double"/>
+						<parameter name="maxmag" type="double"/>
+					</group>
 				</group>
 				<group name="scripts">
 					<parameter name="columns" type="list:string">
