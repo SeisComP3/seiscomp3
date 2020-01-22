@@ -243,10 +243,10 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 	_type = type;
 	if ( type == Tty ) {
 		_flags &= ~SHOW_SPLASH;
-		_app = new QCoreApplication(argc, argv, flags);
+		_app = new QApplication(argc, argv, QApplication::Tty);
 	}
 	else
-		_app = new QApplication(argc, argv, flags);
+		_app = new QApplication(argc, argv);
 
 	setDaemonEnabled(false);
 
