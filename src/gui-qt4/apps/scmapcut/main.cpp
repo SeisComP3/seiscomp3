@@ -476,7 +476,6 @@ int main(int argc, char ** argv) {
 	// Qt 4.2.x crashes when rendering text with console
 	// applications so we enable console application only if
 	// at least Qt 4.3.0 is installed.
-	type = Application::Tty;
 	if ( !Application::minQtVersion("4.3.0") )
 		type = Application::GuiClient;
 
