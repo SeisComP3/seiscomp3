@@ -220,6 +220,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void computeMagnitudesRequested();
 
 		void baseEventSet();
+		void baseEventRejected();
 
 		//! When a new origin has been set inside the view this signal
 		//! is emitted. The bool flag signal whether a new origin has been
