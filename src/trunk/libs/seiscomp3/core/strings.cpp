@@ -350,7 +350,8 @@ std::string stringify(const char* fmt, ...) {
 }
 
 
-int split(std::vector<std::string>& tokens, const char* source, const char* delimiter, bool compressOn) {
+int split(std::vector<std::string>& tokens, const char* source,
+          const char* delimiter, bool compressOn) {
 	boost::split(tokens, source, boost::is_any_of(delimiter),
 	             ((compressOn) ? boost::token_compress_on : boost::token_compress_off));
 	return static_cast<int>(tokens.size());
@@ -358,23 +359,41 @@ int split(std::vector<std::string>& tokens, const char* source, const char* deli
 
 
 size_t splitExt(std::vector<std::string> &tokens, const char *source,
-                const char *delimiter, bool compressOn, bool trim,
-                const char *whitespaces, const char *quotes) {
+                const char *delimiter, bool compressOn, bool unescape,
+                bool trim, const char *whitespaces, const char *quotes) {
 	tokens.clear();
 	size_t lenTok;
 	size_t lenSource = strlen(source);
-	bool delimFound = false;
+	char delimFound = 0;
 	const char *tok = NULL;
-	while ( lenSource > 0 ) {
-		tok = tokenizeExt(lenTok, lenSource, source, delimFound, delimiter,
-		                  trim, whitespaces, quotes);
-		if ( tok != NULL ) {
-			tokens.push_back(std::string(tok, lenTok));
-		}
-		else if ( tokens.empty() || !compressOn ) {
-			tokens.push_back("");
+
+	if ( unescape ) {
+		std::string tmp(source, lenSource);
+		char *sourceCopy = const_cast<char *>(tmp.c_str());
+		while ( lenSource > 0 ) {
+			tok = tokenizeUnescape(lenTok, lenSource, sourceCopy, delimFound,
+			                       delimiter, trim, whitespaces, quotes);
+			if ( tok != NULL ) {
+				tokens.push_back(std::string(tok, lenTok));
+			}
+			else if ( tokens.empty() || !compressOn ) {
+				tokens.push_back("");
+			}
 		}
 	}
+	else {
+		while ( lenSource > 0 ) {
+			tok = tokenizeExt(lenTok, lenSource, source, delimFound, delimiter,
+			                  trim, whitespaces, quotes);
+			if ( tok != NULL ) {
+				tokens.push_back(std::string(tok, lenTok));
+			}
+			else if ( tokens.empty() || !compressOn ) {
+				tokens.push_back("");
+			}
+		}
+	}
+
 	if ( delimFound )
 		tokens.push_back("");
 
@@ -383,47 +402,46 @@ size_t splitExt(std::vector<std::string> &tokens, const char *source,
 
 
 const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
-                        bool &delimFound, const char *delimiter, bool trim,
+                        char &delimFound, const char *delimiter, bool trim,
                         const char *whitespaces, const char *quotes) {
 	lenTok = 0;
-	delimFound = false;
+	delimFound = 0;
 
 	const char *tok = NULL;
-	size_t delimLen = strlen(delimiter);
 	size_t trailing_spaces = 0;
 	char quote = 0;
 
-	bool protect = false;
-
-
 	for ( ; lenSource && *source != 0; --lenSource, ++source ) {
-		// check for unprotected delimeter outside of quotes
-		if ( lenSource >= delimLen and quote == 0 and !protect and
-		     strncmp(source, delimiter, delimLen) == 0 ) {
-			lenSource -= delimLen;
-			source += delimLen;
-			delimFound = true;
+		// check for protected character
+		if ( *source == '\\' ) {
+			if ( lenTok == 0 ) {
+				tok = source;
+			}
+			else {
+				++lenTok;
+				trailing_spaces = 0;
+			}
+
+			// skip following character
+			--lenSource; ++source;
+			if ( lenSource && *source != 0 ) {
+				++lenTok;
+			}
+
+			continue;
+		}
+
+		// check for unprotected delimiter outside of quotes
+		if ( quote == 0 and strchr(delimiter, *source) != NULL ) {
+			delimFound = *source;
+			--lenSource; ++source;
 			lenTok -= trailing_spaces;
 			return tok;
 		}
 
-		// check for protected character
-		if ( *source == '\\' ) {
-			protect = !protect;
-			if ( lenTok == 0 )
-				tok = source;
-			else
-				trailing_spaces = 0;
-
-			++lenTok;
-			continue;
-		}
-
-
 		// check for terminating quote character
 		if ( *source == quote ) {
-			if ( !protect )
-				quote = 0;
+			quote = 0;
 		}
 		// check for beginning quote
 		else if ( quote == 0 and strchr(quotes, *source) != NULL ) {
@@ -432,8 +450,8 @@ const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
 		}
 		// trimming outside unprotected characters outside of quotes
 		else if ( trim ) {
-			if ( !quote and !protect and strchr(whitespaces, *source) != NULL ) {
-				// trim leading white spaces
+			if ( !quote and strchr(whitespaces, *source) != NULL ) {
+				// trim leading whitespaces
 				if ( lenTok == 0 )
 					continue;
 				// count trailing spaces
@@ -445,12 +463,118 @@ const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
 			}
 		}
 
-		// mark begining of string
+		// mark beginning of string
 		if ( lenTok == 0 )
 			tok = source;
 
 		++lenTok;
-		protect = false;
+	}
+
+	lenTok -= trailing_spaces;
+	return tok;
+}
+
+
+const char *tokenizeUnescape(size_t &lenTok, size_t &lenSource, char *&source,
+                             char &delimFound, const char *delimiter,
+                             bool trim, const char *whitespaces,
+                             const char *quotes) {
+	lenTok = 0;
+	delimFound = 0;
+
+	const char *tok = NULL;
+	char *tokEnd = NULL;
+	size_t trailing_spaces = 0;
+	char quote = 0;
+
+	for ( ; lenSource && *source != 0; --lenSource, ++source ) {
+		// check for backslash character
+		if ( *source == '\\' ) {
+			// initialize token if not done so far
+			if ( lenTok == 0 )
+				tok = tokEnd = source;
+			else
+				*tokEnd = *source;
+			++lenTok;
+
+			// read next char
+			--lenSource; ++source;
+
+			// backslash was last char: do not unescape
+			if ( !lenSource || *source == 0 ) {
+				return tok;
+			}
+
+			// backslash outside quotes: unescape backslash, quotes,
+			// delimiter and whitespaces
+			if ( quote == 0 ) {
+				if ( *source != '\\' &&
+				     strchr(quotes, *source) == NULL &&
+				     strchr(delimiter, *source) == NULL &&
+				     strchr(whitespaces, *source) == NULL ) {
+					++tokEnd; ++lenTok;
+				}
+			}
+			// backslash inside quotes: unescape backslash and start quote
+			// character only
+			else {
+				if ( *source != '\\' && *source != quote ) {
+					++tokEnd; ++lenTok;
+				}
+			}
+
+			*tokEnd = *source;
+			++tokEnd;
+			trailing_spaces = 0;
+			continue;
+		}
+
+		// check for unprotected delimiter outside of quotes
+		if ( quote == 0 and strchr(delimiter, *source) != NULL ) {
+			delimFound = *source;
+			--lenSource; ++source;
+			lenTok -= trailing_spaces;
+			return tok;
+		}
+		// check for terminating quote character
+		else if ( *source == quote ) {
+			quote = 0;
+			trailing_spaces = 0;
+			continue;
+		}
+		// check for beginning quote
+		else if ( quote == 0 and strchr(quotes, *source) != NULL ) {
+			quote = *source;
+			trailing_spaces = 0;
+			continue;
+		}
+		// trim outside unprotected characters outside of quotes
+		else if ( trim ) {
+			if ( !quote and strchr(whitespaces, *source) != NULL ) {
+				// trim leading whitespaces
+				if ( lenTok == 0 )
+					continue;
+				// count trailing spaces
+				else
+					++trailing_spaces;
+			}
+			else {
+				trailing_spaces = 0;
+			}
+		}
+
+		// mark beginning of string
+		if ( lenTok == 0 ) {
+			tok = source;
+			tokEnd = source + 1;
+		}
+		// copy source char and advance end pointer of result string
+		else {
+			*tokEnd = *source;
+			++tokEnd;
+		}
+
+		++lenTok;
 	}
 
 	lenTok -= trailing_spaces;
