@@ -3393,6 +3393,8 @@ void MagnitudeView::updateMagnitudeLabels() {
 		double netmagval = _netMag->magnitude().value();
 		if ( netmagval < 12 )
 			snprintf(buf, 10, "%.2f", netmagval);
+		else if ( netmagval < 1000000000 )
+			snprintf(buf, 10, "%d", (int)netmagval);
 
 		_ui.labelMethod->setText(_netMag->methodID().c_str());
 		try {
