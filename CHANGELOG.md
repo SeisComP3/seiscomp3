@@ -1,6 +1,12 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2018.327 patch18
+
+```SC_API_VERSION 12.2.0```
+
+* system
+
+  * Add dependencies for Debian 9 and Debian 10
 
 * scqcv
 
