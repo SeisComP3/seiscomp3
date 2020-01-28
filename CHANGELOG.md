@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch19
+
+* system
+
+  * Fix error message on attempt to create existing alias
+
 ## Release 2018.327 patch18
 
 ```SC_API_VERSION 12.2.0```
