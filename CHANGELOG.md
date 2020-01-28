@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* system
+
+  * Add dependencies for Debian 9 and Debian 10
+
 * scqcv
 
   * Expose more configuration parameters to scconfig
