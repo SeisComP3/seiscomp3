@@ -83,6 +83,10 @@
 
   * Add --ep option and fix ping-pong effect with two cross-connected systems
 
+* system
+
+  * Fix error message on attempt to create existing alias
+
 ## Release 2018.327 patch16
 
 * fdsnws

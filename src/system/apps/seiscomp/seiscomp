@@ -751,6 +751,7 @@ def on_alias(args, flags):
         if len(toks) != 2: continue
         if toks[0] == args[1]:
           has_alias = True
+          break
         else:
           new_lines.append(line)
       f.close()
@@ -774,8 +775,6 @@ def on_alias(args, flags):
 
     f.write("\n".join(new_lines) + "\n")
     f.close()
-
-    if has_alias: return 1
 
     # create symlink of defaults from etc/defaults/mod1.cfg to etc/defaults/mod2.cfg
     # use relative path to default_cfg2
