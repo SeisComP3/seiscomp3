@@ -901,11 +901,6 @@ print "Clean-up MAN build dir"
 try: shutil.rmtree(os.path.join(out_build_dir, "man1"))
 except: pass
 
-try:
-  os.environ["PYTHONPATH"] = os.path.abspath('../src/system/libs/python') + ":" + os.environ["PYTHONPATH"]
-except:
-  os.environ["PYTHONPATH"] = os.path.abspath('../src/system/libs/python')
-
 os.system("sphinx-build -b html %s %s" % (out_dir, os.path.join(out_build_dir, "html")))
 os.system("sphinx-build -b man %s %s" % (out_dir, os.path.join(out_build_dir, "man1")))
 
