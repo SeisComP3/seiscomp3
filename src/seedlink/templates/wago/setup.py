@@ -23,7 +23,7 @@ class SeedlinkPluginHandler:
       
     for letter in range(ord('a'), ord('z') + 1):
       try: seedlink.param('sources.wago.channels.%s.sid' % chr(letter))
-      except: seedlink.setParam('sources.wago.channels.%s.sid' % chr(letter), wago_chan.get(chr(letter), 255))
+      except: seedlink.setParam('sources.wago.channels.%s.sid' % chr(letter), wago_chan.get(chr(letter), 256))
 
     return seedlink.net + "." + seedlink.sta
 
