@@ -22,6 +22,3 @@ int main(int argc, char* argv[]) {
 	SendEvent app(argc, argv);
 	return app();
 }
-
-
-

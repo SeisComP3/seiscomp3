@@ -327,7 +327,7 @@ void MainFrame::loadPlugins() {
 
 	foreach ( QString fileName, pluginsDir.entryList(QDir::Files) ) {
 		std::cout << "checking "
-			<< (const char*)pluginsDir.absoluteFilePath(fileName).toAscii()
+			<< (const char*)pluginsDir.absoluteFilePath(fileName).toLatin1()
 			<< "...";
 
 		QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));

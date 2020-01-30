@@ -51,7 +51,7 @@ std::string propToString(const MetaProperty *prop, BaseObject *obj) {
 }
 
 
-Inspector::Inspector(QWidget * parent, Qt::WFlags f)
+Inspector::Inspector(QWidget * parent, Qt::WindowFlags f)
  : QDialog(parent, f) {
 	_ui.setupUi(this);
 

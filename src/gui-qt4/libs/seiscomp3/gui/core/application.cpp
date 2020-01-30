@@ -202,7 +202,7 @@ class SplashScreen : public QSplashScreen {
 
 		void setMessage(const QString &str) {
 			message = str;
-			repaint();
+			update();
 		}
 
 		void drawContents(QPainter *painter) {
@@ -242,7 +242,12 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 	_type = type;
 	if ( type == Tty ) {
 		_flags &= ~SHOW_SPLASH;
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 		_app = new QApplication(argc, argv, QApplication::Tty);
+#else
+		setenv("QT_QPA_PLATFORM", "offscreen", 1);
+		_app = new QApplication(argc, argv);
+#endif
 	}
 	else
 		_app = new QApplication(argc, argv);
@@ -975,6 +980,7 @@ bool Application::validateParameters() {
 			_splash->finish(_mainWidget);
 
 		_splash->show();
+		_app->processEvents();
 	}
 
 	return true;
@@ -1270,8 +1276,10 @@ void Application::done() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::showMessage(const char* msg) {
-	if ( _splash )
+	if ( _splash ) {
 		static_cast<SplashScreen*>(_splash)->setMessage(msg);
+		_app->processEvents();
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

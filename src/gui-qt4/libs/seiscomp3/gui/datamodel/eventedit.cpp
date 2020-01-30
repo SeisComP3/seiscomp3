@@ -29,6 +29,9 @@
 
 #include <seiscomp3/seismology/regions.h>
 
+#include <QMenu>
+#include <QMessageBox>
+
 #ifdef WIN32
 #define snprintf _snprintf
 #endif
@@ -1065,7 +1068,11 @@ void EventEdit::init() {
 	QHeaderView* header = _originTree->header();
 	header->setSortIndicatorShown(true);
 	header->setSortIndicator(_originColumnMap[OL_CREATED], Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortOriginItems(int)));
 
@@ -1074,7 +1081,11 @@ void EventEdit::init() {
 	header = _ui.treeMagnitudes->header();
 	header->setSortIndicatorShown(true);
 	header->setSortIndicator(_originColumnMap[MLC_TIMESTAMP], Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortMagnitudeItems(int)));
 
@@ -1117,7 +1128,11 @@ void EventEdit::init() {
 	header = _ui.fmTree->header();
 	header->setSortIndicatorShown(true);
 	header->setSortIndicator(_fmColumnMap[FML_CREATED], Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
 	connect(header, SIGNAL(sectionClicked(int)), this, SLOT(sortFMItems(int)));
 
 	connect(_ui.fmTree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
@@ -1234,7 +1249,7 @@ void EventEdit::onObjectModified(Object* object) {
 void EventEdit::addObject(const QString& parentID,
                           Object* obj) {
 	if ( !_currentEvent ) return;
-	const char *pid = (const char*)parentID.toAscii();
+	const char *pid = (const char*)parentID.toLatin1();
 
 	if ( _currentEvent->publicID() == pid ) {
 
@@ -1339,7 +1354,7 @@ void EventEdit::addObject(const QString& parentID,
 	else {
 		Comment *comment = Comment::Cast(obj);
 		if ( comment ) {
-			Origin *org = Origin::Find((const char*)parentID.toAscii());
+			Origin *org = Origin::Find((const char*)parentID.toLatin1());
 			if ( org ) updateOrigin(org);
 			return;
 		}
@@ -1370,7 +1385,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredOriginIdx != -1 ) {
 				if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(
-				         _preferredOriginIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredOriginIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredOrigin = false;
 			}
 
@@ -1381,7 +1396,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredMagnitudeIdx != -1 ) {
 				if ( _currentEvent->preferredMagnitudeID() == (const char*)_ui.treeMagnitudes->topLevelItem(
-				         _preferredMagnitudeIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredMagnitudeIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredMagnitude = false;
 			}
 
@@ -1390,7 +1405,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredFMIdx != -1 ) {
 				if ( _currentEvent->preferredFocalMechanismID() == (const char*)_ui.fmTree->topLevelItem(
-				         _preferredFMIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredFMIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredFM = false;
 			}
 
@@ -1414,7 +1429,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 		Magnitude *publicMag = Magnitude::Find(mag->publicID());
 		if ( _currentOrigin && publicMag && publicMag->origin() == _currentOrigin ) {
 			for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
-				if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+				if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 					updateMagnitudeRow(i, mag);
 					//_ui.treeMagnitudes->topLevelItem(i)->setText(0, QString("%1: %2").arg(mag->type().c_str()).arg(mag->magnitude().value(), 0, 'f', 2));
 				}
@@ -1442,7 +1457,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 	Comment *comment = Comment::Cast(obj);
 	if ( comment ) {
-		Origin *org = Origin::Find((const char*)parentID.toAscii());
+		Origin *org = Origin::Find((const char*)parentID.toLatin1());
 		if ( org ) updateOrigin(org);
 		return;
 	}
@@ -1473,7 +1488,7 @@ void EventEdit::updatePreferredOriginIndex() {
 	}
 
 	for ( int i = 0; i < _originTree->topLevelItemCount(); ++i ) {
-		if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _originTree->topLevelItem(i);
 			for ( int c = 0; c < _originColumnMap.count(); ++c ) {
 				QFont f = item->font(_originColumnMap[c]);
@@ -1506,7 +1521,7 @@ void EventEdit::updatePreferredMagnitudeIndex() {
 
 	for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
 		if ( _currentEvent->preferredMagnitudeID() ==
-		     (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		     (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _ui.treeMagnitudes->topLevelItem(i);
 			for ( int c = 0; c < item->columnCount(); ++c ) {
 				QFont f = item->font(c);
@@ -1539,7 +1554,7 @@ void EventEdit::updatePreferredFMIndex() {
 
 	for ( int i = 0; i < _ui.fmTree->topLevelItemCount(); ++i ) {
 		if ( _currentEvent->preferredFocalMechanismID() ==
-		     (const char*)_ui.fmTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		     (const char*)_ui.fmTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _ui.fmTree->topLevelItem(i);
 			for ( int c = 0; c < _fmColumnMap.count(); ++c ) {
 				QFont f = item->font(_fmColumnMap[c]);
@@ -2373,7 +2388,7 @@ void EventEdit::addJournal(JournalEntry *entry) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::addMagnitude(Magnitude *mag) {
 	for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
-		if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() )
+		if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() )
 			return;
 	}
 

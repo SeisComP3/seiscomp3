@@ -90,6 +90,10 @@ ENDMACRO (QT4_EXTRACT_OPTIONS_COMPAT)
 MACRO(SC_QT4_WRAP_UI outfiles)
   QT4_EXTRACT_OPTIONS_COMPAT(ui_files ui_options ${ARGN})
 
+  IF (SC_GLOBAL_GUI_QT5)
+  	get_target_property(QT_UIC_EXECUTABLE Qt5::uic LOCATION)
+  ENDIF ()
+
   FOREACH (it ${ui_files})
     GET_FILENAME_COMPONENT(outfile ${it} NAME_WE)
     GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
@@ -278,7 +282,9 @@ ENDMACRO(SC_ADD_PLUGIN_LIBRARY)
 
 
 MACRO(SC_ADD_GUI_PLUGIN_LIBRARY _library_package _library_name _plugin_app)
-	INCLUDE(${QT_USE_FILE})
+	IF (NOT SC_GLOBAL_GUI_QT5)
+		INCLUDE(${QT_USE_FILE})
+	ENDIF()
 
 	SET(_global_library_package SEISCOMP3_PLUGIN_${_library_package})
 
@@ -286,7 +292,11 @@ MACRO(SC_ADD_GUI_PLUGIN_LIBRARY _library_package _library_name _plugin_app)
 
 	# Create MOC Files
 	IF (${_library_package}_MOC_HEADERS)
-		QT4_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ELSE ()
+			QT4_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ENDIF ()
 	ENDIF (${_library_package}_MOC_HEADERS)
 
 	# Create UI Headers
@@ -296,9 +306,13 @@ MACRO(SC_ADD_GUI_PLUGIN_LIBRARY _library_package _library_name _plugin_app)
 		INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 	ENDIF (${_library_package}_UI)
 
-    # Add resources
+	# Add resources
 	IF (${_library_package}_RESOURCES)
-		QT4_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		ELSE ()
+			QT4_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		ENDIF()
 	ENDIF (${_library_package}_RESOURCES)
 
 	SET(
@@ -311,7 +325,11 @@ MACRO(SC_ADD_GUI_PLUGIN_LIBRARY _library_package _library_name _plugin_app)
 
 	ADD_LIBRARY(${_library_name} MODULE ${${_library_package}_FILES})
 	SET_TARGET_PROPERTIES(${_library_name} PROPERTIES PREFIX "")
-	TARGET_LINK_LIBRARIES(${_library_name} ${QT_LIBRARIES})
+	IF (SC_GLOBAL_GUI_QT5)
+		TARGET_LINK_LIBRARIES(${_library_name} Qt5::Widgets)
+	ELSE ()
+		TARGET_LINK_LIBRARIES(${_library_name} ${QT_LIBRARIES})
+	ENDIF()
 
 	SET(LIBRARY ${_global_library_package})
 	SET(LIBRARY_NAME ${_library_name})
@@ -323,7 +341,9 @@ ENDMACRO(SC_ADD_GUI_PLUGIN_LIBRARY)
 
 
 MACRO(SC_ADD_GUI_LIBRARY_CUSTOM_INSTALL _library_package _library_name)
-	INCLUDE(${QT_USE_FILE})
+	IF (NOT SC_GLOBAL_GUI_QT5)
+		INCLUDE(${QT_USE_FILE})
+	ENDIF()
 
 	SET(_global_library_package SC_${_library_package})
 
@@ -337,7 +357,11 @@ MACRO(SC_ADD_GUI_LIBRARY_CUSTOM_INSTALL _library_package _library_name)
 
 	# Create MOC Files
 	IF (${_library_package}_MOC_HEADERS)
-		QT4_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ELSE ()
+			QT4_WRAP_CPP(${_library_package}_MOC_SOURCES ${${_library_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ENDIF ()
 	ENDIF (${_library_package}_MOC_HEADERS)
 
 	# Create UI Headers
@@ -349,7 +373,11 @@ MACRO(SC_ADD_GUI_LIBRARY_CUSTOM_INSTALL _library_package _library_name)
 
 	# Add resources
 	IF (${_library_package}_RESOURCES)
-		QT4_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		ELSE ()
+			QT4_ADD_RESOURCES(${_library_package}_RESOURCE_SOURCES ${${_library_package}_RESOURCES})
+		ENDIF()
 	ENDIF (${_library_package}_RESOURCES)
 
 	SET(LIBRARY ${_global_library_package})
@@ -383,7 +411,11 @@ MACRO(SC_ADD_GUI_LIBRARY_CUSTOM_INSTALL _library_package _library_name)
 	)
 
 	ADD_LIBRARY(seiscomp3_${_library_name} ${${_library_package}_TYPE} ${${_library_package}_FILES_})
-	TARGET_LINK_LIBRARIES(seiscomp3_${_library_name} ${QT_LIBRARIES})
+	IF (SC_GLOBAL_GUI_QT5)
+		TARGET_LINK_LIBRARIES(seiscomp3_${_library_name} Qt5::Widgets)
+	ELSE ()
+		TARGET_LINK_LIBRARIES(seiscomp3_${_library_name} ${QT_LIBRARIES})
+	ENDIF()
 ENDMACRO(SC_ADD_GUI_LIBRARY_CUSTOM_INSTALL)
 
 
@@ -472,23 +504,37 @@ ENDMACRO(SC_ADD_TEST_EXECUTABLE)
 
 
 MACRO(SC_ADD_GUI_EXECUTABLE _package _name)
-	INCLUDE(${QT_USE_FILE})
+	IF (NOT SC_GLOBAL_GUI_QT5)
+		INCLUDE(${QT_USE_FILE})
+	ENDIF()
 
 	# Create MOC Files
 	IF (${_package}_MOC_HEADERS)
-		QT4_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ELSE ()
+			QT4_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ENDIF ()
 	ENDIF (${_package}_MOC_HEADERS)
 
 	# Create UI Headers
 	IF (${_package}_UI)
-		QT4_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		ELSE ()
+			QT4_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		ENDIF ()
 		INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 		INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 	ENDIF (${_package}_UI)
 
 	# Add resources
 	IF (${_package}_RESOURCES)
-		QT4_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		ELSE ()
+			QT4_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		ENDIF ()
 	ENDIF (${_package}_RESOURCES)
 
 	SET(
@@ -505,8 +551,11 @@ MACRO(SC_ADD_GUI_EXECUTABLE _package _name)
 	ELSE(WIN32)
 		ADD_EXECUTABLE(${_name} ${${_package}_FILES_})
 	ENDIF(WIN32)
-	TARGET_LINK_LIBRARIES(${_name} ${QT_LIBRARIES})
-	TARGET_LINK_LIBRARIES(${_name} ${QT_QTOPENGL_LIBRARY})
+
+	IF (NOT SC_GLOBAL_GUI_QT5)
+		TARGET_LINK_LIBRARIES(${_name} ${QT_LIBRARIES})
+		TARGET_LINK_LIBRARIES(${_name} ${QT_QTOPENGL_LIBRARY})
+	ENDIF ()
 
 	INSTALL(TARGETS ${_name}
 		RUNTIME DESTINATION ${SC3_PACKAGE_BIN_DIR}
@@ -527,23 +576,37 @@ ENDMACRO(SC_ADD_GUI_EXECUTABLE)
 
 MACRO(SC_ADD_GUI_TEST_EXECUTABLE _package _name)
 	ADD_DEFINITIONS(-DSEISCOMP_TEST_DATA_DIR="${PROJECT_TEST_DATA_DIR}")
-	INCLUDE(${QT_USE_FILE})
+	IF (NOT SC_GLOBAL_GUI_QT5)
+		INCLUDE(${QT_USE_FILE})
+	ENDIF ()
 
 	# Create MOC Files
 	IF (${_package}_MOC_HEADERS)
-		QT4_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ELSE ()
+			QT4_WRAP_CPP(${_package}_MOC_SOURCES ${${_package}_MOC_HEADERS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+		ENDIF ()
 	ENDIF (${_package}_MOC_HEADERS)
 
 	# Create UI Headers
 	IF (${_package}_UI)
-		QT4_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		ELSE ()
+			QT4_WRAP_UI(${_package}_UI_HEADERS ${${_package}_UI})
+		ENDIF ()
 		INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 		INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 	ENDIF (${_package}_UI)
 
 	# Add resources
 	IF (${_package}_RESOURCES)
-		QT4_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		IF (SC_GLOBAL_GUI_QT5)
+			QT5_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		ELSE ()
+			QT4_ADD_RESOURCES(${_package}_RESOURCE_SOURCES ${${_package}_RESOURCES})
+		ENDIF ()
 	ENDIF (${_package}_RESOURCES)
 
 	SET(

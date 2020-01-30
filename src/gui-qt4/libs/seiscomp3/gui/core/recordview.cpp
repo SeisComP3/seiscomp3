@@ -224,7 +224,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RecordView::RecordView(QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+RecordView::RecordView(QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -237,7 +237,7 @@ RecordView::RecordView(QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
-                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+                       QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -250,7 +250,7 @@ RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeSpan& ts,
-                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+                       QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -2911,7 +2911,7 @@ void RecordView::setDefaultActions() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RecordView::setDataSource(const QString& streamURL) {
 	closeThread();
-	_thread = new RecordStreamThread((const char*)streamURL.toAscii());
+	_thread = new RecordStreamThread((const char*)streamURL.toLatin1());
 
 	connect(_thread, SIGNAL(receivedRecord(Seiscomp::Record*)),
 	        this, SLOT(feed(Seiscomp::Record*)));

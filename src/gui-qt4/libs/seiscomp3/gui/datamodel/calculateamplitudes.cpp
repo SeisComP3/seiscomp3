@@ -32,6 +32,7 @@
 
 #include <QProgressBar>
 #include <QHeaderView>
+#include <QMessageBox>
 
 #include <boost/bind.hpp>
 
@@ -952,7 +953,7 @@ void CalculateAmplitudes::setError(int row, QString text) {
 	_ui.table->setCellWidget(row, 3, NULL);
 
 	QTableWidgetItem *itemState = new QTableWidgetItem(text);
-	itemState->setData(Qt::TextColorRole, Qt::red);
+	itemState->setData(Qt::TextColorRole, QVariant::fromValue(QColor(Qt::red)));
 	// Signal an error state
 	itemState->setData(Qt::UserRole, 1);
 	itemState->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

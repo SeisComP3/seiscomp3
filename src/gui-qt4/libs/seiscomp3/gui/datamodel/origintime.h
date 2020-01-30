@@ -30,7 +30,7 @@ class SC_GUI_API OriginTimeDialog : public QDialog {
 	public:
 		OriginTimeDialog(double lon, double lat,
 		                 Seiscomp::Core::Time time,
-		                 QWidget * parent = 0, Qt::WFlags f = 0);
+		                 QWidget * parent = 0, Qt::WindowFlags f = 0);
 
 		Seiscomp::Core::Time time() const;
 

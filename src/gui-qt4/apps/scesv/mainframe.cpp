@@ -43,7 +43,7 @@ MainFrame::MainFrame() {
 	addAction(_ui.actionToggleEventList);
 	addAction(_ui.actionToggleWaveformPropagation);
 
-	_ui.actionAutoSelect->setChecked(TRUE);
+	_ui.actionAutoSelect->setChecked(true);
 
 	// create SummaryView tab
 	_eventSummary = new Gui::EventSummaryView(SCApp->mapsDesc(), SCApp->query());

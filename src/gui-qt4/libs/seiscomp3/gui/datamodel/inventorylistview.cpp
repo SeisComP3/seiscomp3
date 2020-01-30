@@ -47,7 +47,7 @@ class NetworkTreeItem : public QTreeWidgetItem {
 }
 
 
-InventoryListView::InventoryListView(QWidget *parent, Qt::WFlags f)
+InventoryListView::InventoryListView(QWidget *parent, Qt::WindowFlags f)
  : QTreeWidget(parent), DataModel::Visitor()
 {
 	setWindowFlags(f);
@@ -429,7 +429,7 @@ bool InventoryListView::selectStream(const QString& streamID, bool select) {
 
 void InventoryListView::selectStreams(const QString& expr, bool select) {
 	for (StreamItems::const_iterator it = _streamItems.begin(); it != _streamItems.end(); ++it ) {
-		if ( Core::wildcmp(expr.toAscii(), it.key().toAscii() ) )
+		if ( Core::wildcmp(expr.toLatin1(), it.key().toLatin1() ) )
 			it.value()->setCheckState(0, select?Qt::Checked:Qt::Unchecked);
 	}
 }

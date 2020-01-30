@@ -81,15 +81,15 @@ struct StationItem {
 
 class TraceList : public RecordView {
 	public:
-		TraceList(QWidget *parent = 0, Qt::WFlags f = 0)
+		TraceList(QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeWindow& tw,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(tw, parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeSpan& ts,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(ts, parent, f) {}
 
 	protected:
@@ -1767,7 +1767,7 @@ AmplitudeView::Config::Config() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeView::AmplitudeView(QWidget *parent, Qt::WFlags f)
+AmplitudeView::AmplitudeView(QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent,f) {
 	_recordView = new TraceList();
 	init();

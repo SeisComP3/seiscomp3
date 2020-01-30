@@ -16,6 +16,7 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/utils.h>
 
+#include <QPrinter>
 
 using namespace Seiscomp;
 

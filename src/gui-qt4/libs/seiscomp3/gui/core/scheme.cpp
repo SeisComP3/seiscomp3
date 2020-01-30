@@ -15,6 +15,8 @@
 #include <seiscomp3/gui/core/scheme.h>
 #include <seiscomp3/gui/core/application.h>
 
+#include <QTabBar>
+#include <QTabWidget>
 
 #define READ_BOOL(location) \
 	try { location = SCApp->configGetBool("scheme."#location); } \

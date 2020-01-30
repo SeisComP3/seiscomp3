@@ -27,6 +27,8 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/map/projection.h>
 
+#include <QMenu>
+
 #ifdef WIN32
 #undef min
 #undef max
@@ -47,7 +49,7 @@ namespace Gui {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
-                                   QWidget *parent, Qt::WFlags f)
+                                   QWidget *parent, Qt::WindowFlags f)
 : MapWidget(maps, parent, f)
 , _origin(NULL), _drawStations(false)
 , _drawStationsLines(true), _interactive(true)
@@ -66,7 +68,7 @@ OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
-                                   QWidget *parent, Qt::WFlags f)
+                                   QWidget *parent, Qt::WindowFlags f)
 : MapWidget(mapTree, parent, f), _origin(NULL)
 , _drawStations(false), _drawStationsLines(true)
 , _interactive(true)

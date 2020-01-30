@@ -43,6 +43,14 @@
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/seismology/regions.h>
 
+#include <QHeaderView>
+#include <QMenu>
+#include <QMessageBox>
+#include <QProgressBar>
+#include <QProgressDialog>
+#include <QTreeWidgetItem>
+#include <QHeaderView>
+
 
 using namespace Seiscomp::Core;
 using namespace Seiscomp::Client;
@@ -1932,7 +1940,7 @@ using namespace Private;
 
 
 EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool withOrigins,
-                             bool withFocalMechanisms, QWidget * parent, Qt::WFlags f)
+                             bool withFocalMechanisms, QWidget * parent, Qt::WindowFlags f)
  : QWidget(parent, f), _reader(reader),
    _withOrigins(withOrigins), _withFocalMechanisms(withFocalMechanisms),
    _blockSelection(false), _blockRemovingOfExpiredEvents(false) {
@@ -2431,12 +2439,16 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	// Stop movie and hide label when the thread finishes
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(finished()),
 	        _busyIndicatorLabel, SLOT(hide()));
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(terminated()),
 	        _busyIndicatorLabel, SLOT(hide()));
+#endif
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(finished()),
 	        _busyIndicator, SLOT(stop()));
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(terminated()),
 	        _busyIndicator, SLOT(stop()));
+#endif
 
 	setFMLinkEnabled(_itemConfig.createFMLink);
 
@@ -4484,12 +4496,20 @@ void EventListView::setSortingEnabled(bool enable) {
 	if ( enable ) {
 		header->setSortIndicator(0, Qt::DescendingOrder);
 		header->setSortIndicatorShown(true);
+#if QT_VERSION >= 0x050000
+		header->setSectionsClickable(true);
+#else
 		header->setClickable(true);
+#endif
 	}
 	else {
 		header->setSortIndicator(-1, Qt::DescendingOrder);
 		header->setSortIndicatorShown(false);
-		header->setClickable(false);
+#if QT_VERSION >= 0x050000
+		header->setSectionsClickable(true);
+#else
+		header->setClickable(true);
+#endif
 	}
 }
 

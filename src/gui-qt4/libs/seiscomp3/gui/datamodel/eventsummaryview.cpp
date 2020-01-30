@@ -46,6 +46,7 @@
 #include <seiscomp3/gui/datamodel/utils.h>
 
 #include <QMessageBox>
+#include <QScrollArea>
 #include <QStringList>
 
 #ifdef WIN32
@@ -1027,7 +1028,12 @@ void EventSummaryView::init() {
 
 	QAction* refreshAction = new QAction(this);
 	refreshAction->setObjectName(QString::fromUtf8("refreshAction"));
+
+#if QT_VERSION >= 0x050000
+	refreshAction->setShortcut(QApplication::translate("EventSummaryView", "F5", 0));
+#else
 	refreshAction->setShortcut(QApplication::translate("EventSummaryView", "F5", 0, QApplication::UnicodeUTF8));
+#endif
 	addAction(refreshAction);
 
 	_magList = new MagList();
@@ -1039,7 +1045,7 @@ void EventSummaryView::init() {
 //	f.setBold(true);
 //	uiHypocenter._lbSystem->setFont(f);
 
-	_autoSelect = TRUE;
+	_autoSelect = true;
 
 	addAction(ui.actionShowInvisibleMagnitudes);
 

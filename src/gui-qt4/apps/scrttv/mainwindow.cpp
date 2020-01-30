@@ -34,12 +34,18 @@
 #include <seiscomp3/gui/core/infotext.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/datamodel/inventorylistview.h>
+
+#include <QFileDialog>
+#include <QLineEdit>
+#include <QMessageBox>
+
 #include <set>
 #include <fstream>
 
 
 using namespace std;
 using namespace Seiscomp;
+using namespace Seiscomp::Gui;
 using namespace Seiscomp::IO;
 using namespace Seiscomp::DataModel;
 
@@ -277,7 +283,7 @@ void TraceViewTabBar::textChanged() {
 
 
 TraceView::TraceView(const Seiscomp::Core::TimeSpan& span,
-                     QWidget *parent, Qt::WFlags f)
+                     QWidget *parent, Qt::WindowFlags f)
 : Seiscomp::Gui::RecordView(span, parent, f) {
 	_timeSpan = (double)span;
 }
@@ -1619,8 +1625,8 @@ void MainWindow::openAcquisition() {
 		//progress.setRange(0, _waveformStreams.size());
 
 		SCApp->showMessage(QString("Added 0/%1 streams")
-		                   .arg(_waveformStreams.size()).toAscii());
-		cerr << "Adding " << _waveformStreams.size() << " streams" << endl;
+		                   .arg(_waveformStreams.size()).toLatin1());
+		cout << "Adding " << _waveformStreams.size() << " streams" << endl;
 
 		//ofstream of("streams");
 
@@ -1677,7 +1683,7 @@ void MainWindow::openAcquisition() {
 
 			SCApp->showMessage(QString("Added %1/%2 streams")
 			                   .arg(count+1)
-			                   .arg(_waveformStreams.size()).toAscii());
+			                   .arg(_waveformStreams.size()).toLatin1());
 			//progress.setValue(progress.value()+1);
 			//progress.update();
 		}
@@ -1748,7 +1754,7 @@ void MainWindow::openAcquisition() {
 				addPick(pick.get());
 		}
 
-		SCApp->showMessage(QString("Loaded %1 picks").arg(it.count()).toAscii());
+		SCApp->showMessage(QString("Loaded %1 picks").arg(it.count()).toLatin1());
 		cout << "Added " << it.count() << " picks from database" << endl;
 	}
 

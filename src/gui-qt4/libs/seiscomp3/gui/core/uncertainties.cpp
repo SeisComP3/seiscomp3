@@ -18,7 +18,7 @@ namespace Seiscomp {
 namespace Gui {
 
 
-EditUncertainties::EditUncertainties(QWidget * parent, Qt::WFlags f)
+EditUncertainties::EditUncertainties(QWidget * parent, Qt::WindowFlags f)
 : QDialog(parent, f) {
 	_ui.setupUi(this);
 

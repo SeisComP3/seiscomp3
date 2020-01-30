@@ -19,7 +19,7 @@ namespace Seiscomp {
 namespace Gui {
 
 
-ZoomRecordFrame::ZoomRecordFrame(QWidget* parent, Qt::WFlags f)
+ZoomRecordFrame::ZoomRecordFrame(QWidget* parent, Qt::WindowFlags f)
  : QFrame(parent, f) {}
 
 

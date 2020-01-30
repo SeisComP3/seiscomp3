@@ -41,7 +41,11 @@ Texture::Texture() {
 
 
 int Texture::numBytes() const {
+#if QT_VERSION >= 0x040600
+	return image.byteCount();
+#else
 	return image.numBytes();
+#endif
 }
 
 

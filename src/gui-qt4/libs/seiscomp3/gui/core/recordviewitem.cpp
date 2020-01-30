@@ -14,12 +14,15 @@
 
 #define SEISCOMP_COMPONENT Gui::RecordViewItem
 
-#include <QPainter>
-#include <QApplication>
 #include <seiscomp3/gui/core/recordviewitem.h>
 #include <seiscomp3/gui/core/recordview.h>
 #include <seiscomp3/logging/log.h>
 
+#include <QApplication>
+#include <QDrag>
+#include <QMimeData>
+#include <QPainter>
+#include <QWidget>
 
 namespace {
 
@@ -1041,7 +1044,7 @@ void RecordViewItem::mouseMoveEvent(QMouseEvent *event) {
 				streamList += waveformIDToString(item->streamID());
 			}
 
-			mimeData->setData("stream/list", streamList.toAscii());
+			mimeData->setData("stream/list", streamList.toLatin1());
 			mimeData->setText(streamList);
 			drag->setMimeData(mimeData);
 

@@ -55,6 +55,11 @@
 #include "ui_originlocatorview_commit.h"
 #include "ui_originlocatorview_comment.h"
 
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QToolTip>
+#include <QWidget>
+
 #include <algorithm>
 
 #ifdef WIN32
@@ -666,12 +671,20 @@ class NodalPlaneDialog : public QDialog {
 			hboxLayout->addItem(spacerItem1);
 
 			QPushButton *okButton = new QPushButton(this);
+#if QT_VERSION >= 0x050000
+			okButton->setText(QApplication::translate("", "OK", 0));
+#else
 			okButton->setText(QApplication::translate("", "OK", 0, QApplication::UnicodeUTF8));
+#endif
 
 			hboxLayout->addWidget(okButton);
 
 			QPushButton *cancelButton = new QPushButton(this);
+#if QT_VERSION >= 0x050000
+			cancelButton->setText(QApplication::translate("", "Cancel", 0));
+#else
 			cancelButton->setText(QApplication::translate("", "Cancel", 0, QApplication::UnicodeUTF8));
+#endif
 
 			hboxLayout->addWidget(cancelButton);
 
@@ -2463,7 +2476,7 @@ OriginLocatorView::OriginLocatorView::Config::Config() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorView::OriginLocatorView(const MapsDesc &maps,
                                      const PickerView::Config &pickerConfig,
-                                     QWidget * parent, Qt::WFlags f)
+                                     QWidget * parent, Qt::WindowFlags f)
  : QWidget(parent, f), _toolMap(NULL), _recordView(NULL), _currentOrigin(NULL),
    _baseOrigin(NULL), _pickerConfig(pickerConfig) {
 
@@ -2479,7 +2492,7 @@ OriginLocatorView::OriginLocatorView(const MapsDesc &maps,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorView::OriginLocatorView(Map::ImageTree* mapTree,
                                      const PickerView::Config &pickerConfig,
-                                     QWidget * parent, Qt::WFlags f)
+                                     QWidget * parent, Qt::WindowFlags f)
 : QWidget(parent, f), _toolMap(NULL), _recordView(NULL), _currentOrigin(NULL),
    _baseOrigin(NULL), _pickerConfig(pickerConfig) {
 
@@ -2609,7 +2622,11 @@ void OriginLocatorView::init() {
 	_modelArrivals.setDisabledForeground(palette().color(QPalette::Disabled, QPalette::Text));
 
 	ArrivalDelegate *delegate = new ArrivalDelegate(_ui.tableArrivals);
+#if QT_VERSION >= 0x050000
+	_ui.tableArrivals->horizontalHeader()->setSectionsMovable(true);
+#else
 	_ui.tableArrivals->horizontalHeader()->setMovable(true);
+#endif
 	_ui.tableArrivals->setItemDelegate(delegate);
 	_ui.tableArrivals->setMouseTracking(true);
 	_ui.tableArrivals->resizeColumnToContents(0);
@@ -2631,7 +2648,12 @@ void OriginLocatorView::init() {
 	_ui.tableArrivals->horizontalHeader()->setSortIndicatorShown(true);
 	_ui.tableArrivals->horizontalHeader()->setSortIndicator(DISTANCE, Qt::AscendingOrder);
 	//_ui.tableArrivals->horizontalHeader()->setStretchLastSection(true);
+
+#if QT_VERSION >= 0x050000
+	_ui.tableArrivals->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
 	_ui.tableArrivals->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 
 	_ui.tableArrivals->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -4244,7 +4266,11 @@ void OriginLocatorView::updateContent() {
 		_ui.tableArrivals->setColumnHidden(i, !colVisibility[i]);
 
 	//_ui.tableArrivals->resize(_ui.tableArrivals->size());
+#if QT_VERSION >= 0x050000
+	_ui.tableArrivals->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
 	_ui.tableArrivals->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 
 	_ui.buttonEditComment->setEnabled(_baseEvent.get());
 

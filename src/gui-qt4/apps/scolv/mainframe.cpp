@@ -51,6 +51,7 @@
 #include <seiscomp3/core/datamessage.h>
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QSystemTrayIcon>
 
 #include <sstream>
@@ -147,8 +148,13 @@ MainFrame::MainFrame(){
 
 	_actionConfigureAcquisition = new QAction(this);
 	_actionConfigureAcquisition->setObjectName(QString::fromUtf8("configureAcquisition"));
+#if QT_VERSION >= 0x050000
+	_actionConfigureAcquisition->setShortcut(QApplication::translate("MainWindow", "F3", 0));
+	_actionConfigureAcquisition->setText(QApplication::translate("MainWindow", "Configure &OriginLocatorView...", 0));
+#else
 	_actionConfigureAcquisition->setShortcut(QApplication::translate("MainWindow", "F3", 0, QApplication::UnicodeUTF8));
 	_actionConfigureAcquisition->setText(QApplication::translate("MainWindow", "Configure &OriginLocatorView...", 0, QApplication::UnicodeUTF8));
+#endif
 
 	addAction(_actionConfigureAcquisition);
 
@@ -516,7 +522,7 @@ MainFrame::MainFrame(){
 			QString filter = (*it).c_str();
 			QStringList tokens = filter.split(";");
 			if ( tokens.size() != 2 ) {
-				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toAscii());
+				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toLatin1());
 				continue;
 			}
 
@@ -564,7 +570,8 @@ MainFrame::MainFrame(){
 			QString filter = (*it).c_str();
 			QStringList tokens = filter.split(";");
 			if ( tokens.size() != 2 ) {
-				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toAscii());
+				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s",
+				               (const char*)filter.toLatin1());
 				continue;
 			}
 

@@ -14,7 +14,11 @@
 #include "information.h"
 
 #include <seiscomp3/system/environment.h>
-#include <QtGui>
+
+#include <QHeaderView>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <QWidget>
 
 
 InformationPanel::InformationPanel(QWidget *parent)

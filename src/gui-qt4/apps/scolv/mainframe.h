@@ -16,7 +16,6 @@
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
-#include <QtGui>
 #include <seiscomp3/gui/core/mainwindow.h>
 #ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
@@ -25,9 +24,8 @@
 #endif
 #include "ui_mainframe.h"
 
-
-class QSystemTrayIcon;
-
+#include <QtGui>
+#include <QSystemTrayIcon>
 
 namespace Seiscomp {
 namespace Gui {

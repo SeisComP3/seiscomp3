@@ -11,8 +11,20 @@
  ***************************************************************************/
 
 #include "editor.h"
-#include <set>
 
+#include <QAbstractTextDocumentLayout>
+#include <QFile>
+#include <QHeaderView>
+#include <QLabel>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QPainter>
+#include <QScrollBar>
+#include <QSplitter>
+#include <QTableWidget>
+#include <QVBoxLayout>
+
+#include <set>
 
 namespace {
 

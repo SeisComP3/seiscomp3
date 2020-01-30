@@ -49,6 +49,8 @@
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
+#include <QToolButton>
+
 #include <algorithm>
 #include <numeric>
 #include <fstream>
@@ -434,15 +436,15 @@ class ZoomRecordWidget : public RecordWidget {
 
 class TraceList : public RecordView {
 	public:
-		TraceList(QWidget *parent = 0, Qt::WFlags f = 0)
+		TraceList(QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeWindow& tw,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(tw, parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeSpan& ts,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(ts, parent, f) {}
 
 	protected:
@@ -2243,7 +2245,7 @@ void PickerView::Config::getPickPhases(StringList &phases, const QList<PhaseGrou
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PickerView::PickerView(QWidget *parent, Qt::WFlags f)
+PickerView::PickerView(QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent,f) {
 	_recordView = new TraceList();
 	init();
@@ -2255,7 +2257,7 @@ PickerView::PickerView(QWidget *parent, Qt::WFlags f)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::PickerView(const Seiscomp::Core::TimeWindow& tw,
-                       QWidget *parent, Qt::WFlags f)
+                       QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent, f) {
 	_recordView = new TraceList(tw);
 	init();
@@ -2267,7 +2269,7 @@ PickerView::PickerView(const Seiscomp::Core::TimeWindow& tw,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::PickerView(const Seiscomp::Core::TimeSpan& ts,
-                       QWidget *parent, Qt::WFlags f)
+                       QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent, f) {
 	_recordView = new TraceList(ts);
 	init();
@@ -7412,7 +7414,7 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 
 				if ( !marker->filter().isEmpty() )
 					p->setFilterID(marker->filter().toStdString());
-				p->setPhaseHint(Phase((const char*)marker->text().toAscii()));
+				p->setPhaseHint(Phase((const char*)marker->text().toLatin1()));
 				p->setEvaluationMode(EvaluationMode(MANUAL));
 				p->setPolarity(marker->polarity());
 				CreationInfo ci;

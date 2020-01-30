@@ -23,8 +23,13 @@
 #endif
 
 #include <QColor>
+#include <QDialog>
 #include <QPen>
 #include <QtGui>
+
+class QLineEdit;
+class QCheckBox;
+class QSpinBox;
 
 
 namespace Seiscomp {
@@ -49,9 +54,9 @@ class SC_GUI_API MapWidget : public QWidget {
 	Q_OBJECT
 
 	public:
-		MapWidget(QWidget *parent = 0, Qt::WFlags f = 0);
-		MapWidget(const MapsDesc &meta, QWidget *parent = 0, Qt::WFlags f = 0);
-		MapWidget(Map::ImageTree *mapTree, QWidget *parent = 0, Qt::WFlags f = 0);
+		MapWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+		MapWidget(const MapsDesc &meta, QWidget *parent = 0, Qt::WindowFlags f = 0);
+		MapWidget(Map::ImageTree *mapTree, QWidget *parent = 0, Qt::WindowFlags f = 0);
 		virtual ~MapWidget();
 
 		Map::Canvas &canvas() { return _canvas; }

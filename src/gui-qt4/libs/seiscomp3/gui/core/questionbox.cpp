@@ -24,7 +24,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QuestionBox::QuestionBox(QWidget* parent, Qt::WFlags f) {
+QuestionBox::QuestionBox(QWidget* parent, Qt::WindowFlags f) {
 	_parent = parent;
 	_flags = f;
 	_lastResult = -1;

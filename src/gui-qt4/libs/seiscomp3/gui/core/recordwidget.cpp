@@ -12,6 +12,7 @@
 
 
 #include <QPainter>
+#include <QToolTip>
 
 #define SEISCOMP_COMPONENT Gui::RecordWidget
 #include <seiscomp3/core/genericrecord.h>

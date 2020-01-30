@@ -68,7 +68,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DiagramWidget::DiagramWidget(QWidget * parent, Type type, Qt::WFlags f)
+DiagramWidget::DiagramWidget(QWidget * parent, Type type, Qt::WindowFlags f)
  : QWidget(parent, f) {
 	setType(type);
 

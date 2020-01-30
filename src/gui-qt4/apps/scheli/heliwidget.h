@@ -14,6 +14,7 @@
 #define __HELIWIDGET_H__
 
 #include <QtGui>
+#include <QWidget>
 
 #ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>

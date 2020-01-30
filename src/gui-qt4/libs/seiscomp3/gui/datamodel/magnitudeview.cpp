@@ -30,6 +30,8 @@
 #include <seiscomp3/gui/datamodel/amplitudeview.h>
 #include <seiscomp3/gui/datamodel/utils.h>
 
+#include <QMessageBox>
+
 #include <functional>
 
 #ifdef WIN32
@@ -227,7 +229,7 @@ struct like {
 template <>
 struct like<QString> {
 	bool operator()(const QString &lhs, const QString &rhs) const {
-		return Core::wildcmp(rhs.toAscii(), lhs.toAscii());
+		return Core::wildcmp(rhs.toLatin1(), lhs.toLatin1());
 	}
 };
 
@@ -856,7 +858,8 @@ bool StationMagnitudeModel::useMagnitude(int row) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MagnitudeRowFilter::MagnitudeRowFilter(ModelAbstractRowFilter **filter_ptr, QWidget * parent, Qt::WFlags f)
+MagnitudeRowFilter::MagnitudeRowFilter(ModelAbstractRowFilter **filter_ptr, QWidget * parent,
+                                       Qt::WindowFlags f)
 : QDialog(parent, f) {
 	_ui.setupUi(this);
 
@@ -1097,8 +1100,8 @@ ModelAbstractRowFilter *&selectionFilter() {
 //! Implementation of MagnitudeView
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeView::MagnitudeView(const MapsDesc &maps,
-                             Seiscomp::DataModel::DatabaseQuery *reader,
-                             QWidget *parent, Qt::WFlags f)
+                             Seiscomp::DataModel::DatabaseQuery* reader,
+                             QWidget * parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , _reader(reader)
 , _modelStationMagnitudes(NULL, NULL, &_objCache)
@@ -1116,7 +1119,7 @@ MagnitudeView::MagnitudeView(const MapsDesc &maps,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeView::MagnitudeView(Map::ImageTree* mapTree,
                              Seiscomp::DataModel::DatabaseQuery* reader,
-                             QWidget * parent, Qt::WFlags f)
+                             QWidget * parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , _reader(reader)
 , _modelStationMagnitudes(NULL, NULL, &_objCache)
@@ -3283,7 +3286,7 @@ void MagnitudeView::updateContent() {
 
 	//  use selection from comboBox for netmagType
 	//_netMag = _origin->findMagnitude((_ui.comboMagType->itemData(_ui.comboMagType->currentIndex()).value<QString>()).toAscii().data());
-	_netMag = _origin->findMagnitude(_tabMagnitudes->tabData(_tabMagnitudes->currentIndex()).value<TabData>().publicID);
+	_netMag = _origin->findMagnitude(_tabMagnitudes->tabData(_tabMagnitudes->currentIndex()).value<QString>().toLatin1().data());
 	if ( _map ) {
 		_map->setMagnitude(_netMag.get());
 		_map->update();
@@ -3344,7 +3347,11 @@ void MagnitudeView::updateContent() {
 		_ui.tableStationMagnitudes->setColumnHidden(i, !colVisibility[i]);
 
 	// update column width in table view
+#if QT_VERSION >= 0x050000
+	_ui.tableStationMagnitudes->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
 	_ui.tableStationMagnitudes->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 	//_ui.tableStationMagnitudes->resizeColumnsToContents();
 	_ui.tableStationMagnitudes->resizeRowsToContents();
 	_ui.tableStationMagnitudes->sortByColumn(_ui.tableStationMagnitudes->horizontalHeader()->sortIndicatorSection());

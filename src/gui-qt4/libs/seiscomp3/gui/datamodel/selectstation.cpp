@@ -185,7 +185,7 @@ class StationsSortFilterProxyModel : public QSortFilterProxyModel {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SelectStation::SelectStation(Core::Time time, bool ignoreDisabledStations,
-                             QWidget* parent, Qt::WFlags f)
+                             QWidget* parent, Qt::WindowFlags f)
  : QDialog(parent, f) {
 	init(time, ignoreDisabledStations, NULL);
 }
@@ -197,7 +197,7 @@ SelectStation::SelectStation(Core::Time time, bool ignoreDisabledStations,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SelectStation::SelectStation(Core::Time time, bool ignoreDisabledStations,
                              const QSet<QString> &blackList,
-                             QWidget* parent, Qt::WFlags f)
+                             QWidget* parent, Qt::WindowFlags f)
  : QDialog(parent, f) {
 	init(time, ignoreDisabledStations, &blackList);
 }

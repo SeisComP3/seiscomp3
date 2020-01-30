@@ -20,6 +20,16 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMessageBox>
+#include <QSpinBox>
+#include <QToolButton>
+#include <QWidget>
+
 #include <cmath>
 
 #ifdef WIN32
@@ -157,19 +167,19 @@ SaveBNADialog::SaveBNADialog(QWidget *parent, Qt::WindowFlags f)
 
 
 
-MapWidget::MapWidget(QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(NULL) {
 	init();
 }
 
 
-MapWidget::MapWidget(const MapsDesc &meta, QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(const MapsDesc &meta, QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(meta) {
 	init();
 }
 
 
-MapWidget::MapWidget(Map::ImageTree *mapTree, QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(Map::ImageTree *mapTree, QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(mapTree) {
 	init();
 }

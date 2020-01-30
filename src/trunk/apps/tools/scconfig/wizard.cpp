@@ -13,12 +13,21 @@
 #include "wizard.h"
 #include <seiscomp3/config/config.h>
 #include <seiscomp3/system/environment.h>
+
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QTextEdit>
+#include <QToolBar>
+
 #include <iostream>
 #include <sstream>
 
-
 using namespace std;
-
 
 WizardWidget::Node::Node(Node *p, Node *left, Node *right, Input *i)
 : parent(p), prev(left), next(right), child(NULL),

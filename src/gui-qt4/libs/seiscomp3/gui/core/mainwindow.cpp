@@ -31,6 +31,9 @@
 #include <seiscomp3/gui/core/osx.h>
 #endif
 
+#include <QMenuBar>
+#include <QStatusBar>
+
 using namespace Seiscomp;
 using namespace Seiscomp::Communication;
 using namespace Seiscomp::DataModel;
@@ -44,7 +47,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MainWindow::MainWindow(QWidget * parent, Qt::WFlags flags)
+MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags)
  : QMainWindow(parent, flags)
 {
 	_connectionState = NULL;
@@ -59,13 +62,24 @@ MainWindow::MainWindow(QWidget * parent, Qt::WFlags flags)
 
 	_actionToggleFullScreen = new QAction(this);
 	_actionToggleFullScreen->setObjectName(QString::fromUtf8("toggleFS"));
+#if QT_VERSION >= 0x050000
+	_actionToggleFullScreen->setShortcut(QApplication::translate("MainWindow", "F11", 0));
+	_actionToggleFullScreen->setText(QApplication::translate("MainWindow", "Toggle FullScreen", 0));
+#else
 	_actionToggleFullScreen->setShortcut(QApplication::translate("MainWindow", "F11", 0, QApplication::UnicodeUTF8));
 	_actionToggleFullScreen->setText(QApplication::translate("MainWindow", "Toggle FullScreen", 0, QApplication::UnicodeUTF8));
+#endif
 
 	_actionShowSettings = new QAction(this);
 	_actionShowSettings->setObjectName(QString::fromUtf8("showSettings"));
+#if QT_VERSION >= 0x050000
+	_actionShowSettings->setShortcut(QApplication::translate("MainWindow", "F2", 0));
+	_actionShowSettings->setText(QApplication::translate("MainWindow", "Configure &Connection...", 0));
+#else
 	_actionShowSettings->setShortcut(QApplication::translate("MainWindow", "F2", 0, QApplication::UnicodeUTF8));
 	_actionShowSettings->setText(QApplication::translate("MainWindow", "Configure &Connection...", 0, QApplication::UnicodeUTF8));
+#endif
+
 	_actionShowSettings->setEnabled(SCApp->isMessagingEnabled() || SCApp->isDatabaseEnabled());
 
 	connect(_actionToggleFullScreen, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
@@ -76,13 +90,23 @@ MainWindow::MainWindow(QWidget * parent, Qt::WFlags flags)
 
 	QAction *inspectConfig = new QAction(this);
 	inspectConfig->setObjectName(QString::fromUtf8("inspectConfig"));
+#if QT_VERSION >= 0x050000
+	inspectConfig->setShortcut(QApplication::translate("MainWindow", "Alt+Ctrl+C", 0));
+	inspectConfig->setText(QApplication::translate("MainWindow", "Inspect &Configmodule...", 0));
+#else
 	inspectConfig->setShortcut(QApplication::translate("MainWindow", "Alt+Ctrl+C", 0, QApplication::UnicodeUTF8));
 	inspectConfig->setText(QApplication::translate("MainWindow", "Inspect &Configmodule...", 0, QApplication::UnicodeUTF8));
+#endif
 
 	QAction *inspectInventory = new QAction(this);
 	inspectInventory->setObjectName(QString::fromUtf8("inspectInventory"));
+#if QT_VERSION >= 0x050000
+	inspectInventory->setShortcut(QApplication::translate("MainWindow", "Alt+Ctrl+I", 0));
+	inspectInventory->setText(QApplication::translate("MainWindow", "Inspect &Inventory...", 0));
+#else
 	inspectInventory->setShortcut(QApplication::translate("MainWindow", "Alt+Ctrl+I", 0, QApplication::UnicodeUTF8));
 	inspectInventory->setText(QApplication::translate("MainWindow", "Inspect &Inventory...", 0, QApplication::UnicodeUTF8));
+#endif
 
 	addAction(inspectConfig);
 	addAction(inspectInventory);

@@ -21,6 +21,7 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/recordstreamthread.h>
 
+#include <QMessageBox>
 
 using namespace Seiscomp;
 

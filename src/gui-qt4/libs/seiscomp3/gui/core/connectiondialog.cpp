@@ -20,6 +20,7 @@
 #include <seiscomp3/communication/servicemessage.h>
 #include <seiscomp3/utils/timer.h>
 
+#include <QMessageBox>
 
 using namespace Seiscomp::Core;
 using namespace Seiscomp::Communication;
@@ -30,7 +31,7 @@ namespace Seiscomp {
 namespace Gui {
 
 
-ConnectionDialog::ConnectionDialog(ConnectionPtr* con, DatabaseInterfacePtr* db, QWidget * parent , Qt::WFlags f)
+ConnectionDialog::ConnectionDialog(ConnectionPtr* con, DatabaseInterfacePtr* db, QWidget * parent , Qt::WindowFlags f)
  : QDialog(parent, f), _connection(con), _db(db), _requestAllGroups(false) {
 	_ui.setupUi(this);
 
@@ -330,7 +331,8 @@ bool ConnectionDialog::connectToDatabase() {
 
 	if ( !*_db || !(*_db)->isConnected() ) {
 		if ( !_ui.editDbConnection->text().isEmpty() ) {
-			DatabaseProvideMessage tmp(_ui.comboDbType->currentText().toAscii(), _ui.editDbConnection->text().toAscii());
+			DatabaseProvideMessage tmp(_ui.comboDbType->currentText().toLatin1(),
+			                           _ui.editDbConnection->text().toLatin1());
 			*_db = tmp.database();
 		}
 		else
@@ -380,11 +382,11 @@ void ConnectionDialog::onItemChanged(QListWidgetItem *item) {
 	_requestAllGroups = false;
 
 	if ( item->checkState() == Qt::Checked ) {
-		(*_connection)->subscribe((const char*)item->text().toAscii());
+		(*_connection)->subscribe((const char*)item->text().toLatin1());
 		_requestedGroups.append(item->text());
 	}
 	else {
-		(*_connection)->unsubscribe((const char*)item->text().toAscii());
+		(*_connection)->unsubscribe((const char*)item->text().toLatin1());
 		_requestedGroups.removeAll(item->text());
 	}
 }

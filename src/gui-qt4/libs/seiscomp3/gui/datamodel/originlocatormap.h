@@ -39,10 +39,10 @@ class SC_GUI_API OriginLocatorMap : public MapWidget {
 
 	public:
 		OriginLocatorMap(const MapsDesc &maps,
-		                 QWidget *parent = 0, Qt::WFlags f = 0);
+		                 QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		OriginLocatorMap(Map::ImageTree* mapTree,
-		                 QWidget *parent = 0, Qt::WFlags f = 0);
+		                 QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		//! Sets the maximum distance for stations to be displayed
 		//! if they are not part of the origin

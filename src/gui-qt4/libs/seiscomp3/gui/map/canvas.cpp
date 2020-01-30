@@ -23,6 +23,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
+#include <QMenu>
 #include <QMouseEvent>
 #include <QMutex>
 

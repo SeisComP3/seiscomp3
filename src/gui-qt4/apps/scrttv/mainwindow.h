@@ -16,7 +16,6 @@
 #ifndef __MAINWINDOW__
 #define __MAINWINDOW__
 
-#include <QtGui>
 #ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/client/inventory.h>
@@ -29,6 +28,11 @@
 #include <seiscomp3/gui/core/recordstreamthread.h>
 #include "progressbar.h"
 #include "ui_mainwindow.h"
+
+#include <QtGui>
+#include <QTabBar>
+
+class QLineEdit;
 
 namespace Seiscomp {
 namespace DataModel {
@@ -54,7 +58,7 @@ class TraceView : public Seiscomp::Gui::RecordView {
 
 	public:
 		TraceView(const Seiscomp::Core::TimeSpan &span,
-		          QWidget *parent = 0, Qt::WFlags f = 0);
+		          QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		~TraceView();
 

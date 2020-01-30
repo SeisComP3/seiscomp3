@@ -15,7 +15,6 @@
 #ifndef __SEISCOMP_GUI_ORIGINLISTVIEW_H__
 #define __SEISCOMP_GUI_ORIGINLISTVIEW_H__
 
-#include <QtGui>
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/qt4.h>
@@ -25,6 +24,11 @@
 #endif
 #include <seiscomp3/gui/datamodel/ui_eventlistview.h>
 #include <seiscomp3/gui/datamodel/ui_eventlistviewregionfilterdialog.h>
+
+#include <QWidget>
+
+class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace Seiscomp {
 
@@ -90,7 +94,7 @@ class SC_GUI_API EventListView : public QWidget {
 	public:
 		EventListView(Seiscomp::DataModel::DatabaseQuery* reader,
 		              bool withOrigins = true, bool withFocalMechanisms = false,
-		              QWidget * parent = 0, Qt::WFlags f = 0);
+		              QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~EventListView();
 
 

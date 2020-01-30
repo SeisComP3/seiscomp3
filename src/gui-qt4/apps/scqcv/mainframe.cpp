@@ -31,6 +31,8 @@
 
 #include "mainframe.h"
 
+#include <QMessageBox>
+
 using namespace Seiscomp::DataModel;
 
 namespace Seiscomp {
@@ -54,7 +56,7 @@ MainFrame::MainFrame() {
 
 	// action buttons
 	addAction(_ui.actionAutoSelect);
-	_ui.actionAutoSelect->setChecked(TRUE);
+	_ui.actionAutoSelect->setChecked(true);
 
 	_ui.tabWidget->setCurrentIndex(0);
 
@@ -396,8 +398,8 @@ DataModel::ConfigStation* MainFrame::configStation(const std::string& networkCod
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::prepareNotifier(QString streamID, bool enable) {
-	const std::string& networkCode = streamID.split(".")[0].toAscii().data();
-    const std::string& stationCode = streamID.split(".")[1].toAscii().data();
+	const std::string& networkCode = streamID.split(".")[0].toLatin1().data();
+	const std::string& stationCode = streamID.split(".")[1].toLatin1().data();
 
 	DataModel::ConfigStation* cs = configStation(networkCode, stationCode);
 	if ( !cs ) {

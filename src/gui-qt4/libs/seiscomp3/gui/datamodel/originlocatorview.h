@@ -14,7 +14,6 @@
 #ifndef __SEISCOMP_GUI_ORIGINLOCATORVIEW_H__
 #define __SEISCOMP_GUI_ORIGINLOCATORVIEW_H__
 
-#include <QtGui>
 #include <seiscomp3/gui/datamodel/ui_originlocatorview.h>
 #include <seiscomp3/gui/core/ui_diagramfilter.h>
 #include <seiscomp3/gui/core/diagramwidget.h>
@@ -29,7 +28,13 @@
 #include <seiscomp3/seismology/locatorinterface.h>
 #include <seiscomp3/core/baseobject.h>
 #endif
+
+#include <QAbstractItemModel>
+#include <QStyledItemDelegate>
+
 #include <set>
+
+class QTreeWidgetItem;
 
 
 namespace Seiscomp {
@@ -207,10 +212,10 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 	public:
 		OriginLocatorView(const MapsDesc &maps,
 		                  const PickerView::Config &pickerConfig,
-		                  QWidget * parent = 0, Qt::WFlags f = 0);
+		                  QWidget * parent = 0, Qt::WindowFlags f = 0);
 		OriginLocatorView(Map::ImageTree* mapTree,
 		                  const PickerView::Config &pickerConfig,
-		                  QWidget * parent = 0, Qt::WFlags f = 0);
+		                  QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~OriginLocatorView();
 
 	signals:

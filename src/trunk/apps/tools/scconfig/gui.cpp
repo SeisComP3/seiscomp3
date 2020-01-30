@@ -13,7 +13,19 @@
 
 #define SEISCOMP_COMPONENT Configurator
 
-#include <QtGui>
+#include <QAction>
+#include <QApplication>
+#include <QDir>
+#include <QFile>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QWhatsThis>
+#include <QWidget>
 
 #include <iostream>
 #include <list>

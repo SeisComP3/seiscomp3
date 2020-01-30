@@ -15,8 +15,12 @@
 #define __SEISCOMP_CONFIGURATION_GUI_PANEL_SYSTEM_H__
 
 #include "../gui.h"
-#include <QtGui>
 
+#include <QProcess>
+#include <QWidget>
+
+class QTextEdit;
+class QTableWidget;
 
 class SystemPanel : public ConfiguratorPanel {
 	Q_OBJECT

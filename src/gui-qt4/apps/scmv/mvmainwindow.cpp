@@ -516,7 +516,7 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
+MvMainWindow::MvMainWindow(QWidget* parent, Qt::WindowFlags flags)
 : Gui::MainWindow(parent, flags)
 , _mapWidget(NULL)
 , _displayMode(NONE)

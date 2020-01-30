@@ -14,11 +14,19 @@
 #include "help.h"
 #include <seiscomp3/system/environment.h>
 
+#include <QAbstractTextDocumentLayout>
+#include <QDesktopServices>
+#include <QDialog>
+#include <QDir>
+#include <QMenu>
+#include <QTextEdit>
+#include <QToolBar>
+#include <QUrl>
+#include <QVBoxLayout>
+
 #include <iostream>
 
-
 using namespace std;
-
 
 #define TYPEROLE Qt::UserRole+1
 #define PATHROLE Qt::UserRole+2

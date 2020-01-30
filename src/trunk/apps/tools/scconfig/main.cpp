@@ -24,6 +24,8 @@
 #include "gui.h"
 
 #include <QtGui>
+#include <QApplication>
+#include <QMessageBox>
 #if QT_VERSION >= 0x040400
 #include <QSharedMemory>
 #include <QSystemSemaphore>

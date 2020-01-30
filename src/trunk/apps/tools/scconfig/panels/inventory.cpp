@@ -18,7 +18,17 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <locale.h>
 
-#include <QtGui>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDirModel>
+#include <QFileDialog>
+#include <QFileSystemWatcher>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QToolBar>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 
 /** The code to parse VT100 escape sequences is taken from KSysGuard,
@@ -177,7 +187,7 @@ class LogDialog : public QTextEdit {
 			else if ( !c.isNull() ) {
 				insertPlainText("[");
 				QByteArray num;
-				num.setNum(c.toAscii());
+				num.setNum(c.toLatin1());
 				insertPlainText(num);
 				insertPlainText("]");
 			}
@@ -700,7 +710,7 @@ void InventoryPanel::inspectFile() {
 	target = QDir::toNativeSeparators(target + "/" + indexes[0].data().toString());
 
 	Seiscomp::IO::XMLArchive ar;
-	if ( !ar.open(target.toAscii()) ) {
+	if ( !ar.open(target.toLatin1()) ) {
 		QMessageBox::critical(NULL, tr("Show content"),
 		                      tr("Could not open file"));
 		return;

@@ -30,7 +30,7 @@ using namespace Seiscomp::Gui;
 
 
 SendEvent::SendEvent(int& argc, char **argv)
-: Application(argc, argv, 0, Application::Tty) {
+: Application(argc, argv, 0, Tty) {
 	setMessagingEnabled(true);
 	setMessagingUsername("scsendevt");
 	setDatabaseEnabled(true,false);
@@ -47,9 +47,9 @@ bool SendEvent::run() {
 		PublicObjectPtr po = SCApp->query()->loadObject(Event::TypeInfo(), _eventID);
 		EventPtr e = Event::Cast(po);
 		if ( !e ) {
-		SEISCOMP_WARNING("Event %s has not been found.\n", _eventID.c_str());
-		cerr << "Warning: EventID " << _eventID.c_str() << " has not been found.\n";
-			return false;
+			SEISCOMP_WARNING("Event %s has not been found.\n", _eventID.c_str());
+			cerr << "Warning: EventID " << _eventID.c_str() << " has not been found.\n";
+				return false;
 		}
 
 		// Workaround for not to open window QMessageBox in the Application::sendCommand
@@ -75,4 +75,3 @@ void SendEvent::createCommandLineDescription() {
 	commandline().addGroup("Options");
 	commandline().addOption("Options", "event-id,E", "eventID to show details", &_eventID, false);
 }
-

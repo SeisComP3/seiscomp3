@@ -220,7 +220,7 @@ class SC_GUI_API AmplitudeView : public QMainWindow {
 
 	public:
 		//! Default c'tor
-		AmplitudeView(QWidget *parent = 0, Qt::WFlags f = 0);
+		AmplitudeView(QWidget *parent = 0, Qt::WindowFlags f = 0);
 		~AmplitudeView();
 
 	public:

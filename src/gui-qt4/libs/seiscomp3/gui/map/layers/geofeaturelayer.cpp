@@ -18,6 +18,8 @@
 #include <seiscomp3/geo/featureset.h>
 #include <seiscomp3/seismology/regions.h>
 
+#include <QMenu>
+
 #include <iostream>
 
 using namespace std;

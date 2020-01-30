@@ -14,12 +14,18 @@
 #ifndef __SEISCOMP_CONFIGURATION_EDITOR_H__
 #define __SEISCOMP_CONFIGURATION_EDITOR_H__
 
-
-#include <QtGui>
 #ifndef Q_MOC_RUN
 #include <seiscomp3/system/model.h>
 #endif
 
+#include <QSyntaxHighlighter>
+#include <QTextEdit>
+#include <QWidget>
+
+class QLineEdit;
+class QListWidget;
+class QSplitter;
+class QTableWidget;
 
 class ConfigHighlighter : public QSyntaxHighlighter {
 	public:

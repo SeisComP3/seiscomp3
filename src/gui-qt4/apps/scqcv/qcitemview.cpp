@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #define SEISCOMP_COMPONENT Gui::QcView
 #include <seiscomp3/logging/log.h>
 
@@ -22,6 +20,14 @@
 #include "qcmodel.h"
 #include "qcitemview.h"
 #include "qcviewconfig.h"
+
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QScrollBar>
+#include <QTableView>
+#include <QWidget>
+
 
 namespace Seiscomp {
 namespace Applications {

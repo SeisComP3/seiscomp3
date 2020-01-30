@@ -28,7 +28,7 @@ class SC_GUI_API EditUncertainties : public QDialog {
 	Q_OBJECT
 
 	public:
-		EditUncertainties(QWidget * parent = 0, Qt::WFlags f = 0);
+		EditUncertainties(QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~EditUncertainties();
 
 		void setUncertainties(double lower, double upper);

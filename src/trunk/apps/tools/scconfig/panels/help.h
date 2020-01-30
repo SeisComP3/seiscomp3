@@ -15,7 +15,8 @@
 #define __SEISCOMP_CONFIGURATION_GUI_PANEL_HELP_H__
 
 #include "../gui.h"
-#include <QtGui>
+
+#include <QWidget>
 
 
 class HelpPanel : public ConfiguratorPanel {

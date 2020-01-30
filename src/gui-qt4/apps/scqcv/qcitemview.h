@@ -17,7 +17,13 @@
 
 // #define FANCY_GRAPHICS
 
-#include <QtGui>
+#include <QAbstractItemView>
+#include <QItemDelegate>
+
+class QAbstractProxyModel;
+class QCheckBox;
+class QStatusBar;
+class QStyleOptionViewItem;
 
 namespace Seiscomp {
 namespace Applications {

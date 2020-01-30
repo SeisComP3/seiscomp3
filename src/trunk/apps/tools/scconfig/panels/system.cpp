@@ -14,8 +14,19 @@
 #include "system.h"
 #include <seiscomp3/system/environment.h>
 
-#include <iostream>
+#include <QAction>
+#include <QDialog>
+#include <QDir>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QMenu>
+#include <QPushButton>
+#include <QSplitter>
+#include <QTableWidget>
+#include <QTextEdit>
+#include <QToolBar>
 
+#include <iostream>
 
 using namespace std;
 
