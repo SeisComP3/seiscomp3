@@ -234,7 +234,10 @@ latex_documents = [
 
 
 def setup(app):
-  app.add_description_unit('confval', 'confval', 'pair: %s; configuration value')
+  if LooseVersion(sphinx.__version__) < LooseVersion('1.8'):
+    app.add_description_unit('confval', 'confval', 'pair: %s; configuration value')
+  else:
+    app.add_object_type('confval', 'confval', 'pair: %s; configuration value')
 
 pdf_stylesheets = ['sphinx','kerning','a4']
 pdf_documents = [ 

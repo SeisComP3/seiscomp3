@@ -503,11 +503,13 @@ for app in sorted(app_plugin_nodes.keys()):
     options = xml_collect_options(p)
     if options:
       pf.write('''
+.. _%s_configuration:
+
 Configuration
 =============
 
 %s
-''' % options)
+''' % (desc_name, options))
 
     pf.close()
 
@@ -749,12 +751,13 @@ Plugins
 
   if options or note or cfgs:
     f.write('''
+.. _%s_configuration:
 
 Configuration
 =============
 %s
 %s
-''' % (note, cfgs))
+''' % (app_name, note, cfgs))
 
   if options:
     f.write(options)
