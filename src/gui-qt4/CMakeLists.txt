@@ -3,12 +3,6 @@ SC_BEGIN_PACKAGE(GUI)
 OPTION(SC_GLOBAL_GUI "Build graphical user interfaces (requires Qt4 or Qt5)" ON)
 OPTION(SC_GLOBAL_GUI_QT5 "Build graphical user interfaces for Qt5" ON)
 
-# If Qt5 is not installed on the system we fallback to Qt4
-FIND_PACKAGE(Qt5 QUIET REQUIRED Widgets Core Xml)
-IF (NOT Qt5_FOUND)
-	SET(SC_GLOBAL_GUI_QT5 OFF)
-ENDIF ()
-
 SET(CPACK_PACKAGE_EXECUTABLES "scrttv;scrttv" "scmv;scmv" "scolv;scolv" "scesv;scesv")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs)
@@ -21,6 +15,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../trunk/libs)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../trunk/libs)
 
 IF (SC_GLOBAL_GUI)
+	# If Qt5 is not installed on the system we fallback to Qt4
+	FIND_PACKAGE(Qt5 QUIET REQUIRED Widgets Core Xml)
+	IF (NOT Qt5_FOUND)
+		SET(SC_GLOBAL_GUI_QT5 OFF)
+	ENDIF ()
+
 	SET(Boost_DETAILED_FAILURE_MSG ON)
 	FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options thread filesystem iostreams regex)
 	IF (WIN32)
