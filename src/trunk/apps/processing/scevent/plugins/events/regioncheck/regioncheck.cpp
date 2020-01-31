@@ -339,7 +339,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				SEISCOMP_DEBUG("  + evrc: event is negative");
 				if ( _eventTypeNegative ) {
 					eventType = _eventTypeNegative;
-					SEISCOMP_DEBUG("  + evrc: event type from config: %s", _eventTypeNegative.value().toString());
+					SEISCOMP_DEBUG("  + evrc: event type from config: %s", _eventTypeNegative->toString());
 				}
 				else {
 					eventType = Core::None;
@@ -350,7 +350,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				if ( !_readEventTypeFromBNA ) {
 					if ( _eventTypePositive ) {
 						eventType = _eventTypePositive;
-						SEISCOMP_DEBUG("  + evrc: event type from config: %s", _eventTypePositive.value().toString());
+						SEISCOMP_DEBUG("  + evrc: event type from config: %s", _eventTypePositive->toString());
 					}
 					else {
 						SEISCOMP_DEBUG("  + evrc: considering empty event type from eventTypePositive");
@@ -361,7 +361,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 
 			if ( !currentType || (currentType && *currentType != eventType) ) {
 				if ( eventType ) {
-					SEISCOMP_DEBUG("  + evrc: setting type: %s", eventType.value().toString());
+					SEISCOMP_DEBUG("  + evrc: setting type: %s", eventType->toString());
 					event->setType(eventType);
 				}
 				else {
