@@ -2,6 +2,32 @@
 
 ## Release YYYY.ddd
 
+* scesv
+
+  * Added configuration parameter 'recenterMap' to control map centering
+
+* scolv
+
+  * Add event type to left hand summary panel
+
+* scqc
+
+  * Added description of plugin configuration parameters. Default for writing
+    to the database is false.
+  * Added more QC parameters to the documentation
+
+* trunk
+
+  * Added Array.bytes() to Python wrappers (only)
+
+* seedlink
+
+  * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
+  * Fix config to properly support multiple sources (plugins) per station
+  * Use unambiguous station ID (net.station)
+
+## Release 2018.327 patch18
+
 * system
 
   * Add dependencies for Debian 9 and Debian 10
@@ -16,21 +42,13 @@
 * scesv
 
   * Fixed region filter with event list which did not work correctly
-  * Added configuration paraemeter 'recenterMap' to control map centering
 
 * scolv
 
   * Add option `askForConfirmation` to custom commits to allow
     inspection of the options to be applied.
   * Open dialog when a custom commit is activated together with shift key.
-  * Add event type to left hand summary panel
   * Add `visibleMagnitudes` to description
-
-* scqc
-
-  * Added description of plugin configuration parameters. Default for writing
-   to the database is false.
-  * Added more QC parameters to the documentation
 
 * scconfig
 
@@ -44,16 +62,6 @@
 
   * Added option --origin-id-suffix to name relocated origins
     using the original publicID plus the specified suffix
-
-* trunk
-
-  * Added Array.bytes() to Python wrappers (only)
-
-* seedlink
-
-  * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
-  * Fix config to properly support multiple sources (plugins) per station
-  * Use unambiguous station ID (net.station)
 
 ## Release 2018.327 patch17
 
