@@ -26,17 +26,19 @@
   * Fix config to properly support multiple sources (plugins) per station
   * Use unambiguous station ID (net.station)
 
-* scevent/evrc
-
-  * The plugin evrc for scevent allows the configuration of event types for
-    events within positive or negative regions
-  * Provide support for reading the event type from BNA file header
-
 ## Release 2018.327 patch18
 
 * system
 
   * Add dependencies for Debian 9 and Debian 10
+
+* scevent/evrc
+
+  * Do not process delayed objects on update
+  * Add delay time information to the event processing log
+  * The plugin evrc for scevent allows the configuration of event types for
+    events within positive or negative regions
+  * Provide support for reading the event type from BNA file header
 
 * scqcv
 
