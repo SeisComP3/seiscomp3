@@ -3009,159 +3009,161 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Archive swig_types[0]
 #define SWIGTYPE_p_AttachementList swig_types[1]
 #define SWIGTYPE_p_AttachementType swig_types[2]
-#define SWIGTYPE_p_DataArray swig_types[3]
-#define SWIGTYPE_p_ImplType swig_types[4]
-#define SWIGTYPE_p_PackType swig_types[5]
-#define SWIGTYPE_p_Properties swig_types[6]
-#define SWIGTYPE_p_PropertyValue swig_types[7]
-#define SWIGTYPE_p_ReferenceType swig_types[8]
-#define SWIGTYPE_p_RootType swig_types[9]
-#define SWIGTYPE_p_Seiscomp__Array swig_types[10]
-#define SWIGTYPE_p_Seiscomp__BitSet swig_types[11]
-#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[12]
-#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[13]
-#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[14]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[15]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[16]
-#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[17]
-#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[18]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[19]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[20]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[21]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[22]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[23]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[24]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[25]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[26]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__Category_const_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__Category_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__GeoFeature_const_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__GeoFeature_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[59]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Geo__Category swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoBoundingBox swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoCoordinate swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoFeature swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSet swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSetObserver swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSetSingleton swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Geo__formatted_lat swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Geo__formatted_lon swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[95]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[96]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[97]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[98]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[99]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[100]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[101]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[102]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[103]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[104]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[105]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[106]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[107]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[108]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[109]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[110]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[111]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[112]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[113]
-#define SWIGTYPE_p_TagType swig_types[114]
-#define SWIGTYPE_p_Type swig_types[115]
-#define SWIGTYPE_p_ValueType swig_types[116]
-#define SWIGTYPE_p_allocator_type swig_types[117]
-#define SWIGTYPE_p_boost__any swig_types[118]
-#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[119]
-#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[120]
-#define SWIGTYPE_p_char swig_types[121]
-#define SWIGTYPE_p_const_iterator swig_types[122]
-#define SWIGTYPE_p_const_reference swig_types[123]
-#define SWIGTYPE_p_difference_type swig_types[124]
-#define SWIGTYPE_p_float swig_types[125]
-#define SWIGTYPE_p_int swig_types[126]
-#define SWIGTYPE_p_iterator swig_types[127]
-#define SWIGTYPE_p_long_long swig_types[128]
-#define SWIGTYPE_p_p_PyObject swig_types[129]
-#define SWIGTYPE_p_reference swig_types[130]
-#define SWIGTYPE_p_short swig_types[131]
-#define SWIGTYPE_p_signed_char swig_types[132]
-#define SWIGTYPE_p_size_type swig_types[133]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__Category_p_t swig_types[134]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t swig_types[135]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t swig_types[136]
-#define SWIGTYPE_p_std__allocatorT_size_t_t swig_types[137]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[138]
-#define SWIGTYPE_p_std__invalid_argument swig_types[139]
-#define SWIGTYPE_p_std__ostream swig_types[140]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t swig_types[141]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t swig_types[142]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__GeoFeature_p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t_t swig_types[143]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[144]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[145]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[146]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[147]
-#define SWIGTYPE_p_unsigned_char swig_types[148]
-#define SWIGTYPE_p_unsigned_int swig_types[149]
-#define SWIGTYPE_p_unsigned_long_long swig_types[150]
-#define SWIGTYPE_p_unsigned_short swig_types[151]
-#define SWIGTYPE_p_value_type swig_types[152]
-#define SWIGTYPE_p_void swig_types[153]
-static swig_type_info *swig_types[155];
-static swig_module_info swig_module = {swig_types, 154, 0, 0, 0, 0};
+#define SWIGTYPE_p_Attributes swig_types[3]
+#define SWIGTYPE_p_DataArray swig_types[4]
+#define SWIGTYPE_p_ImplType swig_types[5]
+#define SWIGTYPE_p_PackType swig_types[6]
+#define SWIGTYPE_p_Properties swig_types[7]
+#define SWIGTYPE_p_PropertyValue swig_types[8]
+#define SWIGTYPE_p_ReferenceType swig_types[9]
+#define SWIGTYPE_p_RootType swig_types[10]
+#define SWIGTYPE_p_Seiscomp__Array swig_types[11]
+#define SWIGTYPE_p_Seiscomp__BitSet swig_types[12]
+#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[13]
+#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[14]
+#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[15]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[16]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[17]
+#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[18]
+#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[19]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[20]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[21]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[22]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[23]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[24]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[25]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[26]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[27]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__Category_const_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__Category_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__GeoFeature_const_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Geo__GeoFeature_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[60]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Geo__Category swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoBoundingBox swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoCoordinate swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoFeature swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSet swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSetObserver swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSetSingleton swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Geo__formatted_lat swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Geo__formatted_lon swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[95]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[96]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[97]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[98]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[99]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[100]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[101]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[102]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[103]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[104]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[105]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[106]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[107]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[108]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[109]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[110]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[111]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[112]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[113]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[114]
+#define SWIGTYPE_p_TagType swig_types[115]
+#define SWIGTYPE_p_Type swig_types[116]
+#define SWIGTYPE_p_ValueType swig_types[117]
+#define SWIGTYPE_p_allocator_type swig_types[118]
+#define SWIGTYPE_p_boost__any swig_types[119]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[120]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[121]
+#define SWIGTYPE_p_char swig_types[122]
+#define SWIGTYPE_p_const_iterator swig_types[123]
+#define SWIGTYPE_p_const_reference swig_types[124]
+#define SWIGTYPE_p_difference_type swig_types[125]
+#define SWIGTYPE_p_float swig_types[126]
+#define SWIGTYPE_p_int swig_types[127]
+#define SWIGTYPE_p_iterator swig_types[128]
+#define SWIGTYPE_p_long_long swig_types[129]
+#define SWIGTYPE_p_p_PyObject swig_types[130]
+#define SWIGTYPE_p_reference swig_types[131]
+#define SWIGTYPE_p_short swig_types[132]
+#define SWIGTYPE_p_signed_char swig_types[133]
+#define SWIGTYPE_p_size_type swig_types[134]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__Category_p_t swig_types[135]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t swig_types[136]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t swig_types[137]
+#define SWIGTYPE_p_std__allocatorT_size_t_t swig_types[138]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[139]
+#define SWIGTYPE_p_std__invalid_argument swig_types[140]
+#define SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t swig_types[141]
+#define SWIGTYPE_p_std__ostream swig_types[142]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t swig_types[143]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t swig_types[144]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Geo__GeoFeature_p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t_t swig_types[145]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[146]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[147]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[148]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[149]
+#define SWIGTYPE_p_unsigned_char swig_types[150]
+#define SWIGTYPE_p_unsigned_int swig_types[151]
+#define SWIGTYPE_p_unsigned_long_long swig_types[152]
+#define SWIGTYPE_p_unsigned_short swig_types[153]
+#define SWIGTYPE_p_value_type swig_types[154]
+#define SWIGTYPE_p_void swig_types[155]
+static swig_type_info *swig_types[157];
+static swig_module_info swig_module = {swig_types, 156, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9803,16 +9805,89 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_GeoFeature__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  Seiscomp::Geo::Category *arg2 = (Seiscomp::Geo::Category *) 0 ;
+  unsigned int arg3 ;
+  Seiscomp::Geo::GeoFeature::Attributes *arg4 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Geo::GeoFeature *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_GeoFeature",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_GeoFeature" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeoFeature" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Geo__Category, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_GeoFeature" "', argument " "2"" of type '" "Seiscomp::Geo::Category const *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Geo::Category * >(argp2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_GeoFeature" "', argument " "3"" of type '" "unsigned int""'");
+  } 
+  arg3 = static_cast< unsigned int >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_GeoFeature" "', argument " "4"" of type '" "Seiscomp::Geo::GeoFeature::Attributes const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeoFeature" "', argument " "4"" of type '" "Seiscomp::Geo::GeoFeature::Attributes const &""'"); 
+  }
+  arg4 = reinterpret_cast< Seiscomp::Geo::GeoFeature::Attributes * >(argp4);
+  {
+    try {
+      result = (Seiscomp::Geo::GeoFeature *)new Seiscomp::Geo::GeoFeature((std::string const &)*arg1,(Seiscomp::Geo::Category const *)arg2,arg3,(Seiscomp::Geo::GeoFeature::Attributes const &)*arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Geo__GeoFeature, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_GeoFeature(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[4] = {
+  PyObject *argv[5] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
@@ -9861,6 +9936,29 @@ SWIGINTERN PyObject *_wrap_new_GeoFeature(PyObject *self, PyObject *args) {
       }
     }
   }
+  if (argc == 4) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Geo__Category, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_new_GeoFeature__SWIG_4(self, args);
+          }
+        }
+      }
+    }
+  }
   
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_GeoFeature'.\n"
@@ -9868,7 +9966,8 @@ fail:
     "    Seiscomp::Geo::GeoFeature::GeoFeature(Seiscomp::Geo::Category const *,unsigned int)\n"
     "    Seiscomp::Geo::GeoFeature::GeoFeature(Seiscomp::Geo::Category const *)\n"
     "    Seiscomp::Geo::GeoFeature::GeoFeature()\n"
-    "    Seiscomp::Geo::GeoFeature::GeoFeature(std::string const &,Seiscomp::Geo::Category const *,unsigned int)\n");
+    "    Seiscomp::Geo::GeoFeature::GeoFeature(std::string const &,Seiscomp::Geo::Category const *,unsigned int)\n"
+    "    Seiscomp::Geo::GeoFeature::GeoFeature(std::string const &,Seiscomp::Geo::Category const *,unsigned int,Seiscomp::Geo::GeoFeature::Attributes const &)\n");
   return 0;
 }
 
@@ -10056,6 +10155,41 @@ SWIGINTERN PyObject *_wrap_GeoFeature_rank(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
   }
   resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GeoFeature_attributes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Geo::GeoFeature *arg1 = (Seiscomp::Geo::GeoFeature *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Geo::GeoFeature::Attributes *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GeoFeature_attributes",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Geo__GeoFeature, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GeoFeature_attributes" "', argument " "1"" of type '" "Seiscomp::Geo::GeoFeature const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Geo::GeoFeature * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Geo::GeoFeature::Attributes *) &((Seiscomp::Geo::GeoFeature const *)arg1)->attributes();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -21540,13 +21674,15 @@ static PyMethodDef SwigMethods[] = {
 		"GeoFeature(Category category=None, unsigned int rank=1)\n"
 		"GeoFeature(Category category=None)\n"
 		"GeoFeature()\n"
-		"new_GeoFeature(std::string const & name, Category category, unsigned int rank) -> GeoFeature\n"
+		"GeoFeature(std::string const & name, Category category, unsigned int rank)\n"
+		"new_GeoFeature(std::string const & name, Category category, unsigned int rank, Seiscomp::Geo::GeoFeature::Attributes const & attributes) -> GeoFeature\n"
 		""},
 	 { (char *)"delete_GeoFeature", _wrap_delete_GeoFeature, METH_VARARGS, (char *)"delete_GeoFeature(GeoFeature self)"},
 	 { (char *)"GeoFeature_setName", _wrap_GeoFeature_setName, METH_VARARGS, (char *)"GeoFeature_setName(GeoFeature self, std::string const & name)"},
 	 { (char *)"GeoFeature_name", _wrap_GeoFeature_name, METH_VARARGS, (char *)"GeoFeature_name(GeoFeature self) -> std::string const &"},
 	 { (char *)"GeoFeature_category", _wrap_GeoFeature_category, METH_VARARGS, (char *)"GeoFeature_category(GeoFeature self) -> Category"},
 	 { (char *)"GeoFeature_rank", _wrap_GeoFeature_rank, METH_VARARGS, (char *)"GeoFeature_rank(GeoFeature self) -> unsigned int"},
+	 { (char *)"GeoFeature_attributes", _wrap_GeoFeature_attributes, METH_VARARGS, (char *)"GeoFeature_attributes(GeoFeature self) -> Seiscomp::Geo::GeoFeature::Attributes const &"},
 	 { (char *)"GeoFeature_addVertex", _wrap_GeoFeature_addVertex, METH_VARARGS, (char *)"\n"
 		"addVertex(GeoCoordinate vertex, bool newSubFeature=False)\n"
 		"addVertex(GeoCoordinate vertex)\n"
@@ -22020,6 +22156,7 @@ static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, 
 static swig_type_info _swigt__p_Archive = {"_p_Archive", "Archive *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_AttachementList = {"_p_AttachementList", "AttachementList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_AttachementType = {"_p_AttachementType", "AttachementType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Attributes = {"_p_Attributes", "Attributes *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_DataArray = {"_p_DataArray", "DataArray *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ImplType = {"_p_ImplType", "ImplType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PackType = {"_p_PackType", "PackType *", 0, 0, (void*)0, 0};
@@ -22157,6 +22294,7 @@ static swig_type_info _swigt__p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t = 
 static swig_type_info _swigt__p_std__allocatorT_size_t_t = {"_p_std__allocatorT_size_t_t", "std::vector< size_t >::allocator_type *|std::allocator< size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__complexT_double_t = {"_p_std__complexT_double_t", "Seiscomp::Math::Complex *|Seiscomp::Math::SeismometerResponse::Zero *|Seiscomp::Math::Restitution::Zero *|Seiscomp::Math::Restitution::Pole *|Seiscomp::Math::SeismometerResponse::Pole *|std::complex< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t = {"_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t", "Seiscomp::Geo::GeoFeature::Attributes *|std::map< std::string,std::string,std::less< std::string >,std::allocator< std::pair< std::string const,std::string > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t = {"_p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t", "std::vector< Seiscomp::Geo::Category * > *|std::vector< Seiscomp::Geo::Category *,std::allocator< Seiscomp::Geo::Category * > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t = {"_p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t", "std::vector< Seiscomp::Geo::GeoCoordinate > *|std::vector< Seiscomp::Geo::GeoCoordinate,std::allocator< Seiscomp::Geo::GeoCoordinate > > *", 0, 0, (void*)0, 0};
@@ -22176,6 +22314,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Archive,
   &_swigt__p_AttachementList,
   &_swigt__p_AttachementType,
+  &_swigt__p_Attributes,
   &_swigt__p_DataArray,
   &_swigt__p_ImplType,
   &_swigt__p_PackType,
@@ -22313,6 +22452,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_size_t_t,
   &_swigt__p_std__complexT_double_t,
   &_swigt__p_std__invalid_argument,
+  &_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   &_swigt__p_std__ostream,
   &_swigt__p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t,
@@ -22332,6 +22472,7 @@ static swig_type_info *swig_type_initial[] = {
 static swig_cast_info _swigc__p_Archive[] = {  {&_swigt__p_Archive, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_AttachementList[] = {  {&_swigt__p_AttachementList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_AttachementType[] = {  {&_swigt__p_AttachementType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Attributes[] = {  {&_swigt__p_Attributes, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_DataArray[] = {  {&_swigt__p_DataArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ImplType[] = {  {&_swigt__p_ImplType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackType[] = {  {&_swigt__p_PackType, 0, 0, 0},{0, 0, 0, 0}};
@@ -22469,6 +22610,7 @@ static swig_cast_info _swigc__p_std__allocatorT_Seiscomp__Geo__GeoFeature_p_t[] 
 static swig_cast_info _swigc__p_std__allocatorT_size_t_t[] = {  {&_swigt__p_std__allocatorT_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__complexT_double_t[] = {  {&_swigt__p_std__complexT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -22488,6 +22630,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Archive,
   _swigc__p_AttachementList,
   _swigc__p_AttachementType,
+  _swigc__p_Attributes,
   _swigc__p_DataArray,
   _swigc__p_ImplType,
   _swigc__p_PackType,
@@ -22625,6 +22768,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_size_t_t,
   _swigc__p_std__complexT_double_t,
   _swigc__p_std__invalid_argument,
+  _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   _swigc__p_std__ostream,
   _swigc__p_std__vectorT_Seiscomp__Geo__Category_p_std__allocatorT_Seiscomp__Geo__Category_p_t_t,
   _swigc__p_std__vectorT_Seiscomp__Geo__GeoCoordinate_std__allocatorT_Seiscomp__Geo__GeoCoordinate_t_t,

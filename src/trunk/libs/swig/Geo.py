@@ -538,6 +538,7 @@ class GeoFeature(seiscomp3.Core.BaseObject):
         __init__(Seiscomp::Geo::GeoFeature self, Category category=None) -> GeoFeature
         __init__(Seiscomp::Geo::GeoFeature self) -> GeoFeature
         __init__(Seiscomp::Geo::GeoFeature self, std::string const & name, Category category, unsigned int rank) -> GeoFeature
+        __init__(Seiscomp::Geo::GeoFeature self, std::string const & name, Category category, unsigned int rank, Seiscomp::Geo::GeoFeature::Attributes const & attributes) -> GeoFeature
         """
         this = _Geo.new_GeoFeature(*args)
         try:
@@ -565,6 +566,11 @@ class GeoFeature(seiscomp3.Core.BaseObject):
     def rank(self):
         """rank(GeoFeature self) -> unsigned int"""
         return _Geo.GeoFeature_rank(self)
+
+
+    def attributes(self):
+        """attributes(GeoFeature self) -> Seiscomp::Geo::GeoFeature::Attributes const &"""
+        return _Geo.GeoFeature_attributes(self)
 
 
     def addVertex(self, *args):
