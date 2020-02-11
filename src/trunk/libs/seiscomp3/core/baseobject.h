@@ -34,6 +34,10 @@ namespace Core {
 #include <seiscomp3/core.h>
 
 
+using Seiscomp::Core::intrusive_ptr_add_ref;
+using Seiscomp::Core::intrusive_ptr_release;
+
+
 namespace Seiscomp {
 namespace Core {
 
