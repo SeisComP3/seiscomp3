@@ -79,17 +79,19 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 			}
 
 			EventType etype;
-			try {
-				if ( etype.fromString(config.getString("rc.eventTypePositive")) ) {
-					_eventTypePositive = etype;
+			if ( !_readEventTypeFromBNA ) {
+				try {
+					if ( etype.fromString(config.getString("rc.eventTypePositive")) ) {
+						_eventTypePositive = etype;
+					}
+					else {
+						SEISCOMP_ERROR(" + evrc: Invalid event type in rc.eventTypePositive");
+						return false;
+					}
 				}
-				else {
-					SEISCOMP_ERROR(" + evrc: Invalid event type in rc.eventTypePositive");
-					return false;
+				catch ( ... ) {
+					SEISCOMP_DEBUG(" + evrc: event type not set in rc.eventTypePositive");
 				}
-			}
-			catch ( ... ) {
-				SEISCOMP_ERROR(" + evrc: event type not set in rc.eventTypeNegative");
 			}
 
 			try {
@@ -163,9 +165,9 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 								return false;
 							}
 
-							SEISCOMP_INFO(" + evrc: add %s region '%s'",
-							              positiveRegion ? "positive":"negative",
-							              featureName.c_str());
+							SEISCOMP_DEBUG(" + evrc: add %s region '%s'",
+							               positiveRegion ? "positive":"negative",
+							               featureName.c_str());
 							_regions.push_back(RegionCheck(*it, positiveRegion));
 
 							if ( positiveRegion )
@@ -371,7 +373,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				return true;
 			}
 			else {
-				SEISCOMP_DEBUG("  + evrc: new evnt type equals old one - do not update");
+				SEISCOMP_DEBUG("  + evrc: new event type equals old one - do not update");
 			}
 
 			return false;
@@ -384,7 +386,6 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 	private:
 		typedef pair<GeoFeature*,bool> RegionCheck;
 		vector<RegionCheck>    _regions;
-		GeoFeature             _region;
 		OPT(DataModel::EventType)   _eventTypePositive;
 		OPT(DataModel::EventType)   _eventTypeNegative;
 		bool                   _hasPositiveRegions;
