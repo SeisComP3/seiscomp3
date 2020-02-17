@@ -10,6 +10,7 @@
 
   * Add option `--with-filename` which outputs of all accessed archive files
     after import
+  * Fix crash if a data file is not writable
 
 ## Release 2018.327 patch18
 
