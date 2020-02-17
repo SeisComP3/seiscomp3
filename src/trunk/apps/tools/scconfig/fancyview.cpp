@@ -1597,8 +1597,12 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 	return item;
 }
 
-
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 void FancyView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) {
+#else
+void FancyView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+                            const QVector<int> &roles) {
+#endif
 	ViewItems::iterator it = _viewItems.find(topLeft.sibling(topLeft.row(),0));
 	if ( it == _viewItems.end() ) return;
 
@@ -1611,7 +1615,11 @@ void FancyView::dataChanged(const QModelIndex &topLeft, const QModelIndex &botto
 			it.value().input->setValue(topLeft.data().toString());
 	}
 
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 	QAbstractItemView::dataChanged(topLeft, bottomRight);
+#else
+	QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
+#endif
 }
 
 
