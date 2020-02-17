@@ -759,9 +759,8 @@ else:
 
                     try:
                         f = open(archiveDirectory + file, 'ab')
-                    except:
-                        sys.stderr.write("File '%s' could not be opened for writing\n" % (
-                            outputDirectory + file))
+                    except Exception as ex:
+                        sys.stderr.write("Error: %s\n" % (ex))
                         sys.exit(-1)
 
                     # Remove old handles
