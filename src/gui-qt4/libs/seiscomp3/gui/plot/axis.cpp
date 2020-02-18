@@ -220,7 +220,7 @@ void Axis::updateLayout(const QFontMetrics &fm, QRect &rect) {
 		lowerRange = upperRange = 0;
 
 	_tickSpacing = getSpacing(upperRange-lowerRange, tickCount, _logScale);
-	_tickStart = int(floor(lowerRange / _tickSpacing)) * _tickSpacing;
+	_tickStart = floor(lowerRange / _tickSpacing) * _tickSpacing;
 	if ( lowerRange == upperRange )
 		scale = 1;
 	else
