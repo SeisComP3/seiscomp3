@@ -53,6 +53,25 @@
 
   * Correct output of associated filenames in case of a conflict
 
+* GUI
+
+  * Add support to show record borders in the record widget. The style of the border
+    can be changed with the configuration option `scheme.records.recordBorders.drawMode`
+    whereas the following options are available:
+    * TopLine (default)
+    * BottomLine
+    * Box
+
+    Additionally it is possible to select the pen and brush for the options
+    * `scheme.colors.records.borders.standard`
+    * `scheme.colors.records.borders.signatureValid`
+    * `scheme.colors.records.borders.signatureInvalid`
+
+    For example:
+    ```
+    scheme.colors.records.borders.standard.pen.color = FF0000FF
+    ```
+
 ## Release 2018.327 patch18
 
 * system
@@ -123,23 +142,6 @@
   * Fix rendering of geofeatures with more than one subfeature
   * Add lat/lon, depth and magnitude database filter to event list
   * Add `scheme.precision.magnitude` configuration option
-  * Add support to show record borders in the record widget. The style of the border
-    can be changed with the configuration option `scheme.records.recordBorders.drawMode`
-    whereas the following options are available:
-    * TopLine (default)
-    * BottomLine
-    * Box
-
-    Additionally it is possible to select the pen and brush for the options
-    * `scheme.colors.records.borders.standard`
-    * `scheme.colors.records.borders.signatureValid`
-    * `scheme.colors.records.borders.signatureInvalid`
-
-    For example:
-    ```
-    scheme.colors.records.borders.standard.pen.color = FF0000FF
-    ```
-
 
 * ql2sc
 
