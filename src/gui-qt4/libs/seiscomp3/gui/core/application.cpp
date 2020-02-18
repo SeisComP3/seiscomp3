@@ -215,6 +215,35 @@ class SplashScreen : public QSplashScreen {
 };
 
 
+class WrappedQApplication : public QApplication {
+	public:
+		WrappedQApplication(int &argc, char **argv)
+		: QApplication(argc, argv) {}
+
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+		WrappedQApplication(int &argc, char **argv, Type type)
+		: QApplication(argc, argv, type) {}
+#endif
+
+	public:
+		bool notify(QObject *receiver, QEvent *e) {
+			try {
+				return QApplication::notify(receiver, e);
+			}
+			catch ( std::exception &e ) {
+				SEISCOMP_ERROR("An exception occurred while calling an event handler: %s", e.what());
+				::exit(-1);
+			}
+			catch ( ... ) {
+				SEISCOMP_ERROR("An unknown exception occurred while calling an event handler");
+				::exit(-1);
+			}
+
+			return false;
+		}
+};
+
+
 }
 
 
@@ -230,7 +259,7 @@ Application* Application::_instance = NULL;
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Application::Application(int& argc, char **argv, int flags, Type type)
-    : QObject(), Client::Application(argc, argv)
+: QObject(), Client::Application(argc, argv)
 , _settings(NULL)
 , _intervalSOH(60)
 , _readOnlyMessaging(false)
@@ -243,14 +272,14 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 	if ( type == Tty ) {
 		_flags &= ~SHOW_SPLASH;
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-		_app = new QApplication(argc, argv, QApplication::Tty);
+		_app = new WrappedQApplication(argc, argv, QApplication::Tty);
 #else
 		setenv("QT_QPA_PLATFORM", "offscreen", 1);
-		_app = new QApplication(argc, argv);
+		_app = new WrappedQApplication(argc, argv);
 #endif
 	}
 	else
-		_app = new QApplication(argc, argv);
+		_app = new WrappedQApplication(argc, argv);
 
 	setDaemonEnabled(false);
 
@@ -1290,27 +1319,6 @@ void Application::showMessage(const char* msg) {
 void Application::showWarning(const char* msg) {
 	if ( _type != Tty )
 		QMessageBox::warning(NULL, "Warning", msg);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Application::notify(QObject *receiver, QEvent *e) {
-	try {
-		return _app->notify(receiver, e);
-	}
-	catch ( std::exception &e ) {
-		SEISCOMP_ERROR("An exception occurred while calling an event handler: %s", e.what());
-		::exit(-1);
-	}
-	catch ( ... ) {
-		SEISCOMP_ERROR("An unknown exception occurred while calling an event handler");
-		::exit(-1);
-	}
-
-	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -195,8 +195,6 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 		void showMessage(const char*);
 		void showWarning(const char*);
 
-		bool notify(QObject *receiver, QEvent *e);
-
 		bool sendMessage(Seiscomp::Core::Message* msg);
 		bool sendMessage(const char* group, Seiscomp::Core::Message* msg);
 
