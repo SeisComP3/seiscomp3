@@ -877,6 +877,11 @@
 							The precision of lat/lon values.
 						</description>
 					</parameter>
+					<parameter name="magnitude" type="int" default="2">
+						<description>
+							The precision of magnitude values.
+						</description>
+					</parameter>
 					<parameter name="pickTime" type="int" default="1">
 						<description>
 							The precision of pick times.

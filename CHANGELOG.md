@@ -94,6 +94,7 @@
   * Increase default maximum map tile cache to 128mb
   * Fix rendering of geofeatures with more than one subfeature
   * Add lat/lon, depth and magnitude database filter to event list
+  * Add `scheme.precision.magnitude` configuration option
 
 * ql2sc
 

@@ -265,6 +265,7 @@ class SC_GUI_API Scheme {
 			int depth;
 			int distance;
 			int location;
+			int magnitude;
 			int pickTime;
 			int traceValues;
 			int rms;

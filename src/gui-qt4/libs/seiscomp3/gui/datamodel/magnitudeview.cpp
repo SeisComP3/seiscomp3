@@ -566,7 +566,7 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 				break;
 
 			case MAGNITUDE:
-				snprintf(buf, 10, "%.2f", smval);
+				snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, smval);
 				return buf;
 
 			case RESIDUAL:
@@ -1531,7 +1531,9 @@ void MagnitudeView::recalculateMagnitude() {
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(magMw->type().c_str()).arg(magMw->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(magMw->type().c_str())
+				                           .arg(magMw->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 			}
 			else {
 				MagnitudePtr magMw;
@@ -1577,7 +1579,9 @@ void MagnitudeView::recalculateMagnitude() {
 
 	idx = findData(_tabMagnitudes, _netMag->publicID());
 	if ( idx != -1 )
-		_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(_netMag->type().c_str()).arg(_netMag->magnitude().value(), 0, 'f', 2));
+		_tabMagnitudes->setTabText(idx, QString("%1 %2")
+		                           .arg(_netMag->type().c_str())
+		                           .arg(_netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 
 	idx = 0;
 	int staCount = 0;
@@ -2100,7 +2104,9 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(magMw->type().c_str()).arg(magMw->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(magMw->type().c_str())
+				                           .arg(magMw->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 			}
 		}
 		else if ( idx != -1 )
@@ -2127,7 +2133,9 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 	*/
 
 	// Replace magnitude
-	_tabMagnitudes->setTabText(typeIdx, QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
+	_tabMagnitudes->setTabText(typeIdx, QString("%1 %2")
+	                           .arg(netMag->type().c_str())
+	                           .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	_tabMagnitudes->setTabData(typeIdx, QVariant::fromValue<TabData>(netMag->publicID()));
 	if ( _tabMagnitudes->currentIndex() != typeIdx )
 		_tabMagnitudes->setCurrentIndex(typeIdx);
@@ -3035,7 +3043,9 @@ void MagnitudeView::updateObject(const QString &parentID, Seiscomp::DataModel::O
 		if ( _origin && _origin->publicID() == parentID.toStdString() ) {
 			int idx = findData(_tabMagnitudes, netMag->publicID());
 			if ( idx != -1 )
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(netMag->type().c_str())
+				                           .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 		}
 
 		// Not for now
@@ -3099,7 +3109,9 @@ int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
 	}
 
 	//_ui.comboMagType->addItem(QString("%1").arg(netMag->type().c_str()), data);
-	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
+	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2")
+	                                      .arg(netMag->type().c_str())
+	                                      .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	TabData data(netMag->publicID());
 
 	try {
@@ -3381,9 +3393,9 @@ void MagnitudeView::updateMinMaxMagnitude() {
 	_ui.labelMaxMag->setText("-");
 	if (_minStationMagnitude <= _maxStationMagnitude && _minStationMagnitude > -10 && _maxStationMagnitude < 15) {
 		char buf[10];
-		snprintf(buf, 10, "%.2f", _minStationMagnitude);
+		snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, _minStationMagnitude);
 		_ui.labelMinMag->setText(buf);
-		snprintf(buf, 10, "%.2f", _maxStationMagnitude);
+		snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, _maxStationMagnitude);
 		_ui.labelMaxMag->setText(buf);
 	}
 }
@@ -3399,7 +3411,7 @@ void MagnitudeView::updateMagnitudeLabels() {
 		char buf[10] = "-";
 		double netmagval = _netMag->magnitude().value();
 		if ( netmagval < 12 )
-			snprintf(buf, 10, "%.2f", netmagval);
+			snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, netmagval);
 		else if ( netmagval < 1000000000 )
 			snprintf(buf, 10, "%d", (int)netmagval);
 
@@ -3440,8 +3452,8 @@ void MagnitudeView::updateMagnitudeLabels() {
 		strcpy(buf, "-");
 		try {
 			double rms = quantityUncertainty(_netMag->magnitude());
-			if (rms<10)
-				snprintf(buf, 10, "%.2f", rms);
+			if ( rms < 10 )
+				snprintf(buf, 10, "%.*f", SCScheme.precision.rms, rms);
 		}
 		catch ( ... ) {}
 		_ui.labelRMS->setText(buf);

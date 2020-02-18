@@ -30,6 +30,8 @@ Furthermore the precision of various values can be configured:
    scheme.precision.depth = 0
    # Precision of latitude/longitude values.
    scheme.precision.location = 2
+   # Precision of magnitude values.
+   scheme.precision.magnitude = 2
    # Precision of pick times (fractions of seconds).
    scheme.precision.pickTime = 1
 

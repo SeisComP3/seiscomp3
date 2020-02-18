@@ -1931,7 +1931,7 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 		item->setText(MLC_TIMESTAMP, "");
 	}
 
-	item->setText(MLC_VALUE, QString("%1").arg(mag->magnitude().value(), 0, 'f', 2));
+	item->setText(MLC_VALUE, QString("%1").arg(mag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	item->setText(MLC_TYPE, mag->type().c_str());
 
 	try {
@@ -2590,7 +2590,7 @@ void EventEdit::updateOrigin() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::updateMagnitude() {
 	_ui.labelMagnitudeTypeValue->setText(_currentMagnitude->type().c_str());
-	_ui.labelMagnitudeValue->setText(QString("%1").arg(_currentMagnitude->magnitude().value(), 0, 'f', 2));
+	_ui.labelMagnitudeValue->setText(QString("%1").arg(_currentMagnitude->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	_ui.labelMagnitudeError->setText("");
 
 	try {
