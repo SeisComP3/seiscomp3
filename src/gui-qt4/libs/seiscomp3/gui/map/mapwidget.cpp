@@ -132,7 +132,7 @@ SaveBNADialog::SaveBNADialog(QWidget *parent, Qt::WindowFlags f)
 	// file name
 	layout->addWidget(new QLabel("File Name"), row, 0);
 	filename = new QLineEdit(QString("%1/bna/custom.bna")
-	        .arg(Seiscomp::Environment::Instance()->configDir().c_str()));
+	        .arg(Seiscomp::Environment::Instance()->shareDir().c_str()));
 	filename->setToolTip("Path and file name");
 	layout->addWidget(filename, row++, 1);
 
