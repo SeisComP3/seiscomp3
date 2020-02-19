@@ -6,6 +6,11 @@
 
   * Fix error message on attempt to create existing alias
 
+* scart
+
+  * Add option `--with-filename` which outputs of all accessed archive files
+    after import
+
 ## Release 2018.327 patch18
 
 ```SC_API_VERSION 12.2.0```
