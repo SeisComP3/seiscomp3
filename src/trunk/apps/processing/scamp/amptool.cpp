@@ -1267,12 +1267,12 @@ void AmpTool::emitAmplitude(const AmplitudeProcessor *proc,
 	else if ( _ep ) {
 		if ( it == _ampIDReuse.end() ) {
 			_ep->add(amp.get());
-			cerr << "+ " << amp->publicID() << "  " << amp->type() << endl;
+			SEISCOMP_DEBUG("+ %s  %s", amp->publicID().c_str(), amp->type().c_str());
 		}
 		else {
-			cerr << "U " << it->second->publicID() << "  " << it->second->type()
-			     << "  " << it->second->amplitude().value() << " -> " << amp->amplitude().value()
-			     << endl;
+			SEISCOMP_DEBUG("U %s  %s  %f -> %f", it->second->publicID().c_str(),
+			               it->second->type().c_str(), it->second->amplitude().value(),
+			               amp->amplitude().value());
 
 			Core::Time ct_new, ct_old;
 
