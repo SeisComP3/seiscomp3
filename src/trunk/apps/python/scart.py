@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -11,12 +12,15 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
 #    SeisComP Public License for more details.                             #
 ############################################################################
+from __future__ import print_function
 
 import glob
 import re
 import time
 import sys
 import os
+if sys.version_info < (2, 4):
+    from sets import Set as set
 import seiscomp3.IO
 import seiscomp3.Logging
 import seiscomp3.Client
@@ -471,6 +475,7 @@ Usage: scart [options] [archive]
 Options:
     --stdout         writes on stdout if import mode is used instead
                      of creating a SDS archive
+    --with-filename  print all accessed files to stdout after import
     -I               specify recordstream URL when in import mode
                      when using another recordstream than file a
                      stream list file is needed
@@ -511,8 +516,8 @@ def usage(exitcode=0):
 
 try:
     opts, files = getopt(sys.argv[1:], "I:dsmEn:c:t:l:hv",
-                         ["stdout", "dump", "list=", "sort", "modify", "speed=", "files=", "verbose", "test", "help"])
-except GetoptError:
+                         ["stdout", "with-filename", "dump", "list=", "sort", "modify", "speed=", "files=", "verbose", "test", "help"])
+except GetoptError as e:
     usage(exitcode=1)
 
 
@@ -522,6 +527,7 @@ sort = False
 modifyTime = False
 dump = False
 listFile = None
+withFilename = False # Whether to output accessed files for import or not
 test = False
 filePoolSize = 100
 # default = stdin
@@ -535,6 +541,8 @@ networks = "*"
 
 archiveDirectory = "./"
 
+
+
 for flag, arg in opts:
     if flag == "-t":
         tmin, tmax = list(map(str2time, arg.split("~")))
@@ -544,6 +552,8 @@ for flag, arg in opts:
         usage(exitcode=0)
     elif flag in ["--stdout"]:
         stdout = True
+    elif flag in ["--with-filename"]:
+        withFilename = True
     elif flag in ["-v", "--verbose"]:
         verbose = True
     elif flag in ["-d", "--dump"]:
@@ -725,6 +735,7 @@ else:
         rs, seiscomp3.Core.Array.INT, seiscomp3.Core.Record.SAVE_RAW)
     filePool = dict()
     f = None
+    accessedFiles = set()
     try:
         for rec in input:
             if stdout:
@@ -757,10 +768,19 @@ else:
                     if len(filePool) < filePoolSize:
                         filePool[file] = f
 
+                if withFilename:
+                    accessedFiles.add(file)
                 f.write(rec.raw().str())
+            else:
+                if withFilename:
+                    accessedFiles.add(file)
 
             if verbose:
                 sys.stderr.write("%s %s %s\n" %
                                  (rec.streamID(), rec.startTime().iso(), file))
     except Exception as e:
         sys.stderr.write("Exception: %s\n" % str(e))
+
+    if withFilename:
+        for filename in accessedFiles:
+            print(filename)
