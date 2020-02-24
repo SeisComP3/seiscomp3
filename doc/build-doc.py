@@ -191,7 +191,7 @@ Command-line
         except:
           sys.stderr.write("WARNING: publicID is empty\n")
           continue
-        if not cmdline_templates.has_key(publicID):
+        if not publicID in cmdline_templates:
           sys.stderr.write("WARNING: option with publicID '%s' is not available\n" % publicID)
           continue
         options += cmdline_templates[publicID]
@@ -312,13 +312,13 @@ out_dir = os.path.join(out_build_dir, "src")
 out_struct_dir = os.path.join(out_dir, toc_tmp_dir)
 
 if os.path.exists(out_dir):
-  print "Cleaning target dir"
+  print("Cleaning target dir")
   shutil.rmtree(out_dir)
 
 
 if not os.path.exists(out_struct_dir):
   try: os.makedirs(out_struct_dir)
-  except Exception, e:
+  except Exception as e:
     sys.stderr.write("ERROR: creating build directory '%s' failed: %s\n" % (out_struct_dir, str(e)))
     sys.exit(1)
 
@@ -335,7 +335,7 @@ for doc_dir in doc_dirs:
   for f in glob.glob(os.path.join(doc_dir, "*.xml")):
     try:
       xmlTree = ElementTree.parse(f)
-    except Exception ,e:
+    except Exception as e:
       sys.stderr.write("ERROR: %s: parsing failed: %s\n" % (f, str(e)))
       sys.exit(1)
 
@@ -368,7 +368,7 @@ for doc_dir in doc_dirs:
         ct = []
         for t in toks[:-1]:
           ct = ct + [t]
-          if not categories.has_key('/'.join(ct)):
+          if not '/'.join(ct) in categories:
             categories['/'.join(ct)] = []
 
         # Add node to category map
@@ -423,7 +423,7 @@ for key, value in sorted(categories.items()):
     path = os.path.join(out_dir, link)
     if not os.path.exists(path):
       try: os.makedirs(path)
-      except Exception, e:
+      except Exception as e:
         sys.stderr.write("ERROR: creating path '%s' failed: %s\n" % (path, str(e)))
         sys.exit(1)
     link = os.path.join(link, section.lower())
@@ -441,12 +441,12 @@ plugin_refs = {}
 app_path = os.path.join(out_dir, "apps")
 if not os.path.exists(app_path):
   try: os.makedirs(app_path)
-  except Exception, e:
+  except Exception as e:
     sys.stderr.write("ERROR: creating path '%s' failed: %s\n" % (app_path, str(e)))
     sys.exit(1)
 
 
-print "Generating document structure"
+print("Generating document structure")
 
 # Generate plugin structure
 f = open(os.path.join(out_dir, toc_tmp_dir, "extensions.rst"), "w")
@@ -580,18 +580,18 @@ if global_node is not None:
   placeholder_app_refs = "   /apps/global\n" + placeholder_app_refs
 
 # Copy conf.py template
-print "Copy conf.py template"
+print("Copy conf.py template")
 shutil.copyfile(os.path.join(base_dir, "templates", "conf.py"), os.path.join(out_dir, "conf.py"))
 
 # Copy base directory
-print "Copy base directory"
+print("Copy base directory")
 out_base_dir = os.path.join(out_dir, "base")
 shutil.copytree(os.path.join(base_dir, "base"), out_base_dir)
 
 # Copy media files
 for doc_dir in doc_dirs:
   if os.path.exists(os.path.join(doc_dir, "media")):
-    print "Copy media files from %s" % os.path.join(doc_dir, "media")
+    print("Copy media files from %s/media" % os.path.join(doc_dir))
     out_media_dir = os.path.join(out_dir, "apps", "media")
     if not os.path.exists(out_media_dir):
       try: os.makedirs(out_media_dir)
@@ -600,16 +600,16 @@ for doc_dir in doc_dirs:
 
 
 # Create index.rst
-print "Generate index.rst"
+print("Generate index.rst")
 t = open(os.path.join(base_dir, "templates", "index.rst")).read()
 open(os.path.join(out_dir, "index.rst"), "w").write(t.replace("${generator.refs.apps}", placeholder_app_refs).replace("${generator.refs.extensions}", placeholder_plugins_refs))
 
-print "Generate gui.rst"
+print("Generate gui.rst")
 t = open(os.path.join(base_dir, "templates", "gui.rst")).read()
 open(os.path.join(out_dir, "gui.rst"), "w").write(t.replace("${generator.refs.gui}", placeholder_gui_refs))
 
 # Create application .rst files
-print "Generating app .rst files"
+print("Generating app .rst files")
 
 if not global_node is None:
   node_list = app_nodes + [global_node]
@@ -626,7 +626,7 @@ for n in node_list:
   filename = os.path.join(app_path, (app_name + ".rst").lower())
   man_pages.append((app_name.lower(), n.get('author')))
   try: f = codecs.open(filename, "w", "utf-8")
-  except Exception, e:
+  except Exception as e:
     sys.stderr.write("ERROR: unable to create app rst '%s': %s\n" % (filename, str(e)))
     sys.exit(1)
 
@@ -729,7 +729,7 @@ Description
   documented_plugins = []
   if plugins and len(plugins) > 0:
     for p in plugins:
-      if plugins_with_ref.has_key(p): documented_plugins.append(p)
+      if p in plugins_with_ref: documented_plugins.append(p)
 
   if len(documented_plugins) > 0:
     f.write('''
@@ -848,7 +848,7 @@ Configuration
 # Generate extensions.doc to give an overview over available extensions
 filename = os.path.join(out_base_dir, "extensions.doc")
 try: f = codecs.open(filename, "w", "utf-8")
-except Exception, e:
+except Exception as e:
   sys.stderr.write("ERROR: unable to create _extensions.rst: %s\n" % str(e))
   sys.exit(1)
 
@@ -880,30 +880,30 @@ else:
   f.write("**No extensions available**\n")
 
 f = open(os.path.join(out_dir, "conf.py"), "a")
-print >> f, "# -- Options for manual page output --------------------------------------------"
-print >> f, ""
-print >> f, "# One entry per manual page. List of tuples"
-print >> f, "# (source start file, name, description, authors, manual section)."
-print >> f, "man_pages = ["
+print("# -- Options for manual page output --------------------------------------------",file=f)
+print("",file=f)
+print("# One entry per manual page. List of tuples",file=f)
+print("# (source start file, name, description, authors, manual section).",file=f)
+print("man_pages = [",file=f)
 for man_page in man_pages:
   author = "GFZ Potsdam"
   if man_page[1]: author = man_page[1]
-  print >> f, "    ('apps/%s', '%s', project + u' Documentation', [u'%s'], 1)," % (man_page[0], man_page[0], author)
-print >> f, "]"
-print >> f, ""
+  print("    ('apps/%s', '%s', project + u' Documentation', [u'%s'], 1)," % (man_page[0], man_page[0], author),file=f)
+print("]",file=f)
+print("",file=f)
 f.close()
 
-print "Clean-up HTML build dir"
+print("Clean-up HTML build dir")
 try: shutil.rmtree(os.path.join(out_build_dir, "html"))
 except: pass
 
-print "Clean-up MAN build dir"
+print("Clean-up MAN build dir")
 try: shutil.rmtree(os.path.join(out_build_dir, "man1"))
 except: pass
 
 os.system("sphinx-build -b html %s %s" % (out_dir, os.path.join(out_build_dir, "html")))
 os.system("sphinx-build -b man %s %s" % (out_dir, os.path.join(out_build_dir, "man1")))
 
-print "Clean-up MAN temporary files"
+print("Clean-up MAN temporary files")
 try: shutil.rmtree(os.path.join(out_build_dir, "man1", ".doctrees"))
 except: pass
