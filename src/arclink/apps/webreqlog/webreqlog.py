@@ -1055,7 +1055,7 @@ $(document).ready(function() {
 				(lines, nodataCount, errorCount, s) = netcounts.setdefault(netcode, (0, 0, 0, 0))
 				netcounts[netcode] = (lines+1, nodataCount+nodata, errorCount+error, s+size)
 
-			for netcode, (lineCount, nodataCount, errorCount, size) in netcounts.iteritems():
+			for netcode, (lineCount, nodataCount, errorCount, size) in netcounts.items():
 				(count, lines, nodata, error, s) = nets.setdefault(netcode, (0, 0, 0, 0, 0))
 				nets[netcode] = (count +1, lines+lineCount, nodata+nodataCount, error+errorCount, s+size)
 
@@ -1533,7 +1533,7 @@ $(document).ready(function() {
 	def printArgs(self, out, args):
 		print >> out, '<div id="f2" onclick="hide(this)">'
 		print >> out, '<span style="font-weight:bold">Effective Constraints</span><pre>'
-		for k,v in args.iteritems():
+		for k,v in args.items():
 			print >> out, "%s = %s" % (k,v.replace("%20"," "))
 		print >> out, "</pre></div>"
 #----------------------------------------------------------------------------------------------------

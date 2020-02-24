@@ -405,7 +405,7 @@ INSERT INTO ArcStatsSummary
 
     except KeyError as e:
         print "Couldn't find some needed value(s)"
-        for k, v in summary.iteritems():
+        for k, v in summary.items():
             print k, ':', v
         print e
         return

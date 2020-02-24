@@ -212,7 +212,7 @@ class User(object):
 		if not startTime and not endTime and not rtype and not rid:
 			return self.requests.values()
 		retList = list()
-		for req in self.requests.iteritems():
+		for req in self.requests.items():
 			(reqDate, reqID, reqType, reqLabel) = req[0]
 			if startTime and reqDate < startTime:
 				continue

@@ -484,7 +484,7 @@ class RoutingDBUpdater(Client.Application):
                             existingAccess[(networkCode, stationCode, locationCode, streamCode, user, aStart.toString("%Y-%m-%d %H:%M:%S"))] = (aEnd,)
 
 
-        for ((routeType, networkCode, stationCode, locationCode, streamCode, address, start), (end, priority)) in existingRoutes.iteritems():
+        for ((routeType, networkCode, stationCode, locationCode, streamCode, address, start), (end, priority)) in existingRoutes.items():
             if routeType != 'A' and routeType != 'S':
                 logd("Invalid route type %s " % routeType)
                 continue
@@ -594,7 +594,7 @@ class RoutingDBUpdater(Client.Application):
 
             i += 1
 
-        for ((networkCode, stationCode, locationCode, streamCode, user, start), (end,)) in existingAccess.iteritems():
+        for ((networkCode, stationCode, locationCode, streamCode, user, start), (end,)) in existingAccess.items():
             access = routing.access(DataModel.AccessIndex(networkCode, stationCode, locationCode, streamCode, user, Core.Time.FromString(start, "%Y-%m-%d %H:%M:%S")))
             if not access:
                 access = DataModel.Access()
@@ -680,7 +680,7 @@ class TemplateModule(Kernel.Module):
 
         params['pkgroot'] = self.pkgroot
 
-        for (p,v) in params_ex.iteritems():
+        for (p,v) in params_ex.items():
             try:
                 t2 = Kernel.Template(v)
                 params[p] = t2.substitute(params)

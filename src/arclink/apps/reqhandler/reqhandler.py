@@ -298,7 +298,7 @@ class WiggleFetcher(object):
                     else:
                         self.__local_volume_fd.close(Arclink_WARN(message=ex))
                         
-                for (dcid, req) in self.__foreign_req.iteritems():
+                for (dcid, req) in self.__foreign_req.items():
                     fd = self.__volume_factory.open(dcid)
                     fd.close(Arclink_ERROR(message=ex))
                 
@@ -311,7 +311,7 @@ class WiggleFetcher(object):
                     self.__local_volume_fd.close(Arclink_OK)
 
             dcid_req_pending = []
-            for (dcid, req) in self.__foreign_req.iteritems():
+            for (dcid, req) in self.__foreign_req.items():
                 addr = self.__subnode_addr.get(dcid)
                 if addr is None:
                     logs.warning("error submitting request to %s: routing failed" %

@@ -151,7 +151,7 @@ class TemplateModule(seiscomp3.Kernel.Module):
 
         params['pkgroot'] = self.pkgroot
 
-        #for (p,v) in params_ex.iteritems():
+        #for (p,v) in params_ex.items():
         #    try:
         #        t2 = seiscomp3.Kernel.Template(v)
         #        params[p] = t2.substitute(params)
@@ -627,7 +627,7 @@ class Module(TemplateModule):
         try: os.makedirs(self.run_dir)
         except: pass
 
-        for p in self.plugins.itervalues():
+        for p in self.plugins.values():
             p.flush(self)
 
         if self.msrtsimul:
@@ -670,23 +670,23 @@ class Module(TemplateModule):
         if self.sproc_used:
             fd.write(self._process_template("seedlink_sproc.tpl", None, False))
 
-        for i in self.seedlink_source.itervalues():
-            for (source_type, source_id, self.global_params, self.station_params) in i.itervalues():
+        for i in self.seedlink_source.values():
+            for (source_type, source_id, self.global_params, self.station_params) in i.values():
                 source = self._process_template("seedlink_plugin.tpl", source_type)
                 if source:
                     fd.write(source)
 
         fd.write(self._process_template("seedlink_station_head.tpl", None, False))
 
-        for i in self.seedlink_station.itervalues():
-            for j in i.itervalues():
+        for i in self.seedlink_station.values():
+            for j in i.values():
                 fd.write(j)
 
         fd.close()
 
         if self.plugins_ini:
             fd = open(os.path.join(self.config_dir, "plugins.ini"), "w")
-            for i in self.plugins_ini.itervalues():
+            for i in self.plugins_ini.values():
                 fd.write(i)
 
             fd.close()
@@ -699,7 +699,7 @@ class Module(TemplateModule):
             fd = open(self._get('seedlink.streams', False), "w")
             fd.write('<streams>\n')
 
-            for i in self.sproc.itervalues():
+            for i in self.sproc.values():
                 fd.write(i)
 
             fd.write('</streams>\n')

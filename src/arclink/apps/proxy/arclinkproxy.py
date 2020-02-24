@@ -52,7 +52,7 @@ class RequestProxy(object):
         return ("%d,%d,%d,%d,%d,%d %d,%d,%d,%d,%d,%d %s %s %s %s %s" %
             (begin.year, begin.month, begin.day, begin.hour, begin.minute, begin.second,
             end.year, end.month, end.day, end.hour, end.minute, end.second, net, sta, strm, loc,
-            " ".join([ "%s=%s" % (a, v) for a, v in constraints.iteritems() ]))).strip()
+            " ".join([ "%s=%s" % (a, v) for a, v in constraints.items() ]))).strip()
 
     @staticmethod
     def __estimate_size(tw_list):
@@ -314,7 +314,7 @@ class RequestProxy(object):
         xreq.set("id", self.id)
         xreq.set("type", self.__rtype)
         xreq.set("label", self.__label)
-        xreq.set("args", " ".join([ "%s=%s" % (a, v) for a, v in self.__args.iteritems() ]))
+        xreq.set("args", " ".join([ "%s=%s" % (a, v) for a, v in self.__args.items() ]))
         xreq.set("size", str(size))
         xreq.set("ready", ("false", "true")[ready])
         xreq.set("encrypted", ("false", "true")[self.__encrypted])
@@ -417,7 +417,7 @@ class RequestContainerThread(threading.Thread):
         self.__cond = threading.Condition()
 
     def save_state(self, file):
-        for req in self.__request.itervalues():
+        for req in self.__request.values():
             req.before_save_state()
 
         cPickle.dump((self.__id, self.__request, self.__queued), open(file, "w"))
@@ -425,7 +425,7 @@ class RequestContainerThread(threading.Thread):
     def restore_state(self, file):
         (self.__id, self.__request, self.__queued) = cPickle.load(open(file))
 
-        for req in self.__request.itervalues():
+        for req in self.__request.values():
             req.after_restore_state()
 
     def put(self, req):
@@ -467,7 +467,7 @@ class RequestContainerThread(threading.Thread):
         et = ET.Element("arclink")
 
         if id.upper() == "ALL":
-            for req in self.__request.itervalues():
+            for req in self.__request.values():
                 if req.access(user):
                     req.status_xml(et)
 

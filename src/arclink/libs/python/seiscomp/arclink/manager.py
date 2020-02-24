@@ -82,7 +82,7 @@ class RequestLine(object):
             self.end_time.year, self.end_time.month, self.end_time.day,
             self.end_time.hour, self.end_time.minute, self.end_time.second,
             net, sta, cha, loc,
-            " ".join([ "%s=%s" % (a, v) for a, v in self.constraints.iteritems() ]))).rstrip()
+            " ".join([ "%s=%s" % (a, v) for a, v in self.constraints.items() ]))).rstrip()
 
 class _Request(object):
     def __init__(self, rtype, args, label, socket_timeout, request_timeout,
@@ -135,7 +135,7 @@ class _Request(object):
              print >>fd, "LABEL %s" % (self.label,)
 
         print >>fd, "REQUEST %s %s" % (self.rtype,
-            " ".join([ "%s=%s" % (a, v) for a, v in self.args.iteritems() ]))
+            " ".join([ "%s=%s" % (a, v) for a, v in self.args.items() ]))
 
         for rl in self.content:
             print >>fd, repr(rl)
@@ -577,12 +577,12 @@ class ArclinkManager(object):
             expanded = {}
             spfr_diff = 10000
 
-            for sgrp in inv.stationGroup.itervalues():
+            for sgrp in inv.stationGroup.values():
                 if not fnmatch.fnmatchcase(sgrp.code, rl.net):
                     continue
 
-                for sref in sgrp.stationReference.itervalues():
-                    for net in sum([i.values() for i in inv.network.itervalues()], []):
+                for sref in sgrp.stationReference.values():
+                    for net in sum([i.values() for i in inv.network.values()], []):
                         try:
                             sta = net.object[sref.stationID]
                             break
@@ -593,11 +593,11 @@ class ArclinkManager(object):
                     else:
                         continue
 
-                    for loc in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
+                    for loc in sum([i.values() for i in sta.sensorLocation.values()], []):
                         if not fnmatch.fnmatchcase(_dot(loc.code), _dot(rl.loc)):
                             continue
 
-                        for strm in sum([i.values() for i in loc.stream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.stream.values()], []):
                             if fnmatch.fnmatchcase(strm.code, rl.cha):
                                 if spfr is not None:
                                     if self.__spfr_diff(strm, spfr) < spfr_diff:
@@ -610,7 +610,7 @@ class ArclinkManager(object):
                                 expanded[(rl.start_time, rl.end_time, net.code, sta.code, strm.code, _dot(loc.code))] = \
                                     self.__estimate_size(strm, rl.start_time, rl.end_time)
 
-                        for strm in sum([i.values() for i in loc.auxStream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.auxStream.values()], []):
                             if fnmatch.fnmatchcase(strm.code, rl.cha):
                                 if spfr is not None:
                                     if self.__spfr_diff(strm, spfr) < spfr_diff:
@@ -624,19 +624,19 @@ class ArclinkManager(object):
                                     # auxStream doesn't have sample rate info, so this wouldn't work
                                     # self.__estimate_size(strm, rl.start_time, rl.end_time)
 
-            for net in sum([i.values() for i in inv.network.itervalues()], []):
+            for net in sum([i.values() for i in inv.network.values()], []):
                 if not fnmatch.fnmatchcase(net.code, rl.net):
                     continue
 
-                for sta in sum([i.values() for i in net.station.itervalues()], []):
+                for sta in sum([i.values() for i in net.station.values()], []):
                     if not fnmatch.fnmatchcase(sta.code, rl.sta):
                         continue
 
-                    for loc in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
+                    for loc in sum([i.values() for i in sta.sensorLocation.values()], []):
                         if not fnmatch.fnmatchcase(_dot(loc.code), _dot(rl.loc)):
                             continue
 
-                        for strm in sum([i.values() for i in loc.stream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.stream.values()], []):
                             if fnmatch.fnmatchcase(strm.code, rl.cha):
                                 if spfr is not None:
                                     if self.__spfr_diff(strm, spfr) < spfr_diff:
@@ -649,7 +649,7 @@ class ArclinkManager(object):
                                 expanded[(rl.start_time, rl.end_time, net.code, sta.code, strm.code, _dot(loc.code))] = \
                                     self.__estimate_size(strm, rl.start_time, rl.end_time)
 
-                        for strm in sum([i.values() for i in loc.auxStream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.auxStream.values()], []):
                             if fnmatch.fnmatchcase(strm.code, rl.cha):
                                 if spfr is not None:
                                     if self.__spfr_diff(strm, spfr) < spfr_diff:
@@ -664,7 +664,7 @@ class ArclinkManager(object):
                                     # self.__estimate_size(strm, rl.start_time, rl.end_time)
 
             if expanded:
-                for (x, estimated_size) in expanded.iteritems():
+                for (x, estimated_size) in expanded.items():
                     rlx = RequestLine(*x)
                     rlx.routes_tried = rl.routes_tried.copy()
                     rlx.estimated_size = estimated_size
@@ -708,7 +708,7 @@ class ArclinkManager(object):
                 req_noroute.content.append(rl)
                 continue
 
-            server_list = sum([i.values() for i in route.arclink.itervalues()], [])
+            server_list = sum([i.values() for i in route.arclink.values()], [])
             server_list.sort(key=lambda x: x.priority)
             arclink_addrs = []
             for server in server_list:
@@ -896,7 +896,7 @@ class ArclinkManager(object):
                 req_fail.content.append(rl)
                 continue
 
-            server_list = sum([i.values() for i in route.arclink.itervalues()], [])
+            server_list = sum([i.values() for i in route.arclink.values()], [])
             server_list.sort(key=lambda x: x.priority)
             arclink_addrs = []
             for server in server_list:

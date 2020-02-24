@@ -107,7 +107,7 @@ class BreqParser(object):
 			logs.debug("- netlist: %s" % netlist)
 			
 			for net_code in netlist:
-				for net in db.network[net_code].itervalues():
+				for net in db.network[net_code].values():
 					for sta_code in net.station:
 						#logs.debug("- net/stacode: %s %s" % (net_code, sta_code))
 						s = re.sub("^[?]$", "*", station)    # single ? --> *

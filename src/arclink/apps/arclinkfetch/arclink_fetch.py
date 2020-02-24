@@ -127,7 +127,7 @@ def show_lines(request):
             (begin.year, begin.month, begin.day, begin.hour, begin.minute, begin.second,
             end.year, end.month, end.day, end.hour, end.minute, end.second,
             network, station, stream, loc_id,
-            " ".join([ "%s=%s" % (a, v) for a, v in constraints.iteritems() ])))
+            " ".join([ "%s=%s" % (a, v) for a, v in constraints.items() ])))
 
 def parse_native(req, input_file):
     fd = open(input_file)

@@ -62,8 +62,8 @@ class Keyfile(object):
             if fp is not source:
                 fp.close()
 
-    def iteritems(self):
-        for (k, v) in self.__dict__.iteritems():
+    def.items(self):
+        for (k, v) in self.__dict__.items():
             if k == "iteritems" or k[0] == '_':
                 continue
 

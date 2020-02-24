@@ -307,7 +307,7 @@ class _RequestTrackerDIR(object):
         if isinstance(constraints, list):
             constr = " ".join(constraints)
         else:
-            constr = " ".join([ a+"="+b for (a, b) in constraints.iteritems() ])
+            constr = " ".join([ a+"="+b for (a, b) in constraints.items() ])
 
         fd = open(self.__dir + "/" + "status", "a")
         print >>fd, "%s %s %s %s %s %s (%s) %s %s %d %s" % (stime, etime,
@@ -446,7 +446,7 @@ class _RequestTrackerDB(object):
         if isinstance(constraints, list):
             constr = " ".join(constraints)
         else:
-            constr = " ".join([ a+"="+b for (a, b) in constraints.iteritems() ])
+            constr = " ".join([ a+"="+b for (a, b) in constraints.items() ])
 
         arclinkRequestLine = DataModel.ArclinkRequestLine()
         arclinkRequestLine.setStart(startTime)
@@ -703,12 +703,12 @@ class _WaveformRequest(_Request):
         finally:
             RequestHandler.dataLock.release()
         
-        for acc_net in routing.access.itervalues():
-            for acc_sta in acc_net.itervalues():
-                for acc_loc in acc_sta.itervalues():
-                    for acc_strm in acc_loc.itervalues():
-                        for acc_user in acc_strm.itervalues():
-                            for acc in acc_user.itervalues():
+        for acc_net in routing.access.values():
+            for acc_sta in acc_net.values():
+                for acc_loc in acc_sta.values():
+                    for acc_strm in acc_loc.values():
+                        for acc_user in acc_strm.values():
+                            for acc in acc_user.values():
                                 if ':' in acc.user:
                                     # for fdsnws only
                                     continue
@@ -731,7 +731,7 @@ class _WaveformRequest(_Request):
             raise ArclinkHandlerError, "incorrectly formulated request"
 
         # QC constraints
-        consdict = dict([cons for cons in constraints.iteritems() 
+        consdict = dict([cons for cons in constraints.items() 
                         if (cons[0][-4:] == "_min" or cons[0][-4:] == "_max") and cons[1].strip()])
 
         if location is None and channel is not None:
@@ -758,15 +758,15 @@ class _WaveformRequest(_Request):
             finally:
                 RequestHandler.dataLock.release()
 
-            for net in sum([i.values() for i in inv.network.itervalues()], []):
+            for net in sum([i.values() for i in inv.network.values()], []):
                 dcid = net.archive
                 net_class = net.netClass
-                for sta in sum([i.values() for i in net.station.itervalues()], []):
-                    for loc in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
+                for sta in sum([i.values() for i in net.station.values()], []):
+                    for loc in sum([i.values() for i in sta.sensorLocation.values()], []):
                         if not fnmatch.fnmatchcase(loc.code, location):
                             continue
 
-                        for strm in sum([i.values() for i in loc.stream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.stream.values()], []):
                             if not fnmatch.fnmatchcase(strm.code, channel):
                                 continue
                             restricted |= strm.restricted or sta.restricted or net.restricted
@@ -786,7 +786,7 @@ class _WaveformRequest(_Request):
                             expanded.add((start_time, end_time, net.code, sta.code,
                                 strm.code, loc.code, sta.archiveNetworkCode))
 
-                        for strm in sum([i.values() for i in loc.auxStream.itervalues()], []):
+                        for strm in sum([i.values() for i in loc.auxStream.values()], []):
                             if not fnmatch.fnmatchcase(strm.code, channel):
                                 continue
                             restricted |= strm.restricted
@@ -955,10 +955,10 @@ class _ResponseRequest(_Request):
             try:
                 warn_msg = None
                 seed_volume = SEEDVolume(self.__inv, self.__org, self.__label, self.__resp_dict)
-                for net in sum([i.values() for i in self.__inv.network.itervalues()], []):
-                    for sta in sum([i.values() for i in net.station.itervalues()], []):
-                        for loc in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
-                            for strm in sum([i.values() for i in loc.stream.itervalues()], []):
+                for net in sum([i.values() for i in self.__inv.network.values()], []):
+                    for sta in sum([i.values() for i in net.station.values()], []):
+                        for loc in sum([i.values() for i in sta.sensorLocation.values()], []):
+                            for strm in sum([i.values() for i in loc.stream.values()], []):
                                 try:
                                     seed_volume.add_chan(net.code, sta.code, loc.code,
                                         strm.code, strm.start, strm.end)
@@ -1054,7 +1054,7 @@ class _InventoryRequest(_Request):
         restricted = constraints.get("restricted") 
 
         # QC constraints
-        consdict = dict([cons for cons in constraints.iteritems() 
+        consdict = dict([cons for cons in constraints.items() 
                         if (cons[0][-4:] == "_min" or cons[0][-4:] == "_max") and cons[1].strip()])
 
         if location is None and channel is not None:

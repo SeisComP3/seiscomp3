@@ -256,8 +256,8 @@ class ArclinkSynchronizer(Client.Application):
         req.download_xml(inv, True)
 
         self.nets = set()
-        for net_tp in inv.network.itervalues():
-            for net in net_tp.itervalues():
+        for net_tp in inv.network.values():
+            for net in net_tp.values():
                 self.nets.add(net.code)
 
     def request_stations(self, type):

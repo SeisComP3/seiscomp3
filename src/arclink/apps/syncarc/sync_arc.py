@@ -115,7 +115,7 @@ def prepareMap(inv, stationReferenceList = None):
     return map
 
 def findSID(map, content):
-    for (id, values) in map.iteritems():
+    for (id, values) in map.items():
         if values == content:
             return id 
     return None
@@ -574,7 +574,7 @@ class SyncNode(Node):
 
     def _validateStationGroup(self, inv):
         map = prepareMap(inv, None)
-        for (sgcode, sg) in inv.stationGroup.iteritems():
+        for (sgcode, sg) in inv.stationGroup.items():
             for sid in sg.stationReference:
                 if sid not in map:
                     logs.warning("Cleaning invalid station reference %s" % sid)
@@ -911,15 +911,15 @@ class ArclinkSynchronizer(Client.Application):
         logs.debug("Routing clean-up")
         aCollection = []
         sCollection = []
-        for (network, stations) in self.rtn.route.iteritems():
+        for (network, stations) in self.rtn.route.items():
             if network not in node.networks: continue
-            for (station, locations) in stations.iteritems():
-                for (location, streams) in locations.iteritems():
-                    for (stream, route) in streams.iteritems():
+            for (station, locations) in stations.items():
+                for (location, streams) in locations.items():
+                    for (stream, route) in streams.items():
                         ## Arclink
                         if route.arclink:
-                            for (address, spams) in route.arclink.iteritems():
-                                for (start, aroute) in spams.iteritems():
+                            for (address, spams) in route.arclink.items():
+                                for (start, aroute) in spams.items():
                                     ## Arclink has start & end times so we check against node object to see if it fits
                                     if not node.checkSpam(network, aroute): continue
                                     try:
@@ -931,7 +931,7 @@ class ArclinkSynchronizer(Client.Application):
                                         aCollection.append((network, station, location, stream, address, start))
                         ## Seedlink
                         if route.seedlink:
-                            for (address, sroute) in route.seedlink.iteritems():
+                            for (address, sroute) in route.seedlink.items():
                                 try:
                                     rtn.route[network][station][location][stream].seedlink[address]
                                     logs.debug("S [=] SeedLink %s.%s.%s.%s / %s" % (network, station, location, stream, address))
@@ -1117,19 +1117,19 @@ class ArclinkSynchronizer(Client.Application):
         if rtn:
             aCollection = []
             sCollection = []
-            for (network, stations) in rtn.route.iteritems():
-                for (station, locations) in stations.iteritems():
-                    for (location, streams) in locations.iteritems():
-                        for (stream, route) in streams.iteritems():
+            for (network, stations) in rtn.route.items():
+                for (station, locations) in stations.items():
+                    for (location, streams) in locations.items():
+                        for (stream, route) in streams.items():
                             ## Arclink
                             if route.arclink:
-                                for (address, spams) in route.arclink.iteritems():
-                                    for (start, aroute) in spams.iteritems():
+                                for (address, spams) in route.arclink.items():
+                                    for (start, aroute) in spams.items():
                                         ## Arclink has start & end times so we check against node object to see if it fits
                                         aCollection.append((network, station, location, stream, address, start))
                             ## Seedlink
                             if route.seedlink:
-                                for (address, sroute) in route.seedlink.iteritems():
+                                for (address, sroute) in route.seedlink.items():
                                     sCollection.append((network, station, location, stream, address))
     
             ## Real Delete Arclink
@@ -1181,21 +1181,21 @@ class ArclinkSynchronizer(Client.Application):
 
             aCollection = []
             sCollection = []
-            for (network, stations) in rtn.route.iteritems():
+            for (network, stations) in rtn.route.items():
                 if network not in node.networks: continue
-                for (station, locations) in stations.iteritems():
-                    for (location, streams) in locations.iteritems():
-                        for (stream, route) in streams.iteritems():
+                for (station, locations) in stations.items():
+                    for (location, streams) in locations.items():
+                        for (stream, route) in streams.items():
                             ## Arclink
                             if route.arclink:
-                                for (address, spams) in route.arclink.iteritems():
-                                    for (start, aroute) in spams.iteritems():
+                                for (address, spams) in route.arclink.items():
+                                    for (start, aroute) in spams.items():
                                         ## Arclink has start & end times so we check against node object to see if it fits
                                         if not node.checkSpam(network, aroute): continue
                                         aCollection.append((network, station, location, stream, address, start))
                             ## Seedlink
                             if route.seedlink:
-                                for (address, sroute) in route.seedlink.iteritems():
+                                for (address, sroute) in route.seedlink.items():
                                     ## BUG: removes what it need to check
                                     sCollection.append((network, station, location, stream, address))
 
@@ -1293,10 +1293,10 @@ class ArclinkSynchronizer(Client.Application):
     def _cleanRoutings(self):
         ## After clean up check that we don't have any empty route entries
         collection = []
-        for (network, stations) in self.rtn.route.iteritems():
-            for (station, locations) in stations.iteritems():
-                for (location, streams) in locations.iteritems():
-                    for (stream, route) in streams.iteritems():
+        for (network, stations) in self.rtn.route.items():
+            for (station, locations) in stations.items():
+                for (location, streams) in locations.items():
+                    for (stream, route) in streams.items():
                         if len(route.arclink) == 0 and len(route.seedlink) == 0:
                             collection.append((network,station,location,stream))
                             
@@ -1431,13 +1431,13 @@ class ArclinkSynchronizer(Client.Application):
                         logs.warning("Network %s,%d overlaps network defined for node %s" % (ncode, nstart.year, archive))
                         issues = True
 
-        for (network, stations) in self.rtn.route.iteritems():
-            for (station, locations) in stations.iteritems():
-                for (location, streams) in locations.iteritems():
-                    for (stream, route) in streams.iteritems():
+        for (network, stations) in self.rtn.route.items():
+            for (station, locations) in stations.items():
+                for (location, streams) in locations.items():
+                    for (stream, route) in streams.items():
                         if route.arclink:
                             if route.seedlink:
-                                for (address, sroute) in route.seedlink.iteritems():
+                                for (address, sroute) in route.seedlink.items():
                                     try:
                                         if not network: raise Exception("")
                                         found = False
@@ -1450,8 +1450,8 @@ class ArclinkSynchronizer(Client.Application):
                                         logs.warning("Seedlink Routing %s.%s.%s.%s / %s does not match a any loaded valid network" % (network, station, location, stream, address))
                                         sCollection.append((network, station, location, stream, address))
 
-                            for (address, spams) in route.arclink.iteritems():
-                                for (start, aroute) in spams.iteritems():
+                            for (address, spams) in route.arclink.items():
+                                for (start, aroute) in spams.items():
                                     try:
                                         if not network: raise Exception("") 
                                         found = False

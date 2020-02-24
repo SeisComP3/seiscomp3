@@ -159,7 +159,7 @@ def query(obj, args):
         sel = "selected"
         stats = Set()
         for net_code in netlist:
-            for net in db.network[net_code].itervalues():
+            for net in db.network[net_code].values():
                 for sta_code in net.station:
                     stats.add((sta_code, net_code))
 
@@ -183,7 +183,7 @@ def query(obj, args):
         if net_code == network:
             sel = "selected"
             stats = Set()
-            for net in db.network[net_code].itervalues():
+            for net in db.network[net_code].values():
                 for sta_code in net.station:
                     stats.add(sta_code)
 
@@ -258,7 +258,7 @@ def select(obj, args):
     lonmax = args.get("lonmax")
     sensortype = args.get("sensor")
 
-    qc_constraints = dict([ arg for arg in args.iteritems() if arg[0] not in
+    qc_constraints = dict([ arg for arg in args.items() if arg[0] not in
         set(["nettype", "network", "station", "stream", "loc_id", "start_date",
         "end_date", "latmin", "latmax", "lonmin", "lonmax", "sensor",
         "user", "sesskey", "arclink", "submit" ]) and arg[1].strip() ])
@@ -329,10 +329,10 @@ def select(obj, args):
             sta = net.station[sta_code][sta_start[-1]]
             obj.write('<tr><td>%s</td><td>%s</td></tr>\n' % (sta.code, sta.description))
             streamset = Set()
-            for net in db.network[net_code].itervalues():
-                for sta in net.station[sta_code].itervalues():
+            for net in db.network[net_code].values():
+                for sta in net.station[sta_code].values():
                     for loc_code in sta.sensorLocation.keys():
-                        for loc in sta.sensorLocation[loc_code].itervalues():
+                        for loc in sta.sensorLocation[loc_code].values():
 			    for str_code in loc.stream.keys():
 	                        streamset.add((loc_code, str_code))
                                 streamset.add((loc_code, str_code[:-1] + "*"))
