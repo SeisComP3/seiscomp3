@@ -67,7 +67,10 @@ available commands with 'help'. 'exit' leaves the shell.
 
         prompt = "$ "
         while True:
-            line = raw_input(prompt).strip()
+            try:
+                line = raw_input(prompt).strip()
+            except NameError:
+                line = input(prompt).strip()
             toks = split_tokens(line)
             if len(toks) == 0:
                 continue
@@ -93,7 +96,7 @@ available commands with 'help'. 'exit' leaves the shell.
                 return self.commandRemove(args)
 
             raise Exception("Unknown command: %s" % cmd)
-        except Exception, e:
+        except Exception as e:
             sys.stdout.write("%s\n" % str(e))
             return False
 
@@ -299,7 +302,7 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(new_lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
@@ -360,7 +363,7 @@ Commands:
             if is_modified:
                 try:
                     open(f, "w").write('\n'.join(new_lines))
-                except Exception, e:
+                except Exception as e:
                     sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             return True
@@ -380,9 +383,9 @@ Commands:
             key = os.path.join(self.env.key_dir, "station_" + sta)
             try:
                 lines = [line.strip() for line in open(key, "r").readlines()]
-            except IOError, e:
+            except IOError as e:
                 raise Exception("%s: station not configured" % sta)
-            except Exception, e:
+            except Exception as e:
                 raise Exception("%s: unexpected error: %s" % (sta, str(e)))
 
             first = True
@@ -415,9 +418,9 @@ Commands:
                     sys.stdout.write("-"*80 + "\n")
                     sys.stdout.write(data)
                     sys.stdout.write("-"*80 + "\n")
-                except IOError, e:
+                except IOError as e:
                     sys.stdout.write("!binding not found\n")
-                except Exception, e:
+                except Exception as e:
                     sys.stdout.write("!unexpected error: %s\n" % str(e))
 
         else:
@@ -485,7 +488,7 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
@@ -538,7 +541,7 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
@@ -605,7 +608,7 @@ Commands:
 
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
@@ -657,7 +660,7 @@ Commands:
 
                     try:
                         open(f, "w").write('\n'.join(new_lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
                     try:
