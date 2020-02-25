@@ -1,3 +1,4 @@
+from __future__ import print_function
 from .lineType import Nw, Sg, Sr, Sl, Sa, Na, Dl, Se, Ff, Pz, Ia, Cl
 from .nodesi import Instruments
 from .nodesnslc import Network, StationGroup, DontFit
