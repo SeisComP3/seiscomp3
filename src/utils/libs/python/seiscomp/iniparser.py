@@ -115,7 +115,7 @@ def read_ini(source):
                     dict_stack.pop()
                     in_section = False
 
-                if not dict_stack[-1].has_key(m.group(1)):
+                if not m.group(1) in dict_stack[-1]:
                     chd = _ci_dict()
                     dict_stack[-1][m.group(1)] = chd
                     dict_stack.append(chd)
@@ -146,7 +146,7 @@ def read_ini(source):
                         dict_stack[-1][m.group(1)] = d
                     
                     if isinstance(d, dict):
-                        if not d.has_key(m.group(2)):
+                        if not m.group(2) in d:
                             chd = _ci_dict()
                             d[m.group(2)] = chd
                             dict_stack.append(chd)
@@ -169,7 +169,7 @@ def read_ini(source):
                         warning("parse error")
                         break
 
-                    if not dict_stack[-1].has_key(m.group(1)):
+                    if not m.group(1) in dict_stack[-1]:
                         dict_stack[-1][m.group(1)] = m.group(2).replace(r'\"', r'"')
                     else:
                         warning("parameter '%s' is assigned multiple times" % \
@@ -185,7 +185,7 @@ def read_ini(source):
                         warning("parse error")
                         break
 
-                    if not dict_stack[-1].has_key(m.group(1)):
+                    if not m.group(1) in dict_stack[-1]:
                         dict_stack[-1][m.group(1)] = m.group(2)
                     else:
                         warning("parameter '%s' is assigned multiple times" % \

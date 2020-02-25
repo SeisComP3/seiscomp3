@@ -1294,44 +1294,44 @@ $(document).ready(function() {
 	def printRequests(self, out, session, requests):
 		self.printArgs(out, session.args)
 		args = dict(session.args)
-		if session.args.has_key("lines"):
+		if "lines" in session.args:
 			del(args["lines"])
-		print >> out, "%s" % self.link("summary", "Summary Page", args, cls="border")
+		print("%s" % self.link("summary", "Summary Page", args, cls="border"),file=out)
 
-		print >> out,  "<pre><br>"
-		print >> out,  "<h2>Arclink Requests</h2>"
+		print("<pre><br>",file=out)
+		print("<h2>Arclink Requests</h2>",file=out)
 
 		if session.args.get("onlyErrors", None):
-			print >> out,  "only erroneous requests lines are displayed"
+			print("only erroneous requests lines are displayed",file=out)
 
 		streamID = session.args.get("streamID", None)
 		if streamID:
-			print >> out,  "limited to station: %s" % streamID
+			print("limited to station: %s" % streamID,file=out)
 
 		message = session.args.get("message", None)
 		if message:
-			print >> out,  "limited to message: %s" % message.replace("%20", " ")
-		print >> out
+			print("limited to message: %s" % message.replace("%20", " "), file=out)
+		print("",file=out)
 
 
 		for request in requests:
-			print >> out, '<div class="RequestHeader">'
+			print('<div class="RequestHeader">',file=out)
 
 			args = dict()
 			args["session"] = session.args.get("session")
 			args["requestID"] = request.requestID()
 			args["lines"] = "yes"
 			rl = self.link("requests", "%s"%request.requestID(), args)
-			print >> out, "REQUEST_ID %s" % rl
+			print("REQUEST_ID %s" % rl,file=out)
 
-			print >> out, "TYPE %s" % request.type()
-			print >> out, "USER %s" % request.userID()
-			if request.userIP(): print >> out, "USER_IP %s "% request.userIP()
-			print >> out, "CREATED %s " % request.created()
-			if request.clientID(): print >> out, "CLIENT_ID %s " % request.clientID()
-			if request.clientIP(): print >> out, "CLIENT_IP %s " % request.clientIP()
-			if request.header(): print >> out, "HEADER %s" % request.header()
-			if request.label(): print >> out, "LABEL %s" % request.label()
+			print("TYPE %s" % request.type(),file=out)
+			print("USER %s" % request.userID(),file=out)
+			if request.userIP(): print("USER_IP %s "% request.userIP(),file=out)
+			print("CREATED %s " % request.created(),file=out)
+			if request.clientID(): print("CLIENT_ID %s " % request.clientID(),file=out)
+			if request.clientIP(): print("CLIENT_IP %s " % request.clientIP(),file=out)
+			if request.header(): print("HEADER %s" % request.header(),file=out)
+			if request.label(): print("LABEL %s" % request.label(),file=out)
 
 			for i in xrange(request.arclinkRequestLineCount()):
 				line = request.arclinkRequestLine(i)

@@ -185,7 +185,7 @@ class Module(seiscomp3.Kernel.Module):
 
     # Clean up unused rc_* files
     for rc in rc_files:
-      if not self.rc.has_key(os.path.basename(rc)[3:]):
+      if not os.path.basename(rc)[3:] in self.rc:
         try: os.remove(rc)
         except: pass
 

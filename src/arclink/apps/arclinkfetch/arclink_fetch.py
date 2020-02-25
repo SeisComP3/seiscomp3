@@ -431,7 +431,7 @@ def build_filename(encrypted, compressed, req_args):
     endung = ''
     if compressed is True:
         endung = '.bz2'
-    elif compressed is None and req_args.has_key("compression"):
+    elif compressed is None and "compression" in req_args:
         endung = '.bz2'
 
     if encrypted:
