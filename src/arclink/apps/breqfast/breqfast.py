@@ -352,7 +352,7 @@ class SeedOutput(object):
 
                 seed_volume.output(self.__fd)
 
-            except (mseed.MSeedError, SEEDError, DBError), e:
+            except (mseed.MSeedError, SEEDError, DBError) as e:
                 logs.error("error creating SEED volume: " + str(e))
 
         finally:
@@ -882,14 +882,14 @@ def submit_request(parser, req_name, breq_id):
 				try:
 				    req.download_data(fd_out, vol.id, block=True, purge=False)
 
-				except (ArclinkError, socket.error), e:
+				except (ArclinkError, socket.error) as e:
 					logs.error('error on downloading request: ' + str(e))
 					if fd_out is not None:
                                                 fd_out.close()
 					raise
 
 				except (IOError, OSError, DBError,
-                                        SEEDError, mseed.MSeedError), e:
+                                        SEEDError, mseed.MSeedError) as e:
 					logs.error("error creating SEED Volume: %s" % str(e))
 					vol_status = STATUS_ERROR
 
@@ -939,7 +939,7 @@ def submit_request(parser, req_name, breq_id):
 					urllist.append(FTP_URL + '/' + prefix + addname + '.seed' + endung)
 			try:
 				req.purge()
-			except ArclinkError, e:
+			except ArclinkError as e:
 				logs.error('error on purging request: ' + str(e))
 
 
@@ -950,7 +950,7 @@ def submit_request(parser, req_name, breq_id):
 				os.rename(filename, filename + endung)
 			urllist.append(FTP_URL + '/' + prefix + '.seed' + endung)
 
-	except (ArclinkError, socket.error), e:
+	except (ArclinkError, socket.error) as e:
 		logs.warning("request failed: %s" % str(e))
 		failed_content[STATUS_ERROR] = wf_req.content
 
@@ -1133,7 +1133,7 @@ def start():
 					submit_email(emailaddr, "breq_fast request %s_%s processed" % (req_name, breq_id), emailmsg)
 					logs.debug("email submitted with message: %s" % emailmsg)
 
-				except (ArclinkError, socket.error), e:
+				except (ArclinkError, socket.error) as e:
 					logs.error("quit processing: " + str(e))
 
 					if not errorstate:

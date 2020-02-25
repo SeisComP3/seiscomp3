@@ -229,7 +229,7 @@ def available(server="localhost:18000",
 
         elif verbose:
             # probably some diagnostic output
-            print line.strip()
+            print(line.strip())
  
     return windows
  

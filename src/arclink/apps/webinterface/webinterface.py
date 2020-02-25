@@ -520,14 +520,11 @@ def submit(obj, args):
             SENDMAIL_BIN, EMAIL_ADDR, user), "w")
 
         try:
-            print >>fd, "The following ArcLink request has been sent to %s\n" % \
-                (req.dcname,)
+            print("The following ArcLink request has been sent to %s\n" % (req.dcname), file=fd)
 
             req.dump(fd)
-            print >>fd, "\nClick here to see the status of all your requests at %s:" % \
-                (req.dcname,)
-            print >>fd, "http://%s%s/status?arclink=%s&user=%s" % \
-                (obj.hostname, obj.uri.rsplit("/", 1)[0], req.address, user)
+            print("\nClick here to see the status of all your requests at %s:" % (req.dcname), file=fd)
+            print("http://%s%s/status?arclink=%s&user=%s" % (obj.hostname, obj.uri.rsplit("/", 1)[0], req.address, user), file=fd)
         
         finally:
             fd.close()
@@ -750,11 +747,11 @@ def handler(obj):
 
         action(obj, args)
 
-    except ArclinkAuthFailed, e:
+    except ArclinkAuthFailed as e:
         obj.err_headers_out['WWW-Authenticate'] = 'Basic realm="%s"' % (e.dcname,)
         logs.debug("unauthorized")
         return apache.HTTP_UNAUTHORIZED
-    except (ArclinkError, socket.error), e:
+    except (ArclinkError, socket.error) as e:
         #
         # PLE 2013-03-13: This is where that message
         # "Error: missing user ID (email address)"
@@ -765,7 +762,7 @@ def handler(obj):
         obj.write("Error: " + "(%s) " % fname + str(e))
     except apache.SERVER_RETURN:
         raise
-    except Exception, e:
+    except Exception as e:
         logs.error(str(e))
         raise
 

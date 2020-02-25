@@ -54,7 +54,7 @@ class FillDB(Client.Application):
 
             args = self.commandline().unrecognizedOptions()
             if len(args) < 1:
-                print >>sys.stderr, "Usage: fill_db [options] files..."
+                print("Usage: fill_db [options] files...",file=sys.stderr)
                 return False
 
             self.input_files = args

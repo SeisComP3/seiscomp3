@@ -14,17 +14,17 @@ curday = None
 
 def flush_day(day, row):
     s = sum(float(row[x]) for x in row.keys())
-    print "%s %12.3f" % (day, s),
+    print("%s %12.3f" % (day, s))
     for dcid in dcid_list:
         # if row.has_key(dcid):
         # Ugly: ideally would be None if there were no data
         if row[dcid] != 0:
-            print "%8.1f" % (float(row[dcid])),
+            print("%8.1f" % (float(row[dcid])))
         else:
-            print "%8d" % 0,
-    print
+            print("%8d" % 0)
+    print()
 
-print "# DAY    ", "      TOTAL", " ".join("%8s" % x for x in dcid_list)
+print("# DAY    ", "      TOTAL", " ".join("%8s" % x for x in dcid_list))
 
 for x in sys.stdin.readlines():
     line = x.strip()
@@ -35,7 +35,7 @@ for x in sys.stdin.readlines():
     day = words[0]
     dcid = words[1]
     if len(words) < 3:
-        print "# Skipping", line
+        print("# Skipping", line)
         continue
     val = words[2]
 

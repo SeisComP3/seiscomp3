@@ -30,8 +30,8 @@ def submit(file):
     finally:
         reqf.close()
     
-    print "Request successfully submitted"
-    print "Request ID:", req_id
+    print("Request successfully submitted")
+    print("Request ID:", req_id)
 
 def show_status(req_id):
     status = arcl.get_status(req_id)
@@ -44,22 +44,22 @@ def show_status(req_id):
         else:
             req_status = "PROCESSING"
 
-        print "Request ID: %s, Label: %s, Type: %s, Encrypted: %s, Args: %s" % \
-            (req.id, req.label, req.type, req.encrypted, req.args)
-        print "Status: %s, Size: %d, Info: %s" % \
-            (req_status, req.size, req.message)
+        print("Request ID: %s, Label: %s, Type: %s, Encrypted: %s, Args: %s" % \
+            (req.id, req.label, req.type, req.encrypted, req.args) )
+        print("Status: %s, Size: %d, Info: %s" % \
+            (req_status, req.size, req.message) )
 
         if req.user != "":
-            print "User: %s, Institution: %s" % (req.user, req.institution)
+            print("User: %s, Institution: %s" % (req.user, req.institution))
 
         for vol in req.volume:
-            print "    volume ID: %s, dcid: %s, Status: %s, Size: %d, Encrypted: %s, Info: %s " % \
-            (vol.id, vol.dcid, arclink_status_string(vol.status), vol.size, vol.encrypted, vol.message)
+            print("    volume ID: %s, dcid: %s, Status: %s, Size: %d, Encrypted: %s, Info: %s " % \
+            (vol.id, vol.dcid, arclink_status_string(vol.status), vol.size, vol.encrypted, vol.message))
 
             for rqln in vol.line:
-                print "        request: %s" % (rqln.content,)
-                print "        status: %s, Size: %d, Info: %s" % \
-                    (arclink_status_string(rqln.status), rqln.size, rqln.message)
+                print("        request: %s" % (rqln.content,))
+                print("        status: %s, Size: %d, Info: %s" % \
+                    (arclink_status_string(rqln.status), rqln.size, rqln.message))
 
 def download(req_vol):
     rv = req_vol.split(".", 1)
@@ -79,11 +79,11 @@ def download(req_vol):
     finally:
         outfd.close()
 
-    print "Download successful"
+    print("Download successful")
 
 def purge(req_id):
     arcl.purge(req_id)
-    print "Product successfully deleted"
+    print("Product successfully deleted")
 
 def process_options():
     parser = OptionParser(usage="usage: %prog -u user [-i institution] [-o file] [-b] [-w password] {-r|-s|-d|-p} host:port",
@@ -178,18 +178,18 @@ try:
     passwd = None
 
     arcl.open_connection(host, port, user, passwd, inst)
-    print "Connected to", arcl.software, "at", arcl.organization
+    print("Connected to", arcl.software, "at", arcl.organization)
     action(action_arg)
     sys.exit(0)
 
 except ArclinkAuthFailed:
-    print "Authentification failed"
+    print("Authentification failed")
 
 except ArclinkCommandNotAccepted:
-    print "Error:", arcl.get_errmsg()
+    print("Error:", arcl.get_errmsg())
 
-except ArclinkError, e:
-    print "Error:", str(e)
+except ArclinkError as e:
+    print("Error:", str(e))
 
 sys.exit(1)
 

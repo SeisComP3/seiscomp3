@@ -66,7 +66,7 @@ written_count = 0
 buf = ""
 
 if not os.path.exists(msg_dir):
-    print "No message directory", msg_dir, ". Bye."
+    print("No message directory", msg_dir, ". Bye.")
     sys.exit(1)
 
 for line in sys.stdin.readlines():
@@ -87,13 +87,13 @@ for line in sys.stdin.readlines():
 
             if os.path.exists(fname):
                 if (verbose):
-                    print "Skipping existing file %s" % (fname)
+                    print("Skipping existing file %s" % (fname))
                 buf = ""
                 skipped_count += 1
             else:
-                print "Writing to %s (%i lines)" % (fname, count_lines)
+                print("Writing to %s (%i lines)" % (fname, count_lines))
                 with open(fname, "w") as fid:
-                    print >>fid, buf
+                    print(buf,file=fid)
                 buf = ""
                 written_count += 1
 
@@ -111,18 +111,17 @@ if len(buf) > 0:
 
         if os.path.exists(fname):
             if (verbose):
-                print "Skipping existing file %s" % (fname)
+                print("Skipping existing file %s" % (fname))
             buf = ""
             skipped_count += 1
         else:
-            print "Writing to %s (%i lines)" % (fname, count_lines)
+            print("Writing to %s (%i lines)" % (fname, count_lines))
             with open(fname, "w") as fid:
-                print >>fid, buf
+                print(buf,file=fid)
             buf = ""
             written_count += 1
 
 if len(buf) > 0:
-    print "split_mail: ERROR: still %i chars left in buf!!" % (len(buf))
+    print("split_mail: ERROR: still %i chars left in buf!!" % (len(buf)))
 
-print "split_mail: %i message(s) processed; %i skipped, %i written to %s" % (
-    count, skipped_count, written_count, msg_dir)
+print("split_mail: %i message(s) processed; %i skipped, %i written to %s" % (count, skipped_count, written_count, msg_dir))

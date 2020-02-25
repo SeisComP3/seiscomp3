@@ -248,25 +248,25 @@ class Node(object):
         self._remove(self.stationGroups, code, start)
 
     def info(self, where=sys.stderr):
-        print >>where,"%s" % (self.dcid)
-        print >>where," Name: %s" % (self.name)
-        print >>where," Contact: %s" % (self.contact),
-        print >>where,"\tEmail: %s" % (self.email)
-        print >>where," Address: %-15s" % (self.address),
-        print >>where,"\tPort: %s" % (self.port)
+        print("%s" % (self.dcid),file=where)
+        print(" Name: %s" % (self.name),file=where)
+        print(" Contact: %s" % (self.contact),file=where)
+        print("\tEmail: %s" % (self.email),file=where)
+        print(" Address: %-15s" % (self.address),file=where)
+        print("\tPort: %s" % (self.port),file=where)
         
         nList = self.networkList()
         sgList = self.stationGroupList()
         
-        print >>where," %d network%s\t %d station group%s" % (len(nList),"" if len(nList) == 1 else "s", len(sgList), "" if len(sgList) == 1 else "s")
+        print(" %d network%s\t %d station group%s" % (len(nList),"" if len(nList) == 1 else "s", len(sgList), "" if len(sgList) == 1 else "s"),file=where)
         i=1
         for (n,s,e) in nList:
-            print >>where,"  [%d] %s (%s) (%s)" % (i,n,s,e)
+            print("  [%d] %s (%s) (%s)" % (i,n,s,e),file=where)
             i=i+1
         for (n,s,e) in sgList:
-            print >>where,"  [%d] %s (%s) (%s)" % (i,n,s,e)
+            print("  [%d] %s (%s) (%s)" % (i,n,s,e),file=where)
             i=i+1
-        print >>where,""
+        print("",file=where)
 
 class SyncNode(Node):
     __slots__ = (
@@ -309,7 +309,7 @@ class SyncNode(Node):
         logs.info("Submiting %s request to server: %s as %s" % (type, sport, user))
         try:
             req.submit(sport, user, None, None)
-        except Exception,e:
+        except Exception as e:
             logs.error("Error on submit: %s" % str(e))
             return False
         
@@ -324,7 +324,7 @@ class SyncNode(Node):
         
         try:
             req.download_xml(obj, True, True)
-        except Exception,e:
+        except Exception as e:
             logs.error("Error on download: %s" % str(e))
             req.close()
             return False
@@ -493,7 +493,7 @@ class SyncNode(Node):
                 if status is True and saveraw:
                     try:
                         self._saveToDisk(rtn)
-                    except Exception,e:
+                    except Exception as e:
                         logs.error(str(e))
             if status and self._validateRouting(rtn):
                 self._rtn = rtn
@@ -566,7 +566,7 @@ class SyncNode(Node):
                 if status is True and saveraw:
                     try:
                         self._saveToDisk(inv)
-                    except Exception,e:
+                    except Exception as e:
                         logs.error(str(e))
             if status and self._validateInventory(inv):
                 self._inv = inv
@@ -649,7 +649,7 @@ class ArclinkSynchronizer(Client.Application):
                 self.poolKeep = int(self.poolKeep)
                 if self.poolKeep < 0:
                     raise("")
-            except Exception, e:
+            except Exception as e:
                 logs.error("Invalid poolKeep value [%s]" % self.poolKeep)
                 logs.error("Using default value of poolKepp=0")
                 self.poolKeep = 0
@@ -729,36 +729,36 @@ class ArclinkSynchronizer(Client.Application):
         error = False
         
         if self.commandline().unrecognizedOptions():
-            print >>sys.stderr,"Invalid options: ",
+            print("Invalid options: ",file=sys.stderr)
             for i in self.commandline().unrecognizedOptions():
-                print i,
-            print ""
+                print("%s" % i,file=sys.stderr)
+            print("",file=sys.stderr)
             error = True
         
         if count != 1:
-            print >> sys.stderr, "You have to choose one (and only one) operation mode."
+            print("You have to choose one (and only one) operation mode.",file=sys.stderr)
             error = True
         
         if (self.keep or self.keepraw) and not self.doMerge:
-            print >> sys.stderr, "Options --keep and --keepraw can only be used in the merge mode."
+            print("Options --keep and --keepraw can only be used in the merge mode.",file=sys.stderr)
             error = True
         
         if (self.nodeList or self.nodeExclude) and (self.doSanity or self.doSanityClean):
-            print >>sys.stderr, "Sanity check needs the complete master table loaded."
+            print("Sanity check needs the complete master table loaded.",file=sys.stderr)
             error = True
 
         if (self.nodeList or self.nodeExclude) and self.doErase:
-            print >>sys.stderr, "Erase cannot be guided by a master table."
+            print("Erase cannot be guided by a master table.",file=sys.stderr)
             error = True
 
         if error: return False
         
         if self.doErase or (self.doRemove and (self.nodeList is None and self.nodeExclude is None)):
             if self.doErase:
-                print >>sys.stderr,"You are about to do a complete ERASING on your machine inventory/routing tables"
+                print("You are about to do a complete ERASING on your machine inventory/routing tables",file=sys.stderr)
             else:
-                print >>sys.stderr,"You are about to do a complete REMOVING on your machine inventory/routing tables"
-            print >>sys.stderr,"Enter to go / Ctrl-C to abort !"
+                print("You are about to do a complete REMOVING on your machine inventory/routing tables",file=sys.stderr)
+            print("Enter to go / Ctrl-C to abort !",file=sys.stderr)
             ans = sys.stdin.readline()
         
         return True
@@ -857,9 +857,9 @@ class ArclinkSynchronizer(Client.Application):
 
         try:
             r = urlopen(url)
-        except HTTPError, e:
+        except HTTPError as e:
             raise Exception("Invalid master table location %s [HTTP Error code %s]" % (url, e.code))
-        except URLError, e:
+        except URLError as e:
             (code, reason) = e.reason
             raise Exception("Error on fetching master table: %s" % (reason)) 
         xdoc = parseString(r.read())
@@ -1445,7 +1445,7 @@ class ArclinkSynchronizer(Client.Application):
                                             if not net.end and (net.code, net.start) not in nCollection: 
                                                 found = True
                                         if not found: raise Exception("")
-                                    except Exception,e:
+                                    except Exception as e:
                                         issues = True
                                         logs.warning("Seedlink Routing %s.%s.%s.%s / %s does not match a any loaded valid network" % (network, station, location, stream, address))
                                         sCollection.append((network, station, location, stream, address))
@@ -1459,7 +1459,7 @@ class ArclinkSynchronizer(Client.Application):
                                             if isInside(net.start, net.end, aroute.start, aroute.end) and (net.code, net.start) not in nCollection:
                                                 found = True
                                         if not found: raise Exception("")
-                                    except Exception,e:
+                                    except Exception as e:
                                         issues = True
                                         logs.warning("Arclink Routing %s.%s.%s.%s / %s / %s does not match any loaded valid network" % (network, station, location, stream, address, start))
                                         aCollection.append((network, station, location, stream, address, start))
@@ -1621,14 +1621,14 @@ class ArclinkSynchronizer(Client.Application):
         if not self.doErase:
             try:
                 table = self._loadMasterTable()
-            except Exception, e:
+            except Exception as e:
                 logs.error(str(e))
                 return False
         
         if not self.doList:
             try:
                 self.inv = self._loadLocalInventory()
-            except Exception,e:
+            except Exception as e:
                 logs.error(str(e))
                 return False
             
@@ -1667,7 +1667,7 @@ class ArclinkSynchronizer(Client.Application):
                 try:
                     self._mInventory(node)
                     self._mRouting(node)
-                except Exception,e:
+                except Exception as e:
                     logs.error("[%s] %s" % (dcid, e))
             if self.stationGroup:
                 for (dcid, node) in table.items():
@@ -1696,7 +1696,7 @@ class ArclinkSynchronizer(Client.Application):
                 files.append((id, file))
                 if id not in keysKeep:
                     keysKeep.append(id)
-            except Exception,e:
+            except Exception as e:
                 logs.warning("Invalid file %s" % file)
 
         for file in glob.glob(self.poolFolder + "/Routing-*-*-RAW.xml"):
@@ -1706,7 +1706,7 @@ class ArclinkSynchronizer(Client.Application):
                 files.append((id, file))
                 if id not in keysKeep:
                     logs.warning("File %s has not Inventory associated, and will be removed." % file)
-            except Exception,e:
+            except Exception as e:
                 logs.warning("Invalid file %s" % file)
 
 
@@ -1718,7 +1718,7 @@ class ArclinkSynchronizer(Client.Application):
             try:
                 logs.debug("Removing file %s" % file)
                 os.unlink(file)
-            except Exception,e:
+            except Exception as e:
                 logs.warning("Error removing file %s" % file)
         return
 

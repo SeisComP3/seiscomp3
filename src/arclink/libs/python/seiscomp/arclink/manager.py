@@ -132,15 +132,14 @@ class _Request(object):
 
     def dump(self, fd):
         if self.label:
-             print >>fd, "LABEL %s" % (self.label,)
+             print("LABEL %s" % (self.label,), file=fd)
 
-        print >>fd, "REQUEST %s %s" % (self.rtype,
-            " ".join([ "%s=%s" % (a, v) for a, v in self.args.items() ]))
+        print("REQUEST %s %s" % (self.rtype," ".join([ "%s=%s" % (a, v) for a, v in self.args.items() ])),file=fd)
 
         for rl in self.content:
-            print >>fd, repr(rl)
+            print(repr(rl),file=fd)
 
-        print >>fd, "END"
+        print("END",file=fd)
 
     def submit(self, addr, user, passwd=None, user_ip=None):
         try:
@@ -174,7 +173,7 @@ class _Request(object):
             finally:
                 self.__arcl.close_connection()
 
-        except (ArclinkError, socket.error), e:
+        except (ArclinkError, socket.error) as e:
             self.error = str(e)
 
     def status(self):
@@ -215,7 +214,7 @@ class _Request(object):
                 self.__arcl_wait.wait(self.id, timeout=self.socket_timeout)
                 break
 
-            except ArclinkTimeout, e:
+            except ArclinkTimeout as e:
                 reason = str(e)
 
                 retry += 1
@@ -262,7 +261,7 @@ class _Request(object):
 
                     break
 
-                except ArclinkTimeout, e:
+                except ArclinkTimeout as e:
                     reason = str(e)
 
                     try:
@@ -306,7 +305,7 @@ class _Request(object):
 
                     break
 
-                except ArclinkTimeout, e:
+                except ArclinkTimeout as e:
                     retry += 1
                     if retry > self.download_retry:
                         raise ArclinkError, "download failed: " + str(e)
@@ -373,7 +372,7 @@ class RequestThread(threading.Thread):
             self.__req_sent.append(req)
             return
 
-        except ArclinkError, e:
+        except ArclinkError as e:
             try:
                 sr = req.status()
                 if sr.error:
@@ -385,10 +384,10 @@ class RequestThread(threading.Thread):
                 #req.purge()
                 self.__req_sent.append(req)
 
-            except (ArclinkError, socket.error), e:
+            except (ArclinkError, socket.error) as e:
                 logs.warning("%s: error: %s" % (req.address, str(e)))
 
-        except socket.error, e:
+        except socket.error as e:
             logs.warning("%s: error: %s" % (req.address, str(e)))
 
         for rl in req.content:
@@ -459,7 +458,7 @@ class ArclinkManager(object):
             acl.open_connection(host, port, self.__myuser)
             acl.close_connection()
             acl = None
-        except Exception, e:
+        except Exception as e:
             raise Exception("Arclink Server is down.")
 
     def new_request(self, rtype, args={}, label=None):
@@ -790,7 +789,7 @@ class ArclinkManager(object):
                 try:
                     req.download_xml(inv, True)
 
-                except ArclinkError, e:
+                except ArclinkError as e:
                     raise ArclinkError, "error getting inventory data from %s: %s" % \
                         (self.__myaddr, str(e))
 
@@ -817,7 +816,7 @@ class ArclinkManager(object):
                 try:
                     req.download_xml(rtn, True)
 
-                except ArclinkError, e:
+                except ArclinkError as e:
                     raise ArclinkError, "error getting routing data from %s: %s" % \
                         (self.__myaddr, str(e))
 
@@ -841,7 +840,7 @@ class ArclinkManager(object):
                 try:
                     req.wait()
 
-                except ArclinkError, e:
+                except ArclinkError as e:
                     sr = req.status()
                     if sr.error:
                         logs.warning("%s: request %s failed (%s)" % (req.address, req.id, str(e)))

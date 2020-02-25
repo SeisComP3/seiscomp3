@@ -134,7 +134,7 @@ class Listener(seiscomp3.Client.Application):
             self.email_subject = self.configGetString("email.subject")
             self.hostname = self.configGetString("email.host")
             self.magThresh = self.configGetDouble("email.magThresh")
-        except Exception, e:
+        except Exception as e:
             seiscomp3.Logging.info('Some configuration parameters could not be read: %s' % e)
             self.sendemail = False
 
@@ -188,7 +188,7 @@ class Listener(seiscomp3.Client.Application):
                                              self.amqPwd, self.amqMsgFormat)
             self.enableTimer(5)
             seiscomp3.Logging.info('ActiveMQ interface is running.')
-        except Exception, e:
+        except Exception as e:
             seiscomp3.Logging.warning('ActiveMQ interface cannot be loaded: %s' % e)
         return True
 
@@ -319,7 +319,7 @@ class Listener(seiscomp3.Client.Application):
             else:
                 s = smtplib.SMTP(host=self.smtp_server, port=self.email_port,
                                  timeout=5)
-        except Exception, e:
+        except Exception as e:
             seiscomp3.Logging.warning('Cannot connect to smtp server: %s' % e)
             return
         try:
@@ -328,7 +328,7 @@ class Listener(seiscomp3.Client.Application):
             if self.auth:
                 s.login(self.username, self.password)
             s.sendmail(self.email_sender, self.email_recipients, msg.as_string())
-        except Exception, e:
+        except Exception as e:
             seiscomp3.Logging.warning('Email could not be sent: %s' % e)
         s.quit()
 

@@ -177,7 +177,7 @@ Check if SeedLink is running and configured for real-time playback.
         sys.exit(1)
 
     try: out_channel = open(mseed_fifo, "w")
-    except Exception, e:
+    except Exception as e:
         sys.stderr.write("%s\n" % str(e))
         sys.exit(1)
 
@@ -218,6 +218,6 @@ try:
 
 except KeyboardInterrupt:
     pass
-except Exception, e:
+except Exception as e:
     sys.stderr.write("Exception:  %s\n" % str(e))
     sys.exit(1)

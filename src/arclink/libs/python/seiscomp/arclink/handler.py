@@ -249,18 +249,18 @@ class _RequestTrackerDIR(object):
             os.makedirs(self.__dir)
 
         fd = open(self.__dir + "/" + "status", "a")
-        print >>fd, "USER " + user
+        print("USER " + user,file=fd)
 
         if user_ip:
-            print >>fd, "USER_IP " + user_ip
+            print("USER_IP " + user_ip,file=fd)
 
         if client_ip:
-            print >>fd, "CLIENT_IP " + client_ip
+            print("CLIENT_IP " + client_ip,file=fd)
 
         if label:
-            print >>fd, "LABEL " + label
+            print("LABEL " + label,file=fd)
 
-        print >>fd, header
+        print(header,file=fd)
         fd.close()
 
     def line_status(self, start_time, end_time, network, station, channel,
@@ -310,9 +310,9 @@ class _RequestTrackerDIR(object):
             constr = " ".join([ a+"="+b for (a, b) in constraints.items() ])
 
         fd = open(self.__dir + "/" + "status", "a")
-        print >>fd, "%s %s %s %s %s %s (%s) %s %s %d %s" % (stime, etime,
-            network, station, channel, location, constr,
-            volume, status, size, message)
+        print("%s %s %s %s %s %s (%s) %s %s %d %s" % (stime, etime, \
+            network, station, channel, location, constr, \
+            volume, status, size, message) , file=fd )
             
         fd.close()
     
@@ -330,7 +330,7 @@ class _RequestTrackerDIR(object):
             message = ""
 
         fd = open(self.__dir + "/" + "status", "a")
-        print >>fd, "VOLUME %s %s %d %s" % (volume, status, size, message)
+        print("VOLUME %s %s %d %s" % (volume, status, size, message), file=fd)
         fd.close()
 
     def request_status(self, status, message):
@@ -341,7 +341,7 @@ class _RequestTrackerDIR(object):
             message = ""
 
         fd = open(self.__dir + "/" + "status", "a")
-        print >>fd, "%s %s" % (status, message)
+        print("%s %s" % (status, message), file=fd)
         fd.close()
     
     def __verseed_errors(self, volume):
@@ -595,7 +595,7 @@ class _FSEED_Volume(object):
                     copyfileobj(tmpfd, self.__fd)
                     self.__tracker.verseed(self.__name, tmpfd.name)
 
-                except (MSeedError, SEEDError, DBError), e:
+                except (MSeedError, SEEDError, DBError) as e:
                     self.status = Arclink_ERROR(message=str(e))
                 
         finally:
@@ -687,7 +687,7 @@ class _WaveformRequest(_Request):
         
             wf.start_request(self.__volume_factory)
 
-        except (OSError, IOError), e:
+        except (OSError, IOError) as e:
             raise ArclinkHandlerError, str(e)
 
     def __check_access(self, net_code, sta_code, str_code, loc_code,
@@ -856,7 +856,7 @@ class _WaveformRequest(_Request):
 
             status = self.__wf.add_wins(dcid, list(expanded))
 
-        except (OSError, IOError, SEEDError, DBError), e:
+        except (OSError, IOError, SEEDError, DBError) as e:
             raise ArclinkHandlerError, str(e)
 
         if status.volume is not None:
@@ -874,7 +874,7 @@ class _WaveformRequest(_Request):
         if vol.status == Arclink_OK or vol.status == Arclink_WARN:
             try:
                 size = os.stat(self.__fileprefix + name).st_size
-            except OSError, e:
+            except OSError as e:
                 self._logs.error(str(e))
                 self._resp.set_status(Arclink_NODATA, msg=str(e), ref=name)
                 self.__tracker.volume_status(name, "NODATA", 0, str(e))
@@ -937,7 +937,7 @@ class _ResponseRequest(_Request):
             finally:
                 RequestHandler.dataLock.release()
             
-        except DBError, e:
+        except DBError as e:
             raise ArclinkHandlerError, str(e)
 
         self._resp.set_status(Arclink_OK, ref=self._line)
@@ -963,7 +963,7 @@ class _ResponseRequest(_Request):
                                     seed_volume.add_chan(net.code, sta.code, loc.code,
                                         strm.code, strm.start, strm.end)
                                 
-                                except SEEDError, e:
+                                except SEEDError as e:
                                     warn_msg = str(e)
 
 
@@ -1000,7 +1000,7 @@ class _ResponseRequest(_Request):
                     self._resp.set_status(Arclink_WARN, size, warn_msg, "dataless")
                     self.__tracker.volume_status("dataless", "WARN", size, warn_msg)
 
-            except (SEEDError, OSError, IOError), e:
+            except (SEEDError, OSError, IOError) as e:
                 self._resp.set_status(Arclink_ERROR, msg=str(e), ref="dataless")
                 self.__tracker.volume_status("dataless", "ERROR", 0, str(e))
 
@@ -1103,7 +1103,7 @@ class _InventoryRequest(_Request):
             finally:
                 RequestHandler.dataLock.release()
             
-        except DBError, e:
+        except DBError as e:
             raise ArclinkHandlerError, str(e)
 
         self._resp.set_status(Arclink_OK, ref=self._line)
@@ -1136,7 +1136,7 @@ class _InventoryRequest(_Request):
                 self._resp.set_status(Arclink_OK, size, ref="inventory")
                 self.__tracker.volume_status("inventory", "OK", size, "")
 
-            except (DBError, OSError, IOError), e:
+            except (DBError, OSError, IOError) as e:
                 self._resp.set_status(Arclink_ERROR, msg=str(e), ref="inventory")
                 self.__tracker.volume_status("inventory", "ERROR", 0, str(e))
 
@@ -1195,7 +1195,7 @@ class _RoutingRequest(_Request):
             finally:
                 RequestHandler.dataLock.release()
 
-        except DBError, e:
+        except DBError as e:
             raise ArclinkHandlerError, str(e)
 
         self._resp.set_status(Arclink_OK, ref=self._line)
@@ -1239,7 +1239,7 @@ class _RoutingRequest(_Request):
                 self._resp.set_status(Arclink_OK, size, ref="routing")
                 self.__tracker.volume_status("routing", "OK", size, "")
                 
-            except (DBError, OSError, IOError), e:
+            except (DBError, OSError, IOError) as e:
                 self._resp.set_status(Arclink_ERROR, msg=str(e), ref="routing")
                 self.__tracker.volume_status("routing", "ERROR", 0, str(e))
 
@@ -1333,7 +1333,7 @@ class _QCRequest(_Request):
             finally:
                 RequestHandler.dataLock.release()
 
-        except DBError, e:
+        except DBError as e:
             raise ArclinkHandlerError, str(e)
 
         self._resp.set_status(Arclink_OK, ref=self._line)
@@ -1368,7 +1368,7 @@ class _QCRequest(_Request):
                 self._resp.set_status(Arclink_OK, size, ref="qc")
                 self.__tracker.volume_status("qc", "OK", size, "")
                 
-            except (DBError, OSError, IOError), e:
+            except (DBError, OSError, IOError) as e:
                 self._resp.set_status(Arclink_ERROR, msg=str(e), ref="qc")
                 self.__tracker.volume_status("qc", "ERROR", 0, str(e))
 
@@ -1486,7 +1486,7 @@ class RequestHandler(object):
                 self.__tracker.request_status("END", "")
                 self.__resp.req_end()
                 
-            except ArclinkHandlerError, e:
+            except ArclinkHandlerError as e:
                 self.__logs.error(str(e))
                 self.__resp.req_message(str(e))
                 self.__resp.req_error()
@@ -1508,7 +1508,7 @@ class RequestHandler(object):
             try:
                 start_time = datetime.datetime(*map(int, rqline[0].split(",")))
                 end_time = datetime.datetime(*map(int, rqline[1].split(",")))
-            except ValueError, e:
+            except ValueError as e:
                 raise ArclinkHandlerError, "syntax error: " + str(e)
 
             network = None
@@ -1590,7 +1590,7 @@ class RequestHandler(object):
 
                     self.__process_line(rqline)
 
-                except ArclinkHandlerError, e:
+                except ArclinkHandlerError as e:
                     self.__logs.error(str(e))
                     if self.__req is not None:
                         # avoid error from below

@@ -55,7 +55,7 @@ class SeedOutput(object):
 
                 seed_volume.output(self.__fd)
 
-            except (MSeedError, SEEDError, DBError), e:
+            except (MSeedError, SEEDError, DBError) as e:
                 logs.error("error creating SEED volume: " + str(e))
 
         finally:
@@ -81,7 +81,7 @@ class MSeed4KOutput(object):
 
                 wfd.output_data(self.__fd, 0)
 
-            except (MSeedError, SEEDError, DBError), e:
+            except (MSeedError, SEEDError, DBError) as e:
                 logs.error("error reblocking Mini-SEED data: " + str(e))
 
         finally:
@@ -92,7 +92,7 @@ def show_status(request):
     try:
         logs.info(" datacenter name: " + request.dcname)
         rqstat = request.status()
-    except ArclinkError, e:
+    except ArclinkError as e:
         logs.error(str(e))
         return
     
@@ -154,7 +154,7 @@ def parse_native_from_handler(req, fd):
         try:
             start_time = datetime.datetime(*map(int, rqsplit[0].split(",")))
             end_time = datetime.datetime(*map(int, rqsplit[1].split(",")))
-        except ValueError, e:
+        except ValueError as e:
             logs.error("syntax error (%s): '%s'" % (str(e), rqline))
             rqline = fd.readline()
             continue
@@ -411,13 +411,13 @@ http://www.iris.edu/manuals/breq_fast.htm
         logs.error("Errors detected on the command line:")
         for item in errors:
             logs.error("\t%s" % item)
-        print ""
+        print(" ")
 
     if len(warnings) > 0:
         logs.info("Warnings detected on the command line:")
         for item in warnings:
             logs.info("\t%s" % item)
-        print ""
+        print(" ")
 
     if len(errors) > 0:
         sys.exit()
@@ -444,7 +444,7 @@ def main():
     try:
         ret = _main(SSLpasswordDict, addr, request_format, data_format, label, resp_dict, rebuild_volume, proxymode, user, timeout, retries, output_file, input_file, spfr)
 
-    except ArclinkError, e:
+    except ArclinkError as e:
         logs.error(str(e))
         ret = 1
 
@@ -597,11 +597,11 @@ def _main(SSLpasswordDict, addr, request_format, data_format, label, resp_dict, 
                     continue
                 try:
                     req.download_data(fd_out, vol.id, block=True, purge=False, password=SSLpasswordDict.get(vol.dcid))
-                except ArclinkError, e:
+                except ArclinkError as e:
                     logs.error('error on downloading request: ' + str(e))
             try:
                 req.purge()
-            except ArclinkError, e:
+            except ArclinkError as e:
                 logs.error('error on purging request: ' + str(e))
 
         fd_out.close()
@@ -630,7 +630,7 @@ def _main(SSLpasswordDict, addr, request_format, data_format, label, resp_dict, 
                         filename = filename + endung
                     logs.warning("saved file: %s" % filename)
                     fd_out.close()
-                except ArclinkError, e:
+                except ArclinkError as e:
                     logs.error('error on downloading request: ' + str(e))
                     filename = None
                     if fd_out is not None and not fd_out.closed:
@@ -638,17 +638,17 @@ def _main(SSLpasswordDict, addr, request_format, data_format, label, resp_dict, 
 
             try:
                 req.purge()
-            except ArclinkError, e:
+            except ArclinkError as e:
                 logs.error('error on purging request: ' + str(e))
 
 def _debug(s):
     if verbosity > 1:
-        print s
+        print(s)
         sys.stdout.flush()
 
 def _info(s):
     if verbosity > 0:
-        print s
+        print(s)
         sys.stdout.flush()
 
 if __name__ == "__main__":

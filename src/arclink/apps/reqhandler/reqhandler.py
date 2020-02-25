@@ -116,11 +116,11 @@ class RequestThread(threading.Thread):
 
             self.__req.purge()
             
-        except ArclinkTimeout, e:
+        except ArclinkTimeout as e:
             logs.warning("%s: %s" % (self.__req.address, str(e)))
             fd.close(Arclink_RETRY(message="timeout"))
 
-        except ArclinkError, e:
+        except ArclinkError as e:
             try:
                 rqstat = self.__req.status()
                 if rqstat.error:
@@ -137,11 +137,11 @@ class RequestThread(threading.Thread):
 
                 self.__req.purge()
 
-            except (ArclinkError, socket.error), e:
+            except (ArclinkError, socket.error) as e:
                 logs.warning("%s: error: %s" % (self.__req.address, str(e)))
                 fd.close(Arclink_RETRY(message=str(e)))
 
-        except socket.error, e:
+        except socket.error as e:
             logs.warning("%s: error: %s" % (self.__req.address, str(e)))
             fd.close(Arclink_RETRY(message=str(e)))
 
@@ -277,7 +277,7 @@ class WiggleFetcher(object):
                     return Arclink_RETRY(volume=dcid, size=0,
                         message="data temporarily unavailable, try again later")
 
-        except (OSError, IOError, MSeedError, SEEDError, DBError), e:
+        except (OSError, IOError, MSeedError, SEEDError, DBError) as e:
             return Arclink_ERROR(volume=dcid, message=str(e))
         
         self.__local_volume_size += real_size

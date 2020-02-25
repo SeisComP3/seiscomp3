@@ -140,33 +140,33 @@ class ArclinkSynchronizer(Client.Application):
                 self.db_url = self.commandline().optionString("db-url")
 
             if self.source_addr is None:
-                print >>sys.stderr, "Please specify source address using --source"
+                print("Please specify source address using --source", file=sys.stderr)
                 return False
 
             if self.modified_after:
                 try:
                     _parse_datetime(self.modified_after)
 
-                except ValueError, e:
+                except ValueError as e:
                     logs.error(str(e))
                     return False
 
             if not have_sc3wrap and not have_sqlobject:
-                print >>sys.stderr, "Neither SC3 nor sqlobject support is available"
+                print("Neither SC3 nor sqlobject support is available", file=sys.stderr)
                 return False
 
             if self.use_sc3db:
                 if not have_sc3wrap:
-                    print >>sys.stderr, "SC3 database support is not available"
+                    print("SC3 database support is not available", file=sys.stderr)
                     return False
 
             else:
                 if not have_sqlobject:
-                    print >>sys.stderr, "sqlobject support not is available"
+                    print("sqlobject support not is available", file=sys.stderr)
                     return False
 
                 if self.db_url is None:
-                    print >>sys.stderr, "Please specify database URL using --db-url"
+                    print("Please specify database URL using --db-url", file=sys.stderr)
                     return False
 
         except Exception:
@@ -394,7 +394,7 @@ class ArclinkSynchronizer(Client.Application):
     def run(self):
         try:
             if self.dcid is None:
-                print >>sys.stderr, "Please specify datacenter/archive ID"
+                print("Please specify datacenter/archive ID", file=sys.stderr)
                 return False
             
             if self.use_sc3db:

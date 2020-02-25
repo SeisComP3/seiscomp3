@@ -47,7 +47,7 @@ class MyConfig(dict):
             self.readINI(filename)
         elif filename[-4:].lower() == ".xml":
             self.readXML(filename)
-        else: print "XXXXXXXXXXXXXXX"
+        else: print("XXXXXXXXXXXXXXX")
 
     def readINI(self, filename):
         config = ConfigParser.ConfigParser()
@@ -163,9 +163,9 @@ class ConfigXML(MyConfig):
 
 if __name__ == '__main__':
     for f in "test.ini", "test.xml":
-        print "#### filename=", f
+        print("#### filename=%s" % f)
         config = MyConfig(f)
-        print config
+        print(config)
         for section in config:
-            print section, config[section]
+            print(section, config[section])
 

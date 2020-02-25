@@ -80,7 +80,7 @@ class XElement(object):
                 if isinstance(attr, XAttribute):
                     try:
                         obj = attr.fromxml(value)
-                    except (TypeError, ValueError), e:
+                    except (TypeError, ValueError) as e:
                         raise _BadValue, e.args
                 
                     self.__dict__[_fix_attr(name)] = obj
@@ -165,7 +165,7 @@ class _MyContentHandler(xml.sax.ContentHandler):
                 except _ForeignNamespace:
                     pass
                     
-                except _BadValue, e:
+                except _BadValue as e:
                     self.warning(str(e))
 
         except _UnknownElement:

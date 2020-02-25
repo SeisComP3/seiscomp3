@@ -9,20 +9,20 @@ def normalise(line):
     words = line.split()
     if line.endswith('GiB'):
         val = words[-2]
-        print '\t'.join(words[0:-2]), '\t', float(val) * 1024.0, 'MiB'
+        print('\t'.join(words[0:-2]), '\t', float(val) * 1024.0, 'MiB')
     elif line.endswith('MiB'):
-        print line
+        print(line)
         # Not sure; do I need to adjust white space to tabs??
     elif line.endswith('KiB'):
         val = words[-2]
-        print '\t'.join(words[0:-2]), '\t', float(val) / 1024.0, 'MiB'
+        print('\t'.join(words[0:-2]), '\t', float(val) / 1024.0, 'MiB')
     elif line.endswith('B'):
         val = words[-2]
-        print '\t'.join(words[0:-2]), '\t', float(val) / 1024.0 / 1024.0, 'MiB'
+        print('\t'.join(words[0:-2]), '\t', float(val) / 1024.0 / 1024.0, 'MiB')
     else:
         val = words[-1]
         words[-1] = str(float(val) / 1024.0 / 1024.0) + " MiB"
-        print "\t".join(words)
+        print("\t".join(words))
 
 
 def test1():

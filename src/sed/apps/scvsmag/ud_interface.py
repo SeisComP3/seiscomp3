@@ -44,14 +44,14 @@ class UDConnection:
             self.port = port
             self.stomp = Client(host=self.host, port=self.port)
             self.stomp.connect(username=self.username, password=self.password)
-        except Exception, e:
+        except Exception as e:
             raise UDException('Cannot connect to message broker (%s@%s:%d): %s.'\
                                % (username, host, port, e))
 
     def send(self, msg):
         try:
             self.stomp.put(msg, destination=self.topic)
-        except Exception, e:
+        except Exception as e:
             seiscomp3.Logging.error("ActiveMQ connection lost.")
             # Wait for a bit in case the ActiveMQ broker is restarting
             time.sleep(10)
@@ -59,7 +59,7 @@ class UDConnection:
                 del self.stomp
                 self.stomp = Client(host=self.host, port=self.port)
                 self.stomp.connect(username=self.username, password=self.password)
-            except Exception, e:
+            except Exception as e:
                 raise UDException('Cannot reconnect to server: %s' % e)
             seiscomp3.Logging.info('Connection re-established.')
 

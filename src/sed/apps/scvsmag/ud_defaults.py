@@ -31,7 +31,7 @@ if __name__ == '__main__':
         # print defaults
         evt = CoreEventInfo(host='localhost', port=61619, topic='/topic/eew.sys.dm.data',
                             username='decimod', password='weAreOK')
-        print evt.DMMessageEncoder()
+        print(evt.DMMessageEncoder())
         hb = HeartBeat(host='localhost', port=61619, topic='/topic/eew.sys.dm.data',
                             username='decimod', password='weAreOK')
-        print hb.send_hb()
+        print(hb.send_hb())

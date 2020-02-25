@@ -77,9 +77,9 @@ def parse_table(table):
             try:
                 rowdata.append(content.strip().encode('ascii', 'replace'))
             except UnicodeEncodeError as e:
-                print 'While working on row', len(result), \
-                    'of table with headers:', '|'.join(headers)
-                print "ERROR working on content: {", content, "}"
+                print('While working on row', len(result), \
+                    'of table with headers:', '|'.join(headers))
+                print("ERROR working on content: {", content, "}")
                 raise e
 
             #print '|'.join([td.tag, str(td.attrib), str(content).strip(), str(td.tail)])
@@ -119,17 +119,17 @@ def parse_html(data):
         parser.feed(data)
     #except (xml.parsers.expat.ExpatError, xml.etree.ElementTree.ParseError) as e:
     except (xml.parsers.expat.ExpatError) as e:
-        print "Parser ExpatError while reading the file."
-        print e
+        print("Parser ExpatError while reading the file.")
+        print(e)
         return None
 
     except:  # ParseError as e:
-        print "Error while reading the file."
+        print("Error while reading the file.")
         raise
     elem = parser.close()
     body = elem.find("body")
     if body is None:
-        print "Got no body!"
+        print("Got no body!")
 
     parent = body
     table = parent.find("table")
@@ -164,9 +164,9 @@ def parse_html(data):
                     preamble += ET.tostring(t)  # Includes t's tail. + t.tail
 
         if (DEBUG):
-            print 50 * '='
-            print preamble
-            print 50 * '='
+            print(50 * '=')
+            print(preamble)
+            print(50 * '=')
 
         parse_intro_text(preamble, attribs)
         #print "Preamble: got", attribs
@@ -174,13 +174,13 @@ def parse_html(data):
     verbose = False
     things = parent.findall("table")
     if (verbose):
-        print "Num <table>s:", len(things)
+        print("Num <table>s:", len(things))
     for table in things:
         if (verbose):
-            print table.tag, table.attrib,
+            print(table.tag, table.attrib)
         stuff = parse_table(table)
         if (verbose):
-            print '\t|'.join(stuff[0])
+            print('\t|'.join(stuff[0]))
         #print '\t+'.join(len(headers) * ['-------'])
         #for row in stuff:
         #    print '\t|'.join(row)
@@ -339,7 +339,7 @@ INSERT INTO ArcStatsSource
   (host, port, dcid, description) VALUES (?, ?, ?, ?)
 '''
         v = (host, port, dcid, description)
-        print "SQLITE: %s" % q
+        print( "SQLITE: %s" % q)
         cursor.execute(q, v)
         result = cursor.fetchall()
         con.commit()
@@ -404,28 +404,28 @@ INSERT INTO ArcStatsSummary
             v = (k[0], k[1], r, rwe, e, u, tl, ts)
 
     except KeyError as e:
-        print "Couldn't find some needed value(s)"
+        print("Couldn't find some needed value(s)")
         for k, v in summary.items():
-            print k, ':', v
-        print e
+            print(k, ':', v)
+        print(e)
         return
 
     try:
         cursor.execute(q, v)
         con.commit()
     except sqlite3.IntegrityError as e:
-        print "In insert_summary:"
-        print "Start day:", k[0]
-        print "Source:   ", k[1]
-        print e
+        print("In insert_summary:")
+        print("Start day:", k[0])
+        print("Source:   ", k[1])
+        print(e)
 
 
 def report_insert(tablename, heads):
     global verbose
     if (verbose):
-        print "%s table: got" % (tablename), "|".join(heads)
+        print("%s table: got" % (tablename), "|".join(heads))
     else:
-        print "%s " % (tablename),
+        print("%s " % (tablename))
 
 
 def insert_user(con, k, user):
@@ -492,7 +492,7 @@ INSERT INTO ArcStatsVolume
 def insert_station(con, k, table):
     heads = table[0]
     report_insert('Station', heads)
-    print ' ...IGNORED'
+    print(' ...IGNORED')
 
 
 def insert_network(con, k, table):
@@ -518,7 +518,7 @@ INSERT INTO ArcStatsNetwork
         elif (len(row) == 5) and merged_errors_nodata:
             items = [row[0], row[1], row[2], 0, row[3], row[4]]
         else:
-            print "Funny row, skipping it:", row
+            print("Funny row, skipping it:", row)
             continue
 
         v = (k[0], k[1],
@@ -595,17 +595,17 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
     """
     y = int(start_day[0:4])
     if not db.endswith("-%i.db" % y):
-        print " *** Watch out, start day doesn't match db file; skipping"
+        print(" *** Watch out, start day doesn't match db file; skipping")
         return 0
 
     con = sqlite3.connect(db)
     source_id = lookup_source(con, host, port, dcid, description)
     k = (start_day, source_id)  # SOME_KEY_IDENTIFYING_A_REPORT
     if has_summary(con, k):
-        print " *** FOUND Existing summary for", k, "in the db; skipping"
+        print(" *** FOUND Existing summary for", k, "in the db; skipping")
         return 0
 
-    print "Inserting tables... ",
+    print("Inserting tables... ")
     insert_summary(con, k, rd.summary)
     if len(rd.user) > 0:
         insert_user(con, k, rd.user)        # HACK
@@ -627,7 +627,7 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
 
     global verbose
     if (not verbose):
-        print
+        print("")
     return 1
 
 
@@ -666,7 +666,7 @@ def process_html_file(f, host, port, dcid, description):
     rd = ReportData(text)
 
     if len(rd.summary) == 0:
-        print "%s: empty summary" % (f)
+        print("%s: empty summary" % (f))
         return 3
 
     try:
@@ -677,12 +677,12 @@ def process_html_file(f, host, port, dcid, description):
             'lines': rd.summary['lines'],
             'siz': rd.summary['size']}
     except KeyError as e:
-        print "Error reading summary object", e
-        print rd.summary
+        print("Error reading summary object", e)
+        print(rd.summary)
     start_day = rd.summary['start'].split(' ', 1)[0]
     retval = insert_data(db, rd, host, port, dcid, description, start_day)
     if (retval > 0):
-        print summ
+        print(summ)
     return retval
 
 
@@ -729,7 +729,7 @@ def process_resif_string(s):
             units = "MiB"
             summary['start'] = words[4]
         else:
-            print "Unexpected string", s
+            print("Unexpected string", s)
             return 3
 
         summary['end'] = day_after(summary['start'])
@@ -742,17 +742,17 @@ def process_resif_string(s):
         if units.lower() in value.keys():
             summary['size'] = words[3] + " " + words[4]
         else:
-            print "Error parsing units."
+            print("Error parsing units.")
             return 3
 
         summary['error_count'] = None
         summary['users'] = 1  # words[0]
 
     except KeyError as e:
-        print "Error reading summary object", e
-        print summary
+        print("Error reading summary object", e)
+        print(summary)
         return 3
-    print "Covers %(start)s to %(end)s - %(requests)s requests %(lines)s lines, size %(size)s" % summary
+    print("Covers %(start)s to %(end)s - %(requests)s requests %(lines)s lines, size %(size)s" % summary)
     who = words[0]
     # Be strict in mapping 'who' to 'dcid' - otherwise we will be too
     # permissive in accepting reports from other DCIDs.
@@ -765,8 +765,8 @@ def process_resif_string(s):
     try:
         dcid = dcid_list[who]
     except KeyError:
-        print "Reporter is an unknown source;" \
-            "what DCID should I use for %s?" % (who)
+        print("Reporter is an unknown source;" \
+            "what DCID should I use for %s?" % (who))
         return 3
 
     start_day = summary['start'].split(' ', 1)[0]
@@ -780,8 +780,7 @@ reqlogstats_db_dir = os.path.join(os.path.expanduser('~'),
                                   'reqlogstats',
                                   'var')
 if (not os.path.isdir(reqlogstats_db_dir)):
-    print ' *** Configuration error: %s: No such directory' % (
-        reqlogstats_db_dir)
+    print(' *** Configuration error: %s: No such directory' % (reqlogstats_db_dir))
     raise IOError('No such directory')
 
 # Which database file gets used should depend on the start date
@@ -812,17 +811,17 @@ scores = len(scores_labels) * [0]
 unparsed_list = []
 
 if verbose:
-        print 'verbose set to True'
-        print 'Default dcid set to:', default_dcid
-        print 'Year set to:', year
-        print 'db file is:', db
+        print('verbose set to True')
+        print('Default dcid set to:', default_dcid)
+        print('Year set to:', year)
+        print('db file is:', db)
 
 if os.path.exists(db):
     con = sqlite3.connect(db)
     # Only works if the tables exist:
     #print summary_data(db)
 else:
-    print 'Creating new database file', db
+    print('Creating new database file', db)
     con = sqlite3.connect(db)
     new_table(con)
 
@@ -832,7 +831,7 @@ if (DEBUG):
     count = 0
     for line in con.iterdump():
         count += 1
-        print 'DUMP %03i:' % count, line
+        print('DUMP %03i:' % count, line)
 
 
 filelist = []
@@ -860,8 +859,8 @@ source_dict = {"bgr": "BGR",
                "uni-muenchen": "LMU"}
 
 for myfile in filelist:
-    print 70 * '-'
-    print "Processing", myfile,
+    print(70 * '-')
+    print("Processing", myfile)
     if not os.path.exists(myfile):
         scores[2] += 1
         continue
@@ -890,7 +889,7 @@ for myfile in filelist:
         contentType = "text"
 
     if contentType == "text":
-        print "as fdsnws text from %s" % (frm)
+        print("as fdsnws text from %s" % (frm))
         # Try distinguishing (ii) from (iii)?
         if frm:
                 # Case (ii)
@@ -909,15 +908,15 @@ for myfile in filelist:
 
                 result = 0
                 if s.startswith("fdsnws"):
-                    print "Read in:", s
+                    print("Read in:", s)
                     result = process_resif_string(s)
                     scores[result] += 1
 
                 if result == 0:
-                    print "Stopping after the first unacceptable line: '" +\
-                        s[0:16] + "...'"
+                    print("Stopping after the first unacceptable line: '" +\
+                        s[0:16] + "...'")
                     break
-        print "End of processing for", myfile
+        print("End of processing for", myfile)
         continue
 
     # Case (i); case (iv) is unhandled.
@@ -930,7 +929,7 @@ for myfile in filelist:
         d = 'infp'
         host = 'infp.ro'
         emailaddr = 'infp.ro'
-        print ' ** SPECIAL CASE FOR INFP **'
+        print(' ** SPECIAL CASE FOR INFP **')
 
     else:
         # Heuristic to set DCID/source string from From:
@@ -953,13 +952,13 @@ for myfile in filelist:
         emailaddr = 'command line'
         description = 'Command line with dcid=%s' % (default_dcid)
 
-    print "as HTML from %s: %s (%s:%i)" % (emailaddr, dcid, host, port)
+    print("as HTML from %s: %s (%s:%i)" % (emailaddr, dcid, host, port))
 
     with open(bodyfile, 'w') as fid:
         buf = msg.get_payload()
         # Replacements to make HTML pile of tags look like XHTML.
         buf = buf.replace('""', '&quot;&quot;')
-        print >>fid, buf.replace("<hr>", "<hr />").replace("<br>", "<br />")
+        print(buf.replace("<hr>", "<hr />").replace("<br>", "<br />"),file=fid)
     result = process_html_file(bodyfile, host, port, dcid, description)
     os.unlink(bodyfile)
     scores[result] += 1
@@ -968,18 +967,17 @@ for myfile in filelist:
         unparsed_list.append(myfile)
 
 
-print 70 * '-'
-print "Done with %i file(s)." % len(filelist)
-print "Scores:",
+print(70 * '-')
+print("Done with %i file(s)." % len(filelist))
+print("Scores:")
 for k in range(len(scores)):
-    print " %i %s," % (scores[k], scores_labels[k]),
-print
+    print(" %i %s," % (scores[k], scores_labels[k]))
+print()
 
 summary = summary_data(db)
 for (k, v) in sorted(summary.items()):
-    print k, ':', v
-print "Database %s contains  %i source(s), and %i day summaries." % (
-    db, summary['Source'], summary['Summary'])
+    print(k, ':', v)
+print("Database %s contains  %i source(s), and %i day summaries." % (db, summary['Source'], summary['Summary']) )
 if (len(unparsed_list) > 0):
     for f in sorted(unparsed_list):
-        print "Unparsed file", f
+        print("Unparsed file", f)

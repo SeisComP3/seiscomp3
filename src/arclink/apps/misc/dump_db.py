@@ -57,7 +57,7 @@ class DumpDB(Client.Application):
 
             args = self.commandline().unrecognizedOptions()
             if len(args) != 1:
-                print >>sys.stderr, "Usage: dump_db [options] file"
+                print("Usage: dump_db [options] file",file=sys.stderr)
                 return False
 
             self.output_file = args[0]

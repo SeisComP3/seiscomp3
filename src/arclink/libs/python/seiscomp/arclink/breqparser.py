@@ -168,7 +168,7 @@ class BreqParser(object):
 											int(d["beg_hour"]),int(d["beg_min"]),int(d["beg_sec"]))
 				end_time = datetime.datetime(int(d["end_4year"]),int(d["end_month"]),int(d["end_day"]),
 											int(d["end_hour"]),int(d["end_min"]),int(d["end_sec"]))
-			except ValueError, e:
+			except ValueError as e:
 				self.failstr = "%s%s [error: wrong begin or end time: %s]\n" % (self.failstr, line, e)
 				return
 			

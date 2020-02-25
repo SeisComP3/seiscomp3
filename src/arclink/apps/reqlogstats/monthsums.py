@@ -29,7 +29,7 @@ for x in sys.stdin.readlines():
         continue   # Tolerate blank lines
 
     if line.startswith('#'):
-        print line.replace('DAY ', 'DATE') + ' DAYS'    # Pass on comments, is this right?
+        print(line.replace('DAY ', 'DATE') + ' DAYS')    # Pass on comments, is this right?
         continue
 
     today = words.pop(0)
@@ -45,7 +45,7 @@ for x in sys.stdin.readlines():
             sums[k] += float(words[k])
         days += 1
     else:
-        print current[0:7], ' '.join('%8s' % z for z in sums), days
+        print(current[0:7], ' '.join('%8s' % z for z in sums), days)
         current = today
         sums = cols * [0]
         for k in range(len(words)):
@@ -53,4 +53,4 @@ for x in sys.stdin.readlines():
         days = 1
 
 # dump remaining sums:
-print current[0:7], ' '.join('%8s' % z for z in sums), days
+print(current[0:7], ' '.join('%8s' % z for z in sums), days)

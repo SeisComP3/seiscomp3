@@ -268,7 +268,7 @@ class Arclink(object):
             if user_ip is not None:
                 self.send_command("USER_IP " + user_ip)
 
-        except Exception, e:
+        except Exception as e:
             self.__fd = None
             self.__sock = None
 
@@ -303,7 +303,7 @@ class Arclink(object):
 
             p.close()
 
-        except xml.sax.SAXException, e:
+        except xml.sax.SAXException as e:
             raise ArclinkXMLError, str(e)
 
         if(len(element_stack[0].arclink) != 1):
@@ -410,7 +410,7 @@ class Arclink(object):
 
                     SSL = SSLWrapper(password)
 
-            except Exception, e:
+            except Exception as e:
                 logs.info(str(e))
 
         finally:
@@ -428,7 +428,7 @@ class Arclink(object):
                 if buf[0:3] == "BZh":
                     DEC = bz2.BZ2Decompressor()
 
-            except Exception, e:
+            except Exception as e:
                 logs.info(str(e))
                 if status is True:
                     logs.info('file will be saved compressed.')
@@ -488,13 +488,13 @@ class Arclink(object):
                 if r != "END":
                     raise ArclinkError, "END not found"
 
-            except Exception, e:
+            except Exception as e:
                 logs.warning("Download error: %s" % (str(e)))
                 if decryptor is not None:
                     logs.warning("Possible wrong password (%s)." % (password))
                     raise ArclinkError, "decrypt error."
 
-        except Exception, e:
+        except Exception as e:
             exc = e
             
         self.__encrypted = (encStatus is True) and (decryptor is None)
@@ -555,7 +555,7 @@ class Arclink(object):
                     p.feed(buf)
                 p.close()
 
-            except xml.sax.SAXException, e:  # FIXME: not applicable to ElementTree
+            except xml.sax.SAXException as e:  # FIXME: not applicable to ElementTree
                 raise ArclinkXMLError, str(e)
 
             r = self.__fd.readline(LINESIZE).rstrip()

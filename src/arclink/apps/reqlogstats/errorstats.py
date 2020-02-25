@@ -39,13 +39,13 @@ def summary_table(con, src):
     found = (result[0][0] != 0)
     if not found:
         raise Exception('No summary found for src=%i' % (src))
-    print "Results found:", len(result)
+    print("Results found:", len(result))
 
     cursor.close()
 
-    print "\t".join(cols)
+    print("\t".join(cols))
     for r in result:
-        print "\t".join(map(str, r))
+        print("\t".join(map(str, r)))
 
     return True
 
@@ -53,11 +53,11 @@ def summary_table(con, src):
 def do_it(db, dcid):
     con = sqlite3.connect(db)
     source_id = find_dcid(con, dcid)
-    print "Found source_id", source_id
+    print("Found source_id", source_id)
 
     summary_table(con, source_id)
     con.close()
-    print "Closed database"
+    print("Closed database")
 
 
 do_it("var/reqlogstats-2015.db", "NIEP")

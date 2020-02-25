@@ -233,7 +233,7 @@ class SDS(object):
                     lastrecord = record
                     record = recinput.next()                
 
-            except Exception, e:
+            except Exception as e:
                 logs.error("SDS: Unexpected exception occured: %s" % e)
            
 
@@ -285,15 +285,15 @@ def main():
     count = 0
     for req in reqlist:
         count += 1
-        print count,". request"
+        print("%d . request" % count)
         data = sdsobj.getwin(*req)
         if data is not None:
-            print "data_%d" % count
+            print("data_%d" % count)
             fh = file("data_%d" % count,"w")
             fh.write(data)
             fh.close()
         else:
-            print "No data available"
+            print("No data available")
         
 
 if __name__=="__main__":

@@ -155,13 +155,13 @@ class RequestSummarizer(object):
 					d = m.groupdict()
 					if d["user"] is not None:
 						if d["user_name"] in USERS_IGNORE:
-							#print "ignoring: %s" % d["user_name"]
+							#print("ignoring: %s" % d["user_name"])
 							break
 						user = self.setUser(d['user_name'])
 					elif d["label"] is not None:
 						label = d['label_name']
 						if label in LABEL_IGNORE:
-							print "ignoring: %s" % label
+							print("ignoring: %s" % label)
 							break
 					elif d["request"] is not None:
 						req = user.addRequest(reqdate, d['request_id'], d['request_type'], label)
@@ -386,8 +386,8 @@ def catch(f):
     def wrap(*args, **kwargs):
 		try:
 			f(*args, **kwargs)
-		except Exception, e:
-			print "Hmm. An ERROR has occurred ...", e
+		except Exception as e:
+			print("Hmm. An ERROR has occurred ...", e)
     return wrap
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
@@ -419,7 +419,7 @@ class RequestTrackerDB(object):
 
 	@catch
 	def send(self):
-		print "writing request with ID %s to DB" % self.arclinkRequest.requestID()
+		print("writing request with ID %s to DB" % self.arclinkRequest.requestID())
 		al = DataModel.ArclinkLog()
 		al.add(self.arclinkRequest)
 		self.arclinkRequest.accept(self.dbWrite)
@@ -505,7 +505,7 @@ class RequestTrackerDB(object):
 		arclinkStatusLine.setStatus(status)
 		arclinkStatusLine.setSize(size)
 		arclinkStatusLine.setMessage(message)
-		print "adding Volume: ", volume
+		print("adding Volume: ", volume)
 		self.arclinkRequest.add(arclinkStatusLine)
 
 	@catch
@@ -580,7 +580,7 @@ class App(Client.Application):
 			self.start = self.commandline().optionString("startTime")
 			self.end = self.commandline().optionString("endTime")
 		except:
-			print "Error in start/end Time"
+			print("Error in start/end Time")
 			return False
 
 		return True
@@ -602,12 +602,12 @@ class App(Client.Application):
 		month = startTime.month
 		day = startTime
 		while day <= endTime:
-			print str(day)
+			print(str(day))
 			#rs = RequestSummarizer(day)
 			rs = RequestSummarizer(day, archiveDir=False)
 
 			users = rs.getUsers()
-			print users
+			print(users)
 
 			for user in users:
 				requests = user.getRequests()
@@ -616,8 +616,8 @@ class App(Client.Application):
 
 			day += timedelta(1)
 
-		print "count : %d" % dbWrite.count()
-		print "errors: %d" % dbWrite.errors()
+		print("count : %d" % dbWrite.count())
+		print("errors: %d" % dbWrite.errors())
 
 		return True
 #------------------------------------------------------------------------------

@@ -116,7 +116,7 @@ class RequestProxy(object):
                         try:
                             req.purge()
 
-                        except ArclinkError, e:
+                        except ArclinkError as e:
                             logs.error(str(e))
     
     def access(self, user):
@@ -161,7 +161,7 @@ class RequestProxy(object):
                 try:
                     res = mgr.execute(req, False, use_routing)
 
-                except Exception, e:
+                except Exception as e:
                     res = (None, [], req)
                     self.__error = str(e)
 
@@ -182,7 +182,7 @@ class RequestProxy(object):
                         self.__size += int(vs.size)
                         self.__encrypted |= vs.encrypted
  
-                except ArclinkError, e:
+                except ArclinkError as e:
                     logs.error(str(e))
 
             with self.__cond:
@@ -298,7 +298,7 @@ class RequestProxy(object):
                         try:
                             req.purge()
 
-                        except ArclinkError, e:
+                        except ArclinkError as e:
                             logs.error(str(e))
 
     def status_xml(self, et):
@@ -816,7 +816,7 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
                         timeout_counter -= 1
                         continue
                 
-                except select.error, e:
+                except select.error as e:
                     if e[0] == 4: # EINTR
                         continue
 
@@ -851,7 +851,7 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
 
                         errmsg = "success"
 
-                    except InvalidCommandError, e:
+                    except InvalidCommandError as e:
                         errmsg = str(e)
                         self.wfile.write("ERROR\r\n")
 
@@ -997,7 +997,7 @@ def main():
         try:
             server.handle_request()
 
-        except select.error, e:
+        except select.error as e:
             if e[0] != 4:
                 logs.error("select error: " + e[1])
     
@@ -1014,16 +1014,16 @@ def main():
 if __name__ == "__main__":
     def log_debug(s):
         if g_verbosity > 1:
-            print >>sys.stderr, s
+            print(s,file=sys.stderr)
             sys.stderr.flush()
 
     def log_info(s):
         if g_verbosity > 0:
-            print >>sys.stderr, s
+            print(s,file=sys.stderr)
             sys.stderr.flush()
 
     def log_other(s):
-        print >>sys.stderr, s
+        print(s,file=sys.stderr)
         sys.stderr.flush()
 
     logs.debug = log_debug
