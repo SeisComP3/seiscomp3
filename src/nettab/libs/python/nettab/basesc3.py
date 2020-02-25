@@ -1,3 +1,4 @@
+from __future__ import print_function
 from seiscomp3 import DataModel, Core, Config
 from .helpers import parsers
 import datetime
