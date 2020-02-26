@@ -264,6 +264,6 @@ class SeedlinkPluginHandler:
 
     files = glob.glob(os.path.join(seedlink.config_dir, "chain*"))
     for f in files:
-        if f in chains: continue
+      if f in chains: continue
       try: os.remove(f)
       except: print("Warning: %s could not be removed" % f)

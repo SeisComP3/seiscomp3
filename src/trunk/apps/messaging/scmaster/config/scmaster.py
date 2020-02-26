@@ -21,7 +21,7 @@ def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schem
     sys.stdout.write("+ Create MYSQL database\n")
 
     out = check_output(cmd + " -s --skip-column-names -e \"select version()\"")
-    version = out[0].strip()
+    version = out[0].decode(sys.stdout.encoding).strip()
     err = out[1]
     if out[1]:
         sys.stdout.write("  %s\n" % out[1].strip())
@@ -346,7 +346,7 @@ class Module(seiscomp3.Kernel.CoreModule):
 
         print("OK", file=sys.stderr)
 
-        version = out[0].strip()
+        version = out[0].decode(sys.stdout.encoding).strip()
         print("  * database schema version is %s" % version, file=sys.stderr)
 
         try:
