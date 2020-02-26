@@ -177,19 +177,19 @@ MainFrame::MainFrame(){
 	bool addSystemTray = true;
 	try { addSystemTray = SCApp->configGetBool("olv.systemTray"); }
 	catch ( ... ) {}
-
-	if ( addSystemTray ) {
+        
+	if ( addSystemTray and QSystemTrayIcon::isSystemTrayAvailable()) {
 		_trayIcon = new QSystemTrayIcon(this);
 		_trayIcon->setIcon(QIcon(":/icons/icons/locate.png"));
 		_trayIcon->setToolTip(tr("%1").arg(SCApp->name().c_str()));
 		_trayIcon->show();
+	        connect(_trayIcon, SIGNAL(messageClicked()), this, SLOT(trayIconMessageClicked()));
+	        connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+	                this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
 	}
 	else
 		_trayIcon = NULL;
 
-	connect(_trayIcon, SIGNAL(messageClicked()), this, SLOT(trayIconMessageClicked()));
-	connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-	        this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
 #endif
 
 	Map::ImageTreePtr mapTree = new Map::ImageTree(SCApp->mapsDesc());
