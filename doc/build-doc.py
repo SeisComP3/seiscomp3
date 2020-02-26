@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys, os, glob, shutil, codecs, re
 try:
 	# Python 2.5
