@@ -2413,7 +2413,7 @@ class _Channel(object):
         sample_rate = float(strmcfg.sampleRateNumerator) / \
             float(strmcfg.sampleRateDenominator)
 
-        clock_drift = 0
+        clock_drift = float(0)
         if digi:
             if digi.maxClockDrift is not None:
                 clock_drift = digi.maxClockDrift / sample_rate
