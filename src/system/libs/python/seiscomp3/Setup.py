@@ -30,7 +30,6 @@ try:
 except:
     pass
 
-
 import seiscomp3.Config
 
 
@@ -142,7 +141,7 @@ class Simple:
         for f in xmls:
             try:
                 tree = ElementTree.parse(f)
-            except ParseError, (err):
+            except ParseError as err:
                 sys.stderr.write("%s: parsing XML failed: %s\n" % (f, err))
                 continue
 
@@ -161,7 +160,7 @@ class Simple:
                     sys.stderr.write("%s: skipping module without name\n" % f)
                     continue
 
-                if setup_groups.has_key(modname):
+                if modname in setup_groups:
                     raise Exception(
                         "%s: duplicate module name: %s" % (f, modname))
 
@@ -243,7 +242,7 @@ Hint: Entered values starting with a dot (.) are handled
 
         try:
             self.fillTree()
-        except StopIteration, e:
+        except StopIteration:
             raise Exception("aborted by user")
 
         cfg = seiscomp3.Config.Config()
@@ -325,8 +324,10 @@ Hint: Entered values starting with a dot (.) are handled
                 sys.stdout.write("P) Proceed to apply configuration\n")
                 sys.stdout.write("B) Back to last parameter\n")
                 sys.stdout.write("Q) Quit without changes\n")
-
-                value = raw_input('Command? [P]: ').upper()
+                try:
+                    value = raw_input('Command? [P]: ').upper()
+                except NameError:
+                    value = input('Command? [P]: ').upper()
                 if value == "Q":
                     raise StopIteration()
                 elif value == "P" or not value:
@@ -375,8 +376,10 @@ Hint: Entered values starting with a dot (.) are handled
             if self.currentNode.input.echo == "password":
                 value = getpass.getpass(prompt)
             else:
-                value = raw_input(prompt)
-
+                try:
+                    value = raw_input(prompt)
+                except NameError:
+                    value = input(prompt)
             if not value:
                 value = default_value
             elif value == ".help":
