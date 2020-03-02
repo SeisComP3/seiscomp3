@@ -23,6 +23,7 @@
 #include <QFont>
 #include <seiscomp3/gui/qt4.h>
 #include <seiscomp3/gui/core/gradient.h>
+#include <seiscomp3/gui/core/recordwidget.h>
 
 
 class QTabWidget;
@@ -79,6 +80,18 @@ class SC_GUI_API Scheme {
 				QColor notAvailable;
 			};
 
+			struct BrushPen {
+				QPen pen;
+				QBrush brush;
+			};
+
+			struct RecordBorders {
+				RecordBorders();
+				BrushPen standard;
+				BrushPen signatureValid;
+				BrushPen signatureInvalid;
+			};
+
 			struct Records {
 				Records();
 				QColor alignment;
@@ -93,6 +106,7 @@ class SC_GUI_API Scheme {
 				QBrush gaps;
 				QBrush overlaps;
 				RecordStates states;
+				RecordBorders borders;
 			};
 
 			struct Stations {
@@ -251,12 +265,17 @@ class SC_GUI_API Scheme {
 			int lineWidth;
 		};
 
+		struct RecordBorders {
+			Gui::RecordWidget::RecordBorderDrawMode drawMode;
+		};
+
 		struct Records {
 			Records();
 
 			int lineWidth;
 			bool antiAliasing;
 			bool optimize;
+			RecordBorders recordBorders;
 		};
 
 		struct Precision {

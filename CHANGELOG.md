@@ -6,6 +6,10 @@
 
   * Added new surface waves magnitude Ms_20 according to IASPEI standard
 
+* scrttv
+
+  * Add option `Toggle record borders` which shows/hides the borders of records.
+
 * scesv
 
   * Added configuration parameter 'recenterMap' to control map centering
@@ -103,6 +107,23 @@
   * Fix rendering of geofeatures with more than one subfeature
   * Add lat/lon, depth and magnitude database filter to event list
   * Add `scheme.precision.magnitude` configuration option
+  * Add support to show record borders in the record widget. The style of the border
+    can be changed with the configuration option `scheme.records.recordBorders.drawMode`
+    whereas the following options are available:
+    * TopLine (default)
+    * BottomLine
+    * Box
+
+    Additionally it is possible to select the pen and brush for the options
+    * `scheme.colors.records.borders.standard`
+    * `scheme.colors.records.borders.signatureValid`
+    * `scheme.colors.records.borders.signatureInvalid`
+
+    For example:
+    ```
+    scheme.colors.records.borders.standard.pen.color = FF0000FF
+    ```
+
 
 * ql2sc
 
@@ -256,7 +277,7 @@
 
     * Require valid user if network or station is restricted
     * Stop iteration at network or station level if restricted flag but
-      no user is present 
+      no user is present
 
   * Implement service specific version numbers 
 
@@ -326,7 +347,7 @@
 
 * scquery
 
-  * Add more examples to query events and some statistics from the database 
+  * Add more examples to query events and some statistics from the database
 
 * scmag
 

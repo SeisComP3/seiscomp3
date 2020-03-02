@@ -948,6 +948,7 @@ TraceView* MainWindow::createTraceView() {
 	        this, SLOT(filterChanged(const QString&)));
 
 	connect(_ui.actionToggleAllRecords, SIGNAL(toggled(bool)), traceView, SLOT(showAllRecords(bool)));
+	connect(_ui.actionToggleRecordBorders, SIGNAL(toggled(bool)), traceView, SLOT(showRecordBorders(bool)));
 
 	connect(_ui.actionHorZoomIn, SIGNAL(triggered()), traceView, SLOT(horizontalZoomIn()));
 	connect(_ui.actionHorZoomOut, SIGNAL(triggered()), traceView, SLOT(horizontalZoomOut()));

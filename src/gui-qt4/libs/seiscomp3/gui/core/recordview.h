@@ -284,6 +284,9 @@ class SC_GUI_API RecordView : public QWidget {
 		//! both recordstreams
 		void showAllRecords(bool enable);
 
+		//! Whether to show record borders
+		void showRecordBorders(bool enable);
+
 		//! Whether to draw the background using alternating colors
 		//! The item background will be drawn using QPalette::Base and
 		//! QPalette::AlternateBase
@@ -416,6 +419,8 @@ class SC_GUI_API RecordView : public QWidget {
 		Seiscomp::Math::Filtering::InPlaceFilter<float>* filter() const;
 
 		void updateRecords();
+
+		void setRecordBorderDrawMode(RecordWidget::RecordBorderDrawMode mode);
 
 
 	signals:
@@ -566,6 +571,7 @@ class SC_GUI_API RecordView : public QWidget {
 		bool _filtering;      // the filter state
 		bool _alternatingColors;
 		bool _showAllRecords;
+		bool _showRecordBorders;
 		bool _autoInsertItems;
 		bool _autoScale;
 		bool _autoMaxScale;
@@ -577,6 +583,8 @@ class SC_GUI_API RecordView : public QWidget {
 
 		int  _labelWidth;
 		int  _labelColumns;
+
+		RecordWidget::RecordBorderDrawMode _recordBorderDrawMode;
 
 		Seiscomp::Math::Filtering::InPlaceFilter<float> *_filter;
 

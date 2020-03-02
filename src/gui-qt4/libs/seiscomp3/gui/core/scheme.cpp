@@ -18,6 +18,8 @@
 #include <QTabBar>
 #include <QTabWidget>
 
+#include <boost/algorithm/string.hpp>
+
 #define READ_BOOL(location) \
 	try { location = SCApp->configGetBool("scheme."#location); } \
 	catch ( ... ) {}
@@ -32,6 +34,9 @@
 
 #define READ_BRUSH_COLOR(location) \
 	location = SCApp->configGetColor("scheme."#location, location.color());
+
+#define READ_BRUSH(location) \
+	location = SCApp->configGetBrush("scheme."#location, location.color());
 
 #define READ_COLOR_GRADIENT(location) \
 	location = SCApp->configGetColorGradient("scheme."#location, location);
@@ -60,6 +65,8 @@
 		location = QPoint(x,y);\
 	}
 
+
+using namespace std;
 
 namespace Seiscomp {
 namespace Gui {
@@ -204,6 +211,28 @@ Scheme::Colors::RecordStates::RecordStates() {
 	requested = QColor(255,255,0,128);
 	inProgress = QColor(0,255,0,16);
 	notAvailable = QColor(255,0,0,128);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Scheme::Colors::RecordBorders::RecordBorders() {
+	QColor color = Qt::gray;
+	standard.pen = QPen(color);
+	color.setAlpha(16);
+	standard.brush = color;
+
+	color = Qt::green;
+	signatureValid.pen = QPen(color);
+	color.setAlpha(16);
+	signatureValid.brush = QBrush(color);
+
+	color = Qt::red;
+	signatureInvalid.pen = QPen(color);
+	color.setAlpha(16);
+	signatureInvalid.brush = QBrush(color);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -408,6 +437,8 @@ Scheme::Fonts::Fonts() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Scheme::Fonts::setBase(const QFont& f) {
+	Q_UNUSED(f);
+
 	normal = base;
 	normal.setPointSize(base.pointSize() + 2);
 
@@ -517,6 +548,12 @@ void Scheme::fetch() {
 	READ_COLOR(colors.records.states.requested);
 	READ_COLOR(colors.records.states.inProgress);
 	READ_COLOR(colors.records.states.notAvailable);
+	READ_PEN(colors.records.borders.standard.pen);
+	READ_BRUSH(colors.records.borders.standard.brush);
+	READ_PEN(colors.records.borders.signatureValid.pen);
+	READ_BRUSH(colors.records.borders.signatureValid.brush);
+	READ_PEN(colors.records.borders.signatureInvalid.pen);
+	READ_BRUSH(colors.records.borders.signatureInvalid.brush);
 
 	READ_COLOR(colors.picks.manual);
 	READ_COLOR(colors.picks.automatic);
@@ -596,6 +633,21 @@ void Scheme::fetch() {
 	READ_INT(records.lineWidth);
 	READ_BOOL(records.antiAliasing);
 	READ_BOOL(records.optimize);
+
+	try {
+		string mode = SCApp->configGetString("scheme.records.borders.drawMode");
+		boost::to_lower(mode);
+		if ( mode == "box" ) {
+			records.recordBorders.drawMode = Gui::RecordWidget::Box;
+		}
+		else if ( mode == "bottomline" ) {
+			records.recordBorders.drawMode = Gui::RecordWidget::BottomLine;
+		}
+		else {
+			records.recordBorders.drawMode = Gui::RecordWidget::TopLine;
+		}
+	}
+	catch ( ... ) {}
 
 	READ_FONT(fonts.base);
 	fonts.setBase(fonts.base);

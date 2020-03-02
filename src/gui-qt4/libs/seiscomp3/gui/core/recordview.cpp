@@ -479,6 +479,8 @@ void RecordView::setupUi() {
 	_autoInsertItems = true;
 	_alternatingColors = false;
 	_showAllRecords = false;
+	_showRecordBorders = false;
+	_recordBorderDrawMode = SCScheme.records.recordBorders.drawMode;
 	_autoScale = false;
 	_autoMaxScale = false;
 
@@ -860,11 +862,35 @@ void RecordView::showAllRecords(bool enable) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordView::showRecordBorders(bool enable) {
+	if ( _showRecordBorders == enable ) return;
+
+	_showRecordBorders = enable;
+
+	foreach (RecordViewItem* item, _items) {
+		item->widget()->showRecordBorders(_showRecordBorders);
+	}
+}
+
+void RecordView::setRecordBorderDrawMode(RecordWidget::RecordBorderDrawMode mode) {
+	if ( _recordBorderDrawMode == mode ) return;
+
+	foreach (RecordViewItem* item, _items) {
+		item->widget()->setRecordBorderDrawMode(_recordBorderDrawMode);
+	}
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordView::showScrollBar(bool show) {
 	if ( show )
 		_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	else
-	        _scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
