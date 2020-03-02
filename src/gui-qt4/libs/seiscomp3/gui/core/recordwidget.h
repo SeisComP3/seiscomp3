@@ -653,7 +653,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		virtual const double *value(int slot, const Seiscomp::Core::Time&) const;
 
 
-	private:
+	protected:
 		struct Stream {
 			enum Index {
 				Raw = 0,
