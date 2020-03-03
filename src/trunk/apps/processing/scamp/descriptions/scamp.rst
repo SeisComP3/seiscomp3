@@ -41,6 +41,9 @@ Amplitudes for the following magnitudes are currently computed:
 :term:`mb <magnitude, body-wave (mb)>`
    Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
 
+:term:`mBc <magnitude, cumulative body-wave (mBc)>`
+   Cumulative body wave magnitude
+
 :term:`mB <magnitude, broadband body-wave (mB)>`
    Broad band body wave magnitude
 
@@ -49,6 +52,9 @@ Amplitudes for the following magnitudes are currently computed:
 
 :term:`Mjma <magnitude, JMA (M_JMA)>`
    Mjma is computed on displacement data using body waves of period < 30s
+
+:term:`Ms_20 <magnitude, surface wave (Ms_20)>`
+   Surface-wave magnitude at 20 s period
 
 :term:`Ms(BB) <magnitude, broadband surface wave (Ms(BB))>`
    Broad band surface-wave magnitude

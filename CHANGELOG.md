@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+* Ms_20
+
+  * Added new surface waves magnitude Ms_20 according to IASPEI standard
+
 * scesv
 
   * Added configuration parameter 'recenterMap' to control map centering

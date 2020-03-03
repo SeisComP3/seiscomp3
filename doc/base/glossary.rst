@@ -388,6 +388,7 @@ is taken from Modern Global Seismology.
       a 30 s time window at stations in the distance range of 5° to 105°.
 
       * Amplitude unit in SeisComP3 is **nanometer** (nm)
+      * Period range: 0.4 - 3 s
       * Distance range: 5 - 105°
       * Time window: 30 s
 
@@ -410,8 +411,13 @@ is taken from Modern Global Seismology.
          t = min(11.5 \Delta, 60)
 
       * Amplitude unit in SeisComP3 is **nanometer per second** (nm/s)
+      * Period range: all
       * Distance range: 5 - 105°
       * Time window: 60 s if set by :ref:`scautopick`, otherwise the minimum of 60 s and 11.5 s/° * distance in degree
+
+   magnitude, cumulative body-wave (mBc)
+      mBc is the cumulative body-wave magnitude. See Bormann and Wylegalla (2005)
+      and  Bormann and Saul (2009) for details.
 
    magnitude, surface wave (Ms)
       Ms is a magnitude scale based on teleseismic surface waves. Historically, Ms
@@ -435,6 +441,31 @@ is taken from Modern Global Seismology.
 
       where T is the measured period.
 
+   magnitude, surface wave (Ms_20)
+      Ms_20 is the surface-wave magnitude at 20 s period based on the recommendations
+      by the IASPEI magnitude working group issued on 27 March, 2013.
+
+      .. math::
+
+         M_s = \log \left(\frac{A}{T}\right) + 1.66 \log(\Delta) + 0.3
+
+      with
+
+      A: WWSSN_LP corrected ground displacement in nm measured on the vertical-component
+      seismogram as the maximum absolute trace amplitude of a surface wave at periods between
+      18 s and 22 s.
+
+      T: period of the surface wave in seconds.
+
+      The term `Ms_20` is chosen in accordance with the IASPEI standard as of 2013.
+      Alternatively, M\ :sub:`s`(BB)  may be used.
+
+      * Amplitude unit in SeisComP3 is **nanometers** (nm)
+      * Period range: 18 - 22 s
+      * Distance range: 2 - 160°
+      * Depth range: 0 - 100 km
+      * Time window: distance (km) / 3.5 km/s + 30 s
+
    magnitude, broadband surface wave (Ms(BB))
       Ms(BB) is a broadband magnitude scale based on teleseismic surface waves.
       In contrast to :term:`Ms <magnitude, surface wave (Ms)>`, amplitudes for Ms(BB)
@@ -448,6 +479,7 @@ is taken from Modern Global Seismology.
          M_s = \log \left(\frac{A}{2\pi}\right) + 1.66 \log(\Delta) + 3.3
 
       * Amplitude unit in SeisComP3 is **meter per second** (m/s)
+      * Period range: all
       * Distance range: 2 - 160°
       * Depth range: 0 - 100 km
       * Time window: distance (km) / 3.5 km/s + 30 s
@@ -483,7 +515,7 @@ is taken from Modern Global Seismology.
 
       .. math::
 
-         Mw = 2\frac{\log M_0 - 16.1}{3}
+         Mw = \frac{2}{3}(\log M_0 - 16.1)
 
       This equation is analog to the relation between M\ :sub:`s` and M\ :sub:`0`.
 
