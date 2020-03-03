@@ -372,7 +372,7 @@ is taken from Modern Global Seismology.
 
       .. math::
 
-         mb = \log \frac{A}{T} + Q(h,\Delta)
+         mb = \log \left(\frac{A}{T}\right) + Q(h,\Delta)
 
       with A as the displacement amplitude in micrometers, T as the dominant period of the signal in seconds, Q as a
       correction term for depth and distance. mb is usually determined at periods around 1s in adaptation to the use
@@ -414,25 +414,38 @@ is taken from Modern Global Seismology.
       * Time window: 60 s if set by :ref:`scautopick`, otherwise the minimum of 60 s and 11.5 s/° * distance in degree
 
    magnitude, surface wave (Ms)
-      Ms is a magnitude scale based on teleseismic surface waves. Ms is based on measurements of
+      Ms is a magnitude scale based on teleseismic surface waves. Historically, Ms
+      is based on measurements of
       the maximum horizontal true ground motion displacement amplitudes
 
       .. math::
 
          A_{Hmax} =\sqrt{{A_N}^2 + {A_E}^2}
 
-      in the total seismogram at periods around 20s. For shallow earthquakes the dominant
+      in the total seismogram at periods around 20 s. For shallow earthquakes the dominant
       long-period signals are the surface waves. The period of 20 s corresponds to the Airy
       phase, a local minimum in the group velocity dispersion curve of Rayleigh surface waves.
-      The Moscow-Praque equation for surface wave magnitude is given by
+      For measuring amplitudes a correction for the WWSSN_LP instrument response is applied.
+
+      The Moscow-Prague equation for surface wave magnitude is given by
 
       .. math::
 
-         M_s = \log \left(\frac{A}{T}\right)max + 1.66 \log(\Delta) + 3.3
+         M_s = \log \left(\frac{A_{Hmax}}{T}\right) + 1.66 \log(\Delta) + 3.3
 
-      Here the maximum ground particle velocity (A/T)max is used instead of the AHmax to
-      allow a broader spectrum of dominant periods. This formula is valid for distances of
-      2° to 160° and source depths smaller than 50 km.
+      where T is the measured period.
+
+   magnitude, broadband surface wave (Ms(BB))
+      Ms(BB) is a broadband magnitude scale based on teleseismic surface waves.
+      In contrast to :term:`Ms <magnitude, surface wave (Ms)>`, amplitudes for Ms(BB)
+      are measured as the maximum on vertical true ground motion velocity seismograms without
+      instrument simulation or restitution.
+
+      The Moscow-Prague equation for surface wave magnitude is applied as given by
+
+      .. math::
+
+         M_s = \log \left(\frac{A}{2\pi}\right) + 1.66 \log(\Delta) + 3.3
 
       * Amplitude unit in SeisComP3 is **meter per second** (m/s)
       * Distance range: 2 - 160°

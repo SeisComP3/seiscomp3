@@ -50,7 +50,7 @@ Amplitudes for the following magnitudes are currently computed:
 :term:`Mjma <magnitude, JMA (M_JMA)>`
    Mjma is computed on displacement data using body waves of period < 30s
 
-:term:`Ms(BB) <magnitude, surface wave (Ms)>`
+:term:`Ms(BB) <magnitude, broadband surface wave (Ms(BB))>`
    Broad band surface-wave magnitude
 
 :term:`Md <magnitude, duration (Md)>`
