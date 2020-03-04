@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import, division, print_function
+
 import sys, os, time, datetime, calendar, stat
 from   getopt import getopt, GetoptError
 from seiscomp import mseedlite as mseed
@@ -158,27 +160,27 @@ else: usage(exitcode=1)
 if out_channel is None:
     try: sc_root = os.environ["SEISCOMP_ROOT"]
     except:
-        sys.stderr.write("SEISCOMP_ROOT environment variable is not set\n")
+        print("SEISCOMP_ROOT environment variable is not set", file=sys.stderr)
         sys.exit(1)
 
     mseed_fifo = os.path.join(sc_root, "var", "run", "seedlink", "mseedfifo")
     if not os.path.exists(mseed_fifo):
-        sys.stderr.write("""\
-ERROR: %s does not exist.
+        print("""\
+ERROR: {} does not exist.
 In order to push the records to SeedLink, it needs to run and must be configured for real-time playback.
-""" % mseed_fifo)
+""".format(mseed_fifo), file=sys.stderr)
         sys.exit(1)
 
     if not stat.S_ISFIFO(os.stat(mseed_fifo).st_mode):
-        sys.stderr.write("""\
-ERROR: %s is not a named pipe
+        print("""\
+ERROR: {} is not a named pipe
 Check if SeedLink is running and configured for real-time playback.
-""" % mseed_fifo)
+""".format(mseed_fifo), file=sys.stderr)
         sys.exit(1)
 
     try: out_channel = open(mseed_fifo, "w")
-    except Exception, e:
-        sys.stderr.write("%s\n" % str(e))
+    except Exception as e:
+        print(str(e), file=sys.stderr)
         sys.exit(1)
 
 try:
@@ -193,13 +195,14 @@ try:
                 if len(content) != 2:
                     raise Exception("Could not parse a line in file %s: %s\n" % (delays, line))
                 delaydict[content[0].strip()] = float(content[1].strip())
-        except: pass
+        except:
+            pass
 
     input = rt_simul(ifile, speed=speed, jump=jump, delaydict=delaydict)
 
     #input = rt_simul(ifile, speed=speed, jump=jump)
     time_diff = None
-    sys.stderr.write("Starting msrtsimul at %s\n" % datetime.datetime.utcnow())
+    print("Starting msrtsimul at {}".format(datetime.datetime.utcnow()), file=sys.stderr)
     for rec in input:
         if time_diff is None:
             time_diff = datetime.datetime.utcnow() - rec.begin_time - \
@@ -208,8 +211,8 @@ try:
             rec.begin_time += time_diff
 
         if verbosity:
-            sys.stderr.write("%s_%s %7.2f %s %7.2f\n" % (rec.net, rec.sta, (time.time() - stime), str(rec.begin_time),
-                                                         time.time() - calendar.timegm(rec.begin_time.timetuple())))
+            print("%s_%s %7.2f %s %7.2f" % (rec.net, rec.sta, (time.time() - stime), str(rec.begin_time),
+                                              time.time() - calendar.timegm(rec.begin_time.timetuple())), file=sys.stderr)
             #sys.stderr.write("%s_%s %7.2f %s\n" % (rec.net, rec.sta, (time.time()-stime), str(rec.begin_time)))
 
         if not test:
@@ -218,6 +221,6 @@ try:
 
 except KeyboardInterrupt:
     pass
-except Exception, e:
-    sys.stderr.write("Exception:  %s\n" % str(e))
+except Exception as e:
+    print("Exception:  {}".format(str(e)), file=sys.stderr)
     sys.exit(1)
