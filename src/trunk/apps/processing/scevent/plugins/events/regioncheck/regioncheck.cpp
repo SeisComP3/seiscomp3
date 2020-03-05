@@ -47,6 +47,18 @@ bool getEventType(EventType &type, const GeoFeature::Attributes &attributes) {
 	return true;
 }
 
+bool getBnaAttributes(double &value, const GeoFeature::Attributes &attributes, const string &key) {
+	GeoFeature::Attributes::const_iterator it = attributes.find(key);
+	if ( it == attributes.end() ) {
+		return false;
+	}
+
+	if ( !Seiscomp::Core::fromString(value,it->second) ) {
+		return false;
+	}
+	return true;
+}
+
 class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 	// ----------------------------------------------------------------------
 	// X'truction
@@ -207,6 +219,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 		bool process(Event *event) {
 			Origin *org = Origin::Find(event->preferredOriginID());
 			_setType = true;
+			double depth = org->depth().value();
 
 			SEISCOMP_DEBUG("evrc plugin: processing event %s",
 			                 event->publicID().c_str());
@@ -236,7 +249,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				return false;
 			}
 
-			SEISCOMP_DEBUG(" + evrc: checking regions for location %f / %f", location.lat, location.lon);
+			SEISCOMP_DEBUG(" + evrc: checking regions for location %f / %f / %.2f km", location.lat, location.lon, depth);
 
 			OPT(EventType) currentType;
 			OPT(EventType) eventType;
@@ -254,8 +267,41 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 				SEISCOMP_DEBUG(" + evrc: checking region %s",
 				              (_regions[i].first ? _regions[i].first->name().c_str() : "world"));
 
-				if ( _regions[i].first )
+				if ( _regions[i].first ) {
 					isInsideRegion = _regions[i].first->contains(location);
+
+					// check also values in BNA header
+					if ( _readEventTypeFromBNA && isInsideRegion ) {
+						double value;
+						if ( getBnaAttributes(value, _regions[i].first->attributes(), "minDepth") ) {
+							if ( depth < value ) {
+								isInsideRegion = false;
+								SEISCOMP_DEBUG("  + evrc: event at %.2f shallower than minDepth", depth);
+							}
+							else {
+								SEISCOMP_DEBUG("  + evrc: event fulfills minDepth");
+							}
+						}
+						else {
+							SEISCOMP_ERROR("  + evrc: minDepth not found for region %s, not considered",
+							               _regions[i].first->name().c_str());
+						}
+
+						if ( getBnaAttributes(value, _regions[i].first->attributes(), "maxDepth") ) {
+							if ( depth > value ) {
+								isInsideRegion = false;
+								SEISCOMP_DEBUG("  + evrc: event at %.2f deeper than maxDepth", depth);
+							}
+							else {
+								SEISCOMP_DEBUG("  + evrc: event fullfils maxDepth");
+							}
+						}
+						else {
+							SEISCOMP_ERROR("  + evrc: maxDepth not found for region %s, not considered",
+							               _regions[i].first->name().c_str());
+						}
+					}
+				}
 				else
 					isInsideRegion = true;
 
@@ -388,6 +434,8 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 		vector<RegionCheck>    _regions;
 		OPT(DataModel::EventType)   _eventTypePositive;
 		OPT(DataModel::EventType)   _eventTypeNegative;
+		OPT(double)                 _minDepth;
+		OPT(double)                 _maxDepth;
 		bool                   _hasPositiveRegions;
 		bool                   _hasNegativeRegions;
 		bool                   _setType;

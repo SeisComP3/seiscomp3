@@ -48,12 +48,13 @@
 				</parameter>
 				<parameter name="readEventTypeFromBNA" type="boolean" default="false">
 					<description>
-						Read the event type from the BNA polygon header. The header must contain
-						the type, e.g. header of a polygon with name &quot;quarry&quot;:
+						Read the event type, minDepth and maxDepth from the BNA polygon header. The header may contain
+						the values, e.g. header of a polygon with name &quot;quarry&quot;:
 
-						&quot;quarry&quot;,&quot;rank 1&quot;,&quot;eventType: quarry blast&quot;,13
+						&quot;quarry&quot;,&quot;rank 1&quot;,&quot;eventType: quarry blast, minDepth: -5, maxDepth: 10&quot;,13
 
-						When active, type superseeds eventTypePositive and eventTypeNegative.
+						When eventType is set, it superseeds eventTypePositive and eventTypeNegative.
+						When not set, eventTypePositive and eventTypeNegative are considered.
 					</description>
 				</parameter>
 				<parameter name="eventTypePositive" type="string" default="">

@@ -52,6 +52,7 @@
   * The plugin evrc for scevent allows the configuration of event types for
     events within positive or negative regions
   * Provide support for reading the event type from BNA file header
+  * Provide support for reading the depth limits from BNA file header
 
 * scqcv
 

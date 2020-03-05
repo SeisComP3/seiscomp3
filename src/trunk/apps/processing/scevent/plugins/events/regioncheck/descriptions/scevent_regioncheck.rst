@@ -103,6 +103,26 @@ Example BNA file:
 where the name of the polygon / region is "coal" and the considered event type
 is "mining explosion". The name and the rank are mandatory fields.
 
+The depth of the event can be tested, too. For events within a region but with depth outside a depth range the type
+is not set. The limits of the depth range can be added to the header of the BNA files
+using the key words *minDepth* and *maxDepth*. The the depth *d* of an event must be
+within the range
+
+
+.. math::
+
+   minDepth \le d \le maxDepth
+
+The depth is only tested if minDepth or maxDepth or both are set and if :confval:`rc.readEventTypeFromBNA` is active.
+
+Example BNA file:
+
+.. code-block:: sh
+
+   "coal","rank 1","eventType: mining explosion, minDepth: -5, maxDepth: 10",6
+   13.392,50.3002
+   ...
+
 .. warning::
 
    * The names of polygons, e.g. coal, are case sensitive and must not contain commas.
