@@ -1301,12 +1301,12 @@ bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 		return false;
 	}
 
-	if ( SCApp->connection() )
+	if ( connection() )
 		result =
 			group?
-				SCApp->connection()->send(group, msg)
+				connection()->send(group, msg)
 				:
-				SCApp->connection()->send(msg);
+				connection()->send(msg);
 
 
 	if ( result ) return true;
@@ -1324,12 +1324,12 @@ bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 		msgBox.exec();
 
 		if ( msgBox.clickedButton() == retryButton ) {
-			if ( SCApp->connection() )
+			if ( connection() )
 				result =
 					group?
-						SCApp->connection()->send(group, msg)
+						connection()->send(group, msg)
 					:
-						SCApp->connection()->send(msg);
+						connection()->send(msg);
 		}
 		else if ( msgBox.clickedButton() == settingsButton ) {
 			showSettings();
@@ -1709,12 +1709,6 @@ void Application::sendCommand(Command command, const std::string& parameter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::sendCommand(Command command, const std::string& parameter, Core::BaseObject *obj) {
-	if ( _readOnlyMessaging ) {
-		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
-		                      tr("This is a read-only session. No message has been sent."));
-		return;
-	}
-
 	if ( commandTarget().empty() ) {
 		QMessageBox::critical(NULL,
 		            "Commands",
@@ -1727,8 +1721,8 @@ void Application::sendCommand(Command command, const std::string& parameter, Cor
 	CommandMessagePtr cmsg = new CommandMessage(commandTarget(), command);
 	cmsg->setParameter(parameter);
 	cmsg->setObject(obj);
-	if ( connection() )
-		connection()->send(_guiGroup, cmsg.get());
+
+	sendMessage(_guiGroup.c_str(), cmsg.get());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
