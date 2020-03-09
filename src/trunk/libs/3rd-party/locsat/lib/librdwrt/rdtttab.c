@@ -72,7 +72,8 @@ void rdtttab(char *froot, /* Size [ca. 1024] */
              float *tbd,  /* Size [nwav][maxtbd] */
              float *tbz,  /* Size [nwav][maxtbz] */
              float *tbtt, /* Size [nwav][maxtbz][maxtbd] */
-             int *ierr) /* Error flag */
+             int *ierr,
+             int verbose) /* Error flag */
 {
 	int i, j, k,  /* Loop counters */
 	    err,      /* Local error flag */
@@ -122,7 +123,8 @@ void rdtttab(char *froot, /* Size [ca. 1024] */
 		/* Open files */
 
 		if ( (opf = fopen(filnam, "r")) == NULL ) {
-			fprintf (stderr, "\nFile %s will not open!\n", filnam);
+			if ( verbose )
+				fprintf (stderr, "\nFile %s will not open!\n", filnam);
 			ntbd[k] = 0; ntbz[k] = 0;
 			temp_tbz += maxtbz;
 			temp_tbd += maxtbd;

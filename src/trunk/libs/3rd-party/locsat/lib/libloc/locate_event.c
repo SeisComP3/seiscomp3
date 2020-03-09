@@ -252,7 +252,8 @@ void rdtttab(char *froot, /* Size [ca. 1024] */
              float *tbd,  /* Size [nwav][maxtbd] */
              float *tbz,  /* Size [nwav][maxtbz] */
              float *tbtt, /* Size [nwav][maxtbz][maxtbd] */
-             int *ierr); /* Error flag */
+             int *ierr,   /* Error flag */
+             int verbose);/* Verbose mode */
 int rdcortab_(char *froot, char *cortyp,
               int *ntype, char *staid, char *wavid,
               int *nsta, int *nwav, int *ierr,
@@ -286,7 +287,7 @@ static const char *default_phases[] = {
 	"PKPab", "PKPbc", "PKPdf", "SKPdf",
 	"PcP", "Pg", "Pn", "Rg", "S", "SKS",
 	"SS", "ScS", "Sn", "Sg", "pP", "sP",
-	"Pb", "Sb"
+	"Pb", "Sb", "Is", "It"
 };
 
 
@@ -370,7 +371,8 @@ int setup_sites(char *new_net, Site *new_sites, int new_num_sta) {
 
 
 static int
-setup_tttables(const char *new_dir, const char **new_phase_types, int new_num_phase_types) {
+setup_tttables(const char *new_dir, const char **new_phase_types,
+               int new_num_phase_types, int verbose) {
 	int i, ierr, num_type;
 	char *dummy_ptr;
 	int malloc_err = 0;
@@ -452,7 +454,7 @@ setup_tttables(const char *new_dir, const char **new_phase_types, int new_num_ph
 	/* Read the travel-time tables */
 	
 	rdtttab(dir, phase_type_ptr, num_phase_types, maxtbd, maxtbz,
-	        ntbd, ntbz, tbd, tbz, tbtt, &ierr);
+	        ntbd, ntbz, tbd, tbz, tbtt, &ierr, verbose);
 
 	if (ierr == 0)
 	{
@@ -504,8 +506,9 @@ setup_tttables(const char *new_dir, const char **new_phase_types, int new_num_ph
 }
 
 
-int setup_tttables_dir(const char *new_dir) {
-	return setup_tttables(new_dir, default_phases, (sizeof default_phases) / sizeof(const char*));
+int setup_tttables_dir(const char *new_dir, int verbose) {
+	return setup_tttables(new_dir, default_phases,
+	                      (sizeof default_phases) / sizeof(const char*), verbose);
 }
 
 
@@ -578,7 +581,7 @@ int locate_event(char *network, Site *sites, int num_sites, Arrival *arrival,
 		new_dir		    = locator_params->prefix;
 		sta_cor_level	    = locator_params->cor_level;
 		
-		if ((loc_err = setup_tttables_dir (new_dir)) != 0)
+		if ((loc_err = setup_tttables_dir (new_dir, locator_params->verbose == 'y')) != 0)
 			return (loc_err);
 	/*
 	}
