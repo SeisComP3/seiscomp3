@@ -3288,6 +3288,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 		if ( m->isMoveCopyEnabled() ) {
 			x = mapTime(m->time());
+			x -= _canvasRect.left();
 
 			QColor c(enabled?m->color():fg);
 			c.setAlpha(64);
