@@ -168,13 +168,6 @@ private:
 	bool _encodingFlag;
 
 	void _setDataAttributes(int reclen, char *data) const;
-
-	/* callback function for libmseed-function msr_pack(...) */
-	static void _Record_Handler(char *record, int reclen, void *packed) {
-		/* to make the data available to the overloaded operator<< */
-		reinterpret_cast<CharArray *>(packed)->append(reclen, record);
-	}
-	
 };
 
 } // namespace IO

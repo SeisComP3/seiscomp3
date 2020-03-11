@@ -23,6 +23,18 @@
 namespace Seiscomp {
 namespace IO {
 
+namespace {
+
+
+/* callback function for libmseed-function msr_pack(...) */
+void _Record_Handler(char *record, int reclen, void *packed) {
+	/* to make the data available to the overloaded operator<< */
+	reinterpret_cast<CharArray *>(packed)->append(reclen, record);
+}
+
+
+}
+
 
 struct MSEEDLogger {
 	MSEEDLogger() {
@@ -752,7 +764,7 @@ void MSeedRecord::write(std::ostream& out) {
 	CharArray packed;
 	int64_t psamples;
 
-	msr_pack(pmsr, &_Record_Handler, &packed, &psamples, 1, 0);
+	msr_pack(pmsr, _Record_Handler, &packed, &psamples, 1, 0);
 	pmsr->datasamples = 0;
 	msr_free(&pmsr);
 
