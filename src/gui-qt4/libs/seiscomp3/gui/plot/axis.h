@@ -109,6 +109,30 @@ class SC_GUI_API Axis : public QObject {
 	//  Render specific interface
 	// ----------------------------------------------------------------------
 	public:
+		struct Tick {
+			Tick() {}
+			Tick(double v, int rp, int ap) : value(v), relPos(rp), absPos(ap) {}
+			double value;
+			int    relPos;
+			int    absPos;
+		};
+
+		typedef QVector<Tick> Ticks;
+
+		/**
+		 * @brief Returns the generated ticks. A call to updateLayout
+		 *        should precede this call to get reasonable values.
+		 * This call was added with API 13.
+		 */
+		const Ticks &ticks() const;
+
+		/**
+		 * @brief Returns the generated subticks. A call to updateLayout
+		 *        should precede this call to get reasonable values.
+		 * This call was added with API 13.
+		 */
+		const Ticks &subTicks() const;
+
 		/**
 		 * @brief Returns the width in pixels of the axis. This is independent
 		 *        of the direction (horizontal or vertical).
@@ -128,29 +152,34 @@ class SC_GUI_API Axis : public QObject {
 		 * @brief Update the layout and sizes based on the range and settings.
 		 *        This calls generates also the tick marks and the extend of
 		 *        the axis in the flexible direction.
+		 * With API 13 this method has been declared virtual.
 		 * @param fm The font metrics of the font used to render the axis.
 		 * @param rect The target rect which will be changed according to the
 		 *             flexible dimension, e.g. width or height. The width/height
 		 *             of the rect is only changed if it is equal to 0.
 		 */
-		void updateLayout(const QFontMetrics &fm, QRect &rect);
+		virtual void updateLayout(const QFontMetrics &fm, QRect &rect);
 
 		//! Convenience function
-		void updateLayout(const QPainter &painter, QRect &rect);
+		//! With API 13 this method has been declared virtual.
+		virtual void updateLayout(const QPainter &painter, QRect &rect);
 
 		/**
 		 * @brief Returns the size hint for the flexible dimension, for vertical
 		 *        axes it is the width and for horizontal axes the height.
+		 * With API 13 this method has been declared virtual.
 		 * @param mf The font metrics of the font used to render the axis.
 		 * @return The value in pixels or -1 if not determinable.
 		 */
-		int sizeHint(const QFontMetrics &fm) const;
+		virtual int sizeHint(const QFontMetrics &fm) const;
 
 		//! Convenience function
-		int sizeHint(const QPainter &painter) const;
+		//! With API 13 this method has been declared virtual.
+		virtual int sizeHint(const QPainter &painter) const;
 
 		/**
 		 * @brief Renders the axis into the given rect.
+		 * With API 13 this method has been declared virtual.
 		 * @param painter The painter instance to render with.
 		 * @param rect The target rectangle. Depending on the position the rect
 		 *             is being updated according to the flexible direction if
@@ -161,31 +190,26 @@ class SC_GUI_API Axis : public QObject {
 		 *                 rect or not. If enabled, then tick labels that intersect
 		 *                 with the rect will be pushed into the rect if possible.
 		 */
-		void draw(QPainter &painter, const QRect &rect,
-		          bool clipText = false);
+		virtual void draw(QPainter &painter, const QRect &rect,
+		                  bool clipText = false);
 
 		/**
 		 * @brief Draws the grid lines at the (sub)ticks within a passed plot rect.
+		 * With API 13 this method has been declared virtual.
 		 * @param painter The painter instance to render with.
 		 * @param rect The target rect for the plot.
 		 * @param ticks Defines whether ticks should be considered or not
 		 * @param subTicks Defines whether sub-ticks should be considered or not
 		 */
-		void drawGrid(QPainter &painter, const QRect &rect, bool ticks, bool subTicks);
+		virtual void drawGrid(QPainter &painter, const QRect &rect, bool ticks, bool subTicks);
+
+
 
 
 	// ----------------------------------------------------------------------
 	//  Members
 	// ----------------------------------------------------------------------
 	private:
-		struct Tick {
-			Tick() {}
-			Tick(double v, int rp, int ap) : value(v), relPos(rp), absPos(ap) {}
-			double value;
-			int    relPos;
-			int    absPos;
-		};
-
 		// Setup
 		bool          _visible;
 		bool          _grid;
@@ -292,6 +316,14 @@ inline const QPen &Axis::gridPen() const {
 
 inline const QPen &Axis::subGridPen() const {
 	return _penGridSubticks;
+}
+
+inline const Axis::Ticks &Axis::ticks() const {
+	return _ticks;
+}
+
+inline const Axis::Ticks &Axis::subTicks() const {
+	return _subTicks;
 }
 
 

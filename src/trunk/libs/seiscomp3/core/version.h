@@ -54,6 +54,10 @@ namespace Core {
    - Added Seiscomp::Gui::Map::Layer::setCursorShape
    - Added Seiscomp::Gui::Map::Layer::unsetCursorShape
    - Added Seiscomp::Gui::Map::Layer::update
+   - Added Seiscomp::Gui::Axis::ticks
+   - Added Seiscomp::Gui::Axis::subTicks
+   - Declared Seiscomp::Gui::Axis::updateLayout, sizeHint, draw and drawGrid virtual
+   - Declared Seiscomp::Gui::Graph::unproject virtual
 
  "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage
