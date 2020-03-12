@@ -30,6 +30,10 @@
   * Fix config to properly support multiple sources (plugins) per station
   * Use unambiguous station ID (net.station)
 
+* fdsnws
+
+  * Fix bug if useArclinkAccess is enabled
+
 ## Release 2018.327 patch18
 
 * system
