@@ -11,8 +11,7 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import absolute_import, division, print_function
 
 import sys as _sys
 import traceback as _traceback

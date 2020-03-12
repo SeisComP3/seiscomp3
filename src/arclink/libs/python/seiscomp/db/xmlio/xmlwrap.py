@@ -7,12 +7,7 @@
 #
 #
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
-try: str = unicode
-except NameError: pass
-
+from __future__ import absolute_import, division, print_function
 import re
 import datetime
 
@@ -34,19 +29,19 @@ def _string_fromxml(val):
 	if val is None:
 		return ""
 
-	return val.strip()
+	return val.encode("utf-8", "replace").strip()
 
 def _string_toxml(val):
 	if val is None:
 		return ""
 
-	if isinstance(val, bytes):
+	if isinstance(val, str):
 		try:
 			return val.decode("utf-8")
 		except UnicodeDecodeError:
 			return val.decode("iso-8859-1", "replace")
 
-	return str(val)
+	return unicode(val)
 
 def _int_fromxml(val):
 	if val is None or val == "":
@@ -113,9 +108,9 @@ def _datetime_fromxml(val = ""):
 		return None
 		
 	m = _rx_datetime.match(val)
-	if m is None:
+	if m == None:
 		m = _rx_date.match(val)
-		if m is None:
+		if m == None:
 			raise ValueError("invalid datetime: " + val)
 
 		(year, month, mday, tz, plusminus, tzhours, tzminutes) = m.groups()
@@ -205,11 +200,7 @@ class xml_Comment(object):
         self.id = src.id
         self.start = src.start
         self.end = src.end
-        # creationInfo is an XML attribute, but we are missing
-        # CreationInfo_fromxml() [string->object] and _CreationInfo_toxml()
-        # [object->string] serialization within the creationInfo() property.
-        # Could be JSON??? Ignore CreationInfo for now.
-        #self.creationInfo = src.creationInfo
+        self.creationInfo = src.creationInfo
 
     def _copy_to(self, dest):
         if self._element.get("text") is not None:

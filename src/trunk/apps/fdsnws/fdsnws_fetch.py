@@ -61,8 +61,7 @@ specified on the command line.
 
     $ %(prog)s -p request.txt -y station -q level=channel -v -o station.xml
 """
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import absolute_import, division, print_function
 
 import sys
 import time

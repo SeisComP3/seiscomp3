@@ -7,9 +7,7 @@
 #
 #
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
+from __future__ import absolute_import, division, print_function
 #import genwrap as _genwrap
 from seiscomp.db.xmlio import qc as _xmlio
 from seiscomp.db import DBError

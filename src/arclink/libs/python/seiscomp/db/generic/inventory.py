@@ -7,9 +7,7 @@
 #
 #
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
+from __future__ import absolute_import, division, print_function
 #import genwrap as _genwrap
 import datetime
 from seiscomp.db.xmlio import inventory as _xmlio
