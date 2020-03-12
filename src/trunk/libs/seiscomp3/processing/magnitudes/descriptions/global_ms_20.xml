@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="Ms_20">
+		<extends>global</extends>
+		<description>
+		Ms_20 is the surface wave magnitude measured on the vertical component at around 20 s period
+		in accordance with the IASPEI standards.
+		</description>
+	</plugin>
+	<binding name="Ms_20" module="global">
+		<description>
+		Ms_20 is the surface wave magnitude measured on the vertical component at around 20 s period
+		</description>
+		<configuration>
+				<group name="Ms_20">
+				<parameter name="lowerPeriod" type="double" unit="s" default="18">
+					<description>
+						Lower period limit of the signal for computing Ms_20.
+					</description>
+				</parameter>
+				<parameter name="upperPeriod" type="double" unit="s" default="22">
+					<description>
+						Upper period limit of the signal for computing Ms_20.
+					</description>
+				</parameter>
+				<parameter name="minimumDistance" type="double" unit="deg" default="2">
+					<description>
+						Minimum epicentral distance for computing Ms_20.
+					</description>
+				</parameter>
+				<parameter name="maximumDistance" type="double" unit="deg" default="160">
+					<description>
+						Maximum epicentral distance for computing Ms_20.
+					</description>
+				</parameter>
+				<parameter name="maximumDepth" type="double" unit="km" default="100">
+					<description>
+						Maximum depth for computing Ms_20.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

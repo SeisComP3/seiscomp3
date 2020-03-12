@@ -36,6 +36,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_ms20 : public MagnitudeProcessor {
 	public:
 		MagnitudeProcessor_ms20();
 
+		bool setup(const Settings &settings);
+
 		Status computeMagnitude(double amplitude, const std::string &unit,
 		                        double period, double snr,
 		                        double delta, double depth,
@@ -43,6 +45,13 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_ms20 : public MagnitudeProcessor {
 		                        const DataModel::SensorLocation *receiver,
 		                        const DataModel::Amplitude *,
 		                        double &value);
+
+	private:
+		double                  lowPer;
+		double                  upPer;
+		double                  minDistanceDeg;
+		double                  maxDistanceDeg;
+		double                  maxDepthKm;
 };
 
 

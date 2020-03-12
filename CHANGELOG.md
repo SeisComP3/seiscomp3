@@ -5,6 +5,7 @@
 * Ms_20
 
   * Added new surface waves magnitude Ms_20 according to IASPEI standard
+  * Make Ms_20 parameters configurable
 
 * scrttv
 

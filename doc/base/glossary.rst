@@ -384,19 +384,20 @@ is taken from Modern Global Seismology.
       earthquakes occur at lower frequencies than the frequency range between 0.7 Hz - 2 Hz used for the magnitude
       calculation.
 
-      In SeisComP3 mb is determined by simulation of a WWSSN short-period seismometer and then measuring the amplitudes in
-      a 30 s time window at stations in the distance range of 5° to 105°.
+      In SeisComP3 mb amplitudes are measured on vertical-component seismograms
+      in a 30 s time window after simulation of a :term:`WWSSN_SP` short-period
+      seismometer. Amplitudes are considered within epicentral distances of 5° to 105°.
 
       * Amplitude unit in SeisComP3 is **nanometer** (nm)
       * Period range: 0.4 - 3 s
       * Distance range: 5 - 105°
-      * Time window: 30 s
+      * Time window: 0 - 30 s
 
    magnitude, broadband body-wave (mB)
       mB is a magnitude based on body waves like mb, but the amplitude is measured in a broad
       frequency range and longer time windows. Instead of amplitude measurements on displacement
       data together with the dominant period, the maximum velocity amplitude Vmax is taken
-      directly from velocity-proportional records with V = 2πA/T. The time window for the
+      directly from velocity-proportional records with :math:`V = 2 \pi A/T`. The time window for the
       measurement can be determined by the duration of the high-frequency (1-3 Hz) radiation
       (Bormann & Saul, 2008). This time window usually contains the phases P, pP, sP, PcP, but
       not PP. According to the long time window and broad frequency range used for amplitude
@@ -445,26 +446,7 @@ is taken from Modern Global Seismology.
       Ms_20 is the surface-wave magnitude at 20 s period based on the recommendations
       by the IASPEI magnitude working group issued on 27 March, 2013.
 
-      .. math::
-
-         M_s = \log \left(\frac{A}{T}\right) + 1.66 \log(\Delta) + 0.3
-
-      with
-
-      A: WWSSN_LP corrected ground displacement in nm measured on the vertical-component
-      seismogram as the maximum absolute trace amplitude of a surface wave at periods between
-      18 s and 22 s.
-
-      T: period of the surface wave in seconds.
-
-      The term `Ms_20` is chosen in accordance with the IASPEI standard as of 2013.
-      Alternatively, M\ :sub:`s`(BB)  may be used.
-
-      * Amplitude unit in SeisComP3 is **nanometers** (nm)
-      * Period range: 18 - 22 s
-      * Distance range: 2 - 160°
-      * Depth range: 0 - 100 km
-      * Time window: distance (km) / 3.5 km/s + 30 s
+      Read the :ref:`technical documentation <global_ms_20>` for more details and the configuration.
 
    magnitude, broadband surface wave (Ms(BB))
       Ms(BB) is a broadband magnitude scale based on teleseismic surface waves.
@@ -1069,3 +1051,11 @@ is taken from Modern Global Seismology.
    weight
       Attribute of the QuakeML objects Arrival and !MagnitudeReferences defining the
       effect of the referenced object (e.g. Pick).
+
+   WWSSN_SP
+     Short period seismograph with a dominant period of 1 s of the World-Wide
+     Standard Seismograph Network (WWSSN).
+
+   WWSSN_LP
+      Long period seismograph with a dominant period of 20 s of the World-Wide
+      Standard Seismograph Network (WWSSN).
