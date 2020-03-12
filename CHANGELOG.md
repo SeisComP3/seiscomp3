@@ -6,6 +6,14 @@
 
   * Add extraComments option to allow adding more comments to the pick, e.g. SNR
 
+* scevent
+
+  * Add option to allow event creation based on origin score instead of a
+    minimum phase count.
+  * Release created event immediately if origins configured to be delayed
+    and associate all other queued origins in a batch and emit only one
+    additional event.
+
 * system
 
   * Fix error message on attempt to create existing alias
@@ -15,6 +23,23 @@
   * Add option `--with-filename` which outputs of all accessed archive files
     after import
   * Fix crash if a data file is not writable
+
+* fdsnws
+
+  * Fix bug if useArclinkAccess is enabled
+
+* scinv
+
+  * Correct output of associated filenames in case of a conflict
+
+* scsohlog
+
+  * Add database tests
+
+* trunk
+
+  * Fixed MSEED parser to also accept records if blockette 1000 is not within
+    the first 64 bytes
 
 ## Release 2018.327 patch18
 
