@@ -13,7 +13,6 @@
 ###############################################################################
 
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 from functools import cmp_to_key
 
 from collections import OrderedDict
@@ -707,7 +706,7 @@ class FDSNAvailabilityExtent(_Availability):
                         eDict[e.sampleRate()].append(e)
                     else:
                         eDict[e.sampleRate()] = [e]
-                for k, v in iteritems(eDict):
+                for k, v in eDict.items():
                     e = self._mergeExtents(v)
                     lines.append((ext, e, restricted))
             else:
@@ -717,7 +716,7 @@ class FDSNAvailabilityExtent(_Availability):
                         eDict[e.quality()].append(e)
                     else:
                         eDict[e.quality()] = [e]
-                for k, v in iteritems(eDict):
+                for k, v in eDict.items():
                     e = self._mergeExtents(v)
                     lines.append((ext, e, restricted))
 
@@ -984,7 +983,7 @@ class FDSNAvailabilityQuery(_Availability):
                 if line[0] is not ext:
                     if ext is not None:
                         wid = ext.waveformID()
-                        for sr, sg in iteritems(segGroups):
+                        for sr, sg in segGroups.items():
                             if req._disconnected:
                                 return False
                             if byteCount == 0:
@@ -1021,7 +1020,7 @@ class FDSNAvailabilityQuery(_Availability):
             # handle last extent
             if ext is not None:
                 wid = ext.waveformID()
-                for sr, sg in iteritems(segGroups):
+                for sr, sg in segGroups.items():
 
                     if req._disconnected:
                         return False
@@ -1058,7 +1057,7 @@ class FDSNAvailabilityQuery(_Availability):
                 if line[0] is not ext:
                     if ext is not None:
                         wid = ext.waveformID()
-                        for q, sg in iteritems(segGroups):
+                        for q, sg in segGroups.items():
                             if req._disconnected:
                                 return False
                             if byteCount == 0:
@@ -1095,7 +1094,7 @@ class FDSNAvailabilityQuery(_Availability):
             # handle last extent
             if ext is not None:
                 wid = ext.waveformID()
-                for q, sg in iteritems(segGroups):
+                for q, sg in segGroups.items():
                     if req._disconnected:
                         return False
                     if byteCount == 0:
@@ -1131,7 +1130,7 @@ class FDSNAvailabilityQuery(_Availability):
                 if line[0] is not ext:
                     if ext is not None:
                         wid = ext.waveformID()
-                        for (q, sr), sg in iteritems(segGroups):
+                        for (q, sr), sg in segGroups.items():
                             if req._disconnected:
                                 return False
                             if byteCount == 0:
@@ -1171,7 +1170,7 @@ class FDSNAvailabilityQuery(_Availability):
             # handle last extent
             if ext is not None:
                 wid = ext.waveformID()
-                for (q, sr), sg in iteritems(segGroups):
+                for (q, sr), sg in segGroups.items():
                     if req._disconnected:
                         return False
                     if byteCount == 0:

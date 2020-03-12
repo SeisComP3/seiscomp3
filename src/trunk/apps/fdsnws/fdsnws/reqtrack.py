@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 
 from twisted.internet import reactor
 from seiscomp3 import Core, Communication, DataModel
@@ -69,7 +68,7 @@ class RequestTrackerDB(object):
         if isinstance(constraints, list):
             constr = " ".join(constraints)
         else:
-            constr = " ".join([a+"="+b for (a, b) in iteritems(constraints)])
+            constr = " ".join([a+"="+b for (a, b) in constraints.items()])
 
         arclinkRequestLine = DataModel.ArclinkRequestLine()
         arclinkRequestLine.setStart(start_time)

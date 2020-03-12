@@ -17,7 +17,6 @@
 ###############################################################################
 
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 
 import base64
 import fnmatch
@@ -167,7 +166,7 @@ class UserDB(object):
     def dump(self):
         Logging.info("known users:")
 
-        for name, user in iteritems(self.__users):
+        for name, user in self.__users.items():
             Logging.info(" %s %s %d" % (name, user[1], user[2]))
 
 
@@ -289,7 +288,7 @@ class DataAvailabilityCache(object):
             # create a list of (extent, oid, restricted) tuples sorted by stream
             self._extentsSorted = [(e, app.query().getCachedId(e), res)
                                    for wid, (e, res) in sorted(
-                                       iteritems(self._extents),
+                                       self._extents.items(),
                                        key=lambda t: t[0])]
 
             # create a dictionary of object ID to extents

@@ -8,7 +8,6 @@
 ################################################################################
 
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 
 import fnmatch
 import math
@@ -255,7 +254,7 @@ class RequestOptions:
         # transform keys to lower case
         self._args = {}
         if args is not None:
-            for k, v in iteritems(args):
+            for k, v in args.items():
                 self._args[py3ustr(k.lower())] = py3ustrlist(v)
 
         self.streams = []  # 1 entry for GET, multipl

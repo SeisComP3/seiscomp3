@@ -8,7 +8,6 @@
 ################################################################################
 
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 
 import base64
 import datetime
@@ -199,7 +198,7 @@ class ListingResource(BaseResource):
         if request.path[-1:] != b'/':
             return util.redirectTo(request.path + b'/', request)
 
-        for k, v in iteritems(self.children):
+        for k, v in self.children.items():
             if v.isLeaf:
                 continue
             if hasattr(v, 'hideInListing') and v.hideInListing:

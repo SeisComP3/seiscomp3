@@ -23,7 +23,6 @@
 ################################################################################
 
 from __future__ import absolute_import, division, print_function
-from future.utils import iteritems
 
 from twisted.internet.threads import deferToThread
 from twisted.web import http, resource, server
@@ -383,7 +382,7 @@ class FDSNStation(BaseResource):
                             return False
                         dataloggers |= d
                         sensors |= s
-                        for k, v in iteritems(e):
+                        for k, v in e.items():
                             if k not in extents:
                                 extents[k] = v
                 elif self._matchStation(net, sta, ro, dac):
@@ -432,7 +431,7 @@ class FDSNStation(BaseResource):
         if len(extents) > 0:
             objCount += 1
             da = DataModel.DataAvailability()
-            for k, v in iteritems(extents):
+            for k, v in extents.items():
                 objCount += 1
                 da.add(DataModel.DataExtent(v))
             objOut = ExportObjectList()
