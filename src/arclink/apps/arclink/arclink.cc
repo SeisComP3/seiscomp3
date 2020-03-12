@@ -3454,7 +3454,7 @@ void Arclink::setup()
     inet_addr.sin_port = htons(tcp_port);
     inet_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    if(bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
+    if(::bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
         throw ArclinkLibraryError("bind error");
 
     N(listen(listenfd, 5));
