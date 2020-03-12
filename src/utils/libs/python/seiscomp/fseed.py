@@ -243,7 +243,7 @@ def _mkseedstring(nblk, nfld, s, min_length, max_length, flags):
     if min_length != max_length:
         sn += "~"
 
-    return sn
+    return str(sn)
 
 def _mkseedtime(nblk, nfld, t):
     if t is None:
