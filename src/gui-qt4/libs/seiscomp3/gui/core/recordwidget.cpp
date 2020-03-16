@@ -4960,15 +4960,19 @@ void RecordWidget::showRecordBorders(bool enable) {
 
 	_showRecordBorders = enable;
 
-	setDirty();
 	update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordWidget::setRecordBorderDrawMode(RecordBorderDrawMode mode) {
 	if ( _recordBorderDrawMode == mode ) return;
 
 	_recordBorderDrawMode = mode;
 
-	setDirty();
 	update();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

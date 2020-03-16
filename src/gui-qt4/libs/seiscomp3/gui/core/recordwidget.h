@@ -225,13 +225,6 @@ class SC_GUI_API RecordWidget : public QWidget {
 			Box
 		};
 
-		struct BorderRect : QRect {
-			BorderRect() : QRect() {}
-			BorderRect(int x, int y, int width, int height) :
-			    QRect(x, y, width, height) {}
-				QColor color;
-		};
-
 		typedef Math::Filtering::InPlaceFilter<float> Filter;
 
 		struct Trace {
