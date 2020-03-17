@@ -687,12 +687,12 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
-				_inventorySources[inv.get()] = files[i];
+				_inventorySources[i] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
-				merger.push(inv.get());
+				merger.push(inv.get(), i);
 			}
 
 			_currentTask = NULL;
@@ -786,12 +786,12 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
-				_inventorySources[inv.get()] = files[i];
+				_inventorySources[i] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
 				// the merger
-				merger.push(inv.get());
+				merger.push(inv.get(), i);
 			}
 
 			if ( _exitRequested ) {
@@ -1093,12 +1093,12 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
-				_inventorySources[inv.get()] = files[i];
+				_inventorySources[i] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
-				merger.push(inv.get());
+				merger.push(inv.get(), i);
 			}
 
 			_currentTask = NULL;
@@ -1176,12 +1176,12 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
-				_inventorySources[inv.get()] = files[i];
+				_inventorySources[i] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
 				// the merger
-				merger.push(inv.get());
+				merger.push(inv.get(), i);
 			}
 
 			_currentTask = NULL;
@@ -1519,12 +1519,12 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
-				_inventorySources[inv.get()] = files[i];
+				_inventorySources[i] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
-				merger.push(inv.get());
+				merger.push(inv.get(), i);
 			}
 
 			_currentTask = NULL;
@@ -1734,10 +1734,8 @@ class InventoryManager : public Client::Application,
 
 
 		void publish(LogHandler::Level level, const char *message,
-		             const DataModel::Object *obj1,
-		             const Seiscomp::DataModel::Inventory *source1,
-		             const DataModel::Object *obj2,
-		             const Seiscomp::DataModel::Inventory *source2) {
+		             const DataModel::Object *obj1, int id1,
+		             const DataModel::Object *obj2, int id2) {
 			if ( level == LogHandler::Conflict ) ++_conflicts;
 			else if ( level == LogHandler::Error ) ++_errors;
 			else if ( level == LogHandler::Warning ) ++_warnings;
@@ -1746,8 +1744,8 @@ class InventoryManager : public Client::Application,
 			if ( level == LogHandler::Conflict ) {
 				_logs << "C " << message << endl;
 
-				std::string file1 = _inventorySources[source1];
-				std::string file2 = _inventorySources[source2];
+				std::string file1 = _inventorySources[id1];
+				std::string file2 = _inventorySources[id2];
 
 				_logs << "  Defined in ";
 				if ( file1.empty() ) _logs << "<unknown>"; else _logs << file1;
@@ -1792,7 +1790,7 @@ class InventoryManager : public Client::Application,
 
 
 	private:
-		typedef std::map<const DataModel::Inventory*, string> SourceMap;
+		typedef std::map<int, string> SourceMap;
 		Task     *_currentTask;
 		string    _operation;
 		string    _filebase;
