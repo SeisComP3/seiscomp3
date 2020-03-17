@@ -39,6 +39,10 @@
 
   * Fix bug if useArclinkAccess is enabled
 
+* scinv
+
+  * Correct output of associated filenames in case of a conflict
+
 ## Release 2018.327 patch18
 
 * system
