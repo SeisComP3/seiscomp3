@@ -42,10 +42,8 @@ struct LogHandler {
 	 * @param obj2    The second object which can be a NULL pointer
 	 */
 	virtual void publish(Level level, const char *message,
-	                     const Seiscomp::DataModel::Object *obj1,
-	                     const Seiscomp::DataModel::Inventory *source1,
-	                     const Seiscomp::DataModel::Object *obj2,
-	                     const Seiscomp::DataModel::Inventory *source2) = 0;
+	                     const Seiscomp::DataModel::Object *obj1, int id1,
+	                     const Seiscomp::DataModel::Object *obj2, int id2) = 0;
 };
 
 
@@ -53,7 +51,7 @@ class InventoryTask : public Task {
 	public:
 		typedef Seiscomp::DataModel::Object Object;
 		typedef Seiscomp::DataModel::Inventory Inventory;
-		typedef std::map<const Object*,Inventory*> SourceMap;
+		typedef std::map<const Object*,int> SourceMap;
 
 
 	// ------------------------------------------------------------------
