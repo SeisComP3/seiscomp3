@@ -1,7 +1,7 @@
 Part of the :ref:`VS` package.
 
 scvsmag is part of a new SeisComp3 implementation of the
-`Virtual Seismologist <http://www.seismo.ethz.ch/research/vs>`_
+`Virtual Seismologist <http://www.seismo.ethz.ch/en/research-and-teaching/products-software/EEW/Virtual-Seismologist/>`_
 (VS) Earthquake Early Warning algorithm (Cua, 2005; Cua and Heaton, 2007) released
 under the `'SED Public License for SeisComP3 Contributions'
 <http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt>`_. For a
