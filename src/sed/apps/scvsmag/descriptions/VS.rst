@@ -51,7 +51,7 @@ source estimation, was the result of the PhD research of Dr. Georgia Cua with
 Prof. Thomas Heaton at Caltech, from 1998 through 2004.
 
 The first real-time VS prototype system was developed by Georgia Cua and Michael
-Fischer at ETH Zurich from 2006-2012 (http://www.seismo.ethz.ch/research/vs). 
+Fischer at ETH Zurich from 2006-2012 (http://www.seismo.ethz.ch/en/research-and-teaching/products-software/EEW/Virtual-Seismologist/). 
 This first prototype used location estimates generated
 by the Earthworm Binder module (Dietz, 2002) as inputs to the VS magnitude
 estimation. This architecture has been undergoing continuous real-time testing
