@@ -1,7 +1,7 @@
 Part of the :ref:`VS` package.
 
 *scvsmaglog* is part of a new SeisComp3 implementation of the
-`Virtual Seismologist <http://www.seismo.ethz.ch/research/vs>`_
+`Virtual Seismologist <http://www.seismo.ethz.ch/en/research-and-teaching/products-software/EEW/Virtual-Seismologist>`_
 (VS) Earthquake Early Warning algorithm (Cua, 2005; Cua and Heaton, 2007) released
 under the `'SED Public License for SeisComP3 Contributions'
 <http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt>`_. It requires 
@@ -16,9 +16,9 @@ It also implements an ActiveMQ interface (http://activemq.apache.org/) which
 provides the possibility to send alert messages in real-time. Currently, 
 messages can be sent in three different formats (SeisComP3ML, QuakeML, ShakeAlertML).
 The recommended client to display these alert messages is the `Earthquake 
-Early Warning Display (EEWD) <http://www.reaktproject.eu/index.php?option=com_content&view=article&id=496&Itemid=58>`_
+Early Warning Display (EEWD) <http://www.seismo.ethz.ch/en/research-and-teaching/products-software/EEW/earthquake-early-warning-display-eewd/>`_
 an open source user interface developed within the 
-European `REAKT <http://www.reaktproject.eu/>`_ project and based on the 
+European `REAKT <http://www.seismo.ethz.ch/en/research-and-teaching/past-projects/>`_ project and based on the 
 the `UserDisplay <http://www.eew.caltech.edu/research/userdisplay.html>`_.
 The UserDisplay is not openly available, however, people with permission to run
 the UserDisplay can use it to receive alert messages from *scvsmaglog*.
