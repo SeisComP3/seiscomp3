@@ -2482,7 +2482,8 @@ class _Channel(object):
                         else:
                             raise SEEDError("invalid filter type: %s (%s)" % (f, obj.name))
 
-                        sens *= gain
+                        if gain is not None:
+                            sens *= gain
 
             if sens_freq > rate / 5:
                 sens_freq = rate / 5
