@@ -551,54 +551,35 @@ bool _isHeader(const char *header) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MSeedRecord::read(std::istream &is) {
+#define HEADER_BLOCK_LEN 64
 	int reclen = -1;
-	int pos = is.tellg();
 	MSRecord *prec = NULL;
-	const int LEN = 64;
+	const int LEN = 128;
 	char header[LEN];
-	bool myeof = false;
 
-	is.read(header,LEN);
-	while (is.good()) {
-		if (MS_ISVALIDHEADER(header)) {
-			reclen = ms_detect(header,LEN);
-			break;
-		}
-		else  /* ignore nondata records and scan to the next valid header */ {
-			is.read(header,LEN);
-		}
-	}
-
-	if (reclen <= 0 && is.good()) {  /* scan to the next header to retrieve the record length */
-		pos = is.tellg();
-		is.read(header,LEN);
-		while (is.good()) {
-			if (MS_ISVALIDHEADER(header) || MS_ISVALIDBLANK(header) || _isHeader(header)) {
-				reclen = static_cast<int>(is.tellg())-pos;
-				is.seekg(-(reclen+LEN),std::ios::cur);
-				is.read(header,LEN);
+	is.read(header, LEN);
+	while ( is.good() ) {
+		if ( MS_ISVALIDHEADER(header) ) {
+			reclen = ms_detect(header, LEN);
+			if ( reclen > 0 )
 				break;
-			}
-			else
-				is.read(header,LEN);
+		}
+		else {
+			// ignore nondata records and scan to the next valid header
+			if ( LEN > HEADER_BLOCK_LEN )
+				memmove(header, header + HEADER_BLOCK_LEN, LEN - HEADER_BLOCK_LEN);
+			is.read(header + LEN - HEADER_BLOCK_LEN, HEADER_BLOCK_LEN);
 		}
 	}
 
-	if (is.eof()) { /* retrieve the record length of the last record */
-		is.clear();
-		is.seekg(0,std::ios::end);
-		reclen = static_cast<int>(is.tellg())-pos+LEN;
-		is.seekg(-reclen,std::ios::cur);
-		is.read(header,LEN);
-		myeof = true;
-	}
-	else {
-		if (is.bad())
-			throw Core::StreamException("Fatal error occured during reading from stream.");
-	}
+	if ( !is.good() )
+		throw Core::StreamException("Fatal error occured during reading from stream.");
+
+	if ( reclen <= 0 )
+		throw LibmseedException("Retrieving the record length failed.");
 
 	if ( reclen >= LEN ) {
-		if ( MS_ISVALIDHEADER(header) && reclen <= (1 << 20) ) {
+		if ( reclen <= (1 << 20) ) {
 			std::vector<char> rawrec(reclen);
 			memmove(&rawrec[0],header,LEN);
 			is.read(&rawrec[LEN],reclen-LEN);
@@ -618,17 +599,11 @@ void MSeedRecord::read(std::istream &is) {
 				throw Core::EndOfStreamException();
 		}
 		else {
-			if ( !myeof )
-				return read(is);
-			else
-				throw Core::EndOfStreamException("Invalid miniSEED header");
+			throw Core::StreamException("Mini SEED Record exceeds 2**20 bytes");
 		}
 	}
 	else {
-		if ( !myeof )
-			throw LibmseedException("Retrieving the record length failed.");
-		else
-			throw Core::EndOfStreamException("Invalid miniSEED record, too small");
+		throw Core::EndOfStreamException("Invalid Mini SEED record, too small");
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
