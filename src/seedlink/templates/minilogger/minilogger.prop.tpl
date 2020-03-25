@@ -84,9 +84,9 @@ nominal_sample_rate=$sources.minilogger.nominal_sample_rate
 #--- Nominal gain, one of 1, 2 or 4. type=int default=1
 #
 #--- For SEISMOMETER INTERFACE (USB) (CODE: SEP 064) can be 1, 2 or 4:
-#	   ‘1’: ×1 = 0.64μV/count 
-#	   ‘2’: ×2 = 0.32μV/count 
-#	   ‘4’: ×2 = 0.32μV/count 
+#	   '1': x1 = 0.64uV/count
+#	   '2': x2 = 0.32uV/count
+#	   '4': x2 = 0.32uV/count
 #
 nominal_gain=$sources.minilogger.nominal_gain
 

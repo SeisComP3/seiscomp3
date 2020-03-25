@@ -178,7 +178,7 @@ class Module(seiscomp3.Kernel.Module):
 
     # Create rc file
     rc_files = glob.glob(os.path.join(self.config_dir, "rc_*"))
-    for (station_id, rc) in self.rc.iteritems():
+    for (station_id, rc) in self.rc.items():
       fd = open(os.path.join(self.config_dir, "rc_%s" % (station_id,)), "w")
       fd.write(rc)
       fd.close()

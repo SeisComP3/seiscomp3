@@ -678,7 +678,7 @@ def on_update_config(args, flags):
 
     listOfMods = []
     # Collect all unconfigured but indirectly requested mods
-    for name, configured in configuredMods.iteritems():
+    for name, configured in configuredMods.items():
       if not configured: listOfMods.append(name)
 
   return 0

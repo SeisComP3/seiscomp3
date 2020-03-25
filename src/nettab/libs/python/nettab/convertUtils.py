@@ -115,7 +115,7 @@ class StationMappings:
     
     def dump(self, fdo, stationCode):
         items = []
-        for (code, mapping) in self.stationMapping.iteritems():
+        for (code, mapping) in self.stationMapping.items():
             if stationCode and stationCode != code: continue
             items.append(code)
             for (fromDate, toDate, network) in mapping:
@@ -251,9 +251,9 @@ class StationAttributes:
             ## print("no station attributes found for network %s" % self.networkCode, file=sys.stderr)
             return newat
         
-        for (code,row) in attributes.iteritems():
+        for (code,row) in attributes.items():
             nr = {}
-            for (k,v) in row.iteritems():
+            for (k,v) in row.items():
                 if k == 'country': k = 'Country'
                 if k == 'place': k = 'Place'
                 if k == 'affiliation': k = 'Affiliation'
@@ -308,8 +308,8 @@ class StationAttributes:
         if not self.stationAttributeList:
             return None
         
-        for (code, row) in self.stationAttributeList.iteritems():
-            for (k, v) in row.iteritems():
+        for (code, row) in self.stationAttributeList.items():
+            for (k, v) in row.items():
                 if k == 'restricted_exc':
                     k = 'Restricted'
                     extra=',*,'+str(v)
@@ -375,9 +375,9 @@ class StationAttributes:
     def dump(self, fdo, code):
         if not code:
             att = self.reorder_station_attr()
-            for (key,v) in att.iteritems():
+            for (key,v) in att.items():
                 if key in ['Country', 'Place']: continue
-                for (value, s) in v.iteritems():
+                for (value, s) in v.items():
                     fdo.write("Sa: %s=%s" % (key, quote(value)))
                     for station in s:
                             fdo.write(" %s" % (station))
@@ -387,7 +387,7 @@ class StationAttributes:
             if not at: return
             if 'done' in at: return
             at['done'] = 1 # Mark the item as printed
-            for (k,v) in at.iteritems():
+            for (k,v) in at.items():
                 extra = ''
                 if k in [ 'done', 'Place', 'Country']: continue
                 if k in ['Affiliation']: v = quote(v)
@@ -455,7 +455,7 @@ class NetworkAttributes:
         self.networkAttributes.update(attList)
 
     def dump(self, fdo):
-        for (k,v) in self.networkAttributes.iteritems():
+        for (k,v) in self.networkAttributes.items():
             if k in ['Description', 'Remark', 'Region', 'Institutions']:
                 v = quote(v)
             fdo.write("Na: %s=%s\n" % (k,v))

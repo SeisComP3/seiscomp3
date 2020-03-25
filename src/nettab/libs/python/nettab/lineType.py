@@ -656,7 +656,7 @@ class Ia(object):
 			pass
 
 		try:
-			for (pattern, rs) in self.patterns.iteritems():
+			for (pattern, rs) in self.patterns.items():
 				if self._regexCompare(pattern, elementID):
 					if len(rs) == 0: return True
 					for r in rs:
@@ -828,7 +828,7 @@ class Dl(object):
 		
 		# Check that we can find my stages
 		if self.chains:
-			for chain in self.chains.itervalues():
+			for chain in self.chains.values():
 				for stage in chain:
 					if stage not in instruments.keys:
 						error.append(" [%s] Missing stage %s" % (self.id, stage))
@@ -842,7 +842,7 @@ class Dl(object):
 			return False
 		
 		if isinstance(genericFilter, Ff) or isinstance(genericFilter, Pz):
-			for chain in self.chains.itervalues():
+			for chain in self.chains.values():
 				if genericFilter.id in chain:
 					return True
 
