@@ -53,7 +53,7 @@ def _loadDatabase(dbUrl):
     print(" Loading inventory from database ... ", file=sys.stderr)
     inventory = seiscomp3.DataModel.Inventory()
     dbQuery.loadNetworks(inventory)
-    for ni in xrange(inventory.networkCount()):
+    for ni in range(inventory.networkCount()):
         dbQuery.loadStations(inventory.network(ni))
     print("Done.", file=sys.stderr)
     return inventory
@@ -67,13 +67,13 @@ def _loadStationDescriptions(inv):
     """
     d = dict()
 
-    for ni in xrange(inv.networkCount()):
+    for ni in range(inv.networkCount()):
         n = inv.network(ni)
         net = n.code()
         if net not in d:
             d[net] = {}
 
-            for si in xrange(n.stationCount()):
+            for si in range(n.stationCount()):
                 s = n.station(si)
                 sta = s.code()
                 d[net][sta] = s.description()
