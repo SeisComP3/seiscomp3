@@ -28,6 +28,16 @@
 * trunk
 
   * Added Array.bytes() to Python wrappers (only)
+  * QuakeLink client lib
+    * Add support for QuakeLink API 2 which introduces format specific version
+      numbers in general and in particular SUMMARY/2 format
+    * Add hello(), serverID() and serverAPI() methods to query and retrieve the
+      server ID and API version
+    * Add isSupported() and maximumSupportedVersion() methods to check if a specific
+      format version is supported respectively to return the maximum supported
+      format version
+    * Add support for ORDER BY, LIMIT and OFFSET parameters to select() and
+      selectArchived() queries introduced by QuakeLink API 1
 
 * seedlink
 

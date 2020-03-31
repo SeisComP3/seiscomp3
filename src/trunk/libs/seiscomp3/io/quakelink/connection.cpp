@@ -47,12 +47,39 @@ bool startsWith(const string &found, const string &expected) {
 	       strncmp(found.c_str(), expected.c_str(), expected.length()) == 0;
 }
 
-string requestFormat(RequestFormat format) {
-	return format == rfNative   ? " AS NATIVE" :
-	       format == rfGZNative ? " AS GZNATIVE" :
-	       format == rfXML      ? " AS XML" :
-	       format == rfGZXML    ? " AS GZXML" :
-	                              " AS SUMMARY";
+string requestFormat(RequestFormatVersion formatVersion) {
+	stringstream ss;
+	ss << (formatVersion == rfNative   ? " AS NATIVE" :
+	       formatVersion == rfGZNative ? " AS GZNATIVE" :
+	       formatVersion == rfXML      ? " AS XML" :
+	       formatVersion == rfGZXML    ? " AS GZXML" :
+	                                     " AS SUMMARY");
+	if ( formatVersion.version() > 1 )
+		ss << "/" << formatVersion.version();
+	return ss.str();
+}
+
+inline
+bool orderByLimitOffset(stringstream &req, Version api, OrderBy orderBy,
+                        unsigned long limit, unsigned long offset) {
+	if ( (orderBy || limit || offset) && !api ) {
+		SEISCOMP_WARNING("Order by, limit and offset filter not supported by "
+		                 "server API 0");
+		return false;
+	}
+
+	if ( orderBy == obOTimeAsc )
+		req << " ORDER BY OTIME ASC";
+	else if ( orderBy == obOTimeDesc )
+		req << " ORDER BY OTIME DESC";
+
+	if ( limit ) {
+		req << " LIMIT " << limit;
+		if ( offset )
+			req << " OFFSET " << offset;
+	}
+
+	return true;
 }
 
 bool readHeaderValue(string &value, const string &line, const string &key) {
@@ -76,6 +103,22 @@ string intToString(int i) {
 	return ss.str();
 }
 
+FormatAPIMap createAPIMap() {
+	FormatAPIMap map;
+	map[rfSummary]  = APIList();
+	map[rfXML]      = APIList();
+	map[rfGZXML]    = APIList();
+	map[rfNative]   = APIList();
+	map[rfGZNative] = APIList();
+
+	// Summary format 2 added in Server API 2
+	map[rfSummary].push_back(2);
+
+	return map;
+}
+
+const FormatAPIMap APIMap = createAPIMap();
+
 } // ns anonymous
 
 const char *SummaryTimeFormat = "%F %T";
@@ -96,9 +139,6 @@ bool Connection::connected() const {
 }
 
 bool Connection::init(const string &url, int options) {
-	SEISCOMP_DEBUG("%sinitializing service with URL: %s",
-	               _logPrefix.c_str(), url.c_str());
-
 	disconnect();
 	delete _sock;
 	_sock = NULL;
@@ -129,6 +169,7 @@ bool Connection::init(const string &url, int options) {
 
 	// step 2: user:pass
 	vector<string> tokens;
+	string logUserPass;
 	if ( Core::split(tokens, connection.c_str(), "@") >= 2 ) {
 		string login = tokens[0];
 		_service = tokens[1];
@@ -136,6 +177,7 @@ bool Connection::init(const string &url, int options) {
 		Core::split(tokens, login.c_str(), ":");
 		_user = tokens.size() > 0 ? tokens[0] : "";
 		_pass = tokens.size() > 1 ? tokens[1] : "";
+		logUserPass = _user + ":***";
 	}
 	else
 		_service = connection;
@@ -147,8 +189,9 @@ bool Connection::init(const string &url, int options) {
 
 	_sock = ssl ? new SSLSocket() : new Socket();
 
-	SEISCOMP_DEBUG("%sservice initialized: %s, ssl=%i",
-	               _logPrefix.c_str(), _service.c_str(), ssl);
+	SEISCOMP_INFO("%sservice initialized: %s://%s%s",
+	              _logPrefix.c_str(), protocol.c_str(), logUserPass.c_str(),
+	              _service.c_str());
 
 	return true;
 }
@@ -159,6 +202,46 @@ void Connection::disconnect() {
 		SEISCOMP_DEBUG("%sconnection to %s closed",
 		               _logPrefix.c_str(), _service.c_str());
 	}
+	_serverID.clear();
+	_serverAPI = 0;
+}
+
+bool Connection::hello(std::string &id, Version &api) {
+	id.clear();
+	api = 0;
+
+	if ( !connect() || !sendRequest("HELLO") )
+		return false;
+
+	// read header lines
+	string line, tmpID, tmpAPI;
+	bool welcome = false;
+	for ( size_t i = 0; i < 20 && readLine(line) != 0; ++i) {
+		if ( startsWith(line, "QuakeLink") )
+			tmpID = line;
+		else if ( startsWith(line, "API=") )
+			tmpAPI = line;
+		else if ( startsWith(line, "WELCOME") ) {
+			welcome = true;
+			break;
+		}
+	}
+
+	if ( !welcome || !assertLineBreak() ) {
+		logAndDisconnect("HELLO: Server did not respond with 'WELCOME' "
+		                 "followed by new line in first 20 lines of response");
+		return false;
+	}
+
+	if ( !tmpAPI.empty() &&
+	     !Core::fromString(api, Core::trim(tmpAPI).substr(4)) ) {
+		logAndDisconnect("HELLO: Server responded with non numeric API "
+		                 "version string");
+		return false;
+	}
+
+	id = tmpID;
+	return true;
 }
 
 bool Connection::setOptions(int options) {
@@ -169,11 +252,16 @@ bool Connection::setOptions(int options) {
 	return !connected() || sendOptions(oldOptions ^ _options);
 }
 
-bool Connection::getUpdates(Response &response, const std::string &eventid) {
+bool Connection::getUpdates(Response &response, const std::string &eventid,
+                            const RequestFormatVersion &formatVersion) {
 	if ( !connect() ) return false;
 
+	if ( !checkFormatVersion(response.data, formatVersion) ) {
+		return false;
+	}
+
 	// send request, format is restricted to SUMMARY
-	string req = "GET UPDATES OF EVENT " + eventid + requestFormat(rfSummary);
+	string req = "GET UPDATES OF EVENT " + eventid + requestFormat(formatVersion);
 	if ( !sendRequest(req) ) {
 		response.data = "Error sending data request";
 		return false;
@@ -197,13 +285,17 @@ bool Connection::getUpdates(Response &response, const std::string &eventid) {
 }
 
 bool Connection::get(Response &response, const std::string &eventId,
-                     int revision, RequestFormat format) {
+                     int revision, const RequestFormatVersion &formatVersion) {
 	if ( !connect() ) return false;
+
+	if ( !checkFormatVersion(response.data, formatVersion) ) {
+		return false;
+	}
 
 	// send request for either the latest or a specific revision
 	string req = revision < 0 ? "GET EVENT " :
 	             "GET UPDATE " + intToString(revision) + " OF EVENT ";
-	if ( !sendRequest(req + eventId + requestFormat(format)) ) {
+	if ( !sendRequest(req + eventId + requestFormat(formatVersion)) ) {
 		response.data = "Error sending data request";
 		return false;
 	}
@@ -226,19 +318,27 @@ bool Connection::get(Response &response, const std::string &eventId,
 }
 
 bool Connection::selectArchived(Responses &responses, const Core::Time &from,
-                                const Core::Time &to, RequestFormat format,
-                                const std::string &where) {
+                                const Core::Time &to,
+                                const RequestFormatVersion &formatVersion,
+                                const std::string &where, OrderBy orderBy,
+                                unsigned long limit, unsigned long offset) {
 	responses.clear();
-	if ( !connect() ) return false;
+	if ( !connect() || !isSupported(formatVersion, true) )
+		return false;
 
 	// send request
-	string req = "SELECT ARCHIVED EVENTS";
-	if ( from ) req += " FROM " + from.toString(RequestTimeFormat);
-	if ( to ) req += " TO " + to.toString(RequestTimeFormat);
-	req += requestFormat(format);
-	if ( where.size() > 0 ) req += " WHERE " + where;
+	stringstream req;
+	req << "SELECT ARCHIVED EVENTS";
+	if ( from )
+		req << " FROM " << from.toString(RequestTimeFormat);
+	if ( to )
+		req << " TO " + to.toString(RequestTimeFormat);
+	req << requestFormat(formatVersion);
+	if ( where.size() > 0 )
+		req << " WHERE " + where;
 
-	if ( !sendRequest(req) )
+	if ( !orderByLimitOffset(req, _serverAPI, orderBy, limit, offset) ||
+	     !sendRequest(req.str()) )
 		return false;
 
 	// read responses
@@ -274,18 +374,28 @@ bool Connection::selectArchived(Responses &responses, const Core::Time &from,
 }
 
 bool Connection::select(bool archived, const Core::Time &from,
-                        const Core::Time &to, RequestFormat format,
-                        const std::string &where, int updatedBufferSize) {
-	if ( !connect() ) return false;
+                        const Core::Time &to,
+                        const RequestFormatVersion &formatVersion,
+                        const std::string &where, int updatedBufferSize,
+                        OrderBy orderBy, unsigned long limit,
+                        unsigned long offset) {
+
+	if ( !connect() || !isSupported(formatVersion, true) )
+		return false;
 
 	// send request
-	string req = archived ? "SELECT EVENTS" : "SELECT UPDATED EVENTS";
-	if ( from ) req += " FROM " + from.toString(RequestTimeFormat);
-	if ( to ) req += " TO " + to.toString(RequestTimeFormat);
-	req += requestFormat(format);
-	if ( where.size() > 0 ) req += " WHERE " + where;
+	stringstream req;
+	req << (archived ? "SELECT EVENTS" : "SELECT UPDATED EVENTS");
+	if ( from )
+		req << " FROM " << from.toString(RequestTimeFormat);
+	if ( to )
+		req << " TO " << to.toString(RequestTimeFormat);
+	req << requestFormat(formatVersion);
+	if ( where.size() > 0 )
+		req << " WHERE " << where;
 
-	if ( !sendRequest(req) )
+	if ( !orderByLimitOffset(req, _serverAPI, orderBy, limit, offset) ||
+	     !sendRequest(req.str()) )
 		return false;
 
 	// cache of updates received during selection of archived events
@@ -304,7 +414,7 @@ bool Connection::select(bool archived, const Core::Time &from,
 			if ( updatesBetween.size() > 0 ) {
 				SEISCOMP_INFO("%sprocessing %lu updates received in between",
 				              _logPrefix.c_str(),
-				              (unsigned long) updatesBetween.size());
+				              static_cast<unsigned long>(updatesBetween.size()));
 				for ( ResponsesPtr::iterator it = updatesBetween.begin();
 				      it != updatesBetween.end(); ++it )
 					processResponse(*it);
@@ -335,7 +445,7 @@ bool Connection::select(bool archived, const Core::Time &from,
 				}
 
 				// intermediate update, try to buffer
-				if ( updatesBetween.size() < (unsigned) updatedBufferSize ) {
+				if ( updatesBetween.size() < static_cast<unsigned long>(updatedBufferSize) ) {
 					updatesBetween.push_back(response);
 					continue;
 				}
@@ -362,12 +472,60 @@ bool Connection::abort() {
 	return true;
 }
 
+const string& Connection::serverID() {
+	connect();
+	return _serverID;
+}
+
+Version Connection::serverAPI() {
+	connect();
+	return _serverAPI;
+}
+
+bool Connection::isSupported(const RequestFormatVersion &formatVersion,
+                             bool log) {
+	if ( !connect() )
+		return false;
+
+	const Version &version = formatVersion.version();
+	if ( version == 1 )
+		return true;
+
+	const FormatAPIMap::const_iterator it = APIMap.find(formatVersion);
+	if ( it != APIMap.end() && version - 2 < it->second.size() &&
+	     it->second[version - 2] <= _serverAPI )
+		return true;
+
+	if ( log ) {
+		SEISCOMP_WARNING("Format version %u not supported by server", version);
+	}
+	return false;
+}
+
+Version Connection::maximumSupportedVersion(RequestFormat format) {
+	const FormatAPIMap::const_iterator map_it = APIMap.find(format);
+
+	if ( map_it == APIMap.end() || !connect() )
+		return 0;
+
+	Version maxVersion = 1;
+	for ( APIList::const_iterator list_it = map_it->second.begin();
+	      list_it != map_it->second.end(); ++list_it, ++maxVersion ) {
+		if ( *list_it > _serverAPI ) break;
+	}
+
+	return maxVersion;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
-// Private
+// Protected
 ////////////////////////////////////////////////////////////////////////////////
 
 bool Connection::connect() {
 	if ( connected() ) return true;
+
+	disconnect(); // resets server ID and API version
+
 	if ( !_sock ) {
 		SEISCOMP_ERROR("%sinstance not initialized", _logPrefix.c_str());
 		return false;
@@ -380,6 +538,9 @@ bool Connection::connect() {
 		_sock->close();
 		return false;
 	}
+
+	if ( !hello(_serverID, _serverAPI) )
+		return false;
 
 	if ( _user.empty() ) {
 		SEISCOMP_DEBUG("%sskipping authentication", _logPrefix.c_str());
@@ -596,7 +757,7 @@ bool Connection::readPayload(string &data, uint n) {
 
 	while ( total < n ) {
 		read = n - total < BUFSIZE ? n - total : BUFSIZE;
-		try { data += _sock->read(read); }
+		try { data += _sock->read(static_cast<int>(read)); }
 		catch ( SocketException& se) {
 			logAndDisconnect("could not read response payload", se.what());
 			return false;
@@ -606,6 +767,20 @@ bool Connection::readPayload(string &data, uint n) {
 
 	if ( total < n ) {
 		logAndDisconnect("read incomplete response payload");
+		return false;
+	}
+	return true;
+}
+
+bool Connection::checkFormatVersion(std::string &error,
+                                    const RequestFormatVersion &formatVerion) {
+	error.clear();
+	if ( !isSupported(formatVerion) ) {
+		stringstream ss;
+		ss << "Format version not supported by server, requested: "
+		   << formatVerion.version() << ", supported: "
+		   << maximumSupportedVersion(formatVerion);
+		error = ss.str();
 		return false;
 	}
 	return true;
