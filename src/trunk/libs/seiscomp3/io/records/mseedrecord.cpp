@@ -572,8 +572,12 @@ void MSeedRecord::read(std::istream &is) {
 		}
 	}
 
-	if ( !is.good() )
-		throw Core::StreamException("Fatal error occured during reading from stream.");
+	if ( !is.good() ) {
+		if ( is.eof() )
+			throw Core::EndOfStreamException();
+		else
+			throw Core::StreamException("Fatal error occured during reading header from stream");
+	}
 
 	if ( reclen <= 0 )
 		throw LibmseedException("Retrieving the record length failed.");
