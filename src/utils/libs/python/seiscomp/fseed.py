@@ -989,6 +989,7 @@ class _Blockette58(object):
         self.__stage = stage
 
     def output(self, f):
+        if self.__gain is None or self.__gain_freq is None: return
         blk = "058%4d%2d%12.5E%12.5E 0" % (self.__len, self.__stage,
             self.__gain, self.__gain_freq)
 
@@ -2453,13 +2454,16 @@ class _Channel(object):
                         obj = inventory.object[f]
                         if _is_paz_response(obj):
                             gain = resp_container.add_analogue_paz(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         elif _is_iir_response(obj):
                             gain = resp_container.add_analogue_iir(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         elif _is_fap_response(obj):
                             gain = resp_container.add_analogue_fap(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         else:
                             raise SEEDError("invalid filter type: %s (%s)" % (f, obj.name))
 
@@ -2467,7 +2471,8 @@ class _Channel(object):
                 strmcfg.dataloggerSerialNumber, strmcfg.dataloggerChannel,
                 strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator)
 
-            sens *= gain
+            if gain is not None:
+                sens *= gain
 
             if stream_deci.digitalFilterChain:
                 if len(stream_deci.digitalFilterChain) > 0:
