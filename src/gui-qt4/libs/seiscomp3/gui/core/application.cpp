@@ -387,7 +387,7 @@ void Application::setMainWidget(QWidget* w) {
 		QAction *a = helpMenu->addAction("&About SeisComP3");
 		connect(a, SIGNAL(triggered()), this, SLOT(showAbout()));
 
-		a = helpMenu->addAction("&Documenation index");
+		a = helpMenu->addAction("&Documentation index");
 		a->setShortcut(QKeySequence("F1"));
 		connect(a, SIGNAL(triggered()), this, SLOT(showHelpIndex()));
 
