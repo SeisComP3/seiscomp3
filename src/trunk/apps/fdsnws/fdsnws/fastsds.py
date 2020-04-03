@@ -27,11 +27,11 @@ else:
 
 class SDS(object):
     def __init__(self, sdsRoot):
-        if isinstance(sdsRoot, basestring):
-            self.sdsRoot = [sdsRoot]
-
-        elif type(sdsRoot) == type(list()):
+        if type(sdsRoot) == type(list()):
             self.sdsRoot = sdsRoot
+
+        else:
+            self.sdsRoot = [sdsRoot]
 
     def __getMSName(self, reqDate, net, sta, loc, cha):
         for root in self.sdsRoot:

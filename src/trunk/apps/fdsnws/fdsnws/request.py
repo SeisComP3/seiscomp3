@@ -511,7 +511,7 @@ class RequestOptions:
 
         for line in content:
             nLine += 1
-            line = line.strip()
+            line = py3ustr(line.strip())
 
             # ignore empty and comment lines
             if len(line) == 0 or line[0] == '#':

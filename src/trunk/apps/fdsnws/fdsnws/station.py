@@ -50,7 +50,9 @@ class _StationRequestOptions(RequestOptions):
     MinTime = Time(0, 1)
 
     VText = ['text']
-    OutputFormats = list(Exporters) + VText
+    #OutputFormats = list(Exporters) + VText
+    #Default format must be the first, list(Exporters) has random order
+    OutputFormats = ['xml', 'fdsnxml', 'stationxml', 'sc3ml'] + VText
 
     PLevel = ['level']
     PIncludeRestricted = ['includerestricted']
