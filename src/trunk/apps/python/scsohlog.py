@@ -42,7 +42,10 @@ Tests = {
     "summedmessagequeuesize": "cnt",
     "summedmessagesize": "Byte",
     "objectcount": "cnt",
-    "uptime": "s"
+    "uptime": "s",
+    "dbadds": "row/s",
+    "dbupdates": "row/s",
+    "dbdeletes": "row/s"
 }
 
 
