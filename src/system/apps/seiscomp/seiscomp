@@ -205,10 +205,7 @@ def on_setup(args, flags):
       return 1
   else:
     setup = seiscomp3.Setup.Simple()
-    try: cfg = setup.run(env)
-    except Exception as e:
-      error(str(e))
-      return 1
+    cfg = setup.run(env)
 
   retCode = 0
 
