@@ -285,13 +285,12 @@ class SC_GUI_API Application : public QObject, public Client::Application {
 		ConnectionDialog *cdlg();
 
 
-	protected:
-		QApplication       *_app;
-
-
 	private:
 		static Application *_instance;
 
+
+	protected:
+		QApplication       *_app;
 		Type                _type;
 		Scheme             *_scheme;
 		mutable QSettings  *_settings;
