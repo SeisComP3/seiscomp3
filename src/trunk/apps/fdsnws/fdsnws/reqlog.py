@@ -11,6 +11,8 @@ import logging.handlers
 import GeoIP
 import threading
 
+from .utils import py3bstr
+
 mutex = threading.Lock()
 
 
@@ -19,40 +21,11 @@ class MyFileHandler(logging.handlers.TimedRotatingFileHandler):
         super(MyFileHandler, self).__init__(
             filename, when="midnight", utc=True)
 
-    # The rotate() method is missing in Python 2, must override doRollover()
-    # def rotate(self, source, dest):
-    #     super(MyFileHandler, self).rotate(source, dest)
-    #
-    #     if os.path.exists(dest):
-    #         subprocess.Popen(["bzip2", dest])
+    def rotate(self, source, dest):
+        super(MyFileHandler, self).rotate(source, dest)
 
-    def doRollover(self):
-        t = self.rolloverAt - self.interval
-        super(MyFileHandler, self).doRollover()
-
-        currentTime = int(time.time())
-        dstNow = time.localtime(currentTime)[-1]
-
-        if self.utc:
-            timeTuple = time.gmtime(t)
-
-        else:
-            timeTuple = time.localtime(t)
-            dstThen = timeTuple[-1]
-
-            if dstNow != dstThen:
-                if dstNow:
-                    addend = 3600
-
-                else:
-                    addend = -3600
-
-                timeTuple = time.localtime(t + addend)
-
-        dfn = self.baseFilename + "." + time.strftime(self.suffix, timeTuple)
-
-        if os.path.exists(dfn):
-            subprocess.Popen(["bzip2", dfn])
+        if os.path.exists(dest):
+            subprocess.Popen(["bzip2", dest])
 
 
 class Tracker(object):
@@ -61,9 +34,9 @@ class Tracker(object):
         self.__userName = userName
 
         if userName:
-            userID = int(hashlib.md5(userName.lower()).hexdigest()[:8], 16)
+            userID = int(hashlib.md5(py3bstr(userName.lower())).hexdigest()[:8], 16)
         else:
-            userID = int(hashlib.md5(userIP).hexdigest()[:8], 16)
+            userID = int(hashlib.md5(py3bstr(userIP)).hexdigest()[:8], 16)
 
         self.__data = {
             'service': service,

@@ -1207,12 +1207,16 @@ class FDSNWS(Application):
         includeRuleDefined = False
         try:
             import ConfigParser
-        except ImportError as ie:
-            Logging.error("could not load 'ConfigParser' Python module")
-            return False
+            cp = ConfigParser.ConfigParser()
+        except ImportError:
+            try:
+                import configparser
+                cp = configparser.ConfigParser()
+            except ImportError:
+                Logging.error("could not load 'ConfigParser' Python module")
+                return False
 
         try:
-            cp = ConfigParser.ConfigParser()
             Logging.notice("reading inventory filter file: %s" % fileName)
             cp.readfp(open(fileName, 'r'))
             if len(cp.sections()) == 0:
