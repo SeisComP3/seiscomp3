@@ -345,7 +345,7 @@ class FDSNDataSelectRealm(object):
         if resource.IResource in interfaces:
             return (resource.IResource,
                     FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
-                                   {"mail": avatarId, "blacklisted": False}),
+                                   {"mail": utils.py3ustr(avatarId), "blacklisted": False}),
                     lambda: None)
 
         raise NotImplementedError()

@@ -17,6 +17,7 @@ import os
 import random
 import sys
 import time
+import dateutil.parser
 
 from twisted.web import http, resource, server, static, util
 
@@ -268,7 +269,7 @@ class AuthResource(BaseResource):
             return self.renderErrorPage(request, http.BAD_REQUEST, msg)
 
         try:
-            attributes = json.loads(verified.data)
+            attributes = json.loads(py3ustr(verified.data))
             td = dateutil.parser.parse(attributes['valid_until']) - \
                 datetime.datetime.now(dateutil.tz.tzutc())
             lifetime = td.seconds + td.days * 24 * 3600
@@ -285,11 +286,10 @@ class AuthResource(BaseResource):
 
         userid = base64.urlsafe_b64encode(
             hashlib.sha256(verified.data).digest()[:18])
-        password = self.__userdb.addUser(
-            userid, attributes, time.time() + min(lifetime, 24 * 3600), verified.data)
-        utils.accessLog(request, None, http.OK, len(
-            userid)+len(password)+1, None)
-        return '%s:%s' % (userid, password)
+        password = self.__userdb.addUser(userid, attributes,
+            time.time() + min(lifetime, 24 * 3600), py3ustr(verified.data))
+        accessLog(request, None, http.OK, len(userid)+len(password)+1, None)
+        return userid + b':' + password
 
 
 ################################################################################

@@ -81,9 +81,9 @@ class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
         guard.HTTPAuthSessionWrapper.__init__(self, *args, **kwargs)
 
     def render(self, request):
-        if request.method == 'OPTIONS':
-            request.setHeader('Allow', 'GET,HEAD,POST,OPTIONS')
-            return ''
+        if request.method == b'OPTIONS':
+            request.setHeader(b'Allow', b'GET,HEAD,POST,OPTIONS')
+            return b''
 
         else:
             return guard.HTTPAuthSessionWrapper.render(self, request)
@@ -151,7 +151,7 @@ class UserDB(object):
     #--------------------------------------------------------------------------
     def checkPassword(self, credentials):
         try:
-            pw = self.__users[str(credentials.username)][0]
+            pw = self.__users[credentials.username][0]
 
         except KeyError:
             return False
@@ -167,7 +167,7 @@ class UserDB(object):
         Logging.info("known users:")
 
         for name, user in self.__users.items():
-            Logging.info(" %s %s %d" % (name, user[1], user[2]))
+            Logging.info(" %s %s %d" % (py3ustr(name), user[1], user[2]))
 
 
 ###############################################################################
