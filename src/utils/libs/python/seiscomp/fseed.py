@@ -823,13 +823,22 @@ class _Blockette52(object):
         self.__len = 99 + len(self.__comment) + len(self.__flags) + \
             len(self.__start_date) + len(self.__end_date)
 
-        blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.1f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
-            (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
-            self.__comment, self.__signal_units, self.__calibration_units,
-            self.__latitude, self.__longitude, self.__elevation,
-            self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
-            self.__record_length, self.__sample_rate, self.__clock_drift,
-            self.__flags, self.__start_date, self.__end_date)
+        if self.__local_depth >= 1000:
+            blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.0f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
+                (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
+                self.__comment, self.__signal_units, self.__calibration_units,
+                self.__latitude, self.__longitude, self.__elevation,
+                self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
+                self.__record_length, self.__sample_rate, self.__clock_drift,
+                self.__flags, self.__start_date, self.__end_date)
+        else:
+            blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.1f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
+                (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
+                self.__comment, self.__signal_units, self.__calibration_units,
+                self.__latitude, self.__longitude, self.__elevation,
+                self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
+                self.__record_length, self.__sample_rate, self.__clock_drift,
+                self.__flags, self.__start_date, self.__end_date)
 
         if len(blk) != self.__len:
             raise SEEDError, "blockette 52 has invalid length: %d instead of %d" % (len(blk), self.__len)
@@ -1491,7 +1500,9 @@ class _Response5xContainer(_ResponseContainer):
 
     def output(self, f):
         for b in self.__blk:
-            b.output(f)
+            try: b.output(f)
+            except Exception as e:
+                print("Skipped invalid blockette: %s" % str(e), file=sys.stderr)
 
 class _Response4xFactory(object):
     def __init__(self, inventory, unit_dict):
