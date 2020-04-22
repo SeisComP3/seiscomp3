@@ -2,6 +2,10 @@
 
 ## Release 2018.327 patch19
 
+* scautopick
+
+  * Add extraComments option to allow adding more comments to the pick, e.g. SNR
+
 * system
 
   * Fix error message on attempt to create existing alias
