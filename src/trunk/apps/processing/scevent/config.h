@@ -51,6 +51,7 @@ struct Config {
 	typedef std::set<std::string> StringSet;
 
 	size_t          minAutomaticArrivals;
+	OPT(double)     minAutomaticScore;
 	size_t          minMatchingPicks;
 	double          maxMatchingPicksTimeDiff;
 	bool            matchingPicksTimeDiffAND;

@@ -262,6 +262,7 @@ bool EventTool::initConfiguration() {
 	try { _config.matchingPicksTimeDiffAND = configGetBool("eventAssociation.compareAllArrivalTimes"); } catch (...) {}
 	try { _config.matchingLooseAssociatedPicks = configGetBool("eventAssociation.allowLooseAssociatedArrivals"); } catch (...) {}
 	try { _config.minAutomaticArrivals = configGetInt("eventAssociation.minimumDefiningPhases"); } catch (...) {}
+	try { _config.minAutomaticScore = configGetDouble("eventAssociation.minimumScore"); } catch (...) {}
 
 	Config::RegionFilter regionFilter;
 	GlobalRegionPtr region = new GlobalRegion;
@@ -359,6 +360,7 @@ bool EventTool::init() {
 	_config.eventIDPrefix = "gfz";
 	_config.eventIDPattern = "%p%Y%04c";
 	_config.minAutomaticArrivals = 10;
+	_config.minAutomaticScore = Core::None;
 	_config.minStationMagnitudes = 4;
 	_config.minMatchingPicks = 3;
 	_config.maxMatchingPicksTimeDiff = -1;
@@ -388,7 +390,12 @@ bool EventTool::init() {
 
 	if ( !Application::init() ) return false;
 
-	if ( !_config.score.empty() ) {
+	if ( !_config.score.empty() || _config.minAutomaticScore ) {
+		if ( _config.score.empty() ) {
+			SEISCOMP_ERROR("No score processor configured, eventAssociation.score is empty or not set");
+			return false;
+		}
+
 		_score = ScoreProcessorFactory::Create(_config.score.c_str());
 		if ( !_score ) {
 			SEISCOMP_ERROR("Score method '%s' is not available. Is the correct plugin loaded?",
@@ -1836,13 +1843,32 @@ EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *orig
 				return NULL;
 			}
 
-			if ( status == AUTOMATIC
-				&& definingPhaseCount(origin) < (int)_config.minAutomaticArrivals ) {
-				SEISCOMP_DEBUG("... rejecting automatic origin %s (phaseCount: %d < %lu)",
-				               origin->publicID().c_str(), definingPhaseCount(origin), (unsigned long)_config.minAutomaticArrivals);
-				SEISCOMP_LOG(_infoChannel, "Origin %s skipped: phaseCount too low (%d < %lu) to create a new event",
-				             origin->publicID().c_str(), definingPhaseCount(origin), (unsigned long)_config.minAutomaticArrivals);
-				return NULL;
+			if ( status == AUTOMATIC ) {
+				if ( _config.minAutomaticScore ) {
+					double score = _score->evaluate(origin);
+					if ( score < *_config.minAutomaticScore ) {
+						SEISCOMP_DEBUG("... rejecting automatic origin %s (score: %f < %f)",
+						               origin->publicID().c_str(),
+						               score, *_config.minAutomaticScore);
+						SEISCOMP_LOG(_infoChannel,
+						             "Origin %s skipped: score too low (%f < %f) to create a new event",
+						             origin->publicID().c_str(),
+						             score, *_config.minAutomaticScore);
+						return NULL;
+					}
+				}
+				else if ( definingPhaseCount(origin) < int(_config.minAutomaticArrivals) ) {
+					SEISCOMP_DEBUG("... rejecting automatic origin %s (phaseCount: %d < %zu)",
+					               origin->publicID().c_str(),
+					               definingPhaseCount(origin),
+					               _config.minAutomaticArrivals);
+					SEISCOMP_LOG(_infoChannel,
+					             "Origin %s skipped: phaseCount too low (%d < %zu) to create a new event",
+					             origin->publicID().c_str(),
+					             definingPhaseCount(origin),
+					             _config.minAutomaticArrivals);
+					return NULL;
+				}
 			}
 
 			if ( !checkRegionFilter(_config.regionFilter, origin) )
