@@ -7,6 +7,11 @@
   * Added new surface waves magnitude Ms_20 according to IASPEI standard
   * Make Ms_20 parameters configurable
 
+* scautopick
+
+  * Add amplitudes.enableUpdate to descriptions
+  * Add extraComments option to allow adding more comments to the pick, e.g. SNR
+
 * scrttv
 
   * Add option `Toggle record borders` which shows/hides the borders of records.

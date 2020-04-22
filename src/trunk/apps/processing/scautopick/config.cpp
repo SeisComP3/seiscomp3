@@ -58,6 +58,7 @@ Picker::Config::Config() {
 	pickerType = "";
 	killPendingSecondaryProcessors = true;
 	sendDetections = false;
+	extraPickComments = false;
 	playback = false;
 
 	amplitudeList.insert("MLv");
@@ -143,6 +144,9 @@ void Picker::Config::init(const Client::Application *app) {
 	try { sendDetections = app->configGetBool("sendDetections"); }
 	catch ( ... ) {}
 
+	try { extraPickComments = app->configGetBool("extraPickComments"); }
+	catch ( ... ) {}
+
 	try { playback = app->configGetBool("playback"); }
 	catch ( ... ) {}
 }
@@ -157,6 +161,7 @@ void Picker::Config::init(const Client::CommandLine &commandline) {
 	offline = commandline.hasOption("offline") || commandline.hasOption("ep");
 	dumpRecords = commandline.hasOption("dump-records");
 	sendDetections = commandline.hasOption("send-detections") ? true : sendDetections;
+	extraPickComments = commandline.hasOption("extra-comments") ? true : extraPickComments;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

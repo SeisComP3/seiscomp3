@@ -84,6 +84,16 @@
 					and picks by their evaluation mode.
 				</description>
 			</parameter>
+			<parameter name="extraPickComments" type="boolean" default="false">
+				<description>
+					If enabled and picker or spicker is configured, then extra comments
+					will be added to the resulting pick.
+
+					Supported comments:
+
+					SNR: added if SNR >= 0, comment id is &quot;SNR&quot;
+				</description>
+			</parameter>
 			<parameter name="playback" type="boolean" default="false">
 				<description>
 					If enabled, picks can be made on waveforms which are older than
@@ -246,6 +256,7 @@
 				<option long-flag="gap-interpolation" argument="arg" param-ref="gapInterpolation"/>
 				<option long-flag="any-stream" argument="arg" param-ref="useAllStreams"/>
 				<option long-flag="send-detections" param-ref="sendDetections"/>
+				<option long-flag="extra-comments" param-ref="extraPickComments"/>
 			</group>
 		</command-line>
 	</module>
