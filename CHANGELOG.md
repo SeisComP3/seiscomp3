@@ -43,6 +43,8 @@
       format version
     * Add support for ORDER BY, LIMIT and OFFSET parameters to select() and
       selectArchived() queries introduced by QuakeLink API 1
+  * Fixed MSEED parser to also accept records if blockette 1000 is not within
+    the first 64 bytes
 
 * seedlink
 
@@ -57,6 +59,11 @@
 * scinv
 
   * Correct output of associated filenames in case of a conflict
+
+* fdsnxml
+
+  * Supported schema version is 1.1
+  * Convert from/to SC3 by encoding additional attributes as comments
 
 * GUI
 
