@@ -8,7 +8,7 @@
 
 
 #define SEISCOMP_COMPONENT SWE
-#include <fdsnxml/stringtype.h>
+#include <fdsnxml/identifier.h>
 #include <seiscomp3/logging/log.h>
 
 
@@ -16,17 +16,18 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 
-StringType::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
-	addProperty(Core::simpleProperty("text", "string", false, false, false, false, false, false, NULL, &StringType::setText, &StringType::text));
+Identifier::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
+	addProperty(Core::simpleProperty("type", "string", false, false, false, false, false, false, NULL, &Identifier::setType, &Identifier::type));
+	addProperty(Core::simpleProperty("value", "string", false, false, false, false, false, false, NULL, &Identifier::setValue, &Identifier::value));
 }
 
 
-IMPLEMENT_RTTI(StringType, "FDSNXML::StringType", Core::BaseObject)
-IMPLEMENT_RTTI_METHODS(StringType)
-IMPLEMENT_METAOBJECT(StringType)
+IMPLEMENT_RTTI(Identifier, "FDSNXML::Identifier", Core::BaseObject)
+IMPLEMENT_RTTI_METHODS(Identifier)
+IMPLEMENT_METAOBJECT(Identifier)
 
 
-StringType::StringType() {
+Identifier::Identifier() {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -34,7 +35,7 @@ StringType::StringType() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::StringType(const StringType &other)
+Identifier::Identifier(const Identifier &other)
  : Core::BaseObject() {
 	*this = other;
 }
@@ -44,8 +45,8 @@ StringType::StringType(const StringType &other)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::StringType(const std::string& text)
- : _text(text) {
+Identifier::Identifier(const std::string& value)
+ : _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -53,15 +54,10 @@ StringType::StringType(const std::string& text)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::~StringType() {}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::operator std::string&() {
-	return _text;
+Identifier::Identifier(const std::string& type,
+                       const std::string& value)
+ : _type(type),
+   _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -69,17 +65,17 @@ StringType::operator std::string&() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::operator const std::string&() const {
-	return _text;
-}
+Identifier::~Identifier() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool StringType::operator==(const StringType &rhs) const {
-	if ( !(_text == rhs._text) )
+bool Identifier::operator==(const Identifier &rhs) const {
+	if ( !(_type == rhs._type) )
+		return false;
+	if ( !(_value == rhs._value) )
 		return false;
 	return true;
 }
@@ -89,8 +85,8 @@ bool StringType::operator==(const StringType &rhs) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StringType::setText(const std::string& text) {
-	_text = text;
+void Identifier::setType(const std::string& type) {
+	_type = type;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -98,8 +94,8 @@ void StringType::setText(const std::string& text) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& StringType::text() const {
-	return _text;
+const std::string& Identifier::type() const {
+	return _type;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -107,8 +103,27 @@ const std::string& StringType::text() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType& StringType::operator=(const StringType &other) {
-	_text = other._text;
+void Identifier::setValue(const std::string& value) {
+	_value = value;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string& Identifier::value() const {
+	return _value;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Identifier& Identifier::operator=(const Identifier &other) {
+	_type = other._type;
+	_value = other._value;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

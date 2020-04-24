@@ -9,6 +9,7 @@
 
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/network.h>
+#include <fdsnxml/operator.h>
 #include <fdsnxml/station.h>
 #include <algorithm>
 #include <seiscomp3/logging/log.h>
@@ -21,6 +22,7 @@ namespace FDSNXML {
 Network::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
 	addProperty(objectProperty<CounterType>("totalNumberOfStations", "FDSNXML::CounterType", false, true, &Network::setTotalNumberOfStations, &Network::totalNumberOfStations));
 	addProperty(objectProperty<CounterType>("selectedNumberStations", "FDSNXML::CounterType", false, true, &Network::setSelectedNumberStations, &Network::selectedNumberStations));
+	addProperty(arrayClassProperty<Operator>("operators", "FDSNXML::Operator", &Network::operatorsCount, &Network::operators, static_cast<bool (Network::*)(Operator*)>(&Network::addOperators), &Network::removeOperators, static_cast<bool (Network::*)(Operator*)>(&Network::removeOperators)));
 	addProperty(arrayClassProperty<Station>("station", "FDSNXML::Station", &Network::stationCount, &Network::station, static_cast<bool (Network::*)(Station*)>(&Network::addStation), &Network::removeStation, static_cast<bool (Network::*)(Station*)>(&Network::removeStation)));
 }
 
@@ -135,6 +137,74 @@ Network& Network::operator=(const Network &other) {
 	_totalNumberOfStations = other._totalNumberOfStations;
 	_selectedNumberStations = other._selectedNumberStations;
 	return *this;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Network::operatorsCount() const {
+	return _operatorss.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Operator* Network::operators(size_t i) const {
+	return _operatorss[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::addOperators(Operator *obj) {
+	if ( obj == NULL )
+		return false;
+
+	// Add the element
+	_operatorss.push_back(obj);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::removeOperators(Operator *obj) {
+	if ( obj == NULL )
+		return false;
+
+	std::vector<OperatorPtr>::iterator it;
+	it = std::find(_operatorss.begin(), _operatorss.end(), obj);
+	// Element has not been found
+	if ( it == _operatorss.end() ) {
+		SEISCOMP_ERROR("Network::removeOperators(Operator*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::removeOperators(size_t i) {
+	// index out of bounds
+	if ( i >= _operatorss.size() )
+		return false;
+
+	_operatorss.erase(_operatorss.begin() + i);
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

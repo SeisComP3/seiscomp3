@@ -21,6 +21,7 @@
 namespace Seiscomp {
 namespace FDSNXML {
 
+DEFINE_SMARTPOINTER(Operator);
 DEFINE_SMARTPOINTER(Station);
 
 
@@ -98,6 +99,7 @@ class Network : public BaseNode {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
+		bool addOperators(Operator *obj);
 		bool addStation(Station *obj);
 
 		/**
@@ -107,6 +109,7 @@ class Network : public BaseNode {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
+		bool removeOperators(Operator *obj);
 		bool removeStation(Station *obj);
 
 		/**
@@ -115,13 +118,16 @@ class Network : public BaseNode {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
+		bool removeOperators(size_t i);
 		bool removeStation(size_t i);
 
 		//! Retrieve the number of objects of a particular class
+		size_t operatorsCount() const;
 		size_t stationCount() const;
 
 		//! Index access
 		//! @return The object at index i
+		Operator* operators(size_t i) const;
 		Station* station(size_t i) const;
 
 
@@ -134,6 +140,7 @@ class Network : public BaseNode {
 		OPT(CounterType) _selectedNumberStations;
 
 		// Aggregations
+		std::vector<OperatorPtr> _operatorss;
 		std::vector<StationPtr> _stations;
 };
 

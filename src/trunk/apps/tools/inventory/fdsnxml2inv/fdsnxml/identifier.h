@@ -7,14 +7,12 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_FDSNXML_RESPONSELISTELEMENT_H__
-#define __SEISCOMP_FDSNXML_RESPONSELISTELEMENT_H__
+#ifndef __SEISCOMP_FDSNXML_IDENTIFIER_H__
+#define __SEISCOMP_FDSNXML_IDENTIFIER_H__
 
 
 #include <fdsnxml/metadata.h>
-#include <fdsnxml/floattype.h>
-#include <fdsnxml/frequencytype.h>
-#include <fdsnxml/angletype.h>
+#include <string>
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/exceptions.h>
 
@@ -23,11 +21,16 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 
-DEFINE_SMARTPOINTER(ResponseListElement);
+DEFINE_SMARTPOINTER(Identifier);
 
 
-class ResponseListElement : public Core::BaseObject {
-	DECLARE_CASTS(ResponseListElement);
+/**
+ * \brief A type to document persistent identifiers. Identifier values should
+ * \brief be specified without a URI scheme (prefix), instead the identifer
+ * \brief type is documented as an attribute.
+ */
+class Identifier : public Core::BaseObject {
+	DECLARE_CASTS(Identifier);
 	DECLARE_RTTI;
 	DECLARE_METAOBJECT_DERIVED;
 
@@ -36,13 +39,18 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Constructor
-		ResponseListElement();
+		Identifier();
 
 		//! Copy constructor
-		ResponseListElement(const ResponseListElement &other);
+		Identifier(const Identifier &other);
+
+		//! Custom constructor
+		Identifier(const std::string& value);
+		Identifier(const std::string& type,
+		           const std::string& value);
 
 		//! Destructor
-		~ResponseListElement();
+		~Identifier();
 
 
 	// ------------------------------------------------------------------
@@ -50,28 +58,21 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Copies the metadata of other to this
-		ResponseListElement& operator=(const ResponseListElement &other);
-		bool operator==(const ResponseListElement &other) const;
+		Identifier& operator=(const Identifier &other);
+		bool operator==(const Identifier &other) const;
 
 
 	// ------------------------------------------------------------------
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! XML tag: Frequency
-		void setFrequency(const FrequencyType& frequency);
-		FrequencyType& frequency();
-		const FrequencyType& frequency() const;
+		//! XML tag: type
+		void setType(const std::string& type);
+		const std::string& type() const;
 
-		//! XML tag: Amplitude
-		void setAmplitude(const FloatType& amplitude);
-		FloatType& amplitude();
-		const FloatType& amplitude() const;
-
-		//! XML tag: Phase
-		void setPhase(const AngleType& phase);
-		AngleType& phase();
-		const AngleType& phase() const;
+		//! XML tag: value
+		void setValue(const std::string& value);
+		const std::string& value() const;
 
 
 	// ------------------------------------------------------------------
@@ -79,9 +80,8 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	private:
 		// Attributes
-		FrequencyType _frequency;
-		FloatType _amplitude;
-		AngleType _phase;
+		std::string _type;
+		std::string _value;
 };
 
 

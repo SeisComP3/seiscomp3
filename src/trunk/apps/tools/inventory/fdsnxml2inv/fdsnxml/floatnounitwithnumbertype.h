@@ -7,15 +7,13 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_FDSNXML_RESPONSELISTELEMENT_H__
-#define __SEISCOMP_FDSNXML_RESPONSELISTELEMENT_H__
+#ifndef __SEISCOMP_FDSNXML_FLOATNOUNITWITHNUMBERTYPE_H__
+#define __SEISCOMP_FDSNXML_FLOATNOUNITWITHNUMBERTYPE_H__
 
 
 #include <fdsnxml/metadata.h>
-#include <fdsnxml/floattype.h>
-#include <fdsnxml/frequencytype.h>
-#include <fdsnxml/angletype.h>
-#include <seiscomp3/core/baseobject.h>
+#include <fdsnxml/floatnounittype.h>
+#include <fdsnxml/countertype.h>
 #include <seiscomp3/core/exceptions.h>
 
 
@@ -23,11 +21,14 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 
-DEFINE_SMARTPOINTER(ResponseListElement);
+DEFINE_SMARTPOINTER(FloatNoUnitWithNumberType);
 
 
-class ResponseListElement : public Core::BaseObject {
-	DECLARE_CASTS(ResponseListElement);
+/**
+ * \brief Representation of floating-point numbers with index numbers.
+ */
+class FloatNoUnitWithNumberType : public FloatNoUnitType {
+	DECLARE_CASTS(FloatNoUnitWithNumberType);
 	DECLARE_RTTI;
 	DECLARE_METAOBJECT_DERIVED;
 
@@ -36,13 +37,13 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Constructor
-		ResponseListElement();
+		FloatNoUnitWithNumberType();
 
 		//! Copy constructor
-		ResponseListElement(const ResponseListElement &other);
+		FloatNoUnitWithNumberType(const FloatNoUnitWithNumberType &other);
 
 		//! Destructor
-		~ResponseListElement();
+		~FloatNoUnitWithNumberType();
 
 
 	// ------------------------------------------------------------------
@@ -50,28 +51,18 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! Copies the metadata of other to this
-		ResponseListElement& operator=(const ResponseListElement &other);
-		bool operator==(const ResponseListElement &other) const;
+		FloatNoUnitWithNumberType& operator=(const FloatNoUnitWithNumberType &other);
+		bool operator==(const FloatNoUnitWithNumberType &other) const;
 
 
 	// ------------------------------------------------------------------
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! XML tag: Frequency
-		void setFrequency(const FrequencyType& frequency);
-		FrequencyType& frequency();
-		const FrequencyType& frequency() const;
-
-		//! XML tag: Amplitude
-		void setAmplitude(const FloatType& amplitude);
-		FloatType& amplitude();
-		const FloatType& amplitude() const;
-
-		//! XML tag: Phase
-		void setPhase(const AngleType& phase);
-		AngleType& phase();
-		const AngleType& phase() const;
+		//! XML tag: number
+		void setNumber(const OPT(CounterType)& number);
+		CounterType& number();
+		const CounterType& number() const;
 
 
 	// ------------------------------------------------------------------
@@ -79,9 +70,7 @@ class ResponseListElement : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	private:
 		// Attributes
-		FrequencyType _frequency;
-		FloatType _amplitude;
-		AngleType _phase;
+		OPT(CounterType) _number;
 };
 
 

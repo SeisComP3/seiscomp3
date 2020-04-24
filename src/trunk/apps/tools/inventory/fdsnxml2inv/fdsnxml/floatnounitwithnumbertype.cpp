@@ -8,7 +8,7 @@
 
 
 #define SEISCOMP_COMPONENT SWE
-#include <fdsnxml/stringtype.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
 #include <seiscomp3/logging/log.h>
 
 
@@ -16,17 +16,17 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 
-StringType::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
-	addProperty(Core::simpleProperty("text", "string", false, false, false, false, false, false, NULL, &StringType::setText, &StringType::text));
+FloatNoUnitWithNumberType::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
+	addProperty(objectProperty<CounterType>("number", "FDSNXML::CounterType", false, true, &FloatNoUnitWithNumberType::setNumber, &FloatNoUnitWithNumberType::number));
 }
 
 
-IMPLEMENT_RTTI(StringType, "FDSNXML::StringType", Core::BaseObject)
-IMPLEMENT_RTTI_METHODS(StringType)
-IMPLEMENT_METAOBJECT(StringType)
+IMPLEMENT_RTTI(FloatNoUnitWithNumberType, "FDSNXML::FloatNoUnitWithNumberType", FloatNoUnitType)
+IMPLEMENT_RTTI_METHODS(FloatNoUnitWithNumberType)
+IMPLEMENT_METAOBJECT_DERIVED(FloatNoUnitWithNumberType, FloatNoUnitType)
 
 
-StringType::StringType() {
+FloatNoUnitWithNumberType::FloatNoUnitWithNumberType() {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -34,8 +34,8 @@ StringType::StringType() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::StringType(const StringType &other)
- : Core::BaseObject() {
+FloatNoUnitWithNumberType::FloatNoUnitWithNumberType(const FloatNoUnitWithNumberType &other)
+ : FloatNoUnitType() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -44,42 +44,15 @@ StringType::StringType(const StringType &other)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::StringType(const std::string& text)
- : _text(text) {
-}
+FloatNoUnitWithNumberType::~FloatNoUnitWithNumberType() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::~StringType() {}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::operator std::string&() {
-	return _text;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType::operator const std::string&() const {
-	return _text;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool StringType::operator==(const StringType &rhs) const {
-	if ( !(_text == rhs._text) )
+bool FloatNoUnitWithNumberType::operator==(const FloatNoUnitWithNumberType &rhs) const {
+	if ( !(_number == rhs._number) )
 		return false;
 	return true;
 }
@@ -89,8 +62,8 @@ bool StringType::operator==(const StringType &rhs) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StringType::setText(const std::string& text) {
-	_text = text;
+void FloatNoUnitWithNumberType::setNumber(const OPT(CounterType)& number) {
+	_number = number;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -98,8 +71,10 @@ void StringType::setText(const std::string& text) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& StringType::text() const {
-	return _text;
+CounterType& FloatNoUnitWithNumberType::number() {
+	if ( _number )
+		return *_number;
+	throw Seiscomp::Core::ValueException("FloatNoUnitWithNumberType.number is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -107,8 +82,20 @@ const std::string& StringType::text() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType& StringType::operator=(const StringType &other) {
-	_text = other._text;
+const CounterType& FloatNoUnitWithNumberType::number() const {
+	if ( _number )
+		return *_number;
+	throw Seiscomp::Core::ValueException("FloatNoUnitWithNumberType.number is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+FloatNoUnitWithNumberType& FloatNoUnitWithNumberType::operator=(const FloatNoUnitWithNumberType &other) {
+	FloatNoUnitType::operator=(other);
+	_number = other._number;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

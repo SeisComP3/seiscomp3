@@ -12,6 +12,8 @@
 
 
 #include <fdsnxml/metadata.h>
+#include <fdsnxml/agency.h>
+#include <fdsnxml/stringtype.h>
 #include <vector>
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/exceptions.h>
@@ -20,9 +22,7 @@
 namespace Seiscomp {
 namespace FDSNXML {
 
-DEFINE_SMARTPOINTER(Agency);
 DEFINE_SMARTPOINTER(Person);
-DEFINE_SMARTPOINTER(StringType);
 
 
 
@@ -63,6 +63,21 @@ class Operator : public Core::BaseObject {
 		Operator& operator=(const Operator &other);
 		bool operator==(const Operator &other) const;
 
+
+	// ------------------------------------------------------------------
+	//  Setters/Getters
+	// ------------------------------------------------------------------
+	public:
+		//! XML tag: Agency
+		void setAgency(const Agency& agency);
+		Agency& agency();
+		Agency agency() const;
+
+		//! XML tag: WebSite
+		void setWebSite(const OPT(StringType)& webSite);
+		StringType& webSite();
+		const StringType& webSite() const;
+
 	
 	// ------------------------------------------------------------------
 	//  Public interface
@@ -76,9 +91,7 @@ class Operator : public Core::BaseObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
-		bool addAgency(Agency *obj);
 		bool addContact(Person *obj);
-		bool addWebSite(StringType *obj);
 
 		/**
 		 * Removes an object.
@@ -87,9 +100,7 @@ class Operator : public Core::BaseObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
-		bool removeAgency(Agency *obj);
 		bool removeContact(Person *obj);
-		bool removeWebSite(StringType *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -97,30 +108,26 @@ class Operator : public Core::BaseObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
-		bool removeAgency(size_t i);
 		bool removeContact(size_t i);
-		bool removeWebSite(size_t i);
 
 		//! Retrieve the number of objects of a particular class
-		size_t agencyCount() const;
 		size_t contactCount() const;
-		size_t webSiteCount() const;
 
 		//! Index access
 		//! @return The object at index i
-		Agency* agency(size_t i) const;
 		Person* contact(size_t i) const;
-		StringType* webSite(size_t i) const;
 
 
 	// ------------------------------------------------------------------
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
+		// Attributes
+		Agency _agency;
+		OPT(StringType) _webSite;
+
 		// Aggregations
-		std::vector<AgencyPtr> _agencys;
 		std::vector<PersonPtr> _contacts;
-		std::vector<StringTypePtr> _webSites;
 };
 
 

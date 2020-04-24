@@ -113,7 +113,7 @@ FloatType& ResponseListElement::amplitude() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FloatType ResponseListElement::amplitude() const {
+const FloatType& ResponseListElement::amplitude() const {
 	return _amplitude;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

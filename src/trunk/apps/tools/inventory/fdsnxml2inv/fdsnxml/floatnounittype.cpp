@@ -20,6 +20,7 @@ FloatNoUnitType::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::Meta
 	addProperty(Core::simpleProperty("value", "float", false, false, false, false, false, false, NULL, &FloatNoUnitType::setValue, &FloatNoUnitType::value));
 	addProperty(Core::simpleProperty("upperUncertainty", "float", false, false, false, false, true, false, NULL, &FloatNoUnitType::setUpperUncertainty, &FloatNoUnitType::upperUncertainty));
 	addProperty(Core::simpleProperty("lowerUncertainty", "float", false, false, false, false, true, false, NULL, &FloatNoUnitType::setLowerUncertainty, &FloatNoUnitType::lowerUncertainty));
+	addProperty(Core::simpleProperty("measurementMethod", "string", false, false, false, false, false, false, NULL, &FloatNoUnitType::setMeasurementMethod, &FloatNoUnitType::measurementMethod));
 }
 
 
@@ -58,10 +59,12 @@ FloatNoUnitType::FloatNoUnitType(double value)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FloatNoUnitType::FloatNoUnitType(double value,
                                  const OPT(double)& upperUncertainty,
-                                 const OPT(double)& lowerUncertainty)
+                                 const OPT(double)& lowerUncertainty,
+                                 const std::string& measurementMethod)
  : _value(value),
    _upperUncertainty(upperUncertainty),
-   _lowerUncertainty(lowerUncertainty) {
+   _lowerUncertainty(lowerUncertainty),
+   _measurementMethod(measurementMethod) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -100,6 +103,8 @@ bool FloatNoUnitType::operator==(const FloatNoUnitType &rhs) const {
 	if ( !(_upperUncertainty == rhs._upperUncertainty) )
 		return false;
 	if ( !(_lowerUncertainty == rhs._lowerUncertainty) )
+		return false;
+	if ( !(_measurementMethod == rhs._measurementMethod) )
 		return false;
 	return true;
 }
@@ -167,10 +172,29 @@ double FloatNoUnitType::lowerUncertainty() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FloatNoUnitType::setMeasurementMethod(const std::string& measurementMethod) {
+	_measurementMethod = measurementMethod;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string& FloatNoUnitType::measurementMethod() const {
+	return _measurementMethod;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FloatNoUnitType& FloatNoUnitType::operator=(const FloatNoUnitType &other) {
 	_value = other._value;
 	_upperUncertainty = other._upperUncertainty;
 	_lowerUncertainty = other._lowerUncertainty;
+	_measurementMethod = other._measurementMethod;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

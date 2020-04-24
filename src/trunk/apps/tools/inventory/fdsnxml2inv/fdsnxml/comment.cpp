@@ -23,6 +23,7 @@ Comment::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(Core::simpleProperty("beginEffectiveTime", "datetime", false, false, false, false, true, false, NULL, &Comment::setBeginEffectiveTime, &Comment::beginEffectiveTime));
 	addProperty(Core::simpleProperty("endEffectiveTime", "datetime", false, false, false, false, true, false, NULL, &Comment::setEndEffectiveTime, &Comment::endEffectiveTime));
 	addProperty(Core::simpleProperty("id", "int", false, false, false, false, true, false, NULL, &Comment::setId, &Comment::id));
+	addProperty(Core::simpleProperty("subject", "string", false, false, false, false, false, false, NULL, &Comment::setSubject, &Comment::subject));
 	addProperty(arrayClassProperty<Person>("author", "FDSNXML::Person", &Comment::authorCount, &Comment::author, static_cast<bool (Comment::*)(Person*)>(&Comment::addAuthor), &Comment::removeAuthor, static_cast<bool (Comment::*)(Person*)>(&Comment::removeAuthor)));
 }
 
@@ -65,6 +66,8 @@ bool Comment::operator==(const Comment &rhs) const {
 	if ( !(_endEffectiveTime == rhs._endEffectiveTime) )
 		return false;
 	if ( !(_id == rhs._id) )
+		return false;
+	if ( !(_subject == rhs._subject) )
 		return false;
 	return true;
 }
@@ -152,11 +155,30 @@ int Comment::id() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Comment::setSubject(const std::string& subject) {
+	_subject = subject;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string& Comment::subject() const {
+	return _subject;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Comment& Comment::operator=(const Comment &other) {
 	_value = other._value;
 	_beginEffectiveTime = other._beginEffectiveTime;
 	_endEffectiveTime = other._endEffectiveTime;
 	_id = other._id;
+	_subject = other._subject;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
