@@ -69,49 +69,50 @@ const char *PRIORITY_TOKENS[] = {
 // Global region class defining a rectangular region
 // by latmin, lonmin, latmax, lonmax.
 DEFINE_SMARTPOINTER(GlobalRegion);
-struct GlobalRegion : public Client::Config::Region {
-	GlobalRegion() {}
+class GlobalRegion : public Client::Config::Region {
+	public:
+		GlobalRegion() {}
 
-	bool init(const Seiscomp::Config::Config &config, const std::string &prefix) {
-		vector<double> region;
-		try { region = config.getDoubles(prefix + "rect"); }
-		catch ( ... ) {
-			return false;
+		bool init(const Seiscomp::Config::Config &config, const std::string &prefix) {
+			vector<double> region;
+			try { region = config.getDoubles(prefix + "rect"); }
+			catch ( ... ) {
+				return false;
+			}
+
+			// Parse region
+			if ( region.size() != 4 ) {
+				SEISCOMP_ERROR("%srect: expected 4 values in region definition, got %d",
+							   prefix.c_str(), (int)region.size());
+				return false;
+			}
+
+			latMin = region[0];
+			lonMin = region[1];
+			latMax = region[2];
+			lonMax = region[3];
+
+			return true;
 		}
 
-		// Parse region
-		if ( region.size() != 4 ) {
-			SEISCOMP_ERROR("%srect: expected 4 values in region definition, got %d",
-			               prefix.c_str(), (int)region.size());
-			return false;
+		bool isInside(double lat, double lon) const {
+			double len, dist;
+
+			if ( lat < latMin || lat > latMax ) return false;
+
+			len = lonMax - lonMin;
+			if ( len < 0 )
+				len += 360.0;
+
+			dist = lon - lonMin;
+			if ( dist < 0 )
+				dist += 360.0;
+
+			return dist <= len;
 		}
 
-		latMin = region[0];
-		lonMin = region[1];
-		latMax = region[2];
-		lonMax = region[3];
-
-		return true;
-	}
-
-	bool isInside(double lat, double lon) const {
-		double len, dist;
-
-		if ( lat < latMin || lat > latMax ) return false;
-
-		len = lonMax - lonMin;
-		if ( len < 0 )
-			len += 360.0;
-
-		dist = lon - lonMin;
-		if ( dist < 0 )
-			dist += 360.0;
-
-		return dist <= len;
-	}
-
-	double latMin, lonMin;
-	double latMax, lonMax;
+		double latMin, lonMin;
+		double latMax, lonMax;
 };
 
 
@@ -133,7 +134,7 @@ class SC_SYSTEM_CLIENT_API ClearCacheRequestMessage : public Seiscomp::Core::Mes
 		virtual bool empty() const  { return false; }
 };
 
-void ClearCacheRequestMessage::serialize(Archive& ar) {}
+void ClearCacheRequestMessage::serialize(Archive &) {}
 
 IMPLEMENT_SC_CLASS_DERIVED(
 	ClearCacheRequestMessage, Message, "clear_cache_request_message"
@@ -156,7 +157,7 @@ class SC_SYSTEM_CLIENT_API ClearCacheResponseMessage : public Seiscomp::Core::Me
 		virtual bool empty() const  { return false; }
 };
 
-void ClearCacheResponseMessage::serialize(Archive& ar) {}
+void ClearCacheResponseMessage::serialize(Archive &) {}
 
 IMPLEMENT_SC_CLASS_DERIVED(
 	ClearCacheResponseMessage, Message, "clear_cache_response_message"
@@ -684,7 +685,19 @@ void EventTool::handleTimeout() {
 			if ( org ) {
 				SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s",
 				             org->publicID().c_str());
-				associateOrigin(org.get(), true);
+				bool createdEvent;
+				associateOrigin(org.get(), true, &createdEvent);
+				if ( createdEvent ) {
+					// In case an event was created based on a delayed origin
+					// then we immediately release this information. All other
+					// origins will be associated in a row without intermediate
+					// messages.
+					NotifierMessagePtr nmsg = Notifier::GetMessage(true);
+					if ( nmsg ) {
+						SEISCOMP_DEBUG("%d notifier available", (int)nmsg->size());
+						if ( !_testMode ) connection()->send(nmsg.get());
+					}
+				}
 			}
 			else {
 				FocalMechanismPtr fm = FocalMechanism::Cast(it->obj);
@@ -1774,7 +1787,10 @@ EventInformationPtr EventTool::associateOriginCheckDelay(DataModel::Origin *orig
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *origin,
-                                               bool allowEventCreation) {
+                                               bool allowEventCreation,
+                                               bool *createdEvent) {
+	if ( createdEvent ) *createdEvent = false;
+
 	// Default origin status
 	EvaluationMode status = AUTOMATIC;
 	try {
@@ -1876,6 +1892,7 @@ EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *orig
 
 			info = createEvent(origin);
 			if ( info ) {
+				if ( createdEvent ) *createdEvent = true;
 				SEISCOMP_INFO("%s: created", info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Origin %s created a new event %s",
 				             origin->publicID().c_str(), info->event->publicID().c_str());
