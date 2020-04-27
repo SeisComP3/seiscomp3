@@ -2433,6 +2433,7 @@ void PickerView::init() {
 
 	_currentRecord = new ZoomRecordWidget();
 	_currentRecord->showScaledValues(_ui.actionShowTraceValuesInNmS->isChecked());
+	_currentRecord->showRecordBorders(_ui.actionShowRecordBorders->isChecked());
 	_currentRecord->setClippingEnabled(_ui.actionClipComponentsToViewport->isChecked());
 	_currentRecord->setMouseTracking(true);
 	_currentRecord->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -2812,6 +2813,8 @@ void PickerView::init() {
 	        _recordView, SLOT(horizontalZoomOut()));
 	connect(_ui.actionShowTraceValuesInNmS, SIGNAL(triggered(bool)),
 	        this, SLOT(showTraceScaleToggled(bool)));
+	connect(_ui.actionShowRecordBorders, SIGNAL(triggered(bool)),
+	        this, SLOT(showRecordBorders(bool)));
 
 	connect(_ui.actionToggleFilter, SIGNAL(triggered(bool)),
 	        this, SLOT(toggleFilter()));
@@ -5996,6 +5999,15 @@ void PickerView::showTraceScaleToggled(bool e) {
 		item->widget()->showScaledValues(e);
 		updateRecordAxisLabel(item);
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::showRecordBorders(bool e) {
+	_currentRecord->showRecordBorders(e);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

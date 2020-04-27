@@ -224,12 +224,12 @@ Scheme::Colors::RecordBorders::RecordBorders() {
 	color.setAlpha(16);
 	standard.brush = color;
 
-	color = Qt::green;
+	color = Qt::darkGreen;
 	signatureValid.pen = QPen(color);
 	color.setAlpha(16);
 	signatureValid.brush = QBrush(color);
 
-	color = Qt::red;
+	color = Qt::darkRed;
 	signatureInvalid.pen = QPen(color);
 	color.setAlpha(16);
 	signatureInvalid.brush = QBrush(color);

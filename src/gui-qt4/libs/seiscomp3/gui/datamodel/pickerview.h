@@ -383,6 +383,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void updateItemRecordState(const Seiscomp::Record*);
 		void updateRecordValue(Seiscomp::Core::Time);
 		void showTraceScaleToggled(bool);
+		void showRecordBorders(bool);
 
 		void specLogToggled(bool);
 		void specSmoothToggled(bool);
