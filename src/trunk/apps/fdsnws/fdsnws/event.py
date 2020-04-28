@@ -239,10 +239,10 @@ class _EventRequestOptions(RequestOptions):
         # eventID, MUST NOT be combined with above parameters
         if filterParams and self.eventIDs:
             raise ValueError("invalid mixture of parameters, the parameter " \
-                "'%s' may only be combined with: %s, %s, %s, %s, %s" % (
+                "'%s' may only be combined with: %s, %s, %s, %s, %s, %s, %s, %s" % (
                     self.PEventID[0], self.PAllOrigins[0], self.PAllMags[0],
                     self.PArrivals[0], self.PPicks[0], self.PFM[0],
-                    self.PAllFMs[0], self.PAllMTs[0], self.PComments[0]))
+                    self.PAllFMs[0], self.PStaMTs[0], self.PComments[0]))
 
         # format XML
         self.formatted = self.parseBool(self.PFormatted)
