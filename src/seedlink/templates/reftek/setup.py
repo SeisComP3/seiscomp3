@@ -20,7 +20,11 @@ class SeedlinkPluginHandler:
     try: port = int(seedlink.param('sources.reftek.port'))
     except: seedlink.setParam('sources.reftek.port', port)
 
-    key = address + ":" + str(port)
+    proc = "reftek"
+    try: proc = seedlink.param('sources.reftek.proc')
+    except: seedlink.setParam('sources.reftek.proc', proc)
+
+    key = (address + ":" + str(port), proc)
 
     try:
       reftekId = self.instances[key]
@@ -64,9 +68,6 @@ class SeedlinkPluginHandler:
     unlock_tq = 10
     try: unlock_tq = int(seedlink.param('sources.reftek.unlock_tq'))
     except: seedlink.setParam('sources.reftek.unlock_tq', unlock_tq)
-
-    try: proc = seedlink.param('sources.reftek.proc')
-    except: seedlink.setParam('sources.reftek.proc', 'reftek')
 
     log_soh = "true"
     try:
