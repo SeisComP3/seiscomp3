@@ -57,7 +57,7 @@
 #include "plugin.h"
 #include "diag.h"
 
-#define MYVERSION "3.3 (2019.252)"
+#define MYVERSION "3.3 (2020.122)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/seedlink.ini"
@@ -270,6 +270,7 @@ class PluginPartner
   public:
     virtual rc_ptr<StreamProcessor> get_plugin_sproc(const string &plugin_name,
       rc_ptr<StreamProcessorSpec> spspec) =0;
+    virtual rc_ptr<StreamProcessor> get_station_sproc() =0;
     virtual ~PluginPartner() {};
   };
 
@@ -584,22 +585,34 @@ bool Plugin::read(PluginPacketHeader &head, void *data)
 
 rc_ptr<Input> Plugin::get_input(const string &input_name, PluginPartner &partner)
   {
-    if(spspec == NULL)
-      {
-        if(!raw_ignored)
-          {
-            logs(LOG_WARNING) << name << " raw data ignored" << endl;
-            raw_ignored = true;
-          }
-
+    if(raw_ignored || missing_inputs.find(input_name) != missing_inputs.end())
         return NULL;
+
+    rc_ptr<Input> input;
+
+    if(spspec != NULL)
+      {
+        rc_ptr<StreamProcessor> sproc = partner.get_plugin_sproc(name, spspec);
+        input = sproc->get_input(input_name);
       }
 
-    if(missing_inputs.find(input_name) != missing_inputs.end())
-        return NULL;
+    if(input == NULL)
+      {
+        rc_ptr<StreamProcessor> sproc = partner.get_station_sproc();
 
-    rc_ptr<StreamProcessor> sproc = partner.get_plugin_sproc(name, spspec);
-    rc_ptr<Input> input = sproc->get_input(input_name);
+        if(sproc == NULL)
+          {
+            if(spspec == NULL && !raw_ignored)
+              {
+                logs(LOG_WARNING) << name << " raw data ignored" << endl;
+                raw_ignored = true;
+              }
+
+            return NULL;
+          }
+
+        input = sproc->get_input(input_name);
+      }
 
     if(input == NULL)
       {
@@ -657,6 +670,8 @@ class Station: public StreamProcessor::InputVisitor, private PluginPartner
 
     rc_ptr<BufferStore> bufs;
     rc_ptr<Format> log_format;
+    rc_ptr<StreamProcessorSpec> spspec;
+    rc_ptr<StreamProcessor> sproc;
     string station_name;
     string network_id;
     string seed_encoding;
@@ -671,6 +686,7 @@ class Station: public StreamProcessor::InputVisitor, private PluginPartner
     INT_TIME pt_to_it(const ptime &pt);
     rc_ptr<StreamProcessor> get_plugin_sproc(const string &plugin_name,
       rc_ptr<StreamProcessorSpec> spspec);
+    rc_ptr<StreamProcessor> get_station_sproc();
     void visit(const string &channel_name, rc_ptr<Input> input, void *data);
 
     rc_ptr<MSEEDBackfilling> get_mseed_backfilling(const char *id)
@@ -689,14 +705,14 @@ class Station: public StreamProcessor::InputVisitor, private PluginPartner
     const string name;
 
     Station(const string &name_init, rc_ptr<BufferStore> bufs_init,
-      rc_ptr<Format> log_format_init, const string &station_name_init,
-      const string &network_id_init, const string &seed_encoding_init,
-      int proc_gap_warn_init, int proc_gap_flush_init, int proc_gap_reset_init,
-      double backfill_capacity_init):
-      bufs(bufs_init), log_format(log_format_init), station_name(station_name_init),
-      network_id(network_id_init), seed_encoding(seed_encoding_init),
-      proc_gap_warn(proc_gap_warn_init), proc_gap_flush(proc_gap_flush_init),
-      proc_gap_reset(proc_gap_reset_init), minbufs(0),
+      rc_ptr<Format> log_format_init, rc_ptr<StreamProcessorSpec> spspec_init,
+      const string &station_name_init, const string &network_id_init,
+      const string &seed_encoding_init, int proc_gap_warn_init,
+      int proc_gap_flush_init, int proc_gap_reset_init, double backfill_capacity_init):
+      bufs(bufs_init), log_format(log_format_init), spspec(spspec_init),
+      station_name(station_name_init), network_id(network_id_init),
+      seed_encoding(seed_encoding_init), proc_gap_warn(proc_gap_warn_init),
+      proc_gap_flush(proc_gap_flush_init), proc_gap_reset(proc_gap_reset_init), minbufs(0),
       backfill_capacity(backfill_capacity_init), name(name_init) {}
 
     Station(const string &name_init):
@@ -792,6 +808,39 @@ rc_ptr<StreamProcessor> Station::get_plugin_sproc(const string &plugin_name,
       }
 
     plugin_sproc.insert(make_pair(plugin_name, sproc));
+
+    // initialize inputs regarding backfilling
+    sproc->visit_inputs(*this, (void*)0x01);
+
+    return sproc;
+  }
+
+rc_ptr<StreamProcessor> Station::get_station_sproc()
+  {
+    if(sproc != NULL)
+        return sproc;
+
+    if(spspec == NULL)
+        return NULL;
+
+    minbufs += 3 * spspec->number_of_streams();
+    if(bufs->size() < minbufs)
+      {
+        bufs->enlarge(minbufs);
+        logs(LOG_INFO) << "increased the number of buffers for station " <<
+          network_id << "." << station_name << " to " << minbufs << endl;
+      }
+
+    if(!strcasecmp(seed_encoding.c_str(), "steim1"))
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim1Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim1Packet, station_name, network_id));
+      }
+    else
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim2Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim2Packet, station_name, network_id));
+      }
 
     // initialize inputs regarding backfilling
     sproc->visit_inputs(*this, (void*)0x01);
@@ -1282,12 +1331,14 @@ void PluginDef::end_attributes(ostream &cfglog)
 class StationDef: public CfgElement
   {
   private:
+    const map<string, rc_ptr<StreamProcessorSpec> > sproc_defs;
     const IPACL ip_trusted;
     const IPACL default_ip_access;
     string station_key;
     string station_name;
     string network_id;
     string description;
+    string sproc_name;
     string seed_encoding;
     string gap_check_pattern;
     int gap_treshold;
@@ -1304,8 +1355,10 @@ class StationDef: public CfgElement
     list<string> ip_access_str;
     
   public:
-    StationDef(const string &name, const IPACL &ip_trusted_init, const IPACL &ip_access_init):
-      CfgElement(name), ip_trusted(ip_trusted_init), default_ip_access(ip_access_init) {}
+    StationDef(const string &name, const map<string, rc_ptr<StreamProcessorSpec> > &sproc_defs_init,
+      const IPACL &ip_trusted_init, const IPACL &ip_access_init):
+      CfgElement(name), sproc_defs(sproc_defs_init),
+      ip_trusted(ip_trusted_init), default_ip_access(ip_access_init) {}
 
     rc_ptr<CfgAttributeMap> start_attributes(ostream &cfglog, const string &name);
     void end_attributes(ostream &cfglog);
@@ -1317,6 +1370,7 @@ rc_ptr<CfgAttributeMap> StationDef::start_attributes(ostream &cfglog,
     station_key = name;
     station_name = name;
     description = "";
+    sproc_name = "";
     seed_encoding = ::seed_encoding;
     gap_check_pattern = ::gap_check_pattern;
     gap_treshold = ::gap_treshold;
@@ -1337,6 +1391,7 @@ rc_ptr<CfgAttributeMap> StationDef::start_attributes(ostream &cfglog,
     atts->add_item(StringAttribute("name", station_name));
     atts->add_item(StringAttribute("network", network_id));
     atts->add_item(StringAttribute("description", description));
+    atts->add_item(StringAttribute("proc", sproc_name));
     atts->add_item(StringAttribute("encoding", seed_encoding));
     atts->add_item(StringAttribute("gap_check_pattern", gap_check_pattern));
     atts->add_item(IntAttribute("gap_treshold", gap_treshold, 100, IntAttribute::lower_bound));
@@ -1408,6 +1463,14 @@ try
           }
       }
                 
+    rc_ptr<StreamProcessorSpec> spspec;
+    if(sproc_name.length() != 0 &&
+      (spspec = get_object(sproc_defs, sproc_name)) == NULL)
+      {
+        cfglog << "stream processor '" << sproc_name << "' is not defined" << endl;
+        return;
+      }
+
     if(connectionManager == NULL)
       {
         rc_ptr<MasterMonitor> monitor = make_master_monitor(MSEED_RECLEN,
@@ -1436,7 +1499,7 @@ try
     rc_ptr<Format> log_format = new MSEEDFormat(bufs, MSEED_RECLEN, LogPacket,
       station_name, network_id, "", LOG_STREAM, 0, 0);
 
-    insert_object(stations, new Station(station_key, bufs, log_format,
+    insert_object(stations, new Station(station_key, bufs, log_format, spspec,
       station_name, network_id, seed_encoding, proc_gap_warn, proc_gap_flush,
       proc_gap_reset, backfill_capacity));
   }
@@ -1751,7 +1814,7 @@ rc_ptr<CfgElementMap> SeedlinkDef::start_children(ostream &cfglog,
     
     rc_ptr<CfgElementMap> elms = new CfgElementMap;
     elms->add_item(PluginDef("plugin", sproc_defs));
-    elms->add_item(StationDef("station", ip_trusted, ip_access));
+    elms->add_item(StationDef("station", sproc_defs, ip_trusted, ip_access));
 
     return elms;
   }

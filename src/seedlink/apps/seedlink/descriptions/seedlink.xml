@@ -247,6 +247,12 @@
 					are transmitted. This values defines its capacity in seconds.
 				</description>
 			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+					Name of the proc object (defined in streams.xml); used for processing
+					raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
 		</configuration>
 	</binding>
 </seiscomp>

@@ -42,12 +42,6 @@
 					more information.
 				</description>
 			</parameter>
-			<parameter name="proc" type="string">
-				<description>
-				Name of the proc object (defined in streams.xml); used for processing
-				raw streams (streams submitted by a plugin as raw samples).
-				</description>
-			</parameter>
 			<parameter name="station" type="string">
 				<description>
 					Defines the input station if different from the stations

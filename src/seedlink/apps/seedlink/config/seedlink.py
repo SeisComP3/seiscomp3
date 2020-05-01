@@ -292,6 +292,8 @@ class Module(TemplateModule):
             ini += '             segsize = "%s"\n' % self._get('seedlink.station.segsize')
         if self._get('seedlink.station.backfill_buffer'):
             ini += '             backfill_buffer = "%s"\n' % self._get('seedlink.station.backfill_buffer')
+        if self._get('seedlink.station.sproc'):
+            ini += '             proc = "%s"\n' % self._get('seedlink.station.sproc')
         ini += '\n'
         return ini
 
@@ -324,6 +326,7 @@ class Module(TemplateModule):
         self._set('seedlink.station.segments', self._get('segments'))
         self._set('seedlink.station.segsize', self._get('segsize'))
         self._set('seedlink.station.backfill_buffer', self._get('backfill_buffer'))
+        self._set('seedlink.station.sproc', self._get('proc'))
 
         # Supply station description:
         # 1. try getting station description from a database
@@ -363,6 +366,7 @@ class Module(TemplateModule):
         # If real-time simulation is activated do not parse the sources
         # and force the usage of the mseedfifo_plugin
         if self.msrtsimul:
+            self._set('seedlink.station.sproc', '')
             station_dict[(self.net, self.sta)] = self._generateStationForIni()
             self._getPluginHandler('mseedfifo')
             return
@@ -448,16 +452,23 @@ class Module(TemplateModule):
             source_dict[source_key] = (source_type, source_id, self.global_params.copy(), self.station_params.copy())
 
             # Create procs for this type for streams.xml
-            sproc_names = self._get('sources.%s.proc' % (source_type)) or self._get('proc')
-            if sproc_names:
-                sproc_names = [x.strip() for x in sproc_names.split(",")]
-                for sproc_name in sproc_names:
-                    self.sproc_used = True
-                    sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
-                    if sproc:
-                        self.sproc[sproc_name] = sproc
-                    else:
-                        print("WARNING: cannot find streams_%s.tpl" % sproc_name)
+            sproc_name = self._get('proc')
+            if sproc_name:
+                self.sproc_used = True
+                sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
+                if sproc:
+                    self.sproc[sproc_name] = sproc
+                else:
+                    print("WARNING: cannot find streams_%s.tpl" % sproc_name)
+
+            sproc_name = self._get('sources.%s.proc' % (source_type))
+            if sproc_name:
+                self.sproc_used = True
+                sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
+                if sproc:
+                    self.sproc[sproc_name] = sproc
+                else:
+                    print("WARNING: cannot find streams_%s.tpl" % sproc_name)
 
             # Read plugins.ini template for this source and store content
             # under the provided key for this binding

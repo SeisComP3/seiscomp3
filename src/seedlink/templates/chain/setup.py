@@ -134,9 +134,6 @@ class SeedlinkPluginHandler:
         if len(mapping) == 3 and mapping[2] != "1":
           mapping.pop(2)
         unpackMap.append(mapping)
-    else:
-      try: seedlink.param('sources.chain.proc')
-      except: seedlink.setParam('sources.chain.proc', '')
 
     if len(renameMap) == 0 and len(unpackMap) == 0:
       # Close tag
