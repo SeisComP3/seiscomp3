@@ -455,17 +455,22 @@ class TraceList : public RecordView {
 
 		void dropEvent(QDropEvent *event) {
 			if ( event->mimeData()->hasFormat("text/plain") ) {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+				QString strFilter = event->mimeData()->text();
+#else
+				QString strFilter = event->mimeData()->data("text/plain");
+#endif
 				Math::Filtering::InPlaceFilter<float> *f =
-					Math::Filtering::InPlaceFilter<float>::Create(event->mimeData()->text().toStdString());
+					Math::Filtering::InPlaceFilter<float>::Create(strFilter.toStdString());
 
 				if ( !f ) {
 					QMessageBox::critical(this, "Create filter",
-					QString("Invalid filter: %1").arg(event->mimeData()->text()));
+					QString("Invalid filter: %1").arg(strFilter));
 					return;
 				}
 
 				delete f;
-				emit filterChanged(event->mimeData()->text());
+				emit filterChanged(strFilter);
 			}
 		}
 };

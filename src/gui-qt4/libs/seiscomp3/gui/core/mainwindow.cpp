@@ -160,7 +160,11 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainWindow::dropEvent(QDropEvent *event) {
 	if ( event->mimeData()->hasFormat("text/plain") ) {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 		PublicObject *po = PublicObject::Find(event->mimeData()->text().toStdString());
+#else
+		PublicObject *po = PublicObject::Find(event->mimeData()->data("text/plain").toStdString());
+#endif
 		if ( po ) {
 			Inspector *w = new Inspector(this, Qt::Tool);
 			w->setAttribute(Qt::WA_DeleteOnClose);
