@@ -241,7 +241,7 @@ class SeedlinkPluginHandler:
         else:
           fd.write(seedlink._process_template("chain_head_notimetable.tpl", "chain", False))
         first = True
-        for ((g,s),i) in chain_group.items():
+        for ((g,s),i) in sorted(chain_group.items()):
           if not first: fd.write('\n')
           if s in status_map:
             status_map[s] += 1
