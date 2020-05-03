@@ -208,7 +208,7 @@ void ResponsePAZ::convertFromHz() {
 		_zeros[i] *= 2*M_PI;
 
 	if ( _normalizationFactor ) {
-		double n = _poles.size()-_zeros.size();
+		double n = double(_poles.size()) - double(_zeros.size());
 		*_normalizationFactor *= pow(2*M_PI,n);
 	}
 }
