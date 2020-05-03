@@ -23,6 +23,7 @@
 * scolv
 
   * Add event type to left hand summary panel
+  * Add option to show record borders in zoom trace (hotkey: 'B')
 
 * scqc
 
