@@ -45,6 +45,8 @@
       selectArchived() queries introduced by QuakeLink API 1
   * Fixed MSEED parser to also accept records if blockette 1000 is not within
     the first 64 bytes
+  * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
+    than poles
 
 * seedlink
 
@@ -83,6 +85,7 @@
     ```
     scheme.colors.records.borders.standard.pen.color = FF0000FF
     ```
+  * Fix filter string drop to widgets with Qt5
 
 ## Release 2018.327 patch18
 
