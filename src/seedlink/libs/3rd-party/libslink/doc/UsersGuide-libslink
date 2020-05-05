@@ -40,6 +40,7 @@ parameter:
     short int	resume;
     short int   multistation;
     short int   dialup;
+    short int   batchmode;
     short int   lastpkttime;
     short int   terminate;
 
@@ -97,6 +98,12 @@ Parameter descriptions:
 		where the server will close the connection when the end of
 		the selected buffers have been reached, i.e. the most current
 		data has been sent.  The default is 0 (false).
+
+  batchmode:	A flag to indicate that the connection should be configured
+		in batch mode, 1=requested and 2=activated.  This is a
+		mode of operation intended to speed up negotiation with the
+		server by minimizing acknowledgement checks.  The default
+		is 0 (false).
 
   lastpkttime:  A flag to indicate if the last packet time should be appended
                 to a DATA or FETCH command during connection negotiation.
@@ -285,7 +292,7 @@ usage:
 
   sl_newslcd()          - initialize new connection description.
     - set a server address
-    - set other desired parameters; begin/end time or dialup
+    - set other desired parameters; begin/end time or batchmode
   sl_parse_streamlist() - parse a stream list string
   sl_recover_state()    - recover state information from a file
 

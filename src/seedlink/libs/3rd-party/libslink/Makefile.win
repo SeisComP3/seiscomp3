@@ -1,13 +1,11 @@
 #
-#
-# Nmake File For libslink - MS Visual C++ version
+# Nmake file For libslink - MS Visual C/C++
 # Use 'nmake -f Makefile.win'
 
 NODEBUG=1
 
-!include <ntwin32.mak>
-
 INCS = /I.
+OPTS = -D_CRT_SECURE_NO_WARNINGS
 LIB = libslink.lib
 DLL = libslink.dll
 
@@ -33,8 +31,7 @@ dll: $(OBJS)
 	link.exe /dll /nologo /out:$(DLL) $(OBJS)
 
 .c.obj:
-   $(cc) /nologo $(cflags) $(cdebug) $(cvarsmt) $(tflags) $(INCS) $<
-
+   $(CC) /nologo $(CFLAGS) $(INCS) $(OPTS) /c $< 
 
 # Clean-up directives
 clean:

@@ -23,10 +23,7 @@
  *	a[a-z]c		aac abc acc ...
  *	a[-a-z]c	a-c aac abc ...
  *
- * $Log: globmatch.c,v $
- * Revision 1.1  2007/10/09 00:47:17  chad
- * add extended reply message handling
- *
+ * $Log: not supported by cvs2svn $
  * Revision 1.4sl  2007/06/18  12:47:00  ct
  * Rename globmatch to sl_globmatch for integration into libslink.
  *
@@ -40,17 +37,15 @@
  * Revision 1.2  94/12/11  10:38:15  oz
  * charset code fixed. it is now robust and interprets all
  * variations of charset [i think] correctly, including [z-a] etc.
- * 
+ *
  * Revision 1.1  94/12/08  12:45:23  oz
  * Initial revision
  */
 
-
 #include "globmatch.h"
 
-#define SL_GLOBMATCH_TRUE    1
-#define SL_GLOBMATCH_FALSE   0
-
+#define SL_GLOBMATCH_TRUE 1
+#define SL_GLOBMATCH_FALSE 0
 
 /***********************************************************************
  * sl_globmatch:
@@ -65,113 +60,113 @@ sl_globmatch (char *string, char *pattern)
   int negate;
   int match;
   int c;
-  
-  while ( *pattern )
+
+  while (*pattern)
+  {
+    if (!*string && *pattern != '*')
+      return SL_GLOBMATCH_FALSE;
+
+    switch (c = *pattern++)
     {
-      if ( !*string && *pattern != '*' )
-	return SL_GLOBMATCH_FALSE;
-      
-      switch ( c = *pattern++ )
-	{
-	  
-	case '*':
-	  while ( *pattern == '*' )
-	    pattern++;
-	  
-	  if ( !*pattern )
-	    return SL_GLOBMATCH_TRUE;
-	  
-	  if ( *pattern != '?' && *pattern != '[' && *pattern != '\\' )
-	    while ( *string && *pattern != *string )
-	      string++;
-	  
-	  while ( *string )
-	    {
-	      if ( sl_globmatch(string, pattern) )
-		return SL_GLOBMATCH_TRUE;
-	      string++;
-	    }
-	  return SL_GLOBMATCH_FALSE;
-	  
-	case '?':
-	  if ( *string )
-	    break;
-	  return SL_GLOBMATCH_FALSE;
-	  
-	  /* set specification is inclusive, that is [a-z] is a, z and
+
+    case '*':
+      while (*pattern == '*')
+        pattern++;
+
+      if (!*pattern)
+        return SL_GLOBMATCH_TRUE;
+
+      if (*pattern != '?' && *pattern != '[' && *pattern != '\\')
+        while (*string && *pattern != *string)
+          string++;
+
+      while (*string)
+      {
+        if (sl_globmatch (string, pattern))
+          return SL_GLOBMATCH_TRUE;
+        string++;
+      }
+      return SL_GLOBMATCH_FALSE;
+
+    case '?':
+      if (*string)
+        break;
+      return SL_GLOBMATCH_FALSE;
+
+    /* set specification is inclusive, that is [a-z] is a, z and
 	   * everything in between. this means [z-a] may be interpreted
 	   * as a set that contains z, a and nothing in between.
 	   */
-	case '[':
-	  if ( *pattern != SL_GLOBMATCH_NEGATE )
-	    negate = SL_GLOBMATCH_FALSE;
-	  else
-	    {
-	      negate = SL_GLOBMATCH_TRUE;
-	      pattern++;
-	    }
-	  
-	  match = SL_GLOBMATCH_FALSE;
-	  
-	  while ( !match && (c = *pattern++) )
-	    {
-	      if ( !*pattern )
-		return SL_GLOBMATCH_FALSE;
-	      
-	      if ( *pattern == '-' ) 	/* c-c */
-		{
-		  if ( !*++pattern )
-		    return SL_GLOBMATCH_FALSE;
-		  if ( *pattern != ']' )
-		    {
-		      if ( *string == c || *string == *pattern ||
-			   ( *string > c && *string < *pattern ) )
-			match = SL_GLOBMATCH_TRUE;
-		    }
-		  else
-		    {		/* c-] */
-		      if ( *string >= c )
-			match = SL_GLOBMATCH_TRUE;
-		      break;
-		    }
-		}
-	      else			/* cc or c] */
-		{
-		  if ( c == *string )
-		    match = SL_GLOBMATCH_TRUE;
-		  if ( *pattern != ']' )
-		    {
-		      if ( *pattern == *string )
-			match = SL_GLOBMATCH_TRUE;
-		    }
-		  else
-		    break;
-		}
-	    } 
-	  
-	  if ( negate == match )
-	    return SL_GLOBMATCH_FALSE;
-	  
-	  /*
+    case '[':
+      if (*pattern != SL_GLOBMATCH_NEGATE)
+        negate = SL_GLOBMATCH_FALSE;
+      else
+      {
+        negate = SL_GLOBMATCH_TRUE;
+        pattern++;
+      }
+
+      match = SL_GLOBMATCH_FALSE;
+
+      while (!match && (c = *pattern++))
+      {
+        if (!*pattern)
+          return SL_GLOBMATCH_FALSE;
+
+        if (*pattern == '-') /* c-c */
+        {
+          if (!*++pattern)
+            return SL_GLOBMATCH_FALSE;
+          if (*pattern != ']')
+          {
+            if (*string == c || *string == *pattern ||
+                (*string > c && *string < *pattern))
+              match = SL_GLOBMATCH_TRUE;
+          }
+          else
+          { /* c-] */
+            if (*string >= c)
+              match = SL_GLOBMATCH_TRUE;
+            break;
+          }
+        }
+        else /* cc or c] */
+        {
+          if (c == *string)
+            match = SL_GLOBMATCH_TRUE;
+          if (*pattern != ']')
+          {
+            if (*pattern == *string)
+              match = SL_GLOBMATCH_TRUE;
+          }
+          else
+            break;
+        }
+      }
+
+      if (negate == match)
+        return SL_GLOBMATCH_FALSE;
+
+      /*
 	   * if there is a match, skip past the charset and continue on
 	   */
-	  while ( *pattern && *pattern != ']' )
-	    pattern++;
-	  if ( !*pattern++ )	/* oops! */
-	    return SL_GLOBMATCH_FALSE;
-	  break;
-	  
-	case '\\':
-	  if ( *pattern )
-	    c = *pattern++;
-	default:
-	  if ( c != *string )
-	    return SL_GLOBMATCH_FALSE;
-	  break;
-	}
-      
-      string++;
+      while (*pattern && *pattern != ']')
+        pattern++;
+      if (!*pattern++) /* oops! */
+        return SL_GLOBMATCH_FALSE;
+      break;
+
+    case '\\':
+      if (*pattern)
+        c = *pattern++;
+    default:
+      if (c != *string)
+        return SL_GLOBMATCH_FALSE;
+      break;
     }
-  
+
+    string++;
+  }
+
   return !*string;
 }

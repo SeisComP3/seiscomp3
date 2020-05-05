@@ -1,4 +1,4 @@
-.TH MSR_NEW 3 2006/12/10
+.TH MSR_NEW 3 2016/10/14
 .SH NAME
 Utility routines for parsing, printing, etc. of Mini-SEED records
 
@@ -11,7 +11,11 @@ Utility routines for parsing, printing, etc. of Mini-SEED records
 .sp
 .BI "SLMSrecord * \fBsl_msr_parse\fP (SLlog *" log ", char *" msrecord ", SLMSrecord **" msr ",
 .BI "                           int " blktflag " , int " unpackflag );
-.BI "int        \fBsl_msr_print\fP (SLlog *" log ", SLMSrecord *" msr ", int " details ");
+.sp
+.BI "int        \fBsl_msr_print\fP (SLlog *" log ", SLMSrecord *" msr ", int " details ");"
+.sp
+.BI "int        \fBsl_msr_srcname\fP (SLMSrecord *" msr ", char *" srcname ",
+.BI "                           int8_t " quality );
 .sp
 .BI "int        \fBsl_msr_dsamprate\fP (SLMSrecord *" msr ", double *" samprate );
 .BI "double     \fBsl_msr_dnomsamprate\fP (SLMSrecord *" msr );
@@ -80,6 +84,12 @@ in an associated SLCD.  If \fIlog\fP is NULL global logging parameters
 will be used.  If the \fIdetails\fP flag is greater than zero detailed
 information (values in the fixed header and following blockettes) is
 printed.  Otherwise only a single line for each packet is printed.
+
+\fBsl_msr_srcname\fP will generate a source name string of the format
+"Net_Sta_Loc_Chan[_Qual]" for the given SLMSrecord.  The data quality
+indicator will be added to the source name if the \fIquality\fP flag
+is true.  The supplied \fIsrcname\fP buffer must have enough room to
+hold the result.
 
 \fBsl_msr_dsamprate\fP, \fBsl_msr_dnomsamprate\fP and
 \fBsl_msr_depochstime\fP are helper functions for common, mundane

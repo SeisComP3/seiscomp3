@@ -8,15 +8,14 @@
  * modified: 2006.344
  ***************************************************************************/
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
 #include "libslink.h"
-
 
 /***************************************************************************
  * sl_strparse:
@@ -34,9 +33,9 @@
 int
 sl_strparse (const char *string, const char *delim, SLstrlist **list)
 {
-  const char *beg;			/* beginning of element */
-  const char *del;			/* delimiter */
-  int stop = 0;
+  const char *beg; /* beginning of element */
+  const char *del; /* delimiter */
+  int stop  = 0;
   int count = 0;
   int total;
 
@@ -44,66 +43,65 @@ sl_strparse (const char *string, const char *delim, SLstrlist **list)
   SLstrlist *tmplist = 0;
 
   if (string != NULL && delim != NULL)
+  {
+    total = strlen (string);
+    beg   = string;
+
+    while (!stop)
     {
-      total = strlen (string);
-      beg = string;
 
-      while (!stop)
-	{
+      /* Find delimiter */
+      del = strstr (beg, delim);
 
-	  /* Find delimiter */
-	  del = strstr (beg, delim);
+      /* Delimiter not found or empty */
+      if (del == NULL || strlen (delim) == 0)
+      {
+        del  = string + strlen (string);
+        stop = 1;
+      }
 
-	  /* Delimiter not found or empty */
-	  if (del == NULL || strlen (delim) == 0)
-	    {
-	      del = string + strlen (string);
-	      stop = 1;
-	    }
+      tmplist       = (SLstrlist *)malloc (sizeof (SLstrlist));
+      tmplist->next = 0;
 
-	  tmplist = (SLstrlist *) malloc (sizeof (SLstrlist));
-	  tmplist->next = 0;
+      tmplist->element = (char *)malloc (del - beg + 1);
+      strncpy (tmplist->element, beg, (del - beg));
+      tmplist->element[(del - beg)] = '\0';
 
-	  tmplist->element = (char *) malloc (del - beg + 1);
-	  strncpy (tmplist->element, beg, (del - beg));
-	  tmplist->element[(del - beg)] = '\0';
+      /* Add this to the list */
+      if (count++ == 0)
+      {
+        curlist = tmplist;
+        *list   = curlist;
+      }
+      else
+      {
+        curlist->next = tmplist;
+        curlist       = curlist->next;
+      }
 
-	  /* Add this to the list */
-	  if (count++ == 0)
-	    {
-	      curlist = tmplist;
-	      *list = curlist;
-	    }
-	  else
-	    {
-	      curlist->next = tmplist;
-	      curlist = curlist->next;
-	    }
-
-	  /* Update 'beg' */
-	  beg = (del + strlen (delim));
-	  if ((beg - string) > total)
-	    break;
-	}
-
-      return count;
+      /* Update 'beg' */
+      beg = (del + strlen (delim));
+      if ((beg - string) > total)
+        break;
     }
+
+    return count;
+  }
   else
+  {
+    curlist = *list;
+    while (curlist != NULL)
     {
-      curlist = *list;
-      while (curlist != NULL)
-	{
-	  tmplist = curlist->next;
-	  free (curlist->element);
-	  free (curlist);
-	  curlist = tmplist;
-	}
-      *list = NULL;
-
-      return 0;
+      tmplist = curlist->next;
+      free (curlist->element);
+      free (curlist);
+      curlist = tmplist;
     }
-}  /* End of sl_strparse() */
+    *list = NULL;
 
+    return 0;
+  }
+} /* End of sl_strparse() */
 
 /***************************************************************************
  * sl_strncpclean:
@@ -113,7 +111,7 @@ sl_strparse (const char *string, const char *delim, SLstrlist **list)
  * The source string must have at least 'length' characters and the
  * destination string must have enough room needed for the non-space
  * characters within 'length' and the null terminator.
- * 
+ *
  * Returns the number of characters (not including the null terminator) in
  * the destination string.
  ***************************************************************************/
@@ -122,16 +120,16 @@ sl_strncpclean (char *dest, const char *source, int length)
 {
   int sidx, didx;
 
-  for ( sidx=0, didx=0; sidx < length ; sidx++ )
+  for (sidx = 0, didx = 0; sidx < length; sidx++)
+  {
+    if (*(source + sidx) != ' ')
     {
-      if ( *(source+sidx) != ' ' )
-	{
-	  *(dest+didx) = *(source+sidx);
-	  didx++;
-	}
+      *(dest + didx) = *(source + sidx);
+      didx++;
     }
+  }
 
-  *(dest+didx) = '\0';
+  *(dest + didx) = '\0';
 
   return didx;
-}  /* End of sl_strncpclean() */
+} /* End of sl_strncpclean() */

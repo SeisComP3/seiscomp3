@@ -16,7 +16,6 @@
 
 #include "libslink.h"
 
-
 /***************************************************************************
  * sl_dtime:
  *
@@ -27,9 +26,8 @@ double
 sl_dtime (void)
 {
   /* Now just a shell for the portable version */
-  return slp_dtime();
-}  /* End of sl_dtime() */
-
+  return slp_dtime ();
+} /* End of sl_dtime() */
 
 /***************************************************************************
  * sl_doy2md:
@@ -39,47 +37,46 @@ sl_dtime (void)
  * Returns 0 on success and -1 on error.
  ***************************************************************************/
 int
-sl_doy2md(int year, int jday, int *month, int *mday)
+sl_doy2md (int year, int jday, int *month, int *mday)
 {
   int idx;
   int leap;
   int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  
+
   /* Sanity check for the supplied year */
-  if ( year < 1900 || year > 2100 )
-    {
-      sl_log_r (NULL, 2, 0, "sl_doy2md(): year (%d) is out of range\n", year);
-      return -1;
-    }
-    
+  if (year < 1900 || year > 2100)
+  {
+    sl_log_r (NULL, 2, 0, "sl_doy2md(): year (%d) is out of range\n", year);
+    return -1;
+  }
+
   /* Test for leap year */
-  leap = ( ((year%4 == 0) && (year%100 != 0)) || (year%400 == 0) ) ? 1 : 0;
+  leap = (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) ? 1 : 0;
 
   /* Add a day to February if leap year */
-  if ( leap )
+  if (leap)
     days[1]++;
 
-  if (jday > 365+leap || jday <= 0)
-    {
-      sl_log_r (NULL, 2, 0, "sl_doy2md(): day-of-year (%d) is out of range\n", jday);
-      return -1;
-    }
-    
-  for ( idx=0; idx < 12; idx++ )
-    {
-      jday -= days[idx];
+  if (jday > 365 + leap || jday <= 0)
+  {
+    sl_log_r (NULL, 2, 0, "sl_doy2md(): day-of-year (%d) is out of range\n", jday);
+    return -1;
+  }
 
-      if ( jday <= 0 )
-	{
-	  *month = idx + 1;
-	  *mday = days[idx] + jday;
-	  break;
-	}
+  for (idx = 0; idx < 12; idx++)
+  {
+    jday -= days[idx];
+
+    if (jday <= 0)
+    {
+      *month = idx + 1;
+      *mday  = days[idx] + jday;
+      break;
     }
+  }
 
   return 0;
-}  /* End of sl_doy2md() */
-
+} /* End of sl_doy2md() */
 
 /***************************************************************************
  * sl_checkversion:
@@ -92,22 +89,21 @@ sl_doy2md(int year, int jday, int *month, int *mday)
  * -1 = version is less than value specified
  ***************************************************************************/
 int
-sl_checkversion (const SLCD * slconn, float version)
+sl_checkversion (const SLCD *slconn, float version)
 {
   if (slconn->protocol_ver == 0.0)
-    {
-      return 0;
-    }
+  {
+    return 0;
+  }
   else if (slconn->protocol_ver >= version)
-    {
-      return 1;
-    }
+  {
+    return 1;
+  }
   else
-    {
-      return -1;
-    }
-}  /* End of sl_checkversion() */
-
+  {
+    return -1;
+  }
+} /* End of sl_checkversion() */
 
 /***************************************************************************
  * sl_checkslcd:
@@ -117,19 +113,18 @@ sl_checkversion (const SLCD * slconn, float version)
  * Returns 0 if pass and -1 if problems were identified.
  ***************************************************************************/
 int
-sl_checkslcd (const SLCD * slconn)
+sl_checkslcd (const SLCD *slconn)
 {
   int retval = 0;
 
   if (slconn->streams == NULL && slconn->info == NULL)
-    {
-      sl_log_r (slconn, 2, 0, "sl_checkslconn(): stream chain AND info type are empty\n");
-      retval = -1;
-    }
+  {
+    sl_log_r (slconn, 2, 0, "sl_checkslconn(): stream chain AND info type are empty\n");
+    retval = -1;
+  }
 
   return retval;
-}  /* End of sl_checkslconn() */
-
+} /* End of sl_checkslconn() */
 
 /***************************************************************************
  * sl_readline:
@@ -146,30 +141,30 @@ int
 sl_readline (int fd, char *buffer, int buflen)
 {
   int nread = 0;
-  
-  if ( ! buffer )
+
+  if (!buffer)
     return -1;
-  
+
   /* Read data from stream until newline character or max characters */
-  while ( nread < (buflen-1) )
+  while (nread < (buflen - 1))
+  {
+    /* Read a single character from the stream */
+    if (read (fd, buffer + nread, 1) != 1)
     {
-      /* Read a single character from the stream */
-      if ( read (fd, buffer+nread, 1) != 1 )
-	{
-	  return -1;
-	}
-      
-      /* Trap door for newline character */
-      if ( buffer[nread] == '\n' )
-	{
-	  break;
-	}
-      
-      nread++;
+      return -1;
     }
-  
+
+    /* Trap door for newline character */
+    if (buffer[nread] == '\n')
+    {
+      break;
+    }
+
+    nread++;
+  }
+
   /* Terminate string in buffer */
   buffer[nread] = '\0';
-  
+
   return nread;
-}  /* End of sl_readline() */
+} /* End of sl_readline() */

@@ -14,6 +14,10 @@ CFLAGS += -I..
 LDFLAGS = -L..
 LDLIBS = -lslink
 
+# For Windows w/ Unix-like build environments uncomment the following line
+# This is needed for MinGW but not for Cygwin
+#LDLIBS = -lslink -lws2_32
+
 # For SunOS/Solaris uncomment the following line
 #LDLIBS = -lslink -lsocket -lnsl -lrt
 
