@@ -1,3 +1,5 @@
+FIND_PACKAGE(OpenSSL REQUIRED)
+
 SET(SLARCHIVE_SOURCES
 	archive.c
 	dsarchive.c
@@ -8,7 +10,7 @@ INCLUDE_DIRECTORIES(../../../../libs/3rd-party/libslink)
 
 ADD_EXECUTABLE(slarchive ${SLARCHIVE_SOURCES})
 
-TARGET_LINK_LIBRARIES(slarchive slink)
+TARGET_LINK_LIBRARIES(slarchive slink crypto)
 
 INSTALL(TARGETS slarchive
 	RUNTIME DESTINATION ${SC3_PACKAGE_BIN_DIR})

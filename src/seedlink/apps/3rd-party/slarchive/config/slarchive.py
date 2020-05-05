@@ -7,6 +7,7 @@ class Module(seiscomp3.Kernel.Module):
     seiscomp3.Kernel.Module.__init__(self, env, env.moduleName(__file__))
     self.archive_dir = os.path.join(self.env.SEISCOMP_ROOT, "var", "lib", "archive")
     self.config_dir = os.path.join(self.env.SEISCOMP_ROOT, "var", "lib", self.name)
+    self.certs_dir = os.path.join(self.env.SEISCOMP_ROOT, "var", "lib", "certs")
     self.host = "127.0.0.1"
     self.port = 18000
     self.buffer = 1000
@@ -37,6 +38,13 @@ class Module(seiscomp3.Kernel.Module):
         self.archive_dir = os.path.join(self.env.SEISCOMP_ROOT, self.archive_dir)
     except: pass
     self.params['archive'] = self.archive_dir
+
+    try:
+      self.certs_dir = self.params['validation.certs']
+      if not os.path.isabs(self.certs_dir):
+        self.certs_dir = os.path.join(self.env.SEISCOMP_ROOT, self.certs_dir)
+    except: pass
+    self.params['validation.certs'] = self.certs_dir
 
     self.params['slarchive._config_dir'] = self.config_dir
     return cfg
@@ -71,6 +79,11 @@ class Module(seiscomp3.Kernel.Module):
     try: params += ' -k %d' % cfg.getInt('keepalive')
     except: pass
     params += ' -Fi:1 -Fc:900 -l "%s" %s:%d' % (config_file,self.host,self.port)
+    try:
+        params += " -Cs %s" %cfg.getString('validation.mode')
+        try: params += ' -certs %s' % self.certs_dir
+        except: pass
+    except: pass
     return self.env.start(self.name, prog, params, True)
 
 
