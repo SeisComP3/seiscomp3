@@ -11,8 +11,8 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_CORE_RECORD_H__
-#define __SEISCOMP_CORE_RECORD_H__
+#ifndef SEISCOMP_CORE_RECORD_H
+#define SEISCOMP_CORE_RECORD_H
 
 
 #include <string>
@@ -36,7 +36,7 @@ class BitSet;
 DEFINE_SMARTPOINTER(Record);
 
 class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
-	DECLARE_SC_CLASS(Record);
+	DECLARE_SC_CLASS(Record)
 	DECLARE_SERIALIZATION;
 
 	// ----------------------------------------------------------------------
@@ -225,8 +225,11 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 
 DEFINE_INTERFACE_FACTORY(Record);
 
-#define REGISTER_RECORD(Class, Service) \
+#define REGISTER_RECORD_VAR(Class, Service) \
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Record, Class> __##Class##InterfaceFactory__(Service)
+
+#define REGISTER_RECORD(Class, Service) \
+static REGISTER_RECORD_VAR(Class, Service)
 
 
 inline Record::Authentication Record::authentication() const {
