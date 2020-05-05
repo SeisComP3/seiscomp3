@@ -1,3 +1,7 @@
+2019.119/JB: version 1.8-sc3
+	- Authentication support for signatures in opaque data blockette
+	- Update to libslink 2.7 (2.6 + blockette 2000)
+
 2009.240/AH: version 1.7-sc3
 	- Batchmode support.
 
