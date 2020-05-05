@@ -1,3 +1,6 @@
+2019.283: version 2.7
+        - Add support for blockette 2000
+
 2016.290: version 2.6
 	- Change host name resolution to use getaddrinfo() on all platforms
 	except Windows.  Support is now nearly ubiquitous.  Still limited to

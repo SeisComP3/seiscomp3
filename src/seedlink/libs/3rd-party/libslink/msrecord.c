@@ -80,6 +80,8 @@ sl_msr_new (void)
   msr->Blkt100  = NULL;
   msr->Blkt1000 = NULL;
   msr->Blkt1001 = NULL;
+  msr->Blkt2000 = NULL;
+  msr->Blkt2000Ofs = -1;
 
   msr->msrecord    = NULL;
   msr->datasamples = NULL;
@@ -103,6 +105,7 @@ sl_msr_free (SLMSrecord **msr)
     free ((*msr)->Blkt100);
     free ((*msr)->Blkt1000);
     free ((*msr)->Blkt1001);
+    free ((*msr)->Blkt2000);
 
     if ((*msr)->datasamples != NULL)
       free ((*msr)->datasamples);
@@ -217,6 +220,13 @@ sl_msr_parse_size (SLlog *log, const char *msrecord, SLMSrecord **ppmsr,
       msr->Blkt1001 = NULL;
     }
 
+    if (msr->Blkt2000 != NULL)
+    {
+      free (msr->Blkt2000);
+      msr->Blkt2000 = NULL;
+      msr->Blkt2000Ofs = -1;
+    }
+
     if (msr->datasamples != NULL)
     {
       free (msr->datasamples);
@@ -265,6 +275,7 @@ sl_msr_parse_size (SLlog *log, const char *msrecord, SLMSrecord **ppmsr,
     struct sl_blkt_100_s *blkt_100;
     struct sl_blkt_1000_s *blkt_1000;
     struct sl_blkt_1001_s *blkt_1001;
+    struct sl_blkt_2000_s *blkt_2000;
     uint16_t begin_blockette; /* byte offset for next blockette */
 
     /* Initialize the blockette structures */
@@ -272,6 +283,7 @@ sl_msr_parse_size (SLlog *log, const char *msrecord, SLMSrecord **ppmsr,
     blkt_100  = NULL;
     blkt_1000 = NULL;
     blkt_1001 = NULL;
+    blkt_2000 = NULL;
 
     /* loop through blockettes as long as number is non-zero and viable */
     begin_blockette = msr->fsdh.begin_blockette;
@@ -330,6 +342,20 @@ sl_msr_parse_size (SLlog *log, const char *msrecord, SLMSrecord **ppmsr,
         blkt_1001->next_blkt = blkt_head->next_blkt;
 
         msr->Blkt1001 = blkt_1001;
+      }
+
+      if (blkt_head->blkt_type == 2000)
+      { /* found a 2000 blockette */
+        blkt_2000 =
+            (struct sl_blkt_2000_s *)malloc (sizeof (struct sl_blkt_2000_s));
+        memcpy ((void *)blkt_2000, msrecord + begin_blockette,
+                sizeof (struct sl_blkt_2000_s));
+
+        blkt_2000->blkt_type = blkt_head->blkt_type;
+        blkt_2000->next_blkt = blkt_head->next_blkt;
+
+        msr->Blkt2000 = blkt_2000;
+        msr->Blkt2000Ofs = begin_blockette;
       }
 
       /* Point to the next blockette */

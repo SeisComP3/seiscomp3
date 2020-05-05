@@ -19,7 +19,7 @@
  *
  * Copyright (C) 2016 Chad Trabant, IRIS Data Management Center
  *
- * modified: 2016.288
+ * modified: 2019.283
  ***************************************************************************/
 
 #ifndef LIBSLINK_H
@@ -31,8 +31,8 @@ extern "C" {
 
 #include "slplatform.h"
 
-#define LIBSLINK_VERSION "2.6"
-#define LIBSLINK_RELEASE "2016.290"
+#define LIBSLINK_VERSION "2.7"
+#define LIBSLINK_RELEASE "2019.283"
 
 #define SLRECSIZE           512      /* Default Mini-SEED record size */
 #define MAX_HEADER_SIZE     128      /* Max record header size */
@@ -119,6 +119,19 @@ struct sl_blkt_1001_s
   int8_t    usec;
   uint8_t   reserved;
   int8_t    frame_cnt;
+} SLP_PACKED;
+
+/* 2000 Blockette (15 bytes) */
+struct sl_blkt_2000_s
+{
+  uint16_t  blkt_type;
+  uint16_t  next_blkt;
+  uint16_t  total_len;
+  uint16_t  data_offset;
+  uint32_t  record_no;
+  uint8_t   word_swap;
+  uint8_t   flags;
+  uint8_t   header_cnt;
 } SLP_PACKED;
 
 /* Fixed section data of header (48 bytes) */
@@ -307,6 +320,8 @@ typedef struct SLMSrecord_s {
   struct sl_blkt_100_s  *Blkt100;     /* Blockette 100, if present */
   struct sl_blkt_1000_s *Blkt1000;    /* Blockette 1000, if present */
   struct sl_blkt_1001_s *Blkt1001;    /* Blockette 1001, if present */
+  struct sl_blkt_2000_s *Blkt2000;    /* Blockette 2000, if present */
+  int32_t                Blkt2000Ofs; /* Blockette 2000 offset from beginning of record */
   int32_t               *datasamples; /* Unpacked 32-bit data samples */
   int32_t                numsamples;  /* Number of unpacked samples */
   int8_t                 unpackerr;   /* Unpacking/decompression error flag */
