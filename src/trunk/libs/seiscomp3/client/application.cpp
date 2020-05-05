@@ -51,6 +51,7 @@
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/client/queue.ipp>
 
+#include <seiscomp3/utils/certstore.h>
 #include <seiscomp3/utils/files.h>
 
 #include <sstream>
@@ -1949,6 +1950,21 @@ bool Application::init() {
 			std::sort(_cities.begin(), _cities.end(), CityGreaterThan());
 
 			ar.close();
+		}
+	}
+
+	string certStorePath;
+	try {
+		certStorePath =
+		    Environment::Instance()->absolutePath(configGetString("certStore"));
+	}
+	catch ( ... ) {
+		certStorePath = Environment::Instance()->absolutePath("@ROOTDIR@/var/lib/certs");
+	}
+
+	if ( Util::pathExists(certStorePath) ) {
+		if ( !Util::CertificateStore::global().init(certStorePath) ) {
+			return false;
 		}
 	}
 

@@ -15,6 +15,19 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/core/arrayfactory.h>
+#include <seiscomp3/utils/certstore.h>
+
+#include <openssl/asn1.h>
+#include <openssl/ecdsa.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/opensslv.h>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
+
+#if OPENSSL_VERSION_NUMBER > 0x10101000
+#include <openssl/x509err.h>
+#endif
 
 #include <libmseed.h>
 #include <cctype>
@@ -41,10 +54,10 @@ struct MSEEDLogger {
 		ms_loginit(MSEEDLogger::print, "[libmseed] ", MSEEDLogger::diag, "[libmseed] ERR: ");
 	}
 
-	static void print(char *msg) {
+	static void print(char *) {
 		//SEISCOMP_DEBUG("%s", msg);
 	}
-	static void diag(char *msg) {
+	static void diag(char *) {
 		//SEISCOMP_DEBUG("%s", msg);
 	}
 };
@@ -101,18 +114,21 @@ MSeedRecord::MSeedRecord(MSRecord *rec, Array::DataType dt, Hint h)
 {
 	if (_hint == SAVE_RAW)
 		_raw.setData(rec->reclen,rec->record);
-	else
-		if (_hint == DATA_ONLY)
-			try {
-				_setDataAttributes(rec->reclen,rec->record);
-			} catch (LibmseedException &e) {
-				_nsamp = 0;
-				_fsamp = 0;
-				_data = NULL;
-				SEISCOMP_ERROR("LibmseedException in MSeedRecord constructor %s", e.what());
-			}
+	else if (_hint == DATA_ONLY) {
+		try {
+			_setDataAttributes(rec->reclen,rec->record);
+		}
+		catch ( LibmseedException &e ) {
+			_nsamp = 0;
+			_fsamp = 0;
+			_data = NULL;
+			SEISCOMP_ERROR("LibmseedException in MSeedRecord constructor %s", e.what());
+		}
+	}
+
 	_srnum = 0;
 	_srdenom = 1;
+
 	if (_srfact > 0 && _srmult > 0) {
 		_srnum = _srfact*_srmult;
 		_srdenom = 1;
@@ -476,31 +492,126 @@ const Array* MSeedRecord::data() const {
 void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 	MSRecord *pmsr = NULL;
 
-	if (data) {
-		if (msr_unpack(data,reclen,&pmsr,1,0) == MS_NOERROR) {
-			if (pmsr->numsamples == _nsamp) {
-				switch (pmsr->sampletype) {
-				case 'i':
-					_data = ArrayFactory::Create(_datatype,Array::INT,_nsamp,pmsr->datasamples);
-					break;
-				case 'f':
-					_data = ArrayFactory::Create(_datatype,Array::FLOAT,_nsamp,pmsr->datasamples);
-					break;
-				case 'd':
-					_data = ArrayFactory::Create(_datatype,Array::DOUBLE,_nsamp,pmsr->datasamples);
-					break;
-				case 'a':
-					_data = ArrayFactory::Create(_datatype,Array::CHAR,_nsamp,pmsr->datasamples);
-					break;
+	if ( !data ) return;
+
+	if ( msr_unpack(data, reclen, &pmsr, 1, 0) != MS_NOERROR )
+		throw LibmseedException("Unpacking of Mini SEED record failed.");
+
+	if ( pmsr->numsamples == _nsamp ) {
+		switch ( pmsr->sampletype ) {
+			case 'i':
+				_data = ArrayFactory::Create(_datatype,Array::INT,_nsamp,pmsr->datasamples);
+				break;
+			case 'f':
+				_data = ArrayFactory::Create(_datatype,Array::FLOAT,_nsamp,pmsr->datasamples);
+				break;
+			case 'd':
+				_data = ArrayFactory::Create(_datatype,Array::DOUBLE,_nsamp,pmsr->datasamples);
+				break;
+			case 'a':
+				_data = ArrayFactory::Create(_datatype,Array::CHAR,_nsamp,pmsr->datasamples);
+				break;
+		}
+
+		// Check authentication
+		Util::CertificateStore &cs = Util::CertificateStore::global();
+		if ( cs.isValid() ) {
+			bool isSigned = false;
+			BlktLink *blk = pmsr->blkts;
+			for ( ; blk; blk = blk->next ) {
+				if ( blk->blkt_type == 2000 ) {
+					blkt_2000_s *opaq = reinterpret_cast<blkt_2000_s*>(blk->blktdata);
+					if ( opaq->numheaders != 1 ) continue;
+
+					int maxHeaderLength = opaq->data_offset - 15;
+					if ( maxHeaderLength < 6 ) continue;
+
+					const char *opaqHeaders = opaq->payload;
+					std::string header;
+					for ( int i = 0; i < maxHeaderLength; ++i ) {
+						if ( opaqHeaders[i] == '~' ) {
+							header.assign(opaqHeaders, opaqHeaders + i);
+							break;
+						}
+					}
+
+					if ( header.empty() ) continue;
+
+					if ( !strncmp(header.c_str(), "SIGN/", 5) ) {
+						header.erase(header.begin(), header.begin() + 5);
+						long lenSignature = opaq->length - opaq->data_offset;
+
+						unsigned char digest_buffer[EVP_MAX_MD_SIZE];
+						unsigned int digest_len;
+
+						EVP_MD_CTX *mdctx = EVP_MD_CTX_create();
+						EVP_DigestInit(mdctx, EVP_sha256());
+						EVP_DigestUpdate(mdctx, pmsr->record + offsetof(struct fsdh_s, dataquality), sizeof(pmsr->fsdh->dataquality));
+						EVP_DigestUpdate(mdctx, pmsr->record + offsetof(struct fsdh_s, station), offsetof(struct fsdh_s, data_offset) - offsetof(struct fsdh_s, station));
+						EVP_DigestUpdate(mdctx, pmsr->record + pmsr->fsdh->data_offset, (1 << pmsr->Blkt1000->reclen) - pmsr->fsdh->data_offset);
+						EVP_DigestFinal_ex(mdctx, (unsigned char*)digest_buffer, &digest_len);
+
+						EVP_MD_CTX_destroy(mdctx);
+
+						const unsigned char *pp = reinterpret_cast<const unsigned char *>(opaq) + opaq->data_offset - 4;
+						ECDSA_SIG *signature = d2i_ECDSA_SIG(NULL, &pp, lenSignature);
+						if ( !signature ) {
+							SEISCOMP_ERROR("MSEED: Failed to extract signature from opaque headers");
+							continue;
+						}
+
+						const X509 *cert;
+						if ( !cs.validate(header, reinterpret_cast<const char*>(digest_buffer),
+						                  digest_len, signature, &cert) ) {
+							const_cast<MSeedRecord*>(this)->_authenticationStatus = SIGNATURE_VALIDATION_FAILED;
+							SEISCOMP_WARNING("MSEED: Signature validation failed");
+						}
+						else {
+							if ( cert ) {
+								X509_NAME *name = X509_get_subject_name(const_cast<X509*>(cert));
+								if ( name ) {
+									int pos = X509_NAME_get_index_by_NID(name, NID_organizationName, -1);
+									if ( pos != -1 ) {
+										X509_NAME_ENTRY *e = X509_NAME_get_entry(name, pos);
+										ASN1_STRING *str = X509_NAME_ENTRY_get_data(e);
+										if ( ASN1_STRING_type(str) != V_ASN1_UTF8STRING ) {
+											unsigned char *utf8;
+											int length = ASN1_STRING_to_UTF8(&utf8, str);
+											const_cast<MSeedRecord*>(this)->_authority.assign(reinterpret_cast<char*>(utf8), length);
+											OPENSSL_free(utf8);
+										}
+										else {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+											const_cast<MSeedRecord*>(this)->_authority.assign(reinterpret_cast<char*>(ASN1_STRING_data(str)), ASN1_STRING_length(str));
+#else
+											const_cast<MSeedRecord*>(this)->_authority.assign(reinterpret_cast<const char*>(ASN1_STRING_get0_data(str)), ASN1_STRING_length(str));
+#endif
+										}
+									}
+									else
+										SEISCOMP_WARNING("MSEED: Failed to extract certificate authority (O)");
+								}
+							}
+
+							const_cast<MSeedRecord*>(this)->_authenticationStatus = SIGNATURE_VALIDATED;
+							isSigned = true;
+						}
+
+						ECDSA_SIG_free(signature);
+					}
 				}
-			} else {
-				msr_free(&pmsr);
-				throw LibmseedException("The number of the unpacked data samples differs from the sample number in fixed data header.");
 			}
-			msr_free(&pmsr);
-		} else
-			throw LibmseedException("Unpacking of Mini SEED record failed.");
+
+			if ( !isSigned )
+				const_cast<MSeedRecord*>(this)->_authenticationStatus = NOT_SIGNED;
+		}
 	}
+	else {
+		msr_free(&pmsr);
+		throw LibmseedException("The number of the unpacked data samples differs from the sample number in fixed data header.");
+	}
+
+	msr_free(&pmsr);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -92,6 +92,26 @@
 				and has been added as a shortcut.
 				</description>
 			</parameter>
+			<parameter name="certStore" type="path" default="@ROOTDIR@/var/lib/certs">
+				<description>
+				Path to cerificate store where all certificates and CRLs are stored.
+				The store used the OpenSSl store format. From the offical OpenSSL documentation:
+
+				&quot;The directory should contain one certificate or CRL per file in PEM format,
+				with a file name of the form hash.N for a certificate, or hash.rN for a CRL.
+				The .N or .rN suffix is a sequence number that starts at zero, and is incremented
+				consecutively for each certificate or CRL with the same hash value. Gaps in the
+				sequence numbers are not supported, it is assumed that there are no more objects
+				with the same hash beyond the first missing number in the sequence.The .N or .rN suffix
+				is a sequence number that starts at zero, and is incremented consecutively for
+				each certificate or CRL with the same hash value. Gaps in the sequence numbers
+				are not supported, it is assumed that there are no more objects with the same
+				hash beyond the first missing number in the sequence.&quot;
+				The hash value can be obtained as follows:
+
+				openssl x509 -hash -noout -in &lt;file&gt;
+				</description>
+			</parameter>
 			<group name="logging">
 				<parameter name="level" type="int" default="2">
 					<description>
