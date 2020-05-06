@@ -180,9 +180,11 @@ const X509 *CertificateContext::findCertificate(const char *digest, size_t nDige
 		EC_KEY *pubkey = EVP_PKEY_get1_EC_KEY(key);
 
 		verification_status = ECDSA_do_verify(
-			reinterpret_cast<const unsigned char*>(digest), nDigest,
+			reinterpret_cast<const unsigned char*>(digest), int(nDigest),
 			signature, pubkey
 		);
+
+		EC_KEY_free(pubkey);
 
 		if ( verification_status == 1 ) {
 			SEISCOMP_DEBUG("  Reusing cached certifcate");
@@ -217,9 +219,11 @@ const X509 *CertificateContext::findCertificate(const char *digest, size_t nDige
 		}
 
 		verification_status = ECDSA_do_verify(
-			reinterpret_cast<const unsigned char*>(digest), nDigest,
+			reinterpret_cast<const unsigned char*>(digest), int(nDigest),
 			signature, pubkey
 		);
+
+		EC_KEY_free(pubkey);
 
 		if ( verification_status != 1 ) {
 			SEISCOMP_DEBUG("      Verification failed");
