@@ -3350,13 +3350,24 @@ void MagnitudeView::updateContent() {
 	// set labels ...
 	updateMagnitudeLabels();
 
+	QComboBox *comboStatus = static_cast<QComboBox*>(_ui.groupReview->property("combo.netmag.status").value<void*>());
+
 	if ( !_netMag ) {
+		if ( comboStatus ) comboStatus->setCurrentIndex(0);
 		_ui.groupReview->setEnabled(false);
 
 		// set dist column in table & add Net/Sta-Mag to diagram: dist = addStationMagnitude()
 		updateMinMaxMagnitude();
 		update();
 		return;
+	}
+	else if ( comboStatus ) {
+		try {
+			comboStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
+		}
+		catch ( ... ) {
+			comboStatus->setCurrentIndex(0);
+		}
 	}
 
 	SEISCOMP_DEBUG("selected magnitude: %s with %lu magRefs ", _netMag->publicID().c_str(), (unsigned long)_netMag->stationMagnitudeContributionCount() );
