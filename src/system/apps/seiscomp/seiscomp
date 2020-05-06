@@ -3,10 +3,8 @@
 from __future__ import division, print_function
 
 import glob
-import imp
+import importlib
 import os
-import pipes
-import shutil
 import signal
 import subprocess
 import sys
@@ -23,11 +21,20 @@ else:
 def get_library_path():
     if sys.platform == "darwin":
         return LD_LIBRARY_PATH + ":" + DYLD_FALLBACK_FRAMEWORK_PATH
-    else:
-        return LD_LIBRARY_PATH
+
+    return LD_LIBRARY_PATH
 
 def get_framework_path():
         return DYLD_FALLBACK_FRAMEWORK_PATH
+
+# Python 3 compatible string check
+def is_string(variable):
+    try:
+        string_class = basestring
+    except NameError:
+        string_class = str
+
+    return isinstance(variable, string_class)
 
 # ------------------------------------------------------------------------------
 # Helper functions
@@ -69,32 +76,22 @@ def error(msg):
 # Returns a seiscomp3.Kernel.Module instance
 # from a given path with a given name
 def load_module(path):
-  modname =  os.path.splitext(os.path.basename(path))[0].replace('.', '_')
-  f = open(path, 'r')
-  modname = '__seiscomp_modules_' + modname
+  modname0 = os.path.splitext(os.path.basename(path))[0].replace('.', '_')
+  modname = '__seiscomp_modules_' + modname0
 
   if modname in sys.modules:
     mod = sys.modules[modname]
   else:
-    # create a module
-    mod = imp.new_module(modname)
+    if sys.path[0] != INIT_PATH:
+      sys.path.insert(0, INIT_PATH)
+    mod = importlib.import_module(modname0)
     mod.__file__ = path
 
     # store it in sys.modules
     sys.modules[modname] = mod
 
-  # our namespace is the module dictionary
-  namespace = mod.__dict__
+    module = mod.Module
 
-  # test whether this has been done already
-  if not hasattr(mod, 'Module'):
-    code = f.read()
-    # compile and exec dynamic code in the module
-#   exec compile(code, '', 'exec') in namespace
-    exec(compile(code, '', 'exec'), namespace)
-    
-
-  module = namespace.get('Module')
   return module
 
 
@@ -107,7 +104,7 @@ def load_init_modules(path):
 
   files = glob.glob(os.path.join(path, "*.py"))
   for f in files:
-    try: pmod = load_module(f)#imp.load_source(mod_name, f)
+    try: pmod = load_module(f)
     except Exception as exc:
       error(("%s: " % f) + str(exc))
       continue
@@ -453,7 +450,8 @@ def on_list(args, flags):
         state = "disabled"
       print("%s is %s" % (mod.name, state))
     return 0
-  elif args[0] == "aliases":
+
+  if args[0] == "aliases":
     f = open(ALIAS_FILE, 'r')
     lines = [line.rstrip() for line in f.readlines()]
     for line in lines:
@@ -467,12 +465,14 @@ def on_list(args, flags):
         print("%s -> %s" % (toks[0], toks[1]))
     f.close()
     return 0
-  elif args[0] == "enabled":
+
+  if args[0] == "enabled":
     for mod in mods:
       if env.isModuleEnabled(mod.name) or isinstance(mod, seiscomp3.Kernel.CoreModule):
         print(mod.name)
     return 0
-  elif args[0] == "disabled":
+
+  if args[0] == "disabled":
     for mod in mods:
       if not env.isModuleEnabled(mod.name) and not isinstance(mod, seiscomp3.Kernel.CoreModule):
         print(mod.name)
@@ -613,15 +613,15 @@ def on_install_deps_linux(args, flags):
 def on_install_deps(args, flags):
   if sys.platform.startswith("linux"):
     return on_install_deps_linux(args, flags)
-  else:
-    error("unsupported platform")
-    print("*********************************************************************")
-    print("The platform you are currently running on is not supported to install")
-    print("dependencies automatically.")
-    print("You need to check the documentation for required packages and install")
-    print("them manually.")
-    print("*********************************************************************")
-    return 1
+
+  error("unsupported platform")
+  print("*********************************************************************")
+  print("The platform you are currently running on is not supported to install")
+  print("dependencies automatically.")
+  print("You need to check the documentation for required packages and install")
+  print("them manually.")
+  print("*********************************************************************")
+  return 1
 
 
 def on_install_deps_help(args):
@@ -653,7 +653,7 @@ def on_update_config(args, flags):
 
         try:
           proxy = mod.updateConfigProxy()
-          if isinstance(proxy, basestring):
+          if is_string(proxy):
             configuredMods.setdefault(proxy, False)
         except Exception as e:
           pass
@@ -749,8 +749,8 @@ def on_alias(args, flags):
         if toks[0] == args[1]:
           has_alias = True
           break
-        else:
-          new_lines.append(line)
+
+        new_lines.append(line)
       f.close()
     except: pass
 
@@ -776,7 +776,7 @@ def on_alias(args, flags):
     # create symlink of defaults from etc/defaults/mod1.cfg to etc/defaults/mod2.cfg
     # use relative path to default_cfg2
     cwd = os.getcwd()
-    os.chdir(os.path.join(SEISCOMP_ROOT,"etc", "defaults"))
+    os.chdir(os.path.join(SEISCOMP_ROOT, "etc", "defaults"))
     default_cfg1 = args[1] + ".cfg"
     default_cfg2 = args[2] + ".cfg"
     if os.path.exists(default_cfg2):
@@ -800,7 +800,7 @@ def on_alias(args, flags):
 
     # create symlink from etc/init/mod1.py to etc/init/mod2.py
     cwd = os.getcwd()
-    os.chdir(os.path.join(SEISCOMP_ROOT,"etc", "init"))
+    os.chdir(os.path.join(SEISCOMP_ROOT, "etc", "init"))
     init1 = args[1] + ".py"
     init2 = args[2] + ".py"
     print("Link init script: %s -> %s" % (init2, init1))
@@ -813,7 +813,8 @@ def on_alias(args, flags):
     os.chdir(cwd)
 
     return 0
-  elif args[0] == "remove":
+
+  if args[0] == "remove":
     if len(args) != 2:
       error("expected one argument for remove: alias-name")
       return 1
@@ -881,9 +882,9 @@ def on_alias(args, flags):
     except: pass
 
     return 0
-  else:
-    error("wrong command '%s': expected 'create' or 'remove'" % args[0])
-    return 1
+
+  error("wrong command '%s': expected 'create' or 'remove'" % args[0])
+  return 1
 
   return 0
 
@@ -943,14 +944,15 @@ def on_help(args, flags):
     print()
     print("Use 'help [command]' to get more help about a command")
     return 0
-  else:
-    cmd = args[0]
-    try: func = globals()["on_" + cmd.replace("-", "_") + "_help"]
-    except:
-      print("Sorry, no help available for %s" % cmd)
-      return 1
-    func(args[1:])
-    return 0
+
+  cmd = args[0]
+  try: func = globals()["on_" + cmd.replace("-", "_") + "_help"]
+  except:
+    print("Sorry, no help available for %s" % cmd)
+    return 1
+
+  func(args[1:])
+  return 0
 
 
 def run_action(action, args, flags):
