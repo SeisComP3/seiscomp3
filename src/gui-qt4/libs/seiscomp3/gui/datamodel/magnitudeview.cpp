@@ -1233,6 +1233,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 
 	_ui.btnCommit->setFont(SCScheme.fonts.highlight);
 
+	_ui.cbEvalStatus->addItem("- unset -");
+	for ( size_t i = EvaluationStatus::First; i < EvaluationStatus::Quantity; ++i )
+		_ui.cbEvalStatus->addItem(EvaluationStatus::NameDispatcher::name(i));
+
 	/*
 	QAction* debugAction = new QAction(this);
 	debugAction->setShortcut(Qt::Key_C);
@@ -1322,6 +1326,7 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	connect(_ui.btnActivate, SIGNAL(clicked()), this, SLOT(activateChannels()));
 	connect(_ui.btnDeactivate, SIGNAL(clicked()), this, SLOT(deactivateChannels()));
 	connect(_ui.btnWaveforms, SIGNAL(clicked()), this, SLOT(openWaveforms()));
+	connect(_ui.cbEvalStatus, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluationStatusChanged(int)));
 
 	QMenu *selectMenu = new QMenu;
 	QAction *editSelectionFilter = new QAction(tr("Edit"), this);
@@ -1504,6 +1509,8 @@ void MagnitudeView::recalculateMagnitude() {
 	_netMag->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	_netMag->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 
+	_ui.cbEvalStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
+
 	int idx = findType(_tabMagnitudes, _netMag->type().c_str());
 	_tabMagnitudes->setTabTextColor(idx, QColor());
 	_tabMagnitudes->setTabIcon(idx, QIcon());
@@ -1531,6 +1538,7 @@ void MagnitudeView::recalculateMagnitude() {
 					catch ( ... ) {
 						magMw->setStationCount(Core::None);
 					}
+					magMw->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
@@ -3347,12 +3355,21 @@ void MagnitudeView::updateContent() {
 	updateMagnitudeLabels();
 
 	if ( !_netMag ) {
+		_ui.cbEvalStatus->setCurrentIndex(0);
 		_ui.groupReview->setEnabled(false);
 
 		// set dist column in table & add Net/Sta-Mag to diagram: dist = addStationMagnitude()
 		updateMinMaxMagnitude();
 		update();
 		return;
+	}
+	else {
+		try {
+			_ui.cbEvalStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
+		}
+		catch ( ... ) {
+			_ui.cbEvalStatus->setCurrentIndex(0);
+		}
 	}
 
 	SEISCOMP_DEBUG("selected magnitude: %s with %lu magRefs ", _netMag->publicID().c_str(), (unsigned long)_netMag->stationMagnitudeContributionCount() );
@@ -3697,6 +3714,52 @@ void MagnitudeView::calcMinMax(Seiscomp::DataModel::Origin* o, double& latMin, d
 			}
 		}
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::evaluationStatusChanged(int index) {
+	if ( index < 0 || !_netMag ) return;
+
+	if ( !index ) {
+		_netMag->setEvaluationStatus(Core::None);
+	}
+	else {
+		EvaluationStatus stat;
+		if ( !stat.fromInt(index-1) ) {
+			return;
+		}
+		_netMag->setEvaluationStatus(stat);
+	}
+
+	emit magnitudeUpdated(_origin->publicID().c_str(), _netMag.get());
+
+	// Update linked Mw estimate
+	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
+	if ( proc ) {
+		string type = proc->typeMw();
+		int idx = findType(_tabMagnitudes, type.c_str());
+		if ( idx != -1 ) {
+			MagnitudePtr magMw =
+				//Magnitude::Find(_ui.comboMagType->itemData(idx).value<QString>().toStdString());
+				Magnitude::Find(_tabMagnitudes->tabData(idx).value<TabData>().publicID);
+
+			if ( magMw && magMw != _netMag ) {
+				try {
+					magMw->setEvaluationStatus(_netMag->evaluationStatus());
+				}
+				catch ( ... ) {
+					magMw->setEvaluationStatus(Core::None);
+				}
+				emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
+			}
+		}
+	}
+
+	updateMagnitudeLabels();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

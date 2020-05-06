@@ -243,6 +243,7 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void closeTab(int idx);
 
 		void debugCreateMagRef();
+		void evaluationStatusChanged(int index);
 
 
 	protected:

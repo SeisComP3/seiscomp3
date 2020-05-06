@@ -56,7 +56,7 @@ MAKEENUM(
 		OL_LON,
 		OL_DEPTH,
 		OL_RMS,
-		OL_TYPE,
+		OL_STAT,
 		OL_AGENCY,
 		OL_AUTHOR,
 		OL_REGION
@@ -83,7 +83,7 @@ int OriginColAligns[OriginListColumns::Quantity] = {
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
@@ -113,6 +113,7 @@ MAKEENUM(
 		MLC_VALUE,
 		MLC_NUM,
 		MLC_RMS,
+		MLC_STAT,
 		MLC_AGENCY,
 		MLC_AUTHOR,
 		MLC_DUMMY
@@ -123,6 +124,7 @@ MAKEENUM(
 		"M",
 		"Count",
 		"RMS",
+		"Stat",
 		"Agency",
 		"Author",
 		""
@@ -134,7 +136,8 @@ int MagnitudeColAligns[OriginListColumns::Quantity] = {
 	Qt::AlignLeft | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter
 };
@@ -1851,22 +1854,22 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 	}
 
 	char stat = objectStatusToChar(org);
-	item->setText(_originColumnMap[OL_TYPE], QString("%1").arg(stat));
+	item->setText(_originColumnMap[OL_STAT], QString("%1").arg(stat));
 
 	try {
 		switch ( org->evaluationMode() ) {
 			case DataModel::AUTOMATIC:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 				break;
 			case DataModel::MANUAL:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.manual);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.manual);
 				break;
 			default:
 				break;
 		};
 	}
 	catch ( ... ) {
-		item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+		item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 	}
 
 	try {
@@ -1948,6 +1951,11 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 		item->setText(MLC_RMS, "");
 	}
 
+	char stat = objectEvaluationStatusToChar(mag);
+	if ( stat )
+		item->setText(MLC_STAT, QString("%1").arg(stat));
+	else
+		item->setText(MLC_STAT, QString());
 	item->setText(MLC_AGENCY, objectAgencyID(mag).c_str());
 	item->setText(MLC_AUTHOR, objectAuthor(mag).c_str());
 
@@ -2188,6 +2196,7 @@ void EventEdit::resetMagnitude() {
 	_ui.labelMagnitudeError->setText("");
 	_ui.labelMagnitudeCountValue->setText("-");
 	_ui.labelMagnitudeMethodValue->setText("");
+	_ui.labelMagnitudeStatus->setText(QString());
 
 	_ui.buttonFixMagnitudeType->setEnabled(false);
 	_ui.buttonReleaseMagnitudeType->setEnabled(false);
@@ -2611,6 +2620,13 @@ void EventEdit::updateMagnitude() {
 	}
 
 	_ui.labelMagnitudeMethodValue->setText(_currentMagnitude->methodID().c_str());
+
+	try {
+		_ui.labelMagnitudeStatus->setText(_currentMagnitude->evaluationStatus().toString());
+	}
+	catch ( ... ) {
+		_ui.labelMagnitudeStatus->setText(QString());
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
