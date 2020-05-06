@@ -10,17 +10,17 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
+from __future__ import division, print_function
+
 import os
 import sys
 import glob
 
-try:
-    import readline
-except:
-    pass
-
-import seiscomp3.Config
-
+# Python version depended string conversion
+if sys.version_info[0] < 3:
+    py3input = raw_input #pylint: disable=E0602
+else:
+    py3input = input
 
 def split_tokens(line):
     return line.split()
@@ -34,10 +34,8 @@ def convert_wildcard(s):
     # Add station wildcard if only network is given
     if len(wild) == 1:
         wild.append('*')
-    for i in range(len(wild)):
-        if len(wild[i]) == 0:
-            wild[i] = '*'
-    return '_'.join(wild)
+
+    return '_'.join([x if x else '*' for x in wild])
 
 
 def convert_stations(s):
@@ -51,6 +49,9 @@ class CLI:
     """
     Simple console shell.
     """
+
+    def __init__(self):
+        self.env = None
 
     def run(self, env):
         self.env = env
@@ -67,12 +68,12 @@ available commands with 'help'. 'exit' leaves the shell.
 
         prompt = "$ "
         while True:
-            line = raw_input(prompt).strip()
+            line = py3input(prompt).strip()
             toks = split_tokens(line)
             if len(toks) == 0:
                 continue
 
-            if line == "exit" or line == "quit":
+            if line in ("exit", "quit"):
                 break
 
             self.handleCommand(toks[0], toks[1:])
@@ -81,23 +82,24 @@ available commands with 'help'. 'exit' leaves the shell.
         try:
             if cmd == "help":
                 return self.commandHelp(args)
-            elif cmd == "list":
+            if cmd == "list":
                 return self.commandList(args)
-            elif cmd == "delete":
+            if cmd == "delete":
                 return self.commandDelete(args)
-            elif cmd == "print":
+            if cmd == "print":
                 return self.commandPrint(args)
-            elif cmd == "set":
+            if cmd == "set":
                 return self.commandSet(args)
-            elif cmd == "remove":
+            if cmd == "remove":
                 return self.commandRemove(args)
 
             raise Exception("Unknown command: %s" % cmd)
-        except Exception, e:
+        except Exception as e:
             sys.stdout.write("%s\n" % str(e))
             return False
 
-    def commandHelp(self, args):
+    @staticmethod
+    def commandHelp(args):
         if len(args) == 0:
             sys.stdout.write("""\
 Commands:
@@ -203,7 +205,7 @@ Commands:
 
             return True
 
-        elif args[0] == "profiles":
+        if args[0] == "profiles":
             if len(args) > 2:
                 raise Exception("Too many arguments")
             if len(args) < 2:
@@ -211,13 +213,12 @@ Commands:
 
             module = args[1]
 
-            profs = []
             for f in sorted(glob.glob(os.path.join(self.env.key_dir, module, "profile_*"))):
                 print(os.path.basename(f)[8:])
 
             return True
 
-        elif args[0] == "modules":
+        if args[0] == "modules":
             if len(args) > 2:
                 raise Exception("Too many arguments")
             if len(args) < 2:
@@ -238,8 +239,7 @@ Commands:
 
             return True
 
-        else:
-            raise Exception("Invalid argument: %s" % args[0])
+        raise Exception("Invalid argument: %s" % args[0])
 
     def commandDelete(self, args):
         if len(args) == 0:
@@ -267,16 +267,14 @@ Commands:
                 new_lines = []
                 is_modified = False
 
-                for i in range(len(lines)):
-                    line = lines[i]
-
+                for line in lines:
                     # Comment line
                     if line.startswith("#"):
                         new_lines.append(line)
                         continue
 
                     # Empty line
-                    if len(line) == 0:
+                    if not line:
                         new_lines.append(line)
                         continue
 
@@ -299,14 +297,14 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(new_lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        elif args[0] == "binding":
+        if args[0] == "binding":
             if len(args) > 3:
                 raise Exception("Too many arguments")
             if len(args) < 3:
@@ -323,15 +321,13 @@ Commands:
             f = os.path.join(self.env.key_dir, "station_" + sta)
             try:
                 lines = [line.strip() for line in open(f, "r").readlines()]
-            except:
+            except OSError:
                 pass
 
             new_lines = []
             is_modified = False
 
-            for i in range(len(lines)):
-                line = lines[i]
-
+            for line in lines:
                 # Comment line
                 if line.startswith("#"):
                     new_lines.append(line)
@@ -360,13 +356,12 @@ Commands:
             if is_modified:
                 try:
                     open(f, "w").write('\n'.join(new_lines))
-                except Exception, e:
+                except Exception as e:
                     sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             return True
 
-        else:
-            raise Exception("Invalid argument: %s" % args[0])
+        raise Exception("Invalid argument: %s" % args[0])
 
     def commandPrint(self, args):
         if len(args) == 0:
@@ -380,9 +375,9 @@ Commands:
             key = os.path.join(self.env.key_dir, "station_" + sta)
             try:
                 lines = [line.strip() for line in open(key, "r").readlines()]
-            except IOError, e:
+            except IOError:
                 raise Exception("%s: station not configured" % sta)
-            except Exception, e:
+            except Exception as e:
                 raise Exception("%s: unexpected error: %s" % (sta, str(e)))
 
             first = True
@@ -415,9 +410,9 @@ Commands:
                     sys.stdout.write("-"*80 + "\n")
                     sys.stdout.write(data)
                     sys.stdout.write("-"*80 + "\n")
-                except IOError, e:
+                except IOError:
                     sys.stdout.write("!binding not found\n")
-                except Exception, e:
+                except Exception as e:
                     sys.stdout.write("!unexpected error: %s\n" % str(e))
 
         else:
@@ -447,7 +442,7 @@ Commands:
                 module_found = False
                 is_modified = False
 
-                for i in range(len(lines)):
+                for i in range(len(lines)):#pylint: disable=C0200
                     line = lines[i]
 
                     # Comment line
@@ -485,14 +480,14 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        elif args[0] == "module":
+        if args[0] == "module":
             if len(args) != 3:
                 raise Exception(
                     "missing arguments, expected: module station-selector")
@@ -508,7 +503,7 @@ Commands:
                 module_found = False
                 is_modified = False
 
-                for i in range(len(lines)):
+                for i in range(len(lines)):#pylint: disable=C0200
                     line = lines[i]
 
                     # Comment line
@@ -538,15 +533,14 @@ Commands:
                     modified += 1
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        else:
-            raise Exception("Invalid argument: %s" % args[0])
+        raise Exception("Invalid argument: %s" % args[0])
 
     def commandRemove(self, args):
         if len(args) == 0:
@@ -567,7 +561,7 @@ Commands:
                 lines = [line.strip() for line in open(f, "r").readlines()]
 
                 is_modified = False
-                for i in range(len(lines)):
+                for i in range(len(lines)):#pylint: disable=C0200
                     line = lines[i]
 
                     # Comment line
@@ -605,14 +599,14 @@ Commands:
 
                     try:
                         open(f, "w").write('\n'.join(lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        elif args[0] == "module":
+        if args[0] == "module":
             if len(args) != 3:
                 raise Exception(
                     "Missing arguments, expected: module station-selector")
@@ -627,9 +621,7 @@ Commands:
                 new_lines = []
 
                 is_modified = False
-                for i in range(len(lines)):
-                    line = lines[i]
-
+                for line in lines:
                     # Comment line
                     if line.startswith("#"):
                         new_lines.append(line)
@@ -657,18 +649,17 @@ Commands:
 
                     try:
                         open(f, "w").write('\n'.join(new_lines))
-                    except Exception, e:
+                    except Exception as e:
                         sys.stdout.write("%s: %s\n" % (f, str(e)))
 
                     try:
                         os.remove(os.path.join(self.env.key_dir,
                                                module, os.path.basename(f)))
-                    except:
+                    except OSError:
                         pass
 
             sys.stdout.write("OK, %d files modified\n" % modified)
 
             return True
 
-        else:
-            raise Exception("Invalid argument: %s" % args[0])
+        raise Exception("Invalid argument: %s" % args[0])
