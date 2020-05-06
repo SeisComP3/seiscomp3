@@ -57,7 +57,7 @@
 #include "plugin.h"
 #include "diag.h"
 
-#define MYVERSION "3.3 (2020.122)"
+#define MYVERSION "3.3 (2020.127)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/seedlink.ini"
@@ -982,6 +982,8 @@ void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name
   const ptime &pt, int usec_correction, int timing_quality, const int32_t *data,
   int number_of_samples)
   {
+    if(bufs == NULL) return;
+
     rc_ptr<Input> input;
     if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
@@ -1077,6 +1079,8 @@ void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name
 void Station::send_raw(rc_ptr<Plugin> plugin, const string &input_name, const int32_t *data,
   int number_of_samples)
   {
+    if(bufs == NULL) return;
+
     rc_ptr<Input> input;
     if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
@@ -1100,6 +1104,8 @@ void Station::send_raw(rc_ptr<Plugin> plugin, const string &input_name, const in
 void Station::send_gap(rc_ptr<Plugin> plugin, const string &input_name, int usec_correction,
   int timing_quality, int number_of_samples)
   {
+    if(bufs == NULL) return;
+
     rc_ptr<Input> input;
     if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
@@ -1123,6 +1129,8 @@ void Station::send_gap(rc_ptr<Plugin> plugin, const string &input_name, int usec
 
 void Station::send_flush(rc_ptr<Plugin> plugin, const string &input_name)
   {
+    if(bufs == NULL) return;
+
     rc_ptr<Input> input;
     if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
@@ -1902,7 +1910,7 @@ bool IOHandler::operator()(Fdset &fds)
                 logs(LOG_ERR) << "[" << (*p)->name << "]"
                   " station " << station_key << " is not configured" << endl;
 
-                st = new Station(string(head.station, 0, PLUGIN_SIDLEN));
+                st = new Station(station_key);
                 insert_object(stations, st);
               }
             
