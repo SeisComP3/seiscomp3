@@ -3716,7 +3716,7 @@ void MagnitudeView::calcMinMax(Seiscomp::DataModel::Origin* o, double& latMin, d
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::evaluationStatusChanged(int index) {
-	if ( index < 0 ) return;
+	if ( index < 0 || !_netMag ) return;
 
 	if ( !index ) {
 		_netMag->setEvaluationStatus(Core::None);
