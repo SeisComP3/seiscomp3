@@ -1547,6 +1547,7 @@ void MagnitudeView::recalculateMagnitude() {
 					catch ( ... ) {
 						magMw->setStationCount(Core::None);
 					}
+					magMw->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
@@ -3727,6 +3728,27 @@ void MagnitudeView::evaluationStatusChanged(int index) {
 			return;
 		}
 		_netMag->setEvaluationStatus(stat);
+	}
+
+	// Update linked Mw estimate
+	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
+	if ( proc ) {
+		string type = proc->typeMw();
+		int idx = findType(_tabMagnitudes, type.c_str());
+		if ( idx != -1 ) {
+			MagnitudePtr magMw =
+				//Magnitude::Find(_ui.comboMagType->itemData(idx).value<QString>().toStdString());
+				Magnitude::Find(_tabMagnitudes->tabData(idx).value<TabData>().publicID);
+
+			if ( magMw && magMw != _netMag ) {
+				try {
+					magMw->setEvaluationStatus(_netMag->evaluationStatus());
+				}
+				catch ( ... ) {
+					magMw->setEvaluationStatus(Core::None);
+				}
+			}
+		}
 	}
 
 	updateMagnitudeLabels();
