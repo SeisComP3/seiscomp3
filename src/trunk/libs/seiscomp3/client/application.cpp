@@ -1778,13 +1778,13 @@ bool Application::init() {
 
 	if ( commandline().hasOption("help") ) {
 		printUsage();
-		exit(-1);
+		exit(0);
 		return false;
 	}
 
 	if ( commandline().hasOption("version") ) {
 		printVersion();
-		exit(-1);
+		exit(0);
 		return false;
 	}
 
@@ -1823,7 +1823,7 @@ bool Application::init() {
 			}
 			cout << endl;
 			delete services;
-			exit(-1);
+			exit(0);
 			return false;
 		}
 	}
@@ -1840,20 +1840,20 @@ bool Application::init() {
 			}
 			cout << endl;
 			delete services;
-			exit(-1);
+			exit(0);
 			return false;
 		}
 	}
 
 	if ( commandline().hasOption("print-config-vars") ) {
 		printConfigVariables();
-		exit(-1);
+		exit(0);
 		return false;
 	}
 
 	if ( commandline().hasOption("validate-schema-params") ) {
 		validateSchemaParameters();
-		exit(-1);
+		exit(0);
 		return false;
 	}
 
