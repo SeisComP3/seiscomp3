@@ -671,7 +671,7 @@
            <string>Select</string>
           </property>
           <property name="shortcut" >
-           <string>s</string>
+           <string>S</string>
           </property>
          </widget>
         </item>

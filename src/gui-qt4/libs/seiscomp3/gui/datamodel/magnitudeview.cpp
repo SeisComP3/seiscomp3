@@ -1317,6 +1317,24 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	connect(_ui.btnDeactivate, SIGNAL(clicked()), this, SLOT(deactivateChannels()));
 	connect(_ui.btnWaveforms, SIGNAL(clicked()), this, SLOT(openWaveforms()));
 
+	{
+		QList<QHBoxLayout*> layouts = _ui.groupReview->findChildren<QHBoxLayout*>();
+		if ( layouts.count() > 1 ) {
+			QComboBox *comboBoxStatus = new QComboBox;
+			comboBoxStatus->addItem("- unset -");
+			for ( size_t i = EvaluationStatus::First; i < EvaluationStatus::Quantity; ++i ) {
+				comboBoxStatus->addItem(EvaluationStatus::NameDispatcher::name(i));
+			}
+			layouts[1]->insertWidget(4, comboBoxStatus);
+			layouts[1]->insertWidget(4, new QLabel(tr("Evaluation:")));
+
+			_ui.groupReview->setProperty("combo.netmag.status", QVariant::fromValue<void*>(comboBoxStatus));
+
+			connect(comboBoxStatus, SIGNAL(currentIndexChanged(int)),
+			        this, SLOT(evaluationStatusChanged(int)));
+		}
+	}
+
 	QMenu *selectMenu = new QMenu;
 	QAction *editSelectionFilter = new QAction(tr("Edit"), this);
 	editSelectionFilter->setShortcut(QKeySequence("shift+s"));
@@ -1497,6 +1515,10 @@ void MagnitudeView::recalculateMagnitude() {
 
 	_netMag->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	_netMag->setEvaluationStatus(EvaluationStatus(CONFIRMED));
+
+	QComboBox *comboStatus = static_cast<QComboBox*>(_ui.groupReview->property("combo.netmag.status").value<void*>());
+	if ( comboStatus )
+		comboStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
 
 	int idx = findType(_tabMagnitudes, _netMag->type().c_str());
 	_tabMagnitudes->setTabTextColor(idx, QColor());
@@ -3675,6 +3697,28 @@ void MagnitudeView::calcMinMax(Seiscomp::DataModel::Origin* o, double& latMin, d
 			}
 		}
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::evaluationStatusChanged(int index) {
+	if ( index < 0 ) return;
+
+	if ( !index ) {
+		_netMag->setEvaluationStatus(Core::None);
+	}
+	else {
+		EvaluationStatus stat;
+		if ( !stat.fromInt(index-1) ) {
+			return;
+		}
+		_netMag->setEvaluationStatus(stat);
+	}
+
+	updateMagnitudeLabels();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
