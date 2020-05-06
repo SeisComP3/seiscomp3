@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch20
+
+* scolv
+
+  * Add control to set evaluation status of a network magnitude
+
 ## Release 2018.327 patch19
 
 * scautopick
