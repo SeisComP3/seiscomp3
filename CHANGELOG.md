@@ -10,7 +10,6 @@
 * scautopick
 
   * Add amplitudes.enableUpdate to descriptions
-  * Add extraComments option to allow adding more comments to the pick, e.g. SNR
 
 * scrttv
 
@@ -44,8 +43,6 @@
       format version
     * Add support for ORDER BY, LIMIT and OFFSET parameters to select() and
       selectArchived() queries introduced by QuakeLink API 1
-  * Fixed MSEED parser to also accept records if blockette 1000 is not within
-    the first 64 bytes
   * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
     than poles
 
@@ -87,6 +84,54 @@
     scheme.colors.records.borders.standard.pen.color = FF0000FF
     ```
   * Fix filter string drop to widgets with Qt5
+
+## Release 2018.327 patch20
+
+* scolv
+
+  * Add control to set evaluation status of a network magnitude
+  * Show magnitude evaluation status in event edit table and details
+
+## Release 2018.327 patch19
+
+* scautopick
+
+  * Add extraComments option to allow adding more comments to the pick, e.g. SNR
+
+* scevent
+
+  * Add option to allow event creation based on origin score instead of a
+    minimum phase count.
+  * Release created event immediately if origins configured to be delayed
+    and associate all other queued origins in a batch and emit only one
+    additional event.
+
+* system
+
+  * Fix error message on attempt to create existing alias
+
+* scart
+
+  * Add option `--with-filename` which outputs of all accessed archive files
+    after import
+  * Fix crash if a data file is not writable
+
+* fdsnws
+
+  * Fix bug if useArclinkAccess is enabled
+
+* scinv
+
+  * Correct output of associated filenames in case of a conflict
+
+* scsohlog
+
+  * Add database tests
+
+* trunk
+
+  * Fixed MSEED parser to also accept records if blockette 1000 is not within
+    the first 64 bytes
 
 ## Release 2018.327 patch18
 
