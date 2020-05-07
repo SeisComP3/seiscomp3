@@ -124,7 +124,7 @@ class UserDB(object):
 
     #--------------------------------------------------------------------------
     def __expireUsers(self):
-        for (name, (password, attributes, expires)) in self.__users.items():
+        for (name, (password, attributes, expires)) in list(self.__users.items()):
             if time.time() > expires:
                 Logging.info("de-registering %s" % name)
                 del self.__users[name]
@@ -166,7 +166,7 @@ class UserDB(object):
     def dump(self):
         Logging.info("known users:")
 
-        for name, user in self.__users.items():
+        for name, user in list(self.__users.items()):
             Logging.info(" %s %s %d" % (py3ustr(name), user[1], user[2]))
 
 
