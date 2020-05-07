@@ -3730,6 +3730,8 @@ void MagnitudeView::evaluationStatusChanged(int index) {
 		_netMag->setEvaluationStatus(stat);
 	}
 
+	emit magnitudeUpdated(_origin->publicID().c_str(), _netMag.get());
+
 	// Update linked Mw estimate
 	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
 	if ( proc ) {
@@ -3747,6 +3749,7 @@ void MagnitudeView::evaluationStatusChanged(int index) {
 				catch ( ... ) {
 					magMw->setEvaluationStatus(Core::None);
 				}
+				emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 			}
 		}
 	}

@@ -499,7 +499,7 @@
          </widget>
         </item>
         <item row="2" column="1" >
-         <widget class="QFrame" name="frameInformation_2" >
+         <widget class="QFrame" name="frameInformationM" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>5</hsizetype>

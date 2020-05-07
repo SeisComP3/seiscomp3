@@ -43,7 +43,7 @@ SC_SYSTEM_CORE_API std::string eventRegion(const DataModel::Event *);
 
 
 template <typename T>
-char objectStatusToChar(const T *o) {
+char objectEvaluationStatusToChar(const T *o) {
 	try {
 		switch ( o->evaluationStatus() ) {
 			case PRELIMINARY:
@@ -63,6 +63,15 @@ char objectStatusToChar(const T *o) {
 		}
 	}
 	catch ( ... ) {}
+
+	return 0;
+}
+
+
+template <typename T>
+char objectStatusToChar(const T *o) {
+	char evalStat = objectEvaluationStatusToChar(o);
+	if ( evalStat ) return evalStat;
 
 	try {
 		if ( o->evaluationMode() == MANUAL )

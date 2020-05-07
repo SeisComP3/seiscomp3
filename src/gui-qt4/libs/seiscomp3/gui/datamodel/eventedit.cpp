@@ -53,7 +53,7 @@ MAKEENUM(
 		OL_LON,
 		OL_DEPTH,
 		OL_RMS,
-		OL_TYPE,
+		OL_STAT,
 		OL_AGENCY,
 		OL_AUTHOR,
 		OL_REGION
@@ -110,6 +110,7 @@ MAKEENUM(
 		MLC_VALUE,
 		MLC_NUM,
 		MLC_RMS,
+		MLC_STAT,
 		MLC_AGENCY,
 		MLC_AUTHOR,
 		MLC_DUMMY
@@ -120,6 +121,7 @@ MAKEENUM(
 		"M",
 		"Count",
 		"RMS",
+		"Stat",
 		"Agency",
 		"Author",
 		""
@@ -132,6 +134,7 @@ int MagnitudeColAligns[OriginListColumns::Quantity] = {
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter
 };
@@ -825,6 +828,14 @@ void EventEdit::init() {
 	QObject *drawFilter = new ElideFadeDrawer(this);
 	_ui.labelRegionValue->installEventFilter(drawFilter);
 	_ui.labelMagnitudeMethodValue->installEventFilter(drawFilter);
+
+	// Hack to not break binary compatibility
+	QGridLayout *layout = static_cast<QGridLayout*>(_ui.frameInformationM->layout());
+	QLabel *label = new QLabel(tr("Status:"));
+	layout->addWidget(label, 4, 0, 1, 1, Qt::AlignTop);
+	label = new QLabel();
+	layout->addWidget(label, 4, 1, 1, 2, Qt::AlignTop);
+	_ui.frameInformationM->setProperty("label.netmag.status", QVariant::fromValue<void*>(label));
 
 	_customColumn = -1;
 	_customDefaultText = "-";
@@ -1836,22 +1847,22 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 	}
 
 	char stat = objectStatusToChar(org);
-	item->setText(_originColumnMap[OL_TYPE], QString("%1").arg(stat));
+	item->setText(_originColumnMap[OL_STAT], QString("%1").arg(stat));
 
 	try {
 		switch ( org->evaluationMode() ) {
 			case DataModel::AUTOMATIC:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 				break;
 			case DataModel::MANUAL:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.manual);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.manual);
 				break;
 			default:
 				break;
 		};
 	}
 	catch ( ... ) {
-		item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+		item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 	}
 
 	try {
@@ -1933,6 +1944,11 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 		item->setText(MLC_RMS, "");
 	}
 
+	char stat = objectEvaluationStatusToChar(mag);
+	if ( stat )
+		item->setText(MLC_STAT, QString("%1").arg(stat));
+	else
+		item->setText(MLC_STAT, QString());
 	item->setText(MLC_AGENCY, objectAgencyID(mag).c_str());
 	item->setText(MLC_AUTHOR, objectAuthor(mag).c_str());
 
@@ -2173,6 +2189,7 @@ void EventEdit::resetMagnitude() {
 	_ui.labelMagnitudeError->setText("");
 	_ui.labelMagnitudeCountValue->setText("-");
 	_ui.labelMagnitudeMethodValue->setText("");
+	static_cast<QLabel*>(_ui.frameInformationM->property("label.netmag.status").value<void*>())->setText(QString());
 
 	_ui.buttonFixMagnitudeType->setEnabled(false);
 	_ui.buttonReleaseMagnitudeType->setEnabled(false);
@@ -2596,6 +2613,17 @@ void EventEdit::updateMagnitude() {
 	}
 
 	_ui.labelMagnitudeMethodValue->setText(_currentMagnitude->methodID().c_str());
+
+	try {
+		static_cast<QLabel*>(_ui.frameInformationM->property("label.netmag.status").value<void*>())->setText(
+			_currentMagnitude->evaluationStatus().toString()
+		);
+	}
+	catch ( ... ) {
+		static_cast<QLabel*>(_ui.frameInformationM->property("label.netmag.status").value<void*>())->setText(
+			QString()
+		);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
