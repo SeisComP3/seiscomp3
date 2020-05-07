@@ -5,6 +5,7 @@
 * scolv
 
   * Add control to set evaluation status of a network magnitude
+  * Show magnitude evaluation status in event edit table and details
 
 ## Release 2018.327 patch19
 
