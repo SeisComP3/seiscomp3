@@ -896,7 +896,8 @@ void EventEdit::init() {
 	for ( int i = 0; i < OriginListColumns::Quantity; ++i ) {
 		if ( i == _customColumn )
 			_originTableHeader << _customColumnLabel;
-		else if ( i == OL_CREATED || i == OL_TIME ) {
+
+		if ( i == OL_CREATED || i == OL_TIME ) {
 			if ( SCScheme.dateTime.useLocalTime )
 				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
 			else
@@ -1084,7 +1085,7 @@ void EventEdit::init() {
 	_ui.treeMagnitudes->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	header = _ui.treeMagnitudes->header();
 	header->setSortIndicatorShown(true);
-	header->setSortIndicator(_originColumnMap[MLC_TIMESTAMP], Qt::DescendingOrder);
+	header->setSortIndicator(MLC_TIMESTAMP, Qt::DescendingOrder);
 	header->setClickable(true);
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortMagnitudeItems(int)));
