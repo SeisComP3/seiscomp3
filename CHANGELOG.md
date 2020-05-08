@@ -6,6 +6,8 @@
 
   * Add control to set evaluation status of a network magnitude
   * Show magnitude evaluation status in event edit table and details
+  * Fix origin table header when a custom column is configured in the event
+    edit panel
 
 ## Release 2018.327 patch19
 
