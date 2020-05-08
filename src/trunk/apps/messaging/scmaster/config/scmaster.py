@@ -1,16 +1,25 @@
 from __future__ import print_function
+
 import os
 import sys
-import time
 import subprocess
 import seiscomp3.Kernel
 
+#------------------------------------------------------------------------------
+# Python version depended string conversion
+if sys.version_info[0] < 3:
+    py3bstr = str
+    py3ustr = str
+
+else:
+    py3bstr = lambda s: s.encode('utf-8')
+    py3ustr = lambda s: s.decode('utf-8', 'replace')
 
 def check_output(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE, shell=True)
     out = proc.communicate()
-    return [out[0], out[1], proc.returncode]
+    return [py3ustr(out[0]), py3ustr(out[1]), proc.returncode]
 
 
 def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schemapath):
@@ -109,14 +118,15 @@ class Module(seiscomp3.Kernel.CoreModule):
 
     # Add master port
     def _get_start_params(self):
-        return seiscomp3.Kernel.Module._get_start_params(self) + " -H localhost:%d" % self.messagingPort
+        return seiscomp3.Kernel.Module._get_start_params(self) + \
+               " -H localhost:%d" % self.messagingPort
 
     def start(self):
         if not self.messaging:
             print("[kernel] %s is disabled by config" % self.name)
             return 0
 
-        seiscomp3.Kernel.CoreModule.start(self)
+        return seiscomp3.Kernel.CoreModule.start(self)
 
     def check(self):
         if not self.messaging:
@@ -277,7 +287,7 @@ class Module(seiscomp3.Kernel.CoreModule):
             print("WARNING: DB plugin activated but no backend configured", file=sys.stderr)
             return 0
 
-        if backend != "mysql" and backend != "postgresql":
+        if backend not in ("mysql", "postgresql"):
             print("WARNING: Only MySQL and PostgreSQL migrations are supported right now. Please check and "\
                   "upgrade the database schema version yourselves.", file=sys.stderr)
             return 0
