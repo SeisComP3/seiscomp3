@@ -442,15 +442,6 @@ class Module(TemplateModule):
             source_dict[source_key] = (source_type, source_id, self.global_params.copy(), self.station_params.copy())
 
             # Create procs for this type for streams.xml
-            sproc_name = self._get('proc')
-            if sproc_name:
-                self.sproc_used = True
-                sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
-                if sproc:
-                    self.sproc[sproc_name] = sproc
-                else:
-                    print("WARNING: cannot find streams_%s.tpl" % sproc_name)
-
             sproc_name = self._get('sources.%s.proc' % (source_type))
             if sproc_name:
                 self.sproc_used = True
@@ -476,6 +467,16 @@ class Module(TemplateModule):
 
             # Set original parameters
             self.station_params = station_params
+
+        # Add station procs
+        sproc_name = self._get('proc')
+        if sproc_name:
+            self.sproc_used = True
+            sproc = self._process_template("streams_%s.tpl" % sproc_name, None, True, False)
+            if sproc:
+                self.sproc[sproc_name] = sproc
+            else:
+                print("WARNING: cannot find streams_%s.tpl" % sproc_name)
 
         # Create station section for seedlink.ini
         self.seedlink_station[(self.net, self.sta)] = self._generateStationForIni()
@@ -620,13 +621,13 @@ class Module(TemplateModule):
                 print(" Database configured but trunk is not installed", file=sys.stderr)
                 self.seedlink_station_descr = dict()
 
-        self.__load_stations()
-
         try: os.makedirs(self.config_dir)
         except: pass
 
         try: os.makedirs(self.run_dir)
         except: pass
+
+        self.__load_stations()
 
         for p in self.plugins.values():
             p.flush(self)
