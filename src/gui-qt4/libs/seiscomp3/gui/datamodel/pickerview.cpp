@@ -1428,7 +1428,7 @@ Stream* findConfiguredStream(Station *station, const Seiscomp::Core::Time &time)
 					try {
 						ps = DataModel::ParameterSet::Find(setup->parameterSetID());
 					}
-					catch ( Core::ValueException ) {
+					catch ( Core::ValueException & ) {
 						continue;
 					}
 
@@ -7204,7 +7204,7 @@ void PickerView::automaticRepick() {
 						try {
 							ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
 						}
-						catch ( Core::ValueException ) {
+						catch ( Core::ValueException & ) {
 							continue;
 						}
 
