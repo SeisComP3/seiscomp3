@@ -4,8 +4,7 @@
 #include "map.h"
 #include "gcf.h"
 
-char                 *mapfile;
-Map                  *rootmap;
+extern Map *rootmap;
 
 int get_line (FILE *fd, char *line)
 {
