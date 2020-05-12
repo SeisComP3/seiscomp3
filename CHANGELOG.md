@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch21
+
+* trunk
+
+  * Fixed SDSArchive binary search
+
 ## Release 2018.327 patch20
 
 * scolv
