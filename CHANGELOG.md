@@ -45,6 +45,7 @@
       selectArchived() queries introduced by QuakeLink API 1
   * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
     than poles
+  * Fixed SDSArchive binary search
 
 * seedlink
 
