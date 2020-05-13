@@ -1767,7 +1767,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 						long lcy_secs = lcy.seconds();
 						return QString("%1:%2:%3")
 						         .arg(lcy_secs/3600, 2, 10, QChar('0'))
-						         .arg(lcy_secs/60, 2, 10, QChar('0'))
+						         .arg((lcy_secs%3600)/60, 2, 10, QChar('0'))
 						         .arg(lcy_secs % 60, 2, 10, QChar('0'));
 					}
 					catch ( ValueException& ) {}
