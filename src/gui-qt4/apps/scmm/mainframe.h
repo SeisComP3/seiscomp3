@@ -11,15 +11,15 @@
  ***************************************************************************/
 
 
-
-
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
 #define SEISCOMP_COMPONENT MessageMonitor
 
 #include <seiscomp3/gui/core/mainwindow.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/logging/output.h>
+#endif
 #include <QtGui>
 
 #include "ui_mainframe.h"
