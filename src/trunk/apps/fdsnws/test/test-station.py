@@ -31,7 +31,7 @@ class TestStation(FDSNWSTest):
             ('?format=text&level=channel', ctTXT, [], False),
             ('?format=text&includerestricted=false', ctTXT, [], True),
             ('?format=text&startbefore=2019-07-01', ctTXT, [], False),
-            ('?level=channel&includeavailability=true', ctXML, [(172,198,7,0)], False),
+            ('?level=channel&includeavailability=true', ctXML, [(172, 198, 7, 0)], False),
             ('?format=sc3ml&network=AM&station=R0F05&location=00&channel=SHZ&latitude=52&longitude=13&maxradius=0.5&level=response&includeavailability=true', ctXML, [], True),
         ]
         for q, ct, ignoreRanges, concurrent in tests:

@@ -11,7 +11,6 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
-from requests.auth import HTTPDigestAuth
 from fdsnwstest import FDSNWSTest
 
 
@@ -27,8 +26,6 @@ class TestDataSelect(FDSNWSTest):
         ctMSeed = 'application/vnd.fdsn.mseed'
         resFile = self.rootdir + '/results/dataselect-{}.mseed'
 
-        dAuth = HTTPDigestAuth('sysop', 'sysop')
-
         i = 1
         self.testGET('{}{}'.format(query, '?station=R0F05'), ctTXT,
                      retCode=403, testID=i)
@@ -41,7 +38,7 @@ class TestDataSelect(FDSNWSTest):
         for q, concurrent in tests:
             self.testGET('{}{}'.format(query, q), ctMSeed, [], concurrent,
                          dataFile=resFile.format(i), testID=i,
-                         auth=dAuth if q.startswith('auth') else None)
+                         auth=q.startswith('auth'))
             i += 1
 
 

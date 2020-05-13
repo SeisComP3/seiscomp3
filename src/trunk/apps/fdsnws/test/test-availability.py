@@ -11,7 +11,6 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
-from requests.auth import HTTPDigestAuth
 from fdsnwstest import FDSNWSTest
 
 
@@ -28,8 +27,6 @@ class TestAvailability(FDSNWSTest):
         ctJSON = 'application/json'
         resFile = self.rootdir + '/results/availability-{}.txt'
 
-        dAuth = HTTPDigestAuth('sysop', 'sysop')
-
         i = 1
         # (contentType, URL, ignoreChars, concurrent)
         tests = [
@@ -41,7 +38,7 @@ class TestAvailability(FDSNWSTest):
             ('extent?network=AM&channel=HDF&orderby=timespancount_desc', ctTXT, [], False),
             ('extentauth?station=R0F05&orderby=latestupdate_desc&includerestricted=true&format=geocsv', ctCSV, [], False),
             ('extent?orderby=latestupdate_desc&format=request', ctTXT, [], False),
-            ('extentauth?orderby=latestupdate_desc&includerestricted=true&format=json&merge=quality', ctJSON, [(12,32)], True),
+            ('extentauth?orderby=latestupdate_desc&includerestricted=true&format=json&merge=quality', ctJSON, [(12, 32)], True),
             ('query?net=AM', ctTXT, [], False),
             ('query?net=AM&mergegaps=10.0', ctTXT, [], False),
             ('query?net=AM&mergegaps=10.0&merge=overlap', ctTXT, [], False),
@@ -49,16 +46,14 @@ class TestAvailability(FDSNWSTest):
             ('query?net=AM&mergegaps=10.0&merge=overlap,samplerate,quality', ctTXT, [], False),
             ('query?net=AM&show=latestupdate&limit=3', ctTXT, [], False),
             ('query?net=AM&format=geocsv&show=latestupdate', ctCSV, [], False),
-            ('query?net=AM&format=json&show=latestupdate', ctJSON, [(12,32)], False),
-            ('query?net=AM&channel=HDF&format=json&merge=quality,samplerate,overlap&latestupdate', ctJSON, [(12,32)], False),
+            ('query?net=AM&format=json&show=latestupdate', ctJSON, [(12, 32)], False),
+            ('query?net=AM&channel=HDF&format=json&merge=quality,samplerate,overlap&latestupdate', ctJSON, [(12, 32)], False),
             ('query?net=AM&format=request', ctTXT, [], False),
             ('queryauth?net=AM&station=R0F05&includerestricted=true', ctTXT, [], True),
 
         ]
         for q, ct, ignoreRanges, concurrent in tests:
-            auth = None
-            if q.startswith('queryauth') or q.startswith('extentauth'):
-                auth = dAuth
+            auth = q.startswith('queryauth') or q.startswith('extentauth')
             self.testGET('{}{}'.format(query, q), ct, ignoreRanges, concurrent,
                          auth=auth, dataFile=resFile.format(i), testID=i)
             i += 1

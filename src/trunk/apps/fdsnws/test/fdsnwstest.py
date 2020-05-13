@@ -10,8 +10,6 @@
 from __future__ import absolute_import, division, print_function
 
 import os
-import requests
-import signal
 import socket
 import subprocess
 import sys
@@ -19,15 +17,16 @@ import time
 import traceback
 
 from threading import Thread
+from datetime import datetime, timedelta
+
+import requests
 
 if sys.version_info[0] < 3:
-    from Queue import Queue
+    from Queue import Queue #pylint: disable=E0401
 else:
     from queue import Queue
 
-from datetime import datetime, timedelta
-
-from fdsnws.utils import py3bstr
+from fdsnws.utils import py3bstr # pylint: disable=C0413
 
 ###############################################################################
 class FDSNWSTest:
@@ -48,7 +47,7 @@ class FDSNWSTest:
 
         try:
             self.test()
-        except Exception as e:
+        except Exception:
             traceback.print_exc()
 
             self._stopService()
@@ -63,7 +62,7 @@ class FDSNWSTest:
         print('waiting for port {} to become ready '.format(self.port),
               end='')
         maxTime = datetime.now() + timedelta(timeout)
-        while self.service is not None and self.service.poll() == None:
+        while self.service is not None and self.service.poll() is None:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             res = sock.connect_ex(('127.0.0.1', self.port))
             sock.close()
@@ -85,10 +84,9 @@ class FDSNWSTest:
         cmd = self.command()
         print('starting FDSNWS service:', ' '.join(cmd))
         try:
-            self.fdOut = open('fdsnws.stdout', 'w')
-            self.fdErr = open('fdsnws.stderr', 'w')
-            self.service = subprocess.Popen(cmd, stdout=self.fdOut,
-                                            stderr=self.fdErr)
+            fdOut = open('fdsnws.stdout', 'w')
+            fdErr = open('fdsnws.stderr', 'w')
+            self.service = subprocess.Popen(cmd, stdout=fdOut, stderr=fdErr)
         except Exception as e:
             print('failed to start FDSNWS service:', str(e))
             return False
@@ -111,7 +109,7 @@ class FDSNWSTest:
         maxTime = datetime.now() + timedelta(timeout)
 
         self.service.terminate()
-        while self.service.poll() == None:
+        while self.service.poll() is None:
             print('.', end='')
             time.sleep(0.2)
             if datetime.now() > maxTime:
@@ -143,22 +141,24 @@ class FDSNWSTest:
 
 
     #--------------------------------------------------------------------------
-    def diff(self, expected, got, ignoreRanges):
+    @staticmethod
+    def diff(expected, got, ignoreRanges):
         if expected == got:
             return (None, None)
         lenExp = minLen = maxLen = len(expected)
         lenGot = len(got)
-        for r in ignoreRanges:
-            if len(r) > 2:
-                minLen -= r[2]
-            if len(r) > 3:
-                maxLen += r[3]
+        if ignoreRanges:
+            for r in ignoreRanges:
+                if len(r) > 2:
+                    minLen -= r[2]
+                if len(r) > 3:
+                    maxLen += r[3]
 
         if lenGot == 0 and minLen <= 0:
             return (None, None)
         if lenGot < minLen or lenGot > maxLen:
-            return (min(lenExp,lenGot), 'read {} bytes, expected {}'.format(
-                        lenGot, minLen if minLen == maxLen \
+            return (min(lenExp, lenGot), 'read {} bytes, expected {}'\
+                    .format(lenGot, minLen if minLen == maxLen \
                                 else '{}-{}'.format(minLen, maxLen)))
 
         # offset between got and expected index may result from variable length
@@ -176,13 +176,13 @@ class FDSNWSTest:
 
             # bytes do not match, check ignore Range
             ignoreRange = None
-            for r in ignoreRanges:
-                if iExp >= r[0] and iExp < r[1]:
-                    ignoreRange = r
-                    break
+            if ignoreRanges:
+                for r in ignoreRanges:
+                    if r[0] <= iExp < r[1]:
+                        ignoreRange = r
+                        break
 
             if ignoreRange:
-                rStart = ignoreRange[0]
                 rEnd = ignoreRange[1]
                 rLeft = rEnd - iExp
                 rFewer = ignoreRange[2] if len(ignoreRange) > 2 else 0
@@ -203,35 +203,34 @@ class FDSNWSTest:
                 iGot += min(rLeft, rLeft - rFewer)
 
                 # expected data ends on ignore range
-                if exp == None:
+                if exp is None:
                     iGot += min(lenGot-iGot, varLen)
                     continue
 
                 # search range end in data
-                else:
-                    pos = got[iGot:iGot+varLen+1].find(exp)
-                    if pos >= 0:
-                        iGot += pos
-                        continue
+                pos = got[iGot:iGot+varLen+1].find(exp)
+                if pos >= 0:
+                    iGot += pos
+                    continue
 
-            return (iGot, '... [ {} ] != [ {} ] ...'.format(
-                    got[max(0, iGot-10):min(lenGot, iGot+11)],
-                    expected[max(0, iExp-10):min(lenExp, iExp+11)]))
+            return (iGot, '... [ {} ] != [ {} ] ...'\
+                    .format(got[max(0, iGot-10):min(lenGot, iGot+11)],
+                            expected[max(0, iExp-10):min(lenExp, iExp+11)]))
 
         if iGot < lenGot:
-            return (lenGot, 'read {} more bytes than expected'.format(
-                            lenGot-iGot))
-        elif iGot > lenGot:
-            return (lenGot, 'read {} fewer bytes than expected'.format(
-                            iGot-lenGot))
+            return (lenGot, 'read {} more bytes than expected' \
+                            .format(lenGot-iGot))
+        if iGot > lenGot:
+            return (lenGot, 'read {} fewer bytes than expected' \
+                            .format(iGot-lenGot))
 
         # should not happen
         return (None, None)
 
 
     #--------------------------------------------------------------------------
-    def testGET(self, url, contentType='text/html', ignoreRanges=[],
-                concurrent=False, retCode=200, testID=None, auth=None,
+    def testGET(self, url, contentType='text/html', ignoreRanges=None,
+                concurrent=False, retCode=200, testID=None, auth=False,
                 data=None, dataFile=None, diffContent=True, silent=False):
         if concurrent:
             self.testGETConcurrent(url, contentType, data, dataFile, retCode,
@@ -244,14 +243,16 @@ class FDSNWSTest:
 
     #--------------------------------------------------------------------------
     def testGETOneShot(self, url, contentType='text/html', data=None,
-                       dataFile=None, retCode=200, testID=None, ignoreRanges=[],
-                       auth=None, diffContent=True, silent=False):
+                       dataFile=None, retCode=200, testID=None,
+                       ignoreRanges=None, auth=False, diffContent=True,
+                       silent=False):
         if not silent:
             if testID is not None:
                 print('#{} '.format(testID), end='')
             print('{}: '.format(url), end='')
-        stream = False if dataFile is None else True
-        r = requests.get(url, stream=stream, auth=auth)
+        stream = dataFile is not None
+        dAuth = requests.auth.HTTPDigestAuth('sysop', 'sysop') if auth else None
+        r = requests.get(url, stream=stream, auth=dAuth)
         if r.status_code != retCode:
             raise ValueError('Invalid status code, expected "{}", got "{}"' \
                              .format(retCode, r.status_code))
@@ -272,8 +273,8 @@ class FDSNWSTest:
             if diffContent:
                 errPos, errMsg = self.diff(expected, r.content, ignoreRanges)
                 if errPos is not None:
-                    raise ValueError('Unexpected content at byte {}: {}'.format(
-                                     errPos, errMsg))
+                    raise ValueError('Unexpected content at byte {}: {}' \
+                                     .format(errPos, errMsg))
             else:
                 if len(expected) != len(r.content):
                     raise ValueError('Unexpected content length, expected {}, '
@@ -288,7 +289,7 @@ class FDSNWSTest:
     #--------------------------------------------------------------------------
     def testGETConcurrent(self, url, contentType='text/html', data=None,
                           dataFile=None, retCode=200, testID=None,
-                          ignoreRanges=[], auth=None, diffContent=True,
+                          ignoreRanges=None, auth=False, diffContent=True,
                           repetitions=1000, numThreads=10):
         if testID is not None:
             print('#{} '.format(testID), end='')
@@ -335,8 +336,8 @@ class FDSNWSTest:
             t.join()
 
         if errors:
-            raise ValueError("{} errors occured, first one is: {}".format(
-                             len(errors), errors[0]))
+            raise ValueError("{} errors occured, first one is: {}" \
+                             .format(len(errors), errors[0]))
 
         print(' OK')
         sys.stdout.flush()

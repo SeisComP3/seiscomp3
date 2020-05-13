@@ -1292,7 +1292,7 @@ class FDSNAvailabilityQuery(_Availability):
 
         for idList in parentOIDs:
             if req._disconnected:
-                raise StopIteration()
+                return
 
             # build SQL query
             q = 'SELECT * from DataSegment ' \
@@ -1325,7 +1325,7 @@ class FDSNAvailabilityQuery(_Availability):
 
             segIt = dba.getObjectIterator(q, DataModel.DataSegment.TypeInfo())
             if segIt is None or not segIt.valid():
-                raise StopIteration()
+                return
 
             # Iterate and optionally merge segments.
             # A segment will be yielded if
@@ -1388,7 +1388,7 @@ class FDSNAvailabilityQuery(_Availability):
 
             # close database iterator if iteration was stopped because of 
             # row limit
-            raise StopIteration()
+            return
 
 
 # vim: ts=4 et tw=79
