@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2018.327 patch22
+
+* fseed
+
+  * Fix print statement for Python2
+
 ## Release 2018.327 patch21
 
 * trunk
