@@ -1502,7 +1502,7 @@ class _Response5xContainer(_ResponseContainer):
         for b in self.__blk:
             try: b.output(f)
             except Exception as e:
-                print("Skipped invalid blockette: %s" % str(e), file=sys.stderr)
+                print >> sys.stderr, "Skipped invalid blockette: %s" % str(e)
 
 class _Response4xFactory(object):
     def __init__(self, inventory, unit_dict):
