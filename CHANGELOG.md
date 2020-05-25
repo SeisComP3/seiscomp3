@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release 2018.327 patch23
+
+* scolv
+
+  * Fix latency display for time spans larger than an hour
+
+
 ## Release 2018.327 patch22
 
 * fseed
