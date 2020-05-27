@@ -1,4 +1,5 @@
-import ConfigParser
+from __future__ import print_function
+import configparser
 import xml.dom.minidom
 
 def parseXMLnode(root):
@@ -23,7 +24,7 @@ def parseXMLnode(root):
 
             attrs = {}
             if node.hasAttributes():
-                for i in xrange(node.attributes.length):
+                for i in range(node.attributes.length):
                     attr = node.attributes.item(i)
                     name = attr.nodeName
                     attrs[name] = attr.nodeValue.strip()
@@ -47,10 +48,10 @@ class MyConfig(dict):
             self.readINI(filename)
         elif filename[-4:].lower() == ".xml":
             self.readXML(filename)
-        else: print "XXXXXXXXXXXXXXX"
+        else: print("XXXXXXXXXXXXXXX")
 
     def readINI(self, filename):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(filename)
 
         for sec in config.sections():
@@ -70,7 +71,7 @@ class MyConfig(dict):
 
             for name, attrs, content in content:
                 if isinstance(content, list):
-                    raise TypeError, "<%s> elements can't have children" % name
+                    raise TypeError("<%s> elements can't have children" % name)
 
                 if name == "string":
                     tmp = str(content)
@@ -79,10 +80,10 @@ class MyConfig(dict):
                 elif name == "float":
                     tmp = float(content)
                 else:
-                    raise NameError, "illegal tag '%s'" % name
+                    raise NameError("illegal tag '%s'" % name)
 
                 if not "name" in attrs:
-                    raise NameError, "missing 'name' attribute in <%s>" % name
+                    raise NameError("missing 'name' attribute in <%s>" % name)
                 opt = attrs["name"]
                 d[opt] = tmp
 
@@ -96,7 +97,7 @@ class ConfigINI(dict):
         self.mandatory = mandatory
 
     def read(self, filename):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(filename)
 
         for sec in config.sections():
@@ -144,7 +145,7 @@ class ConfigXML(MyConfig):
 
             for name, attrs, content in content:
                 if isinstance(content, list):
-                    raise TypeError, "<%s> elements can't have children" % name
+                    raise TypeError("<%s> elements can't have children" % name)
 
                 if name == "string":
                     tmp = str(content)
@@ -153,19 +154,19 @@ class ConfigXML(MyConfig):
                 elif name == "float":
                     tmp = float(content)
                 else:
-                    raise NameError, "illegal tag '%s'" % name
+                    raise NameError("illegal tag '%s'" % name)
 
                 if not "name" in attrs:
-                    raise NameError, "missing 'name' attribute in <%s>" % name
+                    raise NameError("missing 'name' attribute in <%s>" % name)
                 opt = attrs["name"]
                 d[opt] = tmp
 
 
 if __name__ == '__main__':
     for f in "test.ini", "test.xml":
-        print "#### filename=", f
+        print("#### filename=", f)
         config = MyConfig(f)
-        print config
+        print(config)
         for section in config:
-            print section, config[section]
+            print(section, config[section])
 

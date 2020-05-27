@@ -237,14 +237,14 @@ def makeMainHTML(config):
 
         net_sta = "%s_%s" % (n,s)
         line = "<tr bgcolor='#ffffff'><td><tt>&nbsp;%s <a " \
-		"href='%s.html'>%s</a>&nbsp;</td>%s%s%s</tr>" \
-	        % (n, net_sta, s, TDf(lat1, getColor(lat1)),
+               "href='%s.html'>%s</a>&nbsp;</td>%s%s%s</tr>" \
+               % (n, net_sta, s, TDf(lat1, getColor(lat1)),
                                   TDf(lat2, getColor(lat2)),
                                   TDf(lat3, getColor(lat3)))
-	if config.station[net_sta]['type'][:4] == 'real':
-	        tmp_rt.append(line)
-	else:   tmp_du.append(line)
-	makeStatHTML(net_sta, config)
+        if config.station[net_sta]['type'][:4] == 'real':
+                tmp_rt.append(line)
+        else:   tmp_du.append(line)
+        makeStatHTML(net_sta, config)
 
     try: os.makedirs(config['setup']['wwwdir'])
     except: pass
@@ -284,23 +284,23 @@ def makeMainHTML(config):
     htmlfile.write("<center><table cellpaddding='5' cellspacing='5'><tr>\n")
     if len(tmp_rt):
         htmlfile.write("<td valign='top' align='center'>\n" \
-		       "<font size='+1'>Real-time stations<font>\n</td>\n")
+                       "<font size='+1'>Real-time stations<font>\n</td>\n")
     if len(tmp_du):
         htmlfile.write("<td valign='top' align='center'>\n" \
-		       "<font size='+1'>Dial-up stations<font>\n</td>\n")
+                       "<font size='+1'>Dial-up stations<font>\n</td>\n")
     htmlfile.write("</tr><tr>")
     if len(tmp_rt):
-	htmlfile.write("<td valign='top' align='center'>\n")
-	htmlfile.write(table_begin)
-	htmlfile.write("\n".join(tmp_rt))
-	htmlfile.write(table_end)
-	htmlfile.write("</td>\n")
+        htmlfile.write("<td valign='top' align='center'>\n")
+        htmlfile.write(table_begin)
+        htmlfile.write("\n".join(tmp_rt))
+        htmlfile.write(table_end)
+        htmlfile.write("</td>\n")
     if len(tmp_du):
-	htmlfile.write("<td valign='top' align='center'>\n")
-	htmlfile.write(table_begin)
-	htmlfile.write("\n".join(tmp_du))
-	htmlfile.write(table_end)
-	htmlfile.write("</td>\n")
+        htmlfile.write("<td valign='top' align='center'>\n")
+        htmlfile.write(table_begin)
+        htmlfile.write("\n".join(tmp_du))
+        htmlfile.write(table_end)
+        htmlfile.write("</td>\n")
     htmlfile.write("</tr></table></center>\n")
 
     colorLegend(htmlfile)
@@ -381,12 +381,12 @@ def makeStatHTML(net_sta, config):
     colorLegend(htmlfile)
 
     htmlfile.write("<p>\nHow to <a href='http://geofon.gfz-potsdam.de/waveform/status/latency.php' target='_blank'>interpret</a> " \
-		    "these numbers?<br>\n")
+                   "these numbers?<br>\n")
     if 'liveurl' in config['setup']:
-	# substitute '%s' in live_url by station name
-	url = config['setup']['liveurl'] % s
-	htmlfile.write("View a <a href='%s' target='_blank'>live seismogram</a> of "
-			"station %s</center>\n" % (url, s))
+        # substitute '%s' in live_url by station name
+        url = config['setup']['liveurl'] % s
+        htmlfile.write("View a <a href='%s' target='_blank'>live seismogram</a> of "
+                       "station %s</center>\n" % (url, s))
     htmlfile.write("</p>\n")
     pageTrailer(htmlfile, config)
     htmlfile.close()
@@ -471,10 +471,6 @@ if verbose: status.write(sys.stderr)
 nextTimeGenerateHTML = time()
 
 print("setting up connection to SeedLink server '%s'" % server)
-#cmd = "slinktool -s '?H?.D' -S '%s' -o - '%s'" % (s_arg, server)
-#print cmd
-#inpipe = os.popen(cmd)
-#input = seiscomp.mseed.Input(inpipe)
 
 input = seiscomp.slclient.Input(server, streams)
 for rec in input:
