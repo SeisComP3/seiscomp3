@@ -268,7 +268,7 @@ def makeMainHTML(config):
     </table>
     """
 
-    htmlfile = file(temp, "w")
+    htmlfile = open(temp, "w")
     htmlfile.write("""<html>
     <head>
         <title>%s</title>
@@ -318,7 +318,7 @@ def makeStatHTML(net_sta, config):
     temp = "%s/tmp2.html"  % config['setup']['wwwdir']
     dest = "%s/%s.html"  % ( config['setup']['wwwdir'], net_sta)
 
-    htmlfile = file(temp, "w")
+    htmlfile = open(temp, "w")
     htmlfile.write("""<html>
         <head>
             <title>%s - Station %s</title>

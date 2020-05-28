@@ -51,7 +51,7 @@ class MyConfig(dict):
         else: print("XXXXXXXXXXXXXXX")
 
     def readINI(self, filename):
-        config = configparser.ConfigParser()
+        config = configparser.RawConfigParser()
         config.read(filename)
 
         for sec in config.sections():
@@ -97,7 +97,7 @@ class ConfigINI(dict):
         self.mandatory = mandatory
 
     def read(self, filename):
-        config = configparser.ConfigParser()
+        config = configparser.RawConfigParser()
         config.read(filename)
 
         for sec in config.sections():
