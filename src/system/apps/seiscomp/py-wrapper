@@ -1,0 +1,107 @@
+import sys, os, stat
+
+PYTHON_EXECUTABLE=sys.argv[1]
+CMAKE_INSTALL_PREFIX=sys.argv[2]
+
+permissions = stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR \
+            | stat.S_IRGRP | stat.S_IXGRP \
+            | stat.S_IROTH | stat.S_IXOTH
+
+SEISCOMP_ROOT=CMAKE_INSTALL_PREFIX
+
+wrapper="""#!/bin/sh
+#
+# This is a shell script that executes the Python interpreter as
+# configured using cmake.
+#
+# In order to use this in your Python programs use this
+# shebang line:
+
+#!/usr/bin/env seiscomp-python
+
+# Please note that this wrapper does *not* set the environment
+# variables for you. To ensure that you run your script in the
+# proper environment, please use 'seiscomp exec'. Alternatively
+# you can also set your environment variables according to the
+# output of 'seiscomp print env'.
+
+python_executable="%s"
+
+exec $python_executable "$@"
+""" % (PYTHON_EXECUTABLE,)
+
+f = open("seiscomp-python", "w")
+f.write(wrapper)
+f.close()
+
+os.chmod("seiscomp-python", permissions)
+
+
+
+
+wrapper="""#!/bin/sh -e
+
+# Resolve softlink to seiscomp executable first
+if test -L "$0"
+then
+    # $0 is a link
+    target="$(readlink "$0")"
+    case "$target" in
+        /*)
+            d="$target"
+            ;;
+        *)
+            d="$(dirname "$0")/$target"
+            ;;
+    esac
+else
+    # $0 is NOT a link
+    case "$0" in
+        */* | /*)
+            d="$0"
+            ;;
+        *)
+            d="$(command -v "$0")"
+            ;;
+    esac
+fi
+
+normalized_dirname() {
+    # Normalize directory name without following symlinks.
+    # Brute-force but portable.
+    cd "${1%%/*}" && pwd || exit 1
+}
+
+# Determine the root directory of the 'seiscomp' utility.
+d="$(normalized_dirname "$d")"
+SEISCOMP_ROOT="$(realpath "${d%%/bin}")"
+# FIXME:
+# - Any portability issues with 'realpath'?
+# - Is there a more portable alternative?
+
+export SEISCOMP_ROOT
+export PATH="$SEISCOMP_ROOT/bin:$PATH"
+export LD_LIBRARY_PATH="$SEISCOMP_ROOT/lib:$LD_LIBRARY_PATH"
+export PYTHONPATH="$SEISCOMP_ROOT/lib/python:$PYTHONPATH"
+export MANPATH="$SEISCOMP_ROOT/share/man:$MANPATH"
+export LC_ALL=C
+
+# The path of the Python executable is configured using cmake.
+python_executable="%s"
+
+case $1 in
+    exec)
+        shift
+        exec "$@"
+        ;;
+    *)
+        exec "$python_executable" "$SEISCOMP_ROOT/bin/seiscomp-control.py" "$@"
+        ;;
+esac
+""" % (PYTHON_EXECUTABLE,)
+
+f = open("seiscomp", "w")
+f.write(wrapper)
+f.close()
+
+os.chmod("seiscomp", permissions)
