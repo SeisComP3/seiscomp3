@@ -63,16 +63,32 @@ def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schem
         return False
 
     sys.stdout.write("  + Setup user roles\n")
-    q = "GRANT ALL ON %s.* TO '%s'@'localhost' IDENTIFIED BY '%s';" % (
-        db, rwuser, rwpwd)
-    q += "GRANT ALL ON %s.* TO '%s'@'%%' IDENTIFIED BY '%s';" % (
-        db, rwuser, rwpwd)
+    # MySQL 8 requires explicit "CREATE USER", but this fails
+    # if the users already exists.
+    # "CREATE USER IF NOT EXISTS" is not supported by MySQL<5.7.
+    # Drop possibly existing users, ignoring errors.
+    check_output(cmd + " -e \"DROP USER '%s'@'localhost';\"" % rwuser)
+    check_output(cmd + " -e \"DROP USER '%s'@'%%';\"" % rwuser)
+    q = "CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (
+        rwuser, rwpwd)
+    q += "GRANT ALL ON %s.* TO '%s'@'localhost';" % (
+        db, rwuser)
+    q += "CREATE USER '%s'@'%%' IDENTIFIED BY '%s';" % (
+        rwuser, rwpwd)
+    q += "GRANT ALL ON %s.* TO '%s'@'%%';" % (
+        db, rwuser)
 
     if rwuser != rouser:
-        q += "GRANT SELECT ON %s.* TO '%s'@'localhost' IDENTIFIED BY '%s';" % (
-            db, rouser, ropwd)
-        q += "GRANT SELECT ON %s.* TO '%s'@'%%' IDENTIFIED BY '%s';" % (
-            db, rouser, ropwd)
+        check_output(cmd + " -e \"DROP USER '%s'@'localhost';\"" % rouser)
+        check_output(cmd + " -e \"DROP USER '%s'@'%%';\"" % rouser)
+        q += "CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (
+            rouser, ropwd)
+        q += "GRANT SELECT ON %s.* TO '%s'@'localhost';" % (
+            db, rouser)
+        q += "CREATE USER '%s'@'%%' IDENTIFIED BY '%s';" % (
+            rouser, ropwd)
+        q += "GRANT SELECT ON %s.* TO '%s'@'%%';" % (
+            db, rouser)
 
     out = check_output(cmd + " -e \"%s\"" % q)
     if out[1]:
