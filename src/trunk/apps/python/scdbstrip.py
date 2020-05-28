@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) 2009 by gempa GmbH                                      #

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 import sys
 from seiscomp3 import Client, DataModel, IO
 
