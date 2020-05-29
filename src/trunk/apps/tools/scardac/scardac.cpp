@@ -120,7 +120,7 @@ bool equalsNoUpdated(const DataSegment *s1,
 inline
 bool compareSegmentStart(DataSegmentPtr a,
                          DataSegmentPtr b) {
-	return a->start() <= b->start();
+	return a->start() < b->start();
 }
 
 inline
