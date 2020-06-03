@@ -1131,6 +1131,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QComboBox" name="cbDepthType">
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer>
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
@@ -1408,6 +1415,12 @@
      <y>713</y>
     </hint>
    </hints>
+  </connection>
+  <connection>
+   <sender>cbFixedDepth</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbDepthType</receiver>
+   <slot>setEnabled(bool)</slot>
   </connection>
  </connections>
 </ui>

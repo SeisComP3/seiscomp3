@@ -419,7 +419,7 @@ class OriginCommitOptions : public QDialog {
 				}
 
 				QColor reducedColor;
-				reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 50);
+				reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 75);
 
 				for ( int i = 0; i < DataModel::EventType::Quantity; ++i ) {
 					if ( usedFlags[i] ) continue;
@@ -2854,6 +2854,38 @@ void OriginLocatorView::init() {
 		catch ( ... ) {}
 	}
 
+	{
+		QVector<bool> usedFlags(DataModel::EOriginDepthTypeQuantity, false);
+		QColor reducedColor;
+		reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 75);
+
+		_ui.cbDepthType->addItem("- automatic -");
+		_ui.cbDepthType->addItem("- unset -");
+
+		try {
+			vector<string> depthTypes = SCApp->configGetStrings("olv.commonDepthTypes");
+			for ( size_t i = 0; i < depthTypes.size(); ++i ) {
+				DataModel::OriginDepthType type;
+				if ( !type.fromString(depthTypes[i].c_str()) ) {
+					SEISCOMP_WARNING("olv.commonDepthTypes: invalid type, ignoring: %s",
+					                 depthTypes[i].c_str());
+				}
+				else {
+					usedFlags[type.toInt()] = true;
+					_ui.cbDepthType->addItem(type.toString(), type.toInt());
+				}
+			}
+		}
+		catch ( ... ) {}
+
+		for ( int i = 0; i < DataModel::EOriginDepthTypeQuantity; ++i ) {
+			if ( !usedFlags[i] ) {
+				_ui.cbDepthType->addItem(DataModel::EOriginDepthTypeNames::name(i), i);
+				_ui.cbDepthType->setItemData(_ui.cbDepthType->count()-1, reducedColor, Qt::ForegroundRole);
+			}
+		}
+	}
+
 	vector<string> *locatorInterfaces = Seismology::LocatorInterfaceFactory::Services();
 	if ( locatorInterfaces ) {
 		for ( size_t i = 0; i < locatorInterfaces->size(); ++i )
@@ -4374,6 +4406,13 @@ void OriginLocatorView::updateContent() {
 	}
 
 	try {
+		_ui.labelDepth->setToolTip(tr("Type: %1").arg(_currentOrigin->depthType().toString()));
+	}
+	catch ( ValueException& ) {
+		_ui.labelDepth->setToolTip(tr("Type: unset"));
+	}
+
+	try {
 		double err_z = quantityUncertainty(_currentOrigin->depth());
 		if (err_z == 0.0) {
 			_ui.labelDepthError->setText(QString("fixed"));
@@ -4451,6 +4490,20 @@ void OriginLocatorView::updateContent() {
 	catch ( ValueException& ) {
 		_ui.labelCreated->setText("");
 	}
+
+	/*
+	try {
+		int idx = _ui.cbDepthType->findData(_currentOrigin->depthType().toInt());
+		if ( idx > 0 )
+			_ui.cbDepthType->setCurrentIndex(idx);
+		else
+			_ui.cbDepthType->setCurrentIndex(1);
+	}
+	catch ( ValueException& ) {
+		_ui.cbDepthType->setCurrentIndex(1);
+	}
+	*/
+	_ui.cbDepthType->setCurrentIndex(0);
 
 	int activeArrivals = 0;
 	for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
@@ -5486,7 +5539,16 @@ void OriginLocatorView::relocate(DataModel::Origin *org,
 
 	if ( fixedDepth ) {
 		_ui.cbFixedDepth->setChecked(true);
-		origin->setDepthType(OriginDepthType(OPERATOR_ASSIGNED));
+
+		if ( _ui.cbDepthType->currentIndex() > 0 ) {
+			if ( _ui.cbDepthType->currentIndex() > 1 ) {
+				OriginDepthType type;
+				assert(type.fromInt(_ui.cbDepthType->itemData(_ui.cbDepthType->currentIndex()).toInt()));
+				origin->setDepthType(type);
+			}
+		}
+		else
+			origin->setDepthType(OriginDepthType(OPERATOR_ASSIGNED));
 	}
 
 	if ( distanceCutOff )
