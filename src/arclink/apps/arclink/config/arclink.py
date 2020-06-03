@@ -717,6 +717,10 @@ class Module(TemplateModule):
         TemplateModule.__init__(self, env)
 
     def _run(self):
+        if sys.version_info[0] >= 3:
+            log("- Python 3 is not supported")
+            return 0
+
         if self.env.syslog:
             daemon_opt = '-D '
         else:
