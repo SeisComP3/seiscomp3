@@ -23,6 +23,8 @@
 
   * Add event type to left hand summary panel
   * Add option to show record borders in zoom trace (hotkey: 'B')
+  * Add `visibleMagnitudes` to description
+  * Add option to change origin depth type when depth is fixed
 
 * scqc
 
