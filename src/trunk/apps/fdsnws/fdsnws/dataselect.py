@@ -63,10 +63,11 @@ class _DataSelectRequestOptions(RequestOptions):
 
     POSTParams = RequestOptions.POSTParams + \
         PQuality + PMinimumLength + PLongestOnly
+    GETParams = RequestOptions.GETParams + POSTParams
 
     #---------------------------------------------------------------------------
-    def __init__(self, args=None):
-        RequestOptions.__init__(self, args)
+    def __init__(self):
+        RequestOptions.__init__(self)
         self.service = 'fdsnws-dataselect'
 
         self.quality = self.QualityValues[0]
@@ -396,10 +397,11 @@ class FDSNDataSelect(BaseResource):
 
     #---------------------------------------------------------------------------
     def render_GET(self, req):
-        # Parse and validate POST parameters
-        ro = _DataSelectRequestOptions(req.args)
+        # Parse and validate GET parameters
+        ro = _DataSelectRequestOptions()
         ro.userName = self.__user and self.__user.get('mail')
         try:
+            ro.parseGET(req.args)
             ro.parse()
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)

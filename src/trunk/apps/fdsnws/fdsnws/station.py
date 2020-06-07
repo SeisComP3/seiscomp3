@@ -66,10 +66,12 @@ class _StationRequestOptions(RequestOptions):
     POSTParams = RequestOptions.POSTParams + RequestOptions.GeoParams + \
         PLevel + PIncludeRestricted + PIncludeAvailability + \
         PUpdateAfter + PMatchTimeSeries + PFormatted
+    GETParams = RequestOptions.GETParams + RequestOptions.WindowTimeParams + \
+        POSTParams
 
     #---------------------------------------------------------------------------
-    def __init__(self, args=None):
-        RequestOptions.__init__(self, args)
+    def __init__(self):
+        RequestOptions.__init__(self)
         self.service = 'fdsnws-station'
 
         self.includeSta = True
@@ -263,8 +265,9 @@ class FDSNStation(BaseResource):
     #---------------------------------------------------------------------------
     def render_GET(self, req):
         # Parse and validate GET parameters
-        ro = _StationRequestOptions(req.args)
+        ro = _StationRequestOptions()
         try:
+            ro.parseGET(req.args)
             ro.parse()
             # the GET operation supports exactly one stream filter
             ro.streams.append(ro)
