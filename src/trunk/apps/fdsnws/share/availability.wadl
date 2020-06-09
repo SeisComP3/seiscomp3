@@ -61,7 +61,7 @@
 			<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
 			<param name="format" style="query" type="xsd:string" default="text">
 				<option value="text" mediaType="text/plain"/>
-				<option value="geocsv" mediaType="application/csv"/>
+				<option value="geocsv" mediaType="text/csv"/>
 				<option value="json" mediaType="application/json"/>
 				<option value="request" mediaType="text/plain"/>
 			</param>
@@ -78,7 +78,7 @@
 		</request>
 		<response status="200">
 			<representation mediaType="text/plain"/>
-			<representation mediaType="application/csv"/>
+			<representation mediaType="text/csv"/>
 			<representation mediaType="application/json"/>
 		</response>
 		<response status="204 400 401 403 404 413 414 500 503">
@@ -87,7 +87,9 @@
 	</method>
 	<method name="POST" id="queryPOST">
 		<response status="200">
-			<representation mediaType="application/vnd.fdsn.mseed"/>
+			<representation mediaType="text/plain"/>
+			<representation mediaType="text/csv"/>
+			<representation mediaType="application/json"/>
 		</response>
 		<response status="204 400 401 403 404 413 414 500 503">
 			<representation mediaType="text/plain"/>
@@ -117,7 +119,7 @@
 			<param name="includerestricted" style="query" type="xsd:boolean" default="false"/>
 			<param name="format" style="query" type="xsd:string" default="text">
 				<option value="text" mediaType="text/plain"/>
-				<option value="geocsv" mediaType="application/csv"/>
+				<option value="geocsv" mediaType="text/csv"/>
 				<option value="json" mediaType="application/json"/>
 				<option value="request" mediaType="text/plain"/>
 			</param>
@@ -128,7 +130,7 @@
 		</request>
 		<response status="200">
 			<representation mediaType="text/plain"/>
-			<representation mediaType="application/csv"/>
+			<representation mediaType="text/csv"/>
 			<representation mediaType="application/json"/>
 		</response>
 		<response status="204 400 401 403 404 413 414 500 503">
@@ -137,7 +139,9 @@
 	</method>
 	<method name="POST" id="extentPOST">
 		<response status="200">
-			<representation mediaType="application/vnd.fdsn.mseed"/>
+			<representation mediaType="text/plain"/>
+			<representation mediaType="text/csv"/>
+			<representation mediaType="application/json"/>
 		</response>
 		<response status="204 400 401 403 404 413 414 500 503">
 			<representation mediaType="text/plain"/>
