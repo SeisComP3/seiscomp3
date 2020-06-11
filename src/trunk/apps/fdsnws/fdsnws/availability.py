@@ -246,7 +246,7 @@ class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
         # show (optional)
         for v in self.getListValues(self.PShow, True):
             if v not in self.VShow:
-                self.raiseValueError(key)
+                self.raiseValueError(v)
             if v == self.VShowLatestUpdate:
                 self.showLatestUpdate = True
 
