@@ -73,11 +73,11 @@ class _AvailabilityRequestOptions(RequestOptions):
 
     POSTParams = RequestOptions.POSTParams + PQuality + PMerge + POrderBy + \
                  PLimit + PIncludeRestricted
-
+    GETParams = RequestOptions.GETParams + POSTParams
 
     #--------------------------------------------------------------------------
-    def __init__(self, args=None):
-        RequestOptions.__init__(self, args)
+    def __init__(self):
+        RequestOptions.__init__(self)
 
         self.service = 'availability-base'
         self.quality = None
@@ -184,8 +184,8 @@ class _AvailabilityRequestOptions(RequestOptions):
 class _AvailabilityExtentRequestOptions(_AvailabilityRequestOptions):
 
     #--------------------------------------------------------------------------
-    def __init__(self, args=None):
-        _AvailabilityRequestOptions.__init__(self, args)
+    def __init__(self):
+        _AvailabilityRequestOptions.__init__(self)
         self.service = 'availability-extent'
 
         self.showLatestUpdate = True
@@ -224,10 +224,12 @@ class _AvailabilityQueryRequestOptions(_AvailabilityRequestOptions):
 
     POSTParams = _AvailabilityRequestOptions.POSTParams + PMergeGaps + \
                  PShow + PExcludeTooLarge
+    GETParams = _AvailabilityRequestOptions.GETParams + PMergeGaps + \
+                PShow + PExcludeTooLarge
 
     #--------------------------------------------------------------------------
-    def __init__(self, args=None):
-        _AvailabilityRequestOptions.__init__(self, args)
+    def __init__(self):
+        _AvailabilityRequestOptions.__init__(self)
         self.service = 'availability-query'
 
         self.orderBy = None
@@ -284,8 +286,9 @@ class _Availability(BaseResource):
     #--------------------------------------------------------------------------
     def render_GET(self, req):
         # Parse and validate GET parameters
-        ro = self._createRequestOptions(req.args)
+        ro = self._createRequestOptions()
         try:
+            ro.parseGET(req.args)
             ro.parse()
 
             # the GET operation supports exactly one stream filter
@@ -594,8 +597,8 @@ class FDSNAvailabilityExtent(_Availability):
 
 
     #--------------------------------------------------------------------------
-    def _createRequestOptions(self, args=None):
-        return _AvailabilityExtentRequestOptions(args)
+    def _createRequestOptions(self):
+        return _AvailabilityExtentRequestOptions()
 
 
     #--------------------------------------------------------------------------
@@ -864,8 +867,8 @@ class FDSNAvailabilityQuery(_Availability):
 
 
     #--------------------------------------------------------------------------
-    def _createRequestOptions(self, args=None):
-        return _AvailabilityQueryRequestOptions(args)
+    def _createRequestOptions(self):
+        return _AvailabilityQueryRequestOptions()
 
 
     #--------------------------------------------------------------------------

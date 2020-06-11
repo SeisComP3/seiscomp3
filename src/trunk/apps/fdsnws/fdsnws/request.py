@@ -78,6 +78,7 @@ class RequestOptions:
     OutputParams = PFormat + PNoData
 
     POSTParams = OutputParams
+    GETParams = StreamParams + SimpleTimeParams
 
     #---------------------------------------------------------------------------
     class Channel:
@@ -239,7 +240,7 @@ class RequestOptions:
             return False
 
     #---------------------------------------------------------------------------
-    def __init__(self, args=None):
+    def __init__(self):
         self.service = ""
         self.accessTime = Time.GMT()
         self.userName = None
@@ -251,12 +252,7 @@ class RequestOptions:
         self.noData = http.NO_CONTENT
         self.format = None
 
-        # transform keys to lower case
         self._args = {}
-        if args is not None:
-            for k, v in args.items():
-                self._args[py3ustr(k.lower())] = py3ustrlist(v)
-
         self.streams = []  # 1 entry for GET, multipl
 
     #---------------------------------------------------------------------------
@@ -504,6 +500,17 @@ class RequestOptions:
                 values.append(v)
 
         return values
+
+    #---------------------------------------------------------------------------
+    def parseGET(self, args):
+        # transform keys to lower case
+        if args is not None:
+            for k, v in args.items():
+                k = py3ustr(k.lower())
+                if k not in self.GETParams:
+                    raise ValueError("invalid param: %s" % k)
+
+                self._args[k] = py3ustrlist(v)
 
     #---------------------------------------------------------------------------
     def parsePOST(self, content):

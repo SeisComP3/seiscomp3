@@ -102,6 +102,13 @@ class _EventRequestOptions(RequestOptions):
         ]
     }
 
+    GETParams = RequestOptions.GETParams + RequestOptions.GeoParams + \
+        RequestOptions.OutputParams + PMinDepth + PMaxDepth + PMinMag + \
+        PMaxMag + PMagType + PEventType + PAllOrigins + PAllMags + \
+        PArrivals + PEventID + PLimit + POffset + POrderBy + PContributor + \
+        PCatalog + PUpdateAfter + PPicks + PFM + PAllFMs + PStaMTs + \
+        PComments + PFormatted
+
     #---------------------------------------------------------------------------
     class Depth:
         def __init__(self):
@@ -116,8 +123,8 @@ class _EventRequestOptions(RequestOptions):
             self.type = None
 
     #---------------------------------------------------------------------------
-    def __init__(self, args):
-        RequestOptions.__init__(self, args)
+    def __init__(self):
+        RequestOptions.__init__(self)
         self.service = 'fdsnws-event'
 
         self.depth = None
@@ -274,8 +281,9 @@ class FDSNEvent(BaseResource):
     #---------------------------------------------------------------------------
     def render_GET(self, req):
         # Parse and validate GET parameters
-        ro = _EventRequestOptions(req.args)
+        ro = _EventRequestOptions()
         try:
+            ro.parseGET(req.args)
             ro.parse()
         except ValueError as e:
             Logging.warning(str(e))
