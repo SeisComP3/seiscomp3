@@ -129,7 +129,7 @@ class FDSNWSTest:
     #--------------------------------------------------------------------------
     def command(self):
         return [
-            'python', '{}/../../fdsnws.py'.format(self.rootdir),
+            sys.executable, '{}/../../fdsnws.py'.format(self.rootdir),
             '--debug', '--plugins=dbsqlite3,fdsnxml',
             '--database=sqlite3://{}/seiscomp3.sqlite3'.format(self.rootdir),
             '--serveAvailability=true', '--dataAvailability.enable=true',
