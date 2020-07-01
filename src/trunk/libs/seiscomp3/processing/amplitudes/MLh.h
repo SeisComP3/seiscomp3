@@ -86,6 +86,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_ML2h : public AmplitudeProcessor {
 		struct ComponentResult {
 			AmplitudeValue value;
 			AmplitudeTime  time;
+			double         snr;
 		};
 
 		enum CombinerProc {

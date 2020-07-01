@@ -440,6 +440,7 @@ void AmplitudeProcessor_ML2h::newAmplitude(const AmplitudeProcessor *proc,
 	_results[idx] = ComponentResult();
 	_results[idx]->value = res.amplitude;
 	_results[idx]->time = res.time;
+	_results[idx]->snr = res.snr;
 
 	if ( _results[0] && _results[1] ) {
 		setStatus(Finished, 100.);
@@ -484,7 +485,7 @@ void AmplitudeProcessor_ML2h::newAmplitude(const AmplitudeProcessor *proc,
 		};
 
 		newRes.period = -1;
-		newRes.snr = -1;
+		newRes.snr = std::min(_results[0]->snr, _results[1]->snr);
 		emitAmplitude(newRes);
 	}
 }
