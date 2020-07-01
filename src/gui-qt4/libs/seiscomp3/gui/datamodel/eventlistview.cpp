@@ -84,6 +84,7 @@ MAKEENUM(
 		COL_LAT,
 		COL_LON,
 		COL_DEPTH,
+		COL_DEPTH_TYPE,
 		COL_TYPE,
 		COL_FM,
 		COL_AGENCY,
@@ -96,12 +97,13 @@ MAKEENUM(
 		"Certainty",
 		"Type",
 		"M",
-		"TP",
+		"MType",
 		"Phases",
 		"RMS",
 		"Lat",
 		"Lon",
 		"Depth",
+		"DType",
 		"Stat",
 		"FM",
 		"Agency",
@@ -123,6 +125,7 @@ bool colVisibility[EventListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	false,
 	true,
 	false,
 	true,
@@ -746,6 +749,7 @@ class SchemeTreeItem : public TreeItem {
 			setTextAlignment(config.columnMap[COL_LAT], Qt::AlignRight | Qt::AlignVCenter);
 			setTextAlignment(config.columnMap[COL_LON], Qt::AlignRight | Qt::AlignVCenter);
 			setTextAlignment(config.columnMap[COL_DEPTH], Qt::AlignRight | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_DEPTH_TYPE], Qt::AlignCenter);
 			setTextAlignment(config.columnMap[COL_REGION], Qt::AlignLeft | Qt::AlignVCenter);
 
 			if ( config.customColumn != -1 )
@@ -833,6 +837,7 @@ class OriginTreeItem : public SchemeTreeItem {
 			setData(config.columnMap[COL_LAT], Qt::UserRole, lat);
 			setText(config.columnMap[COL_LON], QString("%1 %2").arg(fabs(lon), 0, 'f', SCScheme.precision.location).arg(lon < 0?"W":"E")); // Lon
 			setData(config.columnMap[COL_LON], Qt::UserRole, lon);
+
 			try {
 				setText(config.columnMap[COL_DEPTH], depthToString(ori->depth(), SCScheme.precision.depth) + " km");
 				setData(config.columnMap[COL_DEPTH], Qt::UserRole, ori->depth().value());
@@ -840,6 +845,13 @@ class OriginTreeItem : public SchemeTreeItem {
 			catch ( ... ) {
 				setText(config.columnMap[COL_DEPTH], "-"); // Depth
 				setData(config.columnMap[COL_DEPTH], Qt::UserRole, QVariant());
+			}
+
+			try {
+				setText(config.columnMap[COL_DEPTH_TYPE], ori->depthType().toString());
+			}
+			catch ( ... ) {
+				setText(config.columnMap[COL_DEPTH_TYPE], "-"); // Depth
 			}
 
 			char stat = objectStatusToChar(ori);
@@ -998,6 +1010,13 @@ class FocalMechanismTreeItem : public SchemeTreeItem {
 					setText(config.columnMap[COL_DEPTH], "-"); // Depth
 				}
 
+				try {
+					setText(config.columnMap[COL_DEPTH_TYPE], fmBaseOrg->depthType().toString());
+				}
+				catch ( ... ) {
+					setText(config.columnMap[COL_DEPTH_TYPE], "-"); // Depth
+				}
+
 				setText(config.columnMap[COL_REGION], Regions::getRegionName(lat, lon).c_str()); // Region
 			}
 
@@ -1051,6 +1070,7 @@ class EventTreeItem : public SchemeTreeItem {
 			setText(config.columnMap[COL_M], "-");
 			setText(config.columnMap[COL_MTYPE], "-");
 			setText(config.columnMap[COL_DEPTH], "-");
+			setText(config.columnMap[COL_DEPTH_TYPE], "-");
 
 			QFont f = SCApp->font();
 			f.setUnderline(true);
@@ -1439,6 +1459,14 @@ class EventTreeItem : public SchemeTreeItem {
 					try {
 						setText(column, QString("%1 km").arg(depthToString(origin->depth(), SCScheme.precision.depth))); // Depth
 						setData(column, Qt::UserRole, origin->depth().value());
+					}
+					catch ( ... ) {
+						setText(column, "-");
+					}
+
+					column = config.columnMap[COL_DEPTH_TYPE];
+					try {
+						setText(column, origin->depthType().toString()); // Depth type
 					}
 					catch ( ... ) {
 						setText(column, "-");
