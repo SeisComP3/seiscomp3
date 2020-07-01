@@ -136,7 +136,8 @@ class FDSNWSTest:
             '--serveAvailability=true', '--dataAvailability.enable=true',
             '--agencyID=Test',
             '--record-url=sdsarchive://{}/sds'.format(self.rootdir),
-            '--htpasswd={}/fdsnws.htpasswd'.format(self.rootdir)
+            '--htpasswd={}/fdsnws.htpasswd'.format(self.rootdir),
+            '--stationFilter={}/stationFilter.cfg'.format(self.rootdir)
         ]
 
 
