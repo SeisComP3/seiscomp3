@@ -1322,10 +1322,10 @@ class FDSNWS(Application):
                                         continue
                                 except ValueError:
                                     if staRestricted is not None:
-                                        if sta.Restricted != rule.Restricted:
+                                        if staRestricted != rule.restricted:
                                             continue
                                     elif netRestricted is None or \
-                                            netRestricted != rule.Restricted:
+                                            netRestricted != rule.restricted:
                                         continue
 
                             # shared
@@ -1335,10 +1335,10 @@ class FDSNWS(Application):
                                         continue
                                 except ValueError:
                                     if staShared is not None:
-                                        if sta.Shared != rule.Shared:
+                                        if staShared != rule.shared:
                                             continue
                                     elif netShared is None or \
-                                            netShared != rule.Shared:
+                                            netShared != rule.shared:
                                         continue
 
                             # netClass
