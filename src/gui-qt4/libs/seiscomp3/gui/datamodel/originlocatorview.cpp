@@ -2859,8 +2859,9 @@ void OriginLocatorView::init() {
 		QColor reducedColor;
 		reducedColor = blend(palette().color(QPalette::Text), palette().color(QPalette::Base), 75);
 
-		_ui.cbDepthType->addItem("- automatic -");
+		_ui.cbDepthType->addItem("depth type set by locator");
 		_ui.cbDepthType->addItem("- unset -");
+		_ui.cbDepthType->setMaximumWidth(fontMetrics().height() * 6);
 
 		try {
 			vector<string> depthTypes = SCApp->configGetStrings("olv.commonDepthTypes");
