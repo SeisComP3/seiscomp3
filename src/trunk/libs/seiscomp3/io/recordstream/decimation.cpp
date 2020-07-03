@@ -454,6 +454,7 @@ bool Decimation::initCoefficients(ResampleStage *stage) {
 	stage->N2 = stage->coefficients->size() / 2;
 	stage->buffer.resize(stage->coefficients->size());
 	stage->reset();
+	stage->valid = true;
 
 	return true;
 }
