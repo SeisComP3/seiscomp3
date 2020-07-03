@@ -1,5 +1,23 @@
 # Jakarta
 
+## Release 2018.327 patch24
+
+* scardac
+
+  * Fix segmentation fault when sorting out of order segments
+
+* LOCSAT
+
+  * Make level of confidence and number of degrees of freedom configurable
+    ```
+    LOCSAT.degreesOfFreedom = 8
+    LOCSAT.confLevel = 0.9
+    ```
+
+* fdsnws
+
+  * Fix restricted and shared filter
+
 ## Release 2018.327 patch23
 
 * scolv
