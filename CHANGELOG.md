@@ -54,6 +54,9 @@
   * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
   * Fix config to properly support multiple sources (plugins) per station
   * Use unambiguous station ID (net.station)
+  * Fix parsing of global `backfill_buffer` variable. Up to this
+    fix the variable was always considered out of bounds and apart from using
+    backfill buffer settings in the bindings the global value had no effect.
 
 * fdsnws
 
@@ -87,6 +90,10 @@
     scheme.colors.records.borders.standard.pen.color = FF0000FF
     ```
   * Fix filter string drop to widgets with Qt5
+  * Quit application if an error occurred during initialization
+    and if the setup dialog is cancelled or closed by hitting
+    the X icon
+  * Rename item `TP` to `MType` of parameter `eventlist.visibleColumns`
 
 ## Release 2018.327 patch20
 
