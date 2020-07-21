@@ -57,7 +57,7 @@
 #include "plugin.h"
 #include "diag.h"
 
-#define MYVERSION "3.3 (2020.127)"
+#define MYVERSION "3.3 (2020.203)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/seedlink.ini"
@@ -879,7 +879,7 @@ void Station::send_mseed(const void *rec)
       {
         const sl_fsdh_s* fsdh = static_cast<const sl_fsdh_s *>(rec);
 
-	if(packet_type(fsdh, MAX_HEADER_LEN) != SLDATA)
+        if(packet_type(fsdh, MAX_HEADER_LEN) != SLDATA)
           {
             commit_mseed(rec);
             return;
@@ -893,7 +893,7 @@ void Station::send_mseed(const void *rec)
         memcpy(id+2, fsdh->channel, 3);
         rc_ptr<MSEEDBackfilling> backfilling = get_mseed_backfilling(id);
 
-        if(backfilling->comitted)
+        if(backfilling->committed)
           {
             double gap = tdiff(stime, backfilling->last_commit)*1E-6;
             // A gap larger than one sample?
@@ -924,7 +924,7 @@ void Station::send_mseed(const void *rec)
                   }
 
                 backfilling->last_commit = etime;
-                backfilling->comitted = true;
+                backfilling->committed = true;
                 commit_mseed(rec);
 
                 sync_buffer(id, backfilling);
@@ -950,7 +950,7 @@ void Station::send_mseed(const void *rec)
 
             // Release the packet
             backfilling->last_commit = etime;
-            backfilling->comitted = true;
+            backfilling->committed = true;
             commit_mseed(rec);
           }
         return;
@@ -992,7 +992,7 @@ void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name
 
     if(input->backfilling.is_enabled())
       {
-        if(input->backfilling.comitted)
+        if(input->backfilling.committed)
           {
             double gap = tdiff(stime, input->backfilling.last_commit)*1E-6;
             // A gap larger than one sample?
@@ -1033,7 +1033,7 @@ void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name
                   }
 
                 input->backfilling.last_commit = etime;
-                input->backfilling.comitted = true;
+                input->backfilling.committed = true;
                 commit_data(input_name, input, stime, usec_correction,
                             timing_quality, data, number_of_samples);
 
@@ -1065,7 +1065,7 @@ void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name
             etime = add_dtime(stime, 1000000 * (double(number_of_samples) * double(input->clk.freqd) / double(input->clk.freqn)));
 
             input->backfilling.last_commit = etime;
-            input->backfilling.comitted = true;
+            input->backfilling.committed = true;
             commit_data(input_name, input, stime, usec_correction,
                         timing_quality, data, number_of_samples);
           }
@@ -1170,7 +1170,7 @@ void Station::commit_packet(const string &input_name, rc_ptr<Input> input,
                             const InputBackfilling::PacketPtr &pkt)
   {
     input->backfilling.last_commit = pkt->etime;
-	input->backfilling.comitted = true;
+	input->backfilling.committed = true;
     commit_data(input_name, input, pkt->stime, pkt->usec_correction,
                 pkt->timing_quality, pkt->data.data(), pkt->data.size());
 
@@ -1196,7 +1196,7 @@ void Station::sync_buffer(const string &input_name, rc_ptr<Input> input)
                         << endl;
       }
 
-    if(!input->backfilling.comitted) return;
+    if(!input->backfilling.committed) return;
 
     // Check if this packet filled a gap to the buffer
     while(!input->backfilling.buffer.empty())
@@ -1229,7 +1229,7 @@ void Station::sync_buffer(const char* cha, rc_ptr<MSEEDBackfilling> bf)
         MSEEDBackfilling::PacketPtr &pkt = bf->buffer.front();
         commit_mseed(pkt->data);
         bf->last_commit = pkt->etime;
-        bf->comitted = true;
+        bf->committed = true;
         bf->buffer.pop_front();
 
         logs(LOG_DEBUG) << name << " channel " << cha
@@ -1239,7 +1239,7 @@ void Station::sync_buffer(const char* cha, rc_ptr<MSEEDBackfilling> bf)
                         << endl;
       }
 
-    if(!bf->comitted) return;
+    if(!bf->committed) return;
 
     // Check if this packet filled a gap to the buffer
     while(!bf->buffer.empty())
@@ -1749,7 +1749,7 @@ rc_ptr<CfgAttributeMap> SeedlinkDef::start_attributes(ostream &cfglog,
     atts->add_item(IntAttribute("proc_gap_warn", proc_gap_warn_default, 0, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("proc_gap_flush", proc_gap_flush_default, 0, 100, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("proc_gap_reset", proc_gap_reset_default, 0, 100, IntAttribute::lower_bound));
-    atts->add_item(FloatAttribute("backfill_buffer", backfill_capacity,  86400, 0, FloatAttribute::upper_bound));
+    atts->add_item(FloatAttribute("backfill_buffer", backfill_capacity,  0, 86400, FloatAttribute::upper_bound));
     atts->add_item(IntAttribute("port", tcp_port, 1, 65535));
     atts->add_item(BoolAttribute("request_log", request_log, "enabled", "disabled"));
     atts->add_item(BoolAttribute("stream_check", stream_check, "enabled", "disabled"));
