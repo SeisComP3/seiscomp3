@@ -1926,12 +1926,12 @@ class MSeedRecord(seiscomp3.Core.Record):
 
 
     def byteOrder(self):
-        """byteOrder(MSeedRecord self) -> unsigned short"""
+        """byteOrder(MSeedRecord self) -> int8_t"""
         return _IO.MSeedRecord_byteOrder(self)
 
 
     def encoding(self):
-        """encoding(MSeedRecord self) -> unsigned short"""
+        """encoding(MSeedRecord self) -> int8_t"""
         return _IO.MSeedRecord_encoding(self)
 
 

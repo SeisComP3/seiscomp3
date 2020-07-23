@@ -5796,9 +5796,9 @@ SWIG_AsVal_float (PyObject * obj, float *val)
 
 
 SWIGINTERNINLINE PyObject *
-SWIG_From_unsigned_SS_short  (unsigned short value)
+SWIG_From_signed_SS_char  (signed char value)
 {    
-  return SWIG_From_unsigned_SS_long  (value);
+  return SWIG_From_long  (value);
 }
 
 
@@ -24700,7 +24700,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_byteOrder(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  unsigned short result;
+  int8_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:MSeedRecord_byteOrder",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__MSeedRecord, 0 |  0 );
@@ -24710,7 +24710,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_byteOrder(PyObject *SWIGUNUSEDPARM(self),
   arg1 = reinterpret_cast< Seiscomp::IO::MSeedRecord * >(argp1);
   {
     try {
-      result = (unsigned short)((Seiscomp::IO::MSeedRecord const *)arg1)->byteOrder();
+      result = (int8_t)((Seiscomp::IO::MSeedRecord const *)arg1)->byteOrder();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -24722,7 +24722,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_byteOrder(PyObject *SWIGUNUSEDPARM(self),
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_From_unsigned_SS_short(static_cast< unsigned short >(result));
+  resultobj = SWIG_From_signed_SS_char(static_cast< signed char >(result));
   return resultobj;
 fail:
   return NULL;
@@ -24735,7 +24735,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_encoding(PyObject *SWIGUNUSEDPARM(self), 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  unsigned short result;
+  int8_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:MSeedRecord_encoding",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__MSeedRecord, 0 |  0 );
@@ -24745,7 +24745,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_encoding(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< Seiscomp::IO::MSeedRecord * >(argp1);
   {
     try {
-      result = (unsigned short)((Seiscomp::IO::MSeedRecord const *)arg1)->encoding();
+      result = (int8_t)((Seiscomp::IO::MSeedRecord const *)arg1)->encoding();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -24757,7 +24757,7 @@ SWIGINTERN PyObject *_wrap_MSeedRecord_encoding(PyObject *SWIGUNUSEDPARM(self), 
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_From_unsigned_SS_short(static_cast< unsigned short >(result));
+  resultobj = SWIG_From_signed_SS_char(static_cast< signed char >(result));
   return resultobj;
 fail:
   return NULL;
@@ -36403,8 +36403,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MSeedRecord_setSampleRateFactor", _wrap_MSeedRecord_setSampleRateFactor, METH_VARARGS, (char *)"MSeedRecord_setSampleRateFactor(MSeedRecord self, int srfact)"},
 	 { (char *)"MSeedRecord_sampleRateMultiplier", _wrap_MSeedRecord_sampleRateMultiplier, METH_VARARGS, (char *)"MSeedRecord_sampleRateMultiplier(MSeedRecord self) -> int"},
 	 { (char *)"MSeedRecord_setSampleRateMultiplier", _wrap_MSeedRecord_setSampleRateMultiplier, METH_VARARGS, (char *)"MSeedRecord_setSampleRateMultiplier(MSeedRecord self, int srmult)"},
-	 { (char *)"MSeedRecord_byteOrder", _wrap_MSeedRecord_byteOrder, METH_VARARGS, (char *)"MSeedRecord_byteOrder(MSeedRecord self) -> unsigned short"},
-	 { (char *)"MSeedRecord_encoding", _wrap_MSeedRecord_encoding, METH_VARARGS, (char *)"MSeedRecord_encoding(MSeedRecord self) -> unsigned short"},
+	 { (char *)"MSeedRecord_byteOrder", _wrap_MSeedRecord_byteOrder, METH_VARARGS, (char *)"MSeedRecord_byteOrder(MSeedRecord self) -> int8_t"},
+	 { (char *)"MSeedRecord_encoding", _wrap_MSeedRecord_encoding, METH_VARARGS, (char *)"MSeedRecord_encoding(MSeedRecord self) -> int8_t"},
 	 { (char *)"MSeedRecord_sampleRateNumerator", _wrap_MSeedRecord_sampleRateNumerator, METH_VARARGS, (char *)"MSeedRecord_sampleRateNumerator(MSeedRecord self) -> int"},
 	 { (char *)"MSeedRecord_sampleRateDenominator", _wrap_MSeedRecord_sampleRateDenominator, METH_VARARGS, (char *)"MSeedRecord_sampleRateDenominator(MSeedRecord self) -> int"},
 	 { (char *)"MSeedRecord_frameNumber", _wrap_MSeedRecord_frameNumber, METH_VARARGS, (char *)"MSeedRecord_frameNumber(MSeedRecord self) -> int"},
