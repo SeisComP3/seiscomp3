@@ -94,6 +94,8 @@
     and if the setup dialog is cancelled or closed by hitting
     the X icon
   * Rename item `TP` to `MType` of parameter `eventlist.visibleColumns`
+  * Add option to define symbol images for layer points defined in
+    either BNA or FEP
 
 ## Release 2018.327 patch20
 

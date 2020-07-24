@@ -20,6 +20,8 @@
 #include <seiscomp3/geo/index/quadtree.h>
 #endif
 
+#include <QIcon>
+
 
 namespace Seiscomp {
 namespace Gui {
@@ -111,6 +113,8 @@ class SC_GUI_API GeoFeatureLayer : public Layer,
 			bool                       filled;
 			int                        symbolSize;
 			SymbolShape                symbolShape;
+			QPixmap                    symbolIcon;
+			QPoint                     symbolIconHotspot;
 
 			LayerProperties(const std::string &name)
 			: parent(NULL), name(name), orientation(Qt::Vertical)

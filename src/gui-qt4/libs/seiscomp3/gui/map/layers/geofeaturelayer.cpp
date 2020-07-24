@@ -252,6 +252,9 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 	const static string cfgRoughness = "roughness";
 	const static string cfgSymbolSize = "symbol.size";
 	const static string cfgSymbolShape = "symbol.shape";
+	const static string cfgSymbolIcon = "symbol.icon";
+	const static string cfgSymbolIconX = "symbol.icon.hotspot.x";
+	const static string cfgSymbolIconY = "symbol.icon.hotspot.y";
 	const static string cfgTitle = "title";
 	const static string cfgLabel = "label";
 	const static string cfgIndex = "index";
@@ -273,6 +276,18 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 			try { roughness = cfg.getInt(cfgRoughness); } catch( ... ) {}
 			try { symbolSize = cfg.getInt(cfgSymbolSize); } catch( ... ) {}
 			try { symbolShape = getSymbolShape(cfg.getString(cfgSymbolShape)); } catch( ... ) {}
+			try {
+				string fn = cfg.getString(cfgSymbolIcon);
+				if ( !fn.empty() ) {
+					if ( fn[0] == '/' )
+						symbolIcon = QPixmap(fn.c_str());
+					else
+						symbolIcon = QPixmap((dataDir + '/' + fn).c_str());
+				}
+			}
+			catch( ... ) {}
+			try { symbolIconHotspot.setX(cfg.getInt(cfgSymbolIconX)); } catch( ... ) {}
+			try { symbolIconHotspot.setY(cfg.getInt(cfgSymbolIconY)); } catch( ... ) {}
 			try { title = cfg.getString(cfgTitle); } catch( ... ) {}
 			try { label = cfg.getString(cfgLabel); } catch( ... ) {}
 			try { index = cfg.getInt(cfgIndex); } catch( ... ) {}
@@ -297,6 +312,18 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 		try { roughness = SCApp->configGetInt(query + cfgRoughness); } catch( ... ) {}
 		try { symbolSize = SCApp->configGetInt(query + cfgSymbolSize); } catch( ... ) {}
 		try { symbolShape = getSymbolShape(SCApp->configGetString(query + cfgSymbolShape)); } catch( ... ) {}
+		try {
+			string fn = SCApp->configGetString(query + cfgSymbolIcon);
+			if ( !fn.empty() ) {
+				if ( fn[0] == '/' )
+					symbolIcon = QPixmap(fn.c_str());
+				else
+					symbolIcon = QPixmap((dataDir + '/' + fn).c_str());
+			}
+		}
+		catch( ... ) {}
+		try { symbolIconHotspot.setX(SCApp->configGetInt(query + cfgSymbolIconX)); } catch( ... ) {}
+		try { symbolIconHotspot.setY(SCApp->configGetInt(query + cfgSymbolIconY)); } catch( ... ) {}
 		try { title = SCApp->configGetString(query + cfgTitle); } catch( ... ) {}
 		try { label = SCApp->configGetString(query + cfgLabel); } catch( ... ) {}
 		try { index = SCApp->configGetInt(query + cfgIndex); } catch( ... ) {}
@@ -306,6 +333,15 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 	}
 
 	filled = brush.style() != Qt::NoBrush;
+
+	if ( !symbolIcon.isNull() ) {
+		if ( symbolSize > 0 ) {
+			QSize oldSize = symbolIcon.size();
+			symbolIcon = symbolIcon.scaled(symbolSize, symbolSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			symbolIconHotspot.setX(symbolIconHotspot.x() * symbolIcon.size().width() / oldSize.width());
+			symbolIconHotspot.setY(symbolIconHotspot.y() * symbolIcon.size().height() / oldSize.height());
+		}
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -524,21 +560,29 @@ bool GeoFeatureLayer::drawFeature(Canvas *canvas, QPainter *painter,
 			int width = props->symbolSize;
 			if ( width < 0 ) width = 8;
 
-			switch ( props->symbolShape ) {
-				case LayerProperties::Square:
-					painter->drawRect(p.x()-width/2, p.y()-width/2, width, width);
-					break;
-				case LayerProperties::Circle:
-					painter->drawEllipse(p.x()-width/2, p.y()-width/2, width, width);
-					break;
-				default:
-					break;
+			if ( !props->symbolIcon.isNull() ) {
+				painter->drawPixmap(p - props->symbolIconHotspot, props->symbolIcon);
+				p.setY(p.y() - props->symbolIconHotspot.y() + props->symbolIcon.height());
+			}
+			else {
+				switch ( props->symbolShape ) {
+					case LayerProperties::Square:
+						painter->drawRect(p.x()-width/2, p.y()-width/2, width, width);
+						break;
+					case LayerProperties::Circle:
+						painter->drawEllipse(p.x()-width/2, p.y()-width/2, width, width);
+						break;
+					default:
+						break;
+				}
+
+				p.setY(p.y() + width/2);
 			}
 
 			if ( props->drawName ) {
 				QString name = f->name().c_str();
 				QRect textRect = painter->fontMetrics().boundingRect(name);
-				textRect.moveTop(p.y() + width/2);
+				textRect.moveTop(p.y() + textRect.height()/4);
 				textRect.moveLeft(p.x() - textRect.width()/2);
 				painter->drawText(textRect, Qt::AlignCenter, name);
 			}
