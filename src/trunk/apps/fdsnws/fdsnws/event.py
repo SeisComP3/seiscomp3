@@ -129,8 +129,8 @@ class _EventRequestOptions(RequestOptions):
 
         self.depth = None
         self.mag = None
-        self.eventTypes = set()  # SC3 numeric event type ids, -1 is used for
-        # empty event types
+        self.eventTypes = set()  # SeisComP numeric event type ids, -1 is used
+                                 # for empty event types
 
         self.allOrigins = None
         self.allMags = None
@@ -260,11 +260,12 @@ class FDSNEvent(BaseResource):
     isLeaf = True
 
     #---------------------------------------------------------------------------
-    def __init__(self, hideAuthor=False, evaluationMode=None,
-                 eventTypeWhitelist=None, eventTypeBlacklist=None,
-                 formatList=None):
+    def __init__(self, hideAuthor=False, hideComments=False,
+                 evaluationMode=None, eventTypeWhitelist=None,
+                 eventTypeBlacklist=None, formatList=None):
         BaseResource.__init__(self, VERSION)
         self._hideAuthor = hideAuthor
+        self._hideComments = hideComments
         self._evaluationMode = evaluationMode
         self._eventTypeWhitelist = eventTypeWhitelist
         self._eventTypeBlacklist = eventTypeBlacklist
@@ -292,6 +293,10 @@ class FDSNEvent(BaseResource):
         # Catalog filter is not supported
         if ro.catalogs:
             msg = "catalog filter not supported"
+            return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
+
+        if ro.comments and self._hideComments:
+            msg = "including of comments not supported"
             return self.renderErrorPage(req, http.BAD_REQUEST, msg, ro)
 
         # updateafter not implemented

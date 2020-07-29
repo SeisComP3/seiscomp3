@@ -108,18 +108,29 @@ class ServiceVersion(resource.Resource):
 class WADLFilter(static.Data):
 
     #---------------------------------------------------------------------------
-    def __init__(self, path, filterList):
-        data = []
+    def __init__(self, path, paramNameFilterList):
+        data = ""
+        removeParam = False
         for line in open(path):
-            valid = True
-            for f in filterList:
-                if f in line:
-                    valid = False
-                    break
-            if valid:
-                data.append(line)
+            lineStripped = line.strip().replace(' ', '')
+            if removeParam:
+                if '</param>' in lineStripped:
+                    removeParam = False
+                continue
 
-        static.Data.__init__(self, py3bstr("\n".join(data)), 'application/xml')
+            valid = True
+            if '<param' in lineStripped:
+                for f in paramNameFilterList:
+                    if 'name="{}"'.format(f) in lineStripped:
+                        valid = False
+                        if lineStripped[-2:] != '/>':
+                            removeParam = True
+                        break
+
+            if valid:
+                data += line
+
+        static.Data.__init__(self, py3bstr(data), 'application/xml')
 
 
 ################################################################################

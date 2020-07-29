@@ -372,6 +372,7 @@ class FDSNWS(Application):
         self._daDCCName = 'DCC'
 
         self._hideAuthor = False
+        self._hideComments = False
         self._evaluationMode = None
         self._eventTypeWhitelist = None
         self._eventTypeBlacklist = None
@@ -957,15 +958,19 @@ configuration read:
 
             # version
             event1.putChild(b'version', ServiceVersion(EventVersion))
-            fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
-            fileRes.childNotFound = NoResource(EventVersion)
 
             # application.wadl
+            filterList = ['includecomments'] if self._hideComments else []
+            try:
+                fileRes = WADLFilter(os.path.join(shareDir, 'event.wadl'),
+                                     filterList)
+            except Exception:
+                fileRes = NoResource(StationVersion)
             event1.putChild(b'application.wadl', fileRes)
-            fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
-            fileRes.childNotFound = NoResource(EventVersion)
 
             # builder
+            fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
+            fileRes.childNotFound = NoResource(EventVersion)
             event1.putChild(b'builder', fileRes)
 
         # station
@@ -984,7 +989,7 @@ configuration read:
             station1.putChild(b'version', ServiceVersion(StationVersion))
 
             # application.wadl
-            filterList = [] if self._daEnabled else ['name="matchtimeseries"']
+            filterList = [] if self._daEnabled else ['matchtimeseries']
             try:
                 fileRes = WADLFilter(os.path.join(shareDir, 'station.wadl'),
                                      filterList)

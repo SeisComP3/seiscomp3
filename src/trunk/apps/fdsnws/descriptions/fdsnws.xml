@@ -131,7 +131,12 @@
 			</parameter>
 			<parameter name="hideAuthor" type="boolean" default="false">
 				<description>
-				If enabled removes author information from any event creationInfo element.
+				If enabled author information is removed from any event creationInfo element.
+				</description>
+			</parameter>
+			<parameter name="hideComments" type="boolean" default="false">
+				<description>
+				If enabled event comment elements are no longer accessible.
 				</description>
 			</parameter>
 			<parameter name="evaluationMode" type="string">

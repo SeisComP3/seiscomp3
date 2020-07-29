@@ -84,9 +84,10 @@
 							Adds all momentensor station contributions.
 						</doc>
 					</param>
+					<!-- includecomments parameter, requires hideComments configuration parameter to be disabled -->
 					<param name="includecomments" style="query" type="xsd:boolean" default="false">
 						<doc title="definition">
-							SeisComP3 supports comments for most datamodel
+							SeisComP supports comments for most datamodel
 							objects. This parameter controls whether or not
 							comments are included in the output document.
 						</doc>
