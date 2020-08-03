@@ -1,7 +1,7 @@
 #!/usr/bin/env seiscomp-python
 
-###############################################################################
-# Copyright (C) 2013-2014 by gempa GmbH
+################################################################################
+# Copyright (C) 2013-2014 gempa GmbH
 #
 # FDSNWS -- Implements FDSN Web Service interface, see
 # http://www.fdsn.org/webservices/
@@ -29,9 +29,9 @@ import time
 try:
     from twisted.cred import checkers, credentials, error, portal
     from twisted.internet import reactor, defer, task
-    from twisted.web import guard, resource, server, static
+    from twisted.web import guard, static
     from twisted.python import log, failure
-    from zope.interface import implementer
+    import zope
 except ImportError as e:
     sys.exit("%s\nIs python twisted installed?" % str(e))
 
@@ -70,7 +70,7 @@ def logSC3(entry):
         else:
             for l in msg:
                 Logging.info("[reactor] %s" % l)
-    except:
+    except Exception:
         pass
 
 
@@ -85,14 +85,11 @@ class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
             request.setHeader(b'Allow', b'GET,HEAD,POST,OPTIONS')
             return b''
 
-        else:
-            return guard.HTTPAuthSessionWrapper.render(self, request)
+        return guard.HTTPAuthSessionWrapper.render(self, request)
 
 
 ###############################################################################
-@implementer(checkers.ICredentialsChecker)
 class UsernamePasswordChecker(object):
-
     credentialInterfaces = (credentials.IUsernamePassword,
                             credentials.IUsernameHashedPassword)
 
@@ -101,16 +98,24 @@ class UsernamePasswordChecker(object):
         self.__userdb = userdb
 
     #--------------------------------------------------------------------------
-    def __cbPasswordMatch(self, matched, username):
+    @staticmethod
+    def __cbPasswordMatch(matched, username):
         if matched:
             return username
-        else:
-            return failure.Failure(error.UnauthorizedLogin())
+
+        return failure.Failure(error.UnauthorizedLogin())
 
     #--------------------------------------------------------------------------
-    def requestAvatarId(self, credentials):
-        return defer.maybeDeferred(self.__userdb.checkPassword, credentials) \
-            .addCallback(self.__cbPasswordMatch, str(credentials.username))
+    def requestAvatarId(self, cred):
+        return defer.maybeDeferred(self.__userdb.checkPassword, cred) \
+            .addCallback(self.__cbPasswordMatch, str(cred.username))
+
+# External interface declaration for UsernamePasswordChecker class because
+#  - @zope.interface.implementer annotation for classes is not supported by
+#    Python2.6
+#  - zope.interface.implements class advice is unsupported by Python3
+zope.interface.classImplements(UsernamePasswordChecker,
+                               checkers.ICredentialsChecker)
 
 
 ###############################################################################
@@ -124,7 +129,7 @@ class UserDB(object):
 
     #--------------------------------------------------------------------------
     def __expireUsers(self):
-        for (name, (password, attributes, expires)) in list(self.__users.items()):
+        for (name, (_, _, expires)) in list(self.__users.items()):
             if time.time() > expires:
                 Logging.info("de-registering %s" % name)
                 del self.__users[name]
@@ -149,14 +154,14 @@ class UserDB(object):
         return password
 
     #--------------------------------------------------------------------------
-    def checkPassword(self, credentials):
+    def checkPassword(self, cred):
         try:
-            pw = self.__users[credentials.username][0]
+            pw = self.__users[cred.username][0]
 
         except KeyError:
             return False
 
-        return credentials.checkPassword(pw)
+        return cred.checkPassword(pw)
 
     #--------------------------------------------------------------------------
     def getAttributes(self, name):
@@ -198,24 +203,27 @@ class Access(object):
                 .append((user, start, end))
 
     #--------------------------------------------------------------------------
-    def __matchTime(self, t1, t2, accessStart, accessEnd):
+    @staticmethod
+    def __matchTime(t1, t2, accessStart, accessEnd):
         return (not accessStart or (t1 and t1 >= accessStart)) and \
             (not accessEnd or (t2 and t2 <= accessEnd))
 
     #--------------------------------------------------------------------------
-    def __matchEmail(self, emailAddress, accessUser):
+    @staticmethod
+    def __matchEmail(emailAddress, accessUser):
         defaultPrefix = "mail:"
 
         if accessUser.startswith(defaultPrefix):
             accessUser = accessUser[len(defaultPrefix):]
 
-        return (emailAddress.upper() == accessUser.upper() or
-                (accessUser[:1] == '@' and emailAddress[:1] != '@' and
-                 emailAddress.upper().endswith(accessUser.upper())))
+        return emailAddress.upper() == accessUser.upper() or (
+            accessUser[:1] == '@' and emailAddress[:1] != '@' and
+            emailAddress.upper().endswith(accessUser.upper()))
 
     #--------------------------------------------------------------------------
-    def __matchAttribute(self, attribute, accessUser):
-        return (attribute.upper() == accessUser.upper())
+    @staticmethod
+    def __matchAttribute(attribute, accessUser):
+        return attribute.upper() == accessUser.upper()
 
     #--------------------------------------------------------------------------
     def authorize(self, user, net, sta, loc, cha, t1, t2):
@@ -348,7 +356,7 @@ class FDSNWS(Application):
         self._htpasswd = '@CONFIGDIR@/fdsnws.htpasswd'
         self._accessLogFile = ''
         self._requestLogFile = ''
-        self._corsOrigins = [ '*' ]
+        self._corsOrigins = ['*']
 
         self._allowRestricted = True
         self._useArclinkAccess = False
@@ -386,6 +394,10 @@ class FDSNWS(Application):
         self._userdb = UserDB()
         self._access = None
         self._checker = None
+
+        self._requestLog = None
+        self.__reloadRequested = False
+        self.__tcpPort = None
 
         # Leave signal handling to us
         Application.HandleSignals(False, False)
@@ -447,26 +459,27 @@ class FDSNWS(Application):
             self._htpasswd = self.configGetString('htpasswd')
         except Exception:
             pass
-        self._htpasswd = Environment.Instance().absolutePath(self._htpasswd)
+        self._htpasswd = Environment.Instance() \
+                         .absolutePath(self._htpasswd)
 
         # location of access log file
         try:
-            self._accessLogFile = Environment.Instance().absolutePath(
-                self.configGetString('accessLog'))
+            self._accessLogFile = Environment.Instance() \
+                                  .absolutePath(self.configGetString('accessLog'))
         except Exception:
             pass
 
         # location of request log file
         try:
-            self._requestLogFile = Environment.Instance().absolutePath(
-                self.configGetString('requestLog'))
+            self._requestLogFile = Environment.Instance() \
+                                   .absolutePath(self.configGetString('requestLog'))
         except Exception:
             pass
 
         # list of allowed CORS origins
         try:
             self._corsOrigins = list(filter(None,
-                                     self.configGetStrings('corsOrigins')))
+                                            self.configGetStrings('corsOrigins')))
         except Exception:
             pass
 
@@ -552,7 +565,7 @@ class FDSNWS(Application):
             pass
         try:
             strings = self.configGetStrings('eventType.whitelist')
-            if len(strings) > 1 or len(strings[0]):
+            if len(strings) > 1 or strings[0]:
                 try:
                     self._eventTypeWhitelist = self._parseEventTypes(strings)
                 except Exception as e:
@@ -563,7 +576,7 @@ class FDSNWS(Application):
             pass
         try:
             strings = self.configGetStrings('eventType.blacklist')
-            if len(strings) > 1 or len(strings[0]):
+            if len(strings) > 1 or strings[0]:
                 try:
                     self._eventTypeBlacklist = self._parseEventTypes(strings)
                     if self._eventTypeWhitelist:
@@ -585,22 +598,22 @@ class FDSNWS(Application):
             pass
         try:
             strings = self.configGetStrings('eventFormats')
-            if len(strings) > 1 or len(strings[0]):
+            if len(strings) > 1 or strings[0]:
                 self._eventFormats = [s.lower() for s in strings]
         except Exception:
             pass
 
         # station filter
         try:
-            self._stationFilter = Environment.Instance().absolutePath(
-                self.configGetString('stationFilter'))
+            self._stationFilter = Environment.Instance() \
+                                  .absolutePath(self.configGetString('stationFilter'))
         except Exception:
             pass
 
         # dataSelect filter
         try:
-            self._dataSelectFilter = Environment.Instance().absolutePath(
-                self.configGetString('dataSelectFilter'))
+            self._dataSelectFilter = Environment.Instance() \
+                                     .absolutePath(self.configGetString('dataSelectFilter'))
         except Exception:
             pass
 
@@ -640,13 +653,13 @@ class FDSNWS(Application):
             self._authGnupgHome = self.configGetString('auth.gnupgHome')
         except Exception:
             pass
-        self._authGnupgHome = Environment.Instance().absolutePath(
-                self._authGnupgHome)
+        self._authGnupgHome = Environment.Instance() \
+                              .absolutePath(self._authGnupgHome)
 
         # blacklist of users/tokens
         try:
             strings = self.configGetStrings('auth.blacklist')
-            if len(strings) > 1 or len(strings[0]):
+            if len(strings) > 1 or strings[0]:
                 self._authBlacklist = strings
         except Exception:
             pass
@@ -661,8 +674,8 @@ class FDSNWS(Application):
             # required if the inventory is loaded from file and no data
             # availability information should be processed
             if not self._serveEvent and not self._useArclinkAccess and \
-               (not self._serveStation or (
-                   not self.isInventoryDatabaseEnabled() and not self._daEnabled)):
+               (not self._serveStation or \
+                   (not self.isInventoryDatabaseEnabled() and not self._daEnabled)):
                 self.setMessagingEnabled(self._trackdbEnabled)
                 self.setDatabaseEnabled(False, False)
 
@@ -676,10 +689,11 @@ class FDSNWS(Application):
         cp = os.fork()
         if cp < 0:
             return False
-        elif cp == 0:
+        if cp == 0:
             return True
-        elif cp > 0:
-            sys.exit(0)
+
+        sys.exit(0)
+        return True
 
     #--------------------------------------------------------------------------
     def getDACache(self):
@@ -690,14 +704,9 @@ class FDSNWS(Application):
         # check if cache is still valid
         if self._daCache is None or now > self._daCache.validUntil():
 
-            if self.query() is None or \
-               not self.query().driver().isConnected():
-                dbInt = IO.DatabaseInterface.Open(self.databaseURI())
-                if dbInt is None:
-                    Logging.error('failed to connect to database')
-                    return self._daCache
-                else:
-                    self.setDatabase(dbInt)
+            if self.query() is None:
+                Logging.error('failed to connect to database')
+                return None
 
             da = DataModel.DataAvailability()
             self.query().loadDataExtents(da)
@@ -706,11 +715,12 @@ class FDSNWS(Application):
 
         return self._daCache
 
-    #---------------------------------------------------------------------------
-    def _parseEventTypes(self, names):
+    #--------------------------------------------------------------------------
+    @staticmethod
+    def _parseEventTypes(names):
         types = set()
-        typeMap = {DataModel.EEventTypeNames.name(i): i
-                   for i in range(DataModel.EEventTypeQuantity)}
+        typeMap = dict((DataModel.EEventTypeNames.name(i), i)
+                       for i in range(DataModel.EEventTypeQuantity))
         for n in names:
             name = n.lower().strip()
             if name == "unknown":
@@ -725,7 +735,8 @@ class FDSNWS(Application):
         return types
 
     #--------------------------------------------------------------------------
-    def _formatEventTypes(self, types):
+    @staticmethod
+    def _formatEventTypes(types):
         return ",".join(["unknown" if i < 0 else
                          DataModel.EEventTypeNames.name(i)
                          for i in sorted(types)])
@@ -751,57 +762,57 @@ class FDSNWS(Application):
         dataSelectFilterStr = "<None>"
         if self._dataSelectFilter is not None:
             dataSelectFilterStr = self._dataSelectFilter
-        Logging.debug("\n"
-                "configuration read:\n"
-                "  serve\n"
-                "    dataselect    : %s\n"
-                "    event         : %s\n"
-                "    station       : %s\n"
-                "    availability  : %s\n"
-                "  listenAddress   : %s\n"
-                "  port            : %i\n"
-                "  connections     : %i\n"
-                "  htpasswd        : %s\n"
-                "  accessLog       : %s\n"
-                "  CORS origins    : %s\n"
-                "  queryObjects    : %i\n"
-                "  realtimeGap     : %s\n"
-                "  samples (M)     : %s\n"
-                "  recordBulkSize  : %i\n"
-                "  allowRestricted : %s\n"
-                "  useArclinkAccess: %s\n"
-                "  hideAuthor      : %s\n"
-                "  evaluationMode  : %s\n"
-                "  data availability\n"
-                "    enabled       : %s\n"
-                "    cache duration: %i\n"
-                "    repo name     : %s\n"
-                "    dcc name      : %s\n"
-                "  eventType\n"
-                "    whitelist     : %s\n"
-                "    blacklist     : %s\n"
-                "  inventory filter\n"
-                "    station       : %s\n"
-                "    dataSelect    : %s\n"
-                "    debug enabled : %s\n"
-                "  trackdb\n"
-                "    enabled       : %s\n"
-                "    defaultUser   : %s\n"
-                "  auth\n"
-                "    enabled       : %s\n"
-                "    gnupgHome     : %s\n"
-                "  requestLog      : %s\n" % (
-                self._serveDataSelect, self._serveEvent, self._serveStation,
-                self._serveAvailability, self._listenAddress, self._port,
-                self._connections, self._htpasswd, self._accessLogFile,
-                str(self._corsOrigins), self._queryObjects, self._realtimeGap,
-                self._samplesM, self._recordBulkSize, self._allowRestricted,
-                self._useArclinkAccess, self._hideAuthor, modeStr,
-                self._daEnabled, self._daCacheDuration, self._daRepositoryName,
-                self._daDCCName, whitelistStr, blacklistStr, stationFilterStr,
-                dataSelectFilterStr, self._debugFilter, self._trackdbEnabled,
-                self._trackdbDefaultUser, self._authEnabled,
-                self._authGnupgHome, self._requestLogFile))
+        Logging.debug("""
+configuration read:
+  serve
+    dataselect    : %s
+    event         : %s
+    station       : %s
+    availability  : %s
+  listenAddress   : %s
+  port            : %i
+  connections     : %i
+  htpasswd        : %s
+  accessLog       : %s
+  CORS origins    : %s
+  queryObjects    : %i
+  realtimeGap     : %s
+  samples (M)     : %s
+  recordBulkSize  : %i
+  allowRestricted : %s
+  useArclinkAccess: %s
+  hideAuthor      : %s
+  evaluationMode  : %s
+  data availability
+    enabled       : %s
+    cache duration: %i
+    repo name     : %s
+    dcc name      : %s
+  eventType
+    whitelist     : %s
+    blacklist     : %s
+  inventory filter
+    station       : %s
+    dataSelect    : %s
+    debug enabled : %s
+  trackdb
+    enabled       : %s
+    defaultUser   : %s
+  auth
+    enabled       : %s
+    gnupgHome     : %s
+  requestLog      : %s""" % (
+            self._serveDataSelect, self._serveEvent, self._serveStation,
+            self._serveAvailability, self._listenAddress, self._port,
+            self._connections, self._htpasswd, self._accessLogFile,
+            self._corsOrigins, self._queryObjects, self._realtimeGap,
+            self._samplesM, self._recordBulkSize, self._allowRestricted,
+            self._useArclinkAccess, self._hideAuthor, modeStr,
+            self._daEnabled, self._daCacheDuration, self._daRepositoryName,
+            self._daDCCName, whitelistStr, blacklistStr, stationFilterStr,
+            dataSelectFilterStr, self._debugFilter, self._trackdbEnabled,
+            self._trackdbDefaultUser, self._authEnabled,
+            self._authGnupgHome, self._requestLogFile))
 
         if not self._serveDataSelect and not self._serveEvent and \
            not self._serveStation:
@@ -817,7 +828,7 @@ class FDSNWS(Application):
         if self._requestLogFile:
             # import here, so we don't depend on GeoIP if request log is not
             # needed
-            from seiscomp3.fdsnws.reqlog import RequestLog
+            from seiscomp3.fdsnws.reqlog import RequestLog # pylint: disable=C0415
             self._requestLog = RequestLog(self._requestLogFile)
 
         # load inventory needed by DataSelect and Station service
@@ -893,11 +904,11 @@ class FDSNWS(Application):
 
             # queryauth
             if self._authEnabled:
-                realm = FDSNDataSelectAuthRealm(dataSelectInv,
-                    self._recordBulkSize, self._access, self._userdb)
+                realm = FDSNDataSelectAuthRealm(
+                    dataSelectInv, self._recordBulkSize, self._access, self._userdb)
             else:
-                realm = FDSNDataSelectRealm(dataSelectInv,
-                    self._recordBulkSize, self._access)
+                realm = FDSNDataSelectRealm(
+                    dataSelectInv, self._recordBulkSize, self._access)
             msg = 'authorization for restricted time series data required'
             authSession = self._getAuthSessionWrapper(realm, msg)
             dataselect1.putChild(b'queryauth', authSession)
@@ -930,9 +941,9 @@ class FDSNWS(Application):
 
             # query
             event1.putChild(b'query', FDSNEvent(
-                    self._hideAuthor, self._evaluationMode,
-                    self._eventTypeWhitelist, self._eventTypeBlacklist,
-                    self._eventFormats))
+                self._hideAuthor, self._evaluationMode,
+                self._eventTypeWhitelist, self._eventTypeBlacklist,
+                self._eventFormats))
 
             # catalogs
             fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
@@ -966,9 +977,8 @@ class FDSNWS(Application):
             station.putChild(b'1', station1)
 
             # query
-            station1.putChild(b'query',
-                    FDSNStation(stationInv, self._allowRestricted,
-                                self._queryObjects, self._daEnabled))
+            station1.putChild(b'query', FDSNStation(
+                stationInv, self._allowRestricted, self._queryObjects, self._daEnabled))
 
             # version
             station1.putChild(b'version', ServiceVersion(StationVersion))
@@ -978,13 +988,12 @@ class FDSNWS(Application):
             try:
                 fileRes = WADLFilter(os.path.join(shareDir, 'station.wadl'),
                                      filterList)
-            except:
+            except Exception:
                 fileRes = NoResource(StationVersion)
             station1.putChild(b'application.wadl', fileRes)
 
             # builder
-            fileRes = static.File(os.path.join(
-                    shareDir, 'station-builder.html'))
+            fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
             fileRes.childNotFound = NoResource(StationVersion)
             station1.putChild(b'builder', fileRes)
 
@@ -1009,8 +1018,7 @@ class FDSNWS(Application):
                                 if isRestricted(cha):
                                     continue
                                 openStreams.add("{0}.{1}.{2}.{3}".format(
-                                                net.code(), sta.code(),
-                                                loc.code(), cha.code()))
+                                    net.code(), sta.code(), loc.code(), cha.code()))
                 self._openStreams = openStreams
             else:
                 self._openStreams = None
@@ -1098,14 +1106,14 @@ class FDSNWS(Application):
 
             # remove reload file
             try:
-                reloadfile = os.path.join(Environment.Instance().installDir(),
-                                          'var', 'run',
-                                          '{}.reload'.format(self.name()))
+                reloadfile = os.path.join(
+                    Environment.Instance().installDir(),
+                    'var', 'run', '{0}.reload'.format(self.name()))
                 if os.path.isfile(reloadfile):
                     os.remove(reloadfile)
             except Exception as e:
-                Logging.warning("error processing reload file: {}".format(
-                                str(e)))
+                Logging.warning(
+                    "error processing reload file: {0}".format(e))
 
             Logging.info("reload successful")
 
@@ -1116,7 +1124,7 @@ class FDSNWS(Application):
         self.__reloadRequested = False
 
     #--------------------------------------------------------------------------
-    def _sighupHandler(self, signum, frame):
+    def _sighupHandler(self, signum, frame): #pylint: disable=W0613
         if self.__reloadRequested:
             Logging.info("SIGHUP received, reload already in progress")
         else:
@@ -1142,7 +1150,6 @@ class FDSNWS(Application):
                                                self._listenAddress)
 
             # setup signal handler
-            self.__reloadRequested = False
             signal.signal(signal.SIGHUP, self._sighupHandler)
             task.LoopingCall(self._reloadTask).start(1, False)
 
@@ -1158,7 +1165,8 @@ class FDSNWS(Application):
         return retn
 
     #--------------------------------------------------------------------------
-    def _cloneInventory(self, inv):
+    @staticmethod
+    def _cloneInventory(inv):
         wasEnabled = DataModel.PublicObject.IsRegistrationEnabled()
         DataModel.PublicObject.SetRegistrationEnabled(False)
         inv2 = DataModel.Inventory.Cast(inv.clone())
@@ -1203,22 +1211,30 @@ class FDSNWS(Application):
                 self.archive = None
 
         # read filter configuration from INI file
-        filter = []
+        invFilter = []
         includeRuleDefined = False
         try:
-            import ConfigParser
-            cp = ConfigParser.ConfigParser()
+            # pylint: disable=C0415
+            if sys.version_info[0] < 3:
+                from ConfigParser import ConfigParser
+                from ConfigParser import Error as CPError
+            else:
+                from configparser import ConfigParser
+                from configparser import Error as CPError
         except ImportError:
-            try:
-                import configparser
-                cp = configparser.ConfigParser()
-            except ImportError:
-                Logging.error("could not load 'ConfigParser' Python module")
-                return False
+            Logging.error("could not load 'ConfigParser' Python module")
+            return False
+
+        cp = ConfigParser()
 
         try:
             Logging.notice("reading inventory filter file: %s" % fileName)
-            cp.readfp(open(fileName, 'r'))
+            fp = open(fileName, 'r')
+            if sys.version_info < (3, 2):
+                cp.readfp(fp) # pylint: disable=W1505
+            else:
+                cp.read_file(fp, fileName)
+
             if len(cp.sections()) == 0:
                 return True
 
@@ -1227,40 +1243,40 @@ class FDSNWS(Application):
                 code = ""
                 try:
                     code = cp.get(sectionName, "code")
-                except:
-                    Logging.error("missing 'code' attribute in section %s of "
-                                  "inventory filter file %s" % (
-                                      sectionName, fileName))
+                except CPError:
+                    Logging.error(
+                        "missing 'code' attribute in section %s of inventory "
+                        "filter file %s" % (sectionName, fileName))
                     return False
 
                 rule = FilterRule(sectionName, str(code))
 
                 try:
                     rule.restricted = cp.getboolean(sectionName, 'restricted')
-                except:
+                except CPError:
                     pass
 
                 try:
                     rule.shared = cp.getboolean(sectionName, 'shared')
-                except:
+                except CPError:
                     pass
 
                 try:
                     rule.netClass = str(cp.get(sectionName, 'netClass'))
-                except:
+                except CPError:
                     pass
 
                 try:
                     rule.archive = str(cp.get(sectionName, 'archive'))
-                except:
+                except CPError:
                     pass
 
                 includeRuleDefined |= not rule.exclude
-                filter.append(rule)
+                invFilter.append(rule)
 
         except Exception as e:
-            Logging.error("could not read inventory filter file %s: %s" % (
-                          fileName, str(e)))
+            Logging.error(
+                "could not read inventory filter file %s: %s" % (fileName, str(e)))
             return False
 
         # apply filter
@@ -1310,7 +1326,7 @@ class FDSNWS(Application):
 
                         # evaluate rules until matching code is found
                         match = False
-                        for rule in filter:
+                        for rule in invFilter:
                             # code
                             if not fnmatch.fnmatchcase(code, rule.code):
                                 continue
@@ -1397,13 +1413,13 @@ class FDSNWS(Application):
 
         if serviceName:
             serviceName += ": "
-        Logging.debug("%sremoved %i networks, %i stations, %i locations, "
-                      "%i streams" % (serviceName, delNet, delSta, delLoc,
-                                      delCha))
+        Logging.debug(
+            "%sremoved %i networks, %i stations, %i locations, %i streams" % (
+                serviceName, delNet, delSta, delLoc, delCha))
         if self._debugFilter:
             debugLines.sort()
             Logging.notice("%sfilter decisions based on file %s:\n%s" % (
-                           serviceName, fileName, str("\n".join(debugLines))))
+                serviceName, fileName, str("\n".join(debugLines))))
 
         return True
 
@@ -1415,8 +1431,8 @@ class FDSNWS(Application):
         return HTTPAuthSessionWrapper(p, [f])
 
 
-app = FDSNWS(len(sys.argv), sys.argv)
-sys.exit(app())
+fdsnwsApp = FDSNWS(len(sys.argv), sys.argv)
+sys.exit(fdsnwsApp())
 
 
 # vim: ts=4 et tw=79

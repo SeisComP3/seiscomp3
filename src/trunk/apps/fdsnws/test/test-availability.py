@@ -21,11 +21,11 @@ class TestAvailability(FDSNWSTest):
     def test(self):
         print('Testing availability service')
 
-        query = '{}/availability/1/'.format(self.url)
+        query = '{0}/availability/1/'.format(self.url)
         ctTXT = 'text/plain'
         ctCSV = 'text/csv'
         ctJSON = 'application/json'
-        resFile = self.rootdir + '/results/availability-{}.txt'
+        resFile = self.rootdir + '/results/availability-{0}.txt'
 
         i = 1
         # (contentType, URL, ignoreChars, concurrent)
@@ -54,7 +54,7 @@ class TestAvailability(FDSNWSTest):
         ]
         for q, ct, ignoreRanges, concurrent in tests:
             auth = q.startswith('queryauth') or q.startswith('extentauth')
-            self.testGET('{}{}'.format(query, q), ct, ignoreRanges, concurrent,
+            self.testGET('{0}{1}'.format(query, q), ct, ignoreRanges, concurrent,
                          auth=auth, dataFile=resFile.format(i), testID=i)
             i += 1
 

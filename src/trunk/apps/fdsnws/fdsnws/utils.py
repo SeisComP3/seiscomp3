@@ -34,17 +34,19 @@ u_str = lambda s: s.decode('utf-8', 'replace')
 #-------------------------------------------------------------------------------
 # Python version depended string conversion
 if sys.version_info[0] < 3:
+    isPy3 = False
     py2bstr = b_str
     py2ustr = u_str
     py3bstr = str
     py3ustr = str
     py3ustrlist = lambda l: l
 else:
+    isPy3 = True
     py2bstr = str
     py2ustr = str
     py3bstr = b_str
     py3ustr = u_str
-    py3ustrlist = lambda l: [ u_str(x) for x in l ]
+    py3ustrlist = lambda l: [u_str(x) for x in l]
 
 
 #-------------------------------------------------------------------------------
@@ -77,8 +79,8 @@ def onFinish(result, req):
         if isinstance(err, defer.CancelledError):
             Logging.error("request canceled")
             return
-        Logging.error("%s %s" % (result.getErrorMessage(),
-                                 traceback.format_tb(result.getTracebackObject())))
+        Logging.error("%s %s" % (
+            result.getErrorMessage(), traceback.format_tb(result.getTracebackObject())))
     else:
         if result:
             Logging.debug("request successfully served")
@@ -86,15 +88,14 @@ def onFinish(result, req):
             Logging.debug("request failed")
 
     reactor.callFromThread(req.finish)
-    # req.finish()
 
 
 #-------------------------------------------------------------------------------
 # Handle connection errors
 def onCancel(failure, req):
     if failure:
-        Logging.error("%s %s" % (failure.getErrorMessage(),
-                                 traceback.format_tb(failure.getTracebackObject())))
+        Logging.error("%s %s" % (
+            failure.getErrorMessage(), traceback.format_tb(failure.getTracebackObject())))
     else:
         Logging.error("request canceled")
     req.cancel()
@@ -102,7 +103,7 @@ def onCancel(failure, req):
 
 #-------------------------------------------------------------------------------
 # Handle premature connection reset
-def onResponseFailure(err, call):
+def onResponseFailure(_, call):
     Logging.error("response canceled")
     call.cancel()
 
@@ -111,7 +112,7 @@ def onResponseFailure(err, call):
 # Renders error page if the result set exceeds the configured maximum number
 # objects
 def accessLog(req, ro, code, length, err):
-    logger = Application.Instance()._accessLog
+    logger = Application.Instance()._accessLog # pylint: disable=W0212
     if logger is None:
         return
 
@@ -126,7 +127,7 @@ class Sink(ExportSink):
         self.written = 0
 
     def write(self, data, size):
-        if self.request._disconnected:
+        if self.request._disconnected: #pylint: disable=W0212
             return -1
         writeTS(self.request, data[:size])
         self.written += size
@@ -170,8 +171,8 @@ class AccessLogEntry:
         # The host name of the client is resolved in the __str__ method by the
         # logging thread so that a long running DNS reverse lookup may not slow
         # down the request
-        self.msgPrefix = "%s|%s|%s|" % (service, req.getRequestHostname(),
-                                        accessTime)
+        self.msgPrefix = "%s|%s|%s|" % (
+            service, py3ustr(req.getRequestHostname()), accessTime)
 
         xff = req.requestHeaders.getRawHeaders("x-forwarded-for")
         if xff:
@@ -181,8 +182,7 @@ class AccessLogEntry:
 
         self.clientIP = req.getClientIP()
         self.msgSuffix = "|%s|%i|%i|%s|%s|%i|%s|%s|%s|%s|%s||" % (
-                         self.clientIP, length, procTime, err, agent, code,
-                         user, net, sta, loc, cha)
+            self.clientIP, length, procTime, err, agent, code, user, net, sta, loc, cha)
 
     def __str__(self):
         try:

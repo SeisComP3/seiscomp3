@@ -20,16 +20,11 @@ import sys
 import time
 import dateutil.parser
 
-if sys.version_info[0] < 3:
-    from cStringIO import StringIO as BytesIO
-else:
-    from io import BytesIO
-
 from twisted.cred import portal
 from twisted.web import http, resource, server
 from twisted.internet import interfaces, reactor
 
-from zope.interface import implementer
+import zope
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
@@ -44,6 +39,11 @@ from . import utils
 
 from .reqtrack import RequestTrackerDB
 from .fastsds import SDS
+
+if sys.version_info[0] < 3:
+    from cStringIO import StringIO as BytesIO
+else:
+    from io import BytesIO
 
 VERSION = "1.1.0"
 
@@ -128,7 +128,8 @@ class _MyRecordStream(object):
         self.__tw.append((net, sta, loc, cha, startt,
                           endt, restricted, archNet))
 
-    def __override_network(self, data, net):
+    @staticmethod
+    def __override_network(data, net):
         inp = BytesIO(data)
         out = BytesIO()
 
@@ -236,7 +237,6 @@ class _MyRecordStream(object):
 
 
 ################################################################################
-@implementer(interfaces.IPushProducer)
 class _WaveformProducer(object):
 
     def __init__(self, req, ro, rs, fileName, trackerList):
@@ -288,7 +288,7 @@ class _WaveformProducer(object):
 
         else:
             Logging.debug("%s: returned %i bytes of mseed data" % (
-                          self.ro.service, self.written))
+                self.ro.service, self.written))
             utils.accessLog(self.req, self.ro, http.OK, self.written, None)
 
             for tracker in self.trackerList:
@@ -319,7 +319,7 @@ class _WaveformProducer(object):
         self.stopped = True
 
         Logging.debug("%s: returned %i bytes of mseed data (not completed)" % (
-                      self.ro.service, self.written))
+                self.ro.service, self.written))
         utils.accessLog(self.req, self.ro, http.OK,
                         self.written, "not completed")
 
@@ -330,9 +330,14 @@ class _WaveformProducer(object):
         self.req.unregisterProducer()
         self.req.finish()
 
+# External interface declaration for UsernamePasswordChecker class because
+#  - @zope.interface.implementer annotation for classes is not supported by
+#    Python2.6
+#  - zope.interface.implements class advice is unsupported by Python3
+zope.interface.classImplements(_WaveformProducer, interfaces.IPushProducer)
+
 
 ################################################################################
-@implementer(portal.IRealm)
 class FDSNDataSelectRealm(object):
 
     #---------------------------------------------------------------------------
@@ -351,9 +356,14 @@ class FDSNDataSelectRealm(object):
 
         raise NotImplementedError()
 
+# External interface declaration for UsernamePasswordChecker class because
+#  - @zope.interface.implementer annotation for classes is not supported by
+#    Python2.6
+#  - zope.interface.implements class advice is unsupported by Python3
+zope.interface.classImplements(FDSNDataSelectRealm, portal.IRealm)
+
 
 ################################################################################
-@implementer(portal.IRealm)
 class FDSNDataSelectAuthRealm(object):
 
     #---------------------------------------------------------------------------
@@ -372,6 +382,12 @@ class FDSNDataSelectAuthRealm(object):
                     lambda: None)
 
         raise NotImplementedError()
+
+# External interface declaration for UsernamePasswordChecker class because
+#  - @zope.interface.implementer annotation for classes is not supported by
+#    Python2.6
+#  - zope.interface.implements class advice is unsupported by Python3
+zope.interface.classImplements(FDSNDataSelectAuthRealm, portal.IRealm)
 
 
 ################################################################################
@@ -446,7 +462,8 @@ class FDSNDataSelect(BaseResource):
             yield net
 
     #---------------------------------------------------------------------------
-    def _stationIter(self, net, ro):
+    @staticmethod
+    def _stationIter(net, ro):
         for i in range(net.stationCount()):
             sta = net.station(i)
 
@@ -466,7 +483,8 @@ class FDSNDataSelect(BaseResource):
             yield sta
 
     #---------------------------------------------------------------------------
-    def _locationIter(self, sta, ro):
+    @staticmethod
+    def _locationIter(sta, ro):
         for i in range(sta.sensorLocationCount()):
             loc = sta.sensorLocation(i)
 
@@ -486,7 +504,8 @@ class FDSNDataSelect(BaseResource):
             yield loc
 
     #---------------------------------------------------------------------------
-    def _streamIter(self, loc, ro):
+    @staticmethod
+    def _streamIter(loc, ro):
         for i in range(loc.streamCount()):
             stream = loc.stream(i)
 
@@ -507,6 +526,7 @@ class FDSNDataSelect(BaseResource):
 
     #---------------------------------------------------------------------------
     def _processRequest(self, req, ro):
+        #pylint: disable=W0212
 
         if ro.quality != 'B' and ro.quality != 'M':
             msg = "quality other than 'B' or 'M' not supported"
@@ -589,10 +609,9 @@ class FDSNDataSelect(BaseResource):
                             except ValueError:
                                 end_time = s.time.end
 
-                            if (netRestricted or staRestricted or
-                                utils.isRestricted(cha)) and (
-                                    not self.__user or (self.__access and
-                                        not self.__access.authorize(
+                            if (netRestricted or staRestricted or utils.isRestricted(cha)) and (
+                                    not self.__user or (
+                                        self.__access and not self.__access.authorize(
                                             self.__user, net.code(), sta.code(),
                                             loc.code(), cha.code(),
                                             start_time, end_time))):
@@ -631,17 +650,17 @@ class FDSNDataSelect(BaseResource):
                                 if samples > maxSamples:
                                     msg = "maximum number of %sM samples " \
                                           "exceeded" % str(app._samplesM)
-                                    return self.renderErrorPage(req,
-                                        http.REQUEST_ENTITY_TOO_LARGE, msg, ro)
+                                    return self.renderErrorPage(
+                                        req, http.REQUEST_ENTITY_TOO_LARGE, msg, ro)
 
-                            Logging.debug("adding stream: %s.%s.%s.%s %s - %s"
-                                          % (net.code(), sta.code(), loc.code(),
-                                             cha.code(), start_time.iso(),
-                                             end_time.iso()))
-                            rs.addStream(net.code(), sta.code(), loc.code(),
-                                         cha.code(), start_time, end_time,
-                                         utils.isRestricted(cha),
-                                         sta.archiveNetworkCode())
+                            Logging.debug(
+                                "adding stream: %s.%s.%s.%s %s - %s" % (
+                                    net.code(), sta.code(), loc.code(),
+                                    cha.code(), start_time.iso(), end_time.iso()))
+                            rs.addStream(
+                                net.code(), sta.code(), loc.code(), cha.code(),
+                                start_time, end_time, utils.isRestricted(cha),
+                                sta.archiveNetworkCode())
 
         if forbidden:
             for tracker in trackerList:
@@ -651,7 +670,7 @@ class FDSNDataSelect(BaseResource):
             msg = "access denied"
             return self.renderErrorPage(req, http.FORBIDDEN, msg, ro)
 
-        elif forbidden is None:
+        if forbidden is None:
             for tracker in trackerList:
                 tracker.volume_status("fdsnws", "NODATA", 0, "")
                 tracker.request_status("END", "")

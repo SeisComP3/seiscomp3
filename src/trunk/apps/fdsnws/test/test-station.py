@@ -21,7 +21,7 @@ class TestStation(FDSNWSTest):
     def test(self):
         print('Testing station service')
 
-        query = '{}/station/1/query'.format(self.url)
+        query = '{0}/station/1/query'.format(self.url)
         ctTXT = 'text/plain'
         ctXML = 'application/xml'
         resFile = self.rootdir + '/results/station-'
@@ -35,8 +35,8 @@ class TestStation(FDSNWSTest):
             ('?format=sc3ml&network=AM&station=R0F05&location=00&channel=SHZ&latitude=52&longitude=13&maxradius=0.5&level=response&includeavailability=true', ctXML, [], True),
         ]
         for q, ct, ignoreRanges, concurrent in tests:
-            self.testGET('{}{}'.format(query, q), ct, ignoreRanges, concurrent,
-                         dataFile='{}{}.txt'.format(resFile, i), testID=i)
+            self.testGET('{0}{1}'.format(query, q), ct, ignoreRanges, concurrent,
+                         dataFile='{0}{1}.txt'.format(resFile, i), testID=i)
             i += 1
 
 

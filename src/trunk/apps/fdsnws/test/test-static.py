@@ -30,53 +30,53 @@ class TestStatic(FDSNWSTest):
         self.testGET(self.url)
 
         # event
-        self.testGET('{}/event'.format(self.url))
-        self.testGET('{}/event/1'.format(self.url),
+        self.testGET('{0}/event'.format(self.url))
+        self.testGET('{0}/event/1'.format(self.url),
                      dataFile=share+'event.html')
-        self.testGET('{}/event/1/version'.format(self.url), ctTXT,
+        self.testGET('{0}/event/1/version'.format(self.url), ctTXT,
                      data=event.VERSION)
-        self.testGET('{}/event/1/application.wadl'.format(self.url), ctXML,
+        self.testGET('{0}/event/1/application.wadl'.format(self.url), ctXML,
                      dataFile=share+'event.wadl')
-        self.testGET('{}/event/1/catalogs'.format(self.url), ctXML,
+        self.testGET('{0}/event/1/catalogs'.format(self.url), ctXML,
                      dataFile=share+'catalogs.xml')
-        self.testGET('{}/event/1/contributors'.format(self.url), ctXML,
+        self.testGET('{0}/event/1/contributors'.format(self.url), ctXML,
                      dataFile=share+'contributors.xml')
-        self.testGET('{}/event/1/builder'.format(self.url),
+        self.testGET('{0}/event/1/builder'.format(self.url),
                      dataFile=share+'event-builder.html')
 
         # station
-        self.testGET('{}/station'.format(self.url))
-        self.testGET('{}/station/1'.format(self.url),
+        self.testGET('{0}/station'.format(self.url))
+        self.testGET('{0}/station/1'.format(self.url),
                      dataFile=share+'station.html')
-        self.testGET('{}/station/1/version'.format(self.url), ctTXT,
+        self.testGET('{0}/station/1/version'.format(self.url), ctTXT,
                      data=station.VERSION)
-        self.testGET('{}/station/1/application.wadl'.format(self.url), ctXML,
+        self.testGET('{0}/station/1/application.wadl'.format(self.url), ctXML,
                      )#dataFile=share+'station.wadl')
-        self.testGET('{}/station/1/builder'.format(self.url),
+        self.testGET('{0}/station/1/builder'.format(self.url),
                      dataFile=share+'station-builder.html')
 
         # dataselect
-        self.testGET('{}/dataselect'.format(self.url))
-        self.testGET('{}/dataselect/1'.format(self.url),
+        self.testGET('{0}/dataselect'.format(self.url))
+        self.testGET('{0}/dataselect/1'.format(self.url),
                      dataFile=share+'dataselect.html')
-        self.testGET('{}/dataselect/1/version'.format(self.url), ctTXT,
+        self.testGET('{0}/dataselect/1/version'.format(self.url), ctTXT,
                      data=dataselect.VERSION)
-        self.testGET('{}/dataselect/1/application.wadl'.format(self.url),
+        self.testGET('{0}/dataselect/1/application.wadl'.format(self.url),
                      ctXML, dataFile=share+'dataselect.wadl')
-        self.testGET('{}/dataselect/1/builder'.format(self.url),
+        self.testGET('{0}/dataselect/1/builder'.format(self.url),
                      dataFile=share+'dataselect-builder.html')
 
         # availability
-        self.testGET('{}/availability'.format(self.url))
-        self.testGET('{}/availability/1'.format(self.url),
+        self.testGET('{0}/availability'.format(self.url))
+        self.testGET('{0}/availability/1'.format(self.url),
                      dataFile=share+'availability.html')
-        self.testGET('{}/availability/1/version'.format(self.url), ctTXT,
+        self.testGET('{0}/availability/1/version'.format(self.url), ctTXT,
                      data=availability.VERSION)
-        self.testGET('{}/availability/1/application.wadl'.format(self.url),
+        self.testGET('{0}/availability/1/application.wadl'.format(self.url),
                      ctXML, dataFile=share+'availability.wadl')
-        self.testGET('{}/availability/1/builder-query'.format(self.url),
+        self.testGET('{0}/availability/1/builder-query'.format(self.url),
                      dataFile=share+'availability-builder-query.html')
-        self.testGET('{}/availability/1/builder-extent'.format(self.url),
+        self.testGET('{0}/availability/1/builder-extent'.format(self.url),
                      dataFile=share+'availability-builder-extent.html')
 
 

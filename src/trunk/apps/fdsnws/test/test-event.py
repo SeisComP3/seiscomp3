@@ -21,7 +21,7 @@ class TestEvent(FDSNWSTest):
     def test(self):
         print('Testing event service')
 
-        query = '{}/event/1/query'.format(self.url)
+        query = '{0}/event/1/query'.format(self.url)
         ctTXT = 'text/plain'
         ctXML = 'application/xml'
         resFile = self.rootdir + '/results/event-'
@@ -38,8 +38,8 @@ class TestEvent(FDSNWSTest):
             ('?format=csv', ctTXT, False),
         ]
         for q, ct, concurrent in tests:
-            self.testGET('{}{}'.format(query, q), ct, [], concurrent,
-                         dataFile='{}{}.txt'.format(resFile, i), testID=i)
+            self.testGET('{0}{1}'.format(query, q), ct, [], concurrent,
+                         dataFile='{0}{1}.txt'.format(resFile, i), testID=i)
             i += 1
 
 

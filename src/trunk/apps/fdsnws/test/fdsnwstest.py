@@ -34,10 +34,10 @@ class FDSNWSTest:
     #--------------------------------------------------------------------------
     def __init__(self, port=8080):
         self.port = port
-        self.url = 'http://localhost:{}/fdsnws'.format(self.port)
+        self.url = 'http://localhost:{0}/fdsnws'.format(self.port)
         self.service = None
         self.rootdir = os.environ.get('SEISCOMP_ROOT')
-        self.sharedir = '{}/share/fdsnws'.format(self.rootdir)
+        self.sharedir = '{0}/share/fdsnws'.format(self.rootdir)
 
 
     #--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ class FDSNWSTest:
 
     #--------------------------------------------------------------------------
     def _waitForSocket(self, timeout=10):
-        print('waiting for port {} to become ready '.format(self.port),
+        print('waiting for port {0} to become ready '.format(self.port),
               end='')
         maxTime = datetime.now() + timedelta(timeout)
         while self.service is not None and self.service.poll() is None:
@@ -104,7 +104,7 @@ class FDSNWSTest:
             print('warning: FDSNWS service terminated ahead of time',
                   file=sys.stdout)
             return
-        print('stopping FDSNWS service (PID: {}): '.format(self.service.pid),
+        print('stopping FDSNWS service (PID: {0}): '.format(self.service.pid),
               end='')
         maxTime = datetime.now() + timedelta(timeout)
 
@@ -129,14 +129,14 @@ class FDSNWSTest:
     #--------------------------------------------------------------------------
     def command(self):
         return [
-            sys.executable, '{}/../../fdsnws.py'.format(self.rootdir),
+            sys.executable, '{0}/../../fdsnws.py'.format(self.rootdir),
             '--debug', '--plugins=dbsqlite3,fdsnxml',
-            '--database=sqlite3://{}/seiscomp3.sqlite3'.format(self.rootdir),
+            '--database=sqlite3://{0}/seiscomp3.sqlite3'.format(self.rootdir),
             '--serveAvailability=true', '--dataAvailability.enable=true',
             '--agencyID=Test',
-            '--record-url=sdsarchive://{}/sds'.format(self.rootdir),
-            '--htpasswd={}/fdsnws.htpasswd'.format(self.rootdir),
-            '--stationFilter={}/stationFilter.cfg'.format(self.rootdir)
+            '--record-url=sdsarchive://{0}/sds'.format(self.rootdir),
+            '--htpasswd={0}/fdsnws.htpasswd'.format(self.rootdir),
+            '--stationFilter={0}/stationFilter.cfg'.format(self.rootdir)
         ]
 
 
@@ -158,9 +158,9 @@ class FDSNWSTest:
         if lenGot == 0 and minLen <= 0:
             return (None, None)
         if lenGot < minLen or lenGot > maxLen:
-            return (min(lenExp, lenGot), 'read {} bytes, expected {}'\
+            return (min(lenExp, lenGot), 'read {0} bytes, expected {1}'\
                     .format(lenGot, minLen if minLen == maxLen \
-                                else '{}-{}'.format(minLen, maxLen)))
+                                else '{0}-{1}'.format(minLen, maxLen)))
 
         # offset between got and expected index may result from variable length
         # result data, e.g. microseconds of time stamps
@@ -214,15 +214,15 @@ class FDSNWSTest:
                     iGot += pos
                     continue
 
-            return (iGot, '... [ {} ] != [ {} ] ...'\
+            return (iGot, '... [ {0} ] != [ {1} ] ...'\
                     .format(got[max(0, iGot-10):min(lenGot, iGot+11)],
                             expected[max(0, iExp-10):min(lenExp, iExp+11)]))
 
         if iGot < lenGot:
-            return (lenGot, 'read {} more bytes than expected' \
+            return (lenGot, 'read {0} more bytes than expected' \
                             .format(lenGot-iGot))
         if iGot > lenGot:
-            return (lenGot, 'read {} fewer bytes than expected' \
+            return (lenGot, 'read {0} fewer bytes than expected' \
                             .format(iGot-lenGot))
 
         # should not happen
@@ -249,17 +249,17 @@ class FDSNWSTest:
                        silent=False):
         if not silent:
             if testID is not None:
-                print('#{} '.format(testID), end='')
-            print('{}: '.format(url), end='')
+                print('#{0} '.format(testID), end='')
+            print('{0}: '.format(url), end='')
         stream = dataFile is not None
         dAuth = requests.auth.HTTPDigestAuth('sysop', 'sysop') if auth else None
         r = requests.get(url, stream=stream, auth=dAuth)
         if r.status_code != retCode:
-            raise ValueError('Invalid status code, expected "{}", got "{}"' \
+            raise ValueError('Invalid status code, expected "{0}", got "{1}"' \
                              .format(retCode, r.status_code))
 
         if contentType != r.headers['content-type']:
-            raise ValueError('Invalid content type, expected "{}", got "{}"' \
+            raise ValueError('Invalid content type, expected "{0}", got "{1}"' \
                              .format(contentType, r.headers['content-type']))
 
         expected = None
@@ -274,13 +274,13 @@ class FDSNWSTest:
             if diffContent:
                 errPos, errMsg = self.diff(expected, r.content, ignoreRanges)
                 if errPos is not None:
-                    raise ValueError('Unexpected content at byte {}: {}' \
+                    raise ValueError('Unexpected content at byte {0}: {1}' \
                                      .format(errPos, errMsg))
             else:
                 if len(expected) != len(r.content):
-                    raise ValueError('Unexpected content length, expected {}, '
-                                     'got {}'.format(len(expected),
-                                                     len(r.content)))
+                    raise ValueError('Unexpected content length, expected {0}, '
+                                     'got {1}'.format(len(expected),
+                                                      len(r.content)))
 
         if not silent:
             print('OK')
@@ -293,8 +293,8 @@ class FDSNWSTest:
                           ignoreRanges=None, auth=False, diffContent=True,
                           repetitions=1000, numThreads=10):
         if testID is not None:
-            print('#{} '.format(testID), end='')
-        print('concurrent [{}/{}] {}: '.format(repetitions, numThreads, url),
+            print('#{0} '.format(testID), end='')
+        print('concurrent [{0}/{1}] {2}: '.format(repetitions, numThreads, url),
               end='')
         sys.stdout.flush()
 
@@ -310,7 +310,7 @@ class FDSNWSTest:
                     print('.', end='')
                     sys.stdout.flush()
                 except ValueError as e:
-                    errors.append("error in job #{}: {}".format(i, str(e)))
+                    errors.append("error in job #{0}: {1}".format(i, str(e)))
                 finally:
                     q.task_done()
 
@@ -337,7 +337,7 @@ class FDSNWSTest:
             t.join()
 
         if errors:
-            raise ValueError("{} errors occured, first one is: {}" \
+            raise ValueError("{0} errors occured, first one is: {1}" \
                              .format(len(errors), errors[0]))
 
         print(' OK')

@@ -15,14 +15,14 @@ class Module(seiscomp3.Kernel.Module):
 
     def reload(self):
         if not self.isRunning():
-            self.env.log('{} is not running'.format(self.name))
+            self.env.log('{0} is not running'.format(self.name))
             return 1
 
-        self.env.log('reloading {}'.format(self.name))
+        self.env.log('reloading {0}'.format(self.name))
 
         lockfile = self.env.lockFile(self.name)
         reloadfile = os.path.join(os.path.dirname(lockfile),
-                                  '{}.reload'.format(self.name))
+                                  '{0}.reload'.format(self.name))
 
         # Open pid file
         with open(lockfile, "r") as f:
@@ -33,15 +33,15 @@ class Module(seiscomp3.Kernel.Module):
             open(reloadfile, 'a').close()
 
             if not os.path.isfile(reloadfile):
-                self.env.log('could not touch reload file: {}'.format(
-                             reloadfile))
+                self.env.log('could not touch reload file: {0}' \
+                             .format(reloadfile))
                 return 1
 
             # Send SIGHUP
             subprocess.call("kill -s HUP %d" % pid, shell=True)
 
             # wait for reload file to disappear
-            for i in range(0, int(self.reloadTimeout * 5)):
+            for _ in range(0, int(self.reloadTimeout * 5)):
                 time.sleep(0.2)
                 if not os.path.isfile(reloadfile):
                     return 0

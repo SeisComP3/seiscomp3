@@ -24,8 +24,7 @@ from twisted.web import http, resource, server, static, util
 from seiscomp3 import Core, Logging
 
 from . import gnupg
-from .utils import accessLog, b_str, u_str, py3ustr, py3bstr, \
-                   writeTS, writeTSBin
+from .utils import accessLog, b_str, u_str, py3ustr, py3bstr, writeTSBin
 
 VERSION = "1.2.4"
 
@@ -77,7 +76,7 @@ Service Version:
                                request.uri, date, py3bstr(version))
             if not noContent:
                 Logging.warning("responding with error: %i (%s)" % (
-                                code, py3ustr(codeStr)))
+                    code, py3ustr(codeStr)))
 
         accessLog(request, ro, code, len(response), msg)
         return response
@@ -95,6 +94,7 @@ class ServiceVersion(resource.Resource):
 
     #---------------------------------------------------------------------------
     def __init__(self, version):
+        resource.Resource.__init__(self)
         self.version = version
         self.type = 'text/plain'
 
@@ -166,7 +166,7 @@ class NoResource(BaseResource):
         return HTTP.renderNotFound(request, self.version)
 
     #---------------------------------------------------------------------------
-    def getChild(self, chnam, request):
+    def getChild(self, path, request):
         return self
 
 
@@ -205,12 +205,12 @@ class ListingResource(BaseResource):
             if hasattr(v, 'hideInListing') and v.hideInListing:
                 continue
             name = u_str(k)
-            lis += u'<li><a href="{}/">{}/</a></li>\n'.format(name, name)
+            lis += u'<li><a href="{0}/">{0}/</a></li>\n'.format(name)
         return b_str(ListingResource.html % (u_str(request.path), lis))
 
     #---------------------------------------------------------------------------
-    def getChild(self, chnam, request):
-        if not chnam:
+    def getChild(self, path, request):
+        if not path:
             return self
         return NoResource(self.version)
 
@@ -231,8 +231,8 @@ class DirectoryResource(static.File):
         return static.File.render(self, request)
 
     #---------------------------------------------------------------------------
-    def getChild(self, chnam, request):
-        if not chnam:
+    def getChild(self, path, request):
+        if not path:
             return self
         return NoResource(self.version)
 
@@ -286,22 +286,23 @@ class AuthResource(BaseResource):
 
         userid = base64.urlsafe_b64encode(
             hashlib.sha256(verified.data).digest()[:18])
-        password = self.__userdb.addUser(userid, attributes,
-            time.time() + min(lifetime, 24 * 3600), py3ustr(verified.data))
+        password = self.__userdb.addUser(
+            userid, attributes, time.time() + min(lifetime, 24 * 3600),
+            py3ustr(verified.data))
         accessLog(request, None, http.OK, len(userid)+len(password)+1, None)
         return userid + b':' + password
 
 
 ################################################################################
 class Site(server.Site):
-    def __init__(self, resource, corsOrigins):
-        server.Site.__init__(self, resource)
+    def __init__(self, res, corsOrigins):
+        server.Site.__init__(self, res)
         self._corsOrigins = corsOrigins
 
     #---------------------------------------------------------------------------
     def getResourceFor(self, request):
-        Logging.debug("request (%s): %s" % (request.getClientIP(),
-                                            py3ustr(request.uri)))
+        Logging.debug("request (%s): %s" % (
+            request.getClientIP(), py3ustr(request.uri)))
         request.setHeader('Server', 'SeisComP3-FDSNWS/%s' % VERSION)
         request.setHeader('Access-Control-Allow-Headers', 'Authorization')
         request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
