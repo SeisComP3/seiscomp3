@@ -56,6 +56,7 @@ namespace Core {
    - Added Seiscomp::Gui::Map::Layer::update
    - Added Seiscomp::Gui::Axis::ticks
    - Added Seiscomp::Gui::Axis::subTicks
+   - Added Seiscomp::Gui::AdvancedOriginSymbol
    - Declared Seiscomp::Gui::Axis::updateLayout, sizeHint, draw and drawGrid virtual
    - Declared Seiscomp::Gui::Graph::unproject virtual
    - Moved seismology/[locsat.h,eigv.h,chi2.h] to seismology/locator/

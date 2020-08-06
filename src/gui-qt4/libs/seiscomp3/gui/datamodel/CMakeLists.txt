@@ -11,6 +11,7 @@ SET(GUI_DATAMODEL_SOURCES
 	publicobjectevaluator.cpp
 	importpicks.cpp
 	originsymbol.cpp
+	advancedoriginsymbol.cpp
 	origintime.cpp
 	origindialog.cpp
 	pickerview.cpp

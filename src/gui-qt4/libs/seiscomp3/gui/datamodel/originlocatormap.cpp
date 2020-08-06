@@ -22,7 +22,7 @@
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/math/math.h>
 
-#include <seiscomp3/gui/datamodel/originsymbol.h>
+#include <seiscomp3/gui/datamodel/advancedoriginsymbol.h>
 #include <seiscomp3/gui/datamodel/ttdecorator.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/map/projection.h>
@@ -92,86 +92,6 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 		p.save();
 
 		QPointF originLocationF(_origin->longitude(), _origin->latitude());
-
-		try {
-			double az = _origin->uncertainty().azimuthMaxHorizontalUncertainty();
-			double lenMax = _origin->uncertainty().maxHorizontalUncertainty();
-			double lenMin = _origin->uncertainty().minHorizontalUncertainty();
-
-			p.setPen(Qt::NoPen);
-			QColor fill = Qt::magenta;
-			fill.setAlpha(64);
-			p.setBrush(fill);
-
-			lenMin = Math::Geo::km2deg(lenMin);
-			lenMax = Math::Geo::km2deg(lenMax);
-
-			QPoint min, max;
-			if ( canvas().projection()->project(min, QPointF(originLocationF.x()-lenMin, originLocationF.y()+lenMax)) &&
-			     canvas().projection()->project(max, QPointF(originLocationF.x()+lenMin, originLocationF.y()-lenMax)) ) {
-
-				QRect r(min, max);
-				r = r.normalized();
-
-				QPoint center = r.center();
-				r.moveCenter(QPoint(0,0));
-
-				p.translate(center);
-				p.rotate(az);
-				p.drawEllipse(r);
-				p.resetMatrix();
-			}
-		}
-		catch ( ... ) {
-			double rad_x = 0.0, rad_y = 0.0;
-			try {
-				double err_x_l = _origin->longitude().lowerUncertainty();
-				double err_x_u = _origin->longitude().upperUncertainty();
-
-				rad_x = std::max(err_x_l, err_x_u);
-			}
-			catch ( ValueException& ) {
-				try {
-					rad_x = _origin->longitude().uncertainty();
-				}
-				catch ( ValueException& ) {}
-			}
-
-			try {
-				double err_y_l = _origin->latitude().lowerUncertainty();
-				double err_y_u = _origin->latitude().upperUncertainty();
-
-				rad_y = std::max(err_y_l, err_y_u);
-			}
-			catch ( ValueException& ) {
-				try {
-					rad_y = _origin->latitude().uncertainty();
-				}
-				catch ( ValueException& ) {}
-			}
-
-			if ( rad_x == 0 && rad_y == 0 ) {
-				try {
-					rad_x = rad_y = _origin->uncertainty().horizontalUncertainty();
-				}
-				catch ( ValueException& ) {}
-			}
-
-			if ( rad_x > 0.0 && rad_y > 0.0 ) {
-				rad_y = Math::Geo::km2deg(rad_y);
-				rad_x = Math::Geo::km2deg(rad_x)/cos(deg2rad(std::max(-89.0, std::min(89.0, (double)_origin->latitude()))));
-
-				p.setPen(Qt::NoPen);
-				QColor fill = Qt::magenta;
-				fill.setAlpha(64);
-				p.setBrush(fill);
-
-				QPoint min, max;
-				if ( canvas().projection()->project(min, QPointF(originLocationF.x()-rad_x, originLocationF.y()+rad_y)) &&
-				     canvas().projection()->project(max, QPointF(originLocationF.x()+rad_x, originLocationF.y()-rad_y)) )
-					p.drawEllipse(min.x(), min.y(), max.x()-min.x()+1, max.y()-min.y()+1);
-			}
-		}
 
 		if ( _drawStations ) {
 			if ( _drawStationsLines ) {
@@ -424,18 +344,15 @@ void OriginLocatorMap::setOrigin(DataModel::Origin* o) {
 	ttd->setOriginTime(o->time());
 	ttd->setVisible(_waveformPropagation);
 
-	_originSymbol = new OriginSymbol(ttd);
-	_originSymbol->setLatitude(o->latitude());
-	_originSymbol->setLongitude(o->longitude());
 	try {
-		_originSymbol->setDepth(o->depth());
 		ttd->setDepth(o->depth());
 	} catch ( Core::ValueException& ) {}
 
 	if ( o->magnitudeCount() > 0 ) {
-		_originSymbol->setPreferredMagnitudeValue(o->magnitude(0)->magnitude());
 		ttd->setPreferredMagnitudeValue(o->magnitude(0)->magnitude());
 	}
+
+	_originSymbol = new AdvancedOriginSymbol(o, ttd);
 
 	// TTDecorator::ShowWaveformPropagation(_waveformPropagation);
 	canvas().symbolCollection()->add(_originSymbol);
