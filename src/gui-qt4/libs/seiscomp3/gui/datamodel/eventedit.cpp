@@ -1674,7 +1674,7 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 			for ( size_t i = 0; i < fm->momentTensorCount(); ++i ) {
 				std::string derivedID = fm->momentTensor(i)->derivedOriginID();
 				OriginPtr derived = Origin::Find(derivedID);
-				if ( !derived )
+				if ( !derived && _reader )
 					derived = Origin::Cast(_reader->getObject(Origin::TypeInfo(), derivedID));
 				if ( derived ) {
 					if ( derived->magnitudeCount() == 0 && _reader )
