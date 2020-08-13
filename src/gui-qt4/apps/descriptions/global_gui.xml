@@ -348,6 +348,20 @@
 								<description>The width of the pen.</description>
 							</parameter>
 						</group>
+						<group name="subGridPen">
+							<description>
+								Defines the pen of the secondary record grid.
+							</description>
+							<parameter name="color" type="color" default="00000000">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="DotLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="1.0">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
 						<group name="states">
 							<description>
 								Defines the background color of records depending on their state.
