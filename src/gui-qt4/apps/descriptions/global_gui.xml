@@ -1025,11 +1025,11 @@
 				</parameter>
 			</group>
 			<group name="eventlist">
-				<parameter name="visibleColumns" type="list:string" default="M, TP, Phases, Lat, Lon, Depth, Stat, Agency, Region, ID">
+				<parameter name="visibleColumns" type="list:string" default="M, MType, Phases, Lat, Lon, Depth, Stat, Agency, Region, ID">
 					<description>
 					Configure the columns of the event list that are visible initially.
 					The first column containing the origin time is always visible and cannot
-					be hidden. Possible values are: Type, M, TP, Phases, Lat, Lon, Depth, Stat, FM, Agency, Region, ID.
+					be hidden. Possible values are: Type, M, MTYPE, Phases, Lat, Lon, Depth, Stat, FM, Agency, Region, ID.
 					</description>
 				</parameter>
 				<parameter name="regions" type="list:string">

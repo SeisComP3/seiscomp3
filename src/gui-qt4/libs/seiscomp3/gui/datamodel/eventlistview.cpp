@@ -2020,9 +2020,17 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 		for ( size_t i = 0; i < cols.size(); ++i ) {
 			EventListColumns v;
 			if ( !v.fromString(cols[i]) ) {
-				std::cerr << "ERROR: eventlist.visibleColumns: invalid column name '"
-				          << cols[i] << "' at index " << i << ", ignoring" << std::endl;
-				continue;
+				if ( cols[i] != "TP" ) {
+					std::cerr << "ERROR: eventlist.visibleColumns: invalid column name '"
+					          << cols[i] << "' at index " << i << ", ignoring" << std::endl;
+					continue;
+				}
+				else {
+					v = COL_MTYPE;
+					std::cerr << "WARNING: eventlist.visibleColumns: name 'TP' "
+					             "has changed to 'MType', please update your configuration"
+					          << std::endl;
+				}
 			}
 
 			colVisibility[v] = true;
