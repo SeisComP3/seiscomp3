@@ -58,6 +58,8 @@ namespace Core {
    - Added Seiscomp::Gui::Axis::subTicks
    - Declared Seiscomp::Gui::Axis::updateLayout, sizeHint, draw and drawGrid virtual
    - Declared Seiscomp::Gui::Graph::unproject virtual
+   - Moved seismology/[locsat.h,eigv.h,chi2.h] to seismology/locator/
+   - Added seismology/locator/utils.h
 
  "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage

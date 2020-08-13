@@ -11,14 +11,12 @@
  ***************************************************************************/
 
 
-
-
 #ifndef SEISCOMP_AUTOLOC_LOCATOR
 #define SEISCOMP_AUTOLOC_LOCATOR
 #include <string>
 #include <map>
 
-#include <seiscomp3/seismology/locsat.h>
+#include <seiscomp3/seismology/locator/locsat.h>
 #include "datamodel.h"
 
 namespace Autoloc {

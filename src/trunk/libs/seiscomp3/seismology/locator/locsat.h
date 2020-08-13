@@ -11,9 +11,8 @@
  ***************************************************************************/
 
 
-
-#ifndef __SEISCOMP3_SEISMOLOGY_LOCSAT_H__
-#define __SEISCOMP3_SEISMOLOGY_LOCSAT_H__
+#ifndef SEISCOMP3_SEISMOLOGY_LOCSAT_H
+#define SEISCOMP3_SEISMOLOGY_LOCSAT_H
 
 
 #include <seiscomp3/core/exceptions.h>

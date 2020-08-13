@@ -17,8 +17,8 @@
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/system/environment.h>
-#include <seiscomp3/seismology/locsat.h>
 #include <seiscomp3/seismology/ttt.h>
+#include <seiscomp3/seismology/locator/locsat.h>
 #include <seiscomp3/math/geo.h>
 
 #include "locsat_internal.h"

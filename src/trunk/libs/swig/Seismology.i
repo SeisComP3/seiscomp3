@@ -58,7 +58,7 @@
 #include "seiscomp3/datamodel/routing_package.h"
 
 #include "seiscomp3/seismology/regions.h"
-#include "seiscomp3/seismology/locsat.h"
+#include "seiscomp3/seismology/locator/locsat.h"
 #include "seiscomp3/seismology/ttt.h"
 %}
 
@@ -94,5 +94,5 @@
 %include "seiscomp3/core.h"
 %include "seiscomp3/seismology/regions.h"
 %include "seiscomp3/seismology/locatorinterface.h"
-%include "seiscomp3/seismology/locsat.h"
+%include "seiscomp3/seismology/locator/locsat.h"
 %include "seiscomp3/seismology/ttt.h"

@@ -23,7 +23,7 @@
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/sensorlocation.h>
-#include <seiscomp3/seismology/locsat.h>
+#include <seiscomp3/seismology/locator/locsat.h>
 #include "util.h"
 #include "sc3adapters.h"
 #include "locator.h"

@@ -18,7 +18,7 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/utils/timer.h>
-#include <seiscomp3/seismology/locsat.h>
+#include <seiscomp3/seismology/locator/locsat.h>
 
 
 namespace Seiscomp {

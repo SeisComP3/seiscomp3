@@ -240,7 +240,7 @@ def setup(app):
     app.add_object_type('confval', 'confval', 'pair: %s; configuration value')
 
 pdf_stylesheets = ['sphinx','kerning','a4']
-pdf_documents = [ 
+pdf_documents = [
         ('index', u'SeisComP3', u'SeisComP3', u'GFZ Potsdam, gempa GmbH'),
     ]
 
@@ -249,3 +249,10 @@ pdf_appendices = []
 pdf_toc_depth = 3
 pdf_use_index = False
 pdf_use_modindex = False
+
+
+rst_prolog = """
+.. |scbin| replace:: `seiscomp`
+.. |scname| replace:: `SeisComP3`
+.. |gempa| replace:: `gempa`
+"""

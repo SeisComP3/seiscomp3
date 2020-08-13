@@ -42,7 +42,6 @@
 #include <seiscomp3/datamodel/journalentry.h>
 #include <seiscomp3/datamodel/publicobjectcache.h>
 #include <seiscomp3/seismology/regions.h>
-#include <seiscomp3/seismology/locsat.h>
 #include <seiscomp3/math/conversions.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/utils/misc.h>
