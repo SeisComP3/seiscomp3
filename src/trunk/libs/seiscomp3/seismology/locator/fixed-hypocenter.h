@@ -43,29 +43,29 @@ class SC_SYSTEM_CORE_API FixedHypocenter : public LocatorInterface {
 	//  Locator interface
 	// ----------------------------------------------------------------------
 	public:
-		virtual bool init(const Config::Config &config) override;
+		virtual bool init(const Config::Config &config);
 
 		//! Returns supported parameters to be changed.
-		virtual IDList parameters() const override;
+		virtual IDList parameters() const;
 
 		//! Returns the value of a parameter.
-		virtual std::string parameter(const std::string &name) const override;
+		virtual std::string parameter(const std::string &name) const;
 
 		//! Sets the value of a parameter.
 		virtual bool setParameter(const std::string &name,
-		                          const std::string &value) override;
+		                          const std::string &value);
 
-		virtual IDList profiles() const override;
-		virtual void setProfile(const std::string &name) override;
+		virtual IDList profiles() const;
+		virtual void setProfile(const std::string &name);
 
-		virtual int capabilities() const override;
+		virtual int capabilities() const;
 
-		virtual DataModel::Origin *locate(PickList& pickList) override;
+		virtual DataModel::Origin *locate(PickList& pickList);
 		virtual DataModel::Origin *locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  const Seiscomp::Core::Time& initTime) override;
+		                                  const Seiscomp::Core::Time& initTime);
 
-		virtual DataModel::Origin *relocate(const DataModel::Origin* origin) override;
+		virtual DataModel::Origin *relocate(const DataModel::Origin* origin);
 
 
 	private:

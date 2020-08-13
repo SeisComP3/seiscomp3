@@ -12,6 +12,29 @@
 
 
 #define SEISCOMP_COMPONENT FixedHypocenter
+
+
+#include <math.h>
+#include <stdio.h>
+
+
+namespace {
+
+
+#include "cephes/mconf.h"
+#include "cephes/const.c"
+#include "cephes/mtherr.c"
+#include "cephes/polevl.c"
+#include "cephes/gamma.c"
+#include "cephes/ndtri.c"
+#include "cephes/incbet.c"
+#include "cephes/incbi.c"
+#include "cephes/fdtr.c"
+
+
+}
+
+
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/math.h>
 #include <seiscomp3/math/mean.h>
@@ -27,17 +50,6 @@ using namespace Seiscomp::DataModel;
 
 
 namespace {
-
-
-#include "cephes/mconf.h"
-#include "cephes/const.c"
-#include "cephes/mtherr.c"
-#include "cephes/polevl.c"
-#include "cephes/gamma.c"
-#include "cephes/ndtri.c"
-#include "cephes/incbet.c"
-#include "cephes/incbi.c"
-#include "cephes/fdtr.c"
 
 
 double getTimeError(const Pick *pick, double defaultTimeError,
@@ -283,7 +295,7 @@ int FixedHypocenter::capabilities() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin *FixedHypocenter::locate(PickList &pickList) {
 	SEISCOMP_ERROR("This call is not supported, an origin is required");
-	return nullptr;
+	return 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -295,7 +307,7 @@ Origin *FixedHypocenter::locate(PickList &pickList,
                                 double initLat, double initLon, double initDepth,
                                 const Core::Time &initTime) {
 	SEISCOMP_ERROR("This call is not supported, an origin is required");
-	return nullptr;
+	return 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
