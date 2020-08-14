@@ -559,6 +559,7 @@ void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 							continue;
 						}
 
+						isSigned = true;
 						const X509 *cert;
 						if ( !cs.validate(header, reinterpret_cast<const char*>(digest_buffer),
 						                  digest_len, signature, &cert) ) {
@@ -595,7 +596,6 @@ void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 							}
 
 							const_cast<MSeedRecord*>(this)->_authenticationStatus = SIGNATURE_VALIDATED;
-							isSigned = true;
 						}
 
 						ECDSA_SIG_free(signature);
