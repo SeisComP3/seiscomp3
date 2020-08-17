@@ -22,21 +22,17 @@
 #include <seiscomp3/core.h>
 
 
-namespace Seiscomp
-{
-namespace Math
-{
-namespace Filtering
-{
+namespace Seiscomp {
+namespace Math {
+namespace Filtering {
 
 
-class SC_SYSTEM_CORE_API AlignmentError : public std::exception
-{
-  public:
-        AlignmentError(const char *txt)  { _txt = txt; }
-        const char* what() const throw() { return _txt; }
-  private:
-	const char *_txt;
+class SC_SYSTEM_CORE_API AlignmentError : public std::exception {
+	public:
+		AlignmentError(const char *txt)  { _txt = txt; }
+		const char* what() const throw() { return _txt; }
+	private:
+		const char *_txt;
 };
 
 // virtual base class that all filter classes should be derived from
@@ -162,15 +158,18 @@ SC_SYSTEM_CORE_API long next_power_of_2(long);
 template<typename TYPE>
 void cosRamp(std::vector<TYPE> &ramp, TYPE f1, TYPE f2);
 
+template <typename T>
+void cosRamp(size_t n, T *inout, size_t istart, size_t iend, size_t estart, size_t eend);
+
+
 } // namespace Seiscomp::Math::Filter
-
 } // namespace Seiscomp::Math
-
 } // namespace Seiscomp
 
 
 #include<seiscomp3/math/hilbert.ipp>
 #include<seiscomp3/math/minmax.ipp>
 #include<seiscomp3/math/decomp.ipp>
+
 
 #endif
