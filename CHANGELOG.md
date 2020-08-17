@@ -34,6 +34,8 @@
 
 * trunk
 
+  * Fixed Buttworth bandpass amplitude damping and made `BW = BW_BP`
+  * Added Butterworth bandstop filter (`BW_BS`)
   * Added Array.bytes() to Python wrappers (only)
   * QuakeLink client lib
     * Add support for QuakeLink API 2 which introduces format specific version
