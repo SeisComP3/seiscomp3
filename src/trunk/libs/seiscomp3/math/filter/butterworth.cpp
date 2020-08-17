@@ -38,7 +38,7 @@ REGISTER_INPLACE_FILTER(ButterworthHighpass,    "BW_HP");
 REGISTER_INPLACE_FILTER(ButterworthBandpass,    "BW_BP");
 REGISTER_INPLACE_FILTER(ButterworthBandstop,    "BW_BS");
 REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
-REGISTER_INPLACE_FILTER2(ButterworthHighLowpass, Proxy, "BW");
+REGISTER_INPLACE_FILTER2(ButterworthBandpass, Proxy, "BW");
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
