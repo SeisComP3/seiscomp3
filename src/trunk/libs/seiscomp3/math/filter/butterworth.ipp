@@ -11,17 +11,6 @@
  ***************************************************************************/
 
 
-// This file is included by "butterworth.cpp"
-
-std::vector<_Biquad> init_bw_biquads(size_t order, double f1, double f2, double fsamp, int type);
-
-#define BUTTERWORTH_HIGHPASS    0
-#define BUTTERWORTH_LOWPASS     1
-#define BUTTERWORTH_BANDPASS    2
-#define BUTTERWORTH_BANDSTOP    3
-#define BUTTERWORTH_HIGHLOWPASS 4 // combination of BUTTERWORTH_LOWPASS and BUTTERWORTH_HIGHPASS
-
-
 template<class TYPE>
 ButterworthLowpass<TYPE>::ButterworthLowpass(int order, double fmax, double fsamp)
 : _order(order), _fmax(fmax), _fsamp(0.0) {

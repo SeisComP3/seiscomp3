@@ -14,18 +14,19 @@
 #include <math.h>
 #include <vector>
 #include <complex>
+#include <stdexcept>
 
 #include <seiscomp3/math/filter/butterworth.h>
+
 
 namespace Seiscomp {
 namespace Math {
 namespace Filtering {
 namespace IIR {
 
+
 typedef std::complex<double> Complex;
 
-// load the template class definitions
-#include <seiscomp3/math/filter/butterworth.ipp>
 
 INSTANTIATE_INPLACE_FILTER(ButterworthLowpass,     SC_SYSTEM_CORE_API);
 INSTANTIATE_INPLACE_FILTER(ButterworthHighpass,    SC_SYSTEM_CORE_API);
@@ -40,9 +41,17 @@ REGISTER_INPLACE_FILTER(ButterworthBandstop,    "BW_BS");
 REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
 REGISTER_INPLACE_FILTER2(ButterworthBandpass, Proxy, "BW");
 
+#define BUTTERWORTH_HIGHPASS    0
+#define BUTTERWORTH_LOWPASS     1
+#define BUTTERWORTH_BANDPASS    2
+#define BUTTERWORTH_BANDSTOP    3
+#define BUTTERWORTH_HIGHLOWPASS 4 // combination of BUTTERWORTH_LOWPASS and BUTTERWORTH_HIGHPASS
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static std::vector<Complex> makepoles(int order) {
+
+namespace {
+
+
+std::vector<Complex> makepoles(int order) {
 	// Create a set of basic poles for a given filter order. For each
 	// conjugate pole pair only one pole is included
 
@@ -67,7 +76,7 @@ static std::vector<Complex> makepoles(int order) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static std::vector<_Biquad> poles2bp(const std::vector<Complex> poles, double fmin, double fmax) {
+std::vector<_Biquad> poles2bp(const std::vector<Complex> poles, double fmin, double fmax) {
 	// convert basic set of poles to an analog bandpass
 
 	double a = 2*M_PI * 2*M_PI * fmin*fmax;
@@ -130,7 +139,7 @@ static std::vector<_Biquad> poles2bp(const std::vector<Complex> poles, double fm
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static std::vector<_Biquad> poles2bs(const std::vector<Complex> poles, double fmin, double fmax) {
+std::vector<_Biquad> poles2bs(const std::vector<Complex> poles, double fmin, double fmax) {
 	// convert basic set of poles to an analog bandstop
 
 	double a = 2*M_PI * 2*M_PI * fmin*fmax;
@@ -192,7 +201,7 @@ static std::vector<_Biquad> poles2bs(const std::vector<Complex> poles, double fm
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static std::vector<_Biquad> poles2lp(const std::vector<Complex> poles, double fmax) {
+std::vector<_Biquad> poles2lp(const std::vector<Complex> poles, double fmax) {
 	// convert basic set of poles to an analog lowpass
 
 	double s = 1/(2*M_PI*fmax);
@@ -243,7 +252,7 @@ static std::vector<_Biquad> poles2lp(const std::vector<Complex> poles, double fm
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static std::vector<_Biquad> poles2hp(const std::vector<Complex> poles, double fmin) {
+std::vector<_Biquad> poles2hp(const std::vector<Complex> poles, double fmin) {
 	// convert basic set of poles to an analog highpass
 
 	double s = 1/(2*M_PI*fmin);
@@ -291,7 +300,7 @@ static std::vector<_Biquad> poles2hp(const std::vector<Complex> poles, double fm
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static void analog2digital(_Biquad &biquad) {
+void analog2digital(_Biquad &biquad) {
 	// convert a biquad from analog to digital
 
 	double c0 = biquad.b0, c1 = biquad.b1, c2 = biquad.b2;
@@ -315,7 +324,7 @@ static void analog2digital(_Biquad &biquad) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-static void analog2digital(std::vector<_Biquad>  &biquads) {
+void analog2digital(std::vector<_Biquad>  &biquads) {
 	// convert filter from analog to digital
 
 	for (std::vector<_Biquad>::iterator biq = biquads.begin(); biq != biquads.end(); ++biq)
@@ -421,8 +430,13 @@ std::vector<_Biquad> init_bw_biquads(size_t order, double fmin, double fmax, dou
 
 	return biquads;
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+}
+
+
+// load the template class definitions
+#include <seiscomp3/math/filter/butterworth.ipp>
 
 
 }	// namespace Seiscomp::Math::Filtering::IIR
