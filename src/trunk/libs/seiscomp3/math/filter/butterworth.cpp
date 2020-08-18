@@ -27,20 +27,6 @@ namespace IIR {
 
 typedef std::complex<double> Complex;
 
-
-INSTANTIATE_INPLACE_FILTER(ButterworthLowpass,     SC_SYSTEM_CORE_API);
-INSTANTIATE_INPLACE_FILTER(ButterworthHighpass,    SC_SYSTEM_CORE_API);
-INSTANTIATE_INPLACE_FILTER(ButterworthBandpass,    SC_SYSTEM_CORE_API);
-INSTANTIATE_INPLACE_FILTER(ButterworthBandstop,    SC_SYSTEM_CORE_API);
-INSTANTIATE_INPLACE_FILTER(ButterworthHighLowpass, SC_SYSTEM_CORE_API);
-
-REGISTER_INPLACE_FILTER(ButterworthLowpass,     "BW_LP");
-REGISTER_INPLACE_FILTER(ButterworthHighpass,    "BW_HP");
-REGISTER_INPLACE_FILTER(ButterworthBandpass,    "BW_BP");
-REGISTER_INPLACE_FILTER(ButterworthBandstop,    "BW_BS");
-REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
-REGISTER_INPLACE_FILTER2(ButterworthBandpass, Proxy, "BW");
-
 #define BUTTERWORTH_HIGHPASS    0
 #define BUTTERWORTH_LOWPASS     1
 #define BUTTERWORTH_BANDPASS    2
@@ -437,6 +423,20 @@ std::vector<_Biquad> init_bw_biquads(size_t order, double fmin, double fmax, dou
 
 // load the template class definitions
 #include <seiscomp3/math/filter/butterworth.ipp>
+
+
+INSTANTIATE_INPLACE_FILTER(ButterworthLowpass,     SC_SYSTEM_CORE_API);
+INSTANTIATE_INPLACE_FILTER(ButterworthHighpass,    SC_SYSTEM_CORE_API);
+INSTANTIATE_INPLACE_FILTER(ButterworthBandpass,    SC_SYSTEM_CORE_API);
+INSTANTIATE_INPLACE_FILTER(ButterworthBandstop,    SC_SYSTEM_CORE_API);
+INSTANTIATE_INPLACE_FILTER(ButterworthHighLowpass, SC_SYSTEM_CORE_API);
+
+REGISTER_INPLACE_FILTER(ButterworthLowpass,     "BW_LP");
+REGISTER_INPLACE_FILTER(ButterworthHighpass,    "BW_HP");
+REGISTER_INPLACE_FILTER(ButterworthBandpass,    "BW_BP");
+REGISTER_INPLACE_FILTER(ButterworthBandstop,    "BW_BS");
+REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
+REGISTER_INPLACE_FILTER2(ButterworthBandpass, Proxy, "BW");
 
 
 }	// namespace Seiscomp::Math::Filtering::IIR
