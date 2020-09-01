@@ -78,7 +78,18 @@ typedef pair<string,FDSNXML::Channel*> ChannelEpoch;
 
 
 bool epochLowerThan(const ChannelEpoch &e1, const ChannelEpoch &e2) {
-	return e1.second->startDate() < e2.second->startDate();
+	try {
+		return e1.second->startDate() < e2.second->startDate();
+	}
+	catch ( ... ) {
+		// At least one start date is not set
+		try {
+			e2.second->startDate();
+			return true;
+		}
+		catch ( ... ) {}
+		return false;
+	}
 }
 
 typedef list<ChannelEpoch> Epochs;
