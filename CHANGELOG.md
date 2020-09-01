@@ -49,7 +49,6 @@
       selectArchived() queries introduced by QuakeLink API 1
   * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
     than poles
-  * Fixed SDSArchive binary search
 
 * seedlink
 
@@ -98,6 +97,25 @@
   * Rename item `TP` to `MType` of parameter `eventlist.visibleColumns`
   * Add option to define symbol images for layer points defined in
     either BNA or FEP
+
+## Release 2018.327 patch23
+
+* scolv
+
+  * Fix latency display for time spans larger than an hour
+
+
+## Release 2018.327 patch22
+
+* fseed
+
+  * Fix print statement for Python2
+
+## Release 2018.327 patch21
+
+* trunk
+
+  * Fixed SDSArchive binary search
 
 ## Release 2018.327 patch20
 
