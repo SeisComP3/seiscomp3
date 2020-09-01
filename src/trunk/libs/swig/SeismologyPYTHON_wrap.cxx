@@ -4038,18 +4038,19 @@ namespace Swig {
 #define SWIGTYPE_p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t swig_types[584]
 #define SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t swig_types[585]
 #define SWIGTYPE_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t swig_types[586]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[587]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t swig_types[588]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[589]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[590]
-#define SWIGTYPE_p_traits_type swig_types[591]
-#define SWIGTYPE_p_unsigned_char swig_types[592]
-#define SWIGTYPE_p_unsigned_int swig_types[593]
-#define SWIGTYPE_p_unsigned_long_long swig_types[594]
-#define SWIGTYPE_p_unsigned_short swig_types[595]
-#define SWIGTYPE_p_value_type swig_types[596]
-static swig_type_info *swig_types[598];
-static swig_module_info swig_module = {swig_types, 597, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t swig_types[587]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[588]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t swig_types[589]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[590]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[591]
+#define SWIGTYPE_p_traits_type swig_types[592]
+#define SWIGTYPE_p_unsigned_char swig_types[593]
+#define SWIGTYPE_p_unsigned_int swig_types[594]
+#define SWIGTYPE_p_unsigned_long_long swig_types[595]
+#define SWIGTYPE_p_unsigned_short swig_types[596]
+#define SWIGTYPE_p_value_type swig_types[597]
+static swig_type_info *swig_types[599];
+static swig_module_info swig_module = {swig_types, 598, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -19535,6 +19536,7 @@ static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argume
 static swig_type_info _swigt__p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t = {"_p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t", "std::list< Seiscomp::TravelTime > *|std::list< Seiscomp::TravelTime,std::allocator< Seiscomp::TravelTime > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t = {"_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t", "std::map< std::string,std::string,std::less< std::string >,std::allocator< std::pair< std::string const,std::string > > > *|Seiscomp::Config::Variables *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t = {"_p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t", "Seiscomp::IO::ExportObjectList *|std::vector< Seiscomp::Core::BaseObject *,std::allocator< Seiscomp::Core::BaseObject * > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t = {"_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t", "std::vector< Seiscomp::Math::Filtering::IIR::BiquadCoefficients,std::allocator< Seiscomp::Math::Filtering::IIR::BiquadCoefficients > > *|Seiscomp::Math::Filtering::IIR::Biquads *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t = {"_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t", "std::vector< Seiscomp::Math::SeismometerResponse::FAP,std::allocator< Seiscomp::Math::SeismometerResponse::FAP > > *|Seiscomp::Math::SeismometerResponse::FAPs *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t = {"_p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t", "Seiscomp::Seismology::LocatorInterface::PickList *|std::vector< Seiscomp::Seismology::LocatorInterface::PickItem,std::allocator< Seiscomp::Seismology::LocatorInterface::PickItem > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t = {"_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t", "std::vector< std::complex< double >,std::allocator< std::complex< double > > > *|Seiscomp::Math::SeismometerResponse::Poles *|Seiscomp::Math::Restitution::Poles *|Seiscomp::Math::SeismometerResponse::Zeros *|Seiscomp::Math::Restitution::Zeros *", 0, 0, (void*)0, 0};
@@ -20134,6 +20136,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t,
   &_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,
+  &_swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t,
   &_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
@@ -20733,6 +20736,7 @@ static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__in
 static swig_cast_info _swigc__p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t[] = {  {&_swigt__p_Seiscomp__TravelTimeList, _p_Seiscomp__TravelTimeListTo_p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t, 0, 0},  {&_swigt__p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -21332,6 +21336,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__listT_Seiscomp__TravelTime_std__allocatorT_Seiscomp__TravelTime_t_t,
   _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   _swigc__p_std__vectorT_Seiscomp__Core__BaseObject_p_std__allocatorT_Seiscomp__Core__BaseObject_p_t_t,
+  _swigc__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   _swigc__p_std__vectorT_Seiscomp__Seismology__LocatorInterface__PickItem_std__allocatorT_Seiscomp__Seismology__LocatorInterface__PickItem_t_t,
   _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
