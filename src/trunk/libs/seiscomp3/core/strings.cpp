@@ -255,6 +255,9 @@ SC_SYSTEM_CORE_API bool fromString(bool& value, const std::string& str) {
 	char* endptr = NULL;
 	errno = 0;
 
+	if ( str.empty() )
+		return false;
+
 	if ( compareNoCase(str, "true") == 0 ) {
 		value = true;
 		return true;
