@@ -14,40 +14,49 @@
 // This file is included by "biquad.cpp"
 
 template<typename TYPE>
-Biquad<TYPE>::Biquad(double a0, double a1, double a2,
-	             double b0, double b1, double b2)
-	: _Biquad(a0, a1, a2, b0, b1, b2),
-	  InPlaceFilter<TYPE>() { }
+Biquad<TYPE>::Biquad(double b0, double b1, double b2,
+                     double a0, double a1, double a2)
+: InPlaceFilter<TYPE>()
+, coefficients(b0, b1, b2, a0, a1, a2) {
+	v1 = v2 = 0.;
+}
 
 template<typename TYPE>
-Biquad<TYPE>::Biquad(_Biquad const &other)
-	: _Biquad(other),
-	  InPlaceFilter<TYPE>() { }
+Biquad<TYPE>::Biquad(const BiquadCoefficients &coeff)
+: InPlaceFilter<TYPE>()
+, coefficients(coeff) {
+	v1 = v2 = 0.;
+}
 
 template<typename TYPE>
-Biquad<TYPE>::Biquad(Biquad<TYPE> const &bq)
-	: _Biquad(bq.a0, bq.a1, bq.a2, bq.b0, bq.b1, bq.b2),
-	  InPlaceFilter<TYPE>() { }
+Biquad<TYPE>::Biquad(const Biquad<TYPE> &other)
+: InPlaceFilter<TYPE>()
+, coefficients(other.coefficients) {
+	v1 = v2 = 0.;
+}
 
 template<typename TYPE>
-void Biquad<TYPE>::apply(int n, TYPE *inout)
-{
-	// here we really need optimum performance so we *don't*
-	// use the std::vector<>::iterator - *DO* *NOT* *CHANGE*
-	// (std::vector is guaranteed to be contiguous in memory)
-	TYPE *ff = inout; // no problem
-	for (int i=0;  i < n;  i++)
-	{	// XXX this assumes that b0==1 XXX
-		double v0 =      ff[i]  - b1*v1 - b2*v2;
-		ff[i]     =  TYPE(a0*v0 + a1*v1 + a2*v2);
+void Biquad<TYPE>::apply(int n, TYPE *inout) {
+	// This is the direct form 2 implementation according to
+	// https://en.wikipedia.org/wiki/Digital_biquad_filter#Direct_form_2
+	TYPE *ff = inout;
+	for ( int i = 0; i < n;  ++i ) {
+
+		// a0 is assumed to be 1
+		double v0 = ff[i] - coefficients.a1*v1 - coefficients.a2*v2;
+		ff[i]     = TYPE(coefficients.b0*v0 + coefficients.b1*v1 + coefficients.b2*v2);
 		v2 = v1; v1 = v0;
 	}
 }
 
 template<typename TYPE>
-InPlaceFilter<TYPE>* Biquad<TYPE>::clone() const
-{
-	return new Biquad<TYPE>(a0, a1, a2, b0, b1, b2);
+InPlaceFilter<TYPE>* Biquad<TYPE>::clone() const {
+	return new Biquad<TYPE>(coefficients);
+}
+
+template<typename TYPE>
+void Biquad<TYPE>::reset() {
+	v1 = v2 = 0.;
 }
 
 template<typename TYPE>
@@ -57,48 +66,29 @@ template<typename TYPE>
 int Biquad<TYPE>::setParameters(int n, const double *params) {
 	if ( n != 6 ) return 6;
 
-	set(params[0], params[1], params[2],
-	    params[3], params[4], params[5]);
+	reset();
+	coefficients.set(params[0], params[1], params[2],
+	                 params[3], params[4], params[5]);
 
 	return n;
 }
 
 template<typename TYPE>
-std::vector<TYPE> Biquad<TYPE>::filter(std::vector<TYPE> const &f)
-{
-	std::vector<TYPE> copy(f.begin(), f.end());
-	apply(copy.size(), &(copy[0]));
-	return copy;
-}
-
-
-
-
-
-
-template<typename TYPE>
 BiquadCascade<TYPE>::BiquadCascade() {}
 
 template<typename TYPE>
-BiquadCascade<TYPE>::BiquadCascade(BiquadCascade const &other)
-{
-	typename std::vector< Biquad<TYPE> >::const_iterator biq;
-	for (biq = other._biq.begin(); biq!=other._biq.end(); biq++)
-		_biq.push_back(*biq);
+BiquadCascade<TYPE>::BiquadCascade(const BiquadCascade &other) {
+	_biq = other._biq;
+	reset();
 }
-
-template<typename TYPE>
-BiquadCascade<TYPE>::~BiquadCascade() {}
 
 template<typename TYPE>
 int BiquadCascade<TYPE>::size() const { return _biq.size(); }
 
 template<typename TYPE>
-void BiquadCascade<TYPE>::apply(int n, TYPE *inout)
-{
-	typename std::vector< Biquad<TYPE> >::iterator biq;
-	for (biq = _biq.begin(); biq != _biq.end(); biq++)
-		biq->apply(n, inout);
+void BiquadCascade<TYPE>::apply(int n, TYPE *inout) {
+	for ( Biquad<TYPE> &biq : _biq )
+		biq.apply(n, inout);
 }
 
 template<typename TYPE>
@@ -111,47 +101,29 @@ InPlaceFilter<TYPE>* BiquadCascade<TYPE>::clone() const {
 	return new BiquadCascade<TYPE>(*this);
 }
 
-
 template<typename TYPE>
-std::vector<TYPE> BiquadCascade<TYPE>::filter (std::vector<TYPE> const &f)
-{
-	std::vector<TYPE> copy(f.begin(), f.end());
-	InPlaceFilter<TYPE>::apply(copy);
-	return copy;
+void BiquadCascade<TYPE>::reset() {
+	for ( Biquad<TYPE> &biq : _biq )
+		biq.reset();
 }
 
 template<typename TYPE>
-void BiquadCascade<TYPE>::reset()
-{
-	typename std::vector< Biquad<TYPE> >::iterator biq;
-	for (biq = _biq.begin(); biq != _biq.end(); biq++)
-		biq->reset();
-}
-
-template<typename TYPE>
-std::string BiquadCascade<TYPE>::print() const
-{
-	std::ostringstream s;
-	int i=0;
-	typename std::vector< Biquad<TYPE> >::const_iterator biq;
-	for (biq = _biq.begin(); biq != _biq.end(); biq++)
-		s << "Biquad #" << ++i << std::endl << (biq->print());
-	return s.str();
-}
-
-template<typename TYPE>
-void BiquadCascade<TYPE>::append(Biquad<TYPE> const &biq)
-{
+void BiquadCascade<TYPE>::append(Biquad<TYPE> const &biq) {
 	_biq.push_back(biq);
 }
 
-/*	
 template<typename TYPE>
-void BiquadCascade<TYPE>::extend(BiquadCascade const &other)
-{
-        typename std::vector< Biquad<TYPE> >::const_iterator biq;
-	for (biq = other._biq.begin(); biq!=other._biq.end(); biq++)
-		_biq.push_back(*biq);
+void BiquadCascade<TYPE>::set(const Biquads &biquads) {
+	_biq.clear();
+	for ( const BiquadCoefficients &biq : biquads )
+		_biq.push_back(biq);
 }
-*/
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const BiquadCascade<T> &b) {
+	int i = 0;
+	for ( const Biquad<T> &biq : b._biq )
+		os << "Biquad #" << ++i << std::endl << biq.coefficients;
+	return os;
+}
 

@@ -4,7 +4,6 @@ SET(FILTER_SOURCES
 	cutoff.cpp
 	biquad.cpp
 	butterworth.cpp
-	iirfilter.cpp
 	iirintegrate.cpp
 	iirdifferentiate.cpp
 	average.cpp
@@ -24,7 +23,6 @@ SET(FILTER_HEADERS
 	biquad.ipp
 	butterworth.h
 	butterworth.ipp
-	iirfilter.h
 	iirintegrate.h
 	iirdifferentiate.h
 	average.h

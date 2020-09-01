@@ -14,8 +14,9 @@
 #ifndef SEISCOMP_FILTERING_IIR_BUTTERWORTH_H
 #define SEISCOMP_FILTERING_IIR_BUTTERWORTH_H
 
+
 #include<seiscomp3/math/filter/biquad.h>
-#include<seiscomp3/math/filter/taper.h>
+
 
 namespace Seiscomp {
 namespace Math {
@@ -29,10 +30,10 @@ class ButterworthLowpass : public BiquadCascade<TYPE> {
 		ButterworthLowpass(int order = 3, double fmax = 0.7, double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp);
-		virtual int setParameters(int n, const double *params);
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
 
-		virtual InPlaceFilter<TYPE>* clone() const;
+		virtual InPlaceFilter<TYPE>* clone() const override;
 
 	private:
 		int _order;
@@ -46,9 +47,10 @@ class ButterworthHighpass : public BiquadCascade<TYPE> {
 		ButterworthHighpass(int order = 3, double fmin = 2.0, double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp);
-		virtual int setParameters(int n, const double *params);
-		virtual InPlaceFilter<TYPE>* clone() const;
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
+
+		virtual InPlaceFilter<TYPE>* clone() const override;
 
 	private:
 		int _order;
@@ -59,73 +61,52 @@ class ButterworthHighpass : public BiquadCascade<TYPE> {
 template<class TYPE>
 class ButterworthBandpass : public BiquadCascade<TYPE> {
 	public:
-		ButterworthBandpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp=0, bool init=false);
+		ButterworthBandpass(int order = 3, double fmin = 0.7, double fmax = 2.0,
+		                    double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp);
-		virtual int setParameters(int n, const double *params);
-		virtual InPlaceFilter<TYPE>* clone() const;
-		virtual void apply(int n, TYPE *inout);
-		void reset();
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
 
-		void handleGap(int n=0) {
-			_gapLength += n;
-			// the actual handling is postponed until next apply() call
-			//_init = true;
-		}
+		virtual InPlaceFilter<TYPE>* clone() const;
+
 
 	protected:
 		// configuration
 		int _order;
 		double _fmin, _fmax, _fsamp;
-
-		// initialization parameters
-		bool _init;
-		InitialTaper<TYPE> _taper;
-		int _gapLength;
-		TYPE _lastSample;
 };
 
 
 template<class TYPE>
 class ButterworthBandstop : public BiquadCascade<TYPE> {
 	public:
-		ButterworthBandstop(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp=0, bool init=false);
+		ButterworthBandstop(int order = 3, double fmin = 0.7, double fmax = 2.0,
+		                    double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp);
-		virtual int setParameters(int n, const double *params);
-		virtual InPlaceFilter<TYPE>* clone() const;
-		virtual void apply(int n, TYPE *inout);
-		void reset();
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
 
-		void handleGap(int n=0) {
-			_gapLength += n;
-			// the actual handling is postponed until next apply() call
-			//_init = true;
-		}
+		virtual InPlaceFilter<TYPE>* clone() const;
 
 	protected:
 		// configuration
 		int _order;
 		double _fmin, _fmax, _fsamp;
-
-		// initialization parameters
-		bool _init;
-		InitialTaper<TYPE> _taper;
-		int _gapLength;
-		TYPE _lastSample;
 };
 
 
 template<class TYPE>
 class ButterworthHighLowpass : public BiquadCascade<TYPE> {
 	public:
-		ButterworthHighLowpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp = 0);
+		ButterworthHighLowpass(int order = 3, double fmin = 0.7,
+		                       double fmax = 2.0, double fsamp = 0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp);
-		virtual int setParameters(int n, const double *params);
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
+
 		virtual InPlaceFilter<TYPE>* clone() const;
 
 	private:
@@ -139,6 +120,5 @@ class ButterworthHighLowpass : public BiquadCascade<TYPE> {
 } // namespace Seiscomp::Math
 } // namespace Seiscomp
 
-#endif
 
-// XXX Read biquad.cpp for additional information XXX
+#endif

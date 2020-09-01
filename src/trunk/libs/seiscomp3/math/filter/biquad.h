@@ -11,134 +11,161 @@
  ***************************************************************************/
 
 
-#ifndef _SEISCOMP_BIQUAD_H_
-#define _SEISCOMP_BIQUAD_H_
+#ifndef SEISCOMP_MATH_FILTER_BIQUAD_H
+#define SEISCOMP_MATH_FILTER_BIQUAD_H
 
-#include<vector>
-#include<string>
-#include<iostream>
+
+#include <vector>
+#include <string>
+#include <ostream>
 
 #include<seiscomp3/math/filter.h>
+
 
 namespace Seiscomp {
 namespace Math {
 namespace Filtering {
 namespace IIR {
 
-// Basic biquad class implementing type-independent functionality,
-// i.e. the actual filtering is not yet implemented; see Biquad<TYPE>
-class _Biquad
-{
-    public:
-	// initialize Biquad using 2x3 coefficients (default is identity)
-	_Biquad(double _a0=1, double _a1=0, double _a2=0,
-	        double _b0=1, double _b1=0, double _b2=0);
-	_Biquad(_Biquad const &other);
 
-	void set(double _a0, double _a1, double _a2,
-		 double _b0, double _b1, double _b2);
+/**
+ * Coefficients of a Biquad.
+ *
+ * Note the order of the coefficients passed to the constructor and the
+ * setter: the numerator coefficients (the b's) followed by the denominator
+ * coefficients (the a's).
+ *
+ * Also note that the coeffients are normalized and a0 is *always* assumed
+ * to be 1. This is not checked.
+ */
+struct BiquadCoefficients {
 
-	// compute the group delay at nsamp frequencies
-	int  delay (int nsamp, double *delay_val);
-	int  delay2(int nsamp, double *delay_val); // XXX preliminary
-	// compute the group delay of the biquad at a single frequency
-	int  delay_one(double freq /* 0...PI */, double *delay);
-	// reset the filter by erasing memory of past samples
-	void reset();
+	BiquadCoefficients(double b0 = 0, double b1 = 0, double b2 = 0,
+	                   double a0 = 1, double a1 = 0, double a2 = 0);
+	BiquadCoefficients(BiquadCoefficients const &bq);
 
-	// for debugging
-	std::string print() const;
+	void set(double b0, double b1, double b2,
+	         double a0, double a1, double a2);
 
 	// filter coefficients
-        double a0, a1, a2;
-        double b0, b1, b2;
-//  private:
-	// memory of past samples
-        double v1, v2;
+	double b0, b1, b2; // numerator coefficients
+	double a0, a1, a2; // denominator coefficients (a0==1)
 };
 
 
-// Template class to extend the type-independent _Biquad by the
-// type-dependent apply()/filter()-functions
+typedef std::vector<BiquadCoefficients> Biquads;
+
+
+std::ostream &operator<<(std::ostream &os, const BiquadCoefficients &biq);
+
+
+/**
+ * Template class to implement the filter interface for a single set of
+ * biquad coefficients.
+ */
 template<typename TYPE>
-class Biquad : public _Biquad, public InPlaceFilter<TYPE>
-{
-    public:
+class Biquad : public InPlaceFilter<TYPE> {
+	// ------------------------------------------------------------------
+	//  X'truction
+	// ------------------------------------------------------------------
+	public:
+		Biquad(double b0 = 0, double b1 = 0, double b2 = 0,
+		       double a0 = 1, double a1 = 0, double a2 = 0);
+		Biquad(const BiquadCoefficients &bq);
+		Biquad(const Biquad &bq);
 
-	Biquad(double a0=0, double a1=0, double a2=0,
-	       double b0=1, double b1=0, double b2=0);
-	Biquad(_Biquad const &other);
-	Biquad(Biquad const &bq);
-	~Biquad() {}
 
-	// apply filter to data vector **in*place**
-	void apply(int n, TYPE *inout);
+	// ------------------------------------------------------------------
+	//  Public methods
+	// ------------------------------------------------------------------
+	public:
+		// reset the filter by erasing memory of past samples
+		void reset();
 
-	// Implement InPlaceFilter interface with default values
-	void setSamplingFrequency(double fsamp);
-	int setParameters(int n, const double *params);
 
-	InPlaceFilter<TYPE>* clone() const;
+	// ------------------------------------------------------------------
+	//  InplaceFilter interface
+	// ------------------------------------------------------------------
+	public:
+		// apply filter to data vector **in*place**
+		virtual void apply(int n, TYPE *inout) override;
 
-	// filter data vector by returning a filtered copy
-	std::vector<TYPE> filter (std::vector<TYPE> const &f);
+		// Implement InPlaceFilter interface with default values
+		virtual void setSamplingFrequency(double fsamp) override;
+		virtual int setParameters(int n, const double *params) override;
 
-}; // class Biquad
+		virtual InPlaceFilter<TYPE> *clone() const override;
+
+
+	// ------------------------------------------------------------------
+	//  Public members
+	// ------------------------------------------------------------------
+	public:
+		// filter coefficients
+		BiquadCoefficients coefficients;
+		// filter memory
+		double v1, v2;
+
+};
 
 
 template<typename TYPE>
-class BiquadCascade : public InPlaceFilter<TYPE>
-{
-    public:
+class BiquadCascade : public InPlaceFilter<TYPE> {
+	// ------------------------------------------------------------------
+	//  X'truction
+	// ------------------------------------------------------------------
+	public:
+		BiquadCascade();
+		BiquadCascade(const BiquadCascade &other);
 
-	BiquadCascade();
-	BiquadCascade(BiquadCascade const &other);
-	~BiquadCascade();
 
-	// number of biquads comprising the cascade
-	int size() const;
+	// ------------------------------------------------------------------
+	//  Public methods
+	// ------------------------------------------------------------------
+	public:
+		// number of biquads comprising the cascade
+		int size() const;
 
-	// apply filter to data vector **in*place**
-	void apply(int n, TYPE *inout);
-	virtual InPlaceFilter<TYPE>* clone() const;
+		// resets the filter, i.e. erases the filter memory
+		void reset();
 
-	// filter data vector by returning a filtered copy
-	std::vector<TYPE> filter (std::vector<TYPE> const &f);
+		// append a single biquad to this cascade
+		void append(const Biquad<TYPE> &biq);
 
-	// filter data vectors **in*place**
-//	void apply(std::vector<int> &f);
-//	void apply(std::vector<double> &f);
+		void set(const Biquads &biquads);
 
-//	void delay(int nsamp, double *delay_val);
-//	void delay_one(double freq /* 0...PI */, double *delay);
 
-	// resets the filter, i.e. erases the filter memory
-	void reset();
+	// ------------------------------------------------------------------
+	//  InplaceFilter interface
+	// ------------------------------------------------------------------
+	public:
+		// apply filter to data vector **in*place**
+		virtual void apply(int n, TYPE *inout) override;
+		virtual InPlaceFilter<TYPE> *clone() const override;
 
-	// for debugging
-	std::string print() const;
+		virtual void setSamplingFrequency(double /*fsamp*/) override {}
+		virtual int setParameters(int n, const double *params) override ;
 
-	virtual void setSamplingFrequency(double /*fsamp*/) {} // FIXME
-	virtual int setParameters(int n, const double *params);
 
-	// append a single biquad to this cascade
-	void append(Biquad<TYPE> const &biq);
+	// ------------------------------------------------------------------
+	//  Protected members
+	// ------------------------------------------------------------------
+	protected:
+		std::vector< Biquad<TYPE> > _biq;
 
-//	void extend(BiquadCascade const &other);
+	template <typename T>
+	friend std::ostream &operator<<(std::ostream &os, const BiquadCascade<T> &b);
+};
 
-    protected:
-	void _clear() { _biq.clear(); }
 
-    private:
-	std::vector< Biquad<TYPE> > _biq;
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const BiquadCascade<T> &b);
 
-}; // class BiquadCascade
 
 } // namespace Seiscomp::Math::Filtering::IIR
 } // namespace Seiscomp::Math::Filtering
 } // namespace Seiscomp::Math
 } // namespace Seiscomp
 
-#endif
 
-// XXX Read biquad.cpp for additional information XXX
+#endif
