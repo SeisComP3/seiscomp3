@@ -117,8 +117,6 @@ FixedHypocenter::FixedHypocenter() {
 	_defaultTimeError = 1.0;
 	_usePickUncertainties = false;
 	_verbose = false;
-	_profiles.push_back("LOCSAT/iasp91");
-	_profiles.push_back("LOCSAT/tab");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -130,7 +128,18 @@ bool FixedHypocenter::init(const Config::Config &config) {
 	try {
 		_profiles = config.getStrings("FixedHypocenter.profiles");
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		try {
+			_profiles = config.getStrings("LOCSAT.profiles");
+			for ( size_t i = 0; i < _profiles.size(); ++i ) {
+				_profiles[i] = "LOCSAT/" + _profiles[i];
+			}
+		}
+		catch ( ... ) {
+			_profiles.push_back("LOCSAT/iasp91");
+			_profiles.push_back("LOCSAT/tab");
+		}
+	}
 
 	try {
 		_usePickUncertainties = config.getBool("FixedHypocenter.usePickUncertainties");
@@ -341,6 +350,8 @@ Origin *FixedHypocenter::relocate(const Origin *origin) {
 	travelTimes.resize(origin->arrivalCount());
 	arrivalWeights.resize(origin->arrivalCount());
 
+	int activeArrivals = 0;
+
 	for ( size_t i = 0; i < origin->arrivalCount(); ++i ) {
 		DataModel::Arrival *arrival = origin->arrival(i);
 
@@ -375,6 +386,12 @@ Origin *FixedHypocenter::relocate(const Origin *origin) {
 
 		double pickTime = double(pick->time().value());
 		double travelTime;
+
+		try {
+			if ( arrival->weight() > 0 )
+				++activeArrivals;
+		}
+		catch ( ... ) {}
 
 		try {
 			travelTime = _ttt->compute(arrival->phase().code().c_str(),
@@ -426,8 +443,12 @@ Origin *FixedHypocenter::relocate(const Origin *origin) {
 		weights.push_back(arrivalWeights[i]);
 	}
 
-	if ( originTimes.empty() )
-		throw LocatorException("Empty set of active arrivals");
+	if ( originTimes.empty() ) {
+		if ( !activeArrivals )
+			throw LocatorException("Empty set of active arrivals");
+		else
+			throw LocatorException("Could not compute travel times of active arrivals");
+	}
 
 	double originTime, originTimeError;
 	Math::Statistics::average(originTimes, weights, originTime, originTimeError);
@@ -436,6 +457,8 @@ Origin *FixedHypocenter::relocate(const Origin *origin) {
 	*newOrigin = *origin;
 	if ( !newOrigin )
 		throw LocatorException("Could not create origin");
+
+	newOrigin->setDepthType(DataModel::OriginDepthType(DataModel::OPERATOR_ASSIGNED));
 
 	// Copy arrivals
 
