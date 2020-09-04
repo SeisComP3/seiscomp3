@@ -7910,6 +7910,7 @@ void PickerView::modifyOrigin() {
 		tmpOrigin->setLongitude(dialog.longitude());
 		tmpOrigin->setTime(Core::Time(dialog.getTime_t()));
 		tmpOrigin->setDepth(RealQuantity(dialog.depth()));
+		tmpOrigin->setDepthType(OriginDepthType(OPERATOR_ASSIGNED));
 		tmpOrigin->setEvaluationMode(EvaluationMode(MANUAL));
 		tmpOrigin->setCreationInfo(ci);
 		for ( size_t i = 0; i < _origin->arrivalCount(); ++i ) {
