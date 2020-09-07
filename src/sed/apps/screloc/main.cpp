@@ -153,7 +153,7 @@ class Reloc : public Client::Application {
 		bool run() {
 			if ( !_originIDs.empty() ) {
 				for ( size_t i = 0; i < _originIDs.size(); ++i ) {
-					OriginPtr org = Origin::Cast(query()->getObject(Origin::TypeInfo(), _originIDs[i]));
+					OriginPtr org = _cache.get<Origin>(_originIDs[i]);
 					if ( !org ) {
 						cerr << "ERROR: Origin with id '" << _originIDs[i] << "' has not been found" << endl;
 						continue;
