@@ -71,7 +71,8 @@ Biquads poles2bp(const std::vector<Complex> &poles, double fmin, double fmax) {
 
 	Biquads biquads;
 
-	for ( const Complex &pole : poles ) {
+	for ( size_t i = 0; i < poles.size(); ++i ) {
+		const Complex &pole = poles[i];
 		double b0(0.0), b1(b), b2(0.0), a0, a1, a2;
 
 		if ( pole != Complex(-1) ) {
@@ -131,7 +132,8 @@ Biquads poles2bs(const std::vector<Complex> &poles, double fmin, double fmax) {
 
 	Biquads biquads;
 
-	for ( const Complex &pole : poles ) {
+	for ( size_t i = 0; i < poles.size(); ++i ) {
+		const Complex &pole = poles[i];
 		double b0(a), b1(0.0), b2(1.0), a0, a1, a2;
 
 		if ( pole != Complex(-1) ) {
@@ -190,8 +192,8 @@ Biquads poles2lp(const std::vector<Complex> &poles, double fmax) {
 
 	Biquads biquads;
 
-//	for ( size_t i = 0; i < poles.size(); ++i ) {
-	for ( const Complex &pole : poles ) {
+	for ( size_t i = 0; i < poles.size(); ++i ) {
+		const Complex &pole = poles[i];
 		double b0(1.0), b1(0.0), b2(0.0), a0, a1, a2;
 
 		if ( pole != Complex(-1) ) {
@@ -238,7 +240,8 @@ Biquads poles2hp(const std::vector<Complex> &poles, double fmin) {
 
 	Biquads biquads;
 
-	for ( const Complex &pole : poles ) {
+	for ( size_t i = 0; i < poles.size(); ++i ) {
+		const Complex &pole = poles[i];
 		double b0, b1, b2, a0, a1, a2;
 
 		if ( pole != Complex(-1) ) {
@@ -301,8 +304,8 @@ void analog2digital(BiquadCoefficients &biquad) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void analog2digital(Biquads &biquads) {
 	// convert filter from analog to digital
-	for ( BiquadCoefficients &biq : biquads )
-		analog2digital(biq);
+	for ( size_t i = 0; i < biquads.size(); ++i )
+		analog2digital(biquads[i]);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

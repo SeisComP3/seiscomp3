@@ -87,8 +87,8 @@ int BiquadCascade<TYPE>::size() const { return _biq.size(); }
 
 template<typename TYPE>
 void BiquadCascade<TYPE>::apply(int n, TYPE *inout) {
-	for ( Biquad<TYPE> &biq : _biq )
-		biq.apply(n, inout);
+	for ( size_t i = 0; i < _biq.size(); ++i )
+		_biq[i].apply(n, inout);
 }
 
 template<typename TYPE>
@@ -103,8 +103,8 @@ InPlaceFilter<TYPE>* BiquadCascade<TYPE>::clone() const {
 
 template<typename TYPE>
 void BiquadCascade<TYPE>::reset() {
-	for ( Biquad<TYPE> &biq : _biq )
-		biq.reset();
+	for ( size_t i = 0; i < _biq.size(); ++i )
+		_biq[i].reset();
 }
 
 template<typename TYPE>
