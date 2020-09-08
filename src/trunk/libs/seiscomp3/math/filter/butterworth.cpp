@@ -14,6 +14,7 @@
 #include <math.h>
 #include <vector>
 #include <complex>
+#include <stdexcept>
 
 #include <seiscomp3/math/filter/butterworth.h>
 

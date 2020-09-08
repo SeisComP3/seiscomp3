@@ -115,15 +115,14 @@ void BiquadCascade<TYPE>::append(Biquad<TYPE> const &biq) {
 template<typename TYPE>
 void BiquadCascade<TYPE>::set(const Biquads &biquads) {
 	_biq.clear();
-	for ( const BiquadCoefficients &biq : biquads )
-		_biq.push_back(biq);
+	for ( size_t i = 0; i < biquads.size(); ++i )
+		_biq.push_back(biquads[i]);
 }
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const BiquadCascade<T> &b) {
-	int i = 0;
-	for ( const Biquad<T> &biq : b._biq )
-		os << "Biquad #" << ++i << std::endl << biq.coefficients;
+	for ( size_t i = 0; i < b._biq.size(); ++i )
+		os << "Biquad #" << i << std::endl << b._biq.coefficients;
 	return os;
 }
 

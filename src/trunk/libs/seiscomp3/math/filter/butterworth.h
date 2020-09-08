@@ -30,10 +30,10 @@ class ButterworthLowpass : public BiquadCascade<TYPE> {
 		ButterworthLowpass(int order = 3, double fmax = 0.7, double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
-		virtual InPlaceFilter<TYPE>* clone() const override;
+		virtual InPlaceFilter<TYPE>* clone() const;
 
 	private:
 		int _order;
@@ -47,10 +47,10 @@ class ButterworthHighpass : public BiquadCascade<TYPE> {
 		ButterworthHighpass(int order = 3, double fmin = 2.0, double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
-		virtual InPlaceFilter<TYPE>* clone() const override;
+		virtual InPlaceFilter<TYPE>* clone() const;
 
 	private:
 		int _order;
@@ -65,8 +65,8 @@ class ButterworthBandpass : public BiquadCascade<TYPE> {
 		                    double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
 		virtual InPlaceFilter<TYPE>* clone() const;
 
@@ -85,8 +85,8 @@ class ButterworthBandstop : public BiquadCascade<TYPE> {
 		                    double fsamp=0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
 		virtual InPlaceFilter<TYPE>* clone() const;
 
@@ -104,8 +104,8 @@ class ButterworthHighLowpass : public BiquadCascade<TYPE> {
 		                       double fmax = 2.0, double fsamp = 0);
 
 	public:
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
 		virtual InPlaceFilter<TYPE>* clone() const;
 

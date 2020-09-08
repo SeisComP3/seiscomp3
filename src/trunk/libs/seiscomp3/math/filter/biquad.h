@@ -88,13 +88,13 @@ class Biquad : public InPlaceFilter<TYPE> {
 	// ------------------------------------------------------------------
 	public:
 		// apply filter to data vector **in*place**
-		virtual void apply(int n, TYPE *inout) override;
+		virtual void apply(int n, TYPE *inout);
 
 		// Implement InPlaceFilter interface with default values
-		virtual void setSamplingFrequency(double fsamp) override;
-		virtual int setParameters(int n, const double *params) override;
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
-		virtual InPlaceFilter<TYPE> *clone() const override;
+		virtual InPlaceFilter<TYPE> *clone() const;
 
 
 	// ------------------------------------------------------------------
@@ -140,11 +140,11 @@ class BiquadCascade : public InPlaceFilter<TYPE> {
 	// ------------------------------------------------------------------
 	public:
 		// apply filter to data vector **in*place**
-		virtual void apply(int n, TYPE *inout) override;
-		virtual InPlaceFilter<TYPE> *clone() const override;
+		virtual void apply(int n, TYPE *inout);
+		virtual InPlaceFilter<TYPE> *clone() const;
 
-		virtual void setSamplingFrequency(double /*fsamp*/) override {}
-		virtual int setParameters(int n, const double *params) override ;
+		virtual void setSamplingFrequency(double /*fsamp*/) {}
+		virtual int setParameters(int n, const double *params);
 
 
 	// ------------------------------------------------------------------
