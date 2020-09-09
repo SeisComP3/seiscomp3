@@ -115,7 +115,7 @@ FixedHypocenter::FixedHypocenter() {
 	_degreesOfFreedom = 8;
 	_confidenceLevel = 0.9;
 	_defaultTimeError = 1.0;
-	_usePickUncertainties = false;
+	_usePickUncertainties = true;
 	_verbose = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
