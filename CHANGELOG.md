@@ -49,6 +49,8 @@
       selectArchived() queries introduced by QuakeLink API 1
   * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
     than poles
+  * Add FixedHypocenter locator which just inverts for origin time by fixing
+    the hypocenter. Any travel time tables available in SeisComP are supported.
 
 * seedlink
 
