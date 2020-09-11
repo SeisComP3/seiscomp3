@@ -172,6 +172,9 @@ class SC_GUI_API EventListView : public QWidget {
 		void selectEvent(int index);
 		void selectEventID(const std::string& publicID);
 
+		void setPreviousEvent();
+		void setNextEvent();
+
 		void readFromDatabase();
 		void readFromDatabase(const Seiscomp::Gui::EventListView::Filter&);
 		void clear();

@@ -785,6 +785,10 @@ MainFrame::MainFrame(){
 	        _originLocator, SLOT(undo()));
 	connect(_ui.actionRedo, SIGNAL(triggered(bool)),
 	        _originLocator, SLOT(redo()));
+	connect(_ui.actionPreviousEvent, SIGNAL(triggered(bool)),
+	        _eventList, SLOT(setPreviousEvent()));
+	connect(_ui.actionNextEvent, SIGNAL(triggered(bool)),
+	        _eventList, SLOT(setNextEvent()));
 	connect(_ui.actionCreateArtificialOrigin, SIGNAL(triggered(bool)),
 	        _originLocator, SLOT(createArtificialOrigin()));
 	connect(_ui.actionOpen, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
