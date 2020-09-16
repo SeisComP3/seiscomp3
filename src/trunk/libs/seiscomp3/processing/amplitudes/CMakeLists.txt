@@ -1,4 +1,5 @@
 SET(AMPS_SOURCES
+	a5_2.cpp
 	mBc.cpp
 	mBc_measure.cpp
 	mb.cpp
