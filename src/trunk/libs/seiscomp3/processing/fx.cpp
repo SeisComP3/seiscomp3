@@ -27,7 +27,9 @@ namespace Processing {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FX::Environment::Environment() : receiver(0), pick(0) {}
+FX::Environment::Environment(const DataModel::SensorLocation *sloc,
+                             const DataModel::Pick           *p)
+: receiver(sloc), pick(p) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -57,6 +59,15 @@ void FX::setDefault() {
 	setNoiseEnd(-1);
 	setSignalStart(-1);
 	setSignalEnd(5);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FX::setTrigger(const Core::Time &trigger) {
+	_trigger = trigger;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -95,6 +106,15 @@ void FX::setEnvironment(const DataModel::SensorLocation *receiver,
                         const DataModel::Pick *pick) {
 	_environment.receiver = receiver;
 	_environment.pick = pick;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FX::setPublishFunction(const PublishFunc &func) {
+	_func = func;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

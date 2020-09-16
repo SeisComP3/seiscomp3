@@ -244,7 +244,7 @@ void Application::registerProcessor(const std::string& networkCode,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::registerProcessor(const DataModel::WaveformStreamID &wfid,
-			            TimeWindowProcessor *proc) {
+                                    TimeWindowProcessor *proc) {
 	registerProcessor(wfid.networkCode(),
 		          wfid.stationCode(),
 		          wfid.locationCode(),

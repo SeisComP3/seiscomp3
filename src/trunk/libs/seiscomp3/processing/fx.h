@@ -50,7 +50,8 @@ class SC_SYSTEM_CLIENT_API FX : public TimeWindowProcessor {
 		};
 
 		struct Environment {
-			Environment();
+			Environment(const DataModel::SensorLocation *sloc = 0,
+			            const DataModel::Pick           *pick = 0);
 
 			const DataModel::SensorLocation *receiver;
 			const DataModel::Pick           *pick;

@@ -38,6 +38,7 @@ namespace Processing {
 
 namespace {
 
+
 template <typename T>
 T cov(size_t n, const T *data1, const T *data2) {
 	T sum = T(0.0);
@@ -45,6 +46,29 @@ T cov(size_t n, const T *data1, const T *data2) {
 		sum += *data1 * *data2;
 	return sum / T(n);
 }
+
+template <typename T>
+ostream &operator<<(ostream &os, const Math::Vector3<T> &v) {
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const Math::Matrix3<T> &m) {
+	os << "    " << m.c._11 << "  " << m.c._12 << "  " << m.c._13 << endl;
+	os << "    " << m.c._21 << "  " << m.c._22 << "  " << m.c._23 << endl;
+	os << "    " << m.c._31 << "  " << m.c._32 << "  " << m.c._33;
+	return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const Math::Tensor2S<T> &t) {
+	os << "    " << t._11 << "  " << t._12 << "  " << t._13 << endl;
+	os << "    " << t._12 << "  " << t._22 << "  " << t._23 << endl;
+	os << "    " << t._13 << "  " << t._23 << "  " << t._33;
+	return os;
+}
+
 
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -395,7 +419,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 	if ( _dumpData ) {
 		ofstream ofs;
 		string fn =
-			"fx-" +
+			"idc-" +
 			_stream.lastRecord->networkCode() + "." +
 			_stream.lastRecord->stationCode() + "." +
 			_stream.lastRecord->locationCode() + "." +
@@ -422,7 +446,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 	_result = Core::None;
 
 #if IDC_DEBUG
-	cerr << "[FX " << _stream.lastRecord->streamID() << "]" << endl;
+	cerr << "[IDC " << _stream.lastRecord->streamID() << "]" << endl;
 
 	size_t maxIntervalStart = 0;
 	size_t maxIntervalEnd = 0;
@@ -432,7 +456,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 	if ( _dumpData ) {
 		string fn =
-			"fx-" +
+			"idc-" +
 			_stream.lastRecord->networkCode() + "." +
 			_stream.lastRecord->stationCode() + "." +
 			_stream.lastRecord->locationCode() + "." +
@@ -497,7 +521,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 		cerr << "    " << eigen.n2 << endl;
 		cerr << "    " << eigen.n3 << endl;
 		cerr << "    > Eigenvalues" << endl;
-		cerr << "    " << Vector3d(eigen.a1, eigen.a2, eigen.a3) << endl;
+		cerr << "    " << Math::Vector3d(eigen.a1, eigen.a2, eigen.a3) << endl;
 #endif
 
 		double rectiLinearity = 2.0 * eigen.a1;
@@ -631,8 +655,15 @@ void IDCFeatureExtraction::finalizePick(DataModel::Pick *pick) const {
 		return;
 	}
 
-	pick->setBackazimuth(DataModel::RealQuantity(_result->backAzimuth, _result->backAzimuthUncertainty));
-	pick->setHorizontalSlowness(DataModel::RealQuantity(_result->slowness, _result->slownessUncertainty));
+	if ( _result->backAzimuthUncertainty >= 0.0 )
+		pick->setBackazimuth(DataModel::RealQuantity(_result->backAzimuth, _result->backAzimuthUncertainty));
+	else
+		pick->setBackazimuth(DataModel::RealQuantity(_result->backAzimuth));
+
+	if ( _result->slownessUncertainty >= 0.0 )
+		pick->setHorizontalSlowness(DataModel::RealQuantity(_result->slowness, _result->slownessUncertainty));
+	else
+		pick->setHorizontalSlowness(DataModel::RealQuantity(_result->slowness));
 
 	DataModel::CommentPtr comment(new DataModel::Comment());
 	comment->setId("IDC:rectilinearity");

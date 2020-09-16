@@ -137,6 +137,9 @@ class Config {
 		// The secondary picker type to use
 		std::string secondaryPickerType;
 
+		// Feature extraction
+		std::string featureExtractionType;
+
 		// Whether kill previously started secondary pickers when a new
 		// primary pick has been declared
 		bool        killPendingSecondaryProcessors;

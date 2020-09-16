@@ -138,6 +138,9 @@ void Picker::Config::init(const Client::Application *app) {
 	try { secondaryPickerType = app->configGetString("spicker"); }
 	catch ( ... ) {}
 
+	try { featureExtractionType = app->configGetString("fx"); }
+	catch ( ... ) {}
+
 	try { killPendingSecondaryProcessors = app->configGetBool("killPendingSPickers"); }
 	catch ( ... ) {}
 

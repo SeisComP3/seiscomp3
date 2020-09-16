@@ -347,6 +347,26 @@ bool App::init() {
 		}
 	}
 
+	if ( !_config.featureExtractionType.empty() ) {
+		FXPtr proc = FXFactory::Create(_config.featureExtractionType.c_str());
+		if ( proc == NULL ) {
+			SEISCOMP_ERROR("Unknown fx: %s", _config.featureExtractionType.c_str());
+			return false;
+		}
+
+		if ( proc->usedComponent() == WaveformProcessor::Horizontal ||
+		     proc->usedComponent() == WaveformProcessor::Any ||
+		     proc->usedComponent() == WaveformProcessor::FirstHorizontal ) {
+			acquireComps[1] = true;
+		}
+
+		if ( proc->usedComponent() == WaveformProcessor::Horizontal ||
+		     proc->usedComponent() == WaveformProcessor::Any ||
+		     proc->usedComponent() == WaveformProcessor::SecondHorizontal ) {
+			acquireComps[2] = true;
+		}
+	}
+
 	std::string logAmplTypes;
 	for ( StringSet::iterator it = _config.amplitudeList.begin();
 	      it != _config.amplitudeList.end(); ) {
@@ -906,6 +926,87 @@ void App::processorFinished(const Record *rec, WaveformProcessor *wp) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool App::addFeatureExtractor(Seiscomp::DataModel::Pick *pick,
+                              DataModel::Amplitude *amp,
+                              const Record *rec, bool isPrimary) {
+	// Add secondary picker
+	FXPtr proc = FXFactory::Create(_config.featureExtractionType.c_str());
+	if ( !proc ) {
+		SEISCOMP_WARNING("Could not create fx: %s", _config.featureExtractionType.c_str());
+		this->exit(1);
+		return false;
+	}
+
+	proc->setTrigger(pick->time().value());
+	proc->setEnvironment(
+		Client::Inventory::Instance()->getSensorLocation(
+			pick->waveformID().networkCode(),
+			pick->waveformID().stationCode(),
+			pick->waveformID().locationCode(),
+			pick->time().value()
+		),
+		pick
+	);
+	proc->setPublishFunction(
+		boost::bind(
+			&App::emitFXPick, this,
+			Seiscomp::DataModel::PickPtr(pick),
+			Seiscomp::DataModel::AmplitudePtr(amp),
+			isPrimary,
+			_1, _2
+		)
+	);
+
+	const DataModel::WaveformStreamID waveformID(waveformStreamID(rec));
+	const std::string &n = rec->networkCode();
+	const std::string &s = rec->stationCode();
+	const std::string &l = rec->locationCode();
+	std::string c = rec->channelCode();
+
+	if ( !initProcessor(proc.get(), proc->usedComponent(), pick->time().value(), rec->streamID(), waveformID, true) )
+		return false;
+
+	SEISCOMP_DEBUG("%s: created fx %s (rec ref: %d)",
+	               rec->streamID().c_str(), _config.featureExtractionType.c_str(),
+	               rec->referenceCount());
+
+	switch ( proc->usedComponent() ) {
+		case Processing::WaveformProcessor::Vertical:
+			c = proc->streamConfig(Processing::WaveformProcessor::VerticalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			break;
+		case Processing::WaveformProcessor::FirstHorizontal:
+			c = proc->streamConfig(Processing::WaveformProcessor::FirstHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			break;
+		case Processing::WaveformProcessor::SecondHorizontal:
+			c = proc->streamConfig(Processing::WaveformProcessor::SecondHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			break;
+		case Processing::WaveformProcessor::Horizontal:
+			c = proc->streamConfig(Processing::WaveformProcessor::FirstHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			c = proc->streamConfig(Processing::WaveformProcessor::SecondHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			break;
+		case Processing::WaveformProcessor::Any:
+			c = proc->streamConfig(Processing::WaveformProcessor::VerticalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			c = proc->streamConfig(Processing::WaveformProcessor::FirstHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			c = proc->streamConfig(Processing::WaveformProcessor::SecondHorizontalComponent).code();
+			addProcessor(n, s, l, c, proc.get());
+			break;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const std::string &pickID) {
 	// Add secondary picker
 	SecondaryPickerPtr proc = SecondaryPickerFactory::Create(_config.secondaryPickerType.c_str());
@@ -1228,67 +1329,10 @@ void App::emitPPick(const Processing::Picker *proc,
 		SEISCOMP_DEBUG("  pickID   %s", amp->pickID().c_str());
 	}
 
-#ifdef LOG_PICKS
-	if ( !isMessagingEnabled() && !_ep ) {
-		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
-		       res.time.toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
-		       res.record->networkCode().c_str(), res.record->stationCode().c_str(),
-		       res.record->channelCode().c_str(),
-		       res.record->locationCode().empty()?"__":res.record->locationCode().c_str(),
-		       res.snr, -1.0, -1.0, 'A', pick->publicID().c_str());
-	}
-#endif
-
-	SEISCOMP_DEBUG("%s: emit P pick %s", res.record->streamID().c_str(), pick->publicID().c_str());
-	logObject(_logPicks, now);
-	logObject(_logAmps, now);
-
-	if ( connection() && !_config.test ) {
-		// Send pick
-		DataModel::NotifierPtr n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, pick.get());
-		DataModel::NotifierMessagePtr m = new DataModel::NotifierMessage;
-		m->attach(n.get());
-		connection()->send(m.get());
-		++_sentMessages;
-
-		// Send amplitude
-		if ( amp ) {
-			n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, amp.get());
-			m = new DataModel::NotifierMessage;
-			m->attach(n.get());
-			connection()->send(_config.amplitudeGroup, m.get());
-			++_sentMessages;
-		}
-	}
-
-	if ( _ep ) {
-		_ep->add(pick.get());
-		if ( amp )
-			_ep->add(amp.get());
-	}
-
-	if ( !_config.secondaryPickerType.empty() )
-		addSecondaryPicker(res.time, res.record, pick->publicID());
-
-	if ( _config.calculateAmplitudes ) {
-		for ( StringSet::iterator it = _config.amplitudeList.begin();
-		      it != _config.amplitudeList.end(); ++it ) {
-			AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(it->c_str());
-			if ( !proc ) continue;
-
-			proc->setTrigger(res.time);
-			addAmplitudeProcessor(proc.get(), res.record, pick.get());
-		}
-	}
-
-	// Request a sync token every n messages to not flood the message bus
-	// and to prevent a disconnect by the master
-	if ( _sentMessages > MESSAGE_LIMIT ) {
-		_sentMessages = 0;
-		// Tell the record acquisition to request synchronization and to
-		// stop sending records until the sync is completed.
-		SEISCOMP_DEBUG("Synchronize with messaging");
-		requestSync();
+	if ( _config.featureExtractionType.empty()
+	  || !addFeatureExtractor(pick.get(), amp.get(), res.record, true) ) {
+		sendPick(pick.get(), amp.get(), res.record, true);
+		SEISCOMP_DEBUG("%s: emit P pick %s", res.record->streamID().c_str(), pick->publicID().c_str());
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1360,46 +1404,10 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 		pick->add(comment.get());
 	}
 
-#ifdef LOG_PICKS
-	if ( !isMessagingEnabled() && !_ep ) {
-		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
-		       res.time.toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
-		       res.record->networkCode().c_str(), res.record->stationCode().c_str(),
-		       res.record->channelCode().c_str(),
-		       res.record->locationCode().empty()?"__":res.record->locationCode().c_str(),
-		       res.snr, -1.0, -1.0, 'A', pick->publicID().c_str());
-	}
-#endif
-
-	SEISCOMP_DEBUG("%s: emit S pick %s", res.record->streamID().c_str(), pick->publicID().c_str());
-	logObject(_logPicks, now);
-
-	if ( connection() && !_config.test ) {
-		// Send pick
-		DataModel::NotifierPtr n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, pick.get());
-		DataModel::NotifierMessagePtr m = new DataModel::NotifierMessage;
-		m->attach(n.get());
-
-		if ( comment ) {
-			n = new DataModel::Notifier(pick->publicID(), DataModel::OP_ADD, comment.get());
-			m->attach(n.get());
-		}
-
-		connection()->send(m.get());
-		++_sentMessages;
-	}
-
-	if ( _ep )
-		_ep->add(pick.get());
-
-	// Request a sync token every n messages to not flood the message bus
-	// and to prevent a disconnect by the master
-	if ( _sentMessages > MESSAGE_LIMIT ) {
-		_sentMessages = 0;
-		// Tell the record acquisition to request synchronization and to
-		// stop sending records until the sync is completed.
-		SEISCOMP_DEBUG("Synchronize with messaging");
-		requestSync();
+	if ( _config.featureExtractionType.empty()
+	  || !addFeatureExtractor(pick.get(), NULL, res.record, false) ) {
+		sendPick(pick.get(), NULL, res.record, false);
+		SEISCOMP_DEBUG("%s: emit S pick %s", res.record->streamID().c_str(), pick->publicID().c_str());
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1448,44 +1456,101 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 
 	static_cast<const Detector*>(proc)->setPickID(pick->publicID());
 
+	if ( _config.featureExtractionType.empty()
+	  || !addFeatureExtractor(pick.get(), 0, rec, true) )
+		sendPick(pick.get(), NULL, rec, true);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::emitFXPick(Seiscomp::DataModel::PickPtr pick,
+                     DataModel::AmplitudePtr amp,
+                     bool isPrimary,
+                     const Processing::FX *proc,
+	                 const Processing::FX::Result &res) {
+	proc->finalizePick(pick.get());
+	sendPick(pick.get(), amp.get(), res.record, isPrimary);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void App::sendPick(Seiscomp::DataModel::Pick *pick, DataModel::Amplitude *amp,
+                   const Record *rec, bool isPrimary) {
 #ifdef LOG_PICKS
 	if ( !isMessagingEnabled() && !_ep ) {
 		//cout << pick.get();
 		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
 		       pick->time().value().toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
-		       rec->networkCode().c_str(), rec->stationCode().c_str(),
-		       rec->channelCode().c_str(),
-		       rec->locationCode().empty()?"__":rec->locationCode().c_str(),
-		       -1.0, -1.0, -1.0, statusFlag(pick.get()),
+		       pick->waveformID().networkCode().c_str(),
+		       pick->waveformID().stationCode().c_str(),
+		       pick->waveformID().channelCode().c_str(),
+		       pick->waveformID().locationCode().empty()?"__":pick->waveformID().locationCode().c_str(),
+		       -1.0, -1.0, -1.0, statusFlag(pick),
 		       pick->publicID().c_str());
 	}
 #endif
 
-	SEISCOMP_DEBUG("%s: emit detection %s", rec->streamID().c_str(), pick->publicID().c_str());
+	SEISCOMP_DEBUG("%s.%s.%s.%s: emit detection %s",
+	               pick->waveformID().networkCode().c_str(),
+	               pick->waveformID().stationCode().c_str(),
+	               pick->waveformID().locationCode().c_str(),
+	               pick->waveformID().channelCode().c_str(),
+	               pick->publicID().c_str());
+	Core::Time now = Core::Time::GMT();
+
 	logObject(_logPicks, now);
+	if ( amp )
+		logObject(_logAmps, now);
 
 	if ( connection() && !_config.test ) {
-		DataModel::NotifierPtr n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, pick.get());
+		DataModel::NotifierPtr n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, pick);
 		DataModel::NotifierMessagePtr m = new DataModel::NotifierMessage;
 		m->attach(n.get());
+
+		for ( size_t i = 0; i < pick->commentCount(); ++i ) {
+			n = new DataModel::Notifier(pick->publicID(), DataModel::OP_ADD, pick->comment(i));
+			m->attach(n.get());
+		}
+
 		connection()->send(m.get());
 		++_sentMessages;
+
+		// Send amplitude
+		if ( amp ) {
+			n = new DataModel::Notifier("EventParameters", DataModel::OP_ADD, amp);
+			m = new DataModel::NotifierMessage;
+			m->attach(n.get());
+			connection()->send(_config.amplitudeGroup, m.get());
+			++_sentMessages;
+		}
 	}
 
-	if ( _ep )
-		_ep->add(pick.get());
+	if ( _ep ) {
+		_ep->add(pick);
+		if ( amp )
+			_ep->add(amp);
+	}
 
-	if ( !_config.secondaryPickerType.empty() )
-		addSecondaryPicker(time, rec, pick->publicID());
+	if ( isPrimary ) {
+		if ( !_config.secondaryPickerType.empty() ) {
+			addSecondaryPicker(pick->time().value(), rec, pick->publicID());
+		}
 
-	if ( _config.calculateAmplitudes ) {
-		for ( StringSet::iterator it = _config.amplitudeList.begin();
-		      it != _config.amplitudeList.end(); ++it ) {
-			AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(it->c_str());
-			if ( !proc ) continue;
+		if ( _config.calculateAmplitudes ) {
+			for ( StringSet::iterator it = _config.amplitudeList.begin();
+			      it != _config.amplitudeList.end(); ++it ) {
+				AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(it->c_str());
+				if ( !proc ) continue;
 
-			proc->setTrigger(time);
-			addAmplitudeProcessor(proc.get(), rec, pick.get());
+				proc->setTrigger(pick->time().value());
+				addAmplitudeProcessor(proc.get(), rec, pick);
+			}
 		}
 	}
 

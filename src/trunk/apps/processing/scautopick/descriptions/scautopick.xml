@@ -56,6 +56,11 @@
 					Configures the secondary picker to use.
 				</description>
 			</parameter>
+			<parameter name="fx" type="string">
+				<description>
+					Configures the feature extraction type to use.
+				</description>
+			</parameter>
 			<parameter name="useAllStreams" type="boolean" default="true">
 				<description>
 					If enabled the all streams are used for picking that are received by the picker.
