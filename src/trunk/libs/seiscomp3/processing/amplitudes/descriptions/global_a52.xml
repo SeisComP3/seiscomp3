@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="A5/2">
+		<extends>global</extends>
+		<description>
+		A5/2 is an implementation of the amplitude measured at CTBTO/IDC.
+		</description>
+	</plugin>
+</seiscomp>

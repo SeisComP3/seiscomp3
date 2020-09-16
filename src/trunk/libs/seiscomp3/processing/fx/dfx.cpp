@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) by gempa GmbH                                           *
+ *   Copyright (C) Preparatory Commission for the Comprehensive            *
+ *   Nuclear-Test-Ban Treaty Organization (CTBTO).                         *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -11,7 +12,7 @@
  ***************************************************************************/
 
 
-#define SEISCOMP_COMPONENT FX/IDC
+#define SEISCOMP_COMPONENT FX/DFX
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/math/filter.h>
@@ -20,21 +21,22 @@
 #include <seiscomp3/math/mean.h>
 #include <seiscomp3/math/matrix3.h>
 #include <seiscomp3/math/tensor.h>
+#include <seiscomp3/processing/fx.h>
 
 #include <fstream>
 
-#include "idc.h"
-
-
-#define SETUP_PREFIX "fx.IDC."
-#define IDC_DEBUG 0
-
 
 using namespace std;
+using namespace Seiscomp;
+using namespace Seiscomp::Processing;
 
 
-namespace Seiscomp {
-namespace Processing {
+#include "dfx_private.h"
+
+
+#define SETUP_PREFIX "fx.DFX."
+#define DFX_DEBUG 0
+
 
 namespace {
 
@@ -68,16 +70,13 @@ ostream &operator<<(ostream &os, const Math::Tensor2S<T> &t) {
 	os << "    " << t._13 << "  " << t._23 << "  " << t._33;
 	return os;
 }
-
-
-}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IDCFeatureExtraction::IDCFeatureExtraction() {
+DFX::DFX() {
 	setDefault();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -86,7 +85,7 @@ IDCFeatureExtraction::IDCFeatureExtraction() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void IDCFeatureExtraction::setDefault() {
+void DFX::setDefault() {
 	setNoiseStart(-30);
 	setNoiseEnd(-20.5);
 	setSignalStart(-1.5);
@@ -113,7 +112,7 @@ void IDCFeatureExtraction::setDefault() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool IDCFeatureExtraction::setup(const Settings &settings) {
+bool DFX::setup(const Settings &settings) {
 	setDefault();
 
 	if ( !FX::setup(settings) )
@@ -192,7 +191,7 @@ bool IDCFeatureExtraction::setup(const Settings &settings) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool IDCFeatureExtraction::feed(const Record *rec) {
+bool DFX::feed(const Record *rec) {
 	size_t component;
 
 	if ( isFinished() ) return false;
@@ -293,7 +292,7 @@ bool IDCFeatureExtraction::feed(const Record *rec) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
+void DFX::extractFX(double *data[3], size_t n) {
 	/*
 	 * The following methods can be used:
 	 * - dataTimeWindow()
@@ -445,7 +444,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 	_result = Core::None;
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 	cerr << "[IDC " << _stream.lastRecord->streamID() << "]" << endl;
 
 	size_t maxIntervalStart = 0;
@@ -493,7 +492,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 		tCov._23 = cov(currentIntervalLength, signalData[Y], signalData[Z]);
 		tCov._33 = cov(currentIntervalLength, signalData[Z], signalData[Z]);
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 		cerr << "  [Interval " << (intervalStart-iSignalBegin) << ":" << (intervalEnd-iSignalBegin) << "]" << endl;
 
 		cerr << "    > Covariance" << endl;
@@ -515,7 +514,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 		eigen.sort();
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 		cerr << "    > Eigenvectors" << endl;
 		cerr << "    " << eigen.n1 << endl;
 		cerr << "    " << eigen.n2 << endl;
@@ -529,31 +528,31 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 		// eigenvalues: eigen.a1 > eigen.a2 > eigen.a3
 		// rectilinearity, Pp, p. 1728, Jurkevics (1988) for surface waves
-#if IDC_DEBUG
+#if DFX_DEBUG
 		rectiLinearity = 1.0 - ((eigen.a2 + eigen.a3) / rectiLinearity);
 		cerr << "    > Rectilinearity, Jurkevics: " << rectiLinearity << endl;
 #endif
 
 		// rectilinearity of polarization, Pp, p. 1875 in Flinn (1965)
-#if IDC_DEBUG
+#if DFX_DEBUG
 		double rectiLinearityF = 1.0 - eigen.a2 / eigen.a1;
 		cerr << "    > RectiLinearity, Flinn: " << rectiLinearityF << endl;
 #endif
 
 		// strength of polarization, Ps, eq. 8 in Vidale (1986)
-#if IDC_DEBUG
+#if DFX_DEBUG
 		double strength = 1.0 - ((eigen.a2 + eigen.a3) / eigen.a1);
 		cerr << "    > Strength, Vidale: " << strength << endl;
 #endif
 
 		// planarity of polarization, Pp, eq. 9 in Vidale (1986)
-#if IDC_DEBUG
+#if DFX_DEBUG
 		double planarityV = 1.0 - eigen.a3 / eigen.a2;
 		cerr << "    > Planarity, Vidale: " << planarityV << endl;
 #endif
 
 		// planarity of polarization, Pp, p. 1728, Jurkevics (1988) for surface waves
-#if IDC_DEBUG
+#if DFX_DEBUG
 		double planarityJ = 1.0 - 2.0 * eigen.a3 / (eigen.a1 + eigen.a2);
 		cerr << "    > Planarity, Jurkevics: " << planarityJ << endl;
 #endif
@@ -565,7 +564,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 		Math::Vector3d eigenAz = eigen.n1;
 
 		double radOfIncidence = acos(abs(eigenAz.z));
-#if IDC_DEBUG
+#if DFX_DEBUG
 		double angleOfIncidence = rad2deg(radOfIncidence);
 		cerr << "    > AoI: " << angleOfIncidence << "°" << endl;
 #endif
@@ -603,7 +602,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 		slowness = Math::Geo::deg2km(slowness);
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 		cerr << "    > Baz: " << backAzimuth << "° +/- " << bazUncertainty << "°" << endl;
 		cerr << "    > Slo: " << slowness << " s/deg +/- " << sloUncertainty << endl;
 #endif
@@ -623,7 +622,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 			_result->slowness = slowness;
 			_result->slownessUncertainty = sloUncertainty;
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 			maxIntervalStart = intervalStart;
 			maxIntervalEnd = intervalEnd;
 #endif
@@ -635,7 +634,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 		return;
 	}
 
-#if IDC_DEBUG
+#if DFX_DEBUG
 	cerr << "Max interval: [" << (maxIntervalStart - iSignalBegin) << ":" << (maxIntervalEnd - iSignalBegin) << "]" << endl;
 #endif
 
@@ -649,7 +648,7 @@ void IDCFeatureExtraction::extractFX(double *data[3], size_t n) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void IDCFeatureExtraction::finalizePick(DataModel::Pick *pick) const {
+void DFX::finalizePick(DataModel::Pick *pick) const {
 	if ( !_result ) {
 		SEISCOMP_WARNING("No result set, pick cannot be finalized");
 		return;
@@ -666,7 +665,7 @@ void IDCFeatureExtraction::finalizePick(DataModel::Pick *pick) const {
 		pick->setHorizontalSlowness(DataModel::RealQuantity(_result->slowness));
 
 	DataModel::CommentPtr comment(new DataModel::Comment());
-	comment->setId("IDC:rectilinearity");
+	comment->setId("DFX:rectilinearity");
 	comment->setText(Core::toString(_result->rectiLinearity));
 
 	pick->add(comment.get());
@@ -677,12 +676,11 @@ void IDCFeatureExtraction::finalizePick(DataModel::Pick *pick) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-REGISTER_FXPROCESSOR(IDCFeatureExtraction, "IDC");
+REGISTER_FXPROCESSOR(DFX, "DFX");
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-}
 }

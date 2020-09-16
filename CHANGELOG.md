@@ -10,6 +10,13 @@
 * scautopick
 
   * Add amplitudes.enableUpdate to descriptions
+  * Add support for an additional processing stage called FX which means
+    feature extraction and is applied on top of an existing pick. A
+    first implementation ported from CTBTO/IDC's DFX code has been added
+    to extract back azimuth and slowness for three-component stations.
+    ```
+    fx = DFX
+    ``` 
 
 * scrttv
 

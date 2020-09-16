@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) by gempa GmbH                                           *
+ *   Copyright (C) Preparatory Commission for the Comprehensive            *
+ *   Nuclear-Test-Ban Treaty Organization (CTBTO).                         *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -11,17 +12,14 @@
  ***************************************************************************/
 
 
-#ifndef SEISCOMP_PROCESSING_FX_IDC_H
-#define SEISCOMP_PROCESSING_FX_IDC_H
+#ifndef SEISCOMP_PROCESSING_FX_DFX_H
+#define SEISCOMP_PROCESSING_FX_DFX_H
 
-
-#include <seiscomp3/processing/fx.h>
 
 #include <boost/array.hpp>
 
 
-namespace Seiscomp {
-namespace Processing {
+namespace {
 
 
 /**
@@ -43,20 +41,20 @@ namespace Processing {
  * [1] Jurkevics, Andy (1988), "Polarization Analysis of Three-Component
  *     Array Data", Bull. Seism. Soc. Am., 78, 1725-1743
  */
-class IDCFeatureExtraction : public FX {
+class DFX : public Processing::FX {
 	// ----------------------------------------------------------------------
 	//  X'truction
 	// ----------------------------------------------------------------------
 	public:
 		//! C'tor
-		IDCFeatureExtraction();
+		DFX();
 
 
 	// ----------------------------------------------------------------------
 	//  Processor interface
 	// ----------------------------------------------------------------------
 	public:
-		virtual bool setup(const Settings &settings);
+		virtual bool setup(const Processing::Settings &settings);
 
 
 	// ----------------------------------------------------------------------
@@ -133,7 +131,6 @@ class IDCFeatureExtraction : public FX {
 };
 
 
-}
 }
 
 

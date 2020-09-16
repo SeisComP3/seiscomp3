@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="FX-DFX">
+		<extends>global</extends>
+		<description>
+		Implementation of the CTBTO/IDC polar analysis for three-component stations.
+		</description>
+	</plugin>
+	<binding name="FX-DFX" module="global">
+		<description>
+		Implementation of the CTBTO/IDC polar analysis for three-component stations.
+		</description>
+		<configuration>
+			<group name="fx">
+				<group name="DFX">
+					<description>
+					Three component feature extraction algorithm ported from the
+					automatic processing system implemented at CTBTO/IDC. The
+					documentation of the methods is not publically available.
+					In case of questions and comments, please contact
+					support@ctbto.org.
+					</description>
+					<group name="filter">
+						<description>
+						Butterworth filter options of the bandpass.
+						</description>
+						<parameter name="order" type="int" default="3">
+							<description>
+							The order of the filter.
+							</description>
+						</parameter>
+						<parameter name="loFreq" type="double" default="1" unit="Hz">
+							<description>
+							The lower cut-off frequency. A negative value or zero
+							will disable a lower cut-off frequency.
+							</description>
+						</parameter>
+						<parameter name="hiFreq" type="double" default="3" unit="Hz">
+							<description>
+							The upper cut-off frequency. A negative value or zero
+							will disable a upper cut-off frequency.
+							</description>
+						</parameter>
+					</group>
+					<group name="polar">
+						<parameter name="window" type="double" default="1.5" unit="s">
+							<description>
+							Length of the covariance window in seconds.
+							</description>
+						</parameter>
+						<parameter name="overlap" type="double" default="0.5">
+							<description>
+							The fraction of the covariance window to overlap.
+							</description>
+						</parameter>
+						<parameter name="alpha" type="double" default="0.3">
+							<description>
+							A station-dependent parameter used to compute a polarization slowness estimate.
+							</description>
+						</parameter>
+						<parameter name="ds" type="double" default="0.03">
+							<description>
+							A station-dependent parameter used to compute the back azimuth and slowness errors.
+							</description>
+						</parameter>
+						<parameter name="dk" type="double" default="0.1">
+							<description>
+							A station-dependent parameter used to compute the back azimuth and slowness errors.
+							</description>
+						</parameter>
+					</group>
+				</group>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

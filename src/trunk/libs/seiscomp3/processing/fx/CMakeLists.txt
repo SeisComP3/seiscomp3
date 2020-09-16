@@ -1,9 +1,11 @@
 SET(FX_SOURCES
-	idc.cpp
+	dfx.cpp
 )
 
 SET(FX_HEADERS
-	idc.h
 )
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})
 
 SC_SETUP_LIB_SUBDIR(FX)
