@@ -1,0 +1,9 @@
+SET(FX_SOURCES
+	idc.cpp
+)
+
+SET(FX_HEADERS
+	idc.h
+)
+
+SC_SETUP_LIB_SUBDIR(FX)
