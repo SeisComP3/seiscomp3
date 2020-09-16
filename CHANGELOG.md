@@ -60,6 +60,8 @@
   * Added FixedHypocenter locator which just inverts for origin time by fixing
     the hypocenter. Any travel time tables available in SeisComP are supported.
   * Added A5/2 amplitude implementation ported from the CTBTO/IDC codebase
+  * Added DFX polar analysis for three-component stations implementation from
+    the CTBTO/IDC codebase
 
 * seedlink
 
