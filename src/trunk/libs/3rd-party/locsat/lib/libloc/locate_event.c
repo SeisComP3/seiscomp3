@@ -1061,6 +1061,9 @@ double compute_ttime(double distance, double depth, char *phase, int extrapolate
 	if (phase_id < 0)
 		return -1.0;
 
+	if (ntbz[phase_id] <= 0)
+		return -1.0;
+
 	delta = distance;
 
 	brack_(&ntbz[phase_id], &tbz[phase_id * maxtbz], &zfoc, &ileft);
