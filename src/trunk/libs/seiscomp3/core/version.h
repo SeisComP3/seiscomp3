@@ -63,6 +63,9 @@ namespace Core {
    - Added seismology/locator/utils.h
    - Added Seiscomp::Math::Filtering::IIR::ButterworthBandstop
    - Added class Seiscomp::Processing::FX
+   - Added WindowFunc::apply(..., left, right)
+   - Changed WindowFunc::process(int n, T *inout, double width)
+     to WindowFunc::process(int n, T *inout, double left, double right)
 
  "12.3.0"   0x0C0300
    - Added ArtificialEventParametersMessage

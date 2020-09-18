@@ -88,6 +88,12 @@ class SC_SYSTEM_CORE_API WindowFunc : public Core::BaseObject {
 		 */
 		void apply(TypedArray<TYPE> *inout, double width = 0.5) const;
 
+		//! Apply methods for non-symmetric window lengths.
+		void apply(int n, TYPE *inout, double left, double right) const;
+		void apply(std::vector<TYPE> &inout, double left, double right) const;
+		void apply(TypedArray<TYPE> &inout, double left, double right) const;
+		void apply(TypedArray<TYPE> *inout, double left, double right) const;
+
 
 	protected:
 		/**
@@ -97,14 +103,23 @@ class SC_SYSTEM_CORE_API WindowFunc : public Core::BaseObject {
 		 * @param n Number of samples
 		 * @param inout The data vector where each sample is multiplied with
 		 *              the respective sample of the window function.
-		 * @param width The width of the window function. The default is 0.5
-		 *              which means 50% at either side. 0.1 would mean that the
-		 *              left half of the window function is applied on 10% of
-		 *              the left portion of the data vector and the right half
-		 *              of the window function is applied on the right 10% of
-		 *              the data vector. The value is clipped into range [0,0.5].
+		 * @param left The width of the window function at the left side.
+		 *             The default is 0.5 which means 50% at the left side.
+		 *             0.1 would mean that the left half of the window function
+		 *             is applied on 10% of the left portion of the data vector.
+		 *             The value is clipped into range [0,0.5].
+		 * @param right The width of the window function at the right side
+		 *              respectively.
 		 */
-		virtual void process(int n, TYPE *inout, double width = 0.5) const = 0;
+		virtual void process(int n, TYPE *inout,
+		                     double left = 0.5,
+		                     double right = 0.5) const = 0;
+
+
+	private:
+		void checkAndProcess(int n, TYPE *inout,
+		                     double left = 0.5,
+		                     double right = 0.5) const;
 };
 
 

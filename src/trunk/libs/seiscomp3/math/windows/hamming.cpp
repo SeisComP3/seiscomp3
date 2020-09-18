@@ -25,19 +25,34 @@ namespace Math {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
-void HammingWindow<TYPE>::process(int n, TYPE *inout, double width) const {
-	if ( width > 0.5 ) width = 0.5;
-	else if ( width < 0 ) width = 0;
-
-	TYPE n2 = n*width;
+void HammingWindow<TYPE>::process(int n, TYPE *inout, double left, double right) const {
+	// Left side
+	TYPE n2 = n * left;
 	if ( n2 > n ) n2 = n;
-	int in2 = (int)n2;
-	int w = in2*2;
-	double scale = 1.0 / (w-1);
+	int in2 = int(n2);
+	int w = in2 * 2;
+	double scale;
 
-	for ( int i = 0; i < in2; ++i ) {
-		inout[i] *= 0.54-0.46*cos(2*M_PI*i*scale);
-		inout[n-in2+i] *= 0.54-0.46*cos(2*M_PI*(i+in2)*scale);
+	if ( w > 1 ) {
+		scale = 1.0 / (w-1);
+		for ( int i = 0; i < in2; ++i ) {
+			inout[i] *= 0.54-0.46*cos(2*M_PI*i*scale);
+		}
+	}
+
+	// Right side
+	if ( left != right ) {
+		n2 = n * right;
+		if ( n2 > n ) n2 = n;
+		in2 = int(n2);
+		w = in2 * 2;
+	}
+
+	if ( w > 1 ) {
+		scale = 1.0 / (w-1);
+		for ( int i = 0; i < in2; ++i ) {
+			inout[n-in2+i] *= 0.54-0.46*cos(2*M_PI*(i+in2)*scale);
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
