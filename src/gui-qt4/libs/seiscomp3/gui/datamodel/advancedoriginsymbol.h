@@ -18,6 +18,7 @@
 
 
 #include <QVector>
+#include <QPainterPath>
 
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 

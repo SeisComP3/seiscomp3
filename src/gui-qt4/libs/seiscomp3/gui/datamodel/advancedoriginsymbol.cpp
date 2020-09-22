@@ -16,6 +16,8 @@
 
 #include "advancedoriginsymbol.h"
 
+#define _GNU_SOURCE
+
 #include <seiscomp3/core/exceptions.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/origin.h>
