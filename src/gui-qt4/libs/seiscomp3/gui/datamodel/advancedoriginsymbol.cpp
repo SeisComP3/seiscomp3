@@ -17,6 +17,7 @@
 #include "advancedoriginsymbol.h"
 
 #include <seiscomp3/core/exceptions.h>
+#include <seiscomp3/core/platform/platform.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/gui/map/canvas.h>
