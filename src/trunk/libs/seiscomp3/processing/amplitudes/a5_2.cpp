@@ -517,8 +517,27 @@ bool AmplitudeA5_2::computeAmplitude(const Seiscomp::DoubleArray &data,
 	if ( _removeInstResp ) {
 		// Convert to nano units
 		finalAmplitude *= 1E9 / _streamConfig[_usedComponent].gain;
-		// Integrate to displacement
-		finalAmplitude /= 2.0 * M_PI / periodInSeconds;
+
+		SignalUnit unit;
+		if ( !unit.fromString(_streamConfig[_usedComponent].gainUnit.c_str()) ) {
+			// Invalid unit string
+			setStatus(IncompatibleUnit, 2);
+			return false;
+		}
+
+		switch ( unit ) {
+			case MeterPerSecondSquared:
+				// Integrate to velocity
+				finalAmplitude /= 2.0 * M_PI / periodInSeconds;
+				// The missing break statement is no bug. In case of
+				// m/s**2 the amplitude must be integrated twice.
+			case MeterPerSecond:
+				// Integrate to displacement
+				finalAmplitude /= 2.0 * M_PI / periodInSeconds;
+				break;
+			default:
+				break;
+		}
 	}
 
 	SEISCOMP_NOTICE("Amplitude after instrument correction: %f",
