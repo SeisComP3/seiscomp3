@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="mb_idc">
+		<extends>global</extends>
+		<description>
+		Body wave magnitude computed at CTBTO/IDC (mb) is calculated for seismic
+		events from the time-defining primary body waves recorded at seismic
+		stations at an epicentral distance between 20 and 105 degrees
+		from the event.
+		</description>
+	</plugin>
+</seiscomp>

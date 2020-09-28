@@ -10,6 +10,7 @@ SET(UTILS_SOURCES
 	keyvalues.cpp
 	bindings.cpp
 	stringfirewall.cpp
+	tabvalues.cpp
 	units.cpp
 )
 
@@ -27,6 +28,7 @@ SET(UTILS_HEADERS
 	keyvalues.h
 	bindings.h
 	stringfirewall.h
+	tabvalues.h
 	units.h
 )
 
