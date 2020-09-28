@@ -24,10 +24,17 @@
 #include <seiscomp3/math/filter/butterworth.h>
 #include <seiscomp3/math/windows/cosine.h>
 
+#include "idc_utils.h"
+
 #include "a5_2_private.h"
 
 namespace {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+using namespace Seiscomp::Processing::Utils::IDC;
 
 
 
@@ -42,14 +49,14 @@ AmplitudeA5_2::AmplitudeA5_2()
 , _ltavFunction(fabs)  // Function to apply to running average
 , _ltavLength(60.0)  // Long-term average noise window length in seconds
 , _noiseSignalGap(3.0)  // Gap between noise/signal windows in seconds
+, _demean(true)  // Demean? True for A5/2
+, _taper(0.5)  // Taper fraction of filter buffer
+, _filbuf(10.0)  // Filter onset length (filter buffer) in seconds
 , _ford(3)  // Filter order (number of poles)
 , _flo(0.8)  // Filter low band cut-off frequency in cycles/second
 , _fhi(4.5)  // Filter high band cut-off frequency in cycles/second
-, _zp(true)  // Use zero phase filter? True for non-causal
-, _taper(0.5)  // Taper fraction of filter buffer
-, _filbuf(10.0)  // Filter onset length (filter buffer) in seconds
-, _demean(true)  // Use demean?
-, _considerLastPeakTrough(true)  // Set to false for classic IDC behavior
+, _zp(true)  // Zero phase filter? True for A5/2
+, _coherent(true)  // True for A5/2
 , _removeFiltResp(true)  // Correct amplitude for filter response?
 , _removeInstResp(true)  // Correct amplitude for instrument response?
 , _filtRolloff(20.0)  // Filter roll-off beyond which a filter correction
@@ -65,34 +72,25 @@ AmplitudeA5_2::AmplitudeA5_2()
 , _interpolationPeriodMaxFilterCorrection(100.0)  // Default
 , _interpolationMaxFilterOrder(10)  // Butterworth max filter order
 {
-	setMargin(Seiscomp::Core::TimeSpan(0.0));
-	setSignalStart(0.0 - _tiLead);
-	setSignalEnd(0.0 + _tiLag);
-	setNoiseStart(config().signalBegin - _noiseSignalGap - _ltavLength);
-	setNoiseEnd(config().noiseBegin + _ltavLength);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeA5_2::computeTimeWindow() {
-	// Call default implementation
-	Seiscomp::Processing::AmplitudeProcessor::computeTimeWindow();
-
-	// Retrieve the time window with filter onset length (filter buffer)
-	//   - on both sides for zero-phase filtering
-	Seiscomp::Core::TimeWindow tw = timeWindow();
-	tw.setStartTime(tw.startTime() - Seiscomp::Core::TimeSpan(_filbuf));
-
+	// Set signal and noise windows to cover entire data window required to
+	//   ensure data completeness, actual/real signal and noise windows are
+	//   determined in computeAmplitude, see {signal,noise}Start and
+	//   {signal,noise}End
+	_preTriggerDataBufferLength =
+		_tiLead + _noiseSignalGap + _ltavLength + _filbuf;
+	SEISCOMP_DEBUG("_preTriggerDataBufferLength = %f",
+	               _preTriggerDataBufferLength);
+	_postTriggerDataBufferLength = _tiLag;
 	if ( _zp ) {
-		tw.setEndTime(tw.endTime() + Seiscomp::Core::TimeSpan(_filbuf));
+		_postTriggerDataBufferLength += _filbuf;
 	}
-	else {
-		tw.setEndTime(tw.endTime());
-	}
-	setTimeWindow(tw);
+	SEISCOMP_DEBUG("_postTriggerDataBufferLength = %f",
+	               _postTriggerDataBufferLength);
+	setMargin(Seiscomp::Core::TimeSpan(0.0));
+	setSignalStart(0.0 - _preTriggerDataBufferLength);
+	setSignalEnd(0.0 + _postTriggerDataBufferLength);
+	setNoiseStart(0.0 - _preTriggerDataBufferLength);
+	setNoiseEnd(0.0 + _postTriggerDataBufferLength);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -109,42 +107,56 @@ bool AmplitudeA5_2::computeAmplitude(const Seiscomp::DoubleArray &data,
                                      double *period, double *snr) {
 	SEISCOMP_DEBUG("Entering Amplitude A5/2 computeAmplitude");
 
-	// Make work copies of data which can be changed
-	SEISCOMP_DEBUG("data.size() = %d", data.size());
-	Seiscomp::DoubleArray dataAmpPer(data);
-	Seiscomp::DoubleArray dataSNR(data);
-
 	// Determine useful constants
+	const size_t dataStart = i1;
+	SEISCOMP_DEBUG("dataStart = %zu", dataStart);
 	const double samplingRate = samplingFrequency();
 	SEISCOMP_DEBUG("samplingRate = %f", samplingRate);
-	const size_t filbufCount = (size_t)(_filbuf * samplingRate);
-	SEISCOMP_DEBUG("filbufCount = %zu", filbufCount);
-	const size_t noiseCount = (size_t)(_ltavLength * samplingRate);
-	SEISCOMP_DEBUG("noiseCount = %zu", noiseCount);
+	const size_t signalCount = (size_t)((_tiLead + _tiLag) * samplingRate);
+	SEISCOMP_DEBUG("signalCount = %zu", signalCount);
+	const size_t signalStart =
+	    dataStart + (_preTriggerDataBufferLength * samplingRate)
+	    - (_tiLead *  samplingRate);
+	SEISCOMP_DEBUG("signalStart = %zu", signalStart);
+	const size_t signalEnd =  signalStart + signalCount;  // exclusive bound
+	SEISCOMP_DEBUG("signalEnd = %zu", signalEnd);
 	const size_t noiseSignalGapCount = (size_t)(_noiseSignalGap * samplingRate);
 	SEISCOMP_DEBUG("noiseSignalGapCount = %zu", noiseSignalGapCount);
-	const size_t signalStart = si1;
-	SEISCOMP_DEBUG("signalStart = %zu", signalStart);
-	const size_t signalEnd = si2;  // exclusive bound
-	SEISCOMP_DEBUG("signalEnd = %zu", signalEnd);
-	const size_t signalCount = signalEnd - signalStart;
-	SEISCOMP_DEBUG("signalCount = %zu", signalCount);
+	const size_t noiseCount = (size_t)(_ltavLength * samplingRate);
+	SEISCOMP_DEBUG("noiseCount = %zu", noiseCount);
 	const size_t noiseStart = signalStart - noiseSignalGapCount - noiseCount;
 	SEISCOMP_DEBUG("noiseStart = %zu", noiseStart);
 	const size_t noiseEnd = noiseStart + noiseCount;  // exclusive bound
 	SEISCOMP_DEBUG("noiseEnd = %zu", noiseEnd);
-	const size_t dataAmpPerCount = signalCount + (2 * filbufCount);
+	const size_t filbufCount = (size_t)(_filbuf * samplingRate);
+	SEISCOMP_DEBUG("filbufCount = %zu", filbufCount);
+	const size_t dataAmpPerCount = signalCount + ((_zp ? 2 : 1) * filbufCount);
 	SEISCOMP_DEBUG("dataAmpPerCount = %zu", dataAmpPerCount);
 	const size_t dataAmpPerStart = signalStart - filbufCount;
 	SEISCOMP_DEBUG("dataAmpPerStart = %zu", dataAmpPerStart);
 	const size_t dataAmpPerEnd = dataAmpPerStart + dataAmpPerCount;
 	SEISCOMP_DEBUG("dataAmpPerEnd = %zu", dataAmpPerEnd);  // exclusive bound
-	const size_t dataSNRCount = (signalEnd - noiseStart) + ( 2 * filbufCount);
+	const size_t dataSNRCount =
+	    (signalEnd - noiseStart) + ((_zp ? 2 : 1) * filbufCount);
 	SEISCOMP_DEBUG("dataSNRCount = %zu", dataSNRCount);
 	const size_t dataSNRStart = noiseStart - filbufCount;
 	SEISCOMP_DEBUG("dataSNRStart = %zu", dataSNRStart);
 	const size_t dataSNREnd = dataSNRStart + dataSNRCount;  // exclusive bound
 	SEISCOMP_DEBUG("dataSNREnd = %zu", dataSNREnd);
+
+	// Check for out-of-bounds indices which indicates missing data
+	if ( dataAmpPerStart < 0 || dataAmpPerStart > (size_t)data.size()
+	     || dataAmpPerEnd > (size_t)data.size()
+	     || dataSNRStart < 0 || dataSNRStart > (size_t)data.size()
+	     || dataSNREnd > (size_t)data.size() ) {
+		SEISCOMP_ERROR("Requested time window not fulfilled");
+		return false;
+	}
+
+	// Make work copies of data which can be changed
+	SEISCOMP_DEBUG("data.size() = %zu", (size_t)data.size());
+	Seiscomp::DoubleArray dataAmpPer(data);
+	Seiscomp::DoubleArray dataSNR(data);
 
 	// Demean data
 	if ( _demean ) {
@@ -174,16 +186,20 @@ bool AmplitudeA5_2::computeAmplitude(const Seiscomp::DoubleArray &data,
 	Seiscomp::Math::CosineWindow<double> cosineTaper;
 
 	if ( _zp ) {
-		// Tapers both ends
+		// Taper both ends
 		cosineTaper.apply(dataAmpPerCount,
 		                  dataAmpPer.typedData() + dataAmpPerStart,
-		                  taperAmpPerWidth);
+		                  taperAmpPerWidth, taperAmpPerWidth);
 		cosineTaper.apply(dataSNRCount, dataSNR.typedData() + dataSNRStart,
-		                  taperSNRWidth);
+		                  taperSNRWidth, taperSNRWidth);
 	}
 	else {
-		SEISCOMP_ERROR("No support for only tapering of the beginning");
-		return false;
+		// Taper left only
+		cosineTaper.apply(dataAmpPerCount,
+		                  dataAmpPer.typedData() + dataAmpPerStart,
+		                  taperAmpPerWidth, 0.0);
+		cosineTaper.apply(dataSNRCount, dataSNR.typedData() + dataSNRStart,
+		                  taperSNRWidth, 0.0);
 	}
 
 	// Initialize butterworth bandpass filter
@@ -213,6 +229,23 @@ bool AmplitudeA5_2::computeAmplitude(const Seiscomp::DoubleArray &data,
 
 		for ( size_t i = dataSNRCount; i > 0; --i ) {  // i is unsigned
 			filter.apply(1, dataPointer + i - 1);
+		}
+	}
+
+	// Rectify if incoherent
+	if ( !_coherent) {
+		double *dataPointer;
+
+		dataPointer = dataAmpPer.typedData() + dataAmpPerStart;
+
+		for ( size_t i = 0; i < dataAmpPerCount; ++i ) {
+			dataPointer[i] = fabs(dataPointer[i]);
+		}
+
+		dataPointer = dataSNR.typedData() + dataSNRStart;
+
+		for ( size_t i = 0; i < dataSNRCount; ++i ) {
+			dataPointer[i] = fabs(dataPointer[i]);
 		}
 	}
 
@@ -352,17 +385,9 @@ bool AmplitudeA5_2::computeAmplitude(const Seiscomp::DoubleArray &data,
 
 	// Loop through remaining points and find max amplitude and indices
 	// NOBUG: The IDC algorithm does not include lastPeakTrough as it uses
-	//        less than (<) which is incorrect instead of less than and equal
-	//        (<=)
-	if ( !_considerLastPeakTrough ) {
-		SEISCOMP_DEBUG("Skipping last peak/trough in maximum amplitude search as per classic IDC behavior");
-		--lastPeakTrough;
-	}
-	else {
-		SEISCOMP_DEBUG("Including last peak/trough in maximum amplitude search");
-	}
+	//        less than (<) instead of instead of less than and equal (<=)
 	for ( size_t ti = firstPeakTrough + 1, si = leftDataEndPoint + 1;
-          ti <= lastPeakTrough;  // We want to include lastPeakTrough in search
+          ti < lastPeakTrough;  // NOBUG: IDC skips lastPeakTrough in search
           ++ti, ++si ) {
 		// Find next peak or trough, skip if neither
 		if ( dataPointTypes[ti] != NEITHER ) {
@@ -1067,144 +1092,6 @@ bool AmplitudeA5_2::interpolate(const double *data,
 	               *interpolatedAmplitude, *interpolatedPeriod);
 
 	SEISCOMP_DEBUG("Leaving Amplitude A5/2 interpolate");
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AmplitudeA5_2::runningAverage(const double *data, const size_t *state,
-                                   const size_t numPoints,
-                                   const size_t averageWindowLength,
-                                   const size_t threshold,
-                                   double (*function)(double x),
-                                   double *runningAverage,
-                                   size_t *runningAverageState) {
-	if ( averageWindowLength < 1 ) {
-		return false;
-	}
-
-	// Determine odd number of samples for centered averages
-	const size_t startPoint = (size_t)(averageWindowLength / 2);
-	size_t endPoint = startPoint;
-
-	if ( averageWindowLength % 2 == 0 ) {
-		endPoint -= 1;
-	}
-
-	// Compute index of first centered average point and number of points which
-	//   will have centered averages
-	const size_t firstCenteredAveragePoint = startPoint + 1;
-	const size_t numPointsCenteredAverages = numPoints - endPoint;
-
-	// Initialize the first half window of data, apply the function and
-	//   multiply by the data state as each point is summed, sum the state
-	//   values as well, store sums in averageSum, stateSum
-	size_t initLength = averageWindowLength;
-
-	if ( numPoints < averageWindowLength ) {
-		initLength = numPoints;
-	}
-
-	double averageSum = 0.0;
-	int stateSum = 0;
-
-	for ( size_t i = 0; i < initLength; ++i ) {
-		averageSum += (*function)(data[i]) * (double)state[i];
-		stateSum += state[i];
-	}
-
-	// Set the first half window data values to the sum averageSum and the
-	//   first half window data state values to the sum stateSum
-	initLength = firstCenteredAveragePoint;
-
-	if ( numPoints < averageWindowLength ) {
-		initLength = numPoints;
-	}
-
-	for ( size_t i = 0; i < initLength; ++i )	{
-		runningAverage[i] = averageSum;
-		runningAverageState[i] = stateSum;
-	}
-
-	if ( initLength != numPoints ) {
-		// Compute centered running sums for each data point and each state
-		//   point, remember to apply function and state to data points
-		for ( size_t i = firstCenteredAveragePoint;
-		      i < numPointsCenteredAverages;
-		      ++i ) {
-			const size_t ipe = i + endPoint;
-			const size_t imf = i - firstCenteredAveragePoint;
-			const size_t im1 = i - 1;
-
-			stateSum += state[ipe] - state[imf];
-			runningAverageState[i] = stateSum;
-
-			const double term = (*function)(data[ipe]) * (double)state[ipe]
-			    - (*function)(data[imf]) * (double)state[imf];
-
-			runningAverage[i] = runningAverage[im1] + term;
-		}
-
-		// Set last half window values to last sum value
-		averageSum = runningAverage[numPointsCenteredAverages - 1];
-		stateSum = runningAverageState[numPointsCenteredAverages - 1];
-
-		for ( size_t i = numPointsCenteredAverages; i < numPoints; ++i ) {
-			runningAverage[i] = averageSum;
-			runningAverageState[i] = stateSum;
-		}
-	}
-
-	if ( initLength < 0 ) {
-		return false;
-	}
-
-	// Last valid centered average
-	const size_t lastValidCenteredAverage = numPoints - initLength + 1;
-
-	// Compute the running average of the first half window of data; if the
-	//   state of the running sum is greater than or equal to threshold, the
-	//   running average is the running sum divided by the running state sum,
-	//   and the running state is set to one; otherwise, the running average
-	//   and state are set to zero
-	const double term = (double)runningAverageState[initLength - 1];
-
-	if ( term >= (double)threshold ) {
-		for ( size_t i = 0; i < initLength; ++i ) {
-			runningAverage[i] /= term;
-			runningAverageState[i] = 1;
-		}
-	}
-	else {
-		for ( size_t i = 0; i < initLength; ++i ) {
-			runningAverage[i] = 0.0;
-			runningAverageState[i] = 0;
-		}
-	}
-
-	// Compute the centered running average of the data
-	for ( size_t i = initLength; i < lastValidCenteredAverage; ++i ) {
-		if ( runningAverageState[i] >= (double)threshold ) {
-			runningAverage[i] /= (double)runningAverageState[i];
-			runningAverageState[i] = 1;
-		}
-		else {
-			runningAverage[i] = 0.0;
-			runningAverageState[i] = 0;
-		}
-	}
-
-	// Set the final half window to the final running average value
-	const size_t lm1 = lastValidCenteredAverage - 1;
-
-	for ( size_t i = lastValidCenteredAverage; i < numPoints; ++i ) {
-		runningAverage[i] = runningAverage[lm1];
-		runningAverageState[i] = runningAverageState[lm1];
-	}
-
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

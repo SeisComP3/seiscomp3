@@ -26,9 +26,6 @@ class AmplitudeA5_2 : public Seiscomp::Processing::AmplitudeProcessor {
 	public:
 		AmplitudeA5_2();
 
-	public:
-		void computeTimeWindow();
-
 	protected:
 		bool computeAmplitude(const Seiscomp::DoubleArray &data,
 		                      size_t i1, size_t i2,
@@ -46,14 +43,14 @@ class AmplitudeA5_2 : public Seiscomp::Processing::AmplitudeProcessor {
 		double (*_ltavFunction)(double x);
 		const double _ltavLength;
 		const double _noiseSignalGap;
+		const bool _demean;
+		const double _taper;
+		const double _filbuf;
 		const int _ford;
 		const double _flo;
 		const double _fhi;
 		const bool _zp;
-		const double _taper;
-		const double _filbuf;
-		const bool _demean;
-		const bool _considerLastPeakTrough;
+		const bool _coherent;
 		const bool _removeFiltResp;
 		const bool _removeInstResp;
 		const double _filtRolloff;
@@ -82,13 +79,10 @@ class AmplitudeA5_2 : public Seiscomp::Processing::AmplitudeProcessor {
 		                 const size_t maxRight,
 		                 double *interpolatedAmplitude,
 		                 double *interpolatedPeriod);
-		bool runningAverage(const double *data, const size_t *state,
-		                    const size_t numPoints,
-		                    const size_t averageWindowLength,
-		                    const size_t threshold,
-		                    double (*function)(double x),
-		                    double *runningAverage,
-		                    size_t *runningAverageState);
+
+	private:
+		double _preTriggerDataBufferLength;
+		double _postTriggerDataBufferLength;
 };
 
 
