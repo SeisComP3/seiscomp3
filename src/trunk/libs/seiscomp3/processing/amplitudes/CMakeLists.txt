@@ -13,6 +13,7 @@ SET(AMPS_SOURCES
 	Ms20.cpp
 	Mwp.cpp
 	mwp_utils.c
+	sbsnr.cpp
 )
 
 SET(AMPS_HEADERS
