@@ -93,7 +93,6 @@ bool MagnitudeProcessor_ms20::MagnitudeProcessor_ms20::setup(const Settings &set
 		maxDepthKm = 100.0; // default maximum depth
 	}
 
-	std::cerr << lowPer << " " << upPer << std::endl;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
