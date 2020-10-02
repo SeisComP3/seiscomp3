@@ -76,11 +76,11 @@ EventLegend::EventLegend(QObject *parent) : Map::Legend(parent) {
 
 	for ( ; it != SCScheme.colors.originSymbol.depth.gradient.end(); ++it ) {
 		lastValue = it.key();
-		_depthItems.append(DepthItem(currentColor, StringWithWidth(QString("<= %1").arg(lastValue),-1)));
+		_depthItems.append(DepthItem(currentColor, StringWithWidth(QString("< %1").arg(lastValue),-1)));
 		currentColor = it.value().first;
 	}
 
-	_depthItems.append(DepthItem(currentColor, StringWithWidth(QString("> %1").arg(lastValue),-1)));
+	_depthItems.append(DepthItem(currentColor, StringWithWidth(QString(">= %1").arg(lastValue),-1)));
 
 	for ( int i = 1; i <= 8; ++i )
 		_magItems.append(MagItem(Gui::OriginSymbol::getSize(i), StringWithWidth(QString::number(i), -1)));
