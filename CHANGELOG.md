@@ -63,6 +63,8 @@
   * Added SBSNR amplitude implementation ported from the CTBTO/IDC codebase
   * Added DFX polar analysis for three-component stations implementation from
     the CTBTO/IDC codebase
+  * Added `mb_idc` magnitude implementation (derived from `mb_ave` from CTBTO/IDC)
+    based on A5/2 amplitudes
 
 * seedlink
 
