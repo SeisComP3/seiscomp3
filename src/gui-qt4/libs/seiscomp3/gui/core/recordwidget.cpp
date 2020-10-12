@@ -1121,14 +1121,19 @@ bool RecordWidget::setRecordFilter(int slot, const Filter *filter) {
 		stream->records[Stream::Filtered] = NULL;
 	}
 
-	if (stream->records[Stream::Raw] && !stream->records[Stream::Raw]->empty()) {
+	if ( stream->records[Stream::Raw] && !stream->records[Stream::Raw]->empty() ) {
 		const Record *rec = stream->records[Stream::Raw]->front().get();
 		double fs = rec->samplingFrequency();
-		stream->filter->setSamplingFrequency(fs);
-		stream->filter->setStartTime(rec->startTime());
-		stream->filter->setStreamID(rec->networkCode(), rec->stationCode(),
-		                            rec->locationCode(), rec->channelCode());
-		filterRecords(stream);
+		try {
+			stream->filter->setSamplingFrequency(fs);
+			stream->filter->setStartTime(rec->startTime());
+			stream->filter->setStreamID(rec->networkCode(), rec->stationCode(),
+			                            rec->locationCode(), rec->channelCode());
+			filterRecords(stream);
+		}
+		catch ( std::exception &e ) {
+			SEISCOMP_ERROR("%s: filter: %s", rec->streamID().c_str(), e.what());
+		}
 	}
 
 	if ( _shadowWidget ) {
@@ -4060,11 +4065,16 @@ bool RecordWidget::createFilter(int slot) {
 		if ( s->records[Stream::Filtered] && !s->records[Stream::Filtered]->empty() )
 			return false;
 		else {
-			s->filter->setSamplingFrequency(fs);
-			s->filter->setStartTime(rec->startTime());
-			s->filter->setStreamID(rec->networkCode(), rec->stationCode(),
-			                       rec->locationCode(), rec->channelCode());
-			filterRecords(s);
+			try {
+				s->filter->setSamplingFrequency(fs);
+				s->filter->setStartTime(rec->startTime());
+				s->filter->setStreamID(rec->networkCode(), rec->stationCode(),
+				                       rec->locationCode(), rec->channelCode());
+				filterRecords(s);
+			}
+			catch ( std::exception &e ) {
+				SEISCOMP_ERROR("%s: filter: %s", rec->streamID().c_str(), e.what());
+			}
 			return true;
 		}
 	}
