@@ -5542,7 +5542,7 @@ void OriginLocatorView::relocate(DataModel::Origin *org,
 		if ( _ui.cbDepthType->currentIndex() > 0 ) {
 			if ( _ui.cbDepthType->currentIndex() > 1 ) {
 				OriginDepthType type;
-				assert(type.fromInt(_ui.cbDepthType->itemData(_ui.cbDepthType->currentIndex()).toInt()));
+				type.fromInt(_ui.cbDepthType->itemData(_ui.cbDepthType->currentIndex()).toInt());
 				origin->setDepthType(type);
 			}
 		}
