@@ -164,6 +164,15 @@ MAKEENUM(
 		FML_CREATED,
 		FML_GAP,
 		FML_COUNT,
+		FML_STRIKE1,
+		FML_DIP1,
+		FML_RAKE1,
+		FML_STRIKE2,
+		FML_DIP2,
+		FML_RAKE2,
+		FML_DC,
+		FML_CLVD,
+		FML_ISO,
 		FML_MISFIT,
 		FML_STDR,
 		FML_STAT,
@@ -174,6 +183,15 @@ MAKEENUM(
 		"Created(%1)",
 		"Azi. Gap",
 		"Count",
+		"Strike1(°)",
+		"Dip1(°)",
+		"Rake1(°)",
+		"Strike2(°)",
+		"Dip2(°)",
+		"Rake2(°)",
+		"DC",
+		"CLVD(%)",
+		"ISO",
 		"Misfit",
 		"STDR",
 		"Stat",
@@ -188,6 +206,15 @@ int FMColAligns[FMListColumns::Quantity] = {
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter
@@ -200,9 +227,43 @@ bool FMColBold[FMListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
 	false,
 	false
 };
+
+
+#define POPULATE_COLUMN_INT(ENUM, DATA) \
+do {\
+	try {\
+		item->setText(_fmColumnMap[ENUM], QString("%1").arg(DATA));\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, DATA);\
+	}\
+	catch ( Core::ValueException& ) {\
+		item->setText(_fmColumnMap[ENUM], "-");\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, QVariant());\
+	}\
+} while (0)
+
+#define POPULATE_COLUMN_DOUBLE(ENUM, DATA, PREC) \
+do {\
+	try {\
+		item->setText(_fmColumnMap[ENUM], QString("%1").arg(DATA, 0, 'f', PREC));\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, DATA);\
+	}\
+	catch ( Core::ValueException& ) {\
+		item->setText(_fmColumnMap[ENUM], "-");\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, QVariant());\
+	}\
+} while (0)
 
 
 
@@ -2004,41 +2065,36 @@ void EventEdit::updateFMRow(int row, FocalMechanism *fm) {
 
 	item->setData(0, Qt::UserRole, QString(fm->publicID().c_str()));
 
-	try {
-		item->setText(_fmColumnMap[FML_GAP], QString("%1").arg(fm->azimuthalGap(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_GAP], Qt::UserRole, fm->azimuthalGap());
+	POPULATE_COLUMN_DOUBLE(FML_GAP, fm->azimuthalGap(), 2);
+	POPULATE_COLUMN_INT(FML_COUNT, fm->stationPolarityCount());
+
+	// Strike, dip, rake
+	POPULATE_COLUMN_DOUBLE(FML_STRIKE1, fm->nodalPlanes().nodalPlane1().strike().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_DIP1, fm->nodalPlanes().nodalPlane1().dip().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_RAKE1, fm->nodalPlanes().nodalPlane1().rake().value(), 0);
+
+	POPULATE_COLUMN_DOUBLE(FML_STRIKE2, fm->nodalPlanes().nodalPlane2().strike().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_DIP2, fm->nodalPlanes().nodalPlane2().dip().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_RAKE2, fm->nodalPlanes().nodalPlane2().rake().value(), 0);
+
+	// DC, ISO, CLVD
+	if ( fm->momentTensorCount() > 0 ) {
+		POPULATE_COLUMN_DOUBLE(FML_DC, fm->momentTensor(0)->doubleCouple()*100.0, 0);
+		POPULATE_COLUMN_DOUBLE(FML_CLVD, fm->momentTensor(0)->clvd()*100.0, 0);
+		POPULATE_COLUMN_DOUBLE(FML_ISO, fm->momentTensor(0)->iso()*100.0, 0);
 	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_GAP], "-");
-		item->setData(_fmColumnMap[FML_GAP], Qt::UserRole, QVariant());
+	else {
+		item->setText(_fmColumnMap[FML_DC], "-");
+		item->setData(_fmColumnMap[FML_DC], Qt::UserRole, QVariant());
+		item->setText(_fmColumnMap[FML_ISO], "-");
+		item->setData(_fmColumnMap[FML_ISO], Qt::UserRole, QVariant());
+		item->setText(_fmColumnMap[FML_CLVD], "-");
+		item->setData(_fmColumnMap[FML_CLVD], Qt::UserRole, QVariant());
 	}
 
-	try {
-		item->setText(_fmColumnMap[FML_COUNT], QString("%1").arg(fm->stationPolarityCount()));
-		item->setData(_fmColumnMap[FML_COUNT], Qt::UserRole, fm->stationPolarityCount());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_COUNT], "-");
-		item->setData(_fmColumnMap[FML_COUNT], Qt::UserRole, QVariant());
-	}
-
-	try {
-		item->setText(_fmColumnMap[FML_MISFIT], QString("%1").arg(fm->misfit(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_MISFIT], Qt::UserRole, fm->misfit());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_MISFIT], "-");
-		item->setData(_fmColumnMap[FML_MISFIT], Qt::UserRole, QVariant());
-	}
-
-	try {
-		item->setText(_fmColumnMap[FML_STDR], QString("%1").arg(fm->stationDistributionRatio(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_STDR], Qt::UserRole, fm->stationDistributionRatio());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_STDR], "-");
-		item->setData(_fmColumnMap[FML_STDR], Qt::UserRole, QVariant());
-	}
+	// Misfit
+	POPULATE_COLUMN_DOUBLE(FML_MISFIT, fm->misfit(), 2);
+	POPULATE_COLUMN_DOUBLE(FML_STDR, fm->stationDistributionRatio(), 2);
 
 	char stat = objectStatusToChar(fm);
 	item->setText(_fmColumnMap[FML_STAT], QString("%1").arg(stat));
