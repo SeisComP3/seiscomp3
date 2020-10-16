@@ -113,6 +113,9 @@
   * Rename item `TP` to `MType` of parameter `eventlist.visibleColumns`
   * Add option to define symbol images for layer points defined in
     either BNA or FEP
+  * Add nodal planes and some more quality parameters to event edit focal
+    mechanism table
+  * Fix setting the depth type in the origin locator panel
 
 ## Release 2018.327 patch23
 
