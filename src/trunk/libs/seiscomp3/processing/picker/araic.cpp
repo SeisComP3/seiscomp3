@@ -219,7 +219,14 @@ bool ARAICPicker::calculatePick(int n, const double *data,
 	Core::SmartPointer<Filter>::Impl filter = _filter.empty()?NULL:Filter::Create(_filter);
 	if ( filter ) {
 		SEISCOMP_DEBUG("AIC: created filter %s", _filter.c_str());
-		filter->setSamplingFrequency(_stream.fsamp);
+		try {
+			filter->setSamplingFrequency(_stream.fsamp);
+		}
+		catch ( std::exception &e ) {
+			SEISCOMP_WARNING("%s: init AIC filter: %s",
+			                 _stream.lastRecord->streamID().c_str(), e.what());
+			return false;
+		}
 	}
 
 	if ( signalEndIdx <= 0 ) return false;

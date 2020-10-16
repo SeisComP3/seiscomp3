@@ -170,7 +170,15 @@ bool AmplitudeSBSNR::computeAmplitude(const Seiscomp::DoubleArray &data,
 	Seiscomp::Math::Filtering::IIR::ButterworthBandpass<double> filter(_ford,
 	                                                                   _flo,
 	                                                                   _fhi);
-	filter.setSamplingFrequency(samplingRate);
+	try {
+		filter.setSamplingFrequency(samplingRate);
+	}
+	catch ( std::exception &e ) {
+		SEISCOMP_WARNING("%s: init SBSNR filter: %s",
+		                 _stream.lastRecord->streamID().c_str(),
+		                 e.what());
+		return false;
+	}
 
 	// Forward filter data
 	filter.apply(dataSBSNRCount, dataSBSNR.typedData() + dataSBSNRStart);
