@@ -57,17 +57,19 @@ AmplitudeSBSNR::AmplitudeSBSNR()
 , _ltavLength(60.0)  // Long-term average window length in seconds
 , _ltavFraction(0.9)  // Fraction of _ltavLength for ltav threshold
 , _ltavFunction(samex)  // Function to apply to recursive average
-, _ltavStabilityLength(180.0)  // Long-term average stability length in seconds
+, _preLtavStabilityLength(180.0)  // Pre long-term average stability length in seconds
+, _postLtavStabilityLength(0.50)  // Post long-term average stability length in seconds
 {
 	// Set signal and noise windows to cover entire data window required to
 	//   ensure data completeness, actual/real signal and noise windows are
 	//   determined in computeAmplitude, see {signal,noise}Start and
 	//   {signal,noise}End
-	_preTriggerDataBufferLength = _ltavLength + _filbuf + _ltavStabilityLength;
+	_preTriggerDataBufferLength =
+	    _ltavLength + _filbuf + _preLtavStabilityLength;
 	SEISCOMP_DEBUG("_preTriggerDataBufferLength = %f",
 	               _preTriggerDataBufferLength);
 	_postTriggerDataBufferLength =
-	    _maxStavWindowLength + _ltavStabilityLength;
+	    _maxStavWindowLength + _postLtavStabilityLength;
 	if ( _zp ) {
 		_postTriggerDataBufferLength += _filbuf;
 	}
@@ -112,16 +114,21 @@ bool AmplitudeSBSNR::computeAmplitude(const Seiscomp::DoubleArray &data,
 	SEISCOMP_DEBUG("noiseStart = %zu", noiseStart);
 	const size_t noiseEnd = noiseStart + noiseCount;  // exclusive bound
 	SEISCOMP_DEBUG("noiseEnd = %zu", noiseEnd);
-	const size_t ltavStabilityCount =
-	    (size_t)(_ltavStabilityLength * samplingRate);
-	SEISCOMP_DEBUG("ltavStabilityCount = %zu", ltavStabilityCount);
+	const size_t preLtavStabilityCount =
+	    (size_t)(_preLtavStabilityLength * samplingRate);
+	SEISCOMP_DEBUG("preLtavStabilityCount = %zu", preLtavStabilityCount);
+	const size_t postLtavStabilityCount =
+	    (size_t)(_postLtavStabilityLength * samplingRate);
+	SEISCOMP_DEBUG("postLtavStabilityCount = %zu", postLtavStabilityCount);
 	const size_t filbufCount = (size_t)(_filbuf * samplingRate);
 	SEISCOMP_DEBUG("filbufCount = %zu", filbufCount);
 	const size_t dataSBSNRCount =
-	    (signalEnd - noiseStart) + (2 * ltavStabilityCount)
+	    (signalEnd - noiseStart)
+	    + preLtavStabilityCount + postLtavStabilityCount
 	    + ((_zp ? 2 : 1) * filbufCount);
 	SEISCOMP_DEBUG("dataSBSNRCount = %zu", dataSBSNRCount);
-	const size_t dataSBSNRStart = noiseStart - ltavStabilityCount - filbufCount;
+	const size_t dataSBSNRStart =
+	    noiseStart - preLtavStabilityCount - filbufCount;
 	SEISCOMP_DEBUG("dataSBSNRStart = %zu", dataSBSNRStart);
 	const size_t dataSBSNREnd = dataSBSNRStart + dataSBSNRCount;  // exclusive bound
 	SEISCOMP_DEBUG("dataSBSNREnd = %zu", dataSBSNREnd);

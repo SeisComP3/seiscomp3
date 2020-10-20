@@ -51,7 +51,8 @@ class AmplitudeSBSNR : public Seiscomp::Processing::AmplitudeProcessor {
 		const double _ltavLength;
 		const double _ltavFraction;
 		double (*_ltavFunction)(double x);
-		const double _ltavStabilityLength;
+		const double _preLtavStabilityLength;
+		const double _postLtavStabilityLength;
 
 	private:
 		double _preTriggerDataBufferLength;
