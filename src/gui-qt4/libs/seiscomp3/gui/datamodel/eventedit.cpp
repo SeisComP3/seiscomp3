@@ -111,6 +111,23 @@ bool OriginColBold[OriginListColumns::Quantity] = {
 };
 
 
+bool OriginColVisible[OriginListColumns::Quantity] = {
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true
+};
+
+
 MAKEENUM(
 	MagnitudeListColumns,
 	EVALUES(
@@ -164,18 +181,18 @@ MAKEENUM(
 		FML_CREATED,
 		FML_GAP,
 		FML_COUNT,
-		FML_STRIKE1,
-		FML_DIP1,
-		FML_RAKE1,
-		FML_STRIKE2,
-		FML_DIP2,
-		FML_RAKE2,
 		FML_DC,
 		FML_CLVD,
 		FML_ISO,
 		FML_MISFIT,
 		FML_STDR,
 		FML_STAT,
+		FML_STRIKE1,
+		FML_DIP1,
+		FML_RAKE1,
+		FML_STRIKE2,
+		FML_DIP2,
+		FML_RAKE2,
 		FML_AGENCY,
 		FML_AUTHOR
 	),
@@ -183,18 +200,18 @@ MAKEENUM(
 		"Created(%1)",
 		"Azi. Gap",
 		"Count",
-		"Strike1(°)",
-		"Dip1(°)",
-		"Rake1(°)",
-		"Strike2(°)",
-		"Dip2(°)",
-		"Rake2(°)",
 		"DC",
 		"CLVD(%)",
 		"ISO",
 		"Misfit",
 		"STDR",
 		"Stat",
+		"Strike1(°)",
+		"Dip1(°)",
+		"Rake1(°)",
+		"Strike2(°)",
+		"Dip2(°)",
+		"Rake2(°)",
 		"Agency",
 		"Author"
 	)
@@ -209,13 +226,13 @@ int FMColAligns[FMListColumns::Quantity] = {
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter
 };
@@ -238,6 +255,27 @@ bool FMColBold[FMListColumns::Quantity] = {
 	true,
 	false,
 	false
+};
+
+
+bool FMColVisible[FMListColumns::Quantity] = {
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true
 };
 
 
@@ -1160,10 +1198,14 @@ void EventEdit::init() {
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortMagnitudeItems(int)));
 
+	_originTree->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
 	connect(_originTree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentOriginChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 	connect(_originTree, SIGNAL(customContextMenuRequested(const QPoint &)),
 	        this, SLOT(originTreeCustomContextMenu(const QPoint &)));
+	connect(_originTree->header(), SIGNAL(customContextMenuRequested(const QPoint &)),
+	        this, SLOT(originTreeHeaderCustomContextMenu(const QPoint &)));
 
 	connect(_ui.treeMagnitudes, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentMagnitudeChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
@@ -1204,7 +1246,10 @@ void EventEdit::init() {
 #else
 	header->setClickable(true);
 #endif
+	header->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(header, SIGNAL(sectionClicked(int)), this, SLOT(sortFMItems(int)));
+	connect(header, SIGNAL(customContextMenuRequested(const QPoint &)),
+	        this, SLOT(fmTreeHeaderCustomContextMenu(const QPoint &)));
 
 	connect(_ui.fmTree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentFMChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
@@ -3172,6 +3217,68 @@ void EventEdit::originTreeCustomContextMenu(const QPoint &pos) {
 	}
 	else if ( result == actionCopy )
 		SCApp->copyToClipboard(_originTree);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EventEdit::originTreeHeaderCustomContextMenu(const QPoint &pos) {
+	int count = _originTree->header()->count();
+	QAbstractItemModel *model = _originTree->header()->model();
+
+	QMenu menu;
+
+	QVector<QAction*> actions(count);
+
+	for ( int i = 0; i < count; ++i ) {
+		actions[i] = menu.addAction(model->headerData(i, Qt::Horizontal).toString());
+		actions[i]->setCheckable(true);
+		actions[i]->setChecked(!_originTree->header()->isSectionHidden(i));
+	}
+
+	QAction *result = menu.exec(_originTree->header()->mapToGlobal(pos));
+	if ( result == NULL ) return;
+
+	int section = actions.indexOf(result);
+	if ( section == -1 ) return;
+
+	for ( int i = 0; i < count; ++i )
+		OriginColVisible[i] = actions[i]->isChecked();
+
+	_originTree->header()->setSectionHidden(section, !OriginColVisible[section]);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EventEdit::fmTreeHeaderCustomContextMenu(const QPoint &pos) {
+	int count = _ui.fmTree->header()->count();
+	QAbstractItemModel *model = _ui.fmTree->header()->model();
+
+	QMenu menu;
+
+	QVector<QAction*> actions(count);
+
+	for ( int i = 0; i < count; ++i ) {
+		actions[i] = menu.addAction(model->headerData(i, Qt::Horizontal).toString());
+		actions[i]->setCheckable(true);
+		actions[i]->setChecked(!_ui.fmTree->header()->isSectionHidden(i));
+	}
+
+	QAction *result = menu.exec(_ui.fmTree->header()->mapToGlobal(pos));
+	if ( result == NULL ) return;
+
+	int section = actions.indexOf(result);
+	if ( section == -1 ) return;
+
+	for ( int i = 0; i < count; ++i )
+		FMColVisible[i] = actions[i]->isChecked();
+
+	_ui.fmTree->header()->setSectionHidden(section, !FMColVisible[section]);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

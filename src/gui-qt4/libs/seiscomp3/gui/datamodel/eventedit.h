@@ -173,6 +173,8 @@ class SC_GUI_API EventEdit : public QWidget, public DataModel::Observer {
 		void currentMagnitudeChanged(QTreeWidgetItem*, QTreeWidgetItem*);
 
 		void originTreeCustomContextMenu(const QPoint &);
+		void originTreeHeaderCustomContextMenu(const QPoint &);
+		void fmTreeHeaderCustomContextMenu(const QPoint &);
 		void magnitudeTreeCustomContextMenu(const QPoint &);
 
 		void fixOrigin();
