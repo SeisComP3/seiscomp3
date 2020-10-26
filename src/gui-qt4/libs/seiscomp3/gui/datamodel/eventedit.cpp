@@ -179,14 +179,14 @@ MAKEENUM(
 	FMListColumns,
 	EVALUES(
 		FML_CREATED,
-		FML_GAP,
 		FML_COUNT,
+		FML_MISFIT,
+		FML_STDR,
+		FML_GAP,
+		FML_STAT,
 		FML_DC,
 		FML_CLVD,
 		FML_ISO,
-		FML_MISFIT,
-		FML_STDR,
-		FML_STAT,
 		FML_STRIKE1,
 		FML_DIP1,
 		FML_RAKE1,
@@ -198,43 +198,43 @@ MAKEENUM(
 	),
 	ENAMES(
 		"Created(%1)",
-		"Azi. Gap",
 		"Count",
-		"DC",
-		"CLVD(%)",
-		"ISO",
 		"Misfit",
 		"STDR",
+		"Azi. Gap(°)",
 		"Stat",
-		"Strike1(°)",
-		"Dip1(°)",
-		"Rake1(°)",
-		"Strike2(°)",
-		"Dip2(°)",
-		"Rake2(°)",
+		"DC(%)",
+		"CLVD(%)",
+		"ISO(%)",
+		"S1(°)",
+		"D1(°)",
+		"R1(°)",
+		"S2(°)",
+		"D2(°)",
+		"R2(°)",
 		"Agency",
 		"Author"
 	)
 );
 
 int FMColAligns[FMListColumns::Quantity] = {
-	Qt::AlignLeft | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter
+	Qt::AlignLeft | Qt::AlignVCenter, // CREATED
+	Qt::AlignCenter,                  // COUNT
+	Qt::AlignCenter,                  // MISFIT
+	Qt::AlignCenter,                  // STDR
+	Qt::AlignCenter,                  // GAP
+	Qt::AlignCenter,                  // STAT
+	Qt::AlignCenter,                  // DC
+	Qt::AlignCenter,                  // CLVD
+	Qt::AlignCenter,                  // ISO
+	Qt::AlignCenter,                  // STRIKE1
+	Qt::AlignCenter,                  // DIP1
+	Qt::AlignCenter,                  // RAKE1
+	Qt::AlignCenter,                  // STRIKE2
+	Qt::AlignCenter,                  // DIP2
+	Qt::AlignCenter,                  // RAKE2
+	Qt::AlignCenter,                  // AGENCY
+	Qt::AlignCenter                   // AUTHOR
 };
 
 bool FMColBold[FMListColumns::Quantity] = {
@@ -1768,6 +1768,9 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 			storeOrigin(org.get());
 		}
 
+		for ( int i = 0; i < _originTree->columnCount(); ++i )
+			_originTree->resizeColumnToContents(i);
+
 		for ( size_t i = 0; i < _currentEvent->focalMechanismReferenceCount(); ++i ) {
 			FocalMechanismReference *ref = _currentEvent->focalMechanismReference(i);
 			FocalMechanismPtr fm = FocalMechanism::Find(ref->focalMechanismID());
@@ -1793,6 +1796,9 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 
 			storeFM(fm.get());
 		}
+
+		for ( int i = 0; i < _ui.fmTree->columnCount(); ++i )
+			_ui.fmTree->resizeColumnToContents(i);
 
 		_blockObserver = false;
 		updateContent();
@@ -2110,7 +2116,7 @@ void EventEdit::updateFMRow(int row, FocalMechanism *fm) {
 
 	item->setData(0, Qt::UserRole, QString(fm->publicID().c_str()));
 
-	POPULATE_COLUMN_DOUBLE(FML_GAP, fm->azimuthalGap(), 2);
+	POPULATE_COLUMN_INT(FML_GAP, int(fm->azimuthalGap()));
 	POPULATE_COLUMN_INT(FML_COUNT, fm->stationPolarityCount());
 
 	// Strike, dip, rake
