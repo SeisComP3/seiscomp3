@@ -65,6 +65,8 @@
     the CTBTO/IDC codebase
   * Added `mb_idc` magnitude implementation (derived from `mb_ave` from CTBTO/IDC)
     based on A5/2 amplitudes
+  * Added `ML_idc` magnitude implementation (derived from `ML` from CTBTO/IDC)
+    based on SBSNR amplitudes
 
 * seedlink
 
