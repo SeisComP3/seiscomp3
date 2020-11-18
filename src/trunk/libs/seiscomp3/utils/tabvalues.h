@@ -95,6 +95,7 @@ class SC_SYSTEM_CORE_API TabValues : public Core::BaseObject {
 	// ----------------------------------------------------------------------
 	public:
 		// X,Y value range
+		std::string            header;
 		ValueList              x, y;
 		OPT(double)            lowerUndefinedX, upperUndefinedX;
 		std::vector<ValueList> values; // y-major

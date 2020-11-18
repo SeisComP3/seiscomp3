@@ -311,10 +311,7 @@ bool TabValues::read(const std::string &filename) {
 		if ( hashPos != string::npos )
 			line.erase(line.begin() + int(hashPos), line.end());
 		Core::trim(line);
-		if ( line.empty() ) continue;
-
-		if ( line != "n" )
-			return false;
+		header = line;
 		break;
 	}
 
