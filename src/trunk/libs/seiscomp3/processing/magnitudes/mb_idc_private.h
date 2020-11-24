@@ -15,7 +15,9 @@
 #ifndef SEISCOMP_PROCESSING_MAGNITUDEPROCESSOR_MB_IDC_H
 #define SEISCOMP_PROCESSING_MAGNITUDEPROCESSOR_MB_IDC_H
 
+
 #include <seiscomp3/processing/magnitudeprocessor.h>
+#include <seiscomp3/utils/tabvalues.h>
 
 
 using namespace Seiscomp;
@@ -41,6 +43,9 @@ class SC_SYSTEM_CLIENT_API Magnitude_mb_idc : public MagnitudeProcessor {
 		                                const DataModel::SensorLocation *receiver,
 		                                const DataModel::Amplitude *,
 		                                double &value);
+
+	private:
+		Util::TabValuesPtr _Q;
 };
 
 

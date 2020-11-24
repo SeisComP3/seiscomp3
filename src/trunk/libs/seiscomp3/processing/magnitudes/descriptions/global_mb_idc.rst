@@ -9,7 +9,7 @@ Station Magnitude
 
 .. math::
 
-   mag = \log10(\frac{A}{T}) + B(\Delta,h)
+   mag = \log10(\frac{A}{T}) + Q(\Delta,h)
 
 with
 
@@ -17,7 +17,7 @@ A: amplitude of type A5/2
 
 T: period of the signal in seconds
 
-B: attenuation correction function of event distance and event depth
+Q: attenuation correction function of event distance and event depth
 
 h: event depth in km
 
@@ -28,9 +28,24 @@ degree for distances out to 180 degrees and for depths 0, 15, 40 km, and
 tables. The tabulated values were adjusted for the fact that the original
 (Veith, K. F., and Clawson, G. E., 1972) tables relate to peak-to-peak
 amplitudes, whereas the measured amplitudes for mb calculations are half
-peak-to-peak. The corrections are read from a file installed at
-`@DATADIR@/magnitudes/IDC/qfvc.mb`. If that file is not present no magnitude
+peak-to-peak. The default corrections are read from a file installed at
+:file:`@DATADIR@/magnitudes/IDC/qfvc.mb`.If that file is not present no magnitude
 will be calculated.
+
+Station corrections
+-------------------
+
+Station magnitudes can be computed with a station specific correction table
+which is configured in the global bindings. The parameter :conf:`magnitudes.mb(IDC).Q`
+takes a path and allows to use placeholders for network code (:code:`{net}`),
+station code (:code:`{sta}`) and location code (:code:`{loc}`).
+
+Example:
+
+.. code::
+
+   magnitudes.mb(IDC).Q = @DATADIR@/magnitudes/IDC/{net}.{sta}.mb
+
 
 * Amplitude unit in SeisComP3: **nanometer** (nm)
 * Time window: 5.5 s

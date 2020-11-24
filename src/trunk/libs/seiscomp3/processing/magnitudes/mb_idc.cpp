@@ -18,7 +18,8 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/system/environment.h>
-#include <seiscomp3/utils/tabvalues.h>
+
+#include <boost/thread/mutex.hpp>
 
 #include <cmath> // log10
 #include <vector> // log10
@@ -27,7 +28,7 @@
 
 
 #define AMP_TYPE "A5/2"
-#define MAG_TYPE "mb_idc"
+#define MAG_TYPE "mb(IDC)"
 
 #define MINIMUM_DISTANCE 20.0   // in degrees
 #define MAXIMUM_DISTANCE 105.0  // in degrees
@@ -41,9 +42,10 @@ namespace {
 
 std::string ExpectedAmplitudeUnit = "nm";
 
-static Util::TabValues tableQ;
-static bool validTableQ = false;
-static bool readTableQ = false;
+Util::TabValues tableQ;
+bool validTableQ = false;
+bool readTableQ = false;
+boost::mutex mutexTableQ;
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -68,23 +70,64 @@ std::string Magnitude_mb_idc::amplitudeType() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Magnitude_mb_idc::setup(const Settings &settings) {
+	_Q.reset();
+
 	if ( !MagnitudeProcessor::setup(settings) )
 		return false;
 
-	if ( !readTableQ ) {
-		string tablePath = Environment::Instance()->absolutePath("@DATADIR@/magnitudes/IDC/qfvc.mb");
-		validTableQ = tableQ.read(tablePath);
-		if ( !validTableQ ) {
-			SEISCOMP_ERROR("Failed to read Q values from: %s", tablePath.c_str());
+	try {
+		string tablePath = Environment::Instance()->absolutePath(settings.getString("magnitudes.mb(IDC).Q"));
+		size_t p;
+
+		p = tablePath.find("{net}");
+		if ( p != string::npos ) {
+			tablePath.replace(p, 5, settings.networkCode);
 		}
 
-		readTableQ = true;
+		p = tablePath.find("{sta}");
+		if ( p != string::npos ) {
+			tablePath.replace(p, 5, settings.stationCode);
+		}
+
+		p = tablePath.find("{loc}");
+		if ( p != string::npos ) {
+			tablePath.replace(p, 5, settings.locationCode);
+		}
+
+		SEISCOMP_DEBUG("Read station specific mb(IDC) Q table at %s",
+		               tablePath.c_str());
+
+		_Q = new Util::TabValues;
+		bool validLocalTable = _Q->read(tablePath);
+		if ( !validLocalTable ) {
+			_Q.reset();
+			SEISCOMP_ERROR("Failed to read A values from: %s", tablePath.c_str());
+			return false;
+		}
 	}
-	else if ( !validTableQ ) {
-		SEISCOMP_ERROR("Invalid Q value table");
+	catch ( ... ) {}
+
+	if ( !_Q ) {
+		mutexTableQ.lock();
+		if ( !readTableQ ) {
+			string tablePath = Environment::Instance()->absolutePath("@DATADIR@/magnitudes/IDC/qfvc.mb");
+			SEISCOMP_DEBUG("Read global mb(IDC) Q table at %s", tablePath.c_str());
+
+			validTableQ = tableQ.read(tablePath);
+			if ( !validTableQ ) {
+				SEISCOMP_ERROR("Failed to read Q values from: %s", tablePath.c_str());
+			}
+
+			readTableQ = true;
+		}
+		else if ( !validTableQ ) {
+			SEISCOMP_ERROR("Invalid Q value table");
+		}
+		mutexTableQ.unlock();
+		return validTableQ;
 	}
 
-	return validTableQ;
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
-	<plugin name="mb_idc">
+	<plugin name="mb(IDC)">
 		<extends>global</extends>
 		<description>
 		Body wave magnitude computed at CTBTO/IDC (mb) is calculated for seismic
@@ -9,4 +9,27 @@
 		from the event.
 		</description>
 	</plugin>
+	<binding name="mb(IDC)" module="global">
+		<description>
+		Body wave magnitude computed at CTBTO/IDC (mb) is calculated for seismic
+		events from the time-defining primary body waves recorded at seismic
+		stations at an epicentral distance between 20 and 105 degrees
+		from the event.
+		</description>
+		<configuration>
+			<group name="magnitudes">
+				<group name="mb(IDC)">
+					<parameter name="Q" type="path">
+						<description>
+						Location of the station specific Q table. If not
+						specified then @DATADIR@/magnitudes/IDC/qfvc.ml will be
+						used as fallback. {net}, {sta} and {loc} are placeholders
+						which will be replaced with the concrete network code,
+						station code and location code.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</binding>
 </seiscomp>
