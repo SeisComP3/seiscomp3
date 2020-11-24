@@ -2,6 +2,10 @@
 
 ## Release YYYY.ddd
 
+```SC_API_VERSION 13.0.0```
+
+This release adds support for Qt5 and Python3.
+
 * Ms_20
 
   * Added new surface waves magnitude Ms_20 according to IASPEI standard
