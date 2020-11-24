@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
-	<plugin name="ML(IDC)">
+	<plugin name="ML_IDC">
 		<extends>global</extends>
 		<description>
 		CTBTO/IDC local magnitude.
 		</description>
 	</plugin>
-	<binding name="ML(IDC)" module="global">
+	<binding name="ML_IDC" module="global">
 		<description>
 		CTBTO/IDC local magnitude.
 		</description>

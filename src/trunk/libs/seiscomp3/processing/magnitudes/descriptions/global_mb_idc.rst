@@ -36,7 +36,7 @@ Station corrections
 -------------------
 
 Station magnitudes can be computed with a station specific correction table
-which is configured in the global bindings. The parameter :conf:`magnitudes.mb(IDC).Q`
+which is configured in the global bindings. The parameter :confval:`magnitudes.mb(IDC).Q`
 takes a path and allows to use placeholders for network code (:code:`{net}`),
 station code (:code:`{sta}`) and location code (:code:`{loc}`).
 
