@@ -22,6 +22,14 @@ This release adds support for Qt5 and Python3.
     fx = DFX
     ``` 
 
+* scevent
+
+  * Fix bug with respect to event splitting. New origins were not associated
+    correctly with the neither the split nor the new event in combination
+    with the matching picks criterion.
+  * Fix reading of origins withouth depth in evrc plugin
+  * Fix setting no event type for region 'world' in evrc plugin
+
 * scrttv
 
   * Add option `Toggle record borders` which shows/hides the borders of records.
