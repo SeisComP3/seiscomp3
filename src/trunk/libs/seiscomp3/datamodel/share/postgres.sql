@@ -2088,13 +2088,3 @@ CREATE INDEX DataExtent_m_lastScan_m_lastScan_ms ON DataExtent(m_lastScan,m_last
 CREATE TRIGGER DataExtent_update BEFORE UPDATE ON DataExtent FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
-CREATE OR REPLACE FUNCTION Fix_bytea_output() RETURNS void
-AS $BODY$
-BEGIN
-	IF (SELECT current_setting('server_version_num'))::int >= 90000 THEN
-		EXECUTE('ALTER DATABASE ' || current_database() || ' SET bytea_output TO ''escape''');
-	END IF;
-END;
-$BODY$ LANGUAGE plpgsql;
-
-SELECT Fix_bytea_output();

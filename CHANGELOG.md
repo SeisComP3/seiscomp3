@@ -42,6 +42,11 @@
 
 * trunk
 
+  * Add database support for 64bit ids. The old MYSQL schema scripts used
+    32bit integers for table ids. The new MYSQL schema scripts are using
+    64bit integers. Both version are supported by the code. To migrate an
+    existing MYSQL database to 64bit integers requires rather expensive
+    table conversions. For more details can be found in the documentation.
   * Fixed Buttworth bandpass amplitude damping and made `BW = BW_BP`
   * Added Butterworth bandstop filter (`BW_BS`)
   * Added Array.bytes() to Python wrappers (only)
