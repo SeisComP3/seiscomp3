@@ -52,6 +52,11 @@ This release adds support for Qt5 and Python3.
     to the database is false.
   * Added more QC parameters to the documentation
 
+* scxmldump
+
+  * Fixed bug that caused missing focal mechanism if only preferred
+    solutions should be exported
+
 * trunk
 
   * Add database support for 64bit ids. The old MYSQL schema scripts used
