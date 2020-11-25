@@ -15,6 +15,7 @@
 
 #define SEISCOMP_COMPONENT REGIONCHECK
 
+
 #include "regioncheck.h"
 
 #include <seiscomp3/core/plugin.h>
@@ -25,15 +26,21 @@
 #include <seiscomp3/datamodel/journalentry.h>
 #include <seiscomp3/seismology/regions.h>
 
+
 ADD_SC_PLUGIN("Region check for events that sets the event type to \"outside of network interest\" "
               "if the location is outside preconfigured regions",
               "Jan Becker, Dirk Roessler, gempa GmbH <jabe@gempa.de>", 0, 1, 0)
+
 
 using namespace std;
 using namespace Seiscomp;
 using namespace Seiscomp::Core;
 using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Geo;
+
+
+namespace {
+
 
 bool getEventType(EventType &type, const GeoFeature::Attributes &attributes) {
 	GeoFeature::Attributes::const_iterator it = attributes.find("eventType");
@@ -59,7 +66,19 @@ bool getBnaAttributes(double &value, const GeoFeature::Attributes &attributes, c
 	return true;
 }
 
+
+}
+
+
 namespace Seiscomp {
+
+
+RegionCheckProcessor::RegionCheckProcessor()
+: _hasPositiveRegions(false)
+, _hasNegativeRegions(false)
+, _setType(true)
+, _readEventTypeFromBNA(false) {}
+
 
 bool RegionCheckProcessor::setup(const Config::Config &config) {
 	const GeoFeatureSet &featureSet = GeoFeatureSetSingleton::getInstance();
@@ -449,6 +468,8 @@ bool RegionCheckProcessor::process(Event *event, const Journal &journal) {
 	return false;
 }
 
+
 REGISTER_EVENTPROCESSOR(RegionCheckProcessor, "RegionCheck");
+
 
 }

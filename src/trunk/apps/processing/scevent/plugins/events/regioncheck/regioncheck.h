@@ -31,7 +31,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 	// ----------------------------------------------------------------------
 	public:
 		//! C'tor
-		RegionCheckProcessor() = default;
+		RegionCheckProcessor();
 
 
 	// ----------------------------------------------------------------------
@@ -67,10 +67,10 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 		std::vector<RegionCheck>  _regions;
 		OPT(DataModel::EventType) _eventTypePositive;
 		OPT(DataModel::EventType) _eventTypeNegative;
-		bool                      _hasPositiveRegions{false};
-		bool                      _hasNegativeRegions{false};
-		bool                      _setType{true};
-		bool                      _readEventTypeFromBNA{false};
+		bool                      _hasPositiveRegions;
+		bool                      _hasNegativeRegions;
+		bool                      _setType;
+		bool                      _readEventTypeFromBNA;
 };
 
 }
