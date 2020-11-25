@@ -767,7 +767,7 @@ class EventDump : public Seiscomp::Client::Application {
 				query()->load(fm.get());
 				for ( size_t m = 0; m < fm->momentTensorCount(); ++m ) {
 					MomentTensor *mt = fm->momentTensor(m);
-					if (ignoreArrivals) // TODO: review!
+					if ( ignoreArrivals ) // TODO: review!
 						removeAllStationContributions(mt);
 				}
 
