@@ -125,17 +125,6 @@ create the database and tables for you. If you are using PostgreSQL you have
 to provide a working database with the correct schema. The schema files are
 part of the distribution and can be found in :file:`share/db/postgresql.sql`.
 
-.. note::
-
-   As of PostgreSQL version 9 the default output encoding has changed to hex.
-   In order to fix issues with seiscomp3 log in to your database and run the
-   following command.
-
-   .. code-block:: sql
-
-      ALTER DATABASE seiscomp3 SET bytea_output TO 'escape';
-
-
 ----
 
 .. code-block:: none

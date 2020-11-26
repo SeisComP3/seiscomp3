@@ -23,6 +23,7 @@
 
 %include "seiscomp3/core.h"
 %import "seiscomp3/core/factory.h"
+%include stdint.i
 %include std_string.i
 %include std_complex.i
 %include "seiscomp3/core/archive.h"

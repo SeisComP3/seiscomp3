@@ -1,686 +1,619 @@
 /************************************************************************
- *  Routines for unpacking STEIM1, STEIM2, INT_16, and INT_32           
- *  data records.							
- *									
- *	Douglas Neuhauser						
- *	Seismographic Station						
- *	University of California, Berkeley				
- *	doug@seismo.berkeley.edu					
- *									
- *									
- *  Changes:	       							
- *									
- *  2003.10.07
- *  - Some more rearrangement for better logging (using SLlog log params)
- *  with sl_log_rl().
+ * Routines for decoding INT16, INT32, STEIM1 and STEIM2 encoded data.
  *
- *  2003.09.19
- *  - Get rid of the check for bad frame count in the Steim 1 and 2
- *  unpack routines, it was meaningless as the frame count was just
- *  calculated with the information being used to check it.
+ * These are routines extracted from libmseed 2.18 and adapted for use
+ * in this code base.
  *
- *  2003.07.26
- *  - Set the decompression error flag in the SLCD.
- *  - Minor renaming updates.
- *
- *  2003.06.05
- *  - Declare the unpack_x routines as static. 
- *
- *  2003.03.02
- *  - Move needed header stuff into the original file.    	
- *  - Add an interface function msh_unpack() to work within the context	
- *    of libslink.
- *  - port to use libslink functions usage [tswapx() and sl_log()].
- *  - change to use uintXX_t type declarations for fixed integer types.
- *  - cleanup for clarity and remove some minor debugging/unused code.
- *
- *
- *  Modified by Chad Trabant, ORFEUS/EC-Project MEREDIAN		
- *
- *  modified: 2006.344
+ * modified: 2016.288
  ************************************************************************/
 
-/*
- * Copyright (c) 1996 The Regents of the University of California.
- * All Rights Reserved.
- * 
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for educational, research and non-profit purposes,
- * without fee, and without a written agreement is hereby granted,
- * provided that the above copyright notice, this paragraph and the
- * following three paragraphs appear in all copies.
- * 
- * Permission to incorporate this software into commercial products may
- * be obtained from the Office of Technology Licensing, 2150 Shattuck
- * Avenue, Suite 510, Berkeley, CA  94704.
- * 
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
- * FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
- * INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND
- * ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE
- * PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
- * CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
- * UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- */
-
+#include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <memory.h>
 
 #include "libslink.h"
 
-/* Data types */
-#define STEIM1                  10
-#define STEIM2                  11
-#define INT_16                  1
-#define INT_32                  3
+/* Supported SEED data encodings */
+#define DE_ASCII 0
+#define DE_INT16 1
+#define DE_INT32 3
+#define DE_FLOAT32 4
+#define DE_FLOAT64 5
+#define DE_STEIM1 10
+#define DE_STEIM2 11
 
-#define	VALS_PER_FRAME	(16-1)		/* # of ints for data per frame.*/
+/* Internal decoding routines */
+static int decode_int16 (int16_t *input, int samplecount, int32_t *output,
+                         int outputlength, int swapflag);
+static int decode_int32 (int32_t *input, int samplecount, int32_t *output,
+                         int outputlength, int swapflag);
+static int decode_steim1 (int32_t *input, int inputlength, int samplecount,
+                          int32_t *output, int outputlength, char *srcname,
+                          int swapflag, SLlog *log);
+static int decode_steim2 (int32_t *input, int inputlength, int samplecount,
+                          int32_t *output, int outputlength, char *srcname,
+                          int swapflag, SLlog *log);
 
-#define STEIM1_SPECIAL_MASK     0
-#define STEIM1_BYTE_MASK        1
-#define STEIM1_HALFWORD_MASK    2
-#define STEIM1_FULLWORD_MASK    3
+/* Control for printing debugging information */
+static int decodedebug = 0;
 
-#define STEIM2_SPECIAL_MASK     0
-#define STEIM2_BYTE_MASK        1
-#define STEIM2_123_MASK         2
-#define STEIM2_567_MASK         3
+/* Extract bit range and shift to start */
+#define EXTRACTBITRANGE(VALUE, STARTBIT, LENGTH) ((VALUE & (((1 << LENGTH) - 1) << STARTBIT)) >> STARTBIT)
 
-#define	X0  pf->w[0].fw
-#define	XN  pf->w[1].fw
-
-typedef union u_diff {                  /* union for steim 1 objects.   */
-    int8_t          byte[4];            /* 4 1-byte differences.        */
-    int16_t         hw[2];              /* 2 halfword differences.      */
-    int32_t         fw;                 /* 1 fullword difference.       */
-} SLP_PACKED U_DIFF;
-
-typedef struct frame {                  /* frame in a seed data record. */
-    uint32_t	    ctrl;               /* control word for frame.      */
-    U_DIFF          w[15];              /* compressed data.             */
-} SLP_PACKED FRAME;
-
-
-/* Internal unpacking routines */
-static int unpack_steim1 (FRAME*, int, int, int, int32_t*, int32_t*,
-			  int32_t*, int32_t*, int, SLlog*);
-static int unpack_steim2 (FRAME*, int, int, int, int32_t*, int32_t*,
-			  int32_t*, int32_t*, int, SLlog*);
-static int unpack_int_16 (int16_t*, int, int, int, int32_t*, int);
-static int unpack_int_32 (int32_t*, int, int, int, int32_t*, int);
-
-
-/************************************************************************/
-/*  sl_msr_unpack():							*/
-/*  Unpack Mini-SEED data for a given SLMSrecord.  The data is accessed	*/
-/*  in the record indicated by SLMSrecord->msrecord and the unpacked	*/
-/*  samples are placed in SLMSrecord->datasamples.  The resulting data	*/
-/*  samples are 32-bit integers in host order.				*/
-/*                                                                      */
-/*  Return number of samples unpacked or -1 on error.                   */
-/************************************************************************/
+/************************************************************************
+ *  sl_msr_unpack():
+ *  Unpack Mini-SEED data for a given SLMSrecord.  The data is accessed
+ *  in the record indicated by SLMSrecord->msrecord and the unpacked
+ *  samples are placed in SLMSrecord->datasamples.  The resulting data
+ *  samples are 32-bit integers in host byte order.
+ *
+ *  Return number of samples unpacked or -1 on error.
+ ************************************************************************/
 int
-sl_msr_unpack (SLlog * log, SLMSrecord * msr, int swapflag)
+sl_msr_unpack (SLlog *log, SLMSrecord *msr, int swapflag)
 {
-  int     i;
-  int     blksize;		/* byte size of Mini-SEED record	*/
-  int     format;		/* SEED data encoding value		*/
-  int     datasize;             /* byte size of data samples in record 	*/
-  int     nsamples;		/* number of samples unpacked		*/
-  int     unpacksize;		/* byte size of unpacked samples	*/
-  const char *dbuf;
-  int32_t    *diffbuff;
-  int32_t     x0, xn;
+  const char *dbuf; /* Encoded data buffer */
+  char srcname[50]; /* Source name, "Net_Sta_Loc_Chan[_Qual] */
+  int blksize;      /* byte size of Mini-SEED record */
+  int format;       /* SEED data encoding */
+  int datasize;     /* byte size of data samples in record */
+  int nsamples;     /* number of samples unpacked */
+  int unpacksize;   /* byte size of unpacked samples */
+  int i;
 
   /* Reset the error flag */
   msr->unpackerr = MSD_NOERROR;
 
   /* Determine data format and blocksize from Blockette 1000 */
-  if ( msr->Blkt1000 != NULL )
-    {
-      format = msr->Blkt1000->encoding;
-      for (blksize = 1, i = 1; i <= msr->Blkt1000->rec_len; i++)
-	blksize *= 2;
-    }
+  if (msr->Blkt1000 != NULL)
+  {
+    format = msr->Blkt1000->encoding;
+    for (blksize = 1, i = 1; i <= msr->Blkt1000->rec_len; i++)
+      blksize *= 2;
+  }
   else
-    {
-      sl_log_rl (log, 2, 0, "msr_unpack(): No Blockette 1000 found!\n");
-      return (-1);
-    }
+  {
+    sl_log_rl (log, 2, 0, "msr_unpack(): No Blockette 1000 found!\n");
+    return (-1);
+  }
 
   /* Calculate buffer size needed for unpacked samples */
-  unpacksize = msr->fsdh.num_samples * sizeof(int32_t);
+  unpacksize = msr->fsdh.num_samples * sizeof (int32_t);
 
   /* Allocate space for the unpacked data */
-  if ( msr->datasamples != NULL )
-    msr->datasamples = (int32_t *) malloc (unpacksize);
+  if (msr->datasamples != NULL)
+    msr->datasamples = (int32_t *)malloc (unpacksize);
   else
-    msr->datasamples = (int32_t *) realloc (msr->datasamples, unpacksize);
+    msr->datasamples = (int32_t *)realloc (msr->datasamples, unpacksize);
 
   datasize = blksize - msr->fsdh.begin_data;
-  dbuf = msr->msrecord + msr->fsdh.begin_data;
+  dbuf     = msr->msrecord + msr->fsdh.begin_data;
 
-  /* Decide if this is a format that we can decode.			*/
+  /* Decide if this is a format that we can decode. */
   switch (format)
-    {
-      
-    case STEIM1:
-      if ((diffbuff = (int32_t *) malloc(unpacksize)) == NULL)
-	{
-	  sl_log_rl (log, 2, 0, "unable to malloc diff buffer in msr_unpack()\n");
-	  return (-1);
-	}
-      
-      sl_log_rl (log, 1, 2, "Unpacking Steim-1 data frames\n");
+  {
 
-      nsamples = unpack_steim1 ((FRAME *)dbuf, datasize, msr->fsdh.num_samples,
-				msr->fsdh.num_samples, msr->datasamples, diffbuff, 
-				&x0, &xn, swapflag, log);
-      free (diffbuff);
-      break;
-      
-    case STEIM2:
-      if ((diffbuff = (int32_t *) malloc(unpacksize)) == NULL)
-	{
-	  sl_log_rl (log, 2, 0, "unable to malloc diff buffer in msr_unpack()\n");
-	  return (-1);
-	}
-      
-      sl_log_rl (log, 1, 2, "Unpacking Steim-2 data frames\n");
+  case DE_STEIM1:
+    sl_log_rl (log, 1, 2, "Unpacking Steim1 data frames\n");
 
-      nsamples = unpack_steim2 ((FRAME *)dbuf, datasize, msr->fsdh.num_samples,
-				msr->fsdh.num_samples, msr->datasamples, diffbuff,
-				&x0, &xn, swapflag, log);
-      free (diffbuff);
-      break;
-      
-    case INT_16:
-      sl_log_rl (log, 1, 2, "Unpacking INT-16 data samples\n");
+    sl_msr_srcname (msr, srcname, 0);
 
-      nsamples = unpack_int_16 ((int16_t *)dbuf, datasize, msr->fsdh.num_samples,
-				msr->fsdh.num_samples, msr->datasamples,
-				swapflag);
-      break;
-      
-    case INT_32:
-      sl_log_rl (log, 1, 2, "Unpacking INT-32 data samples\n");
+    nsamples = decode_steim1 ((int32_t *)dbuf, datasize, msr->fsdh.num_samples,
+                              msr->datasamples, unpacksize, srcname, swapflag, log);
 
-      nsamples = unpack_int_32 ((int32_t *)dbuf, datasize, msr->fsdh.num_samples,
-				msr->fsdh.num_samples, msr->datasamples,
-				swapflag);
-      break;
-      
-    default:
-      sl_log_rl (log, 2, 0, "Unable to unpack format %d for %.5s.%.2s.%.2s.%.3s\n", format,
-	      msr->fsdh.station, msr->fsdh.network,
-	      msr->fsdh.location, msr->fsdh.channel);
+    break;
 
-      msr->unpackerr = MSD_UNKNOWNFORMAT;
-      return (-1);
-    }
-  
+  case DE_STEIM2:
+    sl_log_rl (log, 1, 2, "Unpacking Steim2 data frames\n");
+
+    sl_msr_srcname (msr, srcname, 0);
+
+    nsamples = decode_steim2 ((int32_t *)dbuf, datasize, msr->fsdh.num_samples,
+                              msr->datasamples, unpacksize, srcname, swapflag, log);
+
+    break;
+
+  case DE_INT32:
+    sl_log_rl (log, 1, 2, "Unpacking INT32 data samples\n");
+
+    nsamples = decode_int32 ((int32_t *)dbuf, msr->fsdh.num_samples,
+                             msr->datasamples, unpacksize, swapflag);
+
+    break;
+
+  case DE_INT16:
+    sl_log_rl (log, 1, 2, "Unpacking INT16 data samples\n");
+
+    nsamples = decode_int16 ((int16_t *)dbuf, msr->fsdh.num_samples,
+                             msr->datasamples, unpacksize, swapflag);
+
+    break;
+
+  default:
+    sl_log_rl (log, 2, 0, "Unable to unpack format %d for %.5s.%.2s.%.2s.%.3s\n", format,
+               msr->fsdh.station, msr->fsdh.network,
+               msr->fsdh.location, msr->fsdh.channel);
+
+    msr->unpackerr = MSD_UNKNOWNFORMAT;
+    return (-1);
+  }
+
   if (nsamples > 0 || msr->fsdh.num_samples == 0)
-    {
-      return (nsamples);
-    }
+  {
+    return (nsamples);
+  }
+
   if (nsamples < 0)
-    {
-      msr->unpackerr = nsamples;
-    }
-  
+  {
+    msr->unpackerr = nsamples;
+  }
+
   return (-1);
-}
+} /* End of sl_msr_unpack() */
 
-
-/************************************************************************/
-/*  unpack_steim1:							*/
-/*	Unpack STEIM1 data frames and place in supplied buffer.		*/
-/*	Data is divided into frames.					*/
-/*	If req_samples < 0, perform fast decompression of |req_samples|.*/
-/*	Fast decompression does not decompress all frames, and does not	*/
-/*	verify that the last sample == xN.  Fast decompression is used	*/
-/*	primarily to obtain the first value and difference.		*/
-/*  Return: # of samples returned; negative unpack/decomp flag on error.*/
-/************************************************************************/
-int unpack_steim1
-   (FRAME	*pf,		/* ptr to Steim1 data frames.		*/
-    int		nbytes,		/* number of bytes in all data frames.	*/
-    int		num_samples,	/* number of data samples in all frames.*/
-    int		req_samples,	/* number of data desired by caller.	*/
-    int32_t	*databuff,	/* ptr to unpacked data array.		*/
-    int32_t	*diffbuff,	/* ptr to unpacked diff array.		*/
-    int32_t	*px0,		/* return X0, first sample in frame.	*/
-    int32_t	*pxn,		/* return XN, last sample in frame.	*/
-    int		swapflag,	/* if data should be swapped.	        */
-    SLlog       *log)
+/************************************************************************
+ * decode_int16:
+ *
+ * Decode 16-bit integer data and place in supplied buffer as 32-bit
+ * integers.
+ *
+ * Return number of samples in output buffer on success, -1 on error.
+ ************************************************************************/
+static int
+decode_int16 (int16_t *input, int samplecount, int32_t *output,
+              int outputlength, int swapflag)
 {
-    int32_t    	*diff = diffbuff;
-    int32_t	*data = databuff;
-    int32_t	*prev;
-    int		num_data_frames = nbytes / sizeof(FRAME);
-    int		nd = 0;		/* # of data points in packet.		*/
-    int		fn;		/* current frame number.		*/
-    int		wn;		/* current work number in the frame.	*/
-    int		compflag;      	/* current compression flag.		*/
-    int		fast = 0;	/* flag for fast decompression.		*/
-    int		nr, i;
-    int32_t	last_data;
-    int32_t	itmp;
-    int16_t	stmp;
-    uint32_t	ctrl;
+  int16_t sample;
+  int idx;
 
-    if (num_samples < 0) return (MSD_BADSAMPCOUNT);
-    if (num_samples == 0) return (0);
-    if (req_samples < 0) {
-	req_samples = -req_samples;
-	fast = 1;
+  if (samplecount <= 0)
+    return 0;
+
+  if (!input || !output || outputlength <= 0)
+    return -1;
+
+  for (idx = 0; idx < samplecount && outputlength >= (int)sizeof (int32_t); idx++)
+  {
+    sample = input[idx];
+
+    if (swapflag)
+      sl_gswap2a (&sample);
+
+    output[idx] = (int32_t)sample;
+
+    outputlength -= sizeof (int32_t);
+  }
+
+  return idx;
+} /* End of decode_int16() */
+
+/************************************************************************
+ * decode_int32:
+ *
+ * Decode 32-bit integer data and place in supplied buffer as 32-bit
+ * integers.
+ *
+ * Return number of samples in output buffer on success, -1 on error.
+ ************************************************************************/
+static int
+decode_int32 (int32_t *input, int samplecount, int32_t *output,
+              int outputlength, int swapflag)
+{
+  int32_t sample;
+  int idx;
+
+  if (samplecount <= 0)
+    return 0;
+
+  if (!input || !output || outputlength <= 0)
+    return -1;
+
+  for (idx = 0; idx < samplecount && outputlength >= (int)sizeof (int32_t); idx++)
+  {
+    sample = input[idx];
+
+    if (swapflag)
+      sl_gswap4a (&sample);
+
+    output[idx] = sample;
+
+    outputlength -= sizeof (int32_t);
+  }
+
+  return idx;
+} /* End of decode_int32() */
+
+/************************************************************************
+ * decode_steim1:
+ *
+ * Decode Steim1 encoded miniSEED data and place in supplied buffer
+ * as 32-bit integers.
+ *
+ * Return number of samples in output buffer on success, -1 on error.
+ ************************************************************************/
+static int
+decode_steim1 (int32_t *input, int inputlength, int samplecount,
+               int32_t *output, int outputlength, char *srcname,
+               int swapflag, SLlog *log)
+{
+  int32_t *outputptr = output; /* Pointer to next output sample location */
+  uint32_t frame[16];          /* Frame, 16 x 32-bit quantities = 64 bytes */
+  int32_t X0    = 0;           /* Forward integration constant, aka first sample */
+  int32_t Xn    = 0;           /* Reverse integration constant, aka last sample */
+  int maxframes = inputlength / 64;
+  int frameidx;
+  int startnibble;
+  int nibble;
+  int widx;
+  int diffcount;
+  int idx;
+
+  union dword {
+    int8_t d8[4];
+    int16_t d16[2];
+    int32_t d32;
+  } SLP_PACKED *word;
+
+  if (inputlength <= 0)
+    return 0;
+
+  if (!input || !output || outputlength <= 0 || maxframes <= 0)
+    return -1;
+
+  if (decodedebug)
+    sl_log_rl (log, 1, 0, "Decoding %d Steim1 frames, swapflag: %d, srcname: %s\n",
+               maxframes, swapflag, (srcname) ? srcname : "");
+
+  for (frameidx = 0; frameidx < maxframes && samplecount > 0; frameidx++)
+  {
+    /* Copy frame, each is 16x32-bit quantities = 64 bytes */
+    memcpy (frame, input + (16 * frameidx), 64);
+
+    /* Save forward integration constant (X0) and reverse integration constant (Xn)
+       and set the starting nibble index depending on frame. */
+    if (frameidx == 0)
+    {
+      if (swapflag)
+      {
+        sl_gswap4a (&frame[1]);
+        sl_gswap4a (&frame[2]);
+      }
+
+      X0 = frame[1];
+      Xn = frame[2];
+
+      startnibble = 3; /* First frame: skip nibbles, X0, and Xn */
+
+      if (decodedebug)
+        sl_log_rl (log, 1, 0, "Frame %d: X0=%d  Xn=%d\n", frameidx, X0, Xn);
+    }
+    else
+    {
+      startnibble = 1; /* Subsequent frames: skip nibbles */
+
+      if (decodedebug)
+        sl_log_rl (log, 1, 0, "Frame %d\n", frameidx);
     }
 
-    /* Extract forward and reverse integration constants in first frame */
-    *px0 = X0;
-    *pxn = XN;
+    /* Swap 32-bit word containing the nibbles */
+    if (swapflag)
+      sl_gswap4a (&frame[0]);
 
-    if ( swapflag )
+    /* Decode each 32-bit word according to nibble */
+    for (widx = startnibble; widx < 16 && samplecount > 0; widx++)
+    {
+      /* W0: the first 32-bit contains 16 x 2-bit nibbles for each word */
+      nibble = EXTRACTBITRANGE (frame[0], (30 - (2 * widx)), 2);
+
+      word      = (union dword *)&frame[widx];
+      diffcount = 0;
+
+      switch (nibble)
       {
-	sl_gswap4 (px0);
-	sl_gswap4 (pxn);
-      }
-    
-    /*	Decode compressed data in each frame.				*/
-    for (fn = 0; fn < num_data_frames; fn++)
+      case 0: /* 00: Special flag, no differences */
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 00=special\n", widx);
+        break;
+
+      case 1: /* 01: Four 1-byte differences */
+        diffcount = 4;
+
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 01=4x8b  %d  %d  %d  %d\n",
+                     widx, word->d8[0], word->d8[1], word->d8[2], word->d8[3]);
+        break;
+
+      case 2: /* 10: Two 2-byte differences */
+        diffcount = 2;
+
+        if (swapflag)
+        {
+          sl_gswap2a (&word->d16[0]);
+          sl_gswap2a (&word->d16[1]);
+        }
+
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 10=2x16b  %d  %d\n", widx, word->d16[0], word->d16[1]);
+        break;
+
+      case 3: /* 11: One 4-byte difference */
+        diffcount = 1;
+        if (swapflag)
+          sl_gswap4a (&word->d32);
+
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 11=1x32b  %d\n", widx, word->d32);
+        break;
+      } /* Done with decoding 32-bit word based on nibble */
+
+      /* Apply accumulated differences to calculate output samples */
+      if (diffcount > 0)
       {
-	if (fast && nd >= req_samples)
-	  break;
-	
-	ctrl = pf->ctrl;
-	if ( swapflag ) sl_gswap4 (&ctrl);
-	
-	for (wn = 0; wn < VALS_PER_FRAME; wn++)
-	  {
-	    if (nd >= num_samples) break;
-	    if (fast && nd >= req_samples) break;
+        for (idx = 0; idx < diffcount && samplecount > 0; idx++, outputptr++)
+        {
+          if (outputptr == output) /* Ignore first difference, instead store X0 */
+            *outputptr = X0;
+          else if (diffcount == 4) /* Otherwise store difference from previous sample */
+            *outputptr = *(outputptr - 1) + word->d8[idx];
+          else if (diffcount == 2)
+            *outputptr = *(outputptr - 1) + word->d16[idx];
+          else if (diffcount == 1)
+            *outputptr = *(outputptr - 1) + word->d32;
 
-	    compflag = (ctrl >> ((VALS_PER_FRAME-wn-1)*2)) & 0x3;
-
-	    switch (compflag)
-	      {
-		
-	      case STEIM1_SPECIAL_MASK:
-		/* Headers info -- skip it.				*/
-		break;
-		
-	      case STEIM1_BYTE_MASK:
-		/* Next 4 bytes are 4 1-byte differences.		*/
-		for (i=0; i < 4 && nd < num_samples; i++, nd++)
-		  *diff++ = pf->w[wn].byte[i];
-		break;
-		
-	      case STEIM1_HALFWORD_MASK:
-		/* Next 4 bytes are 2 2-byte differences.		*/
-		for (i=0; i < 2 && nd < num_samples; i++, nd++)
-		  {
-		    if (swapflag)
-		      {
-			stmp = pf->w[wn].hw[i];
-			if ( swapflag ) sl_gswap2 (&stmp);
-			*diff++ = stmp;
-		      }
-		    else *diff++ = pf->w[wn].hw[i];
-		  }
-		break;
-		
-	      case STEIM1_FULLWORD_MASK:
-		/* Next 4 bytes are 1 4-byte difference.		*/
-		if (swapflag)
-		  {
-		    itmp = pf->w[wn].fw;
-		    if ( swapflag ) sl_gswap4 (&itmp);
-		    *diff++ = itmp;
-		  }
-		else *diff++ = pf->w[wn].fw;
-		nd++;
-		break;
-		
-	      default:
-		/* Should NEVER get here.				*/
-		sl_log_rl (log, 2, 0, "unpack_steim1(): invalid cf = %d\n", compflag);
-		return (MSD_STBADCOMPFLAG);
-		break;
-	      }
-	  }
-	++pf;
+          samplecount--;
+        }
       }
-    
-    /* Test if the number of samples implied by the data frames is the
-     * same number indicated in the header
-     */
-    if ( nd != num_samples )
-      sl_log_rl (log, 2, 2,
-		 "unpack_steim1(): number of samples indicated in header (%d) does not equal data (%d)\n",
-		 num_samples, nd);
+    } /* Done looping over nibbles and 32-bit words */
+  }   /* Done looping over frames */
 
-    /*	For now, assume sample count in header to be correct.		*/
-    /*	One way of "trimming" data from a block is simply to reduce	*/
-    /*	the sample count.  It is not clear from the documentation	*/
-    /*	whether this is a valid or not, but it appears to be done	*/
-    /*	by other program, so we should not complain about its effect.	*/
+  /* Check data integrity by comparing last sample to Xn (reverse integration constant) */
+  if (outputptr != output && *(outputptr - 1) != Xn)
+  {
+    sl_log_rl (log, 1, 0, "%s: Warning: Data integrity check for Steim1 failed, Last sample=%d, Xn=%d\n",
+               srcname, *(outputptr - 1), Xn);
+  }
 
-    nr = req_samples;
+  return (outputptr - output);
+} /* End of decode_steim1() */
 
-    /* Compute first value based on last_value from previous buffer.	*/
-    /* The two should correspond in all cases EXCEPT for the first	*/
-    /* record for each component (because we don't have a valid xn from	*/
-    /* a previous record).  Although the Steim compression algorithm	*/
-    /* defines x(-1) as 0 for the first record, this only works for the	*/
-    /* first record created since coldstart of the datalogger, NOT the	*/
-    /* first record of an arbitrary starting record for an event.	*/
-
-    /* In all cases, assume x0 is correct, since we don't have x(-1).	*/
-    data = databuff;
-    diff = diffbuff;
-    last_data = *px0;
-    if (nr > 0)
-      *data = *px0;
-
-    /* Compute all but first values based on previous value.		*/
-    /* Compute all data values in order to compare last value with xn,	*/
-    /* but only return the number of values desired by calling routine.	*/
-
-    prev = data - 1;
-    while (--nr > 0 && --nd > 0)
-	last_data = *++data = *++diff + *++prev;
-
-    if (! fast)
-      {
-	while (--nd > 0)
-	  last_data = *++diff + last_data;
-	
-	/* Verify that the last value is identical to xn.		*/
-	if (last_data != *pxn)
-	  {
-	    sl_log_rl (log, 2, 0,
-		       "Data integrity for Steim-1 is bad, last_data=%d, xn=%d\n",
-		       last_data, *pxn);
-
-	    return (MSD_STBADLASTMATCH);
-	  }
-      }
-
-    return ((req_samples<num_samples) ? req_samples : num_samples);
-}  /* End of unpack_steim1() */
-
-
-/************************************************************************/
-/*  unpack_steim2:							*/
-/*	Unpack STEIM2 data frames and place in supplied buffer.		*/
-/*	Data is divided into frames.					*/
-/*	If req_samples < 0, perform fast decompression of |req_samples|.*/
-/*	Fast decompression does not decompress all frames, and does not	*/
-/*	verify that the last sample == xN.  Fast decompression is used	*/
-/*	primarily to obtain the first value and difference.		*/
-/*  Return: # of samples returned; negative unpack/decomp flag on error.*/
-/************************************************************************/
-int unpack_steim2 
-   (FRAME	*pf,		/* ptr to Steim2 data frames.		*/
-    int		nbytes,		/* number of bytes in all data frames.	*/
-    int		num_samples,	/* number of data samples in all frames.*/
-    int		req_samples,	/* number of data desired by caller.	*/
-    int32_t	*databuff,	/* ptr to unpacked data array.		*/
-    int32_t	*diffbuff,	/* ptr to unpacked diff array.		*/
-    int32_t	*px0,		/* return X0, first sample in frame.	*/
-    int32_t	*pxn,		/* return XN, last sample in frame.	*/
-    int		swapflag,	/* if data should be swapped.	        */
-    SLlog       *log)
+/************************************************************************
+ * decode_steim2:
+ *
+ * Decode Steim2 encoded miniSEED data and place in supplied buffer
+ * as 32-bit integers.
+ *
+ * Return number of samples in output buffer on success, -1 on error.
+ ************************************************************************/
+static int
+decode_steim2 (int32_t *input, int inputlength, int samplecount,
+               int32_t *output, int outputlength, char *srcname,
+               int swapflag, SLlog *log)
 {
-    int32_t    	*diff = diffbuff;
-    int32_t	*data = databuff;
-    int32_t	*prev;
-    int		num_data_frames = nbytes / sizeof(FRAME);
-    int		nd = 0;		/* # of data points in packet.		*/
-    int		fn;		/* current frame number.		*/
-    int		wn;		/* current work number in the frame.	*/
-    int		compflag;     	/* current compression flag.		*/
-    int		fast = 0;	/* flag for fast decompression.		*/
-    int		nr, i;
-    int		n, bits, m1, m2;
-    int32_t	last_data;
-    int32_t    	val;
-    int8_t	dnib;
-    uint32_t	ctrl;
+  int32_t *outputptr = output; /* Pointer to next output sample location */
+  uint32_t frame[16];          /* Frame, 16 x 32-bit quantities = 64 bytes */
+  int32_t X0 = 0;              /* Forward integration constant, aka first sample */
+  int32_t Xn = 0;              /* Reverse integration constant, aka last sample */
+  int32_t diff[7];
+  int32_t semask;
+  int maxframes = inputlength / 64;
+  int frameidx;
+  int startnibble;
+  int nibble;
+  int widx;
+  int diffcount;
+  int dnib;
+  int idx;
 
-    if (num_samples < 0) return (MSD_BADSAMPCOUNT);
-    if (num_samples == 0) return (0);
-    if (req_samples < 0) {
-	req_samples = -req_samples;
-	fast = 1;
+  union dword {
+    int8_t d8[4];
+    int32_t d32;
+  } SLP_PACKED *word;
+
+  if (inputlength <= 0)
+    return 0;
+
+  if (!input || !output || outputlength <= 0 || maxframes <= 0)
+    return -1;
+
+  if (decodedebug)
+    sl_log_rl (log, 1, 0, "Decoding %d Steim2 frames, swapflag: %d, srcname: %s\n",
+               maxframes, swapflag, (srcname) ? srcname : "");
+
+  for (frameidx = 0; frameidx < maxframes && samplecount > 0; frameidx++)
+  {
+    /* Copy frame, each is 16x32-bit quantities = 64 bytes */
+    memcpy (frame, input + (16 * frameidx), 64);
+
+    /* Save forward integration constant (X0) and reverse integration constant (Xn)
+       and set the starting nibble index depending on frame. */
+    if (frameidx == 0)
+    {
+      if (swapflag)
+      {
+        sl_gswap4a (&frame[1]);
+        sl_gswap4a (&frame[2]);
+      }
+
+      X0 = frame[1];
+      Xn = frame[2];
+
+      startnibble = 3; /* First frame: skip nibbles, X0, and Xn */
+
+      if (decodedebug)
+        sl_log_rl (log, 1, 0, "Frame %d: X0=%d  Xn=%d\n", frameidx, X0, Xn);
+    }
+    else
+    {
+      startnibble = 1; /* Subsequent frames: skip nibbles */
+
+      if (decodedebug)
+        sl_log_rl (log, 1, 0, "Frame %d\n", frameidx);
     }
 
-    /* Extract forward and reverse integration constants in first frame.*/
-    *px0 = X0;
-    *pxn = XN;
+    /* Swap 32-bit word containing the nibbles */
+    if (swapflag)
+      sl_gswap4a (&frame[0]);
 
-    if ( swapflag )
+    /* Decode each 32-bit word according to nibble */
+    for (widx = startnibble; widx < 16 && samplecount > 0; widx++)
+    {
+      /* W0: the first 32-bit quantity contains 16 x 2-bit nibbles */
+      nibble    = EXTRACTBITRANGE (frame[0], (30 - (2 * widx)), 2);
+      diffcount = 0;
+
+      switch (nibble)
       {
-	sl_gswap4 (px0);
-	sl_gswap4 (pxn);
-      }
-    
-    /*	Decode compressed data in each frame.				*/
-    for (fn = 0; fn < num_data_frames; fn++)
+      case 0: /* nibble=00: Special flag, no differences */
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 00=special\n", widx);
+
+        break;
+      case 1: /* nibble=01: Four 1-byte differences */
+        diffcount = 4;
+
+        word = (union dword *)&frame[widx];
+        for (idx = 0; idx < diffcount; idx++)
+        {
+          diff[idx] = word->d8[idx];
+        }
+
+        if (decodedebug)
+          sl_log_rl (log, 1, 0, "  W%02d: 01=4x8b  %d  %d  %d  %d\n", widx, diff[0], diff[1], diff[2], diff[3]);
+        break;
+
+      case 2: /* nibble=10: Must consult dnib, the high order two bits */
+        if (swapflag)
+          sl_gswap4a (&frame[widx]);
+        dnib = EXTRACTBITRANGE (frame[widx], 30, 2);
+
+        switch (dnib)
+        {
+        case 0: /* nibble=10, dnib=00: Error, undefined value */
+          sl_log_rl (log, 2, 0, "%s: Impossible Steim2 dnib=00 for nibble=10\n", srcname);
+
+          return -1;
+          break;
+
+        case 1: /* nibble=10, dnib=01: One 30-bit difference */
+          diffcount = 1;
+          semask    = 1U << (30 - 1); /* Sign extension from bit 30 */
+          diff[0]   = EXTRACTBITRANGE (frame[widx], 0, 30);
+          diff[0]   = (diff[0] ^ semask) - semask;
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 10,01=1x30b  %d\n", widx, diff[0]);
+          break;
+
+        case 2: /* nibble=10, dnib=10: Two 15-bit differences */
+          diffcount = 2;
+          semask    = 1U << (15 - 1); /* Sign extension from bit 15 */
+          for (idx = 0; idx < diffcount; idx++)
+          {
+            diff[idx] = EXTRACTBITRANGE (frame[widx], (15 - idx * 15), 15);
+            diff[idx] = (diff[idx] ^ semask) - semask;
+          }
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 10,10=2x15b  %d  %d\n", widx, diff[0], diff[1]);
+          break;
+
+        case 3: /* nibble=10, dnib=11: Three 10-bit differences */
+          diffcount = 3;
+          semask    = 1U << (10 - 1); /* Sign extension from bit 10 */
+          for (idx = 0; idx < diffcount; idx++)
+          {
+            diff[idx] = EXTRACTBITRANGE (frame[widx], (20 - idx * 10), 10);
+            diff[idx] = (diff[idx] ^ semask) - semask;
+          }
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 10,11=3x10b  %d  %d  %d\n", widx, diff[0], diff[1], diff[2]);
+          break;
+        }
+
+        break;
+
+      case 3: /* nibble=11: Must consult dnib, the high order two bits */
+        if (swapflag)
+          sl_gswap4a (&frame[widx]);
+        dnib = EXTRACTBITRANGE (frame[widx], 30, 2);
+
+        switch (dnib)
+        {
+        case 0: /* nibble=11, dnib=00: Five 6-bit differences */
+          diffcount = 5;
+          semask    = 1U << (6 - 1); /* Sign extension from bit 6 */
+          for (idx = 0; idx < diffcount; idx++)
+          {
+            diff[idx] = EXTRACTBITRANGE (frame[widx], (24 - idx * 6), 6);
+            diff[idx] = (diff[idx] ^ semask) - semask;
+          }
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 11,00=5x6b  %d  %d  %d  %d  %d\n",
+                       widx, diff[0], diff[1], diff[2], diff[3], diff[4]);
+          break;
+
+        case 1: /* nibble=11, dnib=01: Six 5-bit differences */
+          diffcount = 6;
+          semask    = 1U << (5 - 1); /* Sign extension from bit 5 */
+          for (idx = 0; idx < diffcount; idx++)
+          {
+            diff[idx] = EXTRACTBITRANGE (frame[widx], (25 - idx * 5), 5);
+            diff[idx] = (diff[idx] ^ semask) - semask;
+          }
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 11,01=6x5b  %d  %d  %d  %d  %d  %d\n",
+                       widx, diff[0], diff[1], diff[2], diff[3], diff[4], diff[5]);
+          break;
+
+        case 2: /* nibble=11, dnib=10: Seven 4-bit differences */
+          diffcount = 7;
+          semask    = 1U << (4 - 1); /* Sign extension from bit 4 */
+          for (idx = 0; idx < diffcount; idx++)
+          {
+            diff[idx] = EXTRACTBITRANGE (frame[widx], (24 - idx * 4), 4);
+            diff[idx] = (diff[idx] ^ semask) - semask;
+          }
+
+          if (decodedebug)
+            sl_log_rl (log, 1, 0, "  W%02d: 11,10=7x4b  %d  %d  %d  %d  %d  %d  %d\n",
+                       widx, diff[0], diff[1], diff[2], diff[3], diff[4], diff[5], diff[6]);
+          break;
+
+        case 3: /* nibble=11, dnib=11: Error, undefined value */
+          sl_log_rl (log, 2, 0, "%s: Impossible Steim2 dnib=11 for nibble=11\n", srcname);
+
+          return -1;
+          break;
+        }
+
+        break;
+      } /* Done with decoding 32-bit word based on nibble */
+
+      /* Apply differences to calculate output samples */
+      if (diffcount > 0)
       {
-	if (fast && nd >= req_samples) break;
-	ctrl = pf->ctrl;
-	if ( swapflag ) sl_gswap4 (&ctrl);
+        for (idx = 0; idx < diffcount && samplecount > 0; idx++, outputptr++)
+        {
+          if (outputptr == output) /* Ignore first difference, instead store X0 */
+            *outputptr = X0;
+          else /* Otherwise store difference from previous sample */
+            *outputptr = *(outputptr - 1) + diff[idx];
 
-	for (wn = 0; wn < VALS_PER_FRAME; wn++)
-	  {
-	    if (nd >= num_samples) break;
-	    if (fast && nd >= req_samples) break;
-
-	    compflag = (ctrl >> ((VALS_PER_FRAME-wn-1)*2)) & 0x3;
-
-	    switch (compflag)
-	      {
-	      case STEIM2_SPECIAL_MASK:
-		/* Headers info -- skip it.				*/
-		break;
-
-	      case STEIM2_BYTE_MASK:
-		/* Next 4 bytes are 4 1-byte differences.		*/
-		for (i=0; i < 4 && nd < num_samples; i++, nd++)
-		    *diff++ = pf->w[wn].byte[i];
-		break;
-
-	      case STEIM2_123_MASK:
-		val = pf->w[wn].fw;
-		if ( swapflag ) sl_gswap4 (&val);
-		dnib =  val >> 30 & 0x3;
-		switch (dnib)
-		  {
-		  case 1:	/*	1 30-bit difference.		*/
-		    bits = 30; n = 1; m1 = 0x3fffffff; m2 = 0x20000000; break;
-		  case 2:	/*  2 15-bit differences.		*/
-		    bits = 15; n = 2; m1 = 0x00007fff; m2 = 0x00004000; break;
-		  case 3:	/*  3 10-bit differences.		*/
-		    bits = 10; n = 3; m1 = 0x000003ff; m2 = 0x00000200; break;
-		  default:	/*	should NEVER get here.		*/
-		    sl_log_rl (log, 2, 0,
-			       "unpack_steim2(): invalid cf, dnib, fn, wn = %d, %d, %d, %d\n", 
-			       compflag, dnib, fn, wn);
-		    return (MSD_STBADCOMPFLAG);
-		    break;
-		}
-		/*  Uncompress the differences.			*/
-		for (i=(n-1)*bits; i >= 0 && nd < num_samples; i-=bits, nd++)
-		  {
-		    *diff = (val >> i) & m1;
-		    *diff = (*diff & m2) ? *diff | ~m1 : *diff;
-		    diff++;
-		  }
-		break;
-
-	      case STEIM2_567_MASK:
-		val = pf->w[wn].fw;
-		if ( swapflag ) sl_gswap4 (&val);
-		dnib =  val >> 30 & 0x3;
-		switch (dnib)
-		  {
-		  case 0:	/*  5 6-bit differences.		*/
-		    bits = 6; n = 5; m1 = 0x0000003f; m2 = 0x00000020; break;
-		  case 1:	/*  6 5-bit differences.		*/
-		    bits = 5; n = 6; m1 = 0x0000001f; m2 = 0x00000010; break;
-		  case 2:	/*  7 4-bit differences.		*/
-		    bits = 4; n = 7; m1 = 0x0000000f; m2 = 0x00000008; break;
-		  default:
-		    sl_log_rl (log, 2, 0,
-			       "unpack_steim2(): invalid cf, dnib, fn, wn = %d, %d, %d, %d\n", 
-			       compflag, dnib, fn, wn);
-		    return (MSD_STBADCOMPFLAG);
-		    break;
-		}
-		/*  Uncompress the differences.			*/
-		for (i=(n-1)*bits; i >= 0 && nd < num_samples; i-=bits, nd++)
-		  {
-		    *diff = (val >> i) & m1;
-		    *diff = (*diff & m2) ? *diff | ~m1 : *diff;
-		    diff++;
-		  }
-		break;
-
-	      default:
-		/* Should NEVER get here.				*/
-		sl_log_rl (log, 2, 0,
-			   "unpack_steim2(): invalid cf, fn, wn = %d, %d, %d\n",
-			   compflag, fn, wn);
-		return (MSD_STBADCOMPFLAG);
-		break;
-	      }
-	  }
-	++pf;
+          samplecount--;
+        }
       }
-    
-    /* Test if the number of samples implied by the data frames is the
-     * same number indicated in the header
-     */
-    if ( nd != num_samples )
-      sl_log_rl (log, 2, 2,
-		 "unpack_steim2(): number of samples indicated in header (%d) does not equal data (%d)\n",
-		 num_samples, nd);
+    } /* Done looping over nibbles and 32-bit words */
+  }   /* Done looping over frames */
 
-    /*	For now, assume sample count in header to be correct.		*/
-    /*	One way of "trimming" data from a block is simply to reduce	*/
-    /*	the sample count.  It is not clear from the documentation	*/
-    /*	whether this is a valid or not, but it appears to be done	*/
-    /*	by other program, so we should not complain about its effect.	*/
+  /* Check data integrity by comparing last sample to Xn (reverse integration constant) */
+  if (outputptr != output && *(outputptr - 1) != Xn)
+  {
+    sl_log_rl (log, 1, 0, "%s: Warning: Data integrity check for Steim2 failed, Last sample=%d, Xn=%d\n",
+               srcname, *(outputptr - 1), Xn);
+  }
 
-    nr = req_samples;
-
-    /* Compute first value based on last_value from previous buffer.	*/
-    /* The two should correspond in all cases EXCEPT for the first	*/
-    /* record for each component (because we don't have a valid xn from	*/
-    /* a previous record).  Although the Steim compression algorithm	*/
-    /* defines x(-1) as 0 for the first record, this only works for the	*/
-    /* first record created since coldstart of the datalogger, NOT the	*/
-    /* first record of an arbitrary starting record for an event.	*/
-
-    /* In all cases, assume x0 is correct, since we don't have x(-1).	*/
-    data = databuff;
-    diff = diffbuff;
-    last_data = *px0;
-    if (nr > 0)
-      *data = *px0;
-
-    /* Compute all but first values based on previous value.		*/
-    /* Compute all data values in order to compare last value with xn,	*/
-    /* but only return the number of values desired by calling routine.	*/
-
-    prev = data - 1;
-    while (--nr > 0 && --nd > 0)
-	last_data = *++data = *++diff + *++prev;
-
-    if (! fast)
-      {
-	while (--nd > 0)
-	  last_data = *++diff + last_data;
-	
-	/* Verify that the last value is identical to xn.		*/
-	if (last_data != *pxn)
-	  {
-	    sl_log_rl (log, 2, 0,
-		       "Data integrity for Steim-2 is bad, last_data=%d, xn=%d\n",
-		       last_data, *pxn);
-	    return (MSD_STBADLASTMATCH);
-	  }
-      }
-    
-    return ((req_samples<num_samples) ? req_samples : num_samples);
-}  /* End of unpack_steim2() */
-
-
-/************************************************************************/
-/*  unpack_int_16:							*/
-/*	Unpack int_16 miniSEED data and place in supplied buffer.	*/
-/*	If req_samples < 0, perform fast decompression of |req_samples|.*/
-/*	(not useful with this data format).				*/
-/*  Return: # of samples returned; negative unpack/decomp flag on error.*/
-/************************************************************************/
-int unpack_int_16 
-   (int16_t	*ibuf,		/* ptr to input data.			*/
-    int		nbytes,		/* number of bytes in all data frames.	*/
-    int		num_samples,	/* number of data samples in all frames.*/
-    int		req_samples,	/* number of data desired by caller.	*/
-    int32_t	*databuff,	/* ptr to unpacked data array.		*/
-    int		swapflag)       /* if data should be swapped.	        */
-{
-    int		nd = 0;		/* # of data points in packet.		*/
-    uint16_t	stmp;
-
-    if (num_samples < 0) return (MSD_BADSAMPCOUNT);
-    if (req_samples < 0) req_samples = -req_samples;
-
-    for (nd=0; nd<req_samples && nd<num_samples; nd++) {
-	stmp = ibuf[nd];
-	if ( swapflag ) sl_gswap2 (&stmp);
-	databuff[nd] = stmp;
-    }
-
-    return (nd);
-}  /* End of unpack_int_16() */
-
-
-/************************************************************************/
-/*  unpack_int_32:							*/
-/*	Unpack int_32 miniSEED data and place in supplied buffer.	*/
-/*	If req_samples < 0, perform fast decompression of |req_samples|.*/
-/*	(not useful with this data format).				*/
-/*  Return: # of samples returned; negative unpack/decomp flag on error.*/
-/************************************************************************/
-int unpack_int_32
-   (int32_t	*ibuf,		/* ptr to input data.			*/
-    int		nbytes,		/* number of bytes in all data frames.	*/
-    int		num_samples,	/* number of data samples in all frames.*/
-    int		req_samples,	/* number of data desired by caller.	*/
-    int32_t	*databuff,	/* ptr to unpacked data array.		*/
-    int		swapflag)	/* if data should be swapped.	        */
-{
-    int		nd = 0;		/* # of data points in packet.		*/
-    int32_t    	itmp;
-
-    if (num_samples < 0) return (MSD_BADSAMPCOUNT);
-    if (req_samples < 0) req_samples = -req_samples;
-
-    for (nd=0; nd<req_samples && nd<num_samples; nd++) {
-        itmp = ibuf[nd];
-	if ( swapflag ) sl_gswap4 (&itmp);
-	databuff[nd] = itmp;
-    }
-
-    return (nd);
-}  /* End of unpack_int_32() */
-
+  return (outputptr - output);
+} /* End of decode_steim2() */

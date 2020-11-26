@@ -29,6 +29,7 @@ using namespace std;
 
 
 IMPLEMENT_SC_ABSTRACT_CLASS(DatabaseInterface, "DatabaseInterface");
+const DatabaseInterface::OID DatabaseInterface::INVALID_OID = 0;
 
 
 DatabaseInterface::DatabaseInterface() : _timeout(0) {}
@@ -249,6 +250,66 @@ std::string DatabaseInterface::getRowFieldString(int index) {
 	const void *data = getRowField(index);
 	if ( !data ) return "";
 	return (const char*)data;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool DatabaseInterface::escape(std::string &out, const std::string &in) {
+	out.resize(in.size()*2+1);
+	size_t length = in.length();
+	const char *in_buf = in.c_str();
+	char *out_buf = &out[0];
+	size_t j = 0;
+
+	for ( size_t i = 0; i < length && *in_buf; ++length, ++in_buf ) {
+		switch ( *in_buf ) {
+			case '\'':
+				out_buf[j++] = '\'';
+				out_buf[j++]   = '\'';
+				break;
+			case '\\':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = '\\';
+				break;
+			case '\n':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 'n';
+				break;
+			case '\t':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 't';
+				break;
+			case '\r':
+				// Filter out
+				break;
+			case '\a':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 'a';
+				break;
+			case '\b':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 'b';
+				break;
+			case '\f':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 'f';
+				break;
+			case '\v':
+				out_buf[j++] = '\\';
+				out_buf[j++]   = 'v';
+				break;
+			default:
+				out_buf[j++] = *in_buf;
+				break;
+		}
+	}
+
+	out_buf[j] = '\0';
+	out.resize(j);
+	return j;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

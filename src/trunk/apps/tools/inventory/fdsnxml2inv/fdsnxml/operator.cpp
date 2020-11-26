@@ -9,9 +9,7 @@
 
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/operator.h>
-#include <fdsnxml/agency.h>
 #include <fdsnxml/person.h>
-#include <fdsnxml/stringtype.h>
 #include <algorithm>
 #include <seiscomp3/logging/log.h>
 
@@ -21,9 +19,9 @@ namespace FDSNXML {
 
 
 Operator::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
-	addProperty(arrayClassProperty<Agency>("agency", "FDSNXML::Agency", &Operator::agencyCount, &Operator::agency, static_cast<bool (Operator::*)(Agency*)>(&Operator::addAgency), &Operator::removeAgency, static_cast<bool (Operator::*)(Agency*)>(&Operator::removeAgency)));
+	addProperty(objectProperty<Agency>("agency", "FDSNXML::Agency", false, false, &Operator::setAgency, &Operator::agency));
+	addProperty(objectProperty<StringType>("webSite", "FDSNXML::StringType", false, true, &Operator::setWebSite, &Operator::webSite));
 	addProperty(arrayClassProperty<Person>("contact", "FDSNXML::Person", &Operator::contactCount, &Operator::contact, static_cast<bool (Operator::*)(Person*)>(&Operator::addContact), &Operator::removeContact, static_cast<bool (Operator::*)(Person*)>(&Operator::removeContact)));
-	addProperty(arrayClassProperty<StringType>("webSite", "FDSNXML::StringType", &Operator::webSiteCount, &Operator::webSite, static_cast<bool (Operator::*)(StringType*)>(&Operator::addWebSite), &Operator::removeWebSite, static_cast<bool (Operator::*)(StringType*)>(&Operator::removeWebSite)));
 }
 
 
@@ -58,7 +56,69 @@ Operator::~Operator() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Operator::operator==(const Operator &rhs) const {
+	if ( !(_agency == rhs._agency) )
+		return false;
+	if ( !(_webSite == rhs._webSite) )
+		return false;
 	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Operator::setAgency(const Agency& agency) {
+	_agency = agency;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Agency& Operator::agency() {
+	return _agency;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Agency Operator::agency() const {
+	return _agency;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Operator::setWebSite(const OPT(StringType)& webSite) {
+	_webSite = webSite;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+StringType& Operator::webSite() {
+	if ( _webSite )
+		return *_webSite;
+	throw Seiscomp::Core::ValueException("Operator.webSite is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const StringType& Operator::webSite() const {
+	if ( _webSite )
+		return *_webSite;
+	throw Seiscomp::Core::ValueException("Operator.webSite is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -67,75 +127,9 @@ bool Operator::operator==(const Operator &rhs) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Operator& Operator::operator=(const Operator &other) {
+	_agency = other._agency;
+	_webSite = other._webSite;
 	return *this;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t Operator::agencyCount() const {
-	return _agencys.size();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Agency* Operator::agency(size_t i) const {
-	return _agencys[i].get();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::addAgency(Agency *obj) {
-	if ( obj == NULL )
-		return false;
-
-	// Add the element
-	_agencys.push_back(obj);
-	
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::removeAgency(Agency *obj) {
-	if ( obj == NULL )
-		return false;
-
-	std::vector<AgencyPtr>::iterator it;
-	it = std::find(_agencys.begin(), _agencys.end(), obj);
-	// Element has not been found
-	if ( it == _agencys.end() ) {
-		SEISCOMP_ERROR("Operator::removeAgency(Agency*) -> child object has not been found although the parent pointer matches???");
-		return false;
-	}
-
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::removeAgency(size_t i) {
-	// index out of bounds
-	if ( i >= _agencys.size() )
-		return false;
-
-	_agencys.erase(_agencys.begin() + i);
-
-	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -202,74 +196,6 @@ bool Operator::removeContact(size_t i) {
 		return false;
 
 	_contacts.erase(_contacts.begin() + i);
-
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t Operator::webSiteCount() const {
-	return _webSites.size();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StringType* Operator::webSite(size_t i) const {
-	return _webSites[i].get();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::addWebSite(StringType *obj) {
-	if ( obj == NULL )
-		return false;
-
-	// Add the element
-	_webSites.push_back(obj);
-	
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::removeWebSite(StringType *obj) {
-	if ( obj == NULL )
-		return false;
-
-	std::vector<StringTypePtr>::iterator it;
-	it = std::find(_webSites.begin(), _webSites.end(), obj);
-	// Element has not been found
-	if ( it == _webSites.end() ) {
-		SEISCOMP_ERROR("Operator::removeWebSite(StringType*) -> child object has not been found although the parent pointer matches???");
-		return false;
-	}
-
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Operator::removeWebSite(size_t i) {
-	// index out of bounds
-	if ( i >= _webSites.size() )
-		return false;
-
-	_webSites.erase(_webSites.begin() + i);
 
 	return true;
 }

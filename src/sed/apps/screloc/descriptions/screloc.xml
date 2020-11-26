@@ -33,6 +33,21 @@
 					weight.
 					</description>
 				</parameter>
+				<parameter name="adoptFixedDepth" type="boolean" default="false">
+					<description>
+					If the input origin's depth is fixed then it will be fixed
+					during the relocation process as well.
+					</description>
+				</parameter>
+				<parameter name="originIDSuffix" type="string">
+					<description>
+					Suffix appended to the publicID of the origin to be relocated
+					to form the new publicID. This
+					helps to identify pairs of origins before and after relocation.
+					However, new publicIDs are unrelated to the time of creation.
+					If not defined, a new publicID will be generated automatically.
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 		<command-line>
@@ -79,19 +94,19 @@
 
 			<group name="Mode">
 				<option long-flag="test">
-					<description>test mode, do not send any message</description>
+					<description>Test mode, do not send any message</description>
 				</option>
 			</group>
 
 			<group name="Input">
 				<option flag="O" long-flag="origin-id" argument="arg">
-					<description>reprocess the origin and send a message unless test mode is activated</description>
+					<description>Reprocess the origin and send a message unless test mode is activated</description>
 				</option>
 				<option long-flag="locator" argument="arg">
-					<description>the locator type to use</description>
+					<description>The locator type to use</description>
 				</option>
 				<option long-flag="use-weight" argument="arg" default="0">
-					<description>use current picks weight</description>
+					<description>Use current picks weight</description>
 				</option>
 				<option long-flag="evaluation-mode" argument="arg">
 					<description>set origin evaluation mode: &quot;AUTOMATIC&quot; or &quot;MANUAL&quot;</description>
@@ -111,6 +126,14 @@
 					of relocation. In other words: two LocSAT origins in, two
 					NonLinLoc origins out. All other objects are passed through.
 					</description>
+				</option>
+			</group>
+			<group name="Profiling">
+				<option long-flag="measure-relocation-time">
+					<description>Measure the time spent in a single relocation</description>
+				</option>
+				<option long-flag="repeated-relocations" argument="arg">
+					<description>improve measurement of relocation time by running each relocation multiple times. Specify the number of relocations, e.g. 100.</description>
 				</option>
 			</group>
 		</command-line>

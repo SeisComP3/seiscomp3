@@ -22,7 +22,7 @@ int SearchWidget::_ObjectCount = 0;
 
 
 
-SearchWidget::SearchWidget(QWidget* widget, Qt::WFlags f)
+SearchWidget::SearchWidget(QWidget* widget, Qt::WindowFlags f)
  : QWidget(widget, f) {
 	_ui.setupUi(this);
 	setWindowFlags(Qt::Tool);
@@ -80,7 +80,7 @@ const SearchWidget::Matches& SearchWidget::previousMatches() const {
 
 
 
-SearchWidget* SearchWidget::Create(QWidget* parent, Qt::WFlags f) {
+SearchWidget* SearchWidget::Create(QWidget* parent, Qt::WindowFlags f) {
 	if ( _ObjectCount > 0 )
 		return NULL;
 

@@ -153,7 +153,7 @@ class SyncNettab(Client.Application):
     def run(self):
         try:
             if self.dcid is None:
-                print >>sys.stderr, "Please specify datacenter/archive ID"
+                print("Please specify datacenter/archive ID", file=sys.stderr)
                 return False
             
             nettab = Nettab(self.dcid)
@@ -173,24 +173,24 @@ class SyncNettab(Client.Application):
 
                 idx = 1
                 for tab in sorted(self.tab_files):
-                    print >>sys.stderr, "Loading %s (%d/%d)" % (tab, idx, len(self.tab_files))
+                    print("Loading %s (%d/%d)" % (tab, idx, len(self.tab_files)), file=sys.stderr)
                     self.__load_file(nettab.load_tab, tab)
-                    print >>sys.stderr, "Generating data structures"
+                    print("Generating data structures", file=sys.stderr)
                     nettab.update_inventory(instdb, inv)
                     idx = idx+1
                     if self.isExitRequested():
-                        print >>sys.stderr, "Exit requested, abort"
+                        print("Exit requested, abort", file=sys.stderr)
                         return False
 
-                print >>sys.stderr, "Generating output"
+                print("Generating output", file=sys.stderr)
                 ar = IO.XMLArchive()
                 ar.setFormattedOutput(self.commandline().hasOption("formatted"))
                 ar.create(self.out_file)
                 ar.writeObject(inv.obj)
                 ar.close()
-                print >>sys.stderr, "Finished"
+                print("Finished", file=sys.stderr)
 
-            except (IOError, NettabError), e:
+            except (IOError, NettabError) as e:
                 logs.error("fatal error: " + str(e))
                 return False
 

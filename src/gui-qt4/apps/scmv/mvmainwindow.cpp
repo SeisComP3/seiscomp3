@@ -516,7 +516,7 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
+MvMainWindow::MvMainWindow(QWidget* parent, Qt::WindowFlags flags)
 : Gui::MainWindow(parent, flags)
 , _mapWidget(NULL)
 , _displayMode(NONE)
@@ -758,7 +758,7 @@ void MvMainWindow::setupStandardUi() {
 	connect(_ui.searchStationAction, SIGNAL(triggered(bool)), this, SLOT(showSearchWidget()));
 	connect(_ui.centerOriginForLatestEventAction, SIGNAL(triggered(bool)), this, SLOT(centerOriginForLatestEvent()));
 	connect(_ui.resetAction, SIGNAL(triggered()), this, SLOT(resetStationData()));
-	connect(_ui.quitAction, SIGNAL(triggered()), SCApp, SLOT(quit()));
+	connect(_ui.quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 	connect(_ui.qcLatencyAction, SIGNAL(triggered()), &_qualityControlStatusSelector, SLOT(selectLatency()));
 	connect(_ui.qcDelayAction, SIGNAL(triggered()), &_qualityControlStatusSelector, SLOT(selectDelay()));

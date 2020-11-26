@@ -15,6 +15,7 @@
 #define __TRACEWIDGET_H__
 
 #include <QtGui>
+#include <QFrame>
 
 namespace Seiscomp {
 namespace Gui {
@@ -23,7 +24,7 @@ class TraceWidget : public QFrame {
 	Q_OBJECT
 
 	public:
-		TraceWidget(QWidget *parent = 0, Qt::WFlags f = 0);
+		TraceWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 	public:
 		void setValueCount(int count);

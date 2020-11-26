@@ -49,6 +49,8 @@
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
+#include <QToolButton>
+
 #include <algorithm>
 #include <numeric>
 #include <fstream>
@@ -434,15 +436,15 @@ class ZoomRecordWidget : public RecordWidget {
 
 class TraceList : public RecordView {
 	public:
-		TraceList(QWidget *parent = 0, Qt::WFlags f = 0)
+		TraceList(QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeWindow& tw,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(tw, parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeSpan& ts,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(ts, parent, f) {}
 
 	protected:
@@ -453,17 +455,22 @@ class TraceList : public RecordView {
 
 		void dropEvent(QDropEvent *event) {
 			if ( event->mimeData()->hasFormat("text/plain") ) {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+				QString strFilter = event->mimeData()->text();
+#else
+				QString strFilter = event->mimeData()->data("text/plain");
+#endif
 				Math::Filtering::InPlaceFilter<float> *f =
-					Math::Filtering::InPlaceFilter<float>::Create(event->mimeData()->text().toStdString());
+					Math::Filtering::InPlaceFilter<float>::Create(strFilter.toStdString());
 
 				if ( !f ) {
 					QMessageBox::critical(this, "Create filter",
-					QString("Invalid filter: %1").arg(event->mimeData()->text()));
+					QString("Invalid filter: %1").arg(strFilter));
 					return;
 				}
 
 				delete f;
-				emit filterChanged(event->mimeData()->text());
+				emit filterChanged(strFilter);
 			}
 		}
 };
@@ -1421,7 +1428,7 @@ Stream* findConfiguredStream(Station *station, const Seiscomp::Core::Time &time)
 					try {
 						ps = DataModel::ParameterSet::Find(setup->parameterSetID());
 					}
-					catch ( Core::ValueException ) {
+					catch ( Core::ValueException & ) {
 						continue;
 					}
 
@@ -2243,7 +2250,7 @@ void PickerView::Config::getPickPhases(StringList &phases, const QList<PhaseGrou
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PickerView::PickerView(QWidget *parent, Qt::WFlags f)
+PickerView::PickerView(QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent,f) {
 	_recordView = new TraceList();
 	init();
@@ -2255,7 +2262,7 @@ PickerView::PickerView(QWidget *parent, Qt::WFlags f)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::PickerView(const Seiscomp::Core::TimeWindow& tw,
-                       QWidget *parent, Qt::WFlags f)
+                       QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent, f) {
 	_recordView = new TraceList(tw);
 	init();
@@ -2267,7 +2274,7 @@ PickerView::PickerView(const Seiscomp::Core::TimeWindow& tw,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PickerView::PickerView(const Seiscomp::Core::TimeSpan& ts,
-                       QWidget *parent, Qt::WFlags f)
+                       QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent, f) {
 	_recordView = new TraceList(ts);
 	init();
@@ -2426,6 +2433,7 @@ void PickerView::init() {
 
 	_currentRecord = new ZoomRecordWidget();
 	_currentRecord->showScaledValues(_ui.actionShowTraceValuesInNmS->isChecked());
+	_currentRecord->showRecordBorders(_ui.actionShowRecordBorders->isChecked());
 	_currentRecord->setClippingEnabled(_ui.actionClipComponentsToViewport->isChecked());
 	_currentRecord->setMouseTracking(true);
 	_currentRecord->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -2805,6 +2813,8 @@ void PickerView::init() {
 	        _recordView, SLOT(horizontalZoomOut()));
 	connect(_ui.actionShowTraceValuesInNmS, SIGNAL(triggered(bool)),
 	        this, SLOT(showTraceScaleToggled(bool)));
+	connect(_ui.actionShowRecordBorders, SIGNAL(triggered(bool)),
+	        this, SLOT(showRecordBorders(bool)));
 
 	connect(_ui.actionToggleFilter, SIGNAL(triggered(bool)),
 	        this, SLOT(toggleFilter()));
@@ -4403,11 +4413,13 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 			if ( sta )
 				loc = findSensorLocation(sta, streamID.locationCode(), origin->time());
 
+			Stream *cha = Client::Inventory::Instance()->getStream(pick.get());
+
 			double dist;
 			try { dist = arrival->distance(); }
 			catch ( ... ) { dist = 0; }
 
-			RecordViewItem* item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false);
+			RecordViewItem* item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false, cha);
 
 			// A new item has been inserted
 			if ( item != NULL ) {
@@ -4568,11 +4580,13 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* o) {
 					if ( sta )
 						loc = findSensorLocation(sta, pick->waveformID().locationCode(), _origin->time());
 
+					Stream *cha = Client::Inventory::Instance()->getStream(pick);
+
 					double dist;
 					try { dist = _origin->arrival(i)->distance(); }
 					catch ( ... ) { dist = 0; }
 
-					item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false);
+					item = addStream(loc, pick->waveformID(), dist, pick->waveformID().stationCode().c_str(), true, false, cha);
 					if ( item ) {
 						_stations.insert((pick->waveformID().networkCode() + "." +
 						                  pick->waveformID().stationCode()).c_str());
@@ -5992,6 +6006,15 @@ void PickerView::showTraceScaleToggled(bool e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::showRecordBorders(bool e) {
+	_currentRecord->showRecordBorders(e);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::updateItemLabel(RecordViewItem* item, char component) {
 	/*
 	if ( item == _recordView->currentItem() )
@@ -7181,7 +7204,7 @@ void PickerView::automaticRepick() {
 						try {
 							ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
 						}
-						catch ( Core::ValueException ) {
+						catch ( Core::ValueException & ) {
 							continue;
 						}
 
@@ -7408,7 +7431,7 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 
 				if ( !marker->filter().isEmpty() )
 					p->setFilterID(marker->filter().toStdString());
-				p->setPhaseHint(Phase((const char*)marker->text().toAscii()));
+				p->setPhaseHint(Phase((const char*)marker->text().toLatin1()));
 				p->setEvaluationMode(EvaluationMode(MANUAL));
 				p->setPolarity(marker->polarity());
 				CreationInfo ci;
@@ -7887,6 +7910,7 @@ void PickerView::modifyOrigin() {
 		tmpOrigin->setLongitude(dialog.longitude());
 		tmpOrigin->setTime(Core::Time(dialog.getTime_t()));
 		tmpOrigin->setDepth(RealQuantity(dialog.depth()));
+		tmpOrigin->setDepthType(OriginDepthType(OPERATOR_ASSIGNED));
 		tmpOrigin->setEvaluationMode(EvaluationMode(MANUAL));
 		tmpOrigin->setCreationInfo(ci);
 		for ( size_t i = 0; i < _origin->arrivalCount(); ++i ) {

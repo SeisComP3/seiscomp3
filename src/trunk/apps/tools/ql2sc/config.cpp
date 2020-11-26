@@ -58,16 +58,12 @@ bool Config::init() {
 	}
 	catch ( ... ) { backLog = 1800; }
 
-	// number of cached objects
-	try {
-		int i = app->configGetInt("cacheSize");
-		cacheSize = i < 0 ? 0 : (size_t)i;
-	}
-	catch ( ... ) { cacheSize = 5000; }
-
 	// maximum number of notifiers per message
 	try { batchSize = app->configGetInt("batchSize"); }
 	catch ( ... ) { batchSize = 2000; }
+
+	try { maxWaitForEventIDTimeout = app->configGetInt("eventAssociationTimeout"); }
+	catch ( ... ) { maxWaitForEventIDTimeout = 10; }
 
 	// host configurations
 	hosts.clear();
@@ -103,6 +99,9 @@ bool Config::init() {
 
 		try { cfg.syncEventAttributes = app->configGetBool(prefix + "syncEventAttributes"); }
 		catch ( ... ) { cfg.syncEventAttributes = true; }
+
+		try { cfg.syncPreferred = app->configGetBool(prefix + "syncPreferred"); }
+		catch ( ... ) { cfg.syncPreferred = false; }
 
 		// data options
 		bool isSet;

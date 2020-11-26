@@ -1,5 +1,8 @@
-<application xmlns="http://wadl.dev.java.net/2009/02"
-		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://www.w3.org/Submission/wadl/wadl.xsd"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns="http://wadl.dev.java.net/2009/02">
 	<resources base="/fdsnws/event/1">
 		<resource path="query">
 			<method name="GET">
@@ -19,6 +22,7 @@
 					<param name="minmagnitude" style="query" type="xsd:float"/>
 					<param name="maxmagnitude" style="query" type="xsd:float"/>
 					<param name="magnitudetype" style="query" type="xsd:string"/>
+					<param name="eventtype" style="query" type="xsd:string"/>
 					<param name="includeallorigins" style="query" type="xsd:boolean" default="false"/>
 					<param name="includeallmagnitudes" style="query" type="xsd:boolean" default="false"/>
 					<param name="includearrivals" style="query" type="xsd:boolean" default="false"/>
@@ -41,7 +45,8 @@
 					</param>
 					<param name="contributor" style="query" type="xsd:string"/>
 					<param name="catalog" style="query" type="xsd:string"/>
-					<param name="updatedafter" style="query" type="xsd:dateTime"/>
+					<!-- not implemented -->
+					<!--param name="updateafter" style="query" type="xsd:dateTime"/-->
 					<param name="format" style="query" type="xsd:string" default="xml">
 						<option value="xml" mediaType="application/xml"/>
 						<option value="text" mediaType="text/plain"/>
@@ -79,9 +84,10 @@
 							Adds all momentensor station contributions.
 						</doc>
 					</param>
+					<!-- includecomments parameter, requires hideComments configuration parameter to be disabled -->
 					<param name="includecomments" style="query" type="xsd:boolean" default="false">
 						<doc title="definition">
-							SeisComP3 supports comments for most datamodel
+							SeisComP supports comments for most datamodel
 							objects. This parameter controls whether or not
 							comments are included in the output document.
 						</doc>
@@ -91,9 +97,6 @@
 							Controls formatted (pretty print) output.
 						</doc>
 					</param>
-
-					<!-- not implemented -->
-					<!--param name="updateafter" style="query" type="xsd:dateTime"/-->
 				</request>
 				<response status="200">
 					<representation mediaType="application/xml"/>

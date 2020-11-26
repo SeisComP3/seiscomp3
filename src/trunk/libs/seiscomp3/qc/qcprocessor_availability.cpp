@@ -38,7 +38,7 @@ bool QcProcessorAvailability::setState(const Record *record, const DoubleArray &
 
 		return true;
 	}
-	catch (Core::ValueException) {}
+	catch (Core::ValueException &) {}
 
 	return false;
 }

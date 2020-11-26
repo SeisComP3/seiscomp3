@@ -17,7 +17,7 @@
 
 #include <seiscomp3/gui/qt4.h>
 
-#include <QtGui/QFrame>
+#include <QFrame>
 
 namespace Seiscomp {
 namespace Gui {

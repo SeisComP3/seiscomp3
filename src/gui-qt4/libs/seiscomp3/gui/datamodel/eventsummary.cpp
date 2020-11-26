@@ -206,7 +206,8 @@ EventSummary::~EventSummary() {}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class EventSummaryMap : public MapWidget {
 	public:
-		EventSummaryMap(EventSummary *owner, Map::ImageTree* mapTree, QWidget *parent = 0, Qt::WFlags f = 0)
+		EventSummaryMap(EventSummary *owner, Map::ImageTree* mapTree, QWidget *parent = 0,
+		                Qt::WindowFlags f = 0)
 		 : MapWidget(mapTree, parent, f) {
 			_owner = owner;
 			QSizePolicy sp = sizePolicy();
@@ -309,6 +310,9 @@ void EventSummary::init() {
 
 	setupFont(_ui.state, SCScheme.fonts.base);
 	setupFont(_ui.mode, SCScheme.fonts.base);
+
+	setupFont(_ui.type, SCScheme.fonts.base);
+	_ui.type->installEventFilter(drawFilter);
 
 	_magnitudeRows = new QVBoxLayout(_ui.magnitudes);
 	_magnitudeRows->setMargin(0);
@@ -1062,13 +1066,26 @@ void EventSummary::updateContent() {
 
 	updateOrigin();
 
+	std::string eventType;
 	if ( _currentEvent ) {
 		setText(_ui.eventID, _currentEvent->publicID().c_str());
 		_ui.eventID->setToolTip(_currentEvent->publicID().c_str());
+		try { eventType = _currentEvent->type().toString(); }
+		catch ( Core::ValueException& ) {}
 	}
 	else {
 		_ui.eventID->setText("-");
 		_ui.eventID->setToolTip("");
+	}
+
+	if ( eventType.empty() ) {
+		_ui.type->setText("");
+		_ui.type->setVisible(false);
+	}
+	else {
+		setText(_ui.type, eventType.c_str());
+		_ui.type->setVisible(true);
+		_ui.type->setToolTip(eventType.c_str());
 	}
 
 	resetMagnitudes();

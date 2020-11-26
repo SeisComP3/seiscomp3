@@ -296,6 +296,7 @@ bool SDSArchive::setStart(const string &fname) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
 	double samprate = 0.0;
+	Time physFirstStartTime, physFirstEndTime;
 	Time recstime, recetime;
 	Time stime = (_curidx->startTime() == Time())?_stime:_curidx->startTime();
 	off_t fpos;
@@ -312,7 +313,18 @@ bool SDSArchive::setStart(const string &fname) {
 	//! binary search
 	retcode = ms_readmsr_r(&pfp,&prec,const_cast<char *>(fname.c_str()),0,NULL,NULL,1,0,0);
 	if (retcode == MS_NOERROR) {
-		recstime = Time((hptime_t)prec->starttime/HPTMODULUS,(hptime_t)prec->starttime%HPTMODULUS);
+		samprate = prec->samprate;
+		physFirstStartTime = Time((hptime_t)prec->starttime/HPTMODULUS,(hptime_t)prec->starttime%HPTMODULUS);
+		if ( samprate > 0. )
+			physFirstEndTime = physFirstStartTime + TimeSpan((double)(prec->samplecnt / samprate));
+		else {
+			SEISCOMP_WARNING("SDS: [%s@0] Wrong sampling frequency %.2f!", fname.c_str(), samprate);
+			physFirstEndTime = physFirstStartTime + TimeSpan(1, 0);
+			result = false;
+		}
+
+		recstime = physFirstStartTime;
+
 		long start = 0;
 		long half = 0;
 		long end = 0;
@@ -355,8 +367,11 @@ bool SDSArchive::setStart(const string &fname) {
 			}
 		}
 
-		if ( (half == 1) && (recstime > stime) )
-			half = 0;
+		if ( (half == 1) && (recstime > stime) ) {
+			if ( physFirstEndTime > stime )
+				half = 0;
+		}
+
 		offset = half*reclen;
 
 		/* Check if the next record can be loaded if there are still data in

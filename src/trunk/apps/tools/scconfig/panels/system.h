@@ -15,8 +15,12 @@
 #define __SEISCOMP_CONFIGURATION_GUI_PANEL_SYSTEM_H__
 
 #include "../gui.h"
-#include <QtGui>
 
+#include <QProcess>
+#include <QWidget>
+
+class QTextEdit;
+class QTableWidget;
 
 class SystemPanel : public ConfiguratorPanel {
 	Q_OBJECT
@@ -35,6 +39,7 @@ class SystemPanel : public ConfiguratorPanel {
 		void start();
 		void stop();
 		void restart();
+		void reload();
 		void check();
 		void enable();
 		void disable();
@@ -56,10 +61,6 @@ class SystemPanel : public ConfiguratorPanel {
 		QTextEdit    *_logWindow;
 		QProcess     *_process;
 		QToolBar     *_cmdToolBar;
-		QAction      *_start;
-		QAction      *_stop;
-		QAction      *_restart;
-		QAction      *_check;
 		QAction      *_enable;
 		QAction      *_disable;
 		QAction      *_updateConfig;

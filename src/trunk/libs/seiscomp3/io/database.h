@@ -66,6 +66,15 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
  class SC_SYSTEM_CORE_API DatabaseInterface : public Seiscomp::Core::BaseObject {
 	DECLARE_SC_CLASS(DatabaseInterface);
 
+
+	// ------------------------------------------------------------------
+	//  Public types
+	// ------------------------------------------------------------------
+	public:
+		typedef uint64_t OID;
+		static const OID INVALID_OID;
+
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -86,7 +95,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		//! @return A pointer to the database driver
 		//!         NOTE: The returned pointer has to be deleted by the
 		//!               caller!
-		static DatabaseInterface* Create(const char* service);
+		static DatabaseInterface *Create(const char* service);
 
 		//! Opens a database source.
 		//! @param url A source URL of format [service://]user:pwd@host/database,
@@ -94,7 +103,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		//! @return A pointer to the database interface.
 		//!         NOTE: The returned pointer has to be deleted by the
 		//!               caller!
-		static DatabaseInterface* Open(const char* uri);
+		static DatabaseInterface *Open(const char* uri);
 
 		/** Opens a connection to the database server
 		    @param connection The string containing the connection
@@ -154,7 +163,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		    value string. The default implementation returns "default".
 		    @return The default value name
 		  */
-		virtual const char* defaultValue() const;
+		virtual const char *defaultValue() const;
 
 		/** Returns the last inserted id when using auto increment id's
 		    @param table The table name for which the last generated id
@@ -171,7 +180,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		    @return The last generated ID > 0 or 0 of there hasn't been
 		            created an ID yet.
 		  */
-		virtual unsigned long lastInsertId(const char* table) = 0;
+		virtual OID lastInsertId(const char* table) = 0;
 
 		/** Returns the number of rows affected by a SQL statement.
 		    This function should only be used after a UPDATE or DELETE
@@ -218,7 +227,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		    @return The content of the field. If the field
 		            is NULL, NULL will be returned.
 		  */
-		virtual const void* getRowField(int index) = 0;
+		virtual const void *getRowField(int index) = 0;
 
 		/**
 		 * Convenience method to return the string of a certain column
@@ -244,8 +253,28 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		//! The format of the string is database dependant.
 		virtual Seiscomp::Core::Time stringToTime(const char*);
 
+		/**
+		 * @brief Escapes an input string to a database specific escaped
+		 *        string to be used in an SQL statement.
+		 *
+		 * The default implementation does C escaping and duplicates a
+		 * single quote.
+		 *
+		 * Note that the output string will have the correct size but the
+		 * capacity (string::reserve, string::capacity) is most likely much
+		 * larger to fit the maximum number of escaped characters. If the
+		 * output string should be used permanently and not just as temporary
+		 * value then call out.reserve(0) afterwards to allow it to shrink to
+		 * its size.
+		 *
+		 * @param to The output string
+		 * @param from The input string.
+		 * @return Success flag
+		 */
+		virtual bool escape(std::string &out, const std::string &in);
+
 		//! Returns the used column prefix
-		const std::string& columnPrefix() const;
+		const std::string &columnPrefix() const;
 
 		//! Prepends the column prefix to the name and returns it
 		std::string convertColumnName(const std::string& name) const;

@@ -64,9 +64,9 @@ class SeedlinkPluginHandler:
       if not mapping[0] or not mapping[1]:
         raise Exception("Error: invalid channel mapping '%s' in %s" % (item, seedlink.station_config_file))
 
-      # Prepend current station id if not explicitely given
+      # Prepend current station code if not explicitely given
       if not " " in mapping[1]:
-        mapping[1] = seedlink._get('seedlink.station.id') + " " + mapping[1]
+        mapping[1] = seedlink._get('seedlink.station.code') + " " + mapping[1]
 
       mapping[1] = [x.strip() for x in mapping[1].split()]
 

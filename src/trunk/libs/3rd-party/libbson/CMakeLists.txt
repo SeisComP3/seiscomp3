@@ -87,6 +87,10 @@ endif ()
 
 include (CheckIncludeFiles)
 
+if(NOT ${CMAKE_VERSION} VERSION_LESS "3.12")
+	cmake_policy(SET CMP0075 OLD)
+endif()
+
 CHECK_INCLUDE_FILE (strings.h BSON_HAVE_STRINGS_H)
 if (NOT BSON_HAVE_STRINGS_H)
    set (BSON_HAVE_STRINGS_H 0)

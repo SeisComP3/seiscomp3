@@ -1,3 +1,5 @@
+SUBDIRS(test)
+
 SC_ADD_PYTHON_PROG(fdsnws)
 SC_ADD_PYTHON_PROG(fdsnws_fetch)
 SC_ADD_PYTHON_PROG(fdsnws2sds)

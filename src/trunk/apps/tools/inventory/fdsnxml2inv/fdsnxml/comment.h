@@ -81,6 +81,12 @@ class Comment : public Core::BaseObject {
 		void setId(const OPT(int)& id);
 		int id() const;
 
+		//! A subject for this comment. Multiple comments with the same subject
+		//! should be considered related.
+		//! XML tag: subject
+		void setSubject(const std::string& subject);
+		const std::string& subject() const;
+
 	
 	// ------------------------------------------------------------------
 	//  Public interface
@@ -130,6 +136,7 @@ class Comment : public Core::BaseObject {
 		OPT(DateTime) _beginEffectiveTime;
 		OPT(DateTime) _endEffectiveTime;
 		OPT(int) _id;
+		std::string _subject;
 
 		// Aggregations
 		std::vector<PersonPtr> _authors;

@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(package="seiscomp3", docstring="Codes for working with geo features (e.g. polygons)") Geo
+%module (package="seiscomp3", docstring="Codes for working with geo features (e.g. polygons)") Geo
 %{
 /* headers to be included in the wrapper code */
 #include "seiscomp3/geo/coordinate.h"

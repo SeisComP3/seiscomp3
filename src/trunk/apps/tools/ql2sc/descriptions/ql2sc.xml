@@ -3,7 +3,7 @@
 	<module name="ql2sc" category="Utilities">
 		<description>QuakeLink (gempa GmbH) to SeisComP3 event parameter exchange</description>
 		<configuration>
-			<parameter name="backLog" type="int" default="1800">
+			<parameter name="backLog" type="int" default="1800" unit="s">
 				<description>
 					Number of seconds to fetch missed updates on start up.
 				</description>
@@ -21,16 +21,29 @@
 					the messaging system.
 				</description>
 			</parameter>
+			<parameter name="eventAssociationTimeout" type="int" default="10" unit="s">
+				<description>
+					If event synchronisation is enabled and an incoming origin
+					is not yet associated with an event on the target machine
+					then this timeout defines the maximum number of seconds to
+					wait for an association.
+				</description>
+			</parameter>
 			<parameter name="hosts" type="list:string">
 				<description>
-					Registration of QuakeLink hosts.
+					Registration of the host profiles defining the connection
+					parameters to the QuakeLink hosts.
 				</description>
 			</parameter>
 			<group name="host">
+				<description>
+				Definition of host profiles. For each host profile a connection
+				to one QuakeLink server can established. The profiles must be registered
+				in 'hosts' to apply them.
+				</description>
 				<struct type="quakelink server profile" link="hosts">
 					<description>
-						For each host profile a connection to a QuakeLink
-						server is established.
+						Provide the connection parameters to one QuakeLink server.
 					</description>
 					<parameter name="url" type="string" default="ql://localhost:18010">
 						<description>
@@ -47,7 +60,8 @@
 						</description>
 					</parameter>
 					<parameter name="native" type="boolean" default="false">
-						<description>Request native data instead of XML format. Native data export may be disabled on some hosts.</description>
+						<description>Request native data instead of XML format.
+						Native data export may be disabled on some hosts.</description>
 					</parameter>
 					<parameter name="syncEventAttributes" type="boolean" default="true">
 						<description>
@@ -61,7 +75,7 @@
 					</parameter>
 					<group name="data">
 						<description>
-							QuakeLink options specifying which XML components to fetch.
+							Specify the XML components to fetch.
 							Note: These options are not used if 'native' data is requested.
 						</description>
 						<parameter name="picks" type="boolean" default="true">

@@ -10,6 +10,8 @@
 #include <fdsnxml/xml.h>
 #include <fdsnxml/inttype.h>
 #include <fdsnxml/floatnounittype.h>
+#include <fdsnxml/countertype.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
 #include <fdsnxml/floattype.h>
 #include <fdsnxml/latitudetype.h>
 #include <fdsnxml/longitudetype.h>
@@ -21,7 +23,6 @@
 #include <fdsnxml/unitstype.h>
 #include <fdsnxml/sampleratetype.h>
 #include <fdsnxml/samplerateratiotype.h>
-#include <fdsnxml/countertype.h>
 #include <fdsnxml/frequencytype.h>
 #include <fdsnxml/site.h>
 #include <fdsnxml/stringtype.h>
@@ -38,6 +39,7 @@
 #include <fdsnxml/gain.h>
 #include <fdsnxml/sensitivity.h>
 #include <fdsnxml/decimation.h>
+#include <fdsnxml/identifier.h>
 #include <fdsnxml/basefilter.h>
 #include <fdsnxml/poleandzero.h>
 #include <fdsnxml/polesandzeros.h>
@@ -84,6 +86,25 @@ struct FloatNoUnitTypeHandler : public IO::XML::TypedClassHandler<FloatNoUnitTyp
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
+	}
+};
+
+
+struct CounterTypeHandler : public IO::XML::TypedClassHandler<CounterType> {
+	CounterTypeHandler() {
+		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
+	}
+};
+
+
+struct FloatNoUnitWithNumberTypeHandler : public IO::XML::TypedClassHandler<FloatNoUnitWithNumberType> {
+	FloatNoUnitWithNumberTypeHandler() {
+		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
+		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
+		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
+		addProperty("number", "", Optional, Attribute, "number");
 	}
 };
 
@@ -93,6 +114,7 @@ struct FloatTypeHandler : public IO::XML::TypedClassHandler<FloatType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -103,6 +125,7 @@ struct LatitudeTypeHandler : public IO::XML::TypedClassHandler<LatitudeType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 		addProperty("datum", "", Optional, Attribute, "datum");
 	}
@@ -114,6 +137,7 @@ struct LongitudeTypeHandler : public IO::XML::TypedClassHandler<LongitudeType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 		addProperty("datum", "", Optional, Attribute, "datum");
 	}
@@ -125,6 +149,7 @@ struct DistanceTypeHandler : public IO::XML::TypedClassHandler<DistanceType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -135,6 +160,7 @@ struct AngleTypeHandler : public IO::XML::TypedClassHandler<AngleType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -145,6 +171,7 @@ struct DipTypeHandler : public IO::XML::TypedClassHandler<DipType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -155,6 +182,7 @@ struct AzimuthTypeHandler : public IO::XML::TypedClassHandler<AzimuthType> {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -165,6 +193,7 @@ struct ClockDriftTypeHandler : public IO::XML::TypedClassHandler<ClockDriftType>
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -183,6 +212,7 @@ struct SampleRateTypeHandler : public IO::XML::TypedClassHandler<SampleRateType>
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -196,18 +226,12 @@ struct SampleRateRatioTypeHandler : public IO::XML::TypedClassHandler<SampleRate
 };
 
 
-struct CounterTypeHandler : public IO::XML::TypedClassHandler<CounterType> {
-	CounterTypeHandler() {
-		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
-	}
-};
-
-
 struct FrequencyTypeHandler : public IO::XML::TypedClassHandler<FrequencyType> {
 	FrequencyTypeHandler() {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("unit", "", Optional, Attribute, "unit");
 	}
 };
@@ -275,9 +299,11 @@ struct PersonHandler : public IO::XML::TypedClassHandler<Person> {
 
 struct OperatorHandler : public IO::XML::TypedClassHandler<Operator> {
 	OperatorHandler() {
-		addChildProperty("Agency", "http://www.fdsn.org/xml/station/1", "agency");
+		// Element
+		addProperty("Agency", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "agency");
+		// Element
+		addProperty("WebSite", "http://www.fdsn.org/xml/station/1", Optional, Element, "webSite");
 		addChildProperty("Contact", "http://www.fdsn.org/xml/station/1", "contact");
-		addChildProperty("WebSite", "http://www.fdsn.org/xml/station/1", "webSite");
 	}
 };
 
@@ -353,6 +379,14 @@ struct DecimationHandler : public IO::XML::TypedClassHandler<Decimation> {
 		addProperty("Delay", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "Delay");
 		// Element
 		addProperty("Correction", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "Correction");
+	}
+};
+
+
+struct IdentifierHandler : public IO::XML::TypedClassHandler<Identifier> {
+	IdentifierHandler() {
+		addProperty("type", "", Optional, Attribute, "type");
+		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 	}
 };
 
@@ -470,6 +504,7 @@ struct PolynomialCoefficientHandler : public IO::XML::TypedClassHandler<Polynomi
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
 		addProperty("plusError", "", Optional, Attribute, "upperUncertainty");
 		addProperty("minusError", "", Optional, Attribute, "lowerUncertainty");
+		addProperty("measurementMethod", "", Optional, Attribute, "measurementMethod");
 		addProperty("number", "", Mandatory, Attribute, "number");
 	}
 };
@@ -536,6 +571,7 @@ struct CommentHandler : public IO::XML::TypedClassHandler<Comment> {
 		addProperty("BeginEffectiveTime", "http://www.fdsn.org/xml/station/1", Optional, Element, "beginEffectiveTime");
 		addProperty("EndEffectiveTime", "http://www.fdsn.org/xml/station/1", Optional, Element, "endEffectiveTime");
 		addProperty("id", "", Optional, Attribute, "id");
+		addProperty("subject", "", Optional, Attribute, "subject");
 		addChildProperty("Author", "http://www.fdsn.org/xml/station/1", "author");
 	}
 };
@@ -574,9 +610,11 @@ struct BaseNodeHandler : public IO::XML::TypedClassHandler<BaseNode> {
 		addProperty("code", "", Mandatory, Attribute, "code");
 		addProperty("startDate", "", Optional, Attribute, "startDate");
 		addProperty("endDate", "", Optional, Attribute, "endDate");
+		addProperty("sourceID", "", Optional, Attribute, "sourceID");
 		addProperty("restrictedStatus", "", Optional, Attribute, "restrictedStatus");
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
+		addChildProperty("Identifier", "http://www.fdsn.org/xml/station/1", "identifier");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
 		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 	}
@@ -589,9 +627,11 @@ struct ChannelHandler : public IO::XML::TypedClassHandler<Channel> {
 		addProperty("code", "", Mandatory, Attribute, "code");
 		addProperty("startDate", "", Optional, Attribute, "startDate");
 		addProperty("endDate", "", Optional, Attribute, "endDate");
+		addProperty("sourceID", "", Optional, Attribute, "sourceID");
 		addProperty("restrictedStatus", "", Optional, Attribute, "restrictedStatus");
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
+		addChildProperty("Identifier", "http://www.fdsn.org/xml/station/1", "identifier");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
 		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
@@ -606,12 +646,13 @@ struct ChannelHandler : public IO::XML::TypedClassHandler<Channel> {
 		addProperty("Azimuth", "http://www.fdsn.org/xml/station/1", Optional, Element, "azimuth");
 		// Element
 		addProperty("Dip", "http://www.fdsn.org/xml/station/1", Optional, Element, "dip");
+		// Element
+		addProperty("waterLevel", "http://www.fdsn.org/xml/station/1", Optional, Element, "waterLevel");
 		addChildProperty("Type", "http://www.fdsn.org/xml/station/1", "type");
 		// Element
 		addProperty("SampleRate", "http://www.fdsn.org/xml/station/1", Optional, Element, "SampleRate");
 		// Element
 		addProperty("SampleRateRatio", "http://www.fdsn.org/xml/station/1", Optional, Element, "SampleRateRatio");
-		addProperty("StorageFormat", "http://www.fdsn.org/xml/station/1", Optional, Element, "StorageFormat");
 		// Element
 		addProperty("ClockDrift", "http://www.fdsn.org/xml/station/1", Optional, Element, "ClockDrift");
 		// Element
@@ -623,10 +664,9 @@ struct ChannelHandler : public IO::XML::TypedClassHandler<Channel> {
 		// Element
 		addProperty("DataLogger", "http://www.fdsn.org/xml/station/1", Optional, Element, "DataLogger");
 		// Element
-		addProperty("Equipment", "http://www.fdsn.org/xml/station/1", Optional, Element, "Equipment");
-		// Element
 		addProperty("Response", "http://www.fdsn.org/xml/station/1", Optional, Element, "Response");
 		addProperty("locationCode", "", Mandatory, Attribute, "locationCode");
+		addChildProperty("Equipment", "http://www.fdsn.org/xml/station/1", "equipment");
 	}
 };
 
@@ -637,9 +677,11 @@ struct StationHandler : public IO::XML::TypedClassHandler<Station> {
 		addProperty("code", "", Mandatory, Attribute, "code");
 		addProperty("startDate", "", Optional, Attribute, "startDate");
 		addProperty("endDate", "", Optional, Attribute, "endDate");
+		addProperty("sourceID", "", Optional, Attribute, "sourceID");
 		addProperty("restrictedStatus", "", Optional, Attribute, "restrictedStatus");
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
+		addChildProperty("Identifier", "http://www.fdsn.org/xml/station/1", "identifier");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
 		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
@@ -650,11 +692,13 @@ struct StationHandler : public IO::XML::TypedClassHandler<Station> {
 		addProperty("Elevation", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "elevation");
 		// Element
 		addProperty("Site", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "site");
+		// Element
+		addProperty("waterLevel", "http://www.fdsn.org/xml/station/1", Optional, Element, "waterLevel");
 		addProperty("Vault", "http://www.fdsn.org/xml/station/1", Optional, Element, "vault");
 		addProperty("Geology", "http://www.fdsn.org/xml/station/1", Optional, Element, "geology");
 		addChildProperty("Equipment", "http://www.fdsn.org/xml/station/1", "equipment");
 		addChildProperty("Operator", "http://www.fdsn.org/xml/station/1", "operators");
-		addProperty("CreationDate", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "creationDate");
+		addProperty("CreationDate", "http://www.fdsn.org/xml/station/1", Optional, Element, "creationDate");
 		addProperty("TerminationDate", "http://www.fdsn.org/xml/station/1", Optional, Element, "terminationDate");
 		// Element
 		addProperty("TotalNumberChannels", "http://www.fdsn.org/xml/station/1", Optional, Element, "totalNumberChannels");
@@ -672,15 +716,18 @@ struct NetworkHandler : public IO::XML::TypedClassHandler<Network> {
 		addProperty("code", "", Mandatory, Attribute, "code");
 		addProperty("startDate", "", Optional, Attribute, "startDate");
 		addProperty("endDate", "", Optional, Attribute, "endDate");
+		addProperty("sourceID", "", Optional, Attribute, "sourceID");
 		addProperty("restrictedStatus", "", Optional, Attribute, "restrictedStatus");
 		addProperty("alternateCode", "", Optional, Attribute, "alternateCode");
 		addProperty("historicCode", "", Optional, Attribute, "historicCode");
+		addChildProperty("Identifier", "http://www.fdsn.org/xml/station/1", "identifier");
 		addChildProperty("Comment", "http://www.fdsn.org/xml/station/1", "comment");
 		addChildProperty("DataAvailability", "http://www.fdsn.org/xml/station/1", "dataAvailability");
 		// Element
 		addProperty("TotalNumberStations", "http://www.fdsn.org/xml/station/1", Optional, Element, "totalNumberOfStations");
 		// Element
 		addProperty("SelectedNumberStations", "http://www.fdsn.org/xml/station/1", Optional, Element, "selectedNumberStations");
+		addChildProperty("Operator", "http://www.fdsn.org/xml/station/1", "operators");
 		addChildProperty("Station", "http://www.fdsn.org/xml/station/1", "station");
 	}
 };
@@ -710,6 +757,8 @@ TypeMap myTypeMap;
 TypeMap::TypeMap() {
 	static IntTypeHandler _IntTypeHandler;
 	static FloatNoUnitTypeHandler _FloatNoUnitTypeHandler;
+	static CounterTypeHandler _CounterTypeHandler;
+	static FloatNoUnitWithNumberTypeHandler _FloatNoUnitWithNumberTypeHandler;
 	static FloatTypeHandler _FloatTypeHandler;
 	static LatitudeTypeHandler _LatitudeTypeHandler;
 	static LongitudeTypeHandler _LongitudeTypeHandler;
@@ -721,7 +770,6 @@ TypeMap::TypeMap() {
 	static UnitsTypeHandler _UnitsTypeHandler;
 	static SampleRateTypeHandler _SampleRateTypeHandler;
 	static SampleRateRatioTypeHandler _SampleRateRatioTypeHandler;
-	static CounterTypeHandler _CounterTypeHandler;
 	static FrequencyTypeHandler _FrequencyTypeHandler;
 	static SiteHandler _SiteHandler;
 	static StringTypeHandler _StringTypeHandler;
@@ -738,6 +786,7 @@ TypeMap::TypeMap() {
 	static GainHandler _GainHandler;
 	static SensitivityHandler _SensitivityHandler;
 	static DecimationHandler _DecimationHandler;
+	static IdentifierHandler _IdentifierHandler;
 	static BaseFilterHandler _BaseFilterHandler;
 	static PoleAndZeroHandler _PoleAndZeroHandler;
 	static PolesAndZerosHandler _PolesAndZerosHandler;
@@ -762,6 +811,8 @@ TypeMap::TypeMap() {
 
 	registerMapping<IntType>("IntType", "http://www.fdsn.org/xml/station/1", &_IntTypeHandler);
 	registerMapping<FloatNoUnitType>("FloatNoUnitType", "http://www.fdsn.org/xml/station/1", &_FloatNoUnitTypeHandler);
+	registerMapping<CounterType>("CounterType", "http://www.fdsn.org/xml/station/1", &_CounterTypeHandler);
+	registerMapping<FloatNoUnitWithNumberType>("FloatNoUnitWithNumberType", "http://www.fdsn.org/xml/station/1", &_FloatNoUnitWithNumberTypeHandler);
 	registerMapping<FloatType>("FloatType", "http://www.fdsn.org/xml/station/1", &_FloatTypeHandler);
 	registerMapping<LatitudeType>("LatitudeType", "http://www.fdsn.org/xml/station/1", &_LatitudeTypeHandler);
 	registerMapping<LongitudeType>("LongitudeType", "http://www.fdsn.org/xml/station/1", &_LongitudeTypeHandler);
@@ -773,7 +824,6 @@ TypeMap::TypeMap() {
 	registerMapping<UnitsType>("UnitsType", "http://www.fdsn.org/xml/station/1", &_UnitsTypeHandler);
 	registerMapping<SampleRateType>("SampleRateType", "http://www.fdsn.org/xml/station/1", &_SampleRateTypeHandler);
 	registerMapping<SampleRateRatioType>("SampleRateRatioType", "http://www.fdsn.org/xml/station/1", &_SampleRateRatioTypeHandler);
-	registerMapping<CounterType>("CounterType", "http://www.fdsn.org/xml/station/1", &_CounterTypeHandler);
 	registerMapping<FrequencyType>("FrequencyType", "http://www.fdsn.org/xml/station/1", &_FrequencyTypeHandler);
 	registerMapping<Site>("Site", "http://www.fdsn.org/xml/station/1", &_SiteHandler);
 	registerMapping<StringType>("StringType", "http://www.fdsn.org/xml/station/1", &_StringTypeHandler);
@@ -790,6 +840,7 @@ TypeMap::TypeMap() {
 	registerMapping<Gain>("Gain", "http://www.fdsn.org/xml/station/1", &_GainHandler);
 	registerMapping<Sensitivity>("Sensitivity", "http://www.fdsn.org/xml/station/1", &_SensitivityHandler);
 	registerMapping<Decimation>("Decimation", "http://www.fdsn.org/xml/station/1", &_DecimationHandler);
+	registerMapping<Identifier>("Identifier", "http://www.fdsn.org/xml/station/1", &_IdentifierHandler);
 	registerMapping<BaseFilter>("BaseFilter", "http://www.fdsn.org/xml/station/1", &_BaseFilterHandler);
 	registerMapping<PoleAndZero>("PoleAndZero", "http://www.fdsn.org/xml/station/1", &_PoleAndZeroHandler);
 	registerMapping<PolesAndZeros>("PolesAndZeros", "http://www.fdsn.org/xml/station/1", &_PolesAndZerosHandler);

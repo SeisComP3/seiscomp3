@@ -712,6 +712,7 @@
     <addaction name="actionShowAllComponents" />
     <addaction name="actionShowUsedStations" />
     <addaction name="actionShowTraceValuesInNmS" />
+    <addaction name="actionShowRecordBorders" />
     <addaction name="actionShowUnassociatedPicks" />
     <addaction name="actionShowTheoreticalArrivals" />
     <addaction name="actionShowSpectrogram" />
@@ -1410,6 +1411,17 @@
    </property>
    <property name="text" >
     <string>Show trace values in nano sensor units</string>
+   </property>
+  </action>
+  <action name="actionShowRecordBorders" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show record borders and authentication state</string>
+   </property>
+   <property name="shortcut" >
+    <string>B</string>
    </property>
   </action>
   <action name="actionClipComponentsToViewport" >

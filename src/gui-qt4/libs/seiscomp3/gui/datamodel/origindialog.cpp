@@ -36,21 +36,21 @@ double OriginDialog::DefaultDepth() {
 }
 
 
-OriginDialog::OriginDialog(QWidget * parent, Qt::WFlags f) :
+OriginDialog::OriginDialog(QWidget * parent, Qt::WindowFlags f) :
  QDialog(parent, f) {
 	init(0.0, 0.0, _defaultDepth);
 }
 
 
 OriginDialog::OriginDialog(double lon, double lat,
-                           QWidget * parent, Qt::WFlags f) :
+                           QWidget * parent, Qt::WindowFlags f) :
  QDialog(parent, f) {
 	init(lon, lat, _defaultDepth);
 }
 
 
 OriginDialog::OriginDialog(double lon, double lat, double dep,
-                           QWidget* parent, Qt::WFlags f) :
+                           QWidget* parent, Qt::WindowFlags f) :
  QDialog(parent, f) {
 	init(lon, lat, dep);
 }

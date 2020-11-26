@@ -1,6 +1,7 @@
 SET(UTILS_SOURCES
 	timer.cpp
 	base64.cpp
+	certstore.cpp
 	datetime.cpp
 	replace.cpp
 	files.cpp
@@ -9,12 +10,14 @@ SET(UTILS_SOURCES
 	keyvalues.cpp
 	bindings.cpp
 	stringfirewall.cpp
+	tabvalues.cpp
 	units.cpp
 )
 
 SET(UTILS_HEADERS
 	base64.h
 	base64.ipp 
+	certstore.h
 	timer.h
 	datetime.h
 	replace.h
@@ -25,6 +28,7 @@ SET(UTILS_HEADERS
 	keyvalues.h
 	bindings.h
 	stringfirewall.h
+	tabvalues.h
 	units.h
 )
 

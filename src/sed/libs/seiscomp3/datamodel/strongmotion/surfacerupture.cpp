@@ -144,7 +144,7 @@ void SurfaceRupture::setLiteratureSource(const OPT(LiteratureSource)& literature
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-LiteratureSource& SurfaceRupture::literatureSource() throw(Seiscomp::Core::ValueException) {
+LiteratureSource& SurfaceRupture::literatureSource() {
 	if ( _literatureSource )
 		return *_literatureSource;
 	throw Seiscomp::Core::ValueException("SurfaceRupture.literatureSource is not set");
@@ -155,7 +155,7 @@ LiteratureSource& SurfaceRupture::literatureSource() throw(Seiscomp::Core::Value
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const LiteratureSource& SurfaceRupture::literatureSource() const throw(Seiscomp::Core::ValueException) {
+const LiteratureSource& SurfaceRupture::literatureSource() const {
 	if ( _literatureSource )
 		return *_literatureSource;
 	throw Seiscomp::Core::ValueException("SurfaceRupture.literatureSource is not set");
@@ -181,7 +181,7 @@ SurfaceRupture& SurfaceRupture::operator=(const SurfaceRupture& other) {
 void SurfaceRupture::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: SurfaceRupture skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -50,6 +50,9 @@ class StringType : public Core::BaseObject {
 	//  Operators
 	// ------------------------------------------------------------------
 	public:
+		operator std::string&();
+		operator const std::string&() const;
+
 		//! Copies the metadata of other to this
 		StringType& operator=(const StringType &other);
 		bool operator==(const StringType &other) const;

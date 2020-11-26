@@ -18,13 +18,13 @@
 
 #include <QDialog>
 #include <QProcess>
+#include <QTextEdit>
 
 
 class QListView;
 class QTreeView;
 class QDirModel;
 class QSortFilterProxyModel;
-class QTextEdit;
 class QLineEdit;
 class QPushButton;
 class QComboBox;
@@ -105,6 +105,7 @@ class InventoryPanel : public ConfiguratorPanel {
 		void inspectFile();
 
 		void import();
+		void testInventory();
 		void testSync();
 		void sync();
 		void syncKeys();

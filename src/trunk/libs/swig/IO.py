@@ -451,7 +451,7 @@ class DatabaseInterface(seiscomp3.Core.BaseObject):
 
 
     def lastInsertId(self, table):
-        """lastInsertId(DatabaseInterface self, char const * table) -> unsigned long"""
+        """lastInsertId(DatabaseInterface self, char const * table) -> Seiscomp::IO::DatabaseInterface::OID"""
         return _IO.DatabaseInterface_lastInsertId(self, table)
 
 
@@ -505,6 +505,11 @@ class DatabaseInterface(seiscomp3.Core.BaseObject):
         return _IO.DatabaseInterface_stringToTime(self, arg2)
 
 
+    def escape(self, out, arg3):
+        """escape(DatabaseInterface self, string out, string arg3) -> bool"""
+        return _IO.DatabaseInterface_escape(self, out, arg3)
+
+
     def columnPrefix(self):
         """columnPrefix(DatabaseInterface self) -> string"""
         return _IO.DatabaseInterface_columnPrefix(self)
@@ -538,6 +543,7 @@ def DatabaseInterface_ConstCast(*args):
     DatabaseInterface_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DatabaseInterface
     """
     return _IO.DatabaseInterface_ConstCast(*args)
+DatabaseInterface.INVALID_OID = _IO.cvar.DatabaseInterface_INVALID_OID
 
 def DatabaseInterface_Create(service):
     """DatabaseInterface_Create(char const * service) -> DatabaseInterface"""
@@ -1013,9 +1019,18 @@ class RecordInput(seiscomp3.Core.BaseObject):
         while 1:
             rec = self.next()
             if not rec:
-                raise StopIteration
-
+                return
             yield rec
+
+    def __next__(self):
+        rec = self.next()
+        if not rec:
+            return
+        return rec
+
+    ## for Python 2 compatibility
+    #def next(self):
+    #    return self.__next__()
 
     __swig_destroy__ = _IO.delete_RecordInput
     __del__ = lambda self: None
@@ -1911,12 +1926,12 @@ class MSeedRecord(seiscomp3.Core.Record):
 
 
     def byteOrder(self):
-        """byteOrder(MSeedRecord self) -> unsigned short"""
+        """byteOrder(MSeedRecord self) -> int8_t"""
         return _IO.MSeedRecord_byteOrder(self)
 
 
     def encoding(self):
-        """encoding(MSeedRecord self) -> unsigned short"""
+        """encoding(MSeedRecord self) -> int8_t"""
         return _IO.MSeedRecord_encoding(self)
 
 

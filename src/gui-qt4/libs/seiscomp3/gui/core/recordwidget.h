@@ -219,6 +219,12 @@ class SC_GUI_API RecordWidget : public QWidget {
 			Right
 		};
 
+		enum RecordBorderDrawMode {
+			TopLine,
+			BottomLine,
+			Box
+		};
+
 		typedef Math::Filtering::InPlaceFilter<float> Filter;
 
 		struct Trace {
@@ -315,6 +321,9 @@ class SC_GUI_API RecordWidget : public QWidget {
 		void setDrawMode(DrawMode mode);
 		DrawMode drawMode() const;
 
+		void setRecordBorderDrawMode(RecordBorderDrawMode mode);
+		RecordBorderDrawMode recordBorderDrawMode() const;
+
 		void setDrawOffset(bool f);
 		bool drawOffset() const { return _drawOffset; }
 
@@ -404,6 +413,9 @@ class SC_GUI_API RecordWidget : public QWidget {
 		//! Whether to show the current selected recordstream or
 		//! both recordstreams
 		void showAllRecords(bool enable);
+
+		//! Whether to show record borders
+		void showRecordBorders(bool enable);
 
 		//! Whether to show scaled or raw values. The default is false.
 		void showScaledValues(bool enable);
@@ -653,7 +665,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		virtual const double *value(int slot, const Seiscomp::Core::Time&) const;
 
 
-	private:
+	protected:
 		struct Stream {
 			enum Index {
 				Raw = 0,
@@ -711,6 +723,11 @@ class SC_GUI_API RecordWidget : public QWidget {
 
 		void prepareRecords(Stream *s);
 		void drawRecords(Stream *s, int slot);
+		void drawTrace(QPainter &painter, Trace *trace,
+		               RecordSequence *seq,
+		               const QPen &pen,
+		               const QPoint &paintOffset);
+		void drawRecordBorders(QPainter &painter, RecordSequence *seq);
 
 		void drawAxis(QPainter &painter, const QPen &p);
 
@@ -723,6 +740,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 
 		QVariant             _data;
 		DrawMode             _drawMode;
+		RecordBorderDrawMode _recordBorderDrawMode;
 		Seiscomp::Core::Time _alignment;
 		bool                 _clipRows;
 	
@@ -751,6 +769,7 @@ class SC_GUI_API RecordWidget : public QWidget {
 		bool      _drawRecordID;
 		bool      _drawOffset;
 		bool      _showAllRecords;
+		bool      _showRecordBorders;
 		bool      _autoMaxScale;
 		bool      _enabled;
 		bool      _useGlobalOffset;

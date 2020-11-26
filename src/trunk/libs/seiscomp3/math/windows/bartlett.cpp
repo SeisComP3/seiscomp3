@@ -25,21 +25,39 @@ namespace Math {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
-void BartlettWindow<TYPE>::process(int n, TYPE *inout, double width) const {
-	if ( width > 0.5 ) width = 0.5;
-	else if ( width < 0 ) width = 0;
+void BartlettWindow<TYPE>::process(int n, TYPE *inout, double left, double right) const {
+	TYPE a0, a1;
 
-	TYPE n2 = n*width;
+	// Left side
+	TYPE n2 = n * left;
 	if ( n2 > n ) n2 = n;
-	int in2 = (int)n2;
-	int w = in2*2;
+	int in2 = int(n2);
+	int w = in2 * 2;
 
-	TYPE a0 = 2.0 / (w-1),
-	     a1 = (w-1)*0.5;
+	if ( w > 1 ) {
+		a0 = 2.0 / (w-1);
+		a1 = (w-1)*0.5;
 
-	for ( int i = 0; i < in2; ++i ) {
-		inout[i] *= 1-fabs((i-a1))*a0;
-		inout[n-in2+i] *= 1-fabs(in2+i-a1)*a0;
+		for ( int i = 0; i < in2; ++i ) {
+			inout[i] *= 1-fabs((i-a1))*a0;
+		}
+	}
+
+	// Right side
+	if ( left != right ) {
+		n2 = n * right;
+		if ( n2 > n ) n2 = n;
+		in2 = int(n2);
+		w = in2 * 2;
+	}
+
+	if ( w > 1 ) {
+		a0 = 2.0 / (w-1);
+		a1 = (w-1)*0.5;
+
+		for ( int i = 0; i < in2; ++i ) {
+			inout[n-in2+i] *= 1-fabs(in2+i-a1)*a0;
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -20,6 +20,16 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMessageBox>
+#include <QSpinBox>
+#include <QToolButton>
+#include <QWidget>
+
 #include <cmath>
 
 #ifdef WIN32
@@ -132,7 +142,7 @@ SaveBNADialog::SaveBNADialog(QWidget *parent, Qt::WindowFlags f)
 	// file name
 	layout->addWidget(new QLabel("File Name"), row, 0);
 	filename = new QLineEdit(QString("%1/bna/custom.bna")
-	        .arg(Seiscomp::Environment::Instance()->configDir().c_str()));
+	        .arg(Seiscomp::Environment::Instance()->shareDir().c_str()));
 	filename->setToolTip("Path and file name");
 	layout->addWidget(filename, row++, 1);
 
@@ -157,19 +167,19 @@ SaveBNADialog::SaveBNADialog(QWidget *parent, Qt::WindowFlags f)
 
 
 
-MapWidget::MapWidget(QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(NULL) {
 	init();
 }
 
 
-MapWidget::MapWidget(const MapsDesc &meta, QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(const MapsDesc &meta, QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(meta) {
 	init();
 }
 
 
-MapWidget::MapWidget(Map::ImageTree *mapTree, QWidget *parent, Qt::WFlags f)
+MapWidget::MapWidget(Map::ImageTree *mapTree, QWidget *parent, Qt::WindowFlags f)
  : QWidget(parent, f), _canvas(mapTree) {
 	init();
 }
@@ -561,6 +571,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 				_measurePoints.push_back(p);
 			}
 			_measurePoints.push_back(p);
+			unsetCursor();
+			setToolTip(QString());
 			update();
 			return;
 		}
@@ -610,8 +622,39 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 		_canvas.projection()->unproject(_measurePoints.last(), event->pos());
 		update();
 	}
-	else if ( !_canvas.filterMouseMoveEvent(event) )
-		_zoomControls->setVisible(_zoomControls->geometry().contains(event->pos()));
+	else {
+		if ( !_canvas.filterMouseMoveEvent(event) )
+			_zoomControls->setVisible(_zoomControls->geometry().contains(event->pos()));
+
+		bool hasLayerCursor = false;
+		bool hasLayerToolTip = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
+		// Check for tooltips
+		int count = _canvas.layerCount();
+
+		for ( int i = count-1; i >= 0; --i ) {
+			Map::Layer *l = _canvas.layer(i);
+			if ( l && !l->toolTip().isEmpty() ) {
+				setToolTip(l->toolTip());
+				hasLayerToolTip = true;
+				break;
+			}
+		}
+
+		if ( !hasLayerToolTip )
+			setToolTip(QString());
+	}
 }
 
 
@@ -626,6 +669,19 @@ void MapWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 
 void MapWidget::keyPressEvent(QKeyEvent* e) {
 	if ( _canvas.filterKeyPressEvent(e) ) {
+		bool hasLayerCursor = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
 		e->accept();
 		return;
 	}
@@ -677,6 +733,19 @@ void MapWidget::keyPressEvent(QKeyEvent* e) {
 
 void MapWidget::keyReleaseEvent(QKeyEvent *e) {
 	if ( _canvas.filterKeyReleaseEvent(e) ) {
+		bool hasLayerCursor = false;
+
+		if ( _canvas.hoverLayer() ) {
+			Map::Layer *l = _canvas.hoverLayer();
+			if ( l && l->hasCursorShape() ) {
+				setCursor(l->cursorShape());
+				hasLayerCursor = true;
+			}
+		}
+
+		if ( !hasLayerCursor )
+			unsetCursor();
+
 		e->accept();
 		return;
 	}

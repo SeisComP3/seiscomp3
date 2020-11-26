@@ -62,6 +62,13 @@ GridSearch::GridSearch()
 	_abort = false;
 }
 
+bool GridSearch::init()
+{
+	if ( ! _relocator.init())
+		return false;
+	return true;
+}
+
 
 bool GridSearch::setGridFile(const std::string &gridfile)
 {

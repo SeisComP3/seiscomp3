@@ -85,7 +85,7 @@ bool QcViewConfig::init() {
 			QString cfgName = sl.last().simplified();
 			_parameterList.append(parameter);
 			_parameterMap.insert(parameter, cfgName);
-			_configMap.insert(cfgName, readConfig(cfgName.toAscii().data(), _configMap["default"]));
+			_configMap.insert(cfgName, readConfig(cfgName.toLatin1().data(), _configMap["default"]));
 		}
 	}
 	catch (Seiscomp::Config::Exception &) {
@@ -97,7 +97,7 @@ bool QcViewConfig::init() {
 	catch (Seiscomp::Config::Exception &) {_streamWidgetLength = 600.0;}
 
 	try { _cumulative = _app->configGetBool("streams.cumulative");}
-	catch (Seiscomp::Config::Exception &) {_cumulative = true;}
+	catch (Seiscomp::Config::Exception &) {_cumulative = false;}
 
 	return true;
 }
@@ -132,7 +132,7 @@ QcViewConfig::Config QcViewConfig::readConfig(const std::string& name, QcViewCon
 	
 	RangeMap::iterator it;
 	for (it = config.rangeMap.begin(); it != config.rangeMap.end(); ++it) {
-		it.value() = readRange(it.key().toAscii().data(), it.value(), name+".");
+		it.value() = readRange(it.key().toLatin1().data(), it.value(), name+".");
 	}
 
 	return config;
@@ -152,7 +152,7 @@ QcViewConfig::Range QcViewConfig::readRange(const std::string& name, QcViewConfi
 	catch (Seiscomp::Config::Exception &) {}
 	
 	try { range.color = QString(_app->configGetString(pre+"range."+name+".color").c_str());
-		readColor(range.color.toAscii().data());
+		readColor(range.color.toLatin1().data());
 	}
 	catch (Seiscomp::Config::Exception &) {}
 

@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[IO_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for WAGO I/O Controller
 
@@ -73,10 +73,10 @@ channel SK source_id=$sources.wago.channels.k.sid realscale=0.000916 realunit=V 
 * Spannung 30V DC Solarcontroller 8
 channel SL source_id=$sources.wago.channels.l.sid realscale=0.000916 realunit=V precision=3
 
-* Spannung 30V DC Diodenverknüpfung SC1+SC2
+* Spannung 30V DC Diodenverknuepfung SC1+SC2
 channel SM source_id=$sources.wago.channels.m.sid realscale=0.000916 realunit=V precision=3
 
-* Spannung 30V DC Diodenverknüpfung SC3+SC8
+* Spannung 30V DC Diodenverknuepfung SC3+SC8
 channel SN source_id=$sources.wago.channels.n.sid realscale=0.000916 realunit=V precision=3
 
 * Spannung 30V DC 12V VSAT (geschaltet) [Sri Lanka, Madagaskar]
@@ -88,7 +88,7 @@ channel SP source_id=$sources.wago.channels.p.sid realscale=0.000916 realunit=V 
 * Spannung 30V DC VSAT Router geschaltet 24V
 channel SQ source_id=$sources.wago.channels.q.sid realscale=0.000916 realunit=V precision=3
 
-* Spannung 30V DC Diodenverknüpfung SC1-SC4 [Sri Lanka]
+* Spannung 30V DC Diodenverknuepfung SC1-SC4 [Sri Lanka]
 channel SR source_id=$sources.wago.channels.r.sid realscale=0.000916 realunit=V precision=3
 
 * Spannung 30V Reserve
@@ -103,7 +103,7 @@ channel SU source_id=$sources.wago.channels.u.sid realscale=0.000916 realunit=V 
 * Wiederstandsmessung Schwimmer
 channel SV source_id=$sources.wago.channels.v.sid realscale=0.5 realunit=Ohm precision=3
 
-* Wiederstandsmessung Türk
+* Wiederstandsmessung Tuerk
 channel SW source_id=$sources.wago.channels.w.sid realscale=0.5 realunit=Ohm precision=3
 
 * Wiederstandsmessung Reserve

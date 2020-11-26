@@ -1,7 +1,50 @@
-2009.240/AH: version 2.2b-sc3
-	- Batchmode support.
+2019.283: version 2.7
+        - Add support for blockette 2000
 
-2009.050: version 2.2b.
+2016.290: version 2.6
+	- Change host name resolution to use getaddrinfo() on all platforms
+	except Windows.  Support is now nearly ubiquitous.  Still limited to
+	IPv4 addresses.
+	- Add Cygwin target to platforms and cleanup platform support.
+
+2016.288:
+	- Replace data sample unpacking routines from qlib2 with new routines
+	developed from scratch in libmseed.  All code is now LGPL licensed.
+	- Add sl_msr_srcname() function to generate "Net_Sta_Loc_Chan[_Qual]".
+	- Switch to simpler SOCKET type defined as needed by platform includes
+	or as int when not set.
+	- Clarify licensing to be LGPLv3.
+	- Cleanup Makefile (remove unused targets) and README, add INSTALL.
+
+2016.287: version 2.5
+	- Support data sample unpacking with byte order specified in Blockette 1000,
+	specifically allows little endian decoding.  Thanks to patch by Yen Soon.
+	- Port socket usage to portable SLP_SOCKET type, either int or SOCKET.
+	- Change default use of lastpkttime to true (1) in sl_newslcd().
+	- Quiet some MSVC warnings with a define suggested by Kevin Frechette.
+
+2013.305: version 2.4b
+	- sl_read_streamlist(): Allow '!' character in selectors field, this
+	is allowed to negate selector(s).  This routine is only used when
+	parsing selections from a file.
+
+2012.152: version 2.4
+	- Integrate a patch from Jacob Crummey that adds support for data
+	record lengths other than 512-byte.  The client must know apriori
+	the record lengths to expect, by default 512-byte record lengths
+	are used and expected by all SeedLink clients, so this is only
+	useful in particular situations (e.g. low latency data collection).
+
+2010.075: version 2.3
+	- Add BATCH mode support, patch from Andres Heinloo/GFZ.
+	- Add protocol version check for BATCH command >= 3.1.
+	- Increase header search length and hostname resolution buffer (GFZ).
+	- Set protocol version to 3.1.
+
+2009.318: version 2.2c
+	- Add proper string limit for snprintf() call in sl_msr_print().
+
+2009.050: version 2.2b
 	- Add an include for sys/stat.h for Solaris in slplatform.h.
 
 2008.078: version 2.2
@@ -13,7 +56,7 @@
 	by newline characters, from unbuffered IO, i.e. a file descriptor.
 	- Add slp_openfile() to slplatform.[ch] to portably open files.
 	- Change Makefile and src/Makefile to use user defined CC and CFLAGS.
-	
+
 2007.284: version 2.0 (no version change)
 	- Use memchr() instead of strnstr() in network.c for portability.
 	- Add globmatch.obj to Makefile.wat and Makefile.win.

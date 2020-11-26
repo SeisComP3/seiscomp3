@@ -165,6 +165,45 @@ Available configuration parameters are:
    Show/hide the layer
    Default is ``true``.
 
+.. confval:: title
+
+   Type: *string*
+
+   Title of the legend for this directory. If the title is empty
+   then no legend will be created. A legend will show the label
+   of its own directory and all its subdirectories.
+
+.. confval:: label
+
+   Type: *string*
+
+   The legend label for this directory.
+
+.. confval:: index
+
+   Type: *int*
+
+   The index of the label in the legend. All labels will be
+   sorted by their index in ascending order.
+
+   Default is ``0``.
+
+.. confval:: legendArea
+
+   Type: *string*
+
+   The area in the map where the legend will be displayed.
+   Valid values are *topleft*, *topright*, *bottomleft* and
+   *bottomright*.
+
+   Default is ``topleft``.
+
+.. confval:: cfgLegendOrientation
+
+   The orientation of the legend, either *vertical* or *horizontal*.
+
+   Default is ``vertical``.
+
 .. confval:: drawName
 
    Type: *boolean*
@@ -212,6 +251,33 @@ Available configuration parameters are:
    values are *circle* and *square*.
 
    Default is ``circle``.
+
+.. confval:: symbol.icon
+
+   Type: *string*
+
+   In case of single points this specifies the path to an image used as
+   icon to represent the map location. The image is scaled to :confval:`symbol.size`
+   if it is larger than zero otherwise the origin size is being used.
+
+.. confval:: symbol.icon.hotspot.x
+
+   Type: *int*
+
+   The X coordinate of the symbol image which is rendered at the map
+   location longitude. This coordinate is in unscaled image space.
+
+   Default is ``0``.
+
+.. confval:: symbol.icon.hotspot.y
+
+   Type: *int*
+
+   The Y coordinate of the symbol image which is rendered at the map
+   location latitude. This coordinate is in unscaled image space
+   starting at top.
+
+   Default is ``0``.
 
 .. confval:: debug
 
@@ -284,6 +350,24 @@ Available configuration parameters are:
 .. confval:: font.overline
 
    Type: *boolean*
+
+.. confval:: composition
+
+   The image composition mode. Valid values are
+   *src-in*, *dst-in*, *src-out*, *dst-out*, *src-atop*,
+   *dst-atop*, *xor*, *plus*, *multiply*, *screen*,
+   *overlay*, *darken*, *lighten*, *color-dodge*,
+   *color-burn*, *hard-light*, *soft-light*, *difference*,
+   *exclusion*, *src-or-dst*, *src-and-dst*, *src-xor-dst*,
+   *not-src-and-not-dst*, *not-src-or-not-dst*,
+   *not-src-xor-dst*, *not-src*, *not-src-and-dst* and
+   *src-and-not-dst*.
+
+   An explanation can be found at the Qt
+   developer documentation, e.g.
+   https://doc.qt.io/qt-5/qpainter.html#composition-modes.
+
+   Default is ``src-over``.
 
 Example:
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -12,8 +12,10 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
+from __future__ import absolute_import, division, print_function
+
 import sys
-import StringIO
+import io
 from seiscomp.fseed import *
 from seiscomp.db.seiscomp3 import sc3wrap
 from seiscomp.db.seiscomp3.inventory import Inventory
@@ -21,8 +23,10 @@ from seiscomp3 import DataModel, IO
 
 ORGANIZATION = "EIDA"
 
+
 def iterinv(obj):
-    return (j for i in obj.itervalues() for j in i.itervalues())
+    return (j for i in obj.values() for j in i.values())
+
 
 def main():
     if len(sys.argv) < 1 or len(sys.argv) > 3:
@@ -43,15 +47,15 @@ def main():
 
     ar = IO.XMLArchive()
     if ar.open(inFile) == False:
-        raise IOError, inFile + ": unable to open"
+        raise IOError(inFile + ": unable to open")
 
     obj = ar.readObject()
     if obj is None:
-        raise TypeError, inFile + ": invalid format"
+        raise TypeError(inFile + ": invalid format")
 
     sc3inv = DataModel.Inventory.Cast(obj)
     if sc3inv is None:
-        raise TypeError, inFile + ": invalid format"
+        raise TypeError(inFile + ": invalid format")
 
     inv = Inventory(sc3inv)
     inv.load_stations("*", "*", "*", "*")
@@ -64,25 +68,30 @@ def main():
             for loc in iterinv(sta.sensorLocation):
                 for strm in iterinv(loc.stream):
                     try:
-                        vol.add_chan(net.code, sta.code, loc.code, strm.code, strm.start, strm.end)
+                        vol.add_chan(net.code, sta.code, loc.code,
+                                     strm.code, strm.start, strm.end)
 
-                    except SEEDError, e:
-                        sys.stderr.write("Error (%s,%s,%s,%s): %s\n" % (net.code, sta.code, loc.code, strm.code, str(e)))
+                    except SEEDError as e:
+                        sys.stderr.write("Error (%s,%s,%s,%s): %s\n" % (
+                            net.code, sta.code, loc.code, strm.code, str(e)))
 
     if not out or out == "-":
-        output = StringIO.StringIO()
+        output = io.BytesIO()
         vol.output(output)
-        sys.stdout.write(output.getvalue())
-        sys.stdout.flush()
+        stdout = sys.stdout.buffer if hasattr(sys.stdout, "buffer") else sys.stdout
+        stdout.write(output.getvalue())
+        stdout.flush()
         output.close()
     else:
-        vol.output(sys.argv[2])
+        with open(sys.argv[2], "wb") as fd:
+            vol.output(fd)
 
     return 0
 
 
 if __name__ == "__main__":
-    try: sys.exit(main())
-    except Exception, e:
+    try:
+        sys.exit(main())
+    except Exception as e:
         sys.stderr.write("Error: %s" % str(e))
         sys.exit(1)

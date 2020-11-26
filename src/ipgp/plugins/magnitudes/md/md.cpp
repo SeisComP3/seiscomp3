@@ -25,7 +25,6 @@
 #include "l4c1hz.h"
 #include <seiscomp3/processing/waveformprocessor.h>
 #include <seiscomp3/math/filter/stalta.h>
-#include <seiscomp3/math/filter/iirfilter.h>
 #include <seiscomp3/math/filter/butterworth.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
@@ -376,8 +375,8 @@ void AmplitudeProcessor_Md::initFilter(double fsamp) {
 				AmplitudeProcessor::setFilter(f);
 			break;
 			case 8:
-                // hardcoded ! We have to read the aFile.BUTTERWORTH
-				f = new Math::Filtering::IIR::ButterworthBandpass<double>(3, 1, 15, 1, true);
+				// hardcoded ! We have to read the aFile.BUTTERWORTH
+				f = new Math::Filtering::IIR::ButterworthBandpass<double>(3, 1, 15, 1);
 				AmplitudeProcessor::setFilter(f);
 			break;
 			case 9:

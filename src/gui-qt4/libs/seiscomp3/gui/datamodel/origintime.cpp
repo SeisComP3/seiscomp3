@@ -23,7 +23,7 @@ namespace Gui {
 
 OriginTimeDialog::OriginTimeDialog(double lon, double lat,
                                    Seiscomp::Core::Time time,
-                                   QWidget * parent, Qt::WFlags f)
+                                   QWidget * parent, Qt::WindowFlags f)
  : QDialog(parent, f) {
 
 	_ui.setupUi(this);

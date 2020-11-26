@@ -35,8 +35,8 @@ template class SC_SYSTEM_CORE_API Generic::Archive<Seiscomp::Core::BaseObject>;
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-BaseObject::BaseObject() : _referenceCount(0) {	
-    ++_objectCount;
+BaseObject::BaseObject() : _referenceCount(0) {
+	++_objectCount;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

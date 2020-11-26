@@ -6,6 +6,8 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import absolute_import, division, print_function
 import re
 import time
 import datetime
@@ -793,7 +795,7 @@ class base_qualitycontrol(object):
         try: obj.setMessage(args["message"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding QCLog"
+            print("seiscomp3.DataModel.QualityControl: error adding QCLog")
         return obj
     def __get_qclog(self):
         list = []
@@ -812,7 +814,7 @@ class base_qualitycontrol(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_qclog(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _qCLog = property(__get_qclog)
@@ -851,7 +853,7 @@ class base_qualitycontrol(object):
         try: obj.setWindowLength(args["windowLength"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding WaveformQuality"
+            print("seiscomp3.DataModel.QualityControl: error adding WaveformQuality")
         return obj
     def __get_waveformquality(self):
         list = []
@@ -881,7 +883,7 @@ class base_qualitycontrol(object):
                             logs.debug("got " + repr(obj) + " in __get_waveformquality(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _waveformQuality = property(__get_waveformquality)
 
@@ -907,7 +909,7 @@ class base_qualitycontrol(object):
                 obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.QualityControl: error adding Outage"
+            print("seiscomp3.DataModel.QualityControl: error adding Outage")
         return obj
     def __get_outage(self):
         list = []
@@ -937,7 +939,7 @@ class base_qualitycontrol(object):
                             logs.debug("got " + repr(obj) + " in __get_outage(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _outage = property(__get_outage)
 
@@ -1162,7 +1164,7 @@ class base_stationgroup(object):
         try: obj.setStationID(args["stationID"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.StationGroup: error adding StationReference"
+            print("seiscomp3.DataModel.StationGroup: error adding StationReference")
         return obj
     def __get_stationreference(self):
         list = []
@@ -1192,7 +1194,7 @@ class base_stationgroup(object):
                             logs.debug("got " + repr(obj) + " in __get_stationreference(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _stationReference = property(__get_stationreference)
 
@@ -1498,7 +1500,7 @@ class base_auxdevice(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.AuxDevice: error adding AuxSource"
+            print("seiscomp3.DataModel.AuxDevice: error adding AuxSource")
         return obj
     def __get_auxsource(self):
         list = []
@@ -1528,7 +1530,7 @@ class base_auxdevice(object):
                             logs.debug("got " + repr(obj) + " in __get_auxsource(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _auxSource = property(__get_auxsource)
 
@@ -1924,7 +1926,7 @@ class base_sensor(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Sensor: error adding SensorCalibration"
+            print("seiscomp3.DataModel.Sensor: error adding SensorCalibration")
         return obj
     def __get_sensorcalibration(self):
         list = []
@@ -1954,7 +1956,7 @@ class base_sensor(object):
                             logs.debug("got " + repr(obj) + " in __get_sensorcalibration(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _sensorCalibration = property(__get_sensorcalibration)
 
@@ -3482,7 +3484,7 @@ class base_datalogger(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Datalogger: error adding DataloggerCalibration"
+            print("seiscomp3.DataModel.Datalogger: error adding DataloggerCalibration")
         return obj
     def __get_dataloggercalibration(self):
         list = []
@@ -3512,7 +3514,7 @@ class base_datalogger(object):
                             logs.debug("got " + repr(obj) + " in __get_dataloggercalibration(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _dataloggerCalibration = property(__get_dataloggercalibration)
 
@@ -3528,7 +3530,7 @@ class base_datalogger(object):
         try: obj.setDigitalFilterChain(args["digitalFilterChain"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Datalogger: error adding Decimation"
+            print("seiscomp3.DataModel.Datalogger: error adding Decimation")
         return obj
     def __get_decimation(self):
         list = []
@@ -3558,7 +3560,7 @@ class base_datalogger(object):
                             logs.debug("got " + repr(obj) + " in __get_decimation(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _decimation = property(__get_decimation)
 
@@ -4189,7 +4191,7 @@ class base_stream(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Stream: error adding Comment"
+            print("seiscomp3.DataModel.Stream: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
@@ -4219,7 +4221,7 @@ class base_stream(object):
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4384,7 +4386,7 @@ class base_sensorlocation(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding Comment"
+            print("seiscomp3.DataModel.SensorLocation: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
@@ -4414,7 +4416,7 @@ class base_sensorlocation(object):
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4446,7 +4448,7 @@ class base_sensorlocation(object):
         try: obj.setShared(args["shared"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding AuxStream"
+            print("seiscomp3.DataModel.SensorLocation: error adding AuxStream")
         return obj
     def __get_auxstream(self):
         list = []
@@ -4476,7 +4478,7 @@ class base_sensorlocation(object):
                             logs.debug("got " + repr(obj) + " in __get_auxstream(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _auxStream = property(__get_auxstream)
 
@@ -4534,7 +4536,7 @@ class base_sensorlocation(object):
         try: obj.setShared(args["shared"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.SensorLocation: error adding Stream"
+            print("seiscomp3.DataModel.SensorLocation: error adding Stream")
         return obj
     def __get_stream(self):
         list = []
@@ -4553,7 +4555,7 @@ class base_sensorlocation(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_stream(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _stream = property(__get_stream)
@@ -4904,7 +4906,7 @@ class base_station(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Station: error adding Comment"
+            print("seiscomp3.DataModel.Station: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
@@ -4934,7 +4936,7 @@ class base_station(object):
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -4960,7 +4962,7 @@ class base_station(object):
         try: obj.setElevation(args["elevation"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Station: error adding SensorLocation"
+            print("seiscomp3.DataModel.Station: error adding SensorLocation")
         return obj
     def __get_sensorlocation(self):
         list = []
@@ -4979,7 +4981,7 @@ class base_station(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_sensorlocation(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _sensorLocation = property(__get_sensorlocation)
@@ -5269,7 +5271,7 @@ class base_network(object):
         try: obj.setCreationInfo(args["creationInfo"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Network: error adding Comment"
+            print("seiscomp3.DataModel.Network: error adding Comment")
         return obj
     def __get_comment(self):
         list = []
@@ -5299,7 +5301,7 @@ class base_network(object):
                             logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _comment = property(__get_comment)
 
@@ -5345,7 +5347,7 @@ class base_network(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Network: error adding Station"
+            print("seiscomp3.DataModel.Network: error adding Station")
         return obj
     def __get_station(self):
         list = []
@@ -5364,7 +5366,7 @@ class base_network(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_station(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _station = property(__get_station)
@@ -5433,7 +5435,7 @@ class base_inventory(object):
         try: obj.setElevation(args["elevation"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding StationGroup"
+            print("seiscomp3.DataModel.Inventory: error adding StationGroup")
         return obj
     def __get_stationgroup(self):
         list = []
@@ -5452,7 +5454,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_stationgroup(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _stationGroup = property(__get_stationgroup)
@@ -5473,7 +5475,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding AuxDevice"
+            print("seiscomp3.DataModel.Inventory: error adding AuxDevice")
         return obj
     def __get_auxdevice(self):
         list = []
@@ -5492,7 +5494,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_auxdevice(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _auxDevice = property(__get_auxdevice)
@@ -5523,7 +5525,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Sensor"
+            print("seiscomp3.DataModel.Inventory: error adding Sensor")
         return obj
     def __get_sensor(self):
         list = []
@@ -5542,7 +5544,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_sensor(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _sensor = property(__get_sensor)
@@ -5577,7 +5579,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Datalogger"
+            print("seiscomp3.DataModel.Inventory: error adding Datalogger")
         return obj
     def __get_datalogger(self):
         list = []
@@ -5596,7 +5598,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_datalogger(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _datalogger = property(__get_datalogger)
@@ -5635,7 +5637,7 @@ class base_inventory(object):
         try: obj.setCorrection(args["correction"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponsePAZ"
+            print("seiscomp3.DataModel.Inventory: error adding ResponsePAZ")
         return obj
     def __get_responsepaz(self):
         list = []
@@ -5654,7 +5656,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepaz(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _responsePAZ = property(__get_responsepaz)
@@ -5685,7 +5687,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseFIR"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseFIR")
         return obj
     def __get_responsefir(self):
         list = []
@@ -5704,7 +5706,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefir(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _responseFIR = property(__get_responsefir)
@@ -5739,7 +5741,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseIIR"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseIIR")
         return obj
     def __get_responseiir(self):
         list = []
@@ -5758,7 +5760,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_responseiir(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _responseIIR = property(__get_responseiir)
@@ -5791,7 +5793,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponsePolynomial"
+            print("seiscomp3.DataModel.Inventory: error adding ResponsePolynomial")
         return obj
     def __get_responsepolynomial(self):
         list = []
@@ -5810,7 +5812,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepolynomial(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _responsePolynomial = property(__get_responsepolynomial)
@@ -5833,7 +5835,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding ResponseFAP"
+            print("seiscomp3.DataModel.Inventory: error adding ResponseFAP")
         return obj
     def __get_responsefap(self):
         list = []
@@ -5852,7 +5854,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefap(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _responseFAP = property(__get_responsefap)
@@ -5891,7 +5893,7 @@ class base_inventory(object):
         try: obj.setRemark(args["remark"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Inventory: error adding Network"
+            print("seiscomp3.DataModel.Inventory: error adding Network")
         return obj
     def __get_network(self):
         list = []
@@ -5910,7 +5912,7 @@ class base_inventory(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_network(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _network = property(__get_network)
@@ -6197,7 +6199,7 @@ class base_route(object):
         try: obj.setPriority(args["priority"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Route: error adding RouteArclink"
+            print("seiscomp3.DataModel.Route: error adding RouteArclink")
         return obj
     def __get_routearclink(self):
         list = []
@@ -6227,7 +6229,7 @@ class base_route(object):
                             logs.debug("got " + repr(obj) + " in __get_routearclink(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _routeArclink = property(__get_routearclink)
 
@@ -6239,7 +6241,7 @@ class base_route(object):
         try: obj.setPriority(args["priority"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Route: error adding RouteSeedlink"
+            print("seiscomp3.DataModel.Route: error adding RouteSeedlink")
         return obj
     def __get_routeseedlink(self):
         list = []
@@ -6269,7 +6271,7 @@ class base_route(object):
                             logs.debug("got " + repr(obj) + " in __get_routeseedlink(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _routeSeedlink = property(__get_routeseedlink)
 
@@ -6484,7 +6486,7 @@ class base_routing(object):
         try: obj.setStreamCode(args["streamCode"])
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Routing: error adding Route"
+            print("seiscomp3.DataModel.Routing: error adding Route")
         return obj
     def __get_route(self):
         list = []
@@ -6503,7 +6505,7 @@ class base_routing(object):
                     obj.lastModified = it.lastModified()
                     list.append(base_route(obj))
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
                 it.step()
         return list
     _route = property(__get_route)
@@ -6530,7 +6532,7 @@ class base_routing(object):
                 obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
         except KeyError: pass
         if not self.obj.add(obj):
-            print "seiscomp3.DataModel.Routing: error adding Access"
+            print("seiscomp3.DataModel.Routing: error adding Access")
         return obj
     def __get_access(self):
         list = []
@@ -6560,7 +6562,7 @@ class base_routing(object):
                             logs.debug("got " + repr(obj) + " in __get_access(), objects_left=" + str(objects_left))
                     i += 1
                 except ValueError, e:
-                    print str(e)
+                    print(str(e))
         return list
     _access = property(__get_access)
 

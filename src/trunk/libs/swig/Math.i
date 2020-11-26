@@ -10,7 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-%module(package="seiscomp3", docstring="Codes for various geographical computations and filters") Math
+%module (package="seiscomp3", docstring="Codes for various geographical computations and filters") Math
 %{
 /* headers to be included in the wrapper code */
 #include "seiscomp3/math/geo.h"
@@ -133,6 +133,13 @@ namespace std {
 
 %template(ButterworthBandpassF) Seiscomp::Math::Filtering::IIR::ButterworthBandpass<float>;
 %template(ButterworthBandpassD) Seiscomp::Math::Filtering::IIR::ButterworthBandpass<double>;
+
+%template(ButterworthHighLowpassF) Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<float>;
+%template(ButterworthHighLowpassD) Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<double>;
+
+%template(ButterworthBandstopF) Seiscomp::Math::Filtering::IIR::ButterworthBandstop<float>;
+%template(ButterworthBandstopD) Seiscomp::Math::Filtering::IIR::ButterworthBandstop<double>;
+
 
 %include "seiscomp3/math/filter/chainfilter.h"
 

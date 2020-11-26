@@ -305,7 +305,14 @@ bool WaveformProcessor::store(const Record *record) {
 	// NOTE: Do not use else here, because lastRecord can be set NULL
 	//       when calling reset() in handleGap(...)
 	if ( !_stream.lastRecord ) {
-		initFilter(record->samplingFrequency());
+		try {
+			initFilter(record->samplingFrequency());
+		}
+		catch ( std::exception &e ) {
+			SEISCOMP_WARNING("%s: init filter: %s", record->streamID().c_str(),
+			                 e.what());
+			return false;
+		}
 
 		// update the received data timewindow
 		_stream.dataTimeWindow = record->timeWindow();

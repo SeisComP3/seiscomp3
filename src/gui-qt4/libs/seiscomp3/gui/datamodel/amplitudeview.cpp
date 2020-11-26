@@ -81,15 +81,15 @@ struct StationItem {
 
 class TraceList : public RecordView {
 	public:
-		TraceList(QWidget *parent = 0, Qt::WFlags f = 0)
+		TraceList(QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeWindow& tw,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(tw, parent, f) {}
 
 		TraceList(const Seiscomp::Core::TimeSpan& ts,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
+		          QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : RecordView(ts, parent, f) {}
 
 	protected:
@@ -99,17 +99,22 @@ class TraceList : public RecordView {
 
 		void dropEvent(QDropEvent *event) {
 			if ( event->mimeData()->hasFormat("text/plain") ) {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+				QString strFilter = event->mimeData()->text();
+#else
+				QString strFilter = event->mimeData()->data("text/plain");
+#endif
 				Math::Filtering::InPlaceFilter<float> *f =
-					Math::Filtering::InPlaceFilter<float>::Create(event->mimeData()->text().toStdString());
+					Math::Filtering::InPlaceFilter<float>::Create(strFilter.toStdString());
 
 				if ( !f ) {
 					QMessageBox::critical(this, "Create filter",
-					QString("Invalid filter: %1").arg(event->mimeData()->text()));
+					QString("Invalid filter: %1").arg(strFilter));
 					return;
 				}
 
 				delete f;
-				emit filterChanged(event->mimeData()->text());
+				emit filterChanged(strFilter);
 			}
 		}
 };
@@ -1767,7 +1772,7 @@ AmplitudeView::Config::Config() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeView::AmplitudeView(QWidget *parent, Qt::WFlags f)
+AmplitudeView::AmplitudeView(QWidget *parent, Qt::WindowFlags f)
 : QMainWindow(parent,f) {
 	_recordView = new TraceList();
 	init();

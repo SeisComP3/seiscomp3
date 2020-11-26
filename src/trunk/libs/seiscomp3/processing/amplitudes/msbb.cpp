@@ -178,9 +178,13 @@ bool AmplitudeProcessor_msbb::computeAmplitude(const DoubleArray &data,
 	if ( !measure_period(data.size(), static_cast<const double*>(data.data()), imax, offset, &pmax, &pstd) )
 		pmax = -1;
 
-	if ( amax < *_noiseAmplitude * _config.snrMin ) {
-		amplitude->value = amax / *_noiseAmplitude;
-		setStatus(LowSNR, amplitude->value);
+	if ( *_noiseAmplitude == 0. )
+		*snr = 1000000.0;
+	else
+		*snr = amax / *_noiseAmplitude;
+
+	if ( *snr < _config.snrMin ) {
+		setStatus(LowSNR, *snr);
 		return false;
 	}
 

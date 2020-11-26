@@ -10,6 +10,7 @@
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/channel.h>
 #include <fdsnxml/output.h>
+#include <fdsnxml/equipment.h>
 #include <algorithm>
 #include <seiscomp3/logging/log.h>
 
@@ -25,18 +26,18 @@ Channel::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(objectProperty<DistanceType>("depth", "FDSNXML::DistanceType", false, false, &Channel::setDepth, &Channel::depth));
 	addProperty(objectProperty<AzimuthType>("azimuth", "FDSNXML::AzimuthType", false, true, &Channel::setAzimuth, &Channel::azimuth));
 	addProperty(objectProperty<DipType>("dip", "FDSNXML::DipType", false, true, &Channel::setDip, &Channel::dip));
+	addProperty(objectProperty<FloatType>("waterLevel", "FDSNXML::FloatType", false, true, &Channel::setWaterLevel, &Channel::waterLevel));
 	addProperty(arrayClassProperty<Output>("type", "FDSNXML::Output", &Channel::typeCount, &Channel::type, static_cast<bool (Channel::*)(Output*)>(&Channel::addType), &Channel::removeType, static_cast<bool (Channel::*)(Output*)>(&Channel::removeType)));
 	addProperty(objectProperty<SampleRateType>("SampleRate", "FDSNXML::SampleRateType", false, true, &Channel::setSampleRate, &Channel::sampleRate));
 	addProperty(objectProperty<SampleRateRatioType>("SampleRateRatio", "FDSNXML::SampleRateRatioType", false, true, &Channel::setSampleRateRatio, &Channel::sampleRateRatio));
-	addProperty(Core::simpleProperty("StorageFormat", "string", false, false, false, false, false, false, NULL, &Channel::setStorageFormat, &Channel::storageFormat));
 	addProperty(objectProperty<ClockDriftType>("ClockDrift", "FDSNXML::ClockDriftType", false, true, &Channel::setClockDrift, &Channel::clockDrift));
 	addProperty(objectProperty<UnitsType>("CalibrationUnits", "FDSNXML::UnitsType", false, true, &Channel::setCalibrationUnits, &Channel::calibrationUnits));
 	addProperty(objectProperty<Equipment>("Sensor", "FDSNXML::Equipment", false, true, &Channel::setSensor, &Channel::sensor));
 	addProperty(objectProperty<Equipment>("PreAmplifier", "FDSNXML::Equipment", false, true, &Channel::setPreAmplifier, &Channel::preAmplifier));
 	addProperty(objectProperty<Equipment>("DataLogger", "FDSNXML::Equipment", false, true, &Channel::setDataLogger, &Channel::dataLogger));
-	addProperty(objectProperty<Equipment>("Equipment", "FDSNXML::Equipment", false, true, &Channel::setEquipment, &Channel::equipment));
 	addProperty(objectProperty<Response>("Response", "FDSNXML::Response", false, true, &Channel::setResponse, &Channel::response));
 	addProperty(Core::simpleProperty("locationCode", "string", false, false, false, false, false, false, NULL, &Channel::setLocationCode, &Channel::locationCode));
+	addProperty(arrayClassProperty<Equipment>("equipment", "FDSNXML::Equipment", &Channel::equipmentCount, &Channel::equipment, static_cast<bool (Channel::*)(Equipment*)>(&Channel::addEquipment), &Channel::removeEquipment, static_cast<bool (Channel::*)(Equipment*)>(&Channel::removeEquipment)));
 }
 
 
@@ -83,11 +84,11 @@ bool Channel::operator==(const Channel &rhs) const {
 		return false;
 	if ( !(_dip == rhs._dip) )
 		return false;
+	if ( !(_waterLevel == rhs._waterLevel) )
+		return false;
 	if ( !(_sampleRate == rhs._sampleRate) )
 		return false;
 	if ( !(_sampleRateRatio == rhs._sampleRateRatio) )
-		return false;
-	if ( !(_storageFormat == rhs._storageFormat) )
 		return false;
 	if ( !(_clockDrift == rhs._clockDrift) )
 		return false;
@@ -98,8 +99,6 @@ bool Channel::operator==(const Channel &rhs) const {
 	if ( !(_preAmplifier == rhs._preAmplifier) )
 		return false;
 	if ( !(_dataLogger == rhs._dataLogger) )
-		return false;
-	if ( !(_equipment == rhs._equipment) )
 		return false;
 	if ( !(_response == rhs._response) )
 		return false;
@@ -283,6 +282,37 @@ const DipType& Channel::dip() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Channel::setWaterLevel(const OPT(FloatType)& waterLevel) {
+	_waterLevel = waterLevel;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+FloatType& Channel::waterLevel() {
+	if ( _waterLevel )
+		return *_waterLevel;
+	throw Seiscomp::Core::ValueException("Channel.waterLevel is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const FloatType& Channel::waterLevel() const {
+	if ( _waterLevel )
+		return *_waterLevel;
+	throw Seiscomp::Core::ValueException("Channel.waterLevel is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Channel::setSampleRate(const OPT(SampleRateType)& sampleRate) {
 	_sampleRate = sampleRate;
 }
@@ -338,24 +368,6 @@ const SampleRateRatioType& Channel::sampleRateRatio() const {
 	if ( _sampleRateRatio )
 		return *_sampleRateRatio;
 	throw Seiscomp::Core::ValueException("Channel.SampleRateRatio is not set");
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Channel::setStorageFormat(const std::string& storageFormat) {
-	_storageFormat = storageFormat;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& Channel::storageFormat() const {
-	return _storageFormat;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -518,37 +530,6 @@ const Equipment& Channel::dataLogger() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Channel::setEquipment(const OPT(Equipment)& equipment) {
-	_equipment = equipment;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Equipment& Channel::equipment() {
-	if ( _equipment )
-		return *_equipment;
-	throw Seiscomp::Core::ValueException("Channel.Equipment is not set");
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Equipment& Channel::equipment() const {
-	if ( _equipment )
-		return *_equipment;
-	throw Seiscomp::Core::ValueException("Channel.Equipment is not set");
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Channel::setResponse(const OPT(Response)& response) {
 	_response = response;
 }
@@ -606,15 +587,14 @@ Channel& Channel::operator=(const Channel &other) {
 	_depth = other._depth;
 	_azimuth = other._azimuth;
 	_dip = other._dip;
+	_waterLevel = other._waterLevel;
 	_sampleRate = other._sampleRate;
 	_sampleRateRatio = other._sampleRateRatio;
-	_storageFormat = other._storageFormat;
 	_clockDrift = other._clockDrift;
 	_calibrationUnits = other._calibrationUnits;
 	_sensor = other._sensor;
 	_preAmplifier = other._preAmplifier;
 	_dataLogger = other._dataLogger;
-	_equipment = other._equipment;
 	_response = other._response;
 	_locationCode = other._locationCode;
 	return *this;
@@ -684,6 +664,74 @@ bool Channel::removeType(size_t i) {
 		return false;
 
 	_types.erase(_types.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Channel::equipmentCount() const {
+	return _equipments.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Equipment* Channel::equipment(size_t i) const {
+	return _equipments[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Channel::addEquipment(Equipment *obj) {
+	if ( obj == NULL )
+		return false;
+
+	// Add the element
+	_equipments.push_back(obj);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Channel::removeEquipment(Equipment *obj) {
+	if ( obj == NULL )
+		return false;
+
+	std::vector<EquipmentPtr>::iterator it;
+	it = std::find(_equipments.begin(), _equipments.end(), obj);
+	// Element has not been found
+	if ( it == _equipments.end() ) {
+		SEISCOMP_ERROR("Channel::removeEquipment(Equipment*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Channel::removeEquipment(size_t i) {
+	// index out of bounds
+	if ( i >= _equipments.size() )
+		return false;
+
+	_equipments.erase(_equipments.begin() + i);
 
 	return true;
 }

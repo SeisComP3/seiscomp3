@@ -6,6 +6,8 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import absolute_import, division, print_function
 #import genwrap as _genwrap
 from seiscomp.db.xmlio import qc as _xmlio
 from seiscomp.db import DBError
@@ -46,7 +48,7 @@ class _QCLog(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.start = start
@@ -102,7 +104,7 @@ class _WaveformQuality(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.start = start
@@ -148,7 +150,7 @@ class _Outage(object):
 		self.my = my
 		self.object = {}
 
-		for (a, v) in args.iteritems():
+		for (a, v) in args.items():
 			self.__setattr__(a, v)
 
 		self.waveformID = waveformID
@@ -192,7 +194,7 @@ class QualityControl(object):
 		if start not in self.log:
 			self.log[start] = {}
 		if waveformID in self.log[start]:
-			raise DBError, "QCLog [%s][%s] already defined" % (start, waveformID)
+			raise DBError("QCLog [%s][%s] already defined" % (start, waveformID))
 		obj = _QCLog(self, start, waveformID, args)
 		self.log[start][waveformID] = obj
 		self.object[obj.publicID] = obj
@@ -204,7 +206,7 @@ class QualityControl(object):
 			if len(self.log[start]) == 0:
 				del self.log[start]
 		except KeyError:
-			raise DBError, "QCLog [%s][%s] not found" % (start, waveformID)
+			raise DBError("QCLog [%s][%s] not found" % (start, waveformID))
 
 	def insert_waveformQuality(self, start, waveformID, type, parameter, **args):
 		if start not in self.waveformQuality:
@@ -214,7 +216,7 @@ class QualityControl(object):
 		if type not in self.waveformQuality[start][waveformID]:
 			self.waveformQuality[start][waveformID][type] = {}
 		if parameter in self.waveformQuality[start][waveformID][type]:
-			raise DBError, "WaveformQuality [%s][%s][%s][%s] already defined" % (start, waveformID, type, parameter)
+			raise DBError("WaveformQuality [%s][%s][%s][%s] already defined" % (start, waveformID, type, parameter))
 		obj = _WaveformQuality(self, start, waveformID, type, parameter, args)
 		self.waveformQuality[start][waveformID][type][parameter] = obj
 		return obj
@@ -229,13 +231,13 @@ class QualityControl(object):
 			if len(self.waveformQuality[start]) == 0:
 				del self.waveformQuality[start]
 		except KeyError:
-			raise DBError, "WaveformQuality [%s][%s][%s][%s] not found" % (start, waveformID, type, parameter)
+			raise DBError("WaveformQuality [%s][%s][%s][%s] not found" % (start, waveformID, type, parameter))
 
 	def insert_outage(self, waveformID, start, **args):
 		if waveformID not in self.outage:
 			self.outage[waveformID] = {}
 		if start in self.outage[waveformID]:
-			raise DBError, "Outage [%s][%s] already defined" % (waveformID, start)
+			raise DBError("Outage [%s][%s] already defined" % (waveformID, start))
 		obj = _Outage(self, waveformID, start, args)
 		self.outage[waveformID][start] = obj
 		return obj
@@ -246,7 +248,7 @@ class QualityControl(object):
 			if len(self.outage[waveformID]) == 0:
 				del self.outage[waveformID]
 		except KeyError:
-			raise DBError, "Outage [%s][%s] not found" % (waveformID, start)
+			raise DBError("Outage [%s][%s] not found" % (waveformID, start))
 
 	def clear_logs(self):
 		self.qclog = {}

@@ -11,14 +11,17 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_IO_RECORDS_MSEEDRECORD_H__
-#define __SEISCOMP_IO_RECORDS_MSEEDRECORD_H__
+#ifndef SEISCOMP_IO_RECORDS_MSEEDRECORD_H
+#define SEISCOMP_IO_RECORDS_MSEEDRECORD_H
 
-#include <string>
-#include <boost/thread/mutex.hpp>
+
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core.h>
+
+#include <boost/thread/mutex.hpp>
+#include <string>
+#include <stdint.h>
 
 
 typedef struct MSRecord_s MSRecord;
@@ -31,9 +34,9 @@ DEFINE_SMARTPOINTER(MSeedRecord);
 
 
 class SC_SYSTEM_CORE_API LibmseedException : public Core::StreamException {
- public:
-	LibmseedException() : Core::StreamException("libmseed error") {}
-	LibmseedException(std::string what) : Core::StreamException(what) {}
+	public:
+		LibmseedException() : Core::StreamException("libmseed error") {}
+		LibmseedException(std::string what) : Core::StreamException(what) {}
 };
 
 
@@ -41,7 +44,7 @@ class SC_SYSTEM_CORE_API LibmseedException : public Core::StreamException {
  * Uses seiscomp error logging as component MSEEDRECORD.
  **/
 class SC_SYSTEM_CORE_API MSeedRecord: public Record {
-	DECLARE_SC_CLASS(MSeedRecord);
+	DECLARE_SC_CLASS(MSeedRecord)
 
 public:
 	//! Initializing Constructor
@@ -101,10 +104,10 @@ public:
 	void setSampleRateMultiplier(int srmult);
 
 	//! Returns the byteorder
-	unsigned short byteOrder() const;
+	int8_t byteOrder() const;
 
 	//! Returns the encoding code
-	unsigned short encoding() const;
+	int8_t encoding() const;
 
 	//! Returns the sample rate numerator
 	int sampleRateNumerator() const;
@@ -157,8 +160,8 @@ private:
 	char _rectype;
 	int _srfact;
 	int _srmult;
-	unsigned short _byteorder;
-	unsigned short _encoding;
+	int8_t _byteorder;
+	int8_t _encoding;
 	int _srnum;
 	int _srdenom;
 	int _reclen;
@@ -168,13 +171,6 @@ private:
 	bool _encodingFlag;
 
 	void _setDataAttributes(int reclen, char *data) const;
-
-	/* callback function for libmseed-function msr_pack(...) */
-	static void _Record_Handler(char *record, int reclen, void *packed) {
-		/* to make the data available to the overloaded operator<< */
-		reinterpret_cast<CharArray *>(packed)->append(reclen, record);
-	}
-	
 };
 
 } // namespace IO

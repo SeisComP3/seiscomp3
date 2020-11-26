@@ -579,14 +579,14 @@ processfile (char *filename, FileNode *fnode, off_t newsize, time_t newmodtime)
       /* Send the record off to the controlling SeedLink server */
       else
 	{
-	  /* Create a station ID of either 'NET_STA' or 'STA' */
+	  /* Create a station ID of either 'NET.STA' or 'STA' */
 	  if ( netstaid )
 	    {
 	      strncpy (staid, mseedbuf+18, 2); staid[2] = '\0';
 	      if ( (tptr = strchr (staid, ' ')) != NULL )
 		*tptr = '\0';
 	      
-	      strcat (staid, "_");
+	      strcat (staid, ".");
 	      
 	      strncat (staid, mseedbuf+8, 5); staid[8] = '\0';
 	      if ( (tptr = strchr (staid, ' ')) != NULL )

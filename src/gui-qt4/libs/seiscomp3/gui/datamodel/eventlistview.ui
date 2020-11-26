@@ -83,9 +83,6 @@
         </item>
         <item>
          <widget class="QToolButton" name="btnFilter" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -99,6 +96,9 @@
           </property>
           <property name="text" >
            <string>Filter</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="icons.qrc" >:/icons/icons/filter2.png</iconset>
           </property>
          </widget>
         </item>
@@ -448,6 +448,8 @@
   </action>
  </widget>
  <pixmapfunction></pixmapfunction>
- <resources/>
+ <resources>
+  <include location="icons.qrc" />
+ </resources>
  <connections/>
 </ui>

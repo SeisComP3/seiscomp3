@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/res">
+        <file>icons/start.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/restart.png</file>
+        <file>icons/reload.png</file>
+        <file>icons/check.png</file>
         <file>icons/add.png</file>
         <file>icons/remove.png</file>
         <file>icons/lock.png</file>

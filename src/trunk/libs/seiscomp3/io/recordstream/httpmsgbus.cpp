@@ -491,14 +491,14 @@ void HMBConnection<SocketType>::initSession()
 				status += "seq=" + Core::toString<int64_t>(seq);
 				_queues[qname].setSequenceNumber(seq);
 			}
-			catch(Core::GeneralException) {
+			catch( Core::GeneralException & ) {
 			}
 
 			try {
 				std::string error = bsonGetString(&b, "error");
 				status += error;
 			}
-			catch(Core::GeneralException) {
+			catch( Core::GeneralException & ) {
 			}
 
 			SEISCOMP_DEBUG("%s: %s", qname.c_str(), status.c_str());

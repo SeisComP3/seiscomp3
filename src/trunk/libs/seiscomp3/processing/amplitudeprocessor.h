@@ -32,7 +32,7 @@ namespace Processing {
 DEFINE_SMARTPOINTER(AmplitudeProcessor);
 
 class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
-	DECLARE_SC_CLASS(AmplitudeProcessor);
+	DECLARE_SC_CLASS(AmplitudeProcessor)
 
 	// ----------------------------------------------------------------------
 	//  Public types

@@ -20,7 +20,7 @@ discarded. This minimum weight can be configured with
 Amplitudes for the following magnitudes are currently computed:
 
 
-:term:`MLh <magnitude, local (ML)>`
+:term:`ML <magnitude, local (ML)>`
    Local magnitude calculated on the vertical component using a correction term
    to fit with the standard ML
 
@@ -41,6 +41,9 @@ Amplitudes for the following magnitudes are currently computed:
 :term:`mb <magnitude, body-wave (mb)>`
    Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
 
+:term:`mBc <magnitude, cumulative body-wave (mBc)>`
+   Cumulative body wave magnitude
+
 :term:`mB <magnitude, broadband body-wave (mB)>`
    Broad band body wave magnitude
 
@@ -50,7 +53,10 @@ Amplitudes for the following magnitudes are currently computed:
 :term:`Mjma <magnitude, JMA (M_JMA)>`
    Mjma is computed on displacement data using body waves of period < 30s
 
-:term:`Ms(BB) <magnitude, surface wave (Ms)>`
+:term:`Ms_20 <magnitude, surface wave (Ms_20)>`
+   Surface-wave magnitude at 20 s period
+
+:term:`Ms(BB) <magnitude, broadband surface wave (Ms(BB))>`
    Broad band surface-wave magnitude
 
 :term:`Md <magnitude, duration (Md)>`

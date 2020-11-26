@@ -35,7 +35,7 @@ class SC_GUI_API Inspector : public QWidget {
 	Q_OBJECT
 
 	public:
-		Inspector(QWidget * parent = 0, Qt::WFlags f = 0);
+		Inspector(QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~Inspector();
 
 

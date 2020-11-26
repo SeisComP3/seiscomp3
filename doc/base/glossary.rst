@@ -353,7 +353,8 @@ is taken from Modern Global Seismology.
       Read the :ref:`technical documentation <global_mlh>` for the configuration.
 
    magnitude, local GNS/GEONET (MLr)
-      Local magnitude calculated from MLv amplitudes based on GNS/GEONET specifications for New Zealand.
+      Local magnitude calculated from :term:`MLv <magnitude, local vertical (MLv)>`
+      amplitudes based on GNS/GEONET specifications for New Zealand.
 
       Read the :ref:`technical documentation <global_mlr>` for the configuration.
 
@@ -371,7 +372,7 @@ is taken from Modern Global Seismology.
 
       .. math::
 
-         mb = \log \frac{A}{T} + Q(h,\Delta)
+         mb = \log \left(\frac{A}{T}\right) + Q(h,\Delta)
 
       with A as the displacement amplitude in micrometers, T as the dominant period of the signal in seconds, Q as a
       correction term for depth and distance. mb is usually determined at periods around 1s in adaptation to the use
@@ -383,16 +384,20 @@ is taken from Modern Global Seismology.
       earthquakes occur at lower frequencies than the frequency range between 0.7 Hz - 2 Hz used for the magnitude
       calculation.
 
-      In SeisComP3 mb is determined by simulation of a WWSSN short-period seismometer and then measuring the amplitudes in
-      a 30 s time window at stations in the distance range of 5° to 105°.
+      In SeisComP3 mb amplitudes are measured on vertical-component seismograms
+      in a 30 s time window after simulation of a :term:`WWSSN_SP` short-period
+      seismometer. Amplitudes are considered within epicentral distances of 5° to 105°.
 
-      The amplitude unit in SeisComP3 is **nanometer** (nm).
+      * Amplitude unit in SeisComP3 is **nanometer** (nm)
+      * Period range: 0.4 - 3 s
+      * Distance range: 5 - 105°
+      * Time window: 0 - 30 s
 
    magnitude, broadband body-wave (mB)
       mB is a magnitude based on body waves like mb, but the amplitude is measured in a broad
       frequency range and longer time windows. Instead of amplitude measurements on displacement
       data together with the dominant period, the maximum velocity amplitude Vmax is taken
-      directly from velocity-proportional records with V = 2πA/T. The time window for the
+      directly from velocity-proportional records with :math:`V = 2 \pi A/T`. The time window for the
       measurement can be determined by the duration of the high-frequency (1-3 Hz) radiation
       (Bormann & Saul, 2008). This time window usually contains the phases P, pP, sP, PcP, but
       not PP. According to the long time window and broad frequency range used for amplitude
@@ -404,32 +409,62 @@ is taken from Modern Global Seismology.
 
       .. math::
 
-         l = min(11.5 \Delta, 60)
+         t = min(11.5 \Delta, 60)
 
-      The amplitude unit in SeisComP3 is **nanometer per second** (nm/s).
+      * Amplitude unit in SeisComP3 is **nanometer per second** (nm/s)
+      * Period range: all
+      * Distance range: 5 - 105°
+      * Time window: 60 s if set by :ref:`scautopick`, otherwise the minimum of 60 s and 11.5 s/° * distance in degree
+
+   magnitude, cumulative body-wave (mBc)
+      mBc is the cumulative body-wave magnitude. See Bormann and Wylegalla (2005)
+      and  Bormann and Saul (2009) for details.
 
    magnitude, surface wave (Ms)
-      Ms is a magnitude scale based on teleseismic surface waves. Ms is based on measurements of
+      Ms is a magnitude scale based on teleseismic surface waves. Historically, Ms
+      is based on measurements of
       the maximum horizontal true ground motion displacement amplitudes
 
       .. math::
 
          A_{Hmax} =\sqrt{{A_N}^2 + {A_E}^2}
 
-      in the total seismogram at periods around 20s. For shallow earthquakes the dominant
+      in the total seismogram at periods around 20 s. For shallow earthquakes the dominant
       long-period signals are the surface waves. The period of 20 s corresponds to the Airy
       phase, a local minimum in the group velocity dispersion curve of Rayleigh surface waves.
-      The Moscow-Praque equation for surface wave magnitude is given by
+      For measuring amplitudes a correction for the WWSSN_LP instrument response is applied.
+
+      The Moscow-Prague equation for surface wave magnitude is given by
 
       .. math::
 
-         M_s = \log \left(\frac{A}{T}\right)max + 1.66 \log(\Delta) + 3.3
+         M_s = \log \left(\frac{A_{Hmax}}{T}\right) + 1.66 \log(\Delta) + 3.3
 
-      Here the maximum ground particle velocity (A/T)max is used instead of the AHmax to
-      allow a broader spectrum of dominant periods. This formula is valid for distances of
-      2° to 160° and source depth smaller than 50 km.
+      where T is the measured period.
 
-      The amplitude unit in SeisComP3 is **meter per second** (m/s).
+   magnitude, surface wave (Ms_20)
+      Ms_20 is the surface-wave magnitude at 20 s period based on the recommendations
+      by the IASPEI magnitude working group issued on 27 March, 2013.
+
+      Read the :ref:`technical documentation <global_ms_20>` for more details and the configuration.
+
+   magnitude, broadband surface wave (Ms(BB))
+      Ms(BB) is a broadband magnitude scale based on teleseismic surface waves.
+      In contrast to :term:`Ms <magnitude, surface wave (Ms)>`, amplitudes for Ms(BB)
+      are measured as the maximum on vertical true ground motion velocity seismograms without
+      instrument simulation or restitution.
+
+      The Moscow-Prague equation for surface wave magnitude is applied as given by
+
+      .. math::
+
+         M_s = \log \left(\frac{A}{2\pi}\right) + 1.66 \log(\Delta) + 3.3
+
+      * Amplitude unit in SeisComP3 is **meter per second** (m/s)
+      * Period range: all
+      * Distance range: 2 - 160°
+      * Depth range: 0 - 100 km
+      * Time window: distance (km) / 3.5 km/s + 30 s
 
    magnitude, duration (Md)
       The duration magnitude measured on the coda wave train.
@@ -448,17 +483,21 @@ is taken from Modern Global Seismology.
       This equation is valid for local (< 2000 km) and shallow (< 80 km) earthquakes. For
       deeper earthquakes additional correction functions have to be applied (Katsumata, 1996).
 
-      The amplitude unit in SeisComP3 is **micrometer** (um).
+      * Amplitude unit in SeisComP3 is **micrometer** (um)
+      * Time window: 150 s
+      * Epicentral distance range: 0 - 20°
+      * Depth range: 0 - 80 km
 
    magnitude, moment (Mw)
       The moment magnitude is a magnitude scale related to the seismic moment M\ :sub:`0` and
       thus to the released seismic energy.
-      To obtain the Mw the seismic moment is first determined, e.g. by a moment tensor inversion.
-      Then the Mw is gained by the following relationship between seismic moment and the moment magnitude (units in cgs):
+      To obtain Mw the seismic moment is first determined, e.g. by a moment tensor inversion.
+      Then the Mw is gained by the following standard relationship between seismic moment
+      and the moment magnitude (M\ :sub:`0` in cgs units of dyn*cm):
 
       .. math::
 
-         Mw = 2\frac{\log M_0 - 16.1}{3}
+         Mw = \frac{2}{3}(\log M_0 - 16.1)
 
       This equation is analog to the relation between M\ :sub:`s` and M\ :sub:`0`.
 
@@ -470,17 +509,19 @@ is taken from Modern Global Seismology.
       of multiple records results in an estimation of the moment magnitude without correction
       for the source mechanism (Tsuboi et al., 1995).
 
-      The amplitude unit in SeisComP3 is **nanometer times second** (nm*s).
+      * Amplitude unit in SeisComP3 is **nanometer times second** (nm*s)
+      * Time window: 95 s
+      * Epicentral distance range: 5 - 105°
 
    magnitude, derived mB (Mw(mB))
       Moment magnitude derived from :term:`mB <magnitude, broadband body-wave (mB)>`
-      magnitudes.
+      magnitudes using linear conversion:
 
       Mw(mB) = 1.30 mB - 2.18
 
    magnitude, derived Mwp (Mw(Mwp))
       Moment magnitude derived from :term:`Mwp <magnitude, broadband P-wave moment (Mwp)>`
-      magnitudes.
+      magnitudes using linear conversion after Whitmore et al. (2002):
 
       Mw(Mwp) = 1.31 Mwp - 1.91
 
@@ -840,7 +881,7 @@ is taken from Modern Global Seismology.
       horizontal offset of geologic markers.
 
    slowness
-      The inverse of velocity, given in the unit seconds/degree or s/km; a large
+      The inverse of velocity, given in the unit seconds/° or s/km; a large
       slowness corresponds to a low velocity.
 
    SNR
@@ -1010,3 +1051,11 @@ is taken from Modern Global Seismology.
    weight
       Attribute of the QuakeML objects Arrival and !MagnitudeReferences defining the
       effect of the referenced object (e.g. Pick).
+
+   WWSSN_SP
+     Short period seismograph with a dominant period of 1 s of the World-Wide
+     Standard Seismograph Network (WWSSN).
+
+   WWSSN_LP
+      Long period seismograph with a dominant period of 20 s of the World-Wide
+      Standard Seismograph Network (WWSSN).

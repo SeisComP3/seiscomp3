@@ -173,7 +173,7 @@ void EventRecordReference::setCampbellDistance(const OPT(RealQuantity)& campbell
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& EventRecordReference::campbellDistance() throw(Seiscomp::Core::ValueException) {
+RealQuantity& EventRecordReference::campbellDistance() {
 	if ( _campbellDistance )
 		return *_campbellDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.campbellDistance is not set");
@@ -184,7 +184,7 @@ RealQuantity& EventRecordReference::campbellDistance() throw(Seiscomp::Core::Val
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& EventRecordReference::campbellDistance() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& EventRecordReference::campbellDistance() const {
 	if ( _campbellDistance )
 		return *_campbellDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.campbellDistance is not set");
@@ -204,7 +204,7 @@ void EventRecordReference::setRuptureToStationAzimuth(const OPT(RealQuantity)& r
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& EventRecordReference::ruptureToStationAzimuth() throw(Seiscomp::Core::ValueException) {
+RealQuantity& EventRecordReference::ruptureToStationAzimuth() {
 	if ( _ruptureToStationAzimuth )
 		return *_ruptureToStationAzimuth;
 	throw Seiscomp::Core::ValueException("EventRecordReference.ruptureToStationAzimuth is not set");
@@ -215,7 +215,7 @@ RealQuantity& EventRecordReference::ruptureToStationAzimuth() throw(Seiscomp::Co
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& EventRecordReference::ruptureToStationAzimuth() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& EventRecordReference::ruptureToStationAzimuth() const {
 	if ( _ruptureToStationAzimuth )
 		return *_ruptureToStationAzimuth;
 	throw Seiscomp::Core::ValueException("EventRecordReference.ruptureToStationAzimuth is not set");
@@ -235,7 +235,7 @@ void EventRecordReference::setRuptureAreaDistance(const OPT(RealQuantity)& ruptu
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& EventRecordReference::ruptureAreaDistance() throw(Seiscomp::Core::ValueException) {
+RealQuantity& EventRecordReference::ruptureAreaDistance() {
 	if ( _ruptureAreaDistance )
 		return *_ruptureAreaDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.ruptureAreaDistance is not set");
@@ -246,7 +246,7 @@ RealQuantity& EventRecordReference::ruptureAreaDistance() throw(Seiscomp::Core::
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& EventRecordReference::ruptureAreaDistance() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& EventRecordReference::ruptureAreaDistance() const {
 	if ( _ruptureAreaDistance )
 		return *_ruptureAreaDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.ruptureAreaDistance is not set");
@@ -266,7 +266,7 @@ void EventRecordReference::setJoynerBooreDistance(const OPT(RealQuantity)& Joyne
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& EventRecordReference::JoynerBooreDistance() throw(Seiscomp::Core::ValueException) {
+RealQuantity& EventRecordReference::JoynerBooreDistance() {
 	if ( _joynerBooreDistance )
 		return *_joynerBooreDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.JoynerBooreDistance is not set");
@@ -277,7 +277,7 @@ RealQuantity& EventRecordReference::JoynerBooreDistance() throw(Seiscomp::Core::
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& EventRecordReference::JoynerBooreDistance() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& EventRecordReference::JoynerBooreDistance() const {
 	if ( _joynerBooreDistance )
 		return *_joynerBooreDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.JoynerBooreDistance is not set");
@@ -297,7 +297,7 @@ void EventRecordReference::setClosestFaultDistance(const OPT(RealQuantity)& clos
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& EventRecordReference::closestFaultDistance() throw(Seiscomp::Core::ValueException) {
+RealQuantity& EventRecordReference::closestFaultDistance() {
 	if ( _closestFaultDistance )
 		return *_closestFaultDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.closestFaultDistance is not set");
@@ -308,7 +308,7 @@ RealQuantity& EventRecordReference::closestFaultDistance() throw(Seiscomp::Core:
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& EventRecordReference::closestFaultDistance() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& EventRecordReference::closestFaultDistance() const {
 	if ( _closestFaultDistance )
 		return *_closestFaultDistance;
 	throw Seiscomp::Core::ValueException("EventRecordReference.closestFaultDistance is not set");
@@ -328,7 +328,7 @@ void EventRecordReference::setPreEventLength(const OPT(double)& preEventLength) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double EventRecordReference::preEventLength() const throw(Seiscomp::Core::ValueException) {
+double EventRecordReference::preEventLength() const {
 	if ( _preEventLength )
 		return *_preEventLength;
 	throw Seiscomp::Core::ValueException("EventRecordReference.preEventLength is not set");
@@ -348,7 +348,7 @@ void EventRecordReference::setPostEventLength(const OPT(double)& postEventLength
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double EventRecordReference::postEventLength() const throw(Seiscomp::Core::ValueException) {
+double EventRecordReference::postEventLength() const {
 	if ( _postEventLength )
 		return *_postEventLength;
 	throw Seiscomp::Core::ValueException("EventRecordReference.postEventLength is not set");
@@ -483,7 +483,7 @@ void EventRecordReference::accept(Visitor* visitor) {
 void EventRecordReference::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: EventRecordReference skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

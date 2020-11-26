@@ -127,7 +127,7 @@ void process_record(char *inseed, char *match,
   char type;
   char prtnet[4], prtsta[7];
   char prtloc[4], prtchan[5];
-  char *seedsta, *spcptr, *encoding;
+  char sta_id[11], *spcptr, *encoding;
   char order[4], sourcename[50];
   int  parsed = 0;
   int  seedreclen;
@@ -166,7 +166,7 @@ void process_record(char *inseed, char *match,
   if ( (spcptr = strstr(prtloc, " ")) != NULL ) *spcptr = '\0';
   if ( (spcptr = strstr(prtchan, " ")) != NULL ) *spcptr = '\0';
 
-  seedsta = strdup(prtsta);
+  snprintf(sta_id, 11, "%s.%s", prtnet, prtsta);
 
   if (prtnet[0] != '\0') strcat(prtnet, "_");
   if (prtsta[0] != '\0') strcat(prtsta, "_");
@@ -199,7 +199,7 @@ void process_record(char *inseed, char *match,
   }
   
   if ( matches(sourcename, match) && p ) {  /* send it off to the daemon */
-    if ( send_mseed(seedsta, (void *) inseed, rec_size) < 0 ) {
+    if ( send_mseed(sta_id, (void *) inseed, rec_size) < 0 ) {
       lprintf(0, "Error sending data to seedlink: %s", strerror(errno));
       exit(1);
     }
@@ -216,8 +216,6 @@ void process_record(char *inseed, char *match,
     lprintf(2, "DROPPED %s: %s, %d bytes, %s",
 	    sourcename, order, seedreclen, encoding);
   }
-
-  free (seedsta);
 
   return;
 }

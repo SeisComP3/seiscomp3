@@ -29,6 +29,7 @@
 #include <string>
 
 namespace Seiscomp {
+
 namespace DataModel {
 	class FocalMechanism;
 	class Magnitude;
@@ -36,36 +37,57 @@ namespace DataModel {
 	class Event;
 }
 
+namespace IO {
+	namespace QuakeLink {
+		class Response;
+	}
+}
+
 namespace QL2SC {
 
-class App : public Seiscomp::Client::Application {
 
+class SC_SYSTEM_CORE_API NoCache : public DataModel::PublicObjectCache {
+	public:
+		bool feed(DataModel::PublicObject* po) { return true; }
+};
+
+
+class App : public Client::Application {
 	public:
 		App(int argc, char **argv);
 		~App();
-		static App* Instance();
 
+	public:
+		void feed(QLClient *client, IO::QuakeLink::Response *response);
 
-	private:
+	protected:
 		typedef std::vector<QLClient*> QLClients;
-		typedef Seiscomp::DataModel::Diff2::Notifiers Notifiers;
-		typedef Seiscomp::DataModel::Diff2::LogNode LogNode;
-		typedef Seiscomp::DataModel::Diff2::LogNodePtr LogNodePtr;
+		typedef DataModel::Diff2::Notifiers Notifiers;
+		typedef DataModel::Diff2::LogNode LogNode;
+		typedef DataModel::Diff2::LogNodePtr LogNodePtr;
 
-		bool init();
-		bool run();
-		void done();
+		virtual void createCommandLineDescription();
 
-		bool dispatchNotification(int type, BaseObject *obj);
-		void addObject(const std::string& parentID, Seiscomp::DataModel::Object *obj);
-		void removeObject(const std::string& parentID, Seiscomp::DataModel::Object *obj);
+		virtual bool init();
+		virtual bool run();
+		virtual void done();
+
+		virtual bool dispatchNotification(int type, BaseObject *obj);
+		virtual void addObject(const std::string& parentID, DataModel::Object *obj);
+		virtual void updateObject(const std::string& parentID, DataModel::Object *obj);
+		virtual void removeObject(const std::string& parentID, DataModel::Object *obj);
+		virtual void handleTimeout();
+
+		bool dispatchResponse(QLClient *client, const IO::QuakeLink::Response *response);
 
 		template <class T>
 		void diffPO(T *remotePO, const std::string &parentID,
 		            Notifiers &notifiers, LogNode *logNode = NULL);
 
-		void syncEvent(Seiscomp::DataModel::Event *event,
-		               Notifiers &notifiers);
+		void syncEvent(const DataModel::EventParameters *ep,
+		               const DataModel::Event *event,
+		               const RoutingTable *routing,
+		               Notifiers &notifiers, bool syncPreferred);
 
 		bool sendNotifiers(const Notifiers &notifiers, const RoutingTable &routing);
 		bool sendJournals(const Notifiers &journals);
@@ -77,11 +99,21 @@ class App : public Seiscomp::Client::Application {
 		                                            const std::string &action,
 		                                            const std::string &params);
 
+		std::string waitForEventAssociation(const std::string &originID, int timeout);
+		void originAssociatedWithEvent(const std::string &eventID,
+		                               const std::string &originID);
+
 	private:
-		Config                                      _config;
-		QLClients                                   _clients;
-		Seiscomp::DataModel::PublicObjectRingBuffer _cache;
-		std::string                                 _lastUpdateFile;
+		Config                   _config;
+		QLClients                _clients;
+		NoCache                  _cache;
+		boost::mutex             _clientPublishMutex;
+		std::string              _lastUpdateFile;
+		std::string              _waitForEventIDOriginID;
+		std::string              _waitForEventIDResult;
+		int                      _waitForEventIDTimeout;
+		std::vector<std::string> _ep;
+		bool                     _test;
 };
 
 } // ns QL2SC

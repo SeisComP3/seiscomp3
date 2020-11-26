@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="FixedHypocenter">
+		<extends>global</extends>
+		<description>Locator for re-computing source time with fixed hypocenter</description>
+		<configuration>
+			<group name="FixedHypocenter">
+				<description>
+					Locator parameters: FixedHypocenter
+				</description>
+				<parameter name="profiles" type="list:string" default="LOCSAT/iasp91,LOCSAT/tab">
+					<description>
+					Defines a list of available travel time tables. Each item
+					is a tuple separated by a slash with format &quot;[interface]/[model]&quot;.
+					Built-in interfaces are &quot;LOCSAT&quot; and &quot;libtau&quot;.
+					Other interfaces might be added via plugins. Please check their
+					documentation for the required interface name.
+					</description>
+				</parameter>
+				<parameter name="usePickUncertainties" type="boolean" default="false">
+					<description>
+					Whether to use pick time uncertainties rather than a fixed
+					time error. If true, then the uncertainties are retrieved from
+					each individual pick object. If they are not defined, then the
+					default pick time uncertainty as defined by defaultTimeError
+					will be used instead.
+					</description>
+				</parameter>
+				<parameter name="defaultTimeError" type="double" default="1.0" unit="s">
+					<description>
+					The default pick time uncertainty if pick uncertainties are
+					not going to be used or if they are absent.
+					</description>
+				</parameter>
+				<parameter name="degreesOfFreedom" type="int" default="8">
+					<description>
+					Number of degrees of freedom used for error estimate.
+					</description>
+				</parameter>
+				<parameter name="confLevel" type="double" default="0.9">
+					<description>
+					Confidence level between 0.5 and 1.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

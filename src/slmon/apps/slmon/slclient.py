@@ -15,7 +15,7 @@ def _timeparse(t, format):
     """
     try:
         return datetime.datetime(*time.strptime(t, format)[0:6]).time()
-    except ValueError, msg:
+    except ValueError as msg:
         if "%S" in format:
             msg = str(msg)
             mat = re.match(r"unconverted data remains:"
@@ -83,7 +83,7 @@ class Input(mseed.Input):
         
         if timeout:
             try:    assert int(timeout) > 0
-            except: raise TypeError, "illegal timeout parameter"
+            except: raise TypeError("illegal timeout parameter")
             args += ["-nt", "%d" % int(timeout)]
         
         args.append(server)
@@ -191,7 +191,7 @@ def available(server="localhost:18000",
     # determine the position of the dash "-" to determine where the
     # other fields are.
     regex = re.compile("^[A-Z][A-Z]\ [A-Z].*[12][0-9]{3}(/[0-9]{2}){2}.*$")
-    for line in infile.xreadlines(): 
+    for line in infile: 
         if regex.match(line): # line containing a time window, a bit crude
 
             line = line.split()
@@ -229,15 +229,10 @@ def available(server="localhost:18000",
 
         elif verbose:
             # probably some diagnostic output
-            print line.strip()
+            sys.stdout.write("%s\n" % line.strip())
  
     return windows
  
-# windows = available("st32:18000", verbose=1)
- 
-# for stream_id in windows: 
-#    print stream_id, windows[stream_id] 
-
 
 def server_version(host, port=18000):
 

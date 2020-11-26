@@ -24,16 +24,15 @@
 
 
 using namespace std;
-using namespace Seiscomp;
 
 
-namespace Gempa {
+namespace Seiscomp {
 namespace Plugins {
 
 namespace {
 
 
-float getTimeError(const Seiscomp::DataModel::Pick *pick,
+float getTimeError(const DataModel::Pick *pick,
                    double defaultTimeError,
                    bool useUncertainties) {
 	if ( useUncertainties ) {
@@ -79,15 +78,97 @@ struct Assoc : ILOC_ASSOC {
 };
 
 
-void initConfig(ILOC_CONF &cfg) {
-	string auxdir = Environment::Instance()->shareDir() + "/iloc";
+template <typename T>
+void getCfg(T &value, const Config::Config &config, const string &key);
 
+template <>
+void getCfg(int &value, const Config::Config &config, const string &key) {
+	value = config.getInt(key);
+}
+
+template <>
+void getCfg(double &value, const Config::Config &config, const string &key) {
+	value = config.getDouble(key);
+}
+
+template <>
+void getCfg(bool &value, const Config::Config &config, const string &key) {
+	value = config.getBool(key);
+}
+
+
+void readConfig(ILOC_CONF &cfg, const Config::Config &config, const string &prefix) {
+#define GET_CFG_STRUCT(NAME) \
+	do {\
+		try { getCfg(cfg.NAME, config, prefix + #NAME); }\
+		catch ( ... ) {}\
+	}\
+	while (0)
+
+#define GET_CFG(NAME) \
+	do {\
+		try { getCfg(NAME, config, prefix + #NAME); }\
+		catch ( ... ) {}\
+	}\
+	while (0)
+
+	GET_CFG_STRUCT(Verbose);
+	bool DoGridSearch = cfg.DoGridSearch;
+	GET_CFG(DoGridSearch);
+	cfg.DoGridSearch = DoGridSearch ? 1 : 0;
+	GET_CFG_STRUCT(NAsearchRadius);
+	GET_CFG_STRUCT(NAsearchDepth);
+	GET_CFG_STRUCT(NAsearchOT);
+	GET_CFG_STRUCT(NAlpNorm);
+	GET_CFG_STRUCT(NAiterMax);
+	GET_CFG_STRUCT(NAcells);
+	GET_CFG_STRUCT(NAinitialSample);
+	GET_CFG_STRUCT(NAnextSample);
+
+	// depth resolution
+	GET_CFG_STRUCT(MinDepthPhases);
+	GET_CFG_STRUCT(MaxLocalDistDeg);
+	GET_CFG_STRUCT(MinLocalStations);
+	GET_CFG_STRUCT(MaxSPDistDeg);
+	GET_CFG_STRUCT(MinSPpairs);
+	GET_CFG_STRUCT(MinCorePhases);
+	GET_CFG_STRUCT(MaxShallowDepthError);
+	GET_CFG_STRUCT(MaxDeepDepthError);
+
+	// Linearized inversion
+	bool DoCorrelatedErrors = cfg.DoCorrelatedErrors;
+	GET_CFG(DoCorrelatedErrors);
+	cfg.DoCorrelatedErrors = DoCorrelatedErrors ? 1 : 0;
+	GET_CFG_STRUCT(SigmaThreshold);
+	GET_CFG_STRUCT(AllowDamping);
+	GET_CFG_STRUCT(MinIterations);
+	GET_CFG_STRUCT(MaxIterations);
+	GET_CFG_STRUCT(MinNdefPhases);
+	GET_CFG_STRUCT(DoNotRenamePhases);
+
+	bool UseRSTTPnSn = cfg.UseRSTTPnSn;
+	GET_CFG(UseRSTTPnSn);
+	cfg.UseRSTTPnSn = UseRSTTPnSn ? 1 : 0;
+
+	bool UseRSTTPgLg = cfg.UseRSTTPgLg;
+	GET_CFG(UseRSTTPgLg);
+	cfg.UseRSTTPgLg = UseRSTTPgLg ? 1 : 0;
+
+	bool UseRSTT = cfg.UseRSTT;
+	GET_CFG(UseRSTT);
+	cfg.UseRSTT = UseRSTT ? 1 : 0;
+}
+
+
+void initConfig(ILOC_CONF &cfg, const Config::Config *config,
+                const string &name, const string &auxdir) {
 	// directory of auxiliary data files
 	strcpy(cfg.auxdir, auxdir.c_str());
-	cfg.Verbose = 1;
 
-	// Travel time predictions
-	strcpy(cfg.TTmodel, "iasp91");
+	memset(cfg.TTmodel, '\0', sizeof(cfg.TTmodel));
+	strncpy(cfg.TTmodel, name.c_str(), sizeof(cfg.TTmodel)-1);
+
+	cfg.Verbose = 1;
 
 	strcpy(cfg.LocalVmodel, "");
 	cfg.MaxLocalTTDelta = 3.;
@@ -134,6 +215,11 @@ void initConfig(ILOC_CONF &cfg) {
 	cfg.UseRSTTPnSn = 1;
 	cfg.UseRSTTPgLg = 1;
 	cfg.UseRSTT = 0;
+
+	if ( config ) {
+		string prefix = "iLoc.profile." + name + ".";
+		readConfig(cfg, *config, prefix);
+	}
 
 	if ( strlen(cfg.LocalVmodel) > 1 && cfg.UseLocalTT )
 		cfg.UseLocalTT = 1;
@@ -242,7 +328,6 @@ ILoc::ILoc() {
 		_allowedParameters.push_back("DefaultPickUncertainty");
 	}
 
-	initConfig(_config);
 	_usePickUncertainties = false;
 	_fixTime = false;
 	_fixLocation = false;
@@ -251,6 +336,7 @@ ILoc::ILoc() {
 
 	_profiles.push_back("iasp91");
 	_profiles.push_back("ak135");
+	initProfiles(NULL, Environment::Instance()->shareDir() + "/iloc");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -265,17 +351,30 @@ ILoc::~ILoc() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ILoc::init(const Seiscomp::Config::Config &config) {
+void ILoc::initProfiles(const Config::Config *config, const string &auxdir) {
+	_profileConfigs.resize(_profiles.size());
+	for ( size_t i = 0; i < _profileConfigs.size(); ++i ) {
+		ILOC_CONF &cfg = _profileConfigs[i];
+		initConfig(cfg, config, _profiles[i], auxdir);
+	}
+
+	_currentConfig = _profileConfigs.empty() ? NULL : &_profileConfigs[0];
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ILoc::init(const Config::Config &config) {
 	string auxdir;
 
 	try {
-		auxdir = Seiscomp::Environment::Instance()->absolutePath(config.getString("iLoc.auxDir"));
+		auxdir = Environment::Instance()->absolutePath(config.getString("iLoc.auxDir"));
 	}
 	catch ( ... ) {
 		auxdir = Environment::Instance()->shareDir() + "/iloc";
 	}
-
-	strcpy(_config.auxdir, auxdir.c_str());
 
 	try {
 		_profiles = config.getStrings("iLoc.profiles");
@@ -285,6 +384,8 @@ bool ILoc::init(const Seiscomp::Config::Config &config) {
 		_profiles.push_back("iasp91");
 		_profiles.push_back("ak135");
 	}
+
+	initProfiles(&config, auxdir);
 
 	try {
 		_defaultPickUncertainty = config.getDouble("iLoc.defaultTimeError");
@@ -311,7 +412,10 @@ ILoc::IDList ILoc::parameters() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string ILoc::parameter(const string &name) const {
-#define RET_STRING(NAME) if ( name == #NAME ) return Core::toString(_config.NAME)
+#define RET_STRING(NAME) if ( name == #NAME ) return Core::toString(_currentConfig->NAME)
+
+	if ( !_currentConfig )
+		return string();
 
 	     RET_STRING(Verbose);
 	else if ( name == "UsePickUncertainties" )
@@ -355,8 +459,11 @@ bool ILoc::setParameter(const string &name, const string &value) {
 	TYPE v;\
 	if ( !Core::fromString(v, value) )\
 		return false;\
-	_config.NAME = v;\
+	_currentConfig->NAME = v;\
 }
+
+	if ( !_currentConfig )
+		return false;
 
 	     INP_STRING(Verbose, int)
 	else if ( name == "UsePickUncertainties" ) {
@@ -389,8 +496,8 @@ bool ILoc::setParameter(const string &name, const string &value) {
 
 		v = v ? 1 : 0;
 
-		if ( _config.UseRSTT != v ) {
-			_config.UseRSTT = v;
+		if ( _currentConfig->UseRSTT != v ) {
+			_currentConfig->UseRSTT = v;
 			// We need to re-read the aux files
 			_auxDirty = true;
 		}
@@ -441,10 +548,17 @@ ILoc::IDList ILoc::profiles() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void ILoc::setProfile(const string &name) {
-	if ( !strcmp(_config.TTmodel, name.c_str()) ) return;
+	if ( !strcmp(_currentConfig->TTmodel, name.c_str()) ) return;
 
-	memset(_config.TTmodel, '\0', sizeof(_config.TTmodel));
-	strncpy(_config.TTmodel, name.c_str(), sizeof(_config.TTmodel)-1);
+	_currentConfig = NULL;
+
+	for ( size_t i = 0; i < _profiles.size(); ++i ) {
+		if ( _profiles[i] == name ) {
+			_currentConfig = &_profileConfigs[i];
+			break;
+		}
+	}
+
 	_auxDirty = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -462,9 +576,9 @@ int ILoc::capabilities() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::DataModel::Origin *ILoc::locate(ILoc::PickList &pickList)
+DataModel::Origin *ILoc::locate(ILoc::PickList &pickList)
 #if SC_API_VERSION < SC_API_VERSION_CHECK(11,0,0)
-throw(Seiscomp::Core::GeneralException)
+throw(Core::GeneralException)
 #endif
 {
 	throw Core::GeneralException("Not yet implemented");
@@ -476,16 +590,16 @@ throw(Seiscomp::Core::GeneralException)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #if SC_API_VERSION < 0x010C00
-Seiscomp::DataModel::Origin *ILoc::locate(ILoc::PickList &pickList,
+DataModel::Origin *ILoc::locate(ILoc::PickList &pickList,
                                           double initLat, double initLon, double initDepth,
                                           Core::Time &initTime)
 throw(Core::GeneralException) {
 #else
-Seiscomp::DataModel::Origin *ILoc::locate(ILoc::PickList &pickList,
+DataModel::Origin *ILoc::locate(ILoc::PickList &pickList,
                                           double initLat, double initLon, double initDepth,
-                                          const Seiscomp::Core::Time &initTime)
+                                          const Core::Time &initTime)
 #if SC_API_VERSION < SC_API_VERSION_CHECK(11,0,0)
-throw(Seiscomp::Core::GeneralException)
+throw(Core::GeneralException)
 #endif
 {
 #endif
@@ -498,11 +612,15 @@ throw(Seiscomp::Core::GeneralException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::DataModel::Origin *ILoc::relocate(const Seiscomp::DataModel::Origin *inputOrigin)
+DataModel::Origin *ILoc::relocate(const DataModel::Origin *inputOrigin)
 #if SC_API_VERSION < SC_API_VERSION_CHECK(11,0,0)
-throw(Seiscomp::Core::GeneralException)
+throw(Core::GeneralException)
 #endif
 {
+	if ( !_currentConfig ) {
+		return NULL;
+	}
+
 	prepareAuxFiles();
 
 	ILOC_HYPO hypoCenter;
@@ -748,7 +866,7 @@ throw(Seiscomp::Core::GeneralException)
 
 	int res;
 
-	res = iLoc_Locator(&_config, &_aux.infoPhaseId, &_aux.fe, &_aux.defaultDepth,
+	res = iLoc_Locator(_currentConfig, &_aux.infoPhaseId, &_aux.fe, &_aux.defaultDepth,
 	                   &_aux.variogram, _aux.ec,
 	                   &_aux.infoTT, _aux.tablesTT,
 	                   &_aux.infoLocalTT, _aux.tablesLocalTT,
@@ -951,7 +1069,7 @@ string ILoc::lastMessage(MessageType) const {
 void ILoc::prepareAuxFiles() {
 	if ( !_auxDirty ) return;
 	SEISCOMP_DEBUG("Read AUX files");
-	_aux.read(&_config);
+	_aux.read(_currentConfig);
 	_auxDirty = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

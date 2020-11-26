@@ -737,7 +737,13 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 Core::GreensFunction* SC3GF1DArchive::read(const std::string &file,
                                         const Core::TimeSpan &ts,
                                         double timeOfs) {
-	Core::GreensFunctionComponent comps[8] = {
+#if SC_API_VERSION >= SC_API_VERSION_CHECK(13,0,0)
+#define GF_COMPS 10
+#else
+#define GF_COMPS 8
+#endif
+
+	Core::GreensFunctionComponent comps[GF_COMPS] = {
 		Core::TSS,
 		Core::TDS,
 		Core::RSS,
@@ -746,11 +752,16 @@ Core::GreensFunction* SC3GF1DArchive::read(const std::string &file,
 		Core::ZSS,
 		Core::ZDS,
 		Core::ZDD
+#if SC_API_VERSION >= SC_API_VERSION_CHECK(13,0,0)
+		,
+		Core::ZEP,
+		Core::REP
+#endif
 	};
 
 	Core::GreensFunction *gf = NULL;
 
-	for ( int i = 0; i < 8; ++i ) {
+	for ( int i = 0; i < GF_COMPS; ++i ) {
 		std::string filename = file + comps[i].toString();
 		std::ifstream ifs(filename .c_str());
 		if ( !ifs.good() ) {

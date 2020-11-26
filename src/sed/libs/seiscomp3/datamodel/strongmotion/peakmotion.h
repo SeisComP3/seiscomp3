@@ -83,17 +83,17 @@ class SC_STRONGMOTION_API PeakMotion : public Object {
 		const std::string& type() const;
 
 		void setPeriod(const OPT(double)& period);
-		double period() const throw(Seiscomp::Core::ValueException);
+		double period() const;
 
 		void setDamping(const OPT(double)& damping);
-		double damping() const throw(Seiscomp::Core::ValueException);
+		double damping() const;
 
 		void setMethod(const std::string& method);
 		const std::string& method() const;
 
 		void setAtTime(const OPT(TimeQuantity)& atTime);
-		TimeQuantity& atTime() throw(Seiscomp::Core::ValueException);
-		const TimeQuantity& atTime() const throw(Seiscomp::Core::ValueException);
+		TimeQuantity& atTime();
+		const TimeQuantity& atTime() const;
 
 	
 	// ------------------------------------------------------------------

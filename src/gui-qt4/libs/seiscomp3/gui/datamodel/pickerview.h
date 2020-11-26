@@ -299,16 +299,16 @@ class SC_GUI_API PickerView : public QMainWindow {
 		//! Default c'tor
 		//! The mode defaults to ringbuffer with a buffer
 		//! size of 30 minutes
-		PickerView(QWidget *parent = 0, Qt::WFlags f = 0);
+		PickerView(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		//! Creates a RecordView using a time window
 		PickerView(const Seiscomp::Core::TimeWindow&,
-		           QWidget *parent = 0, Qt::WFlags f = 0);
+		           QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		//! Creates a RecordView using a timespan and
 		//! a ringbuffer
 		PickerView(const Seiscomp::Core::TimeSpan&,
-		           QWidget *parent = 0, Qt::WFlags f = 0);
+		           QWidget *parent = 0, Qt::WindowFlags f = 0);
 
 		~PickerView();
 
@@ -383,6 +383,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void updateItemRecordState(const Seiscomp::Record*);
 		void updateRecordValue(Seiscomp::Core::Time);
 		void showTraceScaleToggled(bool);
+		void showRecordBorders(bool);
 
 		void specLogToggled(bool);
 		void specSmoothToggled(bool);

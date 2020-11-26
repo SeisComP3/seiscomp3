@@ -25,8 +25,8 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
 
-#ifndef __SEISCOMP_FDSNXML_METADATA_H__
-#define __SEISCOMP_FDSNXML_METADATA_H__
+#ifndef SEISCOMP_FDSNXML_METADATA_H__
+#define SEISCOMP_FDSNXML_METADATA_H__
 
 
 #include <seiscomp3/core/metaproperty.h>

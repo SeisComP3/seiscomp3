@@ -30,6 +30,8 @@
 #include <seiscomp3/gui/datamodel/amplitudeview.h>
 #include <seiscomp3/gui/datamodel/utils.h>
 
+#include <QMessageBox>
+
 #include <functional>
 
 #ifdef WIN32
@@ -44,6 +46,25 @@ using namespace Seiscomp::DataModel;
 
 
 #define INVALID_MAG 0.0
+
+
+namespace {
+
+
+struct TabData {
+	TabData()
+	: valid(true), selected(false) {}
+
+	TabData(const string &pid)
+	: publicID(pid), valid(true), selected(false) {}
+
+	string publicID;
+	bool   valid;
+	bool   selected;
+};
+
+
+}
 
 
 namespace Seiscomp {
@@ -165,7 +186,7 @@ Util::KeyValuesPtr getParams(const string &net, const string &sta) {
 
 int findType(QTabBar *tab, const char *text) {
 	for ( int i = 0; i < tab->count(); ++i ) {
-		Magnitude *mag = Magnitude::Find(tab->tabData(i).value<QString>().toStdString());
+		Magnitude *mag = Magnitude::Find(tab->tabData(i).value<TabData>().publicID);
 		if ( mag && mag->type() == text )
 			return i;
 	}
@@ -174,9 +195,9 @@ int findType(QTabBar *tab, const char *text) {
 }
 
 
-int findData(QTabBar *tab, const QVariant &data) {
+int findData(QTabBar *tab, const string &publicID) {
 	for ( int i = 0; i < tab->count(); ++i ) {
-		if ( tab->tabData(i) == data )
+		if ( tab->tabData(i).value<TabData>().publicID == publicID )
 			return i;
 	}
 
@@ -208,7 +229,7 @@ struct like {
 template <>
 struct like<QString> {
 	bool operator()(const QString &lhs, const QString &rhs) const {
-		return Core::wildcmp(rhs.toAscii(), lhs.toAscii());
+		return Core::wildcmp(rhs.toLatin1(), lhs.toLatin1());
 	}
 };
 
@@ -236,7 +257,10 @@ class ModelFieldValueFilter : public ModelAbstractRowFilter {
 
 	protected:
 		bool check(QAbstractItemModel *model, const QModelIndex &idx, const T &v) {
-			switch ( _op ) {
+			// Actually this->_op is not necessary but due to a bug of clang
+			// this line is required as a hotfix, see
+			// https://stackoverflow.com/questions/55359614/clang-complains-about-constexpr-function-in-case-for-switch-statement
+			switch ( this->_op ) {
 				case Less:
 					return std::less<T>()(model->data(idx, Qt::UserRole).value<T>(), v);
 				case LessEqual:
@@ -545,7 +569,7 @@ QVariant StationMagnitudeModel::data(const QModelIndex &index, int role) const {
 				break;
 
 			case MAGNITUDE:
-				snprintf(buf, 10, "%.2f", smval);
+				snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, smval);
 				return buf;
 
 			case RESIDUAL:
@@ -837,7 +861,8 @@ bool StationMagnitudeModel::useMagnitude(int row) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MagnitudeRowFilter::MagnitudeRowFilter(ModelAbstractRowFilter **filter_ptr, QWidget * parent, Qt::WFlags f)
+MagnitudeRowFilter::MagnitudeRowFilter(ModelAbstractRowFilter **filter_ptr, QWidget * parent,
+                                       Qt::WindowFlags f)
 : QDialog(parent, f) {
 	_ui.setupUi(this);
 
@@ -1071,13 +1096,15 @@ ModelAbstractRowFilter *&selectionFilter() {
 
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 
 //! Implementation of MagnitudeView
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeView::MagnitudeView(const MapsDesc &maps,
                              Seiscomp::DataModel::DatabaseQuery* reader,
-                             QWidget * parent, Qt::WFlags f)
+                             QWidget * parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , _reader(reader)
 , _modelStationMagnitudes(NULL, NULL, &_objCache)
@@ -1095,7 +1122,7 @@ MagnitudeView::MagnitudeView(const MapsDesc &maps,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeView::MagnitudeView(Map::ImageTree* mapTree,
                              Seiscomp::DataModel::DatabaseQuery* reader,
-                             QWidget * parent, Qt::WFlags f)
+                             QWidget * parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , _reader(reader)
 , _modelStationMagnitudes(NULL, NULL, &_objCache)
@@ -1122,7 +1149,7 @@ void MagnitudeView::closeEvent(QCloseEvent *e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::closeTab(int idx) {
-	std::string magID = _tabMagnitudes->tabData(idx).toString().toStdString();
+	std::string magID = _tabMagnitudes->tabData(idx).value<TabData>().publicID;
 	MagnitudePtr mag = Magnitude::Find(magID);
 
 	if ( mag != NULL ) {
@@ -1206,6 +1233,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 
 	_ui.btnCommit->setFont(SCScheme.fonts.highlight);
 
+	_ui.cbEvalStatus->addItem("- unset -");
+	for ( size_t i = EvaluationStatus::First; i < EvaluationStatus::Quantity; ++i )
+		_ui.cbEvalStatus->addItem(EvaluationStatus::NameDispatcher::name(i));
+
 	/*
 	QAction* debugAction = new QAction(this);
 	debugAction->setShortcut(Qt::Key_C);
@@ -1249,8 +1280,8 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 
 	hboxLayout = new QHBoxLayout(_ui.frameMagnitudeTypes);
 	hboxLayout->setMargin(0);
-	_tabMagnitudes = new QTabBar(_ui.frameMagnitudeTypes);
 
+	_tabMagnitudes = new QTabBar(_ui.frameMagnitudeTypes);
 	_tabMagnitudes->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred));
 	_tabMagnitudes->setShape(QTabBar::RoundedNorth);
 	_tabMagnitudes->setUsesScrollButtons(true);
@@ -1295,6 +1326,7 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	connect(_ui.btnActivate, SIGNAL(clicked()), this, SLOT(activateChannels()));
 	connect(_ui.btnDeactivate, SIGNAL(clicked()), this, SLOT(deactivateChannels()));
 	connect(_ui.btnWaveforms, SIGNAL(clicked()), this, SLOT(openWaveforms()));
+	connect(_ui.cbEvalStatus, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluationStatusChanged(int)));
 
 	QMenu *selectMenu = new QMenu;
 	QAction *editSelectionFilter = new QAction(tr("Edit"), this);
@@ -1369,9 +1401,11 @@ void MagnitudeView::setPreferredMagnitudeID(const string &id) {
 
 	//QColor col = palette().color(QPalette::WindowText);
 	for ( int i = 0; i < _tabMagnitudes->count(); ++i ) {
-		if ( _tabMagnitudes->tabData(i).value<QString>().toStdString() == _preferredMagnitudeID ) {
+		TabData d = _tabMagnitudes->tabData(i).value<TabData>();
+		if ( d.publicID == _preferredMagnitudeID ) {
 			//_tabMagnitudes->setTabTextColor(i, Qt::green);
 			_tabMagnitudes->setTabIcon(i, QIcon(":icons/icons/ok.png"));
+			resetPreferredMagnitudeSelection();
 		}
 		else {
 			//_tabMagnitudes->setTabTextColor(i, col);
@@ -1475,6 +1509,8 @@ void MagnitudeView::recalculateMagnitude() {
 	_netMag->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	_netMag->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 
+	_ui.cbEvalStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
+
 	int idx = findType(_tabMagnitudes, _netMag->type().c_str());
 	_tabMagnitudes->setTabTextColor(idx, QColor());
 	_tabMagnitudes->setTabIcon(idx, QIcon());
@@ -1491,7 +1527,7 @@ void MagnitudeView::recalculateMagnitude() {
 			if ( idx != -1 ) {
 				MagnitudePtr magMw =
 					//Magnitude::Find(_ui.comboMagType->itemData(idx).value<QString>().toStdString());
-					Magnitude::Find(_tabMagnitudes->tabData(idx).value<QString>().toStdString());
+					Magnitude::Find(_tabMagnitudes->tabData(idx).value<TabData>().publicID);
 
 				if ( magMw && magMw != _netMag ) {
 					stdev = stdev > MwError?stdev:MwError;
@@ -1502,10 +1538,13 @@ void MagnitudeView::recalculateMagnitude() {
 					catch ( ... ) {
 						magMw->setStationCount(Core::None);
 					}
+					magMw->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(magMw->type().c_str()).arg(magMw->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(magMw->type().c_str())
+				                           .arg(magMw->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 			}
 			else {
 				MagnitudePtr magMw;
@@ -1549,11 +1588,11 @@ void MagnitudeView::recalculateMagnitude() {
 		}
 	}
 
-	QVariant data;
-	data.setValue(QString(_netMag->publicID().c_str()));
-	idx = findData(_tabMagnitudes, data);
+	idx = findData(_tabMagnitudes, _netMag->publicID());
 	if ( idx != -1 )
-		_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(_netMag->type().c_str()).arg(_netMag->magnitude().value(), 0, 'f', 2));
+		_tabMagnitudes->setTabText(idx, QString("%1 %2")
+		                           .arg(_netMag->type().c_str())
+		                           .arg(_netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 
 	idx = 0;
 	int staCount = 0;
@@ -1778,10 +1817,23 @@ void MagnitudeView::computeMagnitudes() {
 			typeChecks.append(check);
 		}
 
-		vl->addLayout(grid);
-		vl->addStretch();
+		QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+		grid->addItem(spacer, _availableMagTypes->size(), 0);
+		grid->setColumnStretch(0, 0);
+		grid->setColumnStretch(1, 1);
+		grid->setMargin(0);
 
-		hl->insertStretch(0);
+		QWidget *typeSelections = new QWidget;
+		typeSelections->setLayout(grid);
+
+		QScrollArea *scrollArea = new QScrollArea;
+		scrollArea->setFrameShape(QFrame::NoFrame);
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setWidget(typeSelections);
+		scrollArea->setWidgetResizable(true);
+
+		vl->addWidget(scrollArea);
+
 		hl->insertLayout(0, vl);
 
 		QLabel *info = new QLabel;
@@ -2022,7 +2074,6 @@ void MagnitudeView::computeMagnitudes() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
-	QVariant data;
 	AmplitudeView *view = (AmplitudeView*)sender();
 	ObjectChangeList<DataModel::Amplitude> changedAmps;
 	view->getChangedAmplitudes(changedAmps);
@@ -2054,7 +2105,7 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 			//int idx = _ui.comboMagType->findText(type.c_str());
 			if ( idx != -1 ) {
 				MagnitudePtr magMw =
-					Magnitude::Find(_tabMagnitudes->tabData(idx).value<QString>().toStdString());
+					Magnitude::Find(_tabMagnitudes->tabData(idx).value<TabData>().publicID);
 
 				if ( magMw ) {
 					if ( MwError < netMag->magnitude().uncertainty() )
@@ -2064,7 +2115,9 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 					emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
 				}
 
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(magMw->type().c_str()).arg(magMw->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(magMw->type().c_str())
+				                           .arg(magMw->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 			}
 		}
 		else if ( idx != -1 )
@@ -2091,9 +2144,10 @@ void MagnitudeView::magnitudeCreated(Seiscomp::DataModel::Magnitude *netMag) {
 	*/
 
 	// Replace magnitude
-	data.setValue(QString(netMag->publicID().c_str()));
-	_tabMagnitudes->setTabText(typeIdx, QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
-	_tabMagnitudes->setTabData(typeIdx, data);
+	_tabMagnitudes->setTabText(typeIdx, QString("%1 %2")
+	                           .arg(netMag->type().c_str())
+	                           .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
+	_tabMagnitudes->setTabData(typeIdx, QVariant::fromValue<TabData>(netMag->publicID()));
 	if ( _tabMagnitudes->currentIndex() != typeIdx )
 		_tabMagnitudes->setCurrentIndex(typeIdx);
 	else
@@ -2140,7 +2194,7 @@ void MagnitudeView::amplitudesConfirmed(Origin *origin,
 		typeIdx = addMagnitude(mag.get());
 	// Update magnitude for type
 	else
-		_tabMagnitudes->setTabData(typeIdx, QString(mag->publicID().c_str()));
+		_tabMagnitudes->setTabData(typeIdx, QVariant::fromValue<TabData>(mag->publicID()));
 
 	if ( _tabMagnitudes->currentIndex() != typeIdx )
 		showMagnitude(mag->publicID());
@@ -2534,6 +2588,8 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 				++staCount;
 		}
 	}
+	else
+		magnitude->setEvaluationStatus(EvaluationStatus(REJECTED));
 
 	magnitude->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	magnitude->setStationCount(staCount);
@@ -2754,6 +2810,56 @@ void MagnitudeView::dataChanged(const QModelIndex& topLeft, const QModelIndex&){
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::selectPreferredMagnitude(int idx) {
+	Magnitude *mag = NULL;
+
+	for ( int i = 0; i < _tabMagnitudes->count(); ++i ) {
+		TabData d = _tabMagnitudes->tabData(i).value<TabData>();
+		d.selected = d.valid && (i == idx);
+		_tabMagnitudes->setTabData(i, QVariant::fromValue(d));
+
+		if ( d.selected )
+			mag = Magnitude::Find(d.publicID);
+		#if QT_VERSION >= 0x040500
+
+		QCheckBox *cb = static_cast<QCheckBox*>(_tabMagnitudes->tabButton(i, QTabBar::LeftSide));
+		if ( cb ) {
+			cb->blockSignals(true);
+			cb->setCheckState(d.selected ? Qt::Checked : Qt::Unchecked);
+			cb->blockSignals(false);
+		}
+		#endif
+	}
+
+	emit magnitudeSelected(_origin->publicID().c_str(), mag);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::tabStateChanged(int state) {
+#if QT_VERSION >= 0x040500
+	if ( state == Qt::Checked ) {
+		for ( int i = 0; i < _tabMagnitudes->count(); ++i ) {
+			QCheckBox *cb = static_cast<QCheckBox*>(_tabMagnitudes->tabButton(i, QTabBar::LeftSide));
+			if ( cb == sender() ) {
+				selectPreferredMagnitude(i);
+				return;
+			}
+		}
+	}
+
+	selectPreferredMagnitude(-1);
+#endif
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::setDrawGridLines(bool f) {
 	_stamagnitudes->setDrawGridLines(f);
 }
@@ -2845,7 +2951,7 @@ void MagnitudeView::setOrigin(Origin* o, Event *e) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagnitudeView::showMagnitude(const string &id) {
 	for ( int i = 0; i < _tabMagnitudes->count(); ++i ) {
-		if ( _tabMagnitudes->tabData(i).toString() == id.c_str() ) {
+		if ( _tabMagnitudes->tabData(i).value<TabData>().publicID == id ) {
 			_tabMagnitudes->setCurrentIndex(i);
 
 			return true;
@@ -2870,15 +2976,6 @@ bool MagnitudeView::showMagnitude(const string &id) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::reload() {
-	/*
-	if ( _reader ) {
-		if ( !_origin->magnitudeCount() )
-			_reader->loadMagnitudes(_origin.get());
-		if ( !_origin->stationMagnitudeCount() )
-			_reader->loadStationMagnitudes(_origin.get());
-	}
-	*/
-
 	// otherwise display the first magnitude
 	_netMag = NULL;
 	for ( size_t i = 0; i < _origin->magnitudeCount(); ++i ) {
@@ -2886,8 +2983,6 @@ void MagnitudeView::reload() {
 		_netMag = mag;
 		break;
 	}
-
-	//cout << "Selected Origin '" << _origin->publicID() << "'" << endl;
 
 	setContent();
 }
@@ -2957,11 +3052,11 @@ void MagnitudeView::updateObject(const QString &parentID, Seiscomp::DataModel::O
 	Magnitude* netMag = Magnitude::Cast(o);
 	if ( netMag ) {
 		if ( _origin && _origin->publicID() == parentID.toStdString() ) {
-			QVariant data;
-			data.setValue(QString(netMag->publicID().c_str()));
-			int idx = findData(_tabMagnitudes, data);
+			int idx = findData(_tabMagnitudes, netMag->publicID());
 			if ( idx != -1 )
-				_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
+				_tabMagnitudes->setTabText(idx, QString("%1 %2")
+				                           .arg(netMag->type().c_str())
+				                           .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 		}
 
 		// Not for now
@@ -2995,7 +3090,17 @@ void MagnitudeView::setReadOnly(bool e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::resetPreferredMagnitudeSelection() {
+	selectPreferredMagnitude(-1);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::disableRework() {
+	resetPreferredMagnitudeSelection();
 	setReadOnly(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -3005,31 +3110,45 @@ void MagnitudeView::disableRework() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
-	QVariant data;
-
 	//for ( int i = 0; i < _ui.comboMagType->count(); ++i ) {
 	for ( int i = 0; i < _tabMagnitudes->count(); ++i ) {
-		if ( _tabMagnitudes->tabData(i).toString() == netMag->publicID().c_str() ) {
+		if ( _tabMagnitudes->tabData(i).value<TabData>().publicID == netMag->publicID() ) {
 		//if ( _ui.comboMagType->itemData(i).toString() == netMag->publicID().c_str() ) {
 			SEISCOMP_DEBUG("Magnitude '%s' has been added already", netMag->publicID().c_str());
 			return i;
 		}
 	}
 
-	data.setValue(QString(netMag->publicID().c_str()));
 	//_ui.comboMagType->addItem(QString("%1").arg(netMag->type().c_str()), data);
-	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
-	_tabMagnitudes->setTabData(tabIndex, data);
+	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2")
+	                                      .arg(netMag->type().c_str())
+	                                      .arg(netMag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
+	TabData data(netMag->publicID());
 
 	try {
 		if ( netMag->evaluationStatus() == REJECTED ) {
 			_tabMagnitudes->setTabText(tabIndex, QString("%1 -.--").arg(netMag->type().c_str()));
 			_tabMagnitudes->setTabTextColor(tabIndex, palette().color(QPalette::Disabled, QPalette::WindowText));
 			_tabMagnitudes->setTabIcon(tabIndex, QIcon(":icons/icons/disabled.png"));
+			data.valid = false;
 		}
 	}
 	catch ( ... ) {}
 
+	_tabMagnitudes->setTabData(tabIndex, QVariant::fromValue<TabData>(data));
+
+#if QT_VERSION >= 0x040500
+	if ( data.valid ) {
+		QCheckBox *btn = new QCheckBox;
+		btn->setToolTip(tr("Select this magnitude type as preferred magnitude "
+		                   "type when the event will be committed either "
+		                   "with additional options or with custom commit profiles."));
+		btn->setProperty("tabIndex", tabIndex);
+		_tabMagnitudes->setTabButton(tabIndex, QTabBar::LeftSide, btn);
+		connect(btn, SIGNAL(stateChanged(int)), this, SLOT(tabStateChanged(int)));
+	}
+
+#endif
 	if ( tabIndex == _tabMagnitudes->currentIndex() )
 		updateContent();
 
@@ -3045,28 +3164,23 @@ int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
 //! set magnitude combo box and go on
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::setContent() {
-	QVariant data;
-
 	// fill MagComboBox with all magnitudes from origin
 	//disconnect(_ui.comboMagType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateContent()));
 	disconnect(_tabMagnitudes, SIGNAL(currentChanged(int)), this, SLOT(updateContent()));
 	//_ui.comboMagType->clear();
 	while ( _tabMagnitudes->count() > 0 ) _tabMagnitudes->removeTab(0);
+	emit magnitudeSelected(_origin ? QString(_origin->publicID().c_str()) : QString(), 0);
 
 	_ui.frameMagnitudeTypes->setVisible(false);
 
 	if ( _origin ) {
-
 		for (size_t i = 0; i < _origin->magnitudeCount(); i++)
 			addMagnitude(_origin->magnitude(i));
 
 		if ( _netMag ) {
 			// set combo box item according to desired netMag
-			data.setValue(QString(_netMag->publicID().c_str()));
-			//_ui.comboMagType->setCurrentIndex(_ui.comboMagType->findData(data));
-			_tabMagnitudes->setCurrentIndex(findData(_tabMagnitudes, data));
+			_tabMagnitudes->setCurrentIndex(findData(_tabMagnitudes, _netMag->publicID()));
 		}
-
 	}
 
 	//connect(_ui.comboMagType,SIGNAL(currentIndexChanged(int)), this, SLOT(updateContent()));
@@ -3155,6 +3269,7 @@ void MagnitudeView::resetContent() {
 	disconnect(_tabMagnitudes, SIGNAL(currentChanged(int)), this, SLOT(updateContent()));
 	//_ui.comboMagType->clear();
 	while ( _tabMagnitudes->count() > 0 ) _tabMagnitudes->removeTab(0);
+	emit magnitudeSelected(_origin ? QString(_origin->publicID().c_str()) : QString(), 0);
 
 	_stamagnitudes->clear();
 	_stamagnitudes->update();
@@ -3194,7 +3309,7 @@ void MagnitudeView::updateContent() {
 
 	//  use selection from comboBox for netmagType
 	//_netMag = _origin->findMagnitude((_ui.comboMagType->itemData(_ui.comboMagType->currentIndex()).value<QString>()).toAscii().data());
-	_netMag = _origin->findMagnitude((_tabMagnitudes->tabData(_tabMagnitudes->currentIndex()).value<QString>()).toAscii().data());
+	_netMag = _origin->findMagnitude(_tabMagnitudes->tabData(_tabMagnitudes->currentIndex()).value<TabData>().publicID);
 	if ( _map ) {
 		_map->setMagnitude(_netMag.get());
 		_map->update();
@@ -3240,12 +3355,21 @@ void MagnitudeView::updateContent() {
 	updateMagnitudeLabels();
 
 	if ( !_netMag ) {
+		_ui.cbEvalStatus->setCurrentIndex(0);
 		_ui.groupReview->setEnabled(false);
 
 		// set dist column in table & add Net/Sta-Mag to diagram: dist = addStationMagnitude()
 		updateMinMaxMagnitude();
 		update();
 		return;
+	}
+	else {
+		try {
+			_ui.cbEvalStatus->setCurrentIndex(_netMag->evaluationStatus().toInt()+1);
+		}
+		catch ( ... ) {
+			_ui.cbEvalStatus->setCurrentIndex(0);
+		}
 	}
 
 	SEISCOMP_DEBUG("selected magnitude: %s with %lu magRefs ", _netMag->publicID().c_str(), (unsigned long)_netMag->stationMagnitudeContributionCount() );
@@ -3255,7 +3379,11 @@ void MagnitudeView::updateContent() {
 		_ui.tableStationMagnitudes->setColumnHidden(i, !colVisibility[i]);
 
 	// update column width in table view
+#if QT_VERSION >= 0x050000
+	_ui.tableStationMagnitudes->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
 	_ui.tableStationMagnitudes->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 	//_ui.tableStationMagnitudes->resizeColumnsToContents();
 	_ui.tableStationMagnitudes->resizeRowsToContents();
 	_ui.tableStationMagnitudes->sortByColumn(_ui.tableStationMagnitudes->horizontalHeader()->sortIndicatorSection());
@@ -3285,9 +3413,9 @@ void MagnitudeView::updateMinMaxMagnitude() {
 	_ui.labelMaxMag->setText("-");
 	if (_minStationMagnitude <= _maxStationMagnitude && _minStationMagnitude > -10 && _maxStationMagnitude < 15) {
 		char buf[10];
-		snprintf(buf, 10, "%.2f", _minStationMagnitude);
+		snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, _minStationMagnitude);
 		_ui.labelMinMag->setText(buf);
-		snprintf(buf, 10, "%.2f", _maxStationMagnitude);
+		snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, _maxStationMagnitude);
 		_ui.labelMaxMag->setText(buf);
 	}
 }
@@ -3303,7 +3431,9 @@ void MagnitudeView::updateMagnitudeLabels() {
 		char buf[10] = "-";
 		double netmagval = _netMag->magnitude().value();
 		if ( netmagval < 12 )
-			snprintf(buf, 10, "%.2f", netmagval);
+			snprintf(buf, 10, "%.*f", SCScheme.precision.magnitude, netmagval);
+		else if ( netmagval < 1000000000 )
+			snprintf(buf, 10, "%d", (int)netmagval);
 
 		_ui.labelMethod->setText(_netMag->methodID().c_str());
 		try {
@@ -3342,8 +3472,8 @@ void MagnitudeView::updateMagnitudeLabels() {
 		strcpy(buf, "-");
 		try {
 			double rms = quantityUncertainty(_netMag->magnitude());
-			if (rms<10)
-				snprintf(buf, 10, "%.2f", rms);
+			if ( rms < 10 )
+				snprintf(buf, 10, "%.*f", SCScheme.precision.rms, rms);
 		}
 		catch ( ... ) {}
 		_ui.labelRMS->setText(buf);
@@ -3589,5 +3719,54 @@ void MagnitudeView::calcMinMax(Seiscomp::DataModel::Origin* o, double& latMin, d
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::evaluationStatusChanged(int index) {
+	if ( index < 0 || !_netMag ) return;
+
+	if ( !index ) {
+		_netMag->setEvaluationStatus(Core::None);
+	}
+	else {
+		EvaluationStatus stat;
+		if ( !stat.fromInt(index-1) ) {
+			return;
+		}
+		_netMag->setEvaluationStatus(stat);
+	}
+
+	emit magnitudeUpdated(_origin->publicID().c_str(), _netMag.get());
+
+	// Update linked Mw estimate
+	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
+	if ( proc ) {
+		string type = proc->typeMw();
+		int idx = findType(_tabMagnitudes, type.c_str());
+		if ( idx != -1 ) {
+			MagnitudePtr magMw =
+				//Magnitude::Find(_ui.comboMagType->itemData(idx).value<QString>().toStdString());
+				Magnitude::Find(_tabMagnitudes->tabData(idx).value<TabData>().publicID);
+
+			if ( magMw && magMw != _netMag ) {
+				try {
+					magMw->setEvaluationStatus(_netMag->evaluationStatus());
+				}
+				catch ( ... ) {
+					magMw->setEvaluationStatus(Core::None);
+				}
+				emit magnitudeUpdated(_origin->publicID().c_str(), magMw.get());
+			}
+		}
+	}
+
+	updateMagnitudeLabels();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 }
 }
+
+
+Q_DECLARE_METATYPE(TabData)

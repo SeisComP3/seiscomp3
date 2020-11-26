@@ -32,6 +32,7 @@ typedef struct {
 int idum;
         time_t       		epochstart;
         time_t       		epochend;
+        char         		*net;
         char         		*stat;
         char         		*chan;
         char         		*netw;
@@ -159,8 +160,11 @@ void dispatch (struct gcf_block_struct *b, int recno)
         printf("Got INITIAL data for [%s]-[%s] - send now  %s  %d samples  sr=%d  recno=%d    Got %d streams now\n", 
                 mp->station, mp->channel, buffer, b->samples, b->sample_rate, recno, numstreams);
 
-        if ( NO_SEND == 0 )
-             send_raw_depoch ( mp->station, mp->channel, b->estart, 0, -1, b->data, b->samples);
+        if ( NO_SEND == 0 ) {
+             char sta_id[11];
+             snprintf(sta_id, 11, "%s.%s", mp->network, mp->station);
+             send_raw_depoch ( sta_id, mp->channel, b->estart, 0, -1, b->data, b->samples);
+        }
 
         time_of_next_expected_sample[chid] = b->estart + (b->samples)/b->sample_rate;
 
@@ -250,6 +254,7 @@ void init_stackp (int chid)
         stackpp[chid][i]->epochend   =  0;
         stackpp[chid][i]->flag       =  0;
         stackpp[chid][i]->idum       =  i;
+        stackpp[chid][i]->net        =  (char *) malloc ( 8);
         stackpp[chid][i]->stat       =  (char *) malloc ( 8);
         stackpp[chid][i]->chan       =  (char *) malloc ( 8);
         stackpp[chid][i]->netw       =  (char *) malloc ( 8);
@@ -278,9 +283,12 @@ void fifo_ring (int chid)
             stackpp[chid][0]->stat, stackpp[chid][0]->chan, buffer, stackpp[chid][0]->samples, stackpp[chid][0]->ttl);
    }
 
-   if ( NO_SEND == 0 )
-        send_raw_depoch ( stackpp[chid][0]->stat, stackpp[chid][0]->chan, stackpp[chid][0]->epochstart, 0, 100, 
+   if ( NO_SEND == 0 ) {
+        char sta_id[11];
+        snprintf(sta_id, 11, "%s.%s", stackpp[chid][0]->net, stackpp[chid][0]->stat);
+        send_raw_depoch ( sta_id, stackpp[chid][0]->chan, stackpp[chid][0]->epochstart, 0, 100, 
                      stackpp[chid][0]->data, stackpp[chid][0]->samples);
+   }
 
    for(i=0; i <= RINGBUFFER_LENGTH-2; i++) {
             memcpy ( (GCF_STACK *)stackpp[chid][i], (GCF_STACK *)stackpp[chid][i+1], sizeof(GCF_STACK ));
@@ -325,6 +333,7 @@ void add_to_stack (struct gcf_block_struct *b, int chid, Map *mp, int recno, int
    stackpp[chid][index]->recno      = recno;
    memcpy ( &stackpp[chid][index]->data[0], &b->data[0], sizeof(int)*2048);
 
+   sprintf (stackpp[chid][index]->net,"%s", mp->network);
    sprintf (stackpp[chid][index]->stat,"%s", mp->station);
    sprintf (stackpp[chid][index]->chan,"%s", mp->channel);
 

@@ -62,7 +62,7 @@ struct Backfilling
   typedef rc_ptr<Packet> PacketPtr;
   typedef list<PacketPtr> PacketList;
 
-  Backfilling(double cap = -1) : capacity(cap), current(NULL), comitted(false) {}
+  Backfilling(double cap = -1) : capacity(cap), current(NULL), committed(false) {}
   bool is_enabled() const { return capacity > 0; }
   //! Insert a packet sorted into the buffer
   void insert(PacketPtr packet)
@@ -84,7 +84,7 @@ struct Backfilling
   PacketList buffer;
   PacketPtr  current;
   INT_TIME last_commit;
-  bool comitted;
+  bool committed;
   };
 
 typedef Backfilling<DataPacket> InputBackfilling;

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -12,7 +12,8 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import seiscomp3.DataModel, seiscomp3.IO
+import seiscomp3.DataModel
+import seiscomp3.IO
 import getopt
 import sys
 
@@ -36,7 +37,7 @@ def main(argv):
     # parse command line options
     try:
         opts, args = getopt.getopt(argv[1:], "hf", ["help", "formatted"])
-    except getopt.error, msg:
+    except getopt.error as msg:
         sys.stderr.write("%s\n" % msg)
         sys.stderr.write("for help use --help\n")
         return 1
@@ -78,4 +79,3 @@ def main(argv):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-

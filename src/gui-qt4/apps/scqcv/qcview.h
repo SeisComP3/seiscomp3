@@ -17,8 +17,6 @@
 #ifndef __QCVIEW_H__
 #define __QCVIEW_H__
 
-
-#include <QtGui>
 #include <string>
 
 #ifndef Q_MOC_RUN
@@ -28,6 +26,10 @@
 #include "qcmodel.h"
 #include "qcviewconfig.h"
 #include "qcitemview.h"
+
+#include <QWidget>
+
+class QTableView;
 
 namespace Seiscomp {
 namespace Applications {
@@ -39,7 +41,7 @@ class QcView : public QWidget {
 	Q_OBJECT
 
 	public:
-		QcView(QcModel* qcModel, QWidget* parent=0, Qt::WFlags f=0);
+		QcView(QcModel* qcModel, QWidget* parent=0, Qt::WindowFlags f=0);
 
 		~QcView();
 
@@ -83,7 +85,7 @@ class QcTableView : public QcView {
 	Q_OBJECT
 
 	public:
-		QcTableView(QcModel* qcModel, QWidget* parent=0, Qt::WFlags f=0);
+		QcTableView(QcModel* qcModel, QWidget* parent=0, Qt::WindowFlags f=0);
 
 		~QcTableView();
 		void init();
@@ -118,7 +120,7 @@ class QcOverView : public QcView {
 	Q_OBJECT
 
 	public:
-		QcOverView(QcModel* qcModel, QWidget* parent=0, Qt::WFlags f=0);
+		QcOverView(QcModel* qcModel, QWidget* parent=0, Qt::WindowFlags f=0);
 		~QcOverView();
 		void init();
 

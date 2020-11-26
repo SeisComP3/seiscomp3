@@ -9,6 +9,7 @@
 
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/basenode.h>
+#include <fdsnxml/identifier.h>
 #include <fdsnxml/comment.h>
 #include <fdsnxml/dataavailability.h>
 #include <algorithm>
@@ -31,9 +32,11 @@ BaseNode::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject 
 	addProperty(Core::simpleProperty("code", "string", false, false, false, false, false, false, NULL, &BaseNode::setCode, &BaseNode::code));
 	addProperty(Core::simpleProperty("startDate", "datetime", false, false, false, false, true, false, NULL, &BaseNode::setStartDate, &BaseNode::startDate));
 	addProperty(Core::simpleProperty("endDate", "datetime", false, false, false, false, true, false, NULL, &BaseNode::setEndDate, &BaseNode::endDate));
+	addProperty(Core::simpleProperty("sourceID", "string", false, false, false, false, false, false, NULL, &BaseNode::setSourceID, &BaseNode::sourceID));
 	addProperty(enumProperty("restrictedStatus", "RestrictedStatusType", false, true, &metaRestrictedStatusType, &BaseNode::setRestrictedStatus, &BaseNode::restrictedStatus));
 	addProperty(Core::simpleProperty("alternateCode", "string", false, false, false, false, false, false, NULL, &BaseNode::setAlternateCode, &BaseNode::alternateCode));
 	addProperty(Core::simpleProperty("historicCode", "string", false, false, false, false, false, false, NULL, &BaseNode::setHistoricCode, &BaseNode::historicCode));
+	addProperty(arrayClassProperty<Identifier>("identifier", "FDSNXML::Identifier", &BaseNode::identifierCount, &BaseNode::identifier, static_cast<bool (BaseNode::*)(Identifier*)>(&BaseNode::addIdentifier), &BaseNode::removeIdentifier, static_cast<bool (BaseNode::*)(Identifier*)>(&BaseNode::removeIdentifier)));
 	addProperty(arrayClassProperty<Comment>("comment", "FDSNXML::Comment", &BaseNode::commentCount, &BaseNode::comment, static_cast<bool (BaseNode::*)(Comment*)>(&BaseNode::addComment), &BaseNode::removeComment, static_cast<bool (BaseNode::*)(Comment*)>(&BaseNode::removeComment)));
 	addProperty(arrayClassProperty<DataAvailability>("dataAvailability", "FDSNXML::DataAvailability", &BaseNode::dataAvailabilityCount, &BaseNode::dataAvailability, static_cast<bool (BaseNode::*)(DataAvailability*)>(&BaseNode::addDataAvailability), &BaseNode::removeDataAvailability, static_cast<bool (BaseNode::*)(DataAvailability*)>(&BaseNode::removeDataAvailability)));
 }
@@ -77,6 +80,8 @@ bool BaseNode::operator==(const BaseNode &rhs) const {
 	if ( !(_startDate == rhs._startDate) )
 		return false;
 	if ( !(_endDate == rhs._endDate) )
+		return false;
+	if ( !(_sourceID == rhs._sourceID) )
 		return false;
 	if ( !(_restrictedStatus == rhs._restrictedStatus) )
 		return false;
@@ -168,6 +173,24 @@ DateTime BaseNode::endDate() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void BaseNode::setSourceID(const std::string& sourceID) {
+	_sourceID = sourceID;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string& BaseNode::sourceID() const {
+	return _sourceID;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BaseNode::setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedStatus) {
 	_restrictedStatus = restrictedStatus;
 }
@@ -229,10 +252,79 @@ BaseNode& BaseNode::operator=(const BaseNode &other) {
 	_code = other._code;
 	_startDate = other._startDate;
 	_endDate = other._endDate;
+	_sourceID = other._sourceID;
 	_restrictedStatus = other._restrictedStatus;
 	_alternateCode = other._alternateCode;
 	_historicCode = other._historicCode;
 	return *this;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t BaseNode::identifierCount() const {
+	return _identifiers.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Identifier* BaseNode::identifier(size_t i) const {
+	return _identifiers[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::addIdentifier(Identifier *obj) {
+	if ( obj == NULL )
+		return false;
+
+	// Add the element
+	_identifiers.push_back(obj);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::removeIdentifier(Identifier *obj) {
+	if ( obj == NULL )
+		return false;
+
+	std::vector<IdentifierPtr>::iterator it;
+	it = std::find(_identifiers.begin(), _identifiers.end(), obj);
+	// Element has not been found
+	if ( it == _identifiers.end() ) {
+		SEISCOMP_ERROR("BaseNode::removeIdentifier(Identifier*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool BaseNode::removeIdentifier(size_t i) {
+	// index out of bounds
+	if ( i >= _identifiers.size() )
+		return false;
+
+	_identifiers.erase(_identifiers.begin() + i);
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

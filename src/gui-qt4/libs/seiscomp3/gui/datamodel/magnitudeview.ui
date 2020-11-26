@@ -671,7 +671,7 @@
            <string>Select</string>
           </property>
           <property name="shortcut" >
-           <string>s</string>
+           <string>S</string>
           </property>
          </widget>
         </item>
@@ -700,6 +700,16 @@
            <string>-</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4" >
+          <property name="text" >
+           <string>Evaluation:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbEvalStatus" />
         </item>
         <item>
          <spacer>

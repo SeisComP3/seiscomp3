@@ -14,7 +14,21 @@
 #include "bindings.h"
 #include "../fancyview.h"
 
-#include <QtGui>
+#include <QAction>
+#include <QApplication>
+#include <QComboBox>
+#include <QDialog>
+#include <QDragEnterEvent>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QProcess>
+#include <QPushButton>
+#include <QSplitter>
+#include <QToolBar>
+#include <QVBoxLayout>
 
 
 using namespace std;
@@ -282,7 +296,6 @@ class StationsFolderView : public QListView {
 class ProfilesModel : public QStandardItemModel {
 	public:
 		ProfilesModel(QObject *parent = 0) : QStandardItemModel(parent) {
-			setSupportedDragActions(Qt::LinkAction);
 		}
 
 	public:
@@ -304,6 +317,10 @@ class ProfilesModel : public QStandardItemModel {
 			QMimeData *data = new QMimeData;
 			data->setText(text);
 			return data;
+		}
+
+		Qt::DropActions supportedDragActions() {
+			return Qt::LinkAction;
 		}
 };
 

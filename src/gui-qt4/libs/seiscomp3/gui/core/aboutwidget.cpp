@@ -23,7 +23,7 @@ namespace Seiscomp {
 namespace Gui {
 
 
-AboutWidget::AboutWidget(QWidget* parent, Qt::WFlags f)
+AboutWidget::AboutWidget(QWidget* parent, Qt::WindowFlags f)
  : QWidget(parent, f) {
 	_ui.setupUi(this);
 	setWindowFlags(Qt::Tool| Qt::WindowStaysOnTopHint);

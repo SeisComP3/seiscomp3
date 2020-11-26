@@ -14,13 +14,21 @@
 
 
 #define SEISCOMP_COMPONENT Gui::QcView
+
+#include "qcview.h"
+
 #include <seiscomp3/logging/log.h>
 
 #include <seiscomp3/gui/core/streamwidget.h>
 #include <seiscomp3/datamodel/waveformstreamid.h>
 
-#include "qcview.h"
+#include <QCheckBox>
+#include <QHeaderView>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QTableView>
 
+using namespace Seiscomp::Gui;
 
 namespace Seiscomp {
 namespace Applications {
@@ -47,7 +55,7 @@ class QcSortFilterProxyModel : public QSortFilterProxyModel {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QcView::QcView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
+QcView::QcView(QcModel* qcModel, QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f) {
 	_qcModel = qcModel;
 	_qcProxyModel = new QcSortFilterProxyModel(this);
@@ -184,7 +192,7 @@ void QcView::updateStreamCount() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QcTableView::QcTableView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
+QcTableView::QcTableView(QcModel* qcModel, QWidget* parent, Qt::WindowFlags f)
 : QcView(qcModel, parent, f) {
 	_cornerButton = NULL;
 	init();
@@ -205,8 +213,13 @@ void QcTableView::init() {
 	_qcTable->hideColumn(0);
 	_qcTable->sortByColumn(0, Qt::AscendingOrder); 
 	_qcTable->setSortingEnabled(true);
+#if QT_VERSION >= 0x050000
+	_qcTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	_qcTable->horizontalHeader()->setSectionsMovable(true);
+#else
 	_qcTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 	_qcTable->horizontalHeader()->setMovable(true);
+#endif
 	_qcTable->horizontalHeader()->setTextElideMode(Qt::ElideRight);
 	_qcTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 
@@ -261,7 +274,7 @@ void QcTableView::showStream(int sec) {
 	QModelIndex index = _qcProxyModel->index(sec, 0);
 	QModelIndex rawindex(_qcProxyModel->mapToSource(index));
 
-	std::string streamID = _qcModel->getKey(rawindex).toAscii().data();
+	std::string streamID = _qcModel->getKey(rawindex).toLatin1().data();
 
 	Gui::StreamWidget* streamView = new Gui::StreamWidget(
                        _recordStreamURL,
@@ -366,7 +379,7 @@ void QcTableView::resetTableSorting() {
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-QcOverView::QcOverView(QcModel* qcModel, QWidget* parent, Qt::WFlags f)
+QcOverView::QcOverView(QcModel* qcModel, QWidget* parent, Qt::WindowFlags f)
 : QcView(qcModel, parent, f) {
 	init();
 }

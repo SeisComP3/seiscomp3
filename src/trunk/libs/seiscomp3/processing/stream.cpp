@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 
 namespace Seiscomp {
@@ -182,15 +183,24 @@ void Stream::init(const DataModel::Stream *stream) {
 					tf->evaluate(&sensorValue, 1, &*sensorGainFrequency);
 
 					double scale = abs(sensorValue) / abs(overallValue);
+					if ( !std::isnormal(scale) ) {
+						SEISCOMP_WARNING("%s.%s.%s.%s: invalid correction factor: %f",
+						                 stream->sensorLocation()->station()->network()->code().c_str(),
+						                 stream->sensorLocation()->station()->code().c_str(),
+						                 stream->sensorLocation()->code().c_str(),
+						                 stream->code().c_str(),
+						                 scale);
+					}
+					else {
+						SEISCOMP_DEBUG("%s.%s.%s.%s: correct gain by factor %f: %f -> %f",
+						               stream->sensorLocation()->station()->network()->code().c_str(),
+						               stream->sensorLocation()->station()->code().c_str(),
+						               stream->sensorLocation()->code().c_str(),
+						               stream->code().c_str(),
+						               scale, gain, gain*scale);
 
-					SEISCOMP_DEBUG("%s.%s.%s.%s: correct gain by factor %f: %f -> %f",
-					               stream->sensorLocation()->station()->network()->code().c_str(),
-					               stream->sensorLocation()->station()->code().c_str(),
-					               stream->sensorLocation()->code().c_str(),
-					               stream->code().c_str(),
-					               scale, gain, gain*scale);
-
-					gain *= scale;
+						gain *= scale;
+					}
 				}
 			}
 		}

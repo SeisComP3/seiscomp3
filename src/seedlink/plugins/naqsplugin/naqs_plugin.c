@@ -80,6 +80,7 @@ static strlist *requestList;     /* Parsed, linked-list, of naqsChannels */
 
 /* It's ugly, but simplifies things greatly */
 ChannelList channelList;
+char *network;                   /* Network code */
 
 /* Functions in this source file */
 static int processMessage(MessageHeader*);
@@ -321,6 +322,9 @@ clientConfig( int argcount, char **argvec )
     }
     else if (strcmp(argvec[optind], "-t") == 0) {
       shortTermComp = atoi(argvec[++optind]);
+    }
+    else if (strcmp(argvec[optind], "-N") == 0) {
+      network = argvec[++optind];
     }
   }
 

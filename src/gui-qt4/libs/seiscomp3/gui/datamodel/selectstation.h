@@ -38,10 +38,10 @@ class SC_GUI_API SelectStation : public QDialog {
 	// ------------------------------------------------------------------
 	public:
 		explicit SelectStation(Core::Time time, bool ignoreDisabledStations,
-		                       QWidget* parent = 0, Qt::WFlags f = 0);
+		                       QWidget* parent = 0, Qt::WindowFlags f = 0);
 		explicit SelectStation(Core::Time time, bool ignoreDisabledStations,
 		                       const QSet<QString> &blackList,
-		                       QWidget* parent = 0, Qt::WFlags f = 0);
+		                       QWidget* parent = 0, Qt::WindowFlags f = 0);
 		~SelectStation();
 
 		QList<DataModel::Station*> selectedStations() const;

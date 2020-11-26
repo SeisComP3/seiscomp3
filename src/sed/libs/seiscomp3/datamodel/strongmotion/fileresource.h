@@ -73,8 +73,8 @@ class SC_STRONGMOTION_API FileResource : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 		void setClass(const std::string& Class);
 		const std::string& Class() const;

@@ -18,7 +18,7 @@ class SeedlinkPluginHandler:
     try: seedlink.param('sources.mws.proc')
     except: seedlink.setParam('sources.mws.proc', 'mws')
 
-    return seedlink.net + "." + seedlink.sta
+    return seedlink.param('sources.mws.comport')
 
 
   # Flush does nothing

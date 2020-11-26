@@ -6,7 +6,7 @@ from seiscomp import mseedlite as mseed
 open_files = {}
 
 if len(sys.argv) != 2:
-    print "Usage: extr_file FILE"
+    print("Usage: extr_file FILE")
     sys.exit(1)
 
 for rec in mseed.Input(file(sys.argv[1])):

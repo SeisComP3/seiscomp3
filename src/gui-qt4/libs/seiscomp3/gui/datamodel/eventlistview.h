@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -15,7 +15,6 @@
 #ifndef __SEISCOMP_GUI_ORIGINLISTVIEW_H__
 #define __SEISCOMP_GUI_ORIGINLISTVIEW_H__
 
-#include <QtGui>
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/qt4.h>
@@ -25,6 +24,11 @@
 #endif
 #include <seiscomp3/gui/datamodel/ui_eventlistview.h>
 #include <seiscomp3/gui/datamodel/ui_eventlistviewregionfilterdialog.h>
+
+#include <QWidget>
+
+class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace Seiscomp {
 
@@ -56,6 +60,7 @@ namespace Private {
 class EventTreeItem;
 class OriginTreeItem;
 class FocalMechanismTreeItem;
+class EventFilterWidget;
 
 }
 
@@ -89,7 +94,7 @@ class SC_GUI_API EventListView : public QWidget {
 	public:
 		EventListView(Seiscomp::DataModel::DatabaseQuery* reader,
 		              bool withOrigins = true, bool withFocalMechanisms = false,
-		              QWidget * parent = 0, Qt::WFlags f = 0);
+		              QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~EventListView();
 
 
@@ -166,6 +171,9 @@ class SC_GUI_API EventListView : public QWidget {
 		void selectFirstEnabledEvent();
 		void selectEvent(int index);
 		void selectEventID(const std::string& publicID);
+
+		void setPreviousEvent();
+		void setNextEvent();
 
 		void readFromDatabase();
 		void readFromDatabase(const Seiscomp::Gui::EventListView::Filter&);
@@ -279,6 +287,7 @@ class SC_GUI_API EventListView : public QWidget {
 
 	private:
 		::Ui::EventListView                 _ui;
+		Private::EventFilterWidget         *_filterWidget;
 		ItemConfig                          _itemConfig;
 		FilterRegions                       _filterRegions;
 		QTreeWidget                        *_treeWidget;

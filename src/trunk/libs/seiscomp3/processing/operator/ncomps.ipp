@@ -277,7 +277,12 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 
 		if ( minLen > 0 ) {
 			// Process finally
-			_proc(rec, data_samples, minLen, maxStartTime, rec->samplingFrequency());
+			try {
+				_proc(rec, data_samples, minLen, maxStartTime, rec->samplingFrequency());
+			}
+			catch ( ... ) {
+				return WaveformProcessor::Error;
+			}
 
 			for ( int i = 0; i < N; ++i ) {
 				if ( comps[i] ) {

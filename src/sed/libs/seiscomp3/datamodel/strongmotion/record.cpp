@@ -174,7 +174,7 @@ void Record::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Record::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Record::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Record.creationInfo is not set");
@@ -185,7 +185,7 @@ CreationInfo& Record::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Record::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Record::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Record.creationInfo is not set");
@@ -223,7 +223,7 @@ void Record::setDuration(const OPT(double)& duration) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Record::duration() const throw(Seiscomp::Core::ValueException) {
+double Record::duration() const {
 	if ( _duration )
 		return *_duration;
 	throw Seiscomp::Core::ValueException("Record.duration is not set");
@@ -270,7 +270,7 @@ void Record::setOwner(const OPT(Contact)& owner) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Contact& Record::owner() throw(Seiscomp::Core::ValueException) {
+Contact& Record::owner() {
 	if ( _owner )
 		return *_owner;
 	throw Seiscomp::Core::ValueException("Record.owner is not set");
@@ -281,7 +281,7 @@ Contact& Record::owner() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Contact& Record::owner() const throw(Seiscomp::Core::ValueException) {
+const Contact& Record::owner() const {
 	if ( _owner )
 		return *_owner;
 	throw Seiscomp::Core::ValueException("Record.owner is not set");
@@ -301,7 +301,7 @@ void Record::setResampleRateNumerator(const OPT(int)& resampleRateNumerator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Record::resampleRateNumerator() const throw(Seiscomp::Core::ValueException) {
+int Record::resampleRateNumerator() const {
 	if ( _resampleRateNumerator )
 		return *_resampleRateNumerator;
 	throw Seiscomp::Core::ValueException("Record.resampleRateNumerator is not set");
@@ -321,7 +321,7 @@ void Record::setResampleRateDenominator(const OPT(int)& resampleRateDenominator)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Record::resampleRateDenominator() const throw(Seiscomp::Core::ValueException) {
+int Record::resampleRateDenominator() const {
 	if ( _resampleRateDenominator )
 		return *_resampleRateDenominator;
 	throw Seiscomp::Core::ValueException("Record.resampleRateDenominator is not set");
@@ -368,7 +368,7 @@ void Record::setWaveformFile(const OPT(FileResource)& waveformFile) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FileResource& Record::waveformFile() throw(Seiscomp::Core::ValueException) {
+FileResource& Record::waveformFile() {
 	if ( _waveformFile )
 		return *_waveformFile;
 	throw Seiscomp::Core::ValueException("Record.waveformFile is not set");
@@ -379,7 +379,7 @@ FileResource& Record::waveformFile() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const FileResource& Record::waveformFile() const throw(Seiscomp::Core::ValueException) {
+const FileResource& Record::waveformFile() const {
 	if ( _waveformFile )
 		return *_waveformFile;
 	throw Seiscomp::Core::ValueException("Record.waveformFile is not set");
@@ -814,7 +814,7 @@ bool Record::removePeakMotion(size_t i) {
 void Record::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Record skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

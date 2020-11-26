@@ -1619,15 +1619,47 @@ bool MagTool::processOriginUpdateOnly(DataModel::Origin* origin) {
 			}
 		}
 
-
 		if ( !mv.empty() ) {
 			string methodID;
 			double val, stdev;
 
 			if ( _keepWeights ) {
 				// Use preset weights
-				if ( !Math::Statistics::average(mv, weights, val, stdev) )
-					return false;
+				if ( averageMethod.type == Median || averageMethod.type == TrimmedMedian ) {
+					vector<double> significantValues;
+					for ( size_t i = 0; i < mv.size(); ++i ) {
+						if ( weights[i] > 0.0 )
+							significantValues.push_back(mv[i]);
+					}
+
+					// A median for zero values is not defined
+					if ( significantValues.empty() )
+						return false;
+
+					val = Math::Statistics::median(significantValues);
+
+					stdev = 0;
+					double cumw = 0.0;
+					for ( size_t i = 0; i < mv.size(); ++i ) {
+						stdev += (mv[i] - val) * (mv[i] - val) * weights[i];
+						cumw += weights[i];
+					}
+
+					if ( cumw > 1 )
+						stdev = sqrt(stdev/(cumw-1));
+					else
+						stdev = 0;
+
+					if ( averageMethod.type == Median )
+						methodID = "median";
+					else {
+						methodID = "trimmed median(" + Core::toString(averageMethod.parameter) + ")";
+					}
+				}
+				else {
+					if ( !Math::Statistics::average(mv, weights, val, stdev) )
+						return false;
+				}
 			}
 			else if ( !computeAverage(averageMethod, mv, weights, methodID, val, stdev) )
 				return false;

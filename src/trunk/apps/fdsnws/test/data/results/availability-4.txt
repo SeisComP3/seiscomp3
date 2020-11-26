@@ -1,0 +1,3 @@
+#N  S      L   C    Earliest                     Latest                       Updated                TimeSpans  Restriction
+AM  R187C  00  EHZ  2019-08-19T16:02:04.778422Z  2019-08-22T16:02:04.778422Z  2019-08-22T16:02:04Z           7  OPEN       
+AM  R187C  00  HDF  2019-08-19T16:02:04.778422Z  2019-08-22T16:02:04.778422Z  2019-08-27T00:00:00Z           7  OPEN       

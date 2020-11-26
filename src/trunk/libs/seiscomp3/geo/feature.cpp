@@ -45,6 +45,19 @@ GeoFeature::GeoFeature(const std::string& name, const Category* category,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GeoFeature::GeoFeature(const std::string &name, const Category* category,
+                       unsigned int rank, const Attributes &attributes)
+: _name(name)
+, _category(category)
+, _userData(NULL)
+, _rank(rank)
+, _attributes(attributes)
+, _closedPolygon(false) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 GeoFeature::~GeoFeature() {
 	_vertices.clear();
 }
@@ -101,6 +114,71 @@ void GeoFeature::invertOrder() {
 			std::swap(_vertices[startIdx+j], _vertices[startIdx+count-1-j]);
 		startIdx = endIdx;
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+namespace {
+
+typedef std::pair<size_t, double> SubFeatureIndexWithArea;
+bool cmpSubFeature(const SubFeatureIndexWithArea &sf1, const SubFeatureIndexWithArea &sf2) {
+	return fabs(sf1.second) > fabs(sf2.second);
+}
+
+}
+
+void GeoFeature::sort() {
+	// Nothing to do without any subfeatures
+	if ( _subFeatures.empty() || !_closedPolygon )
+		return;
+
+	std::vector<SubFeatureIndexWithArea> subFeatures;
+
+	size_t startIdx = 0, endIdx;
+	for ( size_t i = 0; i <= _subFeatures.size(); ++i, startIdx = endIdx ) {
+		endIdx = (i == _subFeatures.size() ? _vertices.size() : _subFeatures[i]);
+		double A = area(&_vertices[startIdx], endIdx - startIdx);
+		subFeatures.push_back(SubFeatureIndexWithArea(i, A));
+	}
+
+	std::sort(subFeatures.begin(), subFeatures.end(), cmpSubFeature);
+
+	bool needResort = false;
+	size_t i = 1;
+	for ( ; i < subFeatures.size(); ++i ) {
+		if ( subFeatures[i].first < subFeatures[i-1].first ) {
+			needResort = true;
+			break;
+		}
+	}
+
+	if ( !needResort )
+		return;
+
+	GeoCoordinates tmpv(_vertices);
+	std::vector<size_t> tmpsf(_subFeatures);
+	size_t vi = 0;
+	size_t sfi = 0;
+
+	for ( size_t i = 0; i < subFeatures.size(); ++i ) {
+		size_t sf = subFeatures[i].first;
+		size_t startIdx = !sf ? 0 : tmpsf[sf-1];
+		size_t endIdx = sf == tmpsf.size() ? tmpv.size() : tmpsf[sf];
+
+		if ( sfi )
+			_subFeatures[sfi-1] = vi;
+
+		for ( size_t j = startIdx; j < endIdx; ++j )
+			_vertices[vi++] = tmpv[j];
+
+		++sfi;
+	}
+
+	assert(vi == _vertices.size());
+	assert(sfi == _subFeatures.size()+1);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

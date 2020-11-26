@@ -66,7 +66,7 @@ class ResponseListElement : public Core::BaseObject {
 		//! XML tag: Amplitude
 		void setAmplitude(const FloatType& amplitude);
 		FloatType& amplitude();
-		FloatType amplitude() const;
+		const FloatType& amplitude() const;
 
 		//! XML tag: Phase
 		void setPhase(const AngleType& phase);

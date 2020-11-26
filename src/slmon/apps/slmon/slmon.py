@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 from    getopt  import getopt, GetoptError
 from    time    import time, gmtime
 from    datetime import datetime
@@ -41,7 +42,7 @@ def usage(exitcode=0):
 try:
     seiscompRoot=os.environ["SEISCOMP_ROOT"]
 except:
-    print >> sys.stderr, "\nSEISCOMP_ROOT must be defined - EXIT\n"
+    print("\nSEISCOMP_ROOT must be defined - EXIT\n", file=sys.stderr)
     usage(exitcode=2)
 
 ini_stations = os.path.join(seiscompRoot,'var/lib/slmon/stations.ini')
@@ -56,7 +57,7 @@ class Module(seiscomp3.Kernel.Module):
     seiscomp3.Kernel.Module.__init__(self, env, env.moduleName(__file__))
 
   def printCrontab(self):
-    print "3 * * * * %s/bin/seiscomp check slmon >/dev/null 2>&1" % (self.env.SEISCOMP_ROOT)
+    print("3 * * * * %s/bin/seiscomp check slmon >/dev/null 2>&1" % (self.env.SEISCOMP_ROOT))
 
 class Status:
 
@@ -73,11 +74,11 @@ class StatusDict(dict):
     def fromSlinkTool(self,server="",stations=["GE_MALT","GE_MORC","GE_IBBN"]):
         # later this shall use XML
         cmd = "slinktool -nd 10 -nt 10 -Q %s" % server
-        print cmd
+        print(cmd)
         f = os.popen(cmd)
         # regex = re.compile("[SLBVEH][HNLG][ZNE123]")
         regex = regexStreams
-        for line in f.xreadlines():
+        for line in f:
             net_sta = line[:2].strip() + "_" + line[3:8].strip()
             if not net_sta in stations:
                 continue
@@ -106,7 +107,7 @@ class StatusDict(dict):
         if type(source) == file:
             source = source.readlines()
         if type(source) != list:
-            raise TypeError, 'cannot read from %s' % str(type(source))
+            raise TypeError('cannot read from %s' % str(type(source)))
 
         for line in source:
             d = Status()
@@ -126,7 +127,7 @@ class StatusDict(dict):
         if type(f) is str:
             f = file(f, "w")
         lines = []
-        for key in self.keys():
+        for key in list(self.keys()):
             lines.append(str(self[key]))
         lines.sort()
         f.write('\n'.join(lines)+'\n')
@@ -204,7 +205,7 @@ def myrename(name1, name2):
     try:
         os.rename(name1, name2)
     except OSError:
-        print >> sys.stderr,"failed to rename(%s,%s)" % (name1, name2)
+        print("failed to rename(%s,%s)" % (name1, name2), file=sys.stderr)
 
 
 def makeMainHTML(config):
@@ -215,7 +216,7 @@ def makeMainHTML(config):
 
     stations = []
 
-    streams = [ x for x in status.keys() if regexStreams.search(x) ]
+    streams = [ x for x in list(status.keys()) if regexStreams.search(x) ]
 
     streams.sort()
 
@@ -236,14 +237,14 @@ def makeMainHTML(config):
 
         net_sta = "%s_%s" % (n,s)
         line = "<tr bgcolor='#ffffff'><td><tt>&nbsp;%s <a " \
-		"href='%s.html'>%s</a>&nbsp;</td>%s%s%s</tr>" \
-	        % (n, net_sta, s, TDf(lat1, getColor(lat1)),
+               "href='%s.html'>%s</a>&nbsp;</td>%s%s%s</tr>" \
+               % (n, net_sta, s, TDf(lat1, getColor(lat1)),
                                   TDf(lat2, getColor(lat2)),
                                   TDf(lat3, getColor(lat3)))
-	if config.station[net_sta]['type'][:4] == 'real':
-	        tmp_rt.append(line)
-	else:   tmp_du.append(line)
-	makeStatHTML(net_sta, config)
+        if config.station[net_sta]['type'][:4] == 'real':
+                tmp_rt.append(line)
+        else:   tmp_du.append(line)
+        makeStatHTML(net_sta, config)
 
     try: os.makedirs(config['setup']['wwwdir'])
     except: pass
@@ -267,7 +268,7 @@ def makeMainHTML(config):
     </table>
     """
 
-    htmlfile = file(temp, "w")
+    htmlfile = open(temp, "w")
     htmlfile.write("""<html>
     <head>
         <title>%s</title>
@@ -283,23 +284,23 @@ def makeMainHTML(config):
     htmlfile.write("<center><table cellpaddding='5' cellspacing='5'><tr>\n")
     if len(tmp_rt):
         htmlfile.write("<td valign='top' align='center'>\n" \
-		       "<font size='+1'>Real-time stations<font>\n</td>\n")
+                       "<font size='+1'>Real-time stations<font>\n</td>\n")
     if len(tmp_du):
         htmlfile.write("<td valign='top' align='center'>\n" \
-		       "<font size='+1'>Dial-up stations<font>\n</td>\n")
+                       "<font size='+1'>Dial-up stations<font>\n</td>\n")
     htmlfile.write("</tr><tr>")
     if len(tmp_rt):
-	htmlfile.write("<td valign='top' align='center'>\n")
-	htmlfile.write(table_begin)
-	htmlfile.write("\n".join(tmp_rt))
-	htmlfile.write(table_end)
-	htmlfile.write("</td>\n")
+        htmlfile.write("<td valign='top' align='center'>\n")
+        htmlfile.write(table_begin)
+        htmlfile.write("\n".join(tmp_rt))
+        htmlfile.write(table_end)
+        htmlfile.write("</td>\n")
     if len(tmp_du):
-	htmlfile.write("<td valign='top' align='center'>\n")
-	htmlfile.write(table_begin)
-	htmlfile.write("\n".join(tmp_du))
-	htmlfile.write(table_end)
-	htmlfile.write("</td>\n")
+        htmlfile.write("<td valign='top' align='center'>\n")
+        htmlfile.write(table_begin)
+        htmlfile.write("\n".join(tmp_du))
+        htmlfile.write(table_end)
+        htmlfile.write("</td>\n")
     htmlfile.write("</tr></table></center>\n")
 
     colorLegend(htmlfile)
@@ -317,7 +318,7 @@ def makeStatHTML(net_sta, config):
     temp = "%s/tmp2.html"  % config['setup']['wwwdir']
     dest = "%s/%s.html"  % ( config['setup']['wwwdir'], net_sta)
 
-    htmlfile = file(temp, "w")
+    htmlfile = open(temp, "w")
     htmlfile.write("""<html>
         <head>
             <title>%s - Station %s</title>
@@ -357,7 +358,7 @@ def makeStatHTML(net_sta, config):
     now = datetime.utcnow()
 
     netsta2=net_sta.replace("_",".")
-    streams = [ x for x in status.keys() if x.find(netsta2)==0 ]
+    streams = [ x for x in list(status.keys()) if x.find(netsta2)==0 ]
     streams.sort()
     for label in streams:
         tim1 = status[label].last_data
@@ -380,12 +381,12 @@ def makeStatHTML(net_sta, config):
     colorLegend(htmlfile)
 
     htmlfile.write("<p>\nHow to <a href='http://geofon.gfz-potsdam.de/waveform/status/latency.php' target='_blank'>interpret</a> " \
-		    "these numbers?<br>\n")
+                   "these numbers?<br>\n")
     if 'liveurl' in config['setup']:
-	# substitute '%s' in live_url by station name
-	url = config['setup']['liveurl'] % s
-	htmlfile.write("View a <a href='%s' target='_blank'>live seismogram</a> of "
-			"station %s</center>\n" % (url, s))
+        # substitute '%s' in live_url by station name
+        url = config['setup']['liveurl'] % s
+        htmlfile.write("View a <a href='%s' target='_blank'>live seismogram</a> of "
+                       "station %s</center>\n" % (url, s))
     htmlfile.write("</p>\n")
     pageTrailer(htmlfile, config)
     htmlfile.close()
@@ -393,28 +394,28 @@ def makeStatHTML(net_sta, config):
 
 def read_ini():
     global config, ini_setup, ini_stations
-    print "\nreading setup config from '%s'" % ini_setup
+    print("\nreading setup config from '%s'" % ini_setup)
     if not os.path.isfile(ini_setup):
-        print  >> sys.stderr,"[error] setup config '%s' does not exist" % ini_setup
+        print("[error] setup config '%s' does not exist" % ini_setup, file=sys.stderr)
         usage(exitcode=2)
 
     config = MyConfig(ini_setup)
-    print "reading station config from '%s'" % ini_stations
+    print("reading station config from '%s'" % ini_stations)
     if not os.path.isfile(ini_stations):
-        print  >> sys.stderr,"[error] station config '%s' does not exist" % ini_stations
+        print("[error] station config '%s' does not exist" % ini_stations, file=sys.stderr)
         usage(exitcode=2)
     config.station = MyConfig(ini_stations)
 
 def SIGINT_handler(signum, frame):
     global status
-    print "received signal #%d => will write status file and exit" % signum
+    print("received signal #%d => will write status file and exit" % signum)
 #   status.write("status.tab")
     sys.exit(0)
 
 try:
     opts, args = getopt(sys.argv[1:], "c:s:t:hv")
 except GetoptError:
-    print >> sys.stderr, "\nUnknown option in "+str(sys.argv[1:])+" - EXIT."
+    print("\nUnknown option in "+str(sys.argv[1:])+" - EXIT.", file=sys.stderr)
     usage(exitcode=2)
 
 for flag, arg in opts:
@@ -461,19 +462,15 @@ status = StatusDict()
 #if verbose: status.write(sys.stderr)
 
 
-print "generating output to '%s'" % config['setup']['wwwdir']
+print("generating output to '%s'" % config['setup']['wwwdir'])
 
-print "getting initial time windows from SeedLink server '%s'" % server
+print("getting initial time windows from SeedLink server '%s'" % server)
 status.fromSlinkTool(server, stations=net_sta)
 if verbose: status.write(sys.stderr)
 
 nextTimeGenerateHTML = time()
 
-print "setting up connection to SeedLink server '%s'" % server
-#cmd = "slinktool -s '?H?.D' -S '%s' -o - '%s'" % (s_arg, server)
-#print cmd
-#inpipe = os.popen(cmd)
-#input = seiscomp.mseed.Input(inpipe)
+print("setting up connection to SeedLink server '%s'" % server)
 
 input = seiscomp.slclient.Input(server, streams)
 for rec in input:

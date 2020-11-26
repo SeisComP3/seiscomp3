@@ -160,6 +160,79 @@
 					</description>
 				</parameter>
 
+				<group name="map">
+					<parameter name="stationSize" type="int" default="8" unit="px">
+						<description>
+							The station symbol size (e.g. in scmv).
+						</description>
+					</parameter>
+					<parameter name="originSymbolMinSize" type="int" default="9" unit="px">
+						<description>
+							The origin symbol minimum size. The formula to compute the
+							size of the origin symbol is: 4.9*(M-1.2).
+						</description>
+					</parameter>
+					<parameter name="vectorLayerAntiAlias" type="boolean" default="false">
+						<description>
+							Should the vector layer in the map use antialiasing?
+							This improves the visual quality but decreases performance.
+						</description>
+					</parameter>
+					<parameter name="bilinearFilter" type="boolean" default="true">
+						<description>
+							Should the map use a bilinear filter?
+							The bilinear filter improves the visual quality but decreases
+							performance slightly. It is only used for static map images.
+							Not while dragging.
+						</description>
+					</parameter>
+					<parameter name="showGrid" type="boolean" default="true">
+						<description>
+							Should the map display the grid?
+						</description>
+					</parameter>
+					<parameter name="showCities" type="boolean" default="true">
+						<description>
+							Should the map display the cities?
+						</description>
+					</parameter>
+					<parameter name="cityPopulationWeight" type="int" default="150">
+						<description>
+							Controls at which zoom level a city will be visible. The
+							following formula is used:
+							screen_width (km) * weight >= population
+						</description>
+					</parameter>
+					<parameter name="showLayers" type="boolean" default="true">
+						<description>
+							Should the map display the custom layers?
+						</description>
+					</parameter>
+					<parameter name="showLegends" type="boolean" default="false">
+						<description>
+							Show map legends initially. Some applications provide
+							controls to toggle the visibility in addition to this
+							option.
+						</description>
+					</parameter>
+					<parameter name="projection" type="string" default="Rectangular">
+						<description>
+							SeisComP ships with the rectangular projection built-in.
+							Other projections may be provided through plugins.
+						</description>
+					</parameter>
+					<parameter name="toBGR" type="boolean" default="false">
+						<description>
+							Converts map colors from RGB color scheme to BGR.
+						</description>
+					</parameter>
+					<parameter name="polygonRoughness" type="int" default="3" unit="px">
+						<description>
+							Minimum screen distance to plot a polygon or polyline line segment.
+						</description>
+					</parameter>
+				</group>
+
 				<group name="colors">
 					<parameter name="background" type="color">
 						<description>
@@ -168,6 +241,59 @@
 							lets Qt decide.
 						</description>
 					</parameter>
+
+					<group name="map">
+						<parameter name="lines" type="color">
+							<description>
+								The color of lines in the map (e.g. lines
+								connecting the origin and a station).
+							</description>
+						</parameter>
+						<parameter name="outlines" type="color">
+							<description>
+								The color of station outlines in the map.
+							</description>
+						</parameter>
+						<group name="grid">
+							<description>
+								Defines the pen of the latitude/longitude grid of the map.
+							</description>
+							<parameter name="color" type="color" default="FFFFFF">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="DotLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="1">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
+						<parameter name="stationAnnotations" type="color">
+							<description>
+								The color of station annotations.
+							</description>
+						</parameter>
+						<parameter name="cityLabels" type="color">
+							<description>
+								The color of city labels.
+							</description>
+						</parameter>
+						<parameter name="cityOutlines" type="color">
+							<description>
+								The color of city outlines.
+							</description>
+						</parameter>
+						<parameter name="cityCapital" type="color">
+							<description>
+								The color of a capital.
+							</description>
+						</parameter>
+						<parameter name="cityNormal" type="color">
+							<description>
+								The color of a &quot;normal&quot; city.
+							</description>
+						</parameter>
+					</group>
 
 					<group name="records">
 						<parameter name="foreground" type="color" default="808080">
@@ -216,6 +342,20 @@
 								<description>The color of the pen.</description>
 							</parameter>
 							<parameter name="style" type="string" default="DashLine">
+								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
+							</parameter>
+							<parameter name="width" type="double" default="1.0">
+								<description>The width of the pen.</description>
+							</parameter>
+						</group>
+						<group name="subGridPen">
+							<description>
+								Defines the pen of the secondary record grid.
+							</description>
+							<parameter name="color" type="color" default="00000000">
+								<description>The color of the pen.</description>
+							</parameter>
+							<parameter name="style" type="string" default="DotLine">
 								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
 							</parameter>
 							<parameter name="width" type="double" default="1.0">
@@ -422,59 +562,6 @@
 						<parameter name="selectedTraceZoom" type="color" default="C0C0FFC0">
 							<description>
 								The color of the selected zoom area (e.g. manual picker).
-							</description>
-						</parameter>
-					</group>
-
-					<group name="map">
-						<parameter name="lines" type="color">
-							<description>
-								The color of lines in the map (e.g. lines
-								connecting the origin and a station).
-							</description>
-						</parameter>
-						<parameter name="outlines" type="color">
-							<description>
-								The color of station outlines in the map.
-							</description>
-						</parameter>
-						<group name="grid">
-							<description>
-								Defines the pen of the latitude/longitude grid of the map.
-							</description>
-							<parameter name="color" type="color" default="FFFFFF">
-								<description>The color of the pen.</description>
-							</parameter>
-							<parameter name="style" type="string" default="DotLine">
-								<description>The style of the pen. Supported values are: NoPen, SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine.</description>
-							</parameter>
-							<parameter name="width" type="double" default="1">
-								<description>The width of the pen.</description>
-							</parameter>
-						</group>
-						<parameter name="stationAnnotations" type="color">
-							<description>
-								The color of station annotations.
-							</description>
-						</parameter>
-						<parameter name="cityLabels" type="color">
-							<description>
-								The color of city labels.
-							</description>
-						</parameter>
-						<parameter name="cityOutlines" type="color">
-							<description>
-								The color of city outlines.
-							</description>
-						</parameter>
-						<parameter name="cityCapital" type="color">
-							<description>
-								The color of a capital.
-							</description>
-						</parameter>
-						<parameter name="cityNormal" type="color">
-							<description>
-								The color of a &quot;normal&quot; city.
 							</description>
 						</parameter>
 					</group>
@@ -788,79 +875,6 @@
 						<parameter name="overline" type="boolean" default="false"/>
 					</group>
 				</group>
-
-				<group name="map">
-					<parameter name="stationSize" type="int" default="8" unit="px">
-						<description>
-							The station symbol size (e.g. in scmv).
-						</description>
-					</parameter>
-					<parameter name="originSymbolMinSize" type="int" default="9" unit="px">
-						<description>
-							The origin symbol minimum size. The formula to compute the
-							size of the origin symbol is: 4.9*(M-1.2).
-						</description>
-					</parameter>
-					<parameter name="vectorLayerAntiAlias" type="boolean" default="false">
-						<description>
-							Should the vector layer in the map use antialiasing?
-							This improves the visual quality but decreases performance.
-						</description>
-					</parameter>
-					<parameter name="bilinearFilter" type="boolean" default="true">
-						<description>
-							Should the map use a bilinear filter?
-							The bilinear filter improves the visual quality but decreases
-							performance slightly. It is only used for static map images.
-							Not while dragging.
-						</description>
-					</parameter>
-					<parameter name="showGrid" type="boolean" default="true">
-						<description>
-							Should the map display the grid?
-						</description>
-					</parameter>
-					<parameter name="showCities" type="boolean" default="true">
-						<description>
-							Should the map display the cities?
-						</description>
-					</parameter>
-					<parameter name="cityPopulationWeight" type="int" default="150">
-						<description>
-							Controls at which zoom level a city will be visible. The
-							following formula is used:
-							screen_width (km) * weight >= population
-						</description>
-					</parameter>
-					<parameter name="showLayers" type="boolean" default="true">
-						<description>
-							Should the map display the custom layers?
-						</description>
-					</parameter>
-					<parameter name="showLegends" type="boolean" default="false">
-						<description>
-							Show map legends initially. Some applications provide
-							controls to toggle the visibility in addition to this
-							option.
-						</description>
-					</parameter>
-					<parameter name="projection" type="string" default="Rectangular">
-						<description>
-							SeisComP ships with the rectangular projection built-in.
-							Other projections may be provided through plugins.
-						</description>
-					</parameter>
-					<parameter name="toBGR" type="boolean" default="false">
-						<description>
-							Converts map colors from RGB color scheme to BGR.
-						</description>
-					</parameter>
-					<parameter name="polygonRoughness" type="int" default="3" unit="px">
-						<description>
-							Minimum screen distance to plot a polygon or polyline line segment.
-						</description>
-					</parameter>
-				</group>
 				<group name="precision">
 					<parameter name="depth" type="int" default="0">
 						<description>
@@ -875,6 +889,11 @@
 					<parameter name="location" type="int" default="2">
 						<description>
 							The precision of lat/lon values.
+						</description>
+					</parameter>
+					<parameter name="magnitude" type="int" default="2">
+						<description>
+							The precision of magnitude values.
 						</description>
 					</parameter>
 					<parameter name="pickTime" type="int" default="1">
@@ -1020,11 +1039,11 @@
 				</parameter>
 			</group>
 			<group name="eventlist">
-				<parameter name="visibleColumns" type="list:string" default="M, TP, Phases, Lat, Lon, Depth, Stat, Agency, Region, ID">
+				<parameter name="visibleColumns" type="list:string" default="M, MType, Phases, Lat, Lon, Depth, Stat, Agency, Region, ID">
 					<description>
 					Configure the columns of the event list that are visible initially.
 					The first column containing the origin time is always visible and cannot
-					be hidden. Possible values are: Type, M, TP, Phases, Lat, Lon, Depth, Stat, FM, Agency, Region, ID.
+					be hidden. Possible values are: Type, M, MTYPE, Phases, Lat, Lon, Depth, Stat, FM, Agency, Region, ID.
 					</description>
 				</parameter>
 				<parameter name="regions" type="list:string">
@@ -1143,6 +1162,19 @@
 							option.
 							</description>
 						</parameter>
+					</group>
+					<group name="database">
+						<description>
+						Pre-set options to filter an event list request.
+						</description>
+						<parameter name="minlat" type="double" unit="deg"/>
+						<parameter name="maxlat" type="double" unit="deg"/>
+						<parameter name="minlon" type="double" unit="deg"/>
+						<parameter name="maxlon" type="double" unit="deg"/>
+						<parameter name="mindepth" type="double" unit="km"/>
+						<parameter name="maxdepth" type="double" unit="km"/>
+						<parameter name="minmag" type="double"/>
+						<parameter name="maxmag" type="double"/>
 					</group>
 				</group>
 				<group name="scripts">

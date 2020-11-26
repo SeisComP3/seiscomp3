@@ -956,7 +956,7 @@ int Wave24Drv::shareData(int len) {
       }
     } 
     
-    strcpy(station,stat);
+    snprintf(station, 10, "%s.%s", network, stat);
     nsamples--; //d0 sa nerata
     for (i=1;i<nsamples;i++) {
       samples[i]=samples[i-1]+samples[i+1];

@@ -11,7 +11,6 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_GUI_APPLICATION_H__
 #define __SEISCOMP_GUI_APPLICATION_H__
 
@@ -36,6 +35,8 @@
 #define SCApp (Seiscomp::Gui::Application::Instance())
 #define SCScheme (SCApp->scheme())
 
+class QAbstractItemView;
+class QHeaderView;
 class QSplashScreen;
 
 namespace Seiscomp {
@@ -91,8 +92,7 @@ struct MessageGroups {
 };
 
 
-class SC_GUI_API Application : public QApplication,
-                               public Client::Application {
+class SC_GUI_API Application : public QObject, public Client::Application {
 	Q_OBJECT
 
 	public:
@@ -130,9 +130,15 @@ class SC_GUI_API Application : public QApplication,
 			                         INTERPRETE_NOTIFIER
 		};
 
+		enum Type {
+			//! Console application
+			Tty,
+			//! GUI client application
+			GuiClient
+		};
 
 	public:
-		Application(int& argc, char **argv, int flags = DEFAULT, Type type = QApplication::GuiClient);
+		Application(int& argc, char **argv, int flags = DEFAULT, Type type = GuiClient);
 		virtual ~Application();
 
 
@@ -147,6 +153,8 @@ class SC_GUI_API Application : public QApplication,
 		//! Copies all selected items of specified item view to clipboard as CSV
 		static void copyToClipboard(const QAbstractItemView* view,
 		                            const QHeaderView *header = NULL);
+
+		Type type() const;
 
 		void setDatabaseSOHInterval(int secs);
 
@@ -187,14 +195,19 @@ class SC_GUI_API Application : public QApplication,
 		void showMessage(const char*);
 		void showWarning(const char*);
 
-		bool notify(QObject *receiver, QEvent *e);
-
 		bool sendMessage(Seiscomp::Core::Message* msg);
 		bool sendMessage(const char* group, Seiscomp::Core::Message* msg);
 
 		//! This method allows to emit notifier locally. They are not being sent over
 		//! the messaging but interpreted and signalled to other local components.
 		void emitNotifier(Seiscomp::DataModel::Notifier* n);
+
+		QFont font() const;
+		void setFont(const QFont &font);
+
+		QPalette palette() const;
+		void setPalette(const QPalette &pal);
+
 
 	protected:
 		virtual bool init();
@@ -239,6 +252,7 @@ class SC_GUI_API Application : public QApplication,
 
 	public slots:
 		void showSettings();
+		void quit();
 
 
 	private slots:
@@ -272,9 +286,13 @@ class SC_GUI_API Application : public QApplication,
 
 
 	private:
-		static Application* _instance;
+		static Application *_instance;
 
-		Scheme              _scheme;
+
+	protected:
+		QApplication       *_app;
+		Type                _type;
+		Scheme             *_scheme;
 		mutable QSettings  *_settings;
 		QTimer              _timerSOH;
 		Core::Time          _lastSOH;
@@ -289,13 +307,13 @@ class SC_GUI_API Application : public QApplication,
 		std::string         _guiGroup;
 		std::string         _commandTargetClient;
 
-		QWidget*            _mainWidget;
-		QSplashScreen*      _splash;
-		ConnectionDialog*   _dlgConnection;
+		QWidget            *_mainWidget;
+		QSplashScreen      *_splash;
+		ConnectionDialog   *_dlgConnection;
 		bool                _settingsOpened;
 		bool                _filterCommands;
 
-		MessageThread*      _thread;
+		MessageThread      *_thread;
 		int                 _flags;
 
 		QSocketNotifier    *_signalNotifier;

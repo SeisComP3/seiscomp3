@@ -89,30 +89,30 @@ class SC_STRONGMOTION_API EventRecordReference : public Object {
 		const std::string& recordID() const;
 
 		void setCampbellDistance(const OPT(RealQuantity)& campbellDistance);
-		RealQuantity& campbellDistance() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& campbellDistance() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& campbellDistance();
+		const RealQuantity& campbellDistance() const;
 
 		void setRuptureToStationAzimuth(const OPT(RealQuantity)& ruptureToStationAzimuth);
-		RealQuantity& ruptureToStationAzimuth() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& ruptureToStationAzimuth() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& ruptureToStationAzimuth();
+		const RealQuantity& ruptureToStationAzimuth() const;
 
 		void setRuptureAreaDistance(const OPT(RealQuantity)& ruptureAreaDistance);
-		RealQuantity& ruptureAreaDistance() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& ruptureAreaDistance() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& ruptureAreaDistance();
+		const RealQuantity& ruptureAreaDistance() const;
 
 		void setJoynerBooreDistance(const OPT(RealQuantity)& JoynerBooreDistance);
-		RealQuantity& JoynerBooreDistance() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& JoynerBooreDistance() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& JoynerBooreDistance();
+		const RealQuantity& JoynerBooreDistance() const;
 
 		void setClosestFaultDistance(const OPT(RealQuantity)& closestFaultDistance);
-		RealQuantity& closestFaultDistance() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& closestFaultDistance() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& closestFaultDistance();
+		const RealQuantity& closestFaultDistance() const;
 
 		void setPreEventLength(const OPT(double)& preEventLength);
-		double preEventLength() const throw(Seiscomp::Core::ValueException);
+		double preEventLength() const;
 
 		void setPostEventLength(const OPT(double)& postEventLength);
-		double postEventLength() const throw(Seiscomp::Core::ValueException);
+		double postEventLength() const;
 
 	
 	// ------------------------------------------------------------------

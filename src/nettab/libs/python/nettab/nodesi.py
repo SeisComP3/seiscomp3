@@ -1,5 +1,6 @@
-from lineType import Dl, Se, Ff, Pz, Cl
-from basesc3 import sc3
+from __future__ import print_function
+from .lineType import Dl, Se, Ff, Pz, Cl
+from .basesc3 import sc3
 import sys
 
 class prefixable(object):
@@ -23,13 +24,13 @@ class Instruments(object):
 	def sc3Objs(self):
 		objs = []
 		
-		for s in self._sensors.values():
+		for s in list(self._sensors.values()):
 			objs.append(s.sc3Obj(self))
 
-		for s in self._datalogger.values():
+		for s in list(self._datalogger.values()):
 			objs.append(s.sc3Obj(self))
 
-		for s in self._filters.values():
+		for s in list(self._filters.values()):
 			objs.append(s.sc3Obj(self))
 
 		return objs
@@ -70,14 +71,14 @@ class Instruments(object):
 	
 	def loadDataloggerCalibrations(self, dsm, dsn, dch, dsg, start, end, dd):
 		cls = []
-		for cl in self.cls.itervalues():
+		for cl in self.cls.values():
 			if cl.type != "L": continue
 			if cl.match(dsm, dsn):
 				cls.append(Calibration(cl, dch, start, end))
 
 		if len(cls) == 0:
 			if dsn in self.cls:
-				print >> sys.stderr,"[%s] No calibrations found for serial number %s and model %s " % (dsm, dsn, dsm)
+				print("[%s] No calibrations found for serial number %s and model %s " % (dsm, dsn, dsm), file=sys.stderr)
 			return
 
 		diid = self.instrumentId(dsm, dsg)
@@ -98,14 +99,14 @@ class Instruments(object):
 
 	def loadSensorCalibrations(self, ssm, ssn, sch, ssg, start, end, ss):
 		cls = []
-		for cl in self.cls.itervalues():
+		for cl in self.cls.values():
 			if cl.type != "S": continue
 			if cl.match(ssm, ssn):
 				cls.append(Calibration(cl, sch, start, end))
 
 		if len(cls) == 0:
 			if ssn in self.cls:
-				print >> sys.stderr,"[%s] No calibrations found for serial number %s and model %s " % (ssm,ssn, ssm)
+				print("[%s] No calibrations found for serial number %s and model %s " % (ssm,ssn, ssm), file=sys.stderr)
 			return
 		
 		siid = self.instrumentId(ssm, ssg)	
@@ -129,15 +130,15 @@ class Instruments(object):
 		
 		# Dataloggers check
 		error.append("* Dataloggers:")
-		for dl in self.dls.itervalues():
+		for dl in self.dls.values():
 			error.extend(dl.check(self))
 		error.append("")
 		
 		# Check fir filters
 		error.append("* Filters:")
-		for f in self.fls.itervalues():
+		for f in self.fls.values():
 			c = False
-			for dl in self.dls.itervalues():
+			for dl in self.dls.values():
 				c = c or dl.use(f)
 				if c: break
 			if not c: error.append(" [%s] filter is not used" % f.id)
@@ -146,15 +147,15 @@ class Instruments(object):
 
 		# Check the calibrations
 		error.append("* Calibrations:")
-		for cl in self.cls.itervalues():
+		for cl in self.cls.values():
 			error.extend(cl.check(self))
 		error.append("")
 		
 		
 		error.append("* Sensors:")
-		for f in self.ses.itervalues():
+		for f in self.ses.values():
 			c = False
-			for network in networks.itervalues():
+			for network in networks.values():
 				for station in network.stations:
 					for location in station.locations:
 						for channel in location.channels:
@@ -167,9 +168,9 @@ class Instruments(object):
 		error.append("")
 
 		error.append("* Dataloggers:")
-		for f in self.dls.itervalues():
+		for f in self.dls.values():
 			c = False
-			for network in networks.itervalues():
+			for network in networks.values():
 				c = c or network.use(f)
 				if c: break
 			if not c: error.append(" [%s] datalogger is not used" % f.id)
@@ -259,7 +260,7 @@ class Instruments(object):
 
 	def _findObject(self, objID, where):
 		obj = None
-		for ob in where.itervalues():
+		for ob in where.values():
 			obj = ob.sc3Obj(self)
 			if obj.publicID() == objID:
 				break;
@@ -273,7 +274,7 @@ class Instruments(object):
 		if channel is None:
 			return None
 		
-		for cal in [obj(i) for i in xrange(0, count)]:
+		for cal in [obj(i) for i in range(0, count)]:
 			if cal.serialNumber() == serialNumber and cal.channel() == channel:
 				return cal.gain()
 		return None
@@ -291,7 +292,7 @@ class Instruments(object):
 		try:
 			gainUnit = sensor.unit()
 		except:
-			print >> sys.stderr,"[%s] No gain unit supplied" % seID
+			print("[%s] No gain unit supplied" % seID, file=sys.stderr)
 			gainUnit = None
 		
 		gain = self._findCallibration(sensor.sensorCalibration, sensor.sensorCalibrationCount(), serialNumber, channel, start)
@@ -313,7 +314,7 @@ class Instruments(object):
 			gain = datalogger.gain()
 		
 		decimation = None
-		for i in xrange(0,datalogger.decimationCount()):
+		for i in range(0,datalogger.decimationCount()):
 			decimation = datalogger.decimation(i)
 			if decimation.sampleRateNumerator() == Numerator and decimation.sampleRateDenominator() == Denominator:
 				break
@@ -362,9 +363,9 @@ class Paz(sc3, prefixable):
 		att = {}
 		att['Name'] = self.id
 
-		for (key,value) in self.att.iteritems():
+		for (key,value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att:
-				print >> sys.stderr," [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value)
+				print(" [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value), file=sys.stderr)
 				continue
 			att[key] = value
 
@@ -392,9 +393,9 @@ class Sensor(sc3, prefixable):
 		att = {}
 		
 		att['Name'] = self.id
-		for (key, value) in self.att.iteritems():
+		for (key, value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att:
-				print >> sys.stderr," [%s] [%s] ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key, value)
+				print(" [%s] [%s] ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key, value), file=sys.stderr)
 				continue
 			att[key] = value
 
@@ -415,9 +416,9 @@ class Fir(sc3, prefixable):
 		att = {}
 		att['Name'] = self.id
 		
-		for (key,value) in self.att.iteritems():
+		for (key,value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att :
-				print >> sys.stderr," [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value)
+				print(" [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value), file=sys.stderr)
 				continue
 			att[key] = value
 		return att
@@ -471,7 +472,7 @@ class Dataloger(sc3, prefixable):
 				dcs.append(Decimation(num, dec, dl))
 			self.dcs = dcs
 		else:
-			print >>sys.stderr, "[%s] Datalogger %s has no stages." % (self.id, dl)
+			print("[%s] Datalogger %s has no stages." % (self.id, dl), file=sys.stderr)
 
 	def sc3Att(self):
 		att = {}
@@ -479,9 +480,9 @@ class Dataloger(sc3, prefixable):
 		att['Gain'] = self.gain
 		att['MaxClockDrift'] = self.maxClockDrift
 		
-		for (key,value) in self.att.iteritems():
+		for (key,value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att:
-				print >> sys.stderr," [%s] [%s] ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key, value)
+				print(" [%s] [%s] ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key, value), file=sys.stderr)
 				continue
 			att[key] = value
 
@@ -514,9 +515,9 @@ class Calibration(sc3):
 		if self.end:
 			att['End'] = self.end
 
-		for (key, value) in self.att.iteritems():
+		for (key, value) in self.att.items():
 			if not self.sc3ValidKey(key) or key in att:
-				print >> sys.stderr," [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value)
+				print(" [%s] [%s] Ignoring Attribute %s = %s " % (self.sc3Mode, self.id, key,value), file=sys.stderr)
 				continue
 			att[key] = value
 		return att

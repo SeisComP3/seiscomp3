@@ -15,12 +15,10 @@
 #ifndef __SEISCOMP_GUI_INFOTEXT_H__
 #define __SEISCOMP_GUI_INFOTEXT_H__
 
-
-#include <QtGui>
-
 #include <seiscomp3/gui/core/ui_infotext.h>
 #include <seiscomp3/gui/qt4.h>
 
+#include <QDialog>
 
 namespace Seiscomp {
 namespace Gui {
@@ -31,7 +29,7 @@ class SC_GUI_API InfoText : public QDialog {
 	//  X'truction
 	// ------------------------------------------------------------------
 	public:
-		InfoText(QWidget* parent = 0, Qt::WFlags f = 0);
+		InfoText(QWidget* parent = 0, Qt::WindowFlags f = 0);
 		~InfoText();
 
 

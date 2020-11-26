@@ -192,7 +192,7 @@ int FS_Decode_MSEED::send_mseed_unpack(const string &channel_name,
       }
     else
       {
-        r = send_raw3(sta.c_str(), channel_name.c_str(), &pt,
+        r = send_raw3((net + "." + sta).c_str(), channel_name.c_str(), &pt,
           ntohs(fsdh->time_correct), timing_quality, msr->datasamples,
           msr->numsamples);
       }

@@ -17,6 +17,7 @@
 
 #include <QTreeWidget>
 #include <QTableWidget>
+#include <QWidget>
 
 #include "ui_inspector.h"
 #ifndef Q_MOC_RUN
@@ -28,7 +29,7 @@ class Inspector : public QDialog {
 	Q_OBJECT
 
 	public:
-		Inspector(QWidget *parent = 0, Qt::WFlags f = 0);
+		Inspector(QWidget *parent = 0, Qt::WindowFlags f = 0);
 		~Inspector();
 
 

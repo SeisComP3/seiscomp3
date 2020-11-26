@@ -7,9 +7,12 @@
 # Email:   javier@gfz-potsdam.de
 ################################################################################
 
-import os
+from __future__ import absolute_import, division, print_function
+
 import datetime
 import fnmatch
+import os
+
 from seiscomp import mseedlite
 from seiscomp3 import Logging
 
@@ -19,16 +22,16 @@ if hasattr(datetime.timedelta, "total_seconds"):
         return td.total_seconds()
 else:
     def _total_seconds(td):
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) // 10**6
 
 
 class SDS(object):
     def __init__(self, sdsRoot):
-        if isinstance(sdsRoot, basestring):
-            self.sdsRoot = [sdsRoot]
-
-        elif type(sdsRoot) == type(list()):
+        if type(sdsRoot) == type(list()):
             self.sdsRoot = sdsRoot
+
+        else:
+            self.sdsRoot = [sdsRoot]
 
     def __getMSName(self, reqDate, net, sta, loc, cha):
         for root in self.sdsRoot:
@@ -51,7 +54,8 @@ class SDS(object):
         r1 = recStart
         t2 = timeEnd
         r2 = recEnd
-        rn = int(r1 + (r2 - r1) * _total_seconds(searchTime - t1) / _total_seconds(t2 - t1))
+        rn = int(r1 + (r2 - r1) * _total_seconds(searchTime - t1) /
+                 _total_seconds(t2 - t1))
 
         if rn < recStart:
             rn = recStart
@@ -70,7 +74,8 @@ class SDS(object):
                 if t1 == t2:
                     break
 
-                rn = int(r1 + (r2 - r1) * _total_seconds(searchTime - t1) / _total_seconds(t2 - t1))
+                rn = int(r1 + (r2 - r1) * _total_seconds(searchTime -
+                                                         t1) / _total_seconds(t2 - t1))
 
                 if rn < recStart:
                     rn = recStart
@@ -88,7 +93,8 @@ class SDS(object):
                 if t1 == t2:
                     break
 
-                rn = int(r2 - (r2 - r1) * _total_seconds(t2 - searchTime) / _total_seconds(t2 - t1))
+                rn = int(r2 - (r2 - r1) * _total_seconds(t2 -
+                                                         searchTime) / _total_seconds(t2 - t1))
 
                 if rn < recStart:
                     rn = recStart
@@ -115,21 +121,25 @@ class SDS(object):
 
         msFile.seek(-reclen, 2)
         rec = mseedlite.Record(msFile)
-        recEnd = msFile.tell() / reclen - 1
+        recEnd = msFile.tell() // reclen - 1
         timeEnd = rec.begin_time
 
         if rec.end_time <= startt:
             return
 
         if timeStart >= timeEnd:
-            Logging.error("%s: overlap detected (start=%s, end=%s)" % (msFile.name, timeStart, timeEnd))
+            Logging.error("%s: overlap detected (start=%s, end=%s)" %
+                          (msFile.name, timeStart, timeEnd))
             return
 
-        (lower, et1) = self.__time2recno(msFile, reclen, timeStart, recStart, timeEnd, recEnd, startt)
-        (upper, et2) = self.__time2recno(msFile, reclen, startt, lower, timeEnd, recEnd, endt)
+        (lower, et1) = self.__time2recno(msFile, reclen,
+                                         timeStart, recStart, timeEnd, recEnd, startt)
+        (upper, et2) = self.__time2recno(
+            msFile, reclen, startt, lower, timeEnd, recEnd, endt)
 
         if upper < lower:
-            Logging.error("%s: overlap detected (lower=%d, upper=%d)" % (msFile.name, lower, upper))
+            Logging.error("%s: overlap detected (lower=%d, upper=%d)" %
+                          (msFile.name, lower, upper))
             upper = lower
 
         msFile.seek(lower * reclen)
@@ -196,7 +206,8 @@ class SDS(object):
                 Logging.error("%s: %s" % (dataFile, str(e)))
 
     def getRawBytes(self, startt, endt, net, sta, loc, cha, bufferSize):
-        day = datetime.datetime(startt.year, startt.month, startt.day) - datetime.timedelta(days=1)
+        day = datetime.datetime(startt.year, startt.month,
+                                startt.day) - datetime.timedelta(days=1)
         endDay = datetime.datetime(endt.year, endt.month, endt.day)
 
         while day <= endDay:
@@ -204,4 +215,3 @@ class SDS(object):
                 yield buf
 
             day += datetime.timedelta(days=1)
-

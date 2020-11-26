@@ -23,6 +23,7 @@
 namespace Seiscomp {
 namespace FDSNXML {
 
+DEFINE_SMARTPOINTER(Identifier);
 DEFINE_SMARTPOINTER(Comment);
 DEFINE_SMARTPOINTER(DataAvailability);
 
@@ -83,6 +84,11 @@ class BaseNode : public Core::BaseObject {
 		void setEndDate(const OPT(DateTime)& endDate);
 		DateTime endDate() const;
 
+		//! A data source identifier in URI form
+		//! XML tag: sourceID
+		void setSourceID(const std::string& sourceID);
+		const std::string& sourceID() const;
+
 		//! XML tag: restrictedStatus
 		void setRestrictedStatus(const OPT(RestrictedStatusType)& restrictedStatus);
 		RestrictedStatusType restrictedStatus() const;
@@ -111,6 +117,7 @@ class BaseNode : public Core::BaseObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
+		bool addIdentifier(Identifier *obj);
 		bool addComment(Comment *obj);
 		bool addDataAvailability(DataAvailability *obj);
 
@@ -121,6 +128,7 @@ class BaseNode : public Core::BaseObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
+		bool removeIdentifier(Identifier *obj);
 		bool removeComment(Comment *obj);
 		bool removeDataAvailability(DataAvailability *obj);
 
@@ -130,15 +138,18 @@ class BaseNode : public Core::BaseObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
+		bool removeIdentifier(size_t i);
 		bool removeComment(size_t i);
 		bool removeDataAvailability(size_t i);
 
 		//! Retrieve the number of objects of a particular class
+		size_t identifierCount() const;
 		size_t commentCount() const;
 		size_t dataAvailabilityCount() const;
 
 		//! Index access
 		//! @return The object at index i
+		Identifier* identifier(size_t i) const;
 		Comment* comment(size_t i) const;
 		DataAvailability* dataAvailability(size_t i) const;
 
@@ -152,11 +163,13 @@ class BaseNode : public Core::BaseObject {
 		std::string _code;
 		OPT(DateTime) _startDate;
 		OPT(DateTime) _endDate;
+		std::string _sourceID;
 		OPT(RestrictedStatusType) _restrictedStatus;
 		std::string _alternateCode;
 		std::string _historicCode;
 
 		// Aggregations
+		std::vector<IdentifierPtr> _identifiers;
 		std::vector<CommentPtr> _comments;
 		std::vector<DataAvailabilityPtr> _dataAvailabilitys;
 };

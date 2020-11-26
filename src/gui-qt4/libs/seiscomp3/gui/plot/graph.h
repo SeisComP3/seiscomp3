@@ -129,7 +129,7 @@ class SC_GUI_API Graph : public QObject {
 		 *             polygon does not necessarily match the number of points
 		 *             in the graph due to clipping.
 		 */
-		void unproject(QPolygonF &poly) const;
+		virtual void unproject(QPolygonF &poly) const;
 
 
 	// ----------------------------------------------------------------------

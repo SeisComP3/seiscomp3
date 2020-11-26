@@ -76,12 +76,12 @@ class Decimation : public Core::BaseObject {
 		//! XML tag: Delay
 		void setDelay(const FloatType& delay);
 		FloatType& delay();
-		FloatType delay() const;
+		const FloatType& delay() const;
 
 		//! XML tag: Correction
 		void setCorrection(const FloatType& correction);
 		FloatType& correction();
-		FloatType correction() const;
+		const FloatType& correction() const;
 
 
 	// ------------------------------------------------------------------

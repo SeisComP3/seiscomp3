@@ -193,7 +193,7 @@ Plugin Interface
 
 In order to implement a SeedLink plugin a developer needs two files included in the SeisComP distribution: plugin.h and plugin.c. In these files the following public functions are defined:
 
-.. c:function:: int send raw3(const char *station, const char *channel, const struct ptime *pt, int usec_correction, int timing_quality, const int32_t *dataptr, intnumber_of_samples)
+.. c:function:: int send_raw3(const char *station, const char *channel, const struct ptime *pt, int usec_correction, int timing_quality, const int32_t *dataptr, intnumber_of_samples)
 
 is used to send a raw packet (array of 32-bit integer samples) to SeedLink. The parameters are:
 
@@ -228,7 +228,7 @@ Special cases:
 
 same as send_raw3() except time is measured in seconds since 1/1/1970 (depoch). Leap seconds are ignored.
 
-.. c:function:: int send flush3(const char *station, const char *channel)
+.. c:function:: int send_flush3(const char *station, const char *channel)
 
 flushes all Mini-SEED data streams associated with a channel. All buffered data is sent out creating "unfilled" Mini-SEED records if necessary. The parameters are:
 
@@ -238,7 +238,7 @@ station
 Channel
     channel ID.
 
-.. c:function:: int send_mseed(const char *station, const void *dataptr, int packet size)
+.. c:function:: int send_mseed(const char *station, const void *dataptr, int packet_size)
 
 is used to send a Mini-SEED packet to SeedLink. Such packets are not further processed. The  parameters are:
 

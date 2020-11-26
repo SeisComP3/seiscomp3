@@ -11,7 +11,7 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
-import xmlwrap as _xmlwrap
+from . import xmlwrap as _xmlwrap
 from seiscomp.db import DBError
 
 try:
@@ -118,16 +118,16 @@ def _wfq_out(xqc, wfq):
     return True
 
 def _xmldoc_out(xqc, qc):
-    for i in qc.log.itervalues():
-        for j in i.itervalues():
+    for i in qc.log.values():
+        for j in i.values():
             _log_out(xqc, j)
 
-    for i in qc.outage.itervalues():
-        for j in i.itervalues():
+    for i in qc.outage.values():
+        for j in i.values():
             _outage_out(xqc, j)
 
-    for i in qc.waveform_quality.itervalues():
-        for j in i.itervalues():
+    for i in qc.waveform_quality.values():
+        for j in i.values():
             _wfq_out(xqc, j)
 
 #***************************************************************************** 
@@ -145,7 +145,7 @@ class _IncrementalParser(object):
     def close(self):
         root = self.__p.close()
         if root.tag != _root_tag:
-            raise DBError, "unrecognized root element: " + root.tag
+            raise DBError("unrecognized root element: " + root.tag)
 
         xqc = _xmlwrap.xml_quality_control(root)
         _xmldoc_in(xqc, self.__qc)
@@ -161,7 +161,7 @@ def xml_in(qc, src):
     doc = ET.parse(src)
     root = doc.getroot()
     if root.tag != _root_tag:
-        raise DBError, "unrecognized root element: " + root.tag
+        raise DBError("unrecognized root element: " + root.tag)
 
     xqc = _xmlwrap.xml_quality_control(root)
     _xmldoc_in(xqc, qc)
@@ -187,22 +187,22 @@ def xml_out(qc, dest, stylesheet=None, indent=True):
 
     _xmldoc_out(xqc, qc)
 
-    if isinstance(dest, basestring):
-        fd = file(dest, "w")
+    if isinstance(dest, str):
+        fd = open(dest, "wb")
     elif hasattr(dest, "write"):
         fd = dest
     else:
-        raise TypeError, "invalid file object"
+        raise TypeError("invalid file object")
 
     try:
         filename = fd.name
     except AttributeError:
         filename = '<???>'
 
-    fd.write('<?xml version="1.0" encoding="utf-8"?>\n')
+    fd.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
 
     if stylesheet is not None:
-        fd.write('<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
+        fd.write(b'<?xml-stylesheet type="application/xml" href="%s"?>\n' % \
             (stylesheet,))
     
     if indent is True:
@@ -210,6 +210,6 @@ def xml_out(qc, dest, stylesheet=None, indent=True):
     
     ET.ElementTree(xqc._element).write(fd, encoding="utf-8")
     
-    if isinstance(dest, basestring):
+    if isinstance(dest, str):
         fd.close()
 

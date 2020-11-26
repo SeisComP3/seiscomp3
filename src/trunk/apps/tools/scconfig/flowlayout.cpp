@@ -38,7 +38,7 @@
  **
  ****************************************************************************/
 
-#include <QtGui>
+#include <QWidget>
 #include <iostream>
 
 #include "flowlayout.h"

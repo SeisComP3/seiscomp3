@@ -1,7 +1,7 @@
 import os
 
 '''
-Plugin handler for the Quanterra/330 plugin.
+Plugin handler for the EarthData PS6-24 plugin.
 '''
 class SeedlinkPluginHandler:
 	# Create defaults
@@ -20,7 +20,6 @@ class SeedlinkPluginHandler:
 
 		# Key is per station and configuration settings
 		key = ";".join([
-			str(seedlink.param('seedlink.station.id')),
 			str(seedlink.param('sources.ps2400_eth.address')),
 			str(seedlink.param('sources.ps2400_eth.port'))])
 		return key

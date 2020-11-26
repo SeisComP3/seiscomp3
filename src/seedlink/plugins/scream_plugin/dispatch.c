@@ -73,19 +73,22 @@ dispatch (gcf_block b, int recno)
   chid = -1;
   for ( mp = rootmap; mp != NULL; mp=mp->next ) {
         if (strncmp (b->strid, mp->stream, strlen(mp->stream)) == 0 ) {
+             char sta_id[11];
+             snprintf(sta_id, 11, "%s.%s", mp->network, mp->station);
+
     	     if (mp->sysid != NULL)
 	     {
 	          if (strncmp(b->sysid, mp->sysid, strlen(mp->sysid)) == 0)
 		  {
-		       printf("Sending raw epoch: %s.%s @ %d Hz\n", mp->station, mp->channel, b->sample_rate);
-                       send_raw_depoch ( mp->station, mp->channel, b->estart, 0, -1, b->data, b->samples);
+		       /*printf("Sending raw epoch: %s.%s.%s @ %d Hz\n", mp->network, mp->station, mp->channel, b->sample_rate);*/
+                       send_raw_depoch ( sta_id, mp->channel, b->estart, 0, -1, b->data, b->samples);
                        chid=mp->id;
 		  }
 	     }
 	     else
 	     {
-	         printf("Sending raw epoch: %s.%s @ %d Hz\n", mp->station, mp->channel, b->sample_rate);
-                 send_raw_depoch ( mp->station, mp->channel, b->estart, 0, -1, b->data, b->samples);
+	         /*printf("Sending raw epoch: %s.%s @ %d Hz\n", mp->station, mp->channel, b->sample_rate);*/
+                 send_raw_depoch ( sta_id, mp->channel, b->estart, 0, -1, b->data, b->samples);
                  chid=mp->id;
 	     }
         }

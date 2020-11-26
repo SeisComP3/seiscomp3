@@ -15,6 +15,7 @@
 #include <fdsnxml/unitstype.h>
 #include <fdsnxml/azimuthtype.h>
 #include <string>
+#include <fdsnxml/floattype.h>
 #include <fdsnxml/basenode.h>
 #include <fdsnxml/longitudetype.h>
 #include <fdsnxml/distancetype.h>
@@ -33,6 +34,7 @@ namespace Seiscomp {
 namespace FDSNXML {
 
 DEFINE_SMARTPOINTER(Output);
+DEFINE_SMARTPOINTER(Equipment);
 
 
 
@@ -114,6 +116,13 @@ class Channel : public BaseNode {
 		DipType& dip();
 		const DipType& dip() const;
 
+		//! Elevation of the water surface in meters for underwater sites, where 0
+		//! is sea level.
+		//! XML tag: waterLevel
+		void setWaterLevel(const OPT(FloatType)& waterLevel);
+		FloatType& waterLevel();
+		const FloatType& waterLevel() const;
+
 		//! XML tag: SampleRate
 		void setSampleRate(const OPT(SampleRateType)& sampleRate);
 		SampleRateType& sampleRate();
@@ -123,11 +132,6 @@ class Channel : public BaseNode {
 		void setSampleRateRatio(const OPT(SampleRateRatioType)& sampleRateRatio);
 		SampleRateRatioType& sampleRateRatio();
 		const SampleRateRatioType& sampleRateRatio() const;
-
-		//! The storage format of the recorded data (e.g. SEED).
-		//! XML tag: StorageFormat
-		void setStorageFormat(const std::string& storageFormat);
-		const std::string& storageFormat() const;
 
 		//! A tolerance value, measured in seconds per sample, used as a threshold
 		//! for time error detection in data from the channel.
@@ -156,11 +160,6 @@ class Channel : public BaseNode {
 		Equipment& dataLogger();
 		const Equipment& dataLogger() const;
 
-		//! XML tag: Equipment
-		void setEquipment(const OPT(Equipment)& equipment);
-		Equipment& equipment();
-		const Equipment& equipment() const;
-
 		//! XML tag: Response
 		void setResponse(const OPT(Response)& response);
 		Response& response();
@@ -184,6 +183,7 @@ class Channel : public BaseNode {
 		 *               or it already has another parent
 		 */
 		bool addType(Output *obj);
+		bool addEquipment(Equipment *obj);
 
 		/**
 		 * Removes an object.
@@ -193,6 +193,7 @@ class Channel : public BaseNode {
 		 *               because it does not exist in the list
 		 */
 		bool removeType(Output *obj);
+		bool removeEquipment(Equipment *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -201,13 +202,16 @@ class Channel : public BaseNode {
 		 * @return false The index is out of bounds
 		 */
 		bool removeType(size_t i);
+		bool removeEquipment(size_t i);
 
 		//! Retrieve the number of objects of a particular class
 		size_t typeCount() const;
+		size_t equipmentCount() const;
 
 		//! Index access
 		//! @return The object at index i
 		Output* type(size_t i) const;
+		Equipment* equipment(size_t i) const;
 
 
 	// ------------------------------------------------------------------
@@ -221,20 +225,20 @@ class Channel : public BaseNode {
 		DistanceType _depth;
 		OPT(AzimuthType) _azimuth;
 		OPT(DipType) _dip;
+		OPT(FloatType) _waterLevel;
 		OPT(SampleRateType) _sampleRate;
 		OPT(SampleRateRatioType) _sampleRateRatio;
-		std::string _storageFormat;
 		OPT(ClockDriftType) _clockDrift;
 		OPT(UnitsType) _calibrationUnits;
 		OPT(Equipment) _sensor;
 		OPT(Equipment) _preAmplifier;
 		OPT(Equipment) _dataLogger;
-		OPT(Equipment) _equipment;
 		OPT(Response) _response;
 		std::string _locationCode;
 
 		// Aggregations
 		std::vector<OutputPtr> _types;
+		std::vector<EquipmentPtr> _equipments;
 };
 
 

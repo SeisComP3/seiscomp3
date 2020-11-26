@@ -224,7 +224,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RecordView::RecordView(QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+RecordView::RecordView(QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -237,7 +237,7 @@ RecordView::RecordView(QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
-                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+                       QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -250,7 +250,7 @@ RecordView::RecordView(const Seiscomp::Core::TimeWindow& tw,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordView::RecordView(const Seiscomp::Core::TimeSpan& ts,
-                       QWidget * parent, Qt::WFlags f, TimeScale *timeScale)
+                       QWidget * parent, Qt::WindowFlags f, TimeScale *timeScale)
  : QWidget(parent, f)
 , _timeScaleWidget(timeScale) {
 	setupUi();
@@ -479,6 +479,8 @@ void RecordView::setupUi() {
 	_autoInsertItems = true;
 	_alternatingColors = false;
 	_showAllRecords = false;
+	_showRecordBorders = false;
+	_recordBorderDrawMode = SCScheme.records.recordBorders.drawMode;
 	_autoScale = false;
 	_autoMaxScale = false;
 
@@ -860,11 +862,35 @@ void RecordView::showAllRecords(bool enable) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordView::showRecordBorders(bool enable) {
+	if ( _showRecordBorders == enable ) return;
+
+	_showRecordBorders = enable;
+
+	foreach (RecordViewItem* item, _items) {
+		item->widget()->showRecordBorders(_showRecordBorders);
+	}
+}
+
+void RecordView::setRecordBorderDrawMode(RecordWidget::RecordBorderDrawMode mode) {
+	if ( _recordBorderDrawMode == mode ) return;
+
+	foreach (RecordViewItem* item, _items) {
+		item->widget()->setRecordBorderDrawMode(_recordBorderDrawMode);
+	}
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordView::showScrollBar(bool show) {
 	if ( show )
 		_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	else
-	        _scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2657,7 +2683,7 @@ void RecordView::setFilter(Seiscomp::Math::Filtering::InPlaceFilter<float>* filt
 bool RecordView::setFilterByName(const QString& strFilter) {
 	Math::Filtering::InPlaceFilter<float> *f =
 		Math::Filtering::InPlaceFilter<float>::Create(strFilter.toStdString());
-	
+
 	if ( !f )
 		return false;
 	
@@ -2751,10 +2777,15 @@ void RecordView::dragEnterEvent(QDragEnterEvent *event) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordView::dropEvent(QDropEvent *event) {
 	if ( event->mimeData()->hasFormat("text/plain") ) {
-		if ( setFilterByName(event->mimeData()->text()) ) {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
+		QString strFilter = event->mimeData()->text();
+#else
+		QString strFilter = event->mimeData()->data("text/plain");
+#endif
+		if ( setFilterByName(strFilter) ) {
 			enableFilter(true);
 			event->acceptProposedAction();
-			emit filterChanged(event->mimeData()->text());
+			emit filterChanged(strFilter);
 		}
 	}
 }
@@ -2911,7 +2942,7 @@ void RecordView::setDefaultActions() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RecordView::setDataSource(const QString& streamURL) {
 	closeThread();
-	_thread = new RecordStreamThread((const char*)streamURL.toAscii());
+	_thread = new RecordStreamThread((const char*)streamURL.toLatin1());
 
 	connect(_thread, SIGNAL(receivedRecord(Seiscomp::Record*)),
 	        this, SLOT(feed(Seiscomp::Record*)));

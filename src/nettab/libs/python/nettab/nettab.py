@@ -26,6 +26,7 @@ from seiscomp import logs
 
 # Compatibillity for python 2.3
 import sys
+from functools import reduce
 if sys.version_info < (2,4): from sets import Set as set
 
 def isPyVersion(major, minor):
@@ -86,7 +87,7 @@ def _parse_paz(npaz, s):
     while pos < len(s):
         m = _rx_paz.match(s, pos)
         if m is None:
-            raise NettabError, "error parsing PAZ at '" + s[pos:] + "'"
+            raise NettabError("error parsing PAZ at '" + s[pos:] + "'")
 
         try:
             if len(m.group(1)) > 0:
@@ -101,16 +102,16 @@ def _parse_paz(npaz, s):
             float(iv)
 
         except ValueError:
-            raise NettabError, "error parsing PAZ at '" + s[pos:] + "'"
+            raise NettabError("error parsing PAZ at '" + s[pos:] + "'")
 
-        for i in xrange(0, x):
+        for i in range(0, x):
             c.append((rv, iv))
         
         n += x
         pos = m.end()
     
     if n != npaz:
-        raise NettabError, "expected %d PAZ, found %d" % (npaz, n)
+        raise NettabError("expected %d PAZ, found %d" % (npaz, n))
 
     return c
 
@@ -138,7 +139,7 @@ def _parse_date(datestr):
 
     m = _rx_datetime.match(datestr)
     if not m:
-        raise ValueError, "invalid date: " + datestr
+        raise ValueError("invalid date: " + datestr)
 
     try:
         year = int(m.group(1))
@@ -155,7 +156,7 @@ def _parse_date(datestr):
         return _datetime(year, doy, hour, minute)
 
     except ValueError:
-        raise ValueError, "invalid date: " + datestr
+        raise ValueError("invalid date: " + datestr)
 
 def _cmptime(t1, t2):
     if t1 is None and t2 is None:
@@ -241,8 +242,8 @@ class _FIR(object):
             try:
                 fd = open(path + self.name)
 
-            except IOError, e:
-                raise NettabError, "cannot read %s%s: %s" % (path, self.name, str(e))
+            except IOError as e:
+                raise NettabError("cannot read %s%s: %s" % (path, self.name, str(e)))
 
             try:
                 if self.sym == 'B':
@@ -257,13 +258,13 @@ class _FIR(object):
                 try:
                     coeff_split = fd.read().split()
                     if len(coeff_split) != real_ncf * 3:
-                        raise NettabError, "invalid number of coefficients in %s%s" % (path, self.name)
+                        raise NettabError("invalid number of coefficients in %s%s" % (path, self.name))
 
                     coeff_strlist = [ coeff_split[3 * i + 1] for i in range(real_ncf) ]
-                    coeff = map(float, coeff_strlist)
+                    coeff = list(map(float, coeff_strlist))
 
-                except (TypeError, ValueError), e:
-                    raise NettabError, "error reading %s%s: %s" % (path, self.name, str(e))
+                except (TypeError, ValueError) as e:
+                    raise NettabError("error reading %s%s: %s" % (path, self.name, str(e)))
 
             finally:
                 fd.close()
@@ -312,10 +313,10 @@ class _Calibration(object):
     def __init__(self, ns, id, p, o):
         self.ns = ns
         self.id = id
-        self.gain = map(float, p[:3])
+        self.gain = list(map(float, p[:3]))
 
     def update_inventory(self, obj, sn, gain_freq):
-        for i in xrange(3):
+        for i in range(3):
            try:
                ical = obj.calibration[sn][i][_EPOCH_DATE]
 
@@ -432,8 +433,8 @@ class _Datalogger(object):
         for f in f_list:
             if isinstance(f, _DIGIPAZ):
                 if dfc:
-                    raise NettabError, "%s: cannot add analogue filter %s after digital filters %s" % \
-                      (self.id, f.id, str([ x.id for x in dfc ]))
+                    raise NettabError("%s: cannot add analogue filter %s after digital filters %s" % \
+                      (self.id, f.id, str([ x.id for x in dfc ])))
 
                 afc.append(f.publicID)
 
@@ -459,7 +460,7 @@ class _Datalogger(object):
 
         gain = self.gain * gain_mult
 
-        for (pri_rate, pri_deci) in self.decimation.iteritems():
+        for (pri_rate, pri_deci) in self.decimation.items():
             try:
                 f_list = pri_deci[(rate, rate_div)]
                 break
@@ -582,13 +583,13 @@ class _InstObject(object):
             try:
                 self.__obj = cls(self.__ns, id, self.__prop, objs)
         
-            except (TypeError, ValueError), e:
-                raise NettabError, "error constructing %s %s: %s" % \
-                  (cls.__name__[1:], id, str(e))
+            except (TypeError, ValueError) as e:
+                raise NettabError("error constructing %s %s: %s" % \
+                  (cls.__name__[1:], id, str(e)))
 
         elif self.__obj.__class__.__name__ != cls.__name__:
-            raise NettabError, "cannot instantiate %s %s: already instantiated as %s" % \
-              (cls.__name__[1:], id, self.__obj.__class__.__name__[1:])
+            raise NettabError("cannot instantiate %s %s: already instantiated as %s" % \
+              (cls.__name__[1:], id, self.__obj.__class__.__name__[1:]))
 
         return self.__obj
 
@@ -599,7 +600,7 @@ class _InstObjects(object):
 
     def add(self, id, prop):
         if id in self.__objs:
-            raise NettabError, "multiple definitions of %s" % (id,)
+            raise NettabError("multiple definitions of %s" % (id,))
 
         self.__objs[id] = _InstObject(self.__ns, prop)
 
@@ -615,21 +616,21 @@ class _InstObjects(object):
     def get(self, cls, id):
         obj = self.trytoget(cls, id)
         if obj is None:
-            raise NettabError, "cannot find %s %s" % (cls.__name__[1:], id)
+            raise NettabError("cannot find %s %s" % (cls.__name__[1:], id))
 
         return obj
 
     def find(self, cls, name):
         found = None
-        for (id, obj) in self.__objs.iteritems():
+        for (id, obj) in self.__objs.items():
             if ('_' + id).endswith('_' + name):
                 if found is not None:
-                    raise NettabError, "%s matches multiple objects" % (name,)
+                    raise NettabError("%s matches multiple objects" % (name,))
 
                 found = obj.get(cls, id, self)
 
         if found is None:
-            raise NettabError, "cannot find %s %s" % (cls.__name__[1:], name)
+            raise NettabError("cannot find %s %s" % (cls.__name__[1:], name))
 
         return found
 
@@ -660,11 +661,11 @@ class Instruments(object):
                     del row['id']
                     self.__dl_attr[id] = row
 
-            except KeyError, e:
-                raise NettabError, "column %s missing in %s" % (str(e), file)
+            except KeyError as e:
+                raise NettabError("column %s missing in %s" % (str(e), file))
 
-            except (TypeError, ValueError), e:
-                raise NettabError, "error reading %s: %s" % (file, str(e))
+            except (TypeError, ValueError) as e:
+                raise NettabError("error reading %s: %s" % (file, str(e)))
 
         finally:
             fd.close()
@@ -707,11 +708,11 @@ class Instruments(object):
 
                     self.__sm_attr[id] = row
 
-            except KeyError, e:
-                raise NettabError, "column %s missing in %s" % (str(e), file)
+            except KeyError as e:
+                raise NettabError("column %s missing in %s" % (str(e), file))
 
-            except (TypeError, ValueError), e:
-                raise NettabError, "error reading %s: %s" % (file, str(e))
+            except (TypeError, ValueError) as e:
+                raise NettabError("error reading %s: %s" % (file, str(e)))
 
         finally:
             fd.close()
@@ -741,8 +742,8 @@ class Instruments(object):
 
         except KeyError:
             dl = self.__objects.find(_Datalogger, dlname)
-            for (pri_rate, pri_deci) in dl.decimation.iteritems():
-                for (f_rate, f_list) in pri_deci.iteritems():
+            for (pri_rate, pri_deci) in dl.decimation.items():
+                for (f_rate, f_list) in pri_deci.items():
                     for f in f_list:
                         if f.id not in self.__flinst:
                             f.update_inventory(inv, self.__path)
@@ -793,15 +794,15 @@ class Instruments(object):
                         id = idline[0].strip()
                         if id and id[0] != '#':
                             if len(idline) != 2:
-                                raise NettabError, "parse error"
+                                raise NettabError("parse error")
 
                             self.__objects.add(idline[0].strip(), idline[1].split())
 
                     line = fd.readline()
                     lineno += 1
 
-            except (NettabError, TypeError, ValueError), e:
-                raise NettabError, "%s:%d: %s" % (file, lineno, str(e))
+            except (NettabError, TypeError, ValueError) as e:
+                raise NettabError("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()
@@ -819,9 +820,9 @@ class _Stream(object):
                 self.dlname, self.dlsn, self.dlgain_mult, self.smname, self.smsn, self.smgain,
                 self.rate, self.rate_div)
 
-        except NettabError, e:
-            raise NettabError, "%s_%s_%s_%s: %s" % (iloc.myStation.myNetwork.code,
-              iloc.myStation.code, iloc.code, self.code, str(e))
+        except NettabError as e:
+            raise NettabError("%s_%s_%s_%s: %s" % (iloc.myStation.myNetwork.code,
+              iloc.myStation.code, iloc.code, self.code, str(e)))
 
         try:
             istrm = iloc.stream[self.code][self.start]
@@ -921,7 +922,7 @@ class _SensorLocation(object):
         iloc.elevation = self.elevation
         
         existing_streams = set()
-        for strm in self.__stream.itervalues():
+        for strm in self.__stream.values():
             strm.shared = shared
             for pat in restricted_exc.split():
                 if fnmatch.fnmatchcase(strm.code, pat):
@@ -933,8 +934,8 @@ class _SensorLocation(object):
             strm.update_inventory(instdb, inv, iloc)
             existing_streams.add((strm.code, strm.start))
 
-        for (strm_code, strm_tp) in iloc.stream.items():
-            for strm_start in strm_tp.keys():
+        for (strm_code, strm_tp) in list(iloc.stream.items()):
+            for strm_start in list(strm_tp.keys()):
                 if (strm_code, strm_start) not in existing_streams:
                     iloc.remove_stream(strm_code, strm_start)
 
@@ -979,13 +980,13 @@ class _Station(object):
         ista.remark = self.remark
         
         existing_sensor_locations = set()
-        for loc in self.__sensor_location.itervalues():
+        for loc in self.__sensor_location.values():
             loc.update_inventory(instdb, inv, ista, self.restricted, self.restricted_exc, 
                 self.shared)
             existing_sensor_locations.add((loc.code, loc.start))
         
-        for (loc_code, loc_tp) in ista.sensorLocation.items():
-            for loc_start in loc_tp.keys():
+        for (loc_code, loc_tp) in list(ista.sensorLocation.items()):
+            for loc_start in list(loc_tp.keys()):
                 if (loc_code, loc_start) not in existing_sensor_locations:
                     ista.remove_sensorLocation(loc_code, loc_start)
 
@@ -1003,18 +1004,18 @@ class _Station(object):
                 elif x[0] == 'T':
                     instrument_code = x[1:]
                 else:
-                    raise NettabError, "unknown code %s in %s" % (x[0], sampling)
+                    raise NettabError("unknown code %s in %s" % (x[0], sampling))
             
         for x in sampling[endPreamble+1:].split('/'):
             m = _rx_samp.match(x)
             if not m:
-                raise NettabError, "error parsing sampling %s at %s" % (sampling, x)
+                raise NettabError("error parsing sampling %s at %s" % (sampling, x))
                 
             try:
                 sample_rate = decimal.Decimal(m.group('sample_rate'))
 
             except decimal.InvalidOperation:
-                raise NettabError, "error parsing sampling %s at %s" % (sampling, x)
+                raise NettabError("error parsing sampling %s at %s" % (sampling, x))
 
             band_code = m.group('band_code')
             if not band_code:
@@ -1031,7 +1032,7 @@ class _Station(object):
                 elif sample_rate == decimal.Decimal("0.01"):
                     band_code = 'U'
                 else:
-                    raise NettabError, "could not determine band code for %s in %s" (x, sampling)
+                    raise NettabError("could not determine band code for %s in %s" (x, sampling))
             
             yield (( band_code + instrument_code, location_code ) +
                 _rational(sample_rate) + ("Steim" + compression_level,))
@@ -1044,7 +1045,7 @@ class _Station(object):
                 yield (n, code, float(azimuth), float(dip))
 
             except (TypeError, ValueError):
-                raise NettabError, "error parsing orientation %s at %s" % (orientation, x)
+                raise NettabError("error parsing orientation %s at %s" % (orientation, x))
 
             n = n + 1
 
@@ -1084,8 +1085,8 @@ class _Station(object):
             for (strm_code, loc_code, rate, rate_div, format) in self.__parse_sampling(samp):
                 try:
                     if self.__loc_coord[(loc_code, start)] != (lat, lon, elev):
-                        raise NettabError, "%s [%s] %d/%03d is already defined with different coordinates" % \
-                            (code, loc_code, start.year, start.utctimetuple()[7])
+                        raise NettabError("%s [%s] %d/%03d is already defined with different coordinates" % \
+                            (code, loc_code, start.year, start.utctimetuple()[7]))
 
                 except KeyError:
                     self.__loc_coord[(loc_code, start)] = (lat, lon, elev)
@@ -1129,7 +1130,7 @@ class _Network(object):
         inet.remark = self.remark
 
         existing_stations = set()
-        for sta_list in self.stations.itervalues():
+        for sta_list in self.stations.values():
             for sta in sta_list:
                 logs.debug("processing station %s %s %d/%03d" %
                   (self.code, sta.code, sta.start.year, sta.start.utctimetuple()[7]))
@@ -1137,8 +1138,8 @@ class _Network(object):
                 sta.update_inventory(instdb, inv, inet)
                 existing_stations.add((sta.code, sta.start))
 
-        for (sta_code, sta_tp) in inet.station.items():
-            for sta_start in sta_tp.keys():
+        for (sta_code, sta_tp) in list(inet.station.items()):
+            for sta_start in list(sta_tp.keys()):
                 if (sta_code, sta_start) not in existing_stations:
                     inet.remove_station(sta_code, sta_start)
     
@@ -1188,7 +1189,7 @@ class _Network(object):
                 orientation = "Z 0.0 -90.0; 1 %.1f 0.0; 2 %.1f 0.0" % (n_az, e_az)
 
             except (TypeError, ValueError):
-                raise NettabError, "invalid depth/azimuth: " + depth_azimuth
+                raise NettabError("invalid depth/azimuth: " + depth_azimuth)
 
         try:
             sta_list = self.stations[code]
@@ -1249,8 +1250,8 @@ class _VirtualNetwork(object):
         existing_sref = set()
         for (net_code, sta_code) in self.stations:
             try:
-               for net in inv.network[net_code].itervalues():
-                   for sta in net.station[sta_code].itervalues():
+               for net in inv.network[net_code].values():
+                   for sta in net.station[sta_code].values():
                        try:
                            igrp.stationReference[sta.publicID]
 
@@ -1263,7 +1264,7 @@ class _VirtualNetwork(object):
                 logs.error("virtual net %s contains nonexistent station %s_%s" % \
                     (self.code, net_code, sta_code))
         
-        for sta_id in igrp.stationReference.keys():
+        for sta_id in list(igrp.stationReference.keys()):
             if sta_id not in existing_sref:
                 igrp.remove_stationReference(sta_id)
 
@@ -1309,11 +1310,11 @@ class Nettab(object):
                     #self.__net_attr[(net_code, start)] = row
                     self.__net_attr[(net_code, _EPOCH_DATE)] = row
 
-            except KeyError, e:
-                raise NettabError, "column %s missing in %s" % (str(e), file)
+            except KeyError as e:
+                raise NettabError("column %s missing in %s" % (str(e), file))
 
-            except (TypeError, ValueError), e:
-                raise NettabError, "error reading %s: %s" % (file, str(e))
+            except (TypeError, ValueError) as e:
+                raise NettabError("error reading %s: %s" % (file, str(e)))
 
         finally:
             fd.close()
@@ -1350,11 +1351,11 @@ class Nettab(object):
 
                     self.__sta_attr[(net_code, sta_code, start)] = row
 
-            except KeyError, e:
-                raise NettabError, "column %s missing in %s" % (str(e), file)
+            except KeyError as e:
+                raise NettabError("column %s missing in %s" % (str(e), file))
 
-            except (TypeError, ValueError), e:
-                raise NettabError, "error reading %s: %s" % (file, str(e))
+            except (TypeError, ValueError) as e:
+                raise NettabError("error reading %s: %s" % (file, str(e)))
 
         finally:
             fd.close()
@@ -1369,7 +1370,7 @@ class Nettab(object):
                 while line:
                     m = _rx_statmap.match(line)
                     if m is None:
-                        raise NettabError, "parse error"
+                        raise NettabError("parse error")
 
                     (sta, net, archive_net, from_def, from_year, from_doy, to_def, to_year, to_doy) = m.groups()
 
@@ -1396,8 +1397,8 @@ class Nettab(object):
                     line = fd.readline()
                     lineno += 1
 
-            except (NettabError, TypeError, ValueError), e:
-                raise NettabError, "%s:%d: %s" % (file, lineno, str(e))
+            except (NettabError, TypeError, ValueError) as e:
+                raise NettabError("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()
@@ -1429,8 +1430,8 @@ class Nettab(object):
                     line = fd.readline()
                     lineno += 1
 
-            except (NettabError, TypeError, ValueError), e:
-                raise NettabError, "%s:%d: %s" % (file, lineno, str(e))
+            except (NettabError, TypeError, ValueError) as e:
+                raise NettabError("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()
@@ -1443,9 +1444,9 @@ class Nettab(object):
 
     def update_inventory(self, instdb, inv):
         updated_networks = set()
-        for net in self.__network.itervalues():
+        for net in self.__network.values():
             #net.restricted |= net.code in self.__access_net
-            for sta_list in net.stations.itervalues():
+            for sta_list in net.stations.values():
                 for sta in sta_list:
                     # sta.restricted = net.restricted # ??? or sta.code in self.__access_sta
                     if sta.restricted is None:
@@ -1457,18 +1458,18 @@ class Nettab(object):
             net.update_inventory(instdb, inv)
             updated_networks.add(net.code)
 
-        for (net_code, net_tp) in inv.network.items():
-            for net_start in net_tp.keys():
+        for (net_code, net_tp) in list(inv.network.items()):
+            for net_start in list(net_tp.keys()):
                 if net_code in updated_networks and \
                     (net_code, net_start) not in self.__network:
                     inv.remove_network(net_code, net_start)
         
         updated_vnets = set()
-        for vnet in self.__vnet.itervalues():
+        for vnet in self.__vnet.values():
             vnet.update_inventory(inv)
             updated_vnets.add(vnet.code)
 
-        for vnet_code in inv.stationGroup.keys():
+        for vnet_code in list(inv.stationGroup.keys()):
             if vnet_code not in updated_vnets:
                 inv.remove_stationGroup(vnet_code)
 
@@ -1488,7 +1489,7 @@ class Nettab(object):
         access_sta = {}
         existing_access = set()
 
-        for net in self.__network.itervalues():
+        for net in self.__network.values():
             #if net.restricted:
             try:
                 access_net[net.code] = self.__access_net[net.code] + self.__access_all
@@ -1496,7 +1497,7 @@ class Nettab(object):
             except KeyError:
                 access_net[net.code] = self.__access_all
 
-            for sta_code in net.stations.iterkeys():
+            for sta_code in net.stations.keys():
                 try:
                     access_sta[(net.code, sta_code)] = self.__access_sta[sta_code]
 
@@ -1506,18 +1507,18 @@ class Nettab(object):
                 except KeyError:
                     pass
 
-        for (net_code, user_list) in access_net.iteritems():
+        for (net_code, user_list) in access_net.items():
             self.__allow(rtn, net_code, "", user_list, existing_access)
 
-        for ((net_code, sta_code), user_list) in access_sta.iteritems():
+        for ((net_code, sta_code), user_list) in access_sta.items():
             self.__allow(rtn, net_code, sta_code, user_list, existing_access)
 
-        for acc_net in rtn.access.values():
-            for acc_sta in acc_net.values():
-                for acc_loc in acc_sta.values():
-                    for acc_user in acc_loc.values():
-                        for acc_start in acc_user.values():
-                            for acc in acc_start.values():
+        for acc_net in list(rtn.access.values()):
+            for acc_sta in list(acc_net.values()):
+                for acc_loc in list(acc_sta.values()):
+                    for acc_user in list(acc_loc.values()):
+                        for acc_start in list(acc_user.values()):
+                            for acc in list(acc_start.values()):
                                 if (acc.networkCode, acc.stationCode, acc.locationCode, acc.streamCode, acc.user, acc.start) not in existing_access:
                                     rtn.remove_access(acc.networkCode, acc.stationCode, acc.locationCode, acc.streamCode, acc.user, acc.start)
         
@@ -1599,13 +1600,13 @@ class Nettab(object):
                                   (file, lineno, " ".join(splitline[4:])))
 
                         else:
-                            raise NettabError, "invalid number of columns (%d)" % (len(splitline),)
+                            raise NettabError("invalid number of columns (%d)" % (len(splitline),))
 
                     line = fd.readline()
                     lineno += 1
 
-            except (NettabError, TypeError, ValueError), e:
-                raise NettabError, "%s:%d: %s" % (file, lineno, str(e))
+            except (NettabError, TypeError, ValueError) as e:
+                raise NettabError("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()
@@ -1635,8 +1636,8 @@ class Nettab(object):
                     line = fd.readline()
                     lineno += 1
 
-            except (NettabError, TypeError, ValueError), e:
-                raise NettabError, "%s:%d: %s" % (file, lineno, str(e))
+            except (NettabError, TypeError, ValueError) as e:
+                raise NettabError("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()

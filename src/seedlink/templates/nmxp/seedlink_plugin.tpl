@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/nmxptool -H $sources.nmxp.a
              timeout = 0
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.nmxp.proc"
 

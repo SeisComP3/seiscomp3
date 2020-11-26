@@ -19,11 +19,18 @@
 #include <seiscomp3/system/schema.h>
 #endif
 
-#include <QtGui>
+#include <QDialog>
+#include <QProcess>
+#include <QStack>
+#include <QWidget>
+
 #include <string>
 #include <list>
 #include <map>
 
+class QFrame;
+class QLabel;
+class QTextEdit;
 
 typedef std::list<Seiscomp::System::SchemaSetupGroup*> SetupGroups;
 typedef std::map<std::string, SetupGroups> WizardModel;

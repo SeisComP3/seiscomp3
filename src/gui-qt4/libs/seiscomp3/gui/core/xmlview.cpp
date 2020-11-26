@@ -12,7 +12,12 @@
 
 
 #include <seiscomp3/gui/core/xmlview.h>
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QtXml>
+#else
+#include <QtXml/QtXml>
+#endif
 
 
 namespace Seiscomp {
@@ -90,7 +95,7 @@ class XmlHandler : public QXmlDefaultHandler {
 };
 
 
-XMLView::XMLView(QWidget * parent, Qt::WFlags f, bool deleteOnClose)
+XMLView::XMLView(QWidget * parent, Qt::WindowFlags f, bool deleteOnClose)
 : QWidget(parent, f) {
 	if ( deleteOnClose )
 		setAttribute(Qt::WA_DeleteOnClose);

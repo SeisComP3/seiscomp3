@@ -11,13 +11,12 @@
  ***************************************************************************/
 
 
-
-
-
 #ifndef __APPS_PICKER_CONFIG_H__
 #define __APPS_PICKER_CONFIG_H__
 
+
 #include <string>
+#include <set>
 
 
 namespace Seiscomp {
@@ -138,12 +137,17 @@ class Config {
 		// The secondary picker type to use
 		std::string secondaryPickerType;
 
+		// Feature extraction
+		std::string featureExtractionType;
+
 		// Whether kill previously started secondary pickers when a new
 		// primary pick has been declared
 		bool        killPendingSecondaryProcessors;
 
 		// Send detections as well if a picker is configured?
 		bool        sendDetections;
+
+		bool        extraPickComments;
 
 		// Accept historic data in real-time playbacks?
 		bool        playback;

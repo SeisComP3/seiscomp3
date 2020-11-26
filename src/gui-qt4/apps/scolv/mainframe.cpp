@@ -51,6 +51,7 @@
 #include <seiscomp3/core/datamessage.h>
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QSystemTrayIcon>
 
 #include <sstream>
@@ -147,8 +148,13 @@ MainFrame::MainFrame(){
 
 	_actionConfigureAcquisition = new QAction(this);
 	_actionConfigureAcquisition->setObjectName(QString::fromUtf8("configureAcquisition"));
+#if QT_VERSION >= 0x050000
+	_actionConfigureAcquisition->setShortcut(QApplication::translate("MainWindow", "F3", 0));
+	_actionConfigureAcquisition->setText(QApplication::translate("MainWindow", "Configure &OriginLocatorView...", 0));
+#else
 	_actionConfigureAcquisition->setShortcut(QApplication::translate("MainWindow", "F3", 0, QApplication::UnicodeUTF8));
 	_actionConfigureAcquisition->setText(QApplication::translate("MainWindow", "Configure &OriginLocatorView...", 0, QApplication::UnicodeUTF8));
+#endif
 
 	addAction(_actionConfigureAcquisition);
 
@@ -516,7 +522,7 @@ MainFrame::MainFrame(){
 			QString filter = (*it).c_str();
 			QStringList tokens = filter.split(";");
 			if ( tokens.size() != 2 ) {
-				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toAscii());
+				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toLatin1());
 				continue;
 			}
 
@@ -564,7 +570,8 @@ MainFrame::MainFrame(){
 			QString filter = (*it).c_str();
 			QStringList tokens = filter.split(";");
 			if ( tokens.size() != 2 ) {
-				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s", (const char*)filter.toAscii());
+				SEISCOMP_ERROR("Wrong filter string, expecting ';' to seperate name and definition: %s",
+				               (const char*)filter.toLatin1());
 				continue;
 			}
 
@@ -612,6 +619,9 @@ MainFrame::MainFrame(){
 
 	connect(_originLocator, SIGNAL(magnitudesAdded(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        _magnitudes, SLOT(reload()));
+
+	connect(_magnitudes, SIGNAL(magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*)),
+	        _originLocator, SLOT(magnitudeSelected(const QString &, Seiscomp::DataModel::Magnitude*)));
 
 	connect(_originLocator, SIGNAL(artificalOriginCreated(Seiscomp::DataModel::Origin*)),
 	        this, SLOT(setArtificialOrigin(Seiscomp::DataModel::Origin*)));
@@ -775,11 +785,15 @@ MainFrame::MainFrame(){
 	        _originLocator, SLOT(undo()));
 	connect(_ui.actionRedo, SIGNAL(triggered(bool)),
 	        _originLocator, SLOT(redo()));
+	connect(_ui.actionPreviousEvent, SIGNAL(triggered(bool)),
+	        _eventList, SLOT(setPreviousEvent()));
+	connect(_ui.actionNextEvent, SIGNAL(triggered(bool)),
+	        _eventList, SLOT(setNextEvent()));
 	connect(_ui.actionCreateArtificialOrigin, SIGNAL(triggered(bool)),
 	        _originLocator, SLOT(createArtificialOrigin()));
 	connect(_ui.actionOpen, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
 	connect(_ui.actionSave, SIGNAL(triggered(bool)), this, SLOT(fileSave()));
-	connect(_ui.actionQuit, SIGNAL(triggered(bool)), SCApp, SLOT(quit()));
+	connect(_ui.actionQuit, SIGNAL(triggered(bool)), qApp, SLOT(quit()));
 
 	connect(_eventList, SIGNAL(originSelected(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        this, SLOT(setData(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));

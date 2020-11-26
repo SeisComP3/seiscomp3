@@ -29,6 +29,9 @@
 
 #include <seiscomp3/seismology/regions.h>
 
+#include <QMenu>
+#include <QMessageBox>
+
 #ifdef WIN32
 #define snprintf _snprintf
 #endif
@@ -52,8 +55,10 @@ MAKEENUM(
 		OL_LAT,
 		OL_LON,
 		OL_DEPTH,
+		OL_DEPTH_TYPE,
 		OL_RMS,
-		OL_TYPE,
+		OL_STAT,
+		OL_METHOD,
 		OL_AGENCY,
 		OL_AUTHOR,
 		OL_REGION
@@ -65,8 +70,10 @@ MAKEENUM(
 		"Lat.",
 		"Lon.",
 		"Depth",
+		"DType",
 		"RMS",
 		"Stat",
+		"Method",
 		"Agency",
 		"Author",
 		"Region"
@@ -80,7 +87,8 @@ int OriginColAligns[OriginListColumns::Quantity] = {
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
 	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
@@ -94,11 +102,29 @@ bool OriginColBold[OriginListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	false,
 	true,
 	true,
 	false,
 	false,
 	false
+};
+
+
+bool OriginColVisible[OriginListColumns::Quantity] = {
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true
 };
 
 
@@ -110,6 +136,7 @@ MAKEENUM(
 		MLC_VALUE,
 		MLC_NUM,
 		MLC_RMS,
+		MLC_STAT,
 		MLC_AGENCY,
 		MLC_AUTHOR,
 		MLC_DUMMY
@@ -120,6 +147,7 @@ MAKEENUM(
 		"M",
 		"Count",
 		"RMS",
+		"Stat",
 		"Agency",
 		"Author",
 		""
@@ -131,7 +159,8 @@ int MagnitudeColAligns[OriginListColumns::Quantity] = {
 	Qt::AlignLeft | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
+	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter,
 	Qt::AlignHCenter | Qt::AlignVCenter
 };
@@ -150,35 +179,62 @@ MAKEENUM(
 	FMListColumns,
 	EVALUES(
 		FML_CREATED,
-		FML_GAP,
 		FML_COUNT,
 		FML_MISFIT,
 		FML_STDR,
+		FML_GAP,
 		FML_STAT,
+		FML_DC,
+		FML_CLVD,
+		FML_ISO,
+		FML_STRIKE1,
+		FML_DIP1,
+		FML_RAKE1,
+		FML_STRIKE2,
+		FML_DIP2,
+		FML_RAKE2,
 		FML_AGENCY,
 		FML_AUTHOR
 	),
 	ENAMES(
 		"Created(%1)",
-		"Azi. Gap",
 		"Count",
 		"Misfit",
 		"STDR",
+		"Azi. Gap(°)",
 		"Stat",
+		"DC(%)",
+		"CLVD(%)",
+		"ISO(%)",
+		"S1(°)",
+		"D1(°)",
+		"R1(°)",
+		"S2(°)",
+		"D2(°)",
+		"R2(°)",
 		"Agency",
 		"Author"
 	)
 );
 
 int FMColAligns[FMListColumns::Quantity] = {
-	Qt::AlignLeft | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignRight | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter,
-	Qt::AlignHCenter | Qt::AlignVCenter
+	Qt::AlignLeft | Qt::AlignVCenter, // CREATED
+	Qt::AlignCenter,                  // COUNT
+	Qt::AlignCenter,                  // MISFIT
+	Qt::AlignCenter,                  // STDR
+	Qt::AlignCenter,                  // GAP
+	Qt::AlignCenter,                  // STAT
+	Qt::AlignCenter,                  // DC
+	Qt::AlignCenter,                  // CLVD
+	Qt::AlignCenter,                  // ISO
+	Qt::AlignCenter,                  // STRIKE1
+	Qt::AlignCenter,                  // DIP1
+	Qt::AlignCenter,                  // RAKE1
+	Qt::AlignCenter,                  // STRIKE2
+	Qt::AlignCenter,                  // DIP2
+	Qt::AlignCenter,                  // RAKE2
+	Qt::AlignCenter,                  // AGENCY
+	Qt::AlignCenter                   // AUTHOR
 };
 
 bool FMColBold[FMListColumns::Quantity] = {
@@ -188,9 +244,64 @@ bool FMColBold[FMListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
 	false,
 	false
 };
+
+
+bool FMColVisible[FMListColumns::Quantity] = {
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true
+};
+
+
+#define POPULATE_COLUMN_INT(ENUM, DATA) \
+do {\
+	try {\
+		item->setText(_fmColumnMap[ENUM], QString("%1").arg(DATA));\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, DATA);\
+	}\
+	catch ( Core::ValueException& ) {\
+		item->setText(_fmColumnMap[ENUM], "-");\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, QVariant());\
+	}\
+} while (0)
+
+#define POPULATE_COLUMN_DOUBLE(ENUM, DATA, PREC) \
+do {\
+	try {\
+		item->setText(_fmColumnMap[ENUM], QString("%1").arg(DATA, 0, 'f', PREC));\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, DATA);\
+	}\
+	catch ( Core::ValueException& ) {\
+		item->setText(_fmColumnMap[ENUM], "-");\
+		item->setData(_fmColumnMap[ENUM], Qt::UserRole, QVariant());\
+	}\
+} while (0)
 
 
 
@@ -885,7 +996,8 @@ void EventEdit::init() {
 	for ( int i = 0; i < OriginListColumns::Quantity; ++i ) {
 		if ( i == _customColumn )
 			_originTableHeader << _customColumnLabel;
-		else if ( i == OL_CREATED || i == OL_TIME ) {
+
+		if ( i == OL_CREATED || i == OL_TIME ) {
 			if ( SCScheme.dateTime.useLocalTime )
 				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
 			else
@@ -1065,7 +1177,11 @@ void EventEdit::init() {
 	QHeaderView* header = _originTree->header();
 	header->setSortIndicatorShown(true);
 	header->setSortIndicator(_originColumnMap[OL_CREATED], Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortOriginItems(int)));
 
@@ -1073,15 +1189,23 @@ void EventEdit::init() {
 	_ui.treeMagnitudes->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	header = _ui.treeMagnitudes->header();
 	header->setSortIndicatorShown(true);
-	header->setSortIndicator(_originColumnMap[MLC_TIMESTAMP], Qt::DescendingOrder);
+	header->setSortIndicator(MLC_TIMESTAMP, Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
 	connect(header, SIGNAL(sectionClicked(int)),
 	        this, SLOT(sortMagnitudeItems(int)));
+
+	_originTree->header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
 	connect(_originTree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentOriginChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 	connect(_originTree, SIGNAL(customContextMenuRequested(const QPoint &)),
 	        this, SLOT(originTreeCustomContextMenu(const QPoint &)));
+	connect(_originTree->header(), SIGNAL(customContextMenuRequested(const QPoint &)),
+	        this, SLOT(originTreeHeaderCustomContextMenu(const QPoint &)));
 
 	connect(_ui.treeMagnitudes, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentMagnitudeChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
@@ -1117,8 +1241,15 @@ void EventEdit::init() {
 	header = _ui.fmTree->header();
 	header->setSortIndicatorShown(true);
 	header->setSortIndicator(_fmColumnMap[FML_CREATED], Qt::DescendingOrder);
+#if QT_VERSION >= 0x050000
+	header->setSectionsClickable(true);
+#else
 	header->setClickable(true);
+#endif
+	header->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(header, SIGNAL(sectionClicked(int)), this, SLOT(sortFMItems(int)));
+	connect(header, SIGNAL(customContextMenuRequested(const QPoint &)),
+	        this, SLOT(fmTreeHeaderCustomContextMenu(const QPoint &)));
 
 	connect(_ui.fmTree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 	        this, SLOT(currentFMChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
@@ -1234,7 +1365,7 @@ void EventEdit::onObjectModified(Object* object) {
 void EventEdit::addObject(const QString& parentID,
                           Object* obj) {
 	if ( !_currentEvent ) return;
-	const char *pid = (const char*)parentID.toAscii();
+	const char *pid = (const char*)parentID.toLatin1();
 
 	if ( _currentEvent->publicID() == pid ) {
 
@@ -1339,7 +1470,7 @@ void EventEdit::addObject(const QString& parentID,
 	else {
 		Comment *comment = Comment::Cast(obj);
 		if ( comment ) {
-			Origin *org = Origin::Find((const char*)parentID.toAscii());
+			Origin *org = Origin::Find((const char*)parentID.toLatin1());
 			if ( org ) updateOrigin(org);
 			return;
 		}
@@ -1370,7 +1501,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredOriginIdx != -1 ) {
 				if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(
-				         _preferredOriginIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredOriginIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredOrigin = false;
 			}
 
@@ -1381,7 +1512,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredMagnitudeIdx != -1 ) {
 				if ( _currentEvent->preferredMagnitudeID() == (const char*)_ui.treeMagnitudes->topLevelItem(
-				         _preferredMagnitudeIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredMagnitudeIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredMagnitude = false;
 			}
 
@@ -1390,7 +1521,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 			if ( _preferredFMIdx != -1 ) {
 				if ( _currentEvent->preferredFocalMechanismID() == (const char*)_ui.fmTree->topLevelItem(
-				         _preferredFMIdx)->data(0, Qt::UserRole).toString().toAscii() )
+				         _preferredFMIdx)->data(0, Qt::UserRole).toString().toLatin1() )
 					changePreferredFM = false;
 			}
 
@@ -1414,7 +1545,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 		Magnitude *publicMag = Magnitude::Find(mag->publicID());
 		if ( _currentOrigin && publicMag && publicMag->origin() == _currentOrigin ) {
 			for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
-				if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+				if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 					updateMagnitudeRow(i, mag);
 					//_ui.treeMagnitudes->topLevelItem(i)->setText(0, QString("%1: %2").arg(mag->type().c_str()).arg(mag->magnitude().value(), 0, 'f', 2));
 				}
@@ -1442,7 +1573,7 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 
 	Comment *comment = Comment::Cast(obj);
 	if ( comment ) {
-		Origin *org = Origin::Find((const char*)parentID.toAscii());
+		Origin *org = Origin::Find((const char*)parentID.toLatin1());
 		if ( org ) updateOrigin(org);
 		return;
 	}
@@ -1473,7 +1604,7 @@ void EventEdit::updatePreferredOriginIndex() {
 	}
 
 	for ( int i = 0; i < _originTree->topLevelItemCount(); ++i ) {
-		if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		if ( _currentEvent->preferredOriginID() == (const char*)_originTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _originTree->topLevelItem(i);
 			for ( int c = 0; c < _originColumnMap.count(); ++c ) {
 				QFont f = item->font(_originColumnMap[c]);
@@ -1506,7 +1637,7 @@ void EventEdit::updatePreferredMagnitudeIndex() {
 
 	for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
 		if ( _currentEvent->preferredMagnitudeID() ==
-		     (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		     (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _ui.treeMagnitudes->topLevelItem(i);
 			for ( int c = 0; c < item->columnCount(); ++c ) {
 				QFont f = item->font(c);
@@ -1539,7 +1670,7 @@ void EventEdit::updatePreferredFMIndex() {
 
 	for ( int i = 0; i < _ui.fmTree->topLevelItemCount(); ++i ) {
 		if ( _currentEvent->preferredFocalMechanismID() ==
-		     (const char*)_ui.fmTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() ) {
+		     (const char*)_ui.fmTree->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() ) {
 			QTreeWidgetItem *item = _ui.fmTree->topLevelItem(i);
 			for ( int c = 0; c < _fmColumnMap.count(); ++c ) {
 				QFont f = item->font(_fmColumnMap[c]);
@@ -1637,6 +1768,9 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 			storeOrigin(org.get());
 		}
 
+		for ( int i = 0; i < _originTree->columnCount(); ++i )
+			_originTree->resizeColumnToContents(i);
+
 		for ( size_t i = 0; i < _currentEvent->focalMechanismReferenceCount(); ++i ) {
 			FocalMechanismReference *ref = _currentEvent->focalMechanismReference(i);
 			FocalMechanismPtr fm = FocalMechanism::Find(ref->focalMechanismID());
@@ -1651,7 +1785,7 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 			for ( size_t i = 0; i < fm->momentTensorCount(); ++i ) {
 				std::string derivedID = fm->momentTensor(i)->derivedOriginID();
 				OriginPtr derived = Origin::Find(derivedID);
-				if ( !derived )
+				if ( !derived && _reader )
 					derived = Origin::Cast(_reader->getObject(Origin::TypeInfo(), derivedID));
 				if ( derived ) {
 					if ( derived->magnitudeCount() == 0 && _reader )
@@ -1662,6 +1796,9 @@ void EventEdit::setEvent(Event *event, Origin *origin) {
 
 			storeFM(fm.get());
 		}
+
+		for ( int i = 0; i < _ui.fmTree->columnCount(); ++i )
+			_ui.fmTree->resizeColumnToContents(i);
 
 		_blockObserver = false;
 		updateContent();
@@ -1835,23 +1972,30 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 		item->setData(_originColumnMap[OL_DEPTH], Qt::UserRole, QVariant());
 	}
 
+	try {
+		item->setText(_originColumnMap[OL_DEPTH_TYPE], org->depthType().toString());
+	}
+	catch ( ... ) {
+		item->setText(_originColumnMap[OL_DEPTH_TYPE], "-");
+	}
+
 	char stat = objectStatusToChar(org);
-	item->setText(_originColumnMap[OL_TYPE], QString("%1").arg(stat));
+	item->setText(_originColumnMap[OL_STAT], QString("%1").arg(stat));
 
 	try {
 		switch ( org->evaluationMode() ) {
 			case DataModel::AUTOMATIC:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 				break;
 			case DataModel::MANUAL:
-				item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.manual);
+				item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.manual);
 				break;
 			default:
 				break;
 		};
 	}
 	catch ( ... ) {
-		item->setTextColor(_originColumnMap[OL_TYPE], SCScheme.colors.originStatus.automatic);
+		item->setTextColor(_originColumnMap[OL_STAT], SCScheme.colors.originStatus.automatic);
 	}
 
 	try {
@@ -1877,6 +2021,7 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 		item->setText(_originColumnMap[OL_CREATED], "");
 	}
 
+	item->setText(_originColumnMap[OL_METHOD], org->methodID().c_str());
 	item->setText(_originColumnMap[OL_AGENCY], objectAgencyID(org).c_str());
 	item->setText(_originColumnMap[OL_AUTHOR], objectAuthor(org).c_str());
 	item->setText(_originColumnMap[OL_REGION], Regions::getRegionName(org->latitude(),org->longitude()).c_str());
@@ -1916,7 +2061,7 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 		item->setText(MLC_TIMESTAMP, "");
 	}
 
-	item->setText(MLC_VALUE, QString("%1").arg(mag->magnitude().value(), 0, 'f', 2));
+	item->setText(MLC_VALUE, QString("%1").arg(mag->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	item->setText(MLC_TYPE, mag->type().c_str());
 
 	try {
@@ -1933,6 +2078,11 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 		item->setText(MLC_RMS, "");
 	}
 
+	char stat = objectEvaluationStatusToChar(mag);
+	if ( stat )
+		item->setText(MLC_STAT, QString("%1").arg(stat));
+	else
+		item->setText(MLC_STAT, QString());
 	item->setText(MLC_AGENCY, objectAgencyID(mag).c_str());
 	item->setText(MLC_AUTHOR, objectAuthor(mag).c_str());
 
@@ -1966,41 +2116,36 @@ void EventEdit::updateFMRow(int row, FocalMechanism *fm) {
 
 	item->setData(0, Qt::UserRole, QString(fm->publicID().c_str()));
 
-	try {
-		item->setText(_fmColumnMap[FML_GAP], QString("%1").arg(fm->azimuthalGap(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_GAP], Qt::UserRole, fm->azimuthalGap());
+	POPULATE_COLUMN_INT(FML_GAP, int(fm->azimuthalGap()));
+	POPULATE_COLUMN_INT(FML_COUNT, fm->stationPolarityCount());
+
+	// Strike, dip, rake
+	POPULATE_COLUMN_DOUBLE(FML_STRIKE1, fm->nodalPlanes().nodalPlane1().strike().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_DIP1, fm->nodalPlanes().nodalPlane1().dip().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_RAKE1, fm->nodalPlanes().nodalPlane1().rake().value(), 0);
+
+	POPULATE_COLUMN_DOUBLE(FML_STRIKE2, fm->nodalPlanes().nodalPlane2().strike().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_DIP2, fm->nodalPlanes().nodalPlane2().dip().value(), 0);
+	POPULATE_COLUMN_DOUBLE(FML_RAKE2, fm->nodalPlanes().nodalPlane2().rake().value(), 0);
+
+	// DC, ISO, CLVD
+	if ( fm->momentTensorCount() > 0 ) {
+		POPULATE_COLUMN_DOUBLE(FML_DC, fm->momentTensor(0)->doubleCouple()*100.0, 0);
+		POPULATE_COLUMN_DOUBLE(FML_CLVD, fm->momentTensor(0)->clvd()*100.0, 0);
+		POPULATE_COLUMN_DOUBLE(FML_ISO, fm->momentTensor(0)->iso()*100.0, 0);
 	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_GAP], "-");
-		item->setData(_fmColumnMap[FML_GAP], Qt::UserRole, QVariant());
+	else {
+		item->setText(_fmColumnMap[FML_DC], "-");
+		item->setData(_fmColumnMap[FML_DC], Qt::UserRole, QVariant());
+		item->setText(_fmColumnMap[FML_ISO], "-");
+		item->setData(_fmColumnMap[FML_ISO], Qt::UserRole, QVariant());
+		item->setText(_fmColumnMap[FML_CLVD], "-");
+		item->setData(_fmColumnMap[FML_CLVD], Qt::UserRole, QVariant());
 	}
 
-	try {
-		item->setText(_fmColumnMap[FML_COUNT], QString("%1").arg(fm->stationPolarityCount()));
-		item->setData(_fmColumnMap[FML_COUNT], Qt::UserRole, fm->stationPolarityCount());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_COUNT], "-");
-		item->setData(_fmColumnMap[FML_COUNT], Qt::UserRole, QVariant());
-	}
-
-	try {
-		item->setText(_fmColumnMap[FML_MISFIT], QString("%1").arg(fm->misfit(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_MISFIT], Qt::UserRole, fm->misfit());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_MISFIT], "-");
-		item->setData(_fmColumnMap[FML_MISFIT], Qt::UserRole, QVariant());
-	}
-
-	try {
-		item->setText(_fmColumnMap[FML_STDR], QString("%1").arg(fm->stationDistributionRatio(), 0, 'f', 2));
-		item->setData(_fmColumnMap[FML_STDR], Qt::UserRole, fm->stationDistributionRatio());
-	}
-	catch ( Core::ValueException& ) {
-		item->setText(_fmColumnMap[FML_STDR], "-");
-		item->setData(_fmColumnMap[FML_STDR], Qt::UserRole, QVariant());
-	}
+	// Misfit
+	POPULATE_COLUMN_DOUBLE(FML_MISFIT, fm->misfit(), 2);
+	POPULATE_COLUMN_DOUBLE(FML_STDR, fm->stationDistributionRatio(), 2);
 
 	char stat = objectStatusToChar(fm);
 	item->setText(_fmColumnMap[FML_STAT], QString("%1").arg(stat));
@@ -2173,6 +2318,7 @@ void EventEdit::resetMagnitude() {
 	_ui.labelMagnitudeError->setText("");
 	_ui.labelMagnitudeCountValue->setText("-");
 	_ui.labelMagnitudeMethodValue->setText("");
+	_ui.labelMagnitudeStatus->setText(QString());
 
 	_ui.buttonFixMagnitudeType->setEnabled(false);
 	_ui.buttonReleaseMagnitudeType->setEnabled(false);
@@ -2373,7 +2519,7 @@ void EventEdit::addJournal(JournalEntry *entry) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::addMagnitude(Magnitude *mag) {
 	for ( int i = 0; i < _ui.treeMagnitudes->topLevelItemCount(); ++i ) {
-		if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toAscii() )
+		if ( mag->publicID() == (const char*)_ui.treeMagnitudes->topLevelItem(i)->data(0, Qt::UserRole).toString().toLatin1() )
 			return;
 	}
 
@@ -2575,7 +2721,7 @@ void EventEdit::updateOrigin() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::updateMagnitude() {
 	_ui.labelMagnitudeTypeValue->setText(_currentMagnitude->type().c_str());
-	_ui.labelMagnitudeValue->setText(QString("%1").arg(_currentMagnitude->magnitude().value(), 0, 'f', 2));
+	_ui.labelMagnitudeValue->setText(QString("%1").arg(_currentMagnitude->magnitude().value(), 0, 'f', SCScheme.precision.magnitude));
 	_ui.labelMagnitudeError->setText("");
 
 	try {
@@ -2596,6 +2742,13 @@ void EventEdit::updateMagnitude() {
 	}
 
 	_ui.labelMagnitudeMethodValue->setText(_currentMagnitude->methodID().c_str());
+
+	try {
+		_ui.labelMagnitudeStatus->setText(_currentMagnitude->evaluationStatus().toString());
+	}
+	catch ( ... ) {
+		_ui.labelMagnitudeStatus->setText(QString());
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3070,6 +3223,68 @@ void EventEdit::originTreeCustomContextMenu(const QPoint &pos) {
 	}
 	else if ( result == actionCopy )
 		SCApp->copyToClipboard(_originTree);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EventEdit::originTreeHeaderCustomContextMenu(const QPoint &pos) {
+	int count = _originTree->header()->count();
+	QAbstractItemModel *model = _originTree->header()->model();
+
+	QMenu menu;
+
+	QVector<QAction*> actions(count);
+
+	for ( int i = 0; i < count; ++i ) {
+		actions[i] = menu.addAction(model->headerData(i, Qt::Horizontal).toString());
+		actions[i]->setCheckable(true);
+		actions[i]->setChecked(!_originTree->header()->isSectionHidden(i));
+	}
+
+	QAction *result = menu.exec(_originTree->header()->mapToGlobal(pos));
+	if ( result == NULL ) return;
+
+	int section = actions.indexOf(result);
+	if ( section == -1 ) return;
+
+	for ( int i = 0; i < count; ++i )
+		OriginColVisible[i] = actions[i]->isChecked();
+
+	_originTree->header()->setSectionHidden(section, !OriginColVisible[section]);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EventEdit::fmTreeHeaderCustomContextMenu(const QPoint &pos) {
+	int count = _ui.fmTree->header()->count();
+	QAbstractItemModel *model = _ui.fmTree->header()->model();
+
+	QMenu menu;
+
+	QVector<QAction*> actions(count);
+
+	for ( int i = 0; i < count; ++i ) {
+		actions[i] = menu.addAction(model->headerData(i, Qt::Horizontal).toString());
+		actions[i]->setCheckable(true);
+		actions[i]->setChecked(!_ui.fmTree->header()->isSectionHidden(i));
+	}
+
+	QAction *result = menu.exec(_ui.fmTree->header()->mapToGlobal(pos));
+	if ( result == NULL ) return;
+
+	int section = actions.indexOf(result);
+	if ( section == -1 ) return;
+
+	for ( int i = 0; i < count; ++i )
+		FMColVisible[i] = actions[i]->isChecked();
+
+	_ui.fmTree->header()->setSectionHidden(section, !FMColVisible[section]);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

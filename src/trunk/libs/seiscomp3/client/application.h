@@ -342,6 +342,8 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 */
 		bool sync(const char *syncID = NULL);
 
+		bool waitEvent();
+
 
 	// ----------------------------------------------------------------------
 	//  Initialization configuration functions
@@ -972,6 +974,9 @@ inline const CommandLine& Application::commandline() const {
 	return *_commandline;
 }
 
+inline bool Application::waitEvent() {
+	return processEvent();
+}
 
 
 

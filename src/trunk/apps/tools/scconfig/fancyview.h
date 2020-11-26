@@ -78,7 +78,12 @@ class FancyView : public QAbstractItemView {
 	//  Protected slots
 	// ------------------------------------------------------------------
 	protected slots:
+#if QT_VERSION < 0x050000
 		void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+#else
+		void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+		                 const QVector<int> &roles = QVector<int>());
+#endif
 		void rowsInserted(const QModelIndex &parent, int start, int end);
 		void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
 

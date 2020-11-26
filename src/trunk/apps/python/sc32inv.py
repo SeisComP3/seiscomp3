@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -25,13 +25,14 @@ Options:
   -f             Enable formatted XML output
 """
 
+
 def main(argv):
     formatted = False
 
     # parse command line options
     try:
         opts, args = getopt.getopt(argv[1:], "hf", ["help"])
-    except getopt.error, msg:
+    except getopt.error as msg:
         sys.stderr.write("%s\n" % msg)
         sys.stderr.write("for help use --help\n")
         return 1
@@ -66,7 +67,7 @@ def main(argv):
         return 4
 
     if len(argv) < 2:
-        output_file = "-" 
+        output_file = "-"
     else:
         output_file = argv[1]
 
@@ -80,4 +81,3 @@ def main(argv):
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-

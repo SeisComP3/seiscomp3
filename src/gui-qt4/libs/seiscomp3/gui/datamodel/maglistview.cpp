@@ -30,6 +30,8 @@
 #include <seiscomp3/datamodel/station.h>
 #include <seiscomp3/datamodel/databasequery.h>
 
+#include <QProgressDialog>
+
 #include <iostream>
 
 
@@ -231,7 +233,7 @@ class NetMagTreeItem : public SchemeTreeItem {
 
 
 MagListView::MagListView(Seiscomp::DataModel::DatabaseQuery* reader, bool withOrigins,
-                             QWidget * parent, Qt::WFlags f)
+                             QWidget * parent, Qt::WindowFlags f)
  : QWidget(parent, f), _reader(reader), _withOrigins(withOrigins), _blockSelection(false) {
 	_ui.setupUi(this);
 
@@ -247,11 +249,11 @@ MagListView::MagListView(Seiscomp::DataModel::DatabaseQuery* reader, bool withOr
 	//! HACK show all events in list, even with type 'other'
 	QCheckBox* cbShowAll = new QCheckBox(this);
 	cbShowAll->setToolTip("hide other events");
-	cbShowAll->setTristate(FALSE);
+	cbShowAll->setTristate(false);
 	cbShowAll->setCheckState(Qt::Checked);
 	_ui.hboxLayout->addWidget(cbShowAll);
 	connect(cbShowAll, SIGNAL(stateChanged(int)), this,  SLOT(onShowAll()));
-	_showAll = FALSE;
+	_showAll = false;
 	//! HACK ------------1--------
 
 	connect(_ui.btnDbRead, SIGNAL(clicked()), this, SLOT(readFromDatabase()));
@@ -264,9 +266,9 @@ MagListView::MagListView(Seiscomp::DataModel::DatabaseQuery* reader, bool withOr
 void MagListView::onShowAll() {
 
 	if (_showAll)
-		_showAll = FALSE;
+		_showAll = false;
 	else
-		_showAll = TRUE;
+		_showAll = true;
 
 	readFromDatabase();
 

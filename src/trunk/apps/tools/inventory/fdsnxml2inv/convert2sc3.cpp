@@ -19,10 +19,16 @@
 #include <fdsnxml/station.h>
 #include <fdsnxml/channel.h>
 #include <fdsnxml/comment.h>
+#include <fdsnxml/agency.h>
+#include <fdsnxml/email.h>
+#include <fdsnxml/name.h>
+#include <fdsnxml/person.h>
 #include <fdsnxml/response.h>
 #include <fdsnxml/responsestage.h>
 #include <fdsnxml/coefficients.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
 #include <fdsnxml/fir.h>
+#include <fdsnxml/identifier.h>
 #include <fdsnxml/numeratorcoefficient.h>
 #include <fdsnxml/polynomial.h>
 #include <fdsnxml/polynomialcoefficient.h>
@@ -36,10 +42,13 @@
 #include <seiscomp3/datamodel/inventory_package.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <seiscomp3/io/archive/jsonarchive.h>
 #include <seiscomp3/utils/replace.h>
 #include <seiscomp3/logging/log.h>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 
 #include <iostream>
 #include <cstdio>
@@ -69,7 +78,18 @@ typedef pair<string,FDSNXML::Channel*> ChannelEpoch;
 
 
 bool epochLowerThan(const ChannelEpoch &e1, const ChannelEpoch &e2) {
-	return e1.second->startDate() < e2.second->startDate();
+	try {
+		return e1.second->startDate() < e2.second->startDate();
+	}
+	catch ( ... ) {
+		// At least one start date is not set
+		try {
+			e2.second->startDate();
+			return true;
+		}
+		catch ( ... ) {}
+		return false;
+	}
 }
 
 typedef list<ChannelEpoch> Epochs;
@@ -582,7 +602,7 @@ bool isAnalogDataloggerStage(const string &inputUnit, const string &outputUnit) 
 }
 
 
-bool isDigitalDataloggerStage(const string &inputUnit, const string &outputUnit) {
+bool isDigitalDataloggerStage(const string &, const string &outputUnit) {
 	return !isElectric(outputUnit);
 }
 
@@ -743,7 +763,7 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 	rf->setCoefficients(DataModel::RealArray());
 	vector<double> &numerators = rf->coefficients().content();
 	for ( size_t n = 0; n < coeff->numeratorCount(); ++n ) {
-		FDSNXML::FloatType *num = coeff->numerator(n);
+		FDSNXML::FloatNoUnitWithNumberType *num = coeff->numerator(n);
 		numerators.push_back(num->value());
 	}
 
@@ -785,7 +805,7 @@ DataModel::ResponseIIRPtr convertIIR(const FDSNXML::ResponseStage *resp,
 	vector<double> &numerators = rp->numerators().content();
 
 	for ( size_t n = 0; n < coeff->numeratorCount(); ++n ) {
-		FDSNXML::FloatType *num = coeff->numerator(n);
+		FDSNXML::FloatNoUnitWithNumberType *num = coeff->numerator(n);
 		numerators.push_back(num->value());
 	}
 
@@ -793,7 +813,7 @@ DataModel::ResponseIIRPtr convertIIR(const FDSNXML::ResponseStage *resp,
 	vector<double> &denominators = rp->denominators().content();
 
 	for ( size_t n = 0; n < coeff->denominatorCount(); ++n ) {
-		FDSNXML::FloatType *num = coeff->denominator(n);
+		FDSNXML::FloatNoUnitWithNumberType *num = coeff->denominator(n);
 		denominators.push_back(num->value());
 	}
 
@@ -1039,6 +1059,73 @@ createSensorLocation(const string &net, const string &sta, const string &code)
 }
 
 
+template<typename T1, typename T2>
+void populateComments(T1 sx, T2 sc) {
+	for ( size_t c = 0; c < sx->commentCount(); ++c ) {
+		FDSNXML::Comment *comment = sx->comment(c);
+		DataModel::CommentPtr sc_comment = new DataModel::Comment;
+		try { sc_comment->setId(Core::toString(comment->id())); }
+		catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
+
+		sc_comment->setText(comment->value());
+		try { sc_comment->setStart(comment->beginEffectiveTime()); }
+		catch ( ... ) {}
+		try { sc_comment->setEnd(comment->endEffectiveTime()); }
+		catch ( ... ) {}
+
+		if ( comment->authorCount() > 0 ) {
+			FDSNXML::Person *author = comment->author(0);
+			DataModel::CreationInfo ci;
+
+			if ( author->nameCount() > 0 ) {
+				try { ci.setAuthor(author->name(0)->text()); }
+				catch ( ... ) {}
+			}
+
+			if ( author->emailCount() > 0 ) {
+				try { ci.setAuthorURI(author->email(0)->text()); }
+				catch ( ... ) {}
+			}
+
+			if (author->agencyCount() > 0 ) {
+				try { ci.setAgencyID(author->agency(0)->text()); }
+				catch ( ... ) {}
+			}
+
+			sc_comment->setCreationInfo(ci);
+		}
+
+		sc->add(sc_comment.get());
+	}
+
+	for ( size_t c = 0; c < sx->identifierCount(); ++c ) {
+		FDSNXML::Identifier *identifier = sx->identifier(c);
+		DataModel::CommentPtr sc_comment = new DataModel::Comment;
+		sc_comment->setId("FDSNXML:Identifier/" + Core::toString(c));
+		std::string data;
+
+		{
+			boost::iostreams::stream_buffer<boost::iostreams::back_insert_device<std::string> > buf(data);
+			IO::JSONArchive ar;
+			ar.create(&buf, false);
+			string type = identifier->type();
+			string value = identifier->value();
+			ar & NAMED_OBJECT_HINT("type", type, Core::Archive::STATIC_TYPE);
+			ar & NAMED_OBJECT_HINT("value", value, Core::Archive::STATIC_TYPE);
+
+			if ( !ar.success() ) {
+				SEISCOMP_ERROR("failed to serialize identifier type \"%s\" value \"%s\"",
+						type.c_str(), value.c_str());
+				continue;
+			}
+		}
+
+		sc_comment->setText(data);
+		sc->add(sc_comment.get());
+	}
+}
+
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1277,19 +1364,7 @@ bool Convert2SC3::push(const FDSNXML::FDSNStationXML *msg) {
 			sc_net->update();
 		}
 
-		for ( size_t c = 0; c < net->commentCount(); ++c ) {
-			FDSNXML::Comment *comment = net->comment(c);
-			DataModel::CommentPtr sc_comment = new DataModel::Comment;
-			try { sc_comment->setId(Core::toString(comment->id())); }
-			catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
-
-			sc_comment->setText(comment->value());
-			try { sc_comment->setStart(comment->beginEffectiveTime()); }
-			catch ( ... ) {}
-			try { sc_comment->setEnd(comment->endEffectiveTime()); }
-			catch ( ... ) {}
-			sc_net->add(sc_comment.get());
-		}
+		populateComments(net, sc_net);
 
 		_touchedNetworks.insert(NetworkIndex(sc_net->code(), sc_net->start()));
 
@@ -1606,19 +1681,7 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 		)
 	);
 
-	for ( size_t c = 0; c < sta->commentCount(); ++c ) {
-		FDSNXML::Comment *comment = sta->comment(c);
-		DataModel::CommentPtr sc_comment = new DataModel::Comment;
-		try { sc_comment->setId(Core::toString(comment->id())); }
-		catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
-
-		sc_comment->setText(comment->value());
-		try { sc_comment->setStart(comment->beginEffectiveTime()); }
-		catch ( ... ) {}
-		try { sc_comment->setEnd(comment->endEffectiveTime()); }
-		catch ( ... ) {}
-		sc_sta->add(sc_comment.get());
-	}
+	populateComments(sta, sc_sta);
 
 	EpochCodeMap epochMap;
 
@@ -1881,18 +1944,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		newInstance = true;
 	}
 
-	for ( size_t c = 0; c < cha->commentCount(); ++c ) {
-		FDSNXML::Comment *comment = cha->comment(c);
-		DataModel::CommentPtr sc_comment = new DataModel::Comment;
-		try { sc_comment->setId(Core::toString(comment->id())); }
-		catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
-		sc_comment->setText(comment->value());
-		try { sc_comment->setStart(comment->beginEffectiveTime()); }
-		catch ( ... ) {}
-		try { sc_comment->setEnd(comment->endEffectiveTime()); }
-		catch ( ... ) {}
-		sc_stream->add(sc_comment.get());
-	}
+	populateComments(cha, sc_stream);
 
 	if ( _logStages ) {
 		cerr << "[" << sc_loc->code() << chaCode << "]" << endl;
@@ -1929,7 +1981,6 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	catch ( ... ) { sc_stream->setEnd(Core::None); }
 
 	sc_stream->setDepth(cha->depth().value());
-	sc_stream->setFormat(cha->storageFormat());
 
 	for ( size_t i = 0; i < cha->typeCount(); ++i )
 		flags += cha->type(i)->type().toString()[0];
@@ -2547,9 +2598,9 @@ bool Convert2SC3::process(DataModel::Datalogger *sc_dl, DataModel::Stream *sc_st
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Convert2SC3::process(DataModel::Sensor *sc_sens, DataModel::Stream *sc_stream,
-                          const FDSNXML::Channel *epoch,
-                          const FDSNXML::ResponseStage *resp) {
+bool Convert2SC3::process(DataModel::Sensor *, DataModel::Stream *,
+                          const FDSNXML::Channel *,
+                          const FDSNXML::ResponseStage *) {
 	/*
 	 * Actually a sensor calibration should not be created automatically. That
 	 * be used from the historic values of the sensitivity blockette. In FDSN

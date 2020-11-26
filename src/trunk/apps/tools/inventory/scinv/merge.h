@@ -34,7 +34,7 @@ class Merge : public InventoryTask {
 		//! All childs of the passed inventory will be moved into an
 		//! internal inventory. After the call inv should be empty.
 		//! The ownership of all childs goes to this instance.
-		bool push(Seiscomp::DataModel::Inventory *inv);
+		bool push(Seiscomp::DataModel::Inventory *inv, int id);
 		bool merge(bool stripUnreferenced);
 
 

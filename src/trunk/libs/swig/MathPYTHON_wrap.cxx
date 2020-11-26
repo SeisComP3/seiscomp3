@@ -3083,93 +3083,107 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[74]
 #define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[75]
 #define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[95]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[96]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[97]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[98]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[99]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[100]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[101]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[102]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[103]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__PositionInterpolator swig_types[104]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[105]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[106]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[107]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__FAP swig_types[108]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros swig_types[109]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec swig_types[110]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson swig_types[111]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config swig_types[112]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[113]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[114]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[115]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[116]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[117]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[118]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[119]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[120]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[121]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[122]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[123]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[124]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[125]
-#define SWIGTYPE_p_TagType swig_types[126]
-#define SWIGTYPE_p_Type swig_types[127]
-#define SWIGTYPE_p_ValueType swig_types[128]
-#define SWIGTYPE_p_allocator_type swig_types[129]
-#define SWIGTYPE_p_boost__any swig_types[130]
-#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[131]
-#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[132]
-#define SWIGTYPE_p_char swig_types[133]
-#define SWIGTYPE_p_const_iterator swig_types[134]
-#define SWIGTYPE_p_difference_type swig_types[135]
-#define SWIGTYPE_p_double swig_types[136]
-#define SWIGTYPE_p_float swig_types[137]
-#define SWIGTYPE_p_iterator swig_types[138]
-#define SWIGTYPE_p_p_PyObject swig_types[139]
-#define SWIGTYPE_p_size_type swig_types[140]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[141]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[142]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[143]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[144]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[145]
-#define SWIGTYPE_p_std__allocatorT_float_t swig_types[146]
-#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[147]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[148]
-#define SWIGTYPE_p_std__exception swig_types[149]
-#define SWIGTYPE_p_std__invalid_argument swig_types[150]
-#define SWIGTYPE_p_std__string swig_types[151]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[152]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[153]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[154]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[155]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[156]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[157]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[158]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[159]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[160]
-#define SWIGTYPE_p_value_type swig_types[161]
-static swig_type_info *swig_types[163];
-static swig_module_info swig_module = {swig_types, 162, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[95]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[96]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[97]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[98]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[99]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[100]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[101]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[102]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[103]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[104]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[105]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[106]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[107]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__PositionInterpolator swig_types[108]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[109]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[110]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[111]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__FAP swig_types[112]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros swig_types[113]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec swig_types[114]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson swig_types[115]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config swig_types[116]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[117]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[118]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[119]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[120]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[121]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[122]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[123]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[124]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[125]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[126]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[127]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[128]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[129]
+#define SWIGTYPE_p_TagType swig_types[130]
+#define SWIGTYPE_p_Type swig_types[131]
+#define SWIGTYPE_p_ValueType swig_types[132]
+#define SWIGTYPE_p_allocator_type swig_types[133]
+#define SWIGTYPE_p_boost__any swig_types[134]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaObject_t swig_types[135]
+#define SWIGTYPE_p_boost__shared_ptrT_Seiscomp__Core__MetaProperty_t swig_types[136]
+#define SWIGTYPE_p_char swig_types[137]
+#define SWIGTYPE_p_const_iterator swig_types[138]
+#define SWIGTYPE_p_difference_type swig_types[139]
+#define SWIGTYPE_p_double swig_types[140]
+#define SWIGTYPE_p_float swig_types[141]
+#define SWIGTYPE_p_int swig_types[142]
+#define SWIGTYPE_p_iterator swig_types[143]
+#define SWIGTYPE_p_long_long swig_types[144]
+#define SWIGTYPE_p_p_PyObject swig_types[145]
+#define SWIGTYPE_p_short swig_types[146]
+#define SWIGTYPE_p_signed_char swig_types[147]
+#define SWIGTYPE_p_size_type swig_types[148]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[149]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[150]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[151]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[152]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[153]
+#define SWIGTYPE_p_std__allocatorT_float_t swig_types[154]
+#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[155]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[156]
+#define SWIGTYPE_p_std__exception swig_types[157]
+#define SWIGTYPE_p_std__invalid_argument swig_types[158]
+#define SWIGTYPE_p_std__ostream swig_types[159]
+#define SWIGTYPE_p_std__string swig_types[160]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t swig_types[161]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[162]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[163]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[164]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[165]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[166]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[167]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[168]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[169]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[170]
+#define SWIGTYPE_p_unsigned_char swig_types[171]
+#define SWIGTYPE_p_unsigned_int swig_types[172]
+#define SWIGTYPE_p_unsigned_long_long swig_types[173]
+#define SWIGTYPE_p_unsigned_short swig_types[174]
+#define SWIGTYPE_p_value_type swig_types[175]
+static swig_type_info *swig_types[177];
+static swig_module_info swig_module = {swig_types, 176, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -31901,7 +31915,7 @@ SWIGINTERN PyObject *InitialTaperFilterD_swigregister(PyObject *SWIGUNUSEDPARM(s
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double arg2 ;
@@ -31927,42 +31941,42 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new__Biquad",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_BiquadCoefficients",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new__Biquad" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_BiquadCoefficients" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new__Biquad" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_BiquadCoefficients" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
   ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new__Biquad" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_BiquadCoefficients" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new__Biquad" "', argument " "5"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_BiquadCoefficients" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
   ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new__Biquad" "', argument " "6"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_BiquadCoefficients" "', argument " "6"" of type '" "double""'");
   } 
   arg6 = static_cast< double >(val6);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1,arg2,arg3,arg4,arg5,arg6);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1,arg2,arg3,arg4,arg5,arg6);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -31974,14 +31988,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double arg2 ;
@@ -32003,37 +32017,37 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new__Biquad",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_BiquadCoefficients",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new__Biquad" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_BiquadCoefficients" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new__Biquad" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_BiquadCoefficients" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
   ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new__Biquad" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_BiquadCoefficients" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new__Biquad" "', argument " "5"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_BiquadCoefficients" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1,arg2,arg3,arg4,arg5);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1,arg2,arg3,arg4,arg5);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32045,14 +32059,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double arg2 ;
@@ -32070,32 +32084,32 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:new__Biquad",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_BiquadCoefficients",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new__Biquad" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_BiquadCoefficients" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new__Biquad" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_BiquadCoefficients" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
   ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new__Biquad" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_BiquadCoefficients" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1,arg2,arg3,arg4);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1,arg2,arg3,arg4);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32107,14 +32121,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double arg2 ;
@@ -32128,27 +32142,27 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_3(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:new__Biquad",&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_BiquadCoefficients",&obj0,&obj1,&obj2)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new__Biquad" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_BiquadCoefficients" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new__Biquad" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_BiquadCoefficients" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1,arg2,arg3);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1,arg2,arg3);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32160,14 +32174,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_3(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double arg2 ;
@@ -32177,22 +32191,22 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_4(PyObject *SWIGUNUSEDPARM(self), P
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:new__Biquad",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_BiquadCoefficients",&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new__Biquad" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_BiquadCoefficients" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1,arg2);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1,arg2);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32204,30 +32218,30 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_4(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
   double val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:new__Biquad",&obj0)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:new_BiquadCoefficients",&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_double(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new__Biquad" "', argument " "1"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad(arg1);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients(arg1);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32239,21 +32253,21 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_5(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)":new__Biquad")) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)":new_BiquadCoefficients")) SWIG_fail;
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad();
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32265,33 +32279,33 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_6(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  Seiscomp::Math::Filtering::IIR::_Biquad *result = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:new__Biquad",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad,  0  | 0);
+  if (!PyArg_ParseTuple(args,(char *)"O:new_BiquadCoefficients",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new__Biquad" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new__Biquad" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BiquadCoefficients" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   {
     try {
-      result = (Seiscomp::Math::Filtering::IIR::_Biquad *)new Seiscomp::Math::Filtering::IIR::_Biquad((Seiscomp::Math::Filtering::IIR::_Biquad const &)*arg1);
+      result = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *)new Seiscomp::Math::Filtering::IIR::BiquadCoefficients((Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &)*arg1);
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -32303,14 +32317,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad__SWIG_7(PyObject *SWIGUNUSEDPARM(self), P
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_BiquadCoefficients(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[7] = {
     0
@@ -32323,14 +32337,14 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new__Biquad__SWIG_6(self, args);
+    return _wrap_new_BiquadCoefficients__SWIG_6(self, args);
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_new__Biquad__SWIG_7(self, args);
+      return _wrap_new_BiquadCoefficients__SWIG_7(self, args);
     }
   }
   if (argc == 1) {
@@ -32340,7 +32354,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new__Biquad__SWIG_5(self, args);
+      return _wrap_new_BiquadCoefficients__SWIG_5(self, args);
     }
   }
   if (argc == 2) {
@@ -32355,7 +32369,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new__Biquad__SWIG_4(self, args);
+        return _wrap_new_BiquadCoefficients__SWIG_4(self, args);
       }
     }
   }
@@ -32376,7 +32390,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_new__Biquad__SWIG_3(self, args);
+          return _wrap_new_BiquadCoefficients__SWIG_3(self, args);
         }
       }
     }
@@ -32403,7 +32417,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_new__Biquad__SWIG_2(self, args);
+            return _wrap_new_BiquadCoefficients__SWIG_2(self, args);
           }
         }
       }
@@ -32436,7 +32450,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_new__Biquad__SWIG_1(self, args);
+              return _wrap_new_BiquadCoefficients__SWIG_1(self, args);
             }
           }
         }
@@ -32475,7 +32489,7 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
-                return _wrap_new__Biquad__SWIG_0(self, args);
+                return _wrap_new_BiquadCoefficients__SWIG_0(self, args);
               }
             }
           }
@@ -32485,23 +32499,23 @@ SWIGINTERN PyObject *_wrap_new__Biquad(PyObject *self, PyObject *args) {
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new__Biquad'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_BiquadCoefficients'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double,double,double,double,double,double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double,double,double,double,double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double,double,double,double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double,double,double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double,double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(double)\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad()\n"
-    "    Seiscomp::Math::Filtering::IIR::_Biquad::_Biquad(Seiscomp::Math::Filtering::IIR::_Biquad const &)\n");
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double,double,double,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double,double,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(double)\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients()\n"
+    "    Seiscomp::Math::Filtering::IIR::BiquadCoefficients::BiquadCoefficients(Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &)\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   double arg3 ;
   double arg4 ;
@@ -32530,40 +32544,40 @@ SWIGINTERN PyObject *_wrap__Biquad_set(PyObject *SWIGUNUSEDPARM(self), PyObject 
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:_Biquad_set",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:BiquadCoefficients_set",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   ecode3 = SWIG_AsVal_double(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "_Biquad_set" "', argument " "3"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "BiquadCoefficients_set" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
   ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "_Biquad_set" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "BiquadCoefficients_set" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "_Biquad_set" "', argument " "5"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "BiquadCoefficients_set" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
   ecode6 = SWIG_AsVal_double(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "_Biquad_set" "', argument " "6"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "BiquadCoefficients_set" "', argument " "6"" of type '" "double""'");
   } 
   arg6 = static_cast< double >(val6);
   ecode7 = SWIG_AsVal_double(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "_Biquad_set" "', argument " "7"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "BiquadCoefficients_set" "', argument " "7"" of type '" "double""'");
   } 
   arg7 = static_cast< double >(val7);
   {
@@ -32587,237 +32601,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_delay(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  int arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:_Biquad_delay",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_delay" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_delay" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "_Biquad_delay" "', argument " "3"" of type '" "double *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  {
-    try {
-      result = (int)(arg1)->delay(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_delay2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  int arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:_Biquad_delay2",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_delay2" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_delay2" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "_Biquad_delay2" "', argument " "3"" of type '" "double *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  {
-    try {
-      result = (int)(arg1)->delay2(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_delay_one(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  double arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:_Biquad_delay_one",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_delay_one" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_delay_one" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "_Biquad_delay_one" "', argument " "3"" of type '" "double *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  {
-    try {
-      result = (int)(arg1)->delay_one(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  {
-    try {
-      (arg1)->reset();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad__print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad__print",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad__print" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  {
-    try {
-      result = ((Seiscomp::Math::Filtering::IIR::_Biquad const *)arg1)->print();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -32826,171 +32612,15 @@ SWIGINTERN PyObject *_wrap__Biquad_a0_set(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_a0_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_b0_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a0_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b0_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_a0_set" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->a0 = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_a0_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a0_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  result = (double) ((arg1)->a0);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_a1_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a1_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_a1_set" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->a1 = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_a1_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a1_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  result = (double) ((arg1)->a1);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_a2_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a2_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_a2_set" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->a2 = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_a2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  double result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_a2_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_a2_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  result = (double) ((arg1)->a2);
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap__Biquad_b0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_b0_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b0_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_b0_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_b0_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   if (arg1) (arg1)->b0 = arg2;
@@ -33001,20 +32631,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_b0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_b0_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_b0_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b0_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b0_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   result = (double) ((arg1)->b0);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
@@ -33023,9 +32653,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_b1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -33034,15 +32664,15 @@ SWIGINTERN PyObject *_wrap__Biquad_b1_set(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_b1_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_b1_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b1_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b1_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_b1_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_b1_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   if (arg1) (arg1)->b1 = arg2;
@@ -33053,20 +32683,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_b1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_b1_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_b1_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b1_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b1_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   result = (double) ((arg1)->b1);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
@@ -33075,9 +32705,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_b2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -33086,15 +32716,15 @@ SWIGINTERN PyObject *_wrap__Biquad_b2_set(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_b2_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_b2_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b2_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b2_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_b2_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_b2_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   if (arg1) (arg1)->b2 = arg2;
@@ -33105,20 +32735,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_b2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_b2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_b2_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_b2_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_b2_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_b2_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   result = (double) ((arg1)->b2);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
@@ -33127,9 +32757,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_v1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a0_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -33138,18 +32768,18 @@ SWIGINTERN PyObject *_wrap__Biquad_v1_set(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_v1_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_a0_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_v1_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a0_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_v1_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_a0_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->v1 = arg2;
+  if (arg1) (arg1)->a0 = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -33157,21 +32787,21 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_v1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a0_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_v1_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_a0_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_v1_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a0_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  result = (double) ((arg1)->v1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
+  result = (double) ((arg1)->a0);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -33179,9 +32809,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_v2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -33190,18 +32820,18 @@ SWIGINTERN PyObject *_wrap__Biquad_v2_set(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:_Biquad_v2_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_a1_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_v2_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a1_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_Biquad_v2_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_a1_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->v2 = arg2;
+  if (arg1) (arg1)->a1 = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -33209,21 +32839,21 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap__Biquad_v2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:_Biquad_v2_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_a1_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_Biquad_v2_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a1_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
-  result = (double) ((arg1)->v2);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
+  result = (double) ((arg1)->a1);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -33231,19 +32861,71 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete__Biquad(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a2_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::_Biquad *arg1 = (Seiscomp::Math::Filtering::IIR::_Biquad *) 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCoefficients_a2_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a2_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BiquadCoefficients_a2_set" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->a2 = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCoefficients_a2_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCoefficients_a2_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCoefficients_a2_get" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
+  result = (double) ((arg1)->a2);
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_BiquadCoefficients(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCoefficients *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"O:delete__Biquad",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_POINTER_DISOWN |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_BiquadCoefficients",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete__Biquad" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::_Biquad *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BiquadCoefficients" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *""'"); 
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::_Biquad * >(argp1);
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp1);
   {
     try {
       delete arg1;
@@ -33265,12 +32947,62 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_Biquad_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *BiquadCoefficients_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap___lshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::ostream *arg1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::BiquadCoefficients *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::ostream *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:__lshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__ostream,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "1"" of type '" "std::ostream &""'"); 
+  }
+  arg1 = reinterpret_cast< std::ostream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "__lshift__" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "__lshift__" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCoefficients * >(argp2);
+  {
+    try {
+      result = (std::ostream *) &Seiscomp::Math::Filtering::IIR::operator <<(*arg1,(Seiscomp::Math::Filtering::IIR::BiquadCoefficients const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__ostream, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_new_BiquadCascadeF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -33371,40 +33103,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_BiquadCascadeF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_BiquadCascadeF",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BiquadCascadeF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
-  {
-    try {
-      if (arg1) arg1->decrementReferenceCount();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_BiquadCascadeF_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
@@ -33434,6 +33132,132 @@ SWIGINTERN PyObject *_wrap_BiquadCascadeF_size(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeF_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
+  {
+    try {
+      (arg1)->reset();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeF_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
+  Seiscomp::Math::Filtering::IIR::Biquad< float > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeF_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_append" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeF_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< float > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeF_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< float > const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquad< float > * >(argp2);
+  {
+    try {
+      (arg1)->append((Seiscomp::Math::Filtering::IIR::Biquad< float > const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeF_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
+  Seiscomp::Math::Filtering::IIR::Biquads *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeF_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeF_set" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquads const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeF_set" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquads const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquads * >(argp2);
+  {
+    try {
+      (arg1)->set((Seiscomp::Math::Filtering::IIR::Biquads const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -33522,126 +33346,6 @@ SWIGINTERN PyObject *_wrap_BiquadCascadeF_clone(PyObject *SWIGUNUSEDPARM(self), 
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeF_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
-  std::vector< float,std::allocator< float > > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::vector< float,std::allocator< float > > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeF_filter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_filter" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
-  {
-    std::vector< float,std::allocator< float > > *ptr = (std::vector< float,std::allocator< float > > *)0;
-    res2 = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeF_filter" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeF_filter" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    try {
-      result = (arg1)->filter((std::vector< float,std::allocator< float > > const &)*arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = swig::from(static_cast< std::vector< float,std::allocator< float > > >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeF_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
-  {
-    try {
-      (arg1)->reset();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeF__print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeF__print",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF__print" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
-  {
-    try {
-      result = ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > const *)arg1)->print();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -33744,34 +33448,22 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_BiquadCascadeF_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_BiquadCascadeF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) 0 ;
-  Seiscomp::Math::Filtering::IIR::Biquad< float > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeF_append",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_BiquadCascadeF",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeF_append" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BiquadCascadeF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< float > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeF_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< float > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeF_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< float > const &""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquad< float > * >(argp2);
   {
     try {
-      (arg1)->append((Seiscomp::Math::Filtering::IIR::Biquad< float > const &)*arg2);
+      if (arg1) arg1->decrementReferenceCount();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -33896,40 +33588,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_BiquadCascadeD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_BiquadCascadeD",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BiquadCascadeD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
-  {
-    try {
-      if (arg1) arg1->decrementReferenceCount();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_BiquadCascadeD_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
@@ -33959,6 +33617,132 @@ SWIGINTERN PyObject *_wrap_BiquadCascadeD_size(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeD_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
+  {
+    try {
+      (arg1)->reset();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeD_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
+  Seiscomp::Math::Filtering::IIR::Biquad< double > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeD_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_append" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeD_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< double > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeD_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< double > const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquad< double > * >(argp2);
+  {
+    try {
+      (arg1)->append((Seiscomp::Math::Filtering::IIR::Biquad< double > const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BiquadCascadeD_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
+  Seiscomp::Math::Filtering::IIR::Biquads *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeD_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_set" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeD_set" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquads const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeD_set" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquads const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquads * >(argp2);
+  {
+    try {
+      (arg1)->set((Seiscomp::Math::Filtering::IIR::Biquads const &)*arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -34047,126 +33831,6 @@ SWIGINTERN PyObject *_wrap_BiquadCascadeD_clone(PyObject *SWIGUNUSEDPARM(self), 
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeD_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
-  std::vector< double,std::allocator< double > > *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::vector< double,std::allocator< double > > result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeD_filter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_filter" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
-  {
-    std::vector< double,std::allocator< double > > *ptr = (std::vector< double,std::allocator< double > > *)0;
-    res2 = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeD_filter" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeD_filter" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  {
-    try {
-      result = (arg1)->filter((std::vector< double,std::allocator< double > > const &)*arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = swig::from(static_cast< std::vector< double,std::allocator< double > > >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeD_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
-  {
-    try {
-      (arg1)->reset();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_BiquadCascadeD__print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:BiquadCascadeD__print",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD__print" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
-  {
-    try {
-      result = ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > const *)arg1)->print();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -34269,34 +33933,22 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_BiquadCascadeD_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_BiquadCascadeD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *arg1 = (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) 0 ;
-  Seiscomp::Math::Filtering::IIR::Biquad< double > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:BiquadCascadeD_append",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0 |  0 );
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_BiquadCascadeD",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BiquadCascadeD_append" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BiquadCascadeD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::BiquadCascade< double > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BiquadCascadeD_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< double > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BiquadCascadeD_append" "', argument " "2"" of type '" "Seiscomp::Math::Filtering::IIR::Biquad< double > const &""'"); 
-  }
-  arg2 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::Biquad< double > * >(argp2);
   {
     try {
-      (arg1)->append((Seiscomp::Math::Filtering::IIR::Biquad< double > const &)*arg2);
+      if (arg1) arg1->decrementReferenceCount();
     }
     catch ( const Seiscomp::Core::ValueException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
@@ -35968,78 +35620,6 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_0(PyObject *SWIGUNUSED
   double arg2 ;
   double arg3 ;
   double arg4 ;
-  bool arg5 ;
-  int val1 ;
-  int ecode1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  bool val5 ;
-  int ecode5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_ButterworthBandpassF",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandpassF" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = static_cast< int >(val1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandpassF" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandpassF" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthBandpassF" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_bool(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_ButterworthBandpassF" "', argument " "5"" of type '" "bool""'");
-  } 
-  arg5 = static_cast< bool >(val5);
-  {
-    try {
-      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >(arg1,arg2,arg3,arg4,arg5);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  int arg1 ;
-  double arg2 ;
-  double arg3 ;
-  double arg4 ;
   int val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -36097,7 +35677,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   double arg2 ;
@@ -36151,7 +35731,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   double arg2 ;
@@ -36196,7 +35776,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -36232,7 +35812,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *result = 0 ;
   
@@ -36261,18 +35841,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[6] = {
+  PyObject *argv[5] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_ButterworthBandpassF__SWIG_5(self, args);
+    return _wrap_new_ButterworthBandpassF__SWIG_4(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -36281,7 +35861,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *ar
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new_ButterworthBandpassF__SWIG_4(self, args);
+      return _wrap_new_ButterworthBandpassF__SWIG_3(self, args);
     }
   }
   if (argc == 2) {
@@ -36296,7 +35876,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *ar
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_ButterworthBandpassF__SWIG_3(self, args);
+        return _wrap_new_ButterworthBandpassF__SWIG_2(self, args);
       }
     }
   }
@@ -36317,7 +35897,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *ar
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_new_ButterworthBandpassF__SWIG_2(self, args);
+          return _wrap_new_ButterworthBandpassF__SWIG_1(self, args);
         }
       }
     }
@@ -36344,41 +35924,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *ar
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_new_ButterworthBandpassF__SWIG_1(self, args);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    {
-      int res = SWIG_AsVal_int(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_bool(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              return _wrap_new_ButterworthBandpassF__SWIG_0(self, args);
-            }
+            return _wrap_new_ButterworthBandpassF__SWIG_0(self, args);
           }
         }
       }
@@ -36388,7 +35934,6 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassF(PyObject *self, PyObject *ar
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthBandpassF'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::ButterworthBandpass(int,double,double,double,bool)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::ButterworthBandpass(int,double,double,double)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::ButterworthBandpass(int,double,double)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::ButterworthBandpass(int,double)\n"
@@ -36530,215 +36075,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ButterworthBandpassF_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) 0 ;
-  int arg2 ;
-  float *arg3 = (float *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthBandpassF_apply",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassF_apply" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandpassF_apply" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthBandpassF_apply" "', argument " "3"" of type '" "float *""'"); 
-  }
-  arg3 = reinterpret_cast< float * >(argp3);
-  {
-    try {
-      (arg1)->apply(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandpassF_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > * >(argp1);
-  {
-    try {
-      (arg1)->reset();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassF_handleGap__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthBandpassF_handleGap",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassF_handleGap" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandpassF_handleGap" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      (arg1)->handleGap(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassF_handleGap__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandpassF_handleGap",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassF_handleGap" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > * >(argp1);
-  {
-    try {
-      (arg1)->handleGap();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassF_handleGap(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_ButterworthBandpassF_handleGap__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_ButterworthBandpassF_handleGap__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ButterworthBandpassF_handleGap'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::handleGap(int)\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float >::handleGap()\n");
-  return 0;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_ButterworthBandpassF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) 0 ;
@@ -36781,78 +36117,6 @@ SWIGINTERN PyObject *ButterworthBandpassF_swigregister(PyObject *SWIGUNUSEDPARM(
 }
 
 SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  int arg1 ;
-  double arg2 ;
-  double arg3 ;
-  double arg4 ;
-  bool arg5 ;
-  int val1 ;
-  int ecode1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  bool val5 ;
-  int ecode5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:new_ButterworthBandpassD",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(obj0, &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandpassD" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = static_cast< int >(val1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandpassD" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandpassD" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthBandpassD" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_bool(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_ButterworthBandpassD" "', argument " "5"" of type '" "bool""'");
-  } 
-  arg5 = static_cast< bool >(val5);
-  {
-    try {
-      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >(arg1,arg2,arg3,arg4,arg5);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   double arg2 ;
@@ -36915,7 +36179,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   double arg2 ;
@@ -36969,7 +36233,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   double arg2 ;
@@ -37014,7 +36278,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -37050,7 +36314,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *result = 0 ;
   
@@ -37079,18 +36343,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[6] = {
+  PyObject *argv[5] = {
     0
   };
   Py_ssize_t ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_ButterworthBandpassD__SWIG_5(self, args);
+    return _wrap_new_ButterworthBandpassD__SWIG_4(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -37099,7 +36363,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *ar
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new_ButterworthBandpassD__SWIG_4(self, args);
+      return _wrap_new_ButterworthBandpassD__SWIG_3(self, args);
     }
   }
   if (argc == 2) {
@@ -37114,7 +36378,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *ar
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_ButterworthBandpassD__SWIG_3(self, args);
+        return _wrap_new_ButterworthBandpassD__SWIG_2(self, args);
       }
     }
   }
@@ -37135,7 +36399,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *ar
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_new_ButterworthBandpassD__SWIG_2(self, args);
+          return _wrap_new_ButterworthBandpassD__SWIG_1(self, args);
         }
       }
     }
@@ -37162,41 +36426,7 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *ar
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_new_ButterworthBandpassD__SWIG_1(self, args);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    {
-      int res = SWIG_AsVal_int(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_bool(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              return _wrap_new_ButterworthBandpassD__SWIG_0(self, args);
-            }
+            return _wrap_new_ButterworthBandpassD__SWIG_0(self, args);
           }
         }
       }
@@ -37206,7 +36436,6 @@ SWIGINTERN PyObject *_wrap_new_ButterworthBandpassD(PyObject *self, PyObject *ar
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthBandpassD'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::ButterworthBandpass(int,double,double,double,bool)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::ButterworthBandpass(int,double,double,double)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::ButterworthBandpass(int,double,double)\n"
     "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::ButterworthBandpass(int,double)\n"
@@ -37348,215 +36577,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ButterworthBandpassD_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) 0 ;
-  int arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthBandpassD_apply",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassD_apply" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandpassD_apply" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthBandpassD_apply" "', argument " "3"" of type '" "double *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  {
-    try {
-      (arg1)->apply(arg2,arg3);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandpassD_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > * >(argp1);
-  {
-    try {
-      (arg1)->reset();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassD_handleGap__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthBandpassD_handleGap",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassD_handleGap" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandpassD_handleGap" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      (arg1)->handleGap(arg2);
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassD_handleGap__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandpassD_handleGap",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandpassD_handleGap" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > * >(argp1);
-  {
-    try {
-      (arg1)->handleGap();
-    }
-    catch ( const Seiscomp::Core::ValueException &e) {
-      SWIG_exception(SWIG_ValueError, e.what());
-    }
-    catch ( const std::exception &e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-    catch ( ... ) {
-      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ButterworthBandpassD_handleGap(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_ButterworthBandpassD_handleGap__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_ButterworthBandpassD_handleGap__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ButterworthBandpassD_handleGap'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::handleGap(int)\n"
-    "    Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double >::handleGap()\n");
-  return 0;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_ButterworthBandpassD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) 0 ;
@@ -37595,6 +36615,2014 @@ SWIGINTERN PyObject *ButterworthBandpassD_swigregister(PyObject *SWIGUNUSEDPARM(
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_ButterworthHighLowpassF",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthHighLowpassF" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthHighLowpassF" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >(arg1,arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_ButterworthHighLowpassF",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthHighLowpassF" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_ButterworthHighLowpassF",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ButterworthHighLowpassF",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >(arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ButterworthHighLowpassF")) SWIG_fail;
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassF(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ButterworthHighLowpassF__SWIG_4(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ButterworthHighLowpassF__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_ButterworthHighLowpassF__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_ButterworthHighLowpassF__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_ButterworthHighLowpassF__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthHighLowpassF'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >::ButterworthHighLowpass(int,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >::ButterworthHighLowpass(int,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >::ButterworthHighLowpass(int,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >::ButterworthHighLowpass(int)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float >::ButterworthHighLowpass()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassF_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthHighLowpassF_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassF_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthHighLowpassF_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setSamplingFrequency(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassF_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthHighLowpassF_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassF_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthHighLowpassF_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthHighLowpassF_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  {
+    try {
+      result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassF_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthHighLowpassF_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassF_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::InPlaceFilter< float > *)((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > const *)arg1)->clone();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ButterworthHighLowpassF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ButterworthHighLowpassF",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ButterworthHighLowpassF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > * >(argp1);
+  {
+    try {
+      if (arg1) arg1->decrementReferenceCount();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ButterworthHighLowpassF_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_ButterworthHighLowpassD",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthHighLowpassD" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthHighLowpassD" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >(arg1,arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_ButterworthHighLowpassD",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthHighLowpassD" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_ButterworthHighLowpassD",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthHighLowpassD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ButterworthHighLowpassD",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthHighLowpassD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >(arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ButterworthHighLowpassD")) SWIG_fail;
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthHighLowpassD(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ButterworthHighLowpassD__SWIG_4(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ButterworthHighLowpassD__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_ButterworthHighLowpassD__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_ButterworthHighLowpassD__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_ButterworthHighLowpassD__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthHighLowpassD'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >::ButterworthHighLowpass(int,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >::ButterworthHighLowpass(int,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >::ButterworthHighLowpass(int,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >::ButterworthHighLowpass(int)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double >::ButterworthHighLowpass()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassD_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthHighLowpassD_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassD_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthHighLowpassD_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setSamplingFrequency(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassD_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthHighLowpassD_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassD_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthHighLowpassD_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthHighLowpassD_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  {
+    try {
+      result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthHighLowpassD_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthHighLowpassD_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthHighLowpassD_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::InPlaceFilter< double > *)((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > const *)arg1)->clone();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ButterworthHighLowpassD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ButterworthHighLowpassD",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ButterworthHighLowpassD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > * >(argp1);
+  {
+    try {
+      if (arg1) arg1->decrementReferenceCount();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ButterworthHighLowpassD_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_ButterworthBandstopF",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandstopF" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthBandstopF" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >(arg1,arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_ButterworthBandstopF",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandstopF" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_ButterworthBandstopF",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ButterworthBandstopF",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopF" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >(arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ButterworthBandstopF")) SWIG_fail;
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopF(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ButterworthBandstopF__SWIG_4(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ButterworthBandstopF__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_ButterworthBandstopF__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_ButterworthBandstopF__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_ButterworthBandstopF__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthBandstopF'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >::ButterworthBandstop(int,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >::ButterworthBandstop(int,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >::ButterworthBandstop(int,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >::ButterworthBandstop(int)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float >::ButterworthBandstop()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopF_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthBandstopF_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopF_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandstopF_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setSamplingFrequency(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopF_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthBandstopF_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopF_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandstopF_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthBandstopF_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  {
+    try {
+      result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopF_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandstopF_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopF_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::InPlaceFilter< float > *)((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > const *)arg1)->clone();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ButterworthBandstopF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ButterworthBandstopF",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ButterworthBandstopF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > * >(argp1);
+  {
+    try {
+      if (arg1) arg1->decrementReferenceCount();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ButterworthBandstopF_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_ButterworthBandstopD",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandstopD" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_ButterworthBandstopD" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >(arg1,arg2,arg3,arg4);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  double arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_ButterworthBandstopD",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ButterworthBandstopD" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >(arg1,arg2,arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  double arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_ButterworthBandstopD",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_ButterworthBandstopD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >(arg1,arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_ButterworthBandstopD",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ButterworthBandstopD" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >(arg1);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_ButterworthBandstopD")) SWIG_fail;
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *)new Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ButterworthBandstopD(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[5] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_ButterworthBandstopD__SWIG_4(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_ButterworthBandstopD__SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_ButterworthBandstopD__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_ButterworthBandstopD__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_ButterworthBandstopD__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ButterworthBandstopD'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >::ButterworthBandstop(int,double,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >::ButterworthBandstop(int,double,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >::ButterworthBandstop(int,double)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >::ButterworthBandstop(int)\n"
+    "    Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double >::ButterworthBandstop()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopD_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ButterworthBandstopD_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopD_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandstopD_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setSamplingFrequency(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopD_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ButterworthBandstopD_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopD_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ButterworthBandstopD_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ButterworthBandstopD_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  {
+    try {
+      result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ButterworthBandstopD_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ButterworthBandstopD_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ButterworthBandstopD_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Math::Filtering::InPlaceFilter< double > *)((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > const *)arg1)->clone();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ButterworthBandstopD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *arg1 = (Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_ButterworthBandstopD",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ButterworthBandstopD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > * >(argp1);
+  {
+    try {
+      if (arg1) arg1->decrementReferenceCount();
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ButterworthBandstopD_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -47003,73 +48031,63 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"InitialTaperFilterD_setSamplingFrequency", _wrap_InitialTaperFilterD_setSamplingFrequency, METH_VARARGS, (char *)"InitialTaperFilterD_setSamplingFrequency(InitialTaperFilterD self, double fsamp)"},
 	 { (char *)"InitialTaperFilterD_setParameters", _wrap_InitialTaperFilterD_setParameters, METH_VARARGS, (char *)"InitialTaperFilterD_setParameters(InitialTaperFilterD self, int n, double const * params) -> int"},
 	 { (char *)"InitialTaperFilterD_swigregister", InitialTaperFilterD_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new__Biquad", _wrap_new__Biquad, METH_VARARGS, (char *)"\n"
-		"_Biquad(double _a0=1, double _a1=0, double _a2=0, double _b0=1, double _b1=0, double _b2=0)\n"
-		"_Biquad(double _a0=1, double _a1=0, double _a2=0, double _b0=1, double _b1=0)\n"
-		"_Biquad(double _a0=1, double _a1=0, double _a2=0, double _b0=1)\n"
-		"_Biquad(double _a0=1, double _a1=0, double _a2=0)\n"
-		"_Biquad(double _a0=1, double _a1=0)\n"
-		"_Biquad(double _a0=1)\n"
-		"_Biquad()\n"
-		"new__Biquad(_Biquad other) -> _Biquad\n"
+	 { (char *)"new_BiquadCoefficients", _wrap_new_BiquadCoefficients, METH_VARARGS, (char *)"\n"
+		"BiquadCoefficients(double b0=0, double b1=0, double b2=0, double a0=1, double a1=0, double a2=0)\n"
+		"BiquadCoefficients(double b0=0, double b1=0, double b2=0, double a0=1, double a1=0)\n"
+		"BiquadCoefficients(double b0=0, double b1=0, double b2=0, double a0=1)\n"
+		"BiquadCoefficients(double b0=0, double b1=0, double b2=0)\n"
+		"BiquadCoefficients(double b0=0, double b1=0)\n"
+		"BiquadCoefficients(double b0=0)\n"
+		"BiquadCoefficients()\n"
+		"new_BiquadCoefficients(BiquadCoefficients bq) -> BiquadCoefficients\n"
 		""},
-	 { (char *)"_Biquad_set", _wrap__Biquad_set, METH_VARARGS, (char *)"_Biquad_set(_Biquad self, double _a0, double _a1, double _a2, double _b0, double _b1, double _b2)"},
-	 { (char *)"_Biquad_delay", _wrap__Biquad_delay, METH_VARARGS, (char *)"_Biquad_delay(_Biquad self, int nsamp, double * delay_val) -> int"},
-	 { (char *)"_Biquad_delay2", _wrap__Biquad_delay2, METH_VARARGS, (char *)"_Biquad_delay2(_Biquad self, int nsamp, double * delay_val) -> int"},
-	 { (char *)"_Biquad_delay_one", _wrap__Biquad_delay_one, METH_VARARGS, (char *)"_Biquad_delay_one(_Biquad self, double freq, double * delay) -> int"},
-	 { (char *)"_Biquad_reset", _wrap__Biquad_reset, METH_VARARGS, (char *)"_Biquad_reset(_Biquad self)"},
-	 { (char *)"_Biquad__print", _wrap__Biquad__print, METH_VARARGS, (char *)"_Biquad__print(_Biquad self) -> std::string"},
-	 { (char *)"_Biquad_a0_set", _wrap__Biquad_a0_set, METH_VARARGS, (char *)"_Biquad_a0_set(_Biquad self, double a0)"},
-	 { (char *)"_Biquad_a0_get", _wrap__Biquad_a0_get, METH_VARARGS, (char *)"_Biquad_a0_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_a1_set", _wrap__Biquad_a1_set, METH_VARARGS, (char *)"_Biquad_a1_set(_Biquad self, double a1)"},
-	 { (char *)"_Biquad_a1_get", _wrap__Biquad_a1_get, METH_VARARGS, (char *)"_Biquad_a1_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_a2_set", _wrap__Biquad_a2_set, METH_VARARGS, (char *)"_Biquad_a2_set(_Biquad self, double a2)"},
-	 { (char *)"_Biquad_a2_get", _wrap__Biquad_a2_get, METH_VARARGS, (char *)"_Biquad_a2_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_b0_set", _wrap__Biquad_b0_set, METH_VARARGS, (char *)"_Biquad_b0_set(_Biquad self, double b0)"},
-	 { (char *)"_Biquad_b0_get", _wrap__Biquad_b0_get, METH_VARARGS, (char *)"_Biquad_b0_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_b1_set", _wrap__Biquad_b1_set, METH_VARARGS, (char *)"_Biquad_b1_set(_Biquad self, double b1)"},
-	 { (char *)"_Biquad_b1_get", _wrap__Biquad_b1_get, METH_VARARGS, (char *)"_Biquad_b1_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_b2_set", _wrap__Biquad_b2_set, METH_VARARGS, (char *)"_Biquad_b2_set(_Biquad self, double b2)"},
-	 { (char *)"_Biquad_b2_get", _wrap__Biquad_b2_get, METH_VARARGS, (char *)"_Biquad_b2_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_v1_set", _wrap__Biquad_v1_set, METH_VARARGS, (char *)"_Biquad_v1_set(_Biquad self, double v1)"},
-	 { (char *)"_Biquad_v1_get", _wrap__Biquad_v1_get, METH_VARARGS, (char *)"_Biquad_v1_get(_Biquad self) -> double"},
-	 { (char *)"_Biquad_v2_set", _wrap__Biquad_v2_set, METH_VARARGS, (char *)"_Biquad_v2_set(_Biquad self, double v2)"},
-	 { (char *)"_Biquad_v2_get", _wrap__Biquad_v2_get, METH_VARARGS, (char *)"_Biquad_v2_get(_Biquad self) -> double"},
-	 { (char *)"delete__Biquad", _wrap_delete__Biquad, METH_VARARGS, (char *)"delete__Biquad(_Biquad self)"},
-	 { (char *)"_Biquad_swigregister", _Biquad_swigregister, METH_VARARGS, NULL},
+	 { (char *)"BiquadCoefficients_set", _wrap_BiquadCoefficients_set, METH_VARARGS, (char *)"BiquadCoefficients_set(BiquadCoefficients self, double b0, double b1, double b2, double a0, double a1, double a2)"},
+	 { (char *)"BiquadCoefficients_b0_set", _wrap_BiquadCoefficients_b0_set, METH_VARARGS, (char *)"BiquadCoefficients_b0_set(BiquadCoefficients self, double b0)"},
+	 { (char *)"BiquadCoefficients_b0_get", _wrap_BiquadCoefficients_b0_get, METH_VARARGS, (char *)"BiquadCoefficients_b0_get(BiquadCoefficients self) -> double"},
+	 { (char *)"BiquadCoefficients_b1_set", _wrap_BiquadCoefficients_b1_set, METH_VARARGS, (char *)"BiquadCoefficients_b1_set(BiquadCoefficients self, double b1)"},
+	 { (char *)"BiquadCoefficients_b1_get", _wrap_BiquadCoefficients_b1_get, METH_VARARGS, (char *)"BiquadCoefficients_b1_get(BiquadCoefficients self) -> double"},
+	 { (char *)"BiquadCoefficients_b2_set", _wrap_BiquadCoefficients_b2_set, METH_VARARGS, (char *)"BiquadCoefficients_b2_set(BiquadCoefficients self, double b2)"},
+	 { (char *)"BiquadCoefficients_b2_get", _wrap_BiquadCoefficients_b2_get, METH_VARARGS, (char *)"BiquadCoefficients_b2_get(BiquadCoefficients self) -> double"},
+	 { (char *)"BiquadCoefficients_a0_set", _wrap_BiquadCoefficients_a0_set, METH_VARARGS, (char *)"BiquadCoefficients_a0_set(BiquadCoefficients self, double a0)"},
+	 { (char *)"BiquadCoefficients_a0_get", _wrap_BiquadCoefficients_a0_get, METH_VARARGS, (char *)"BiquadCoefficients_a0_get(BiquadCoefficients self) -> double"},
+	 { (char *)"BiquadCoefficients_a1_set", _wrap_BiquadCoefficients_a1_set, METH_VARARGS, (char *)"BiquadCoefficients_a1_set(BiquadCoefficients self, double a1)"},
+	 { (char *)"BiquadCoefficients_a1_get", _wrap_BiquadCoefficients_a1_get, METH_VARARGS, (char *)"BiquadCoefficients_a1_get(BiquadCoefficients self) -> double"},
+	 { (char *)"BiquadCoefficients_a2_set", _wrap_BiquadCoefficients_a2_set, METH_VARARGS, (char *)"BiquadCoefficients_a2_set(BiquadCoefficients self, double a2)"},
+	 { (char *)"BiquadCoefficients_a2_get", _wrap_BiquadCoefficients_a2_get, METH_VARARGS, (char *)"BiquadCoefficients_a2_get(BiquadCoefficients self) -> double"},
+	 { (char *)"delete_BiquadCoefficients", _wrap_delete_BiquadCoefficients, METH_VARARGS, (char *)"delete_BiquadCoefficients(BiquadCoefficients self)"},
+	 { (char *)"BiquadCoefficients_swigregister", BiquadCoefficients_swigregister, METH_VARARGS, NULL},
+	 { (char *)"__lshift__", _wrap___lshift__, METH_VARARGS, (char *)"__lshift__(std::ostream & os, BiquadCoefficients biq) -> std::ostream &"},
 	 { (char *)"new_BiquadCascadeF", _wrap_new_BiquadCascadeF, METH_VARARGS, (char *)"\n"
 		"BiquadCascadeF()\n"
 		"new_BiquadCascadeF(BiquadCascadeF other) -> BiquadCascadeF\n"
 		""},
-	 { (char *)"delete_BiquadCascadeF", _wrap_delete_BiquadCascadeF, METH_VARARGS, (char *)"delete_BiquadCascadeF(BiquadCascadeF self)"},
 	 { (char *)"BiquadCascadeF_size", _wrap_BiquadCascadeF_size, METH_VARARGS, (char *)"BiquadCascadeF_size(BiquadCascadeF self) -> int"},
+	 { (char *)"BiquadCascadeF_reset", _wrap_BiquadCascadeF_reset, METH_VARARGS, (char *)"BiquadCascadeF_reset(BiquadCascadeF self)"},
+	 { (char *)"BiquadCascadeF_append", _wrap_BiquadCascadeF_append, METH_VARARGS, (char *)"BiquadCascadeF_append(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquad< float > const & biq)"},
+	 { (char *)"BiquadCascadeF_set", _wrap_BiquadCascadeF_set, METH_VARARGS, (char *)"BiquadCascadeF_set(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquads const & biquads)"},
 	 { (char *)"BiquadCascadeF_apply", _wrap_BiquadCascadeF_apply, METH_VARARGS, (char *)"BiquadCascadeF_apply(BiquadCascadeF self, int n, float * inout)"},
 	 { (char *)"BiquadCascadeF_clone", _wrap_BiquadCascadeF_clone, METH_VARARGS, (char *)"BiquadCascadeF_clone(BiquadCascadeF self) -> InPlaceFilterF"},
-	 { (char *)"BiquadCascadeF_filter", _wrap_BiquadCascadeF_filter, METH_VARARGS, (char *)"BiquadCascadeF_filter(BiquadCascadeF self, vectorf f) -> vectorf"},
-	 { (char *)"BiquadCascadeF_reset", _wrap_BiquadCascadeF_reset, METH_VARARGS, (char *)"BiquadCascadeF_reset(BiquadCascadeF self)"},
-	 { (char *)"BiquadCascadeF__print", _wrap_BiquadCascadeF__print, METH_VARARGS, (char *)"BiquadCascadeF__print(BiquadCascadeF self) -> std::string"},
 	 { (char *)"BiquadCascadeF_setSamplingFrequency", _wrap_BiquadCascadeF_setSamplingFrequency, METH_VARARGS, (char *)"BiquadCascadeF_setSamplingFrequency(BiquadCascadeF self, double arg3)"},
 	 { (char *)"BiquadCascadeF_setParameters", _wrap_BiquadCascadeF_setParameters, METH_VARARGS, (char *)"BiquadCascadeF_setParameters(BiquadCascadeF self, int n, double const * params) -> int"},
-	 { (char *)"BiquadCascadeF_append", _wrap_BiquadCascadeF_append, METH_VARARGS, (char *)"BiquadCascadeF_append(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquad< float > const & biq)"},
+	 { (char *)"delete_BiquadCascadeF", _wrap_delete_BiquadCascadeF, METH_VARARGS, (char *)"delete_BiquadCascadeF(BiquadCascadeF self)"},
 	 { (char *)"BiquadCascadeF_swigregister", BiquadCascadeF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_BiquadCascadeD", _wrap_new_BiquadCascadeD, METH_VARARGS, (char *)"\n"
 		"BiquadCascadeD()\n"
 		"new_BiquadCascadeD(BiquadCascadeD other) -> BiquadCascadeD\n"
 		""},
-	 { (char *)"delete_BiquadCascadeD", _wrap_delete_BiquadCascadeD, METH_VARARGS, (char *)"delete_BiquadCascadeD(BiquadCascadeD self)"},
 	 { (char *)"BiquadCascadeD_size", _wrap_BiquadCascadeD_size, METH_VARARGS, (char *)"BiquadCascadeD_size(BiquadCascadeD self) -> int"},
+	 { (char *)"BiquadCascadeD_reset", _wrap_BiquadCascadeD_reset, METH_VARARGS, (char *)"BiquadCascadeD_reset(BiquadCascadeD self)"},
+	 { (char *)"BiquadCascadeD_append", _wrap_BiquadCascadeD_append, METH_VARARGS, (char *)"BiquadCascadeD_append(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquad< double > const & biq)"},
+	 { (char *)"BiquadCascadeD_set", _wrap_BiquadCascadeD_set, METH_VARARGS, (char *)"BiquadCascadeD_set(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquads const & biquads)"},
 	 { (char *)"BiquadCascadeD_apply", _wrap_BiquadCascadeD_apply, METH_VARARGS, (char *)"BiquadCascadeD_apply(BiquadCascadeD self, int n, double * inout)"},
 	 { (char *)"BiquadCascadeD_clone", _wrap_BiquadCascadeD_clone, METH_VARARGS, (char *)"BiquadCascadeD_clone(BiquadCascadeD self) -> InPlaceFilterD"},
-	 { (char *)"BiquadCascadeD_filter", _wrap_BiquadCascadeD_filter, METH_VARARGS, (char *)"BiquadCascadeD_filter(BiquadCascadeD self, vectord f) -> vectord"},
-	 { (char *)"BiquadCascadeD_reset", _wrap_BiquadCascadeD_reset, METH_VARARGS, (char *)"BiquadCascadeD_reset(BiquadCascadeD self)"},
-	 { (char *)"BiquadCascadeD__print", _wrap_BiquadCascadeD__print, METH_VARARGS, (char *)"BiquadCascadeD__print(BiquadCascadeD self) -> std::string"},
 	 { (char *)"BiquadCascadeD_setSamplingFrequency", _wrap_BiquadCascadeD_setSamplingFrequency, METH_VARARGS, (char *)"BiquadCascadeD_setSamplingFrequency(BiquadCascadeD self, double arg3)"},
 	 { (char *)"BiquadCascadeD_setParameters", _wrap_BiquadCascadeD_setParameters, METH_VARARGS, (char *)"BiquadCascadeD_setParameters(BiquadCascadeD self, int n, double const * params) -> int"},
-	 { (char *)"BiquadCascadeD_append", _wrap_BiquadCascadeD_append, METH_VARARGS, (char *)"BiquadCascadeD_append(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquad< double > const & biq)"},
+	 { (char *)"delete_BiquadCascadeD", _wrap_delete_BiquadCascadeD, METH_VARARGS, (char *)"delete_BiquadCascadeD(BiquadCascadeD self)"},
 	 { (char *)"BiquadCascadeD_swigregister", BiquadCascadeD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthLowpassF", _wrap_new_ButterworthLowpassF, METH_VARARGS, (char *)"\n"
-		"ButterworthLowpassF(int order=3, double fc=0.7, double fsamp=0)\n"
-		"ButterworthLowpassF(int order=3, double fc=0.7)\n"
+		"ButterworthLowpassF(int order=3, double fmax=0.7, double fsamp=0)\n"
+		"ButterworthLowpassF(int order=3, double fmax=0.7)\n"
 		"ButterworthLowpassF(int order=3)\n"
 		"new_ButterworthLowpassF() -> ButterworthLowpassF\n"
 		""},
@@ -47079,8 +48097,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ButterworthLowpassF", _wrap_delete_ButterworthLowpassF, METH_VARARGS, (char *)"delete_ButterworthLowpassF(ButterworthLowpassF self)"},
 	 { (char *)"ButterworthLowpassF_swigregister", ButterworthLowpassF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthLowpassD", _wrap_new_ButterworthLowpassD, METH_VARARGS, (char *)"\n"
-		"ButterworthLowpassD(int order=3, double fc=0.7, double fsamp=0)\n"
-		"ButterworthLowpassD(int order=3, double fc=0.7)\n"
+		"ButterworthLowpassD(int order=3, double fmax=0.7, double fsamp=0)\n"
+		"ButterworthLowpassD(int order=3, double fmax=0.7)\n"
 		"ButterworthLowpassD(int order=3)\n"
 		"new_ButterworthLowpassD() -> ButterworthLowpassD\n"
 		""},
@@ -47090,8 +48108,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ButterworthLowpassD", _wrap_delete_ButterworthLowpassD, METH_VARARGS, (char *)"delete_ButterworthLowpassD(ButterworthLowpassD self)"},
 	 { (char *)"ButterworthLowpassD_swigregister", ButterworthLowpassD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthHighpassF", _wrap_new_ButterworthHighpassF, METH_VARARGS, (char *)"\n"
-		"ButterworthHighpassF(int order=3, double fc=2.0, double fsamp=0)\n"
-		"ButterworthHighpassF(int order=3, double fc=2.0)\n"
+		"ButterworthHighpassF(int order=3, double fmin=2.0, double fsamp=0)\n"
+		"ButterworthHighpassF(int order=3, double fmin=2.0)\n"
 		"ButterworthHighpassF(int order=3)\n"
 		"new_ButterworthHighpassF() -> ButterworthHighpassF\n"
 		""},
@@ -47101,8 +48119,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ButterworthHighpassF", _wrap_delete_ButterworthHighpassF, METH_VARARGS, (char *)"delete_ButterworthHighpassF(ButterworthHighpassF self)"},
 	 { (char *)"ButterworthHighpassF_swigregister", ButterworthHighpassF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthHighpassD", _wrap_new_ButterworthHighpassD, METH_VARARGS, (char *)"\n"
-		"ButterworthHighpassD(int order=3, double fc=2.0, double fsamp=0)\n"
-		"ButterworthHighpassD(int order=3, double fc=2.0)\n"
+		"ButterworthHighpassD(int order=3, double fmin=2.0, double fsamp=0)\n"
+		"ButterworthHighpassD(int order=3, double fmin=2.0)\n"
 		"ButterworthHighpassD(int order=3)\n"
 		"new_ButterworthHighpassD() -> ButterworthHighpassD\n"
 		""},
@@ -47112,7 +48130,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ButterworthHighpassD", _wrap_delete_ButterworthHighpassD, METH_VARARGS, (char *)"delete_ButterworthHighpassD(ButterworthHighpassD self)"},
 	 { (char *)"ButterworthHighpassD_swigregister", ButterworthHighpassD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthBandpassF", _wrap_new_ButterworthBandpassF, METH_VARARGS, (char *)"\n"
-		"ButterworthBandpassF(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0, bool init=False)\n"
 		"ButterworthBandpassF(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
 		"ButterworthBandpassF(int order=3, double fmin=0.7, double fmax=2.0)\n"
 		"ButterworthBandpassF(int order=3, double fmin=0.7)\n"
@@ -47122,16 +48139,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ButterworthBandpassF_setSamplingFrequency", _wrap_ButterworthBandpassF_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthBandpassF_setSamplingFrequency(ButterworthBandpassF self, double fsamp)"},
 	 { (char *)"ButterworthBandpassF_setParameters", _wrap_ButterworthBandpassF_setParameters, METH_VARARGS, (char *)"ButterworthBandpassF_setParameters(ButterworthBandpassF self, int n, double const * params) -> int"},
 	 { (char *)"ButterworthBandpassF_clone", _wrap_ButterworthBandpassF_clone, METH_VARARGS, (char *)"ButterworthBandpassF_clone(ButterworthBandpassF self) -> InPlaceFilterF"},
-	 { (char *)"ButterworthBandpassF_apply", _wrap_ButterworthBandpassF_apply, METH_VARARGS, (char *)"ButterworthBandpassF_apply(ButterworthBandpassF self, int n, float * inout)"},
-	 { (char *)"ButterworthBandpassF_reset", _wrap_ButterworthBandpassF_reset, METH_VARARGS, (char *)"ButterworthBandpassF_reset(ButterworthBandpassF self)"},
-	 { (char *)"ButterworthBandpassF_handleGap", _wrap_ButterworthBandpassF_handleGap, METH_VARARGS, (char *)"\n"
-		"handleGap(int n=0)\n"
-		"ButterworthBandpassF_handleGap(ButterworthBandpassF self)\n"
-		""},
 	 { (char *)"delete_ButterworthBandpassF", _wrap_delete_ButterworthBandpassF, METH_VARARGS, (char *)"delete_ButterworthBandpassF(ButterworthBandpassF self)"},
 	 { (char *)"ButterworthBandpassF_swigregister", ButterworthBandpassF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ButterworthBandpassD", _wrap_new_ButterworthBandpassD, METH_VARARGS, (char *)"\n"
-		"ButterworthBandpassD(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0, bool init=False)\n"
 		"ButterworthBandpassD(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
 		"ButterworthBandpassD(int order=3, double fmin=0.7, double fmax=2.0)\n"
 		"ButterworthBandpassD(int order=3, double fmin=0.7)\n"
@@ -47141,14 +48151,56 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ButterworthBandpassD_setSamplingFrequency", _wrap_ButterworthBandpassD_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthBandpassD_setSamplingFrequency(ButterworthBandpassD self, double fsamp)"},
 	 { (char *)"ButterworthBandpassD_setParameters", _wrap_ButterworthBandpassD_setParameters, METH_VARARGS, (char *)"ButterworthBandpassD_setParameters(ButterworthBandpassD self, int n, double const * params) -> int"},
 	 { (char *)"ButterworthBandpassD_clone", _wrap_ButterworthBandpassD_clone, METH_VARARGS, (char *)"ButterworthBandpassD_clone(ButterworthBandpassD self) -> InPlaceFilterD"},
-	 { (char *)"ButterworthBandpassD_apply", _wrap_ButterworthBandpassD_apply, METH_VARARGS, (char *)"ButterworthBandpassD_apply(ButterworthBandpassD self, int n, double * inout)"},
-	 { (char *)"ButterworthBandpassD_reset", _wrap_ButterworthBandpassD_reset, METH_VARARGS, (char *)"ButterworthBandpassD_reset(ButterworthBandpassD self)"},
-	 { (char *)"ButterworthBandpassD_handleGap", _wrap_ButterworthBandpassD_handleGap, METH_VARARGS, (char *)"\n"
-		"handleGap(int n=0)\n"
-		"ButterworthBandpassD_handleGap(ButterworthBandpassD self)\n"
-		""},
 	 { (char *)"delete_ButterworthBandpassD", _wrap_delete_ButterworthBandpassD, METH_VARARGS, (char *)"delete_ButterworthBandpassD(ButterworthBandpassD self)"},
 	 { (char *)"ButterworthBandpassD_swigregister", ButterworthBandpassD_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ButterworthHighLowpassF", _wrap_new_ButterworthHighLowpassF, METH_VARARGS, (char *)"\n"
+		"ButterworthHighLowpassF(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
+		"ButterworthHighLowpassF(int order=3, double fmin=0.7, double fmax=2.0)\n"
+		"ButterworthHighLowpassF(int order=3, double fmin=0.7)\n"
+		"ButterworthHighLowpassF(int order=3)\n"
+		"new_ButterworthHighLowpassF() -> ButterworthHighLowpassF\n"
+		""},
+	 { (char *)"ButterworthHighLowpassF_setSamplingFrequency", _wrap_ButterworthHighLowpassF_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthHighLowpassF_setSamplingFrequency(ButterworthHighLowpassF self, double fsamp)"},
+	 { (char *)"ButterworthHighLowpassF_setParameters", _wrap_ButterworthHighLowpassF_setParameters, METH_VARARGS, (char *)"ButterworthHighLowpassF_setParameters(ButterworthHighLowpassF self, int n, double const * params) -> int"},
+	 { (char *)"ButterworthHighLowpassF_clone", _wrap_ButterworthHighLowpassF_clone, METH_VARARGS, (char *)"ButterworthHighLowpassF_clone(ButterworthHighLowpassF self) -> InPlaceFilterF"},
+	 { (char *)"delete_ButterworthHighLowpassF", _wrap_delete_ButterworthHighLowpassF, METH_VARARGS, (char *)"delete_ButterworthHighLowpassF(ButterworthHighLowpassF self)"},
+	 { (char *)"ButterworthHighLowpassF_swigregister", ButterworthHighLowpassF_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ButterworthHighLowpassD", _wrap_new_ButterworthHighLowpassD, METH_VARARGS, (char *)"\n"
+		"ButterworthHighLowpassD(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
+		"ButterworthHighLowpassD(int order=3, double fmin=0.7, double fmax=2.0)\n"
+		"ButterworthHighLowpassD(int order=3, double fmin=0.7)\n"
+		"ButterworthHighLowpassD(int order=3)\n"
+		"new_ButterworthHighLowpassD() -> ButterworthHighLowpassD\n"
+		""},
+	 { (char *)"ButterworthHighLowpassD_setSamplingFrequency", _wrap_ButterworthHighLowpassD_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthHighLowpassD_setSamplingFrequency(ButterworthHighLowpassD self, double fsamp)"},
+	 { (char *)"ButterworthHighLowpassD_setParameters", _wrap_ButterworthHighLowpassD_setParameters, METH_VARARGS, (char *)"ButterworthHighLowpassD_setParameters(ButterworthHighLowpassD self, int n, double const * params) -> int"},
+	 { (char *)"ButterworthHighLowpassD_clone", _wrap_ButterworthHighLowpassD_clone, METH_VARARGS, (char *)"ButterworthHighLowpassD_clone(ButterworthHighLowpassD self) -> InPlaceFilterD"},
+	 { (char *)"delete_ButterworthHighLowpassD", _wrap_delete_ButterworthHighLowpassD, METH_VARARGS, (char *)"delete_ButterworthHighLowpassD(ButterworthHighLowpassD self)"},
+	 { (char *)"ButterworthHighLowpassD_swigregister", ButterworthHighLowpassD_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ButterworthBandstopF", _wrap_new_ButterworthBandstopF, METH_VARARGS, (char *)"\n"
+		"ButterworthBandstopF(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
+		"ButterworthBandstopF(int order=3, double fmin=0.7, double fmax=2.0)\n"
+		"ButterworthBandstopF(int order=3, double fmin=0.7)\n"
+		"ButterworthBandstopF(int order=3)\n"
+		"new_ButterworthBandstopF() -> ButterworthBandstopF\n"
+		""},
+	 { (char *)"ButterworthBandstopF_setSamplingFrequency", _wrap_ButterworthBandstopF_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthBandstopF_setSamplingFrequency(ButterworthBandstopF self, double fsamp)"},
+	 { (char *)"ButterworthBandstopF_setParameters", _wrap_ButterworthBandstopF_setParameters, METH_VARARGS, (char *)"ButterworthBandstopF_setParameters(ButterworthBandstopF self, int n, double const * params) -> int"},
+	 { (char *)"ButterworthBandstopF_clone", _wrap_ButterworthBandstopF_clone, METH_VARARGS, (char *)"ButterworthBandstopF_clone(ButterworthBandstopF self) -> InPlaceFilterF"},
+	 { (char *)"delete_ButterworthBandstopF", _wrap_delete_ButterworthBandstopF, METH_VARARGS, (char *)"delete_ButterworthBandstopF(ButterworthBandstopF self)"},
+	 { (char *)"ButterworthBandstopF_swigregister", ButterworthBandstopF_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_ButterworthBandstopD", _wrap_new_ButterworthBandstopD, METH_VARARGS, (char *)"\n"
+		"ButterworthBandstopD(int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0)\n"
+		"ButterworthBandstopD(int order=3, double fmin=0.7, double fmax=2.0)\n"
+		"ButterworthBandstopD(int order=3, double fmin=0.7)\n"
+		"ButterworthBandstopD(int order=3)\n"
+		"new_ButterworthBandstopD() -> ButterworthBandstopD\n"
+		""},
+	 { (char *)"ButterworthBandstopD_setSamplingFrequency", _wrap_ButterworthBandstopD_setSamplingFrequency, METH_VARARGS, (char *)"ButterworthBandstopD_setSamplingFrequency(ButterworthBandstopD self, double fsamp)"},
+	 { (char *)"ButterworthBandstopD_setParameters", _wrap_ButterworthBandstopD_setParameters, METH_VARARGS, (char *)"ButterworthBandstopD_setParameters(ButterworthBandstopD self, int n, double const * params) -> int"},
+	 { (char *)"ButterworthBandstopD_clone", _wrap_ButterworthBandstopD_clone, METH_VARARGS, (char *)"ButterworthBandstopD_clone(ButterworthBandstopD self) -> InPlaceFilterD"},
+	 { (char *)"delete_ButterworthBandstopD", _wrap_delete_ButterworthBandstopD, METH_VARARGS, (char *)"delete_ButterworthBandstopD(ButterworthBandstopD self)"},
+	 { (char *)"ButterworthBandstopD_swigregister", ButterworthBandstopD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ChainFilterF", _wrap_new_ChainFilterF, METH_VARARGS, (char *)"new_ChainFilterF() -> ChainFilterF"},
 	 { (char *)"delete_ChainFilterF", _wrap_delete_ChainFilterF, METH_VARARGS, (char *)"delete_ChainFilterF(ChainFilterF self)"},
 	 { (char *)"ChainFilterF_add", _wrap_ChainFilterF_add, METH_VARARGS, (char *)"ChainFilterF_add(ChainFilterF self, InPlaceFilterF filter) -> bool"},
@@ -47380,6 +48432,12 @@ static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_
 static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
 }
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) x));
+}
 static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__TypedArrayT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::TypedArray< double > *)  ((Seiscomp::NumericArray< double > *) x));
 }
@@ -47403,6 +48461,12 @@ static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p
 }
 static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) x));
 }
 static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__TypedArrayT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::TypedArray< float > *)  ((Seiscomp::NumericArray< float > *) x));
@@ -47434,11 +48498,23 @@ static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(vo
 static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
 }
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) x));
+}
 static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
 }
 static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) x));
 }
 static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
@@ -47602,6 +48678,12 @@ static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Ma
 static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
 }
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *) x));
+}
 static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
 }
@@ -47680,6 +48762,12 @@ static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__M
 static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
 }
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *) x));
+}
 static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
 }
@@ -47750,17 +48838,21 @@ static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_float_t", "Seiscomp::Math::Filtering::ChainFilter< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t", "Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t", "Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients", "Seiscomp::Math::Filtering::IIR::BiquadCoefficients *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t", "Seiscomp::Math::Filtering::IIR::Biquad< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t", "Seiscomp::Math::Filtering::IIR::Biquad< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t", "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t", "Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t", "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t", "Seiscomp::Math::Filtering::IIR::ButterworthBandstop< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t", "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t", "Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t", "Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t", "Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t", "Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t", "Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t", "Seiscomp::Math::Filtering::IIR::WWSSN_SP_Filter< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t", "Seiscomp::Math::Filtering::IIR::WWSSN_SP_Filter< float > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR___Biquad = {"_p_Seiscomp__Math__Filtering__IIR___Biquad", "Seiscomp::Math::Filtering::IIR::_Biquad *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t = {"_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t", "Seiscomp::Math::Filtering::InPlaceFilter< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t = {"_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t", "Seiscomp::Math::Filtering::InPlaceFilter< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_double_t", "Seiscomp::Math::Filtering::InitialTaper< double > *", 0, 0, (void*)0, 0};
@@ -47808,8 +48900,12 @@ static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_it
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t = {"_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t", "std::allocator< Seiscomp::Math::Geo::City< double > > *|std::vector< Seiscomp::Math::Geo::City< double > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t = {"_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t", "std::allocator< Seiscomp::Math::Geo::City< float > > *|std::vector< Seiscomp::Math::Geo::City< float > >::allocator_type *", 0, 0, (void*)0, 0};
@@ -47834,7 +48930,9 @@ static swig_type_info _swigt__p_Seiscomp__Core__GeneralException = {"_p_Seiscomp
 static swig_type_info _swigt__p_Seiscomp__Core___private__OperationInterrupted = {"_p_Seiscomp__Core___private__OperationInterrupted", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__DuplicateClassname = {"_p_Seiscomp__Core__DuplicateClassname", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t = {"_p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t", "std::vector< Seiscomp::Math::Filtering::IIR::BiquadCoefficients,std::allocator< Seiscomp::Math::Filtering::IIR::BiquadCoefficients > > *|Seiscomp::Math::Filtering::IIR::Biquads *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t = {"_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t", "std::vector< Seiscomp::Math::Geo::City< double >,std::allocator< Seiscomp::Math::Geo::City< double > > > *|std::vector< Seiscomp::Math::Geo::City< double > > *|std::vector< Seiscomp::Math::Geo::CityD > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t = {"_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t", "std::vector< Seiscomp::Math::Geo::City< float > > *|std::vector< Seiscomp::Math::Geo::City< float >,std::allocator< Seiscomp::Math::Geo::City< float > > > *|std::vector< Seiscomp::Math::Geo::CityF > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t = {"_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t", "std::vector< Seiscomp::Math::Geo::NamedCoord< double > > *|std::vector< Seiscomp::Math::Geo::NamedCoord< double >,std::allocator< Seiscomp::Math::Geo::NamedCoord< double > > > *|std::vector< Seiscomp::Math::Geo::NamedCoordD > *", 0, 0, (void*)0, 0};
@@ -47844,6 +48942,10 @@ static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t =
 static swig_type_info _swigt__p_std__vectorT_float_std__allocatorT_float_t_t = {"_p_std__vectorT_float_std__allocatorT_float_t_t", "std::vector< float > *|std::vector< float,std::allocator< float > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t = {"_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t", "std::vector< std::complex< double > > *|std::vector< Seiscomp::Math::Complex,std::allocator< Seiscomp::Math::Complex > > *|std::vector< Seiscomp::Math::Complex > *|std::vector< std::complex< double >,std::allocator< std::complex< double > > > *|Seiscomp::Math::Restitution::Poles *|Seiscomp::Math::SeismometerResponse::Poles *|Seiscomp::Math::Restitution::Zeros *|Seiscomp::Math::SeismometerResponse::Zeros *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|uint_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *|uint_least16_t *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -47924,17 +49026,21 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t,
-  &_swigt__p_Seiscomp__Math__Filtering__IIR___Biquad,
   &_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t,
@@ -47985,8 +49091,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_difference_type,
   &_swigt__p_double,
   &_swigt__p_float,
+  &_swigt__p_int,
   &_swigt__p_iterator,
+  &_swigt__p_long_long,
   &_swigt__p_p_PyObject,
+  &_swigt__p_short,
+  &_swigt__p_signed_char,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t,
   &_swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t,
@@ -47998,7 +49108,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__complexT_double_t,
   &_swigt__p_std__exception,
   &_swigt__p_std__invalid_argument,
+  &_swigt__p_std__ostream,
   &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t,
@@ -48008,6 +49120,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__vectorT_float_std__allocatorT_float_t_t,
   &_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
   &_swigt__p_swig__SwigPyIterator,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long_long,
+  &_swigt__p_unsigned_short,
   &_swigt__p_value_type,
 };
 
@@ -48032,7 +49148,7 @@ static swig_cast_info _swigc__p_Seiscomp__Core___private__InterruptibleObject[] 
 static swig_cast_info _swigc__p_Seiscomp__Core__GreensFunction[] = {{&_swigt__p_Seiscomp__Core__GreensFunction, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Record[] = {{&_swigt__p_Seiscomp__Record, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__GenericRecord[] = {{&_swigt__p_Seiscomp__GenericRecord, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, _p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, _p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t[] = {  {&_swigt__p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t[] = {  {&_swigt__p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -48076,21 +49192,25 @@ static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_double_t[] =
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR___Biquad[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR___Biquad, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -48136,8 +49256,12 @@ static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t[] = {  {&_swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t[] = {  {&_swigt__p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -48162,7 +49286,9 @@ static swig_cast_info _swigc__p_Seiscomp__Core___private__OperationInterrupted[]
 static swig_cast_info _swigc__p_Seiscomp__Core__DuplicateClassname[] = {{&_swigt__p_Seiscomp__Core__DuplicateClassname, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__exception[] = {  {&_swigt__p_Seiscomp__Core__ValueError, _p_Seiscomp__Core__ValueErrorTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ClassNotFound, _p_Seiscomp__Core__ClassNotFoundTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeException, _p_Seiscomp__Core__TypeExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueException, _p_Seiscomp__Core__ValueExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__UnderflowException, _p_Seiscomp__Core__UnderflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__OverflowException, _p_Seiscomp__Core__OverflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeConversionException, _p_Seiscomp__Core__TypeConversionExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__EndOfStreamException, _p_Seiscomp__Core__EndOfStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__StreamException, _p_Seiscomp__Core__StreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__MemoryException, _p_Seiscomp__Core__MemoryExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__GeneralException, _p_Seiscomp__Core__GeneralExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_std__exception, 0, 0, 0},  {&_swigt__p_Seiscomp__Core___private__OperationInterrupted, _p_Seiscomp__Core___private__OperationInterruptedTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__DuplicateClassname, _p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AlignmentError, _p_Seiscomp__Math__Filtering__AlignmentErrorTo_p_std__exception, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -48172,6 +49298,10 @@ static swig_cast_info _swigc__p_std__vectorT_double_std__allocatorT_double_t_t[]
 static swig_cast_info _swigc__p_std__vectorT_float_std__allocatorT_float_t_t[] = {  {&_swigt__p_std__vectorT_float_std__allocatorT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -48252,17 +49382,21 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCoefficients,
   _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandstopT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighLowpassT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t,
-  _swigc__p_Seiscomp__Math__Filtering__IIR___Biquad,
   _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t,
@@ -48313,8 +49447,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_difference_type,
   _swigc__p_double,
   _swigc__p_float,
+  _swigc__p_int,
   _swigc__p_iterator,
+  _swigc__p_long_long,
   _swigc__p_p_PyObject,
+  _swigc__p_short,
+  _swigc__p_signed_char,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t,
   _swigc__p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t,
@@ -48326,7 +49464,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__complexT_double_t,
   _swigc__p_std__exception,
   _swigc__p_std__invalid_argument,
+  _swigc__p_std__ostream,
   _swigc__p_std__string,
+  _swigc__p_std__vectorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_std__allocatorT_Seiscomp__Math__Filtering__IIR__BiquadCoefficients_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t,
@@ -48336,6 +49476,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__vectorT_float_std__allocatorT_float_t_t,
   _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
   _swigc__p_swig__SwigPyIterator,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long_long,
+  _swigc__p_unsigned_short,
   _swigc__p_value_type,
 };
 

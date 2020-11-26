@@ -81,9 +81,9 @@ class SC_GUI_API FMMap : public MapWidget {
 	Q_OBJECT
 
 	public:
-		FMMap(const MapsDesc &maps, QWidget *parent = 0, Qt::WFlags f = 0)
+		FMMap(const MapsDesc &maps, QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : MapWidget(maps, parent, f) { init(); }
-		FMMap(Map::ImageTree* mapTree, QWidget *parent = 0, Qt::WFlags f = 0)
+		FMMap(Map::ImageTree* mapTree, QWidget *parent = 0, Qt::WindowFlags f = 0)
 		 : MapWidget(mapTree, parent, f) { init(); }
 
 		virtual ~FMMap();
@@ -173,6 +173,8 @@ class SC_GUI_API EventEdit : public QWidget, public DataModel::Observer {
 		void currentMagnitudeChanged(QTreeWidgetItem*, QTreeWidgetItem*);
 
 		void originTreeCustomContextMenu(const QPoint &);
+		void originTreeHeaderCustomContextMenu(const QPoint &);
+		void fmTreeHeaderCustomContextMenu(const QPoint &);
 		void magnitudeTreeCustomContextMenu(const QPoint &);
 
 		void fixOrigin();

@@ -27,7 +27,7 @@ class MvMapWidget : public Seiscomp::Gui::MapWidget {
 	// ----------------------------------------------------------------------
 	public:
 		MvMapWidget(const Seiscomp::Gui::MapsDesc &,
-		            QWidget* parent = 0, Qt::WFlags f = 0);
+		            QWidget* parent = 0, Qt::WindowFlags f = 0);
 
 		~MvMapWidget() {}
 

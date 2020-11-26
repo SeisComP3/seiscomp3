@@ -51,7 +51,7 @@ namespace Gui {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeMap::MagnitudeMap(const MapsDesc &maps,
-                           QWidget *parent, Qt::WFlags f)
+                           QWidget *parent, Qt::WindowFlags f)
  : MapWidget(maps, parent, f), _origin(NULL),
    _interactive(true), _drawStations(false) {
 	_lastSymbolSize = 0;
@@ -64,7 +64,7 @@ MagnitudeMap::MagnitudeMap(const MapsDesc &maps,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeMap::MagnitudeMap(Map::ImageTree* mapTree,
-                           QWidget *parent, Qt::WFlags f)
+                           QWidget *parent, Qt::WindowFlags f)
  : MapWidget(mapTree, parent, f), _origin(NULL),
    _interactive(true), _drawStations(false) {
 	_lastSymbolSize = 0;

@@ -21,7 +21,6 @@
 
 #include "ui_searchwidget.h"
 
-
 class SearchWidget : public QWidget {
 	Q_OBJECT
 
@@ -38,7 +37,7 @@ class SearchWidget : public QWidget {
 	// X'struction
 	// ----------------------------------------------------------------------
 	private:
-		SearchWidget(QWidget* parent = 0, Qt::WFlags f = 0);
+		SearchWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
 		~SearchWidget();
 
 	// ----------------------------------------------------------------------
@@ -49,7 +48,7 @@ class SearchWidget : public QWidget {
 		const Matches& matches();
 		const Matches& previousMatches() const;
 
-		static SearchWidget* Create(QWidget* parent = 0, Qt::WFlags f = 0);
+		static SearchWidget* Create(QWidget* parent = 0, Qt::WindowFlags f = 0);
 
 	// ----------------------------------------------------------------------
 	// Protected Interface

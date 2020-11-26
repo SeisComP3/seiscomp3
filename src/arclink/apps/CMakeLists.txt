@@ -1,1 +1,1 @@
-SUBDIRS(arclink arclinkfetch arclinktool breqfast reqhandler misc syncarc proxy webinterface webreqlog)
+SUBDIRS(arclink arclinkfetch arclinktool breqfast reqhandler misc syncarc proxy webreqlog)

@@ -9,8 +9,8 @@
 
 #define SEISCOMP_COMPONENT SWE
 #include <fdsnxml/coefficients.h>
-#include <fdsnxml/floattype.h>
-#include <fdsnxml/floattype.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
 #include <algorithm>
 #include <seiscomp3/logging/log.h>
 
@@ -28,8 +28,8 @@ static Seiscomp::Core::MetaEnumImpl<CfTransferFunctionType> metaCfTransferFuncti
 
 Coefficients::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
 	addProperty(enumProperty("CfTransferFunctionType", "CfTransferFunctionType", false, false, &metaCfTransferFunctionType, &Coefficients::setCfTransferFunctionType, &Coefficients::cfTransferFunctionType));
-	addProperty(arrayClassProperty<FloatType>("Numerator", "FDSNXML::FloatType", &Coefficients::numeratorCount, &Coefficients::numerator, static_cast<bool (Coefficients::*)(FloatType*)>(&Coefficients::addNumerator), &Coefficients::removeNumerator, static_cast<bool (Coefficients::*)(FloatType*)>(&Coefficients::removeNumerator)));
-	addProperty(arrayClassProperty<FloatType>("Denominator", "FDSNXML::FloatType", &Coefficients::denominatorCount, &Coefficients::denominator, static_cast<bool (Coefficients::*)(FloatType*)>(&Coefficients::addDenominator), &Coefficients::removeDenominator, static_cast<bool (Coefficients::*)(FloatType*)>(&Coefficients::removeDenominator)));
+	addProperty(arrayClassProperty<FloatNoUnitWithNumberType>("Numerator", "FDSNXML::FloatNoUnitWithNumberType", &Coefficients::numeratorCount, &Coefficients::numerator, static_cast<bool (Coefficients::*)(FloatNoUnitWithNumberType*)>(&Coefficients::addNumerator), &Coefficients::removeNumerator, static_cast<bool (Coefficients::*)(FloatNoUnitWithNumberType*)>(&Coefficients::removeNumerator)));
+	addProperty(arrayClassProperty<FloatNoUnitWithNumberType>("Denominator", "FDSNXML::FloatNoUnitWithNumberType", &Coefficients::denominatorCount, &Coefficients::denominator, static_cast<bool (Coefficients::*)(FloatNoUnitWithNumberType*)>(&Coefficients::addDenominator), &Coefficients::removeDenominator, static_cast<bool (Coefficients::*)(FloatNoUnitWithNumberType*)>(&Coefficients::removeDenominator)));
 }
 
 
@@ -112,7 +112,7 @@ size_t Coefficients::numeratorCount() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FloatType* Coefficients::numerator(size_t i) const {
+FloatNoUnitWithNumberType* Coefficients::numerator(size_t i) const {
 	return _numerators[i].get();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -121,7 +121,7 @@ FloatType* Coefficients::numerator(size_t i) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Coefficients::addNumerator(FloatType *obj) {
+bool Coefficients::addNumerator(FloatNoUnitWithNumberType *obj) {
 	if ( obj == NULL )
 		return false;
 
@@ -136,15 +136,15 @@ bool Coefficients::addNumerator(FloatType *obj) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Coefficients::removeNumerator(FloatType *obj) {
+bool Coefficients::removeNumerator(FloatNoUnitWithNumberType *obj) {
 	if ( obj == NULL )
 		return false;
 
-	std::vector<FloatTypePtr>::iterator it;
+	std::vector<FloatNoUnitWithNumberTypePtr>::iterator it;
 	it = std::find(_numerators.begin(), _numerators.end(), obj);
 	// Element has not been found
 	if ( it == _numerators.end() ) {
-		SEISCOMP_ERROR("Coefficients::removeNumerator(FloatType*) -> child object has not been found although the parent pointer matches???");
+		SEISCOMP_ERROR("Coefficients::removeNumerator(FloatNoUnitWithNumberType*) -> child object has not been found although the parent pointer matches???");
 		return false;
 	}
 
@@ -180,7 +180,7 @@ size_t Coefficients::denominatorCount() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FloatType* Coefficients::denominator(size_t i) const {
+FloatNoUnitWithNumberType* Coefficients::denominator(size_t i) const {
 	return _denominators[i].get();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -189,7 +189,7 @@ FloatType* Coefficients::denominator(size_t i) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Coefficients::addDenominator(FloatType *obj) {
+bool Coefficients::addDenominator(FloatNoUnitWithNumberType *obj) {
 	if ( obj == NULL )
 		return false;
 
@@ -204,15 +204,15 @@ bool Coefficients::addDenominator(FloatType *obj) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Coefficients::removeDenominator(FloatType *obj) {
+bool Coefficients::removeDenominator(FloatNoUnitWithNumberType *obj) {
 	if ( obj == NULL )
 		return false;
 
-	std::vector<FloatTypePtr>::iterator it;
+	std::vector<FloatNoUnitWithNumberTypePtr>::iterator it;
 	it = std::find(_denominators.begin(), _denominators.end(), obj);
 	// Element has not been found
 	if ( it == _denominators.end() ) {
-		SEISCOMP_ERROR("Coefficients::removeDenominator(FloatType*) -> child object has not been found although the parent pointer matches???");
+		SEISCOMP_ERROR("Coefficients::removeDenominator(FloatNoUnitWithNumberType*) -> child object has not been found although the parent pointer matches???");
 		return false;
 	}
 

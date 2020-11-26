@@ -26,11 +26,12 @@ Station::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(objectProperty<LongitudeType>("longitude", "FDSNXML::LongitudeType", false, false, &Station::setLongitude, &Station::longitude));
 	addProperty(objectProperty<DistanceType>("elevation", "FDSNXML::DistanceType", false, false, &Station::setElevation, &Station::elevation));
 	addProperty(objectProperty<Site>("site", "FDSNXML::Site", false, false, &Station::setSite, &Station::site));
+	addProperty(objectProperty<FloatType>("waterLevel", "FDSNXML::FloatType", false, true, &Station::setWaterLevel, &Station::waterLevel));
 	addProperty(Core::simpleProperty("vault", "string", false, false, false, false, false, false, NULL, &Station::setVault, &Station::vault));
 	addProperty(Core::simpleProperty("geology", "string", false, false, false, false, false, false, NULL, &Station::setGeology, &Station::geology));
 	addProperty(arrayClassProperty<Equipment>("equipment", "FDSNXML::Equipment", &Station::equipmentCount, &Station::equipment, static_cast<bool (Station::*)(Equipment*)>(&Station::addEquipment), &Station::removeEquipment, static_cast<bool (Station::*)(Equipment*)>(&Station::removeEquipment)));
 	addProperty(arrayClassProperty<Operator>("operators", "FDSNXML::Operator", &Station::operatorsCount, &Station::operators, static_cast<bool (Station::*)(Operator*)>(&Station::addOperators), &Station::removeOperators, static_cast<bool (Station::*)(Operator*)>(&Station::removeOperators)));
-	addProperty(Core::simpleProperty("creationDate", "datetime", false, false, false, false, false, false, NULL, &Station::setCreationDate, &Station::creationDate));
+	addProperty(Core::simpleProperty("creationDate", "datetime", false, false, false, false, true, false, NULL, &Station::setCreationDate, &Station::creationDate));
 	addProperty(Core::simpleProperty("terminationDate", "datetime", false, false, false, false, true, false, NULL, &Station::setTerminationDate, &Station::terminationDate));
 	addProperty(objectProperty<CounterType>("totalNumberChannels", "FDSNXML::CounterType", false, true, &Station::setTotalNumberChannels, &Station::totalNumberChannels));
 	addProperty(objectProperty<CounterType>("selectedNumberChannels", "FDSNXML::CounterType", false, true, &Station::setSelectedNumberChannels, &Station::selectedNumberChannels));
@@ -77,6 +78,8 @@ bool Station::operator==(const Station &rhs) const {
 	if ( !(_elevation == rhs._elevation) )
 		return false;
 	if ( !(_site == rhs._site) )
+		return false;
+	if ( !(_waterLevel == rhs._waterLevel) )
 		return false;
 	if ( !(_vault == rhs._vault) )
 		return false;
@@ -206,6 +209,37 @@ const Site& Station::site() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Station::setWaterLevel(const OPT(FloatType)& waterLevel) {
+	_waterLevel = waterLevel;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+FloatType& Station::waterLevel() {
+	if ( _waterLevel )
+		return *_waterLevel;
+	throw Seiscomp::Core::ValueException("Station.waterLevel is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const FloatType& Station::waterLevel() const {
+	if ( _waterLevel )
+		return *_waterLevel;
+	throw Seiscomp::Core::ValueException("Station.waterLevel is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Station::setVault(const std::string& vault) {
 	_vault = vault;
 }
@@ -242,7 +276,7 @@ const std::string& Station::geology() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Station::setCreationDate(DateTime creationDate) {
+void Station::setCreationDate(const OPT(DateTime)& creationDate) {
 	_creationDate = creationDate;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -252,7 +286,9 @@ void Station::setCreationDate(DateTime creationDate) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DateTime Station::creationDate() const {
-	return _creationDate;
+	if ( _creationDate )
+		return *_creationDate;
+	throw Seiscomp::Core::ValueException("Station.creationDate is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -348,6 +384,7 @@ Station& Station::operator=(const Station &other) {
 	_longitude = other._longitude;
 	_elevation = other._elevation;
 	_site = other._site;
+	_waterLevel = other._waterLevel;
 	_vault = other._vault;
 	_geology = other._geology;
 	_creationDate = other._creationDate;

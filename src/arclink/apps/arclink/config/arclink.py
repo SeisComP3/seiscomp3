@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, string, time, re, glob, shutil, sys, imp, random, fnmatch
 from seiscomp3 import Core, Kernel, Config, System, Client, Communication, DataModel
 
@@ -34,14 +35,14 @@ def logd(message):
     Debugding method
     '''
     if DEBUG:
-        print >>sys.stderr,message
+        print(message, file=sys.stderr)
         sys.stderr.flush()
 
 def log(message):
     '''
     Helper method for outputting with flushing
     '''
-    print >>sys.stdout,message
+    print(message, file=sys.stdout)
     sys.stdout.flush()
 
 class InventoryResolver(object):
@@ -160,11 +161,9 @@ class InventoryResolver(object):
                                     items.index((currentLocCode, stream.code()))
                                 except:
                                     items.append((currentLocCode, stream.code()))
-                        except Exception,e:
-                            #print e
+                        except Exception as e:
                             pass
-                except Exception,e:
-                    #print e
+                except Exception as e:
                     pass
     
         return items
@@ -176,7 +175,7 @@ class InventoryResolver(object):
 
             try:
                 stations = self._findStations(network, scode, start, end)
-            except Exception, e:
+            except Exception as  e:
                 logd(str(e))
                 continue
 
@@ -352,7 +351,7 @@ class RoutingDBUpdater(Client.Application):
                         ## Resolve Inventory
                         try:
                             networkList = iResolver.expandNetworkStation(networkCode, stationCode, route_start, route_end)
-                        except Exception, e:
+                        except Exception as  e:
                             log("Arclink routing issue, cannot find network object for %s %s (label: %s)::\n\t %s" % (staid.networkCode, staid.stationCode, r, str(e)))
                             continue
                         
@@ -398,7 +397,7 @@ class RoutingDBUpdater(Client.Application):
                         ## Resolve Inventory
                         try:
                             networkList = iResolver.expandNetworkStation(networkCode, stationCode, Core.Time.GMT(), None)
-                        except Exception, e:
+                        except Exception as  e:
                             log("Seedlink routing issue, cannot find network object for %s %s (label: %s)::\n\t %s" % (staid.networkCode, staid.stationCode, r, str(e)))
                             continue
     
@@ -461,7 +460,7 @@ class RoutingDBUpdater(Client.Application):
                 ## Resolve Inventory
                 try:
                     networkList = iResolver.expandNetworkStation(networkCode, stationCode, access_start, access_end)
-                except Exception, e:
+                except Exception as  e:
                     #log("Access issue, cannot find network object for %s %s::\n\t %s" % (staid.networkCode, staid.stationCode, str(e)))
                     for user in access_users.split(','):
                         existingAccess[(networkCode, "", "", "", user, "1980-01-01 00:00:00")] = (None,)
@@ -485,7 +484,7 @@ class RoutingDBUpdater(Client.Application):
                             existingAccess[(networkCode, stationCode, locationCode, streamCode, user, aStart.toString("%Y-%m-%d %H:%M:%S"))] = (aEnd,)
 
 
-        for ((routeType, networkCode, stationCode, locationCode, streamCode, address, start), (end, priority)) in existingRoutes.iteritems():
+        for ((routeType, networkCode, stationCode, locationCode, streamCode, address, start), (end, priority)) in existingRoutes.items():
             if routeType != 'A' and routeType != 'S':
                 logd("Invalid route type %s " % routeType)
                 continue
@@ -519,7 +518,7 @@ class RoutingDBUpdater(Client.Application):
                         if cpriority != priority:
                             arclink.setPriority(priority)
                             update = True
-                    except ValueError,e:
+                    except ValueError as e:
                         if priority:
                             arclink.setPriority(priority)
                             update = True
@@ -529,7 +528,7 @@ class RoutingDBUpdater(Client.Application):
                         if (not end) or (end and cend != end):
                             arclink.setEnd(end)
                             update = True
-                    except ValueError,e:
+                    except ValueError as e:
                         if end:
                             arclink.setEnd(end)
                             update = True
@@ -555,7 +554,7 @@ class RoutingDBUpdater(Client.Application):
                         if cpriority != priority:
                             seedlink.setPriority(priority)
                             update = True
-                    except ValueError,e:
+                    except ValueError as e:
                         if priority:
                             seedlink.setPriority(priority)
                             update = True
@@ -595,7 +594,7 @@ class RoutingDBUpdater(Client.Application):
 
             i += 1
 
-        for ((networkCode, stationCode, locationCode, streamCode, user, start), (end,)) in existingAccess.iteritems():
+        for ((networkCode, stationCode, locationCode, streamCode, user, start), (end,)) in existingAccess.items():
             access = routing.access(DataModel.AccessIndex(networkCode, stationCode, locationCode, streamCode, user, Core.Time.FromString(start, "%Y-%m-%d %H:%M:%S")))
             if not access:
                 access = DataModel.Access()
@@ -614,7 +613,7 @@ class RoutingDBUpdater(Client.Application):
                     if (not end) or (end and cend != end):
                         access.setEnd(end)
                         update = True
-                except ValueError,e:
+                except ValueError as e:
                     if end:
                         access.setEnd(end)
                         update = True
@@ -681,7 +680,7 @@ class TemplateModule(Kernel.Module):
 
         params['pkgroot'] = self.pkgroot
 
-        for (p,v) in params_ex.iteritems():
+        for (p,v) in params_ex.items():
             try:
                 t2 = Kernel.Template(v)
                 params[p] = t2.substitute(params)
@@ -699,7 +698,7 @@ class TemplateModule(Kernel.Module):
             pass
 
         if print_warning:
-            print "warning: parameter '%s' is not defined" % (name,)
+            print("warning: parameter '%s' is not defined" % (name,), file=sys.stderr)
 
         raise KeyError
 
@@ -718,6 +717,10 @@ class Module(TemplateModule):
         TemplateModule.__init__(self, env)
 
     def _run(self):
+        if sys.version_info[0] >= 3:
+            log("- Python 3 is not supported")
+            return 0
+
         if self.env.syslog:
             daemon_opt = '-D '
         else:

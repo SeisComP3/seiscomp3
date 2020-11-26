@@ -15,13 +15,14 @@
 #ifndef __SEISCOMP_GUI_CONNECTIONDIALOG_H__
 #define __SEISCOMP_GUI_CONNECTIONDIALOG_H__
 
-#include <QtGui>
 #include <seiscomp3/gui/core/ui_connectiondialog.h>
 #include <seiscomp3/gui/qt4.h>
 #ifndef Q_MOC_RUN
 #include <seiscomp3/io/database.h>
 #include <seiscomp3/communication/connection.h>
 #endif
+
+#include <QDialog>
 
 namespace Seiscomp {
 namespace Gui {
@@ -36,7 +37,7 @@ class SC_GUI_API ConnectionDialog : public QDialog {
 	public:
 		ConnectionDialog(Seiscomp::Communication::ConnectionPtr*,
 		                 Seiscomp::IO::DatabaseInterfacePtr*,
-		                 QWidget* parent = 0, Qt::WFlags f = 0);
+		                 QWidget* parent = 0, Qt::WindowFlags f = 0);
 		~ConnectionDialog();
 
 

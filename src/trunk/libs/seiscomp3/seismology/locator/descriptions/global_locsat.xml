@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="LOCSAT">
+		<extends>global</extends>
+		<description>
+			LOCSAT locator in SeisComP for computing source time and hypocenter
+			coordinates from phase picks.
+		</description>
+		<configuration>
+			<group name="LOCSAT">
+				<description>
+					Locator parameters: LOCSAT
+				</description>
+				<parameter name="profiles" type="list:string" default="iasp91,tab">
+					<description>
+					Defines a list of available LOCSAT travel-time tables.
+					</description>
+				</parameter>
+				<parameter name="enableConfidenceEllipsoid" type="boolean" default="false">
+					<description>
+					Compute the confidence ellipsoid.
+					</description>
+				</parameter>
+				<parameter name="depthInit" type="double" default="20.0" unit="km">
+					<description>
+					The initial depth estimate for LOCSAT.
+					</description>
+				</parameter>
+				<parameter name="defaultTimeError" type="double" default="1.0" unit="s">
+					<description>
+					The default pick time uncertainty assigned to LOCSAT's arrival deltim
+					attribute if pick uncertainties are not going to be used or
+					if they are absent. A time uncertainty of 0 s may result in
+					errors of the SVD decomposition in LOCSAT.
+					</description>
+				</parameter>
+				<parameter name="usePickUncertainties" type="boolean" default="false">
+					<description>
+					Whether to use pick time untertainties for arrival deltim rather
+					than a fixed time error. If true then the uncertainties are
+					retrieved from each individual pick object. If they are not
+					defined then the default pick time uncertainty will be used
+					as fallback.
+					</description>
+				</parameter>
+				<parameter name="degreesOfFreedom" type="int" default="9999">
+					<description>
+					Number of degrees of freedom.
+					</description>
+				</parameter>
+				<parameter name="confLevel" type="double" default="0.9">
+					<description>
+					Confidence level between 0.5 and 1.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

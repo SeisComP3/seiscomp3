@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -41,15 +41,17 @@ class EventList(Client.Application):
         self._delimiter = None
         self._modifiedAfterTime = None
 
-
     def createCommandLineDescription(self):
         self.commandline().addGroup("Events")
-        self.commandline().addStringOption("Events", "begin", "specify the lower bound of the time interval")
-        self.commandline().addStringOption("Events", "modified-after", "select events modified after the specified time")
-        self.commandline().addStringOption("Events", "end", "specify the upper bound of the time interval")
-        self.commandline().addStringOption("Events", "delimiter,D", "specify the delimiter of the resulting event ids (default: '\\n')")
+        self.commandline().addStringOption("Events", "begin",
+                                           "specify the lower bound of the time interval")
+        self.commandline().addStringOption("Events", "modified-after",
+                                           "select events modified after the specified time")
+        self.commandline().addStringOption(
+            "Events", "end", "specify the upper bound of the time interval")
+        self.commandline().addStringOption("Events", "delimiter,D",
+                                           "specify the delimiter of the resulting event ids (default: '\\n')")
         return True
-
 
     def init(self):
         if not Client.Application.init(self):
@@ -63,7 +65,8 @@ class EventList(Client.Application):
         if self._startTime is None:
             Logging.error("Wrong 'begin' format '%s'" % start)
             return False
-        Logging.debug("Setting start to %s" % self._startTime.toString("%FT%TZ"))
+        Logging.debug("Setting start to %s" %
+                      self._startTime.toString("%FT%TZ"))
 
         try:
             end = self.commandline().optionString("end")
@@ -84,13 +87,15 @@ class EventList(Client.Application):
             modifiedAfter = self.commandline().optionString("modified-after")
             self._modifiedAfterTime = _parseTime(modifiedAfter)
             if self._modifiedAfterTime is None:
-                Logging.error("Wrong 'modified-after' format '%s'" % modifiedAfter)
+                Logging.error("Wrong 'modified-after' format '%s'" %
+                              modifiedAfter)
                 return False
-            Logging.debug("Setting 'modified-after' time to %s" % self._modifiedAfterTime.toString("%FT%TZ"))
-        except: pass
+            Logging.debug("Setting 'modified-after' time to %s" %
+                          self._modifiedAfterTime.toString("%FT%TZ"))
+        except:
+            pass
 
         return True
-
 
     def run(self):
         first = True
@@ -117,6 +122,7 @@ class EventList(Client.Application):
 def main():
     app = EventList(len(sys.argv), sys.argv)
     app()
+
 
 if __name__ == "__main__":
     main()

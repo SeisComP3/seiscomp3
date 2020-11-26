@@ -114,6 +114,8 @@ class SC_SYSTEM_CLIENT_API Inventory {
 		//! not been found NULL will be returned.
 		DataModel::SensorLocation* getSensorLocation(const DataModel::Pick*) const;
 
+		DataModel::Stream* getStream(const DataModel::Pick*) const;
+
 		//! Returns the three streams (vertical, horizontal1, horizontal2) corresponding
 		//! to the picked stream.
 		DataModel::ThreeComponents getThreeComponents(const DataModel::Pick*) const;

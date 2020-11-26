@@ -24,7 +24,6 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/gui/qt4.h>
 
-
 namespace Seiscomp {
 namespace Gui {
 
@@ -38,12 +37,12 @@ public:
 	static void SetDefaultDepth(double depth);
 	static double DefaultDepth();
 
-	OriginDialog(QWidget * parent = 0, Qt::WFlags f = 0);
+	OriginDialog(QWidget * parent = 0, Qt::WindowFlags f = 0);
 	OriginDialog(double lon, double lat,
-	             QWidget * parent = 0, Qt::WFlags f = 0);
+	             QWidget * parent = 0, Qt::WindowFlags f = 0);
 
 	OriginDialog(double lon, double lat, double dep,
-	             QWidget * parent = 0, Qt::WFlags f = 0);
+	             QWidget * parent = 0, Qt::WindowFlags f = 0);
 
 	~OriginDialog();
 

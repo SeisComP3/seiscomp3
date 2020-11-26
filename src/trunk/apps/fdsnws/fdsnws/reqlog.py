@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function
+
 import os
 import time
 import datetime
@@ -9,46 +11,22 @@ import logging.handlers
 import GeoIP
 import threading
 
+from .utils import py3bstr
+
 mutex = threading.Lock()
+
 
 class MyFileHandler(logging.handlers.TimedRotatingFileHandler):
     def __init__(self, filename):
-        super(MyFileHandler, self).__init__(filename, when="midnight", utc=True)
+        super(MyFileHandler, self).__init__(
+            filename, when="midnight", utc=True)
 
-    # The rotate() method is missing in Python 2, must override doRollover()
-    # def rotate(self, source, dest):
-    #     super(MyFileHandler, self).rotate(source, dest)
-    #
-    #     if os.path.exists(dest):
-    #         subprocess.Popen(["bzip2", dest])
+    def rotate(self, source, dest):
+        super(MyFileHandler, self).rotate(source, dest)
 
-    def doRollover(self):
-        t = self.rolloverAt - self.interval
-        super(MyFileHandler, self).doRollover()
+        if os.path.exists(dest):
+            subprocess.Popen(["bzip2", dest])
 
-        currentTime = int(time.time())
-        dstNow = time.localtime(currentTime)[-1]
-
-        if self.utc:
-            timeTuple = time.gmtime(t)
-
-        else:
-            timeTuple = time.localtime(t)
-            dstThen = timeTuple[-1]
-
-            if dstNow != dstThen:
-                if dstNow:
-                    addend = 3600
-
-                else:
-                    addend = -3600
-
-                timeTuple = time.localtime(t + addend)
-
-        dfn = self.baseFilename + "." + time.strftime(self.suffix, timeTuple)
-
-        if os.path.exists(dfn):
-            subprocess.Popen(["bzip2", dfn])
 
 class Tracker(object):
     def __init__(self, logger, geoip, service, userName, userIP, clientID):
@@ -56,9 +34,9 @@ class Tracker(object):
         self.__userName = userName
 
         if userName:
-            userID = int(hashlib.md5(userName.lower()).hexdigest()[:8], 16)
+            userID = int(hashlib.md5(py3bstr(userName.lower())).hexdigest()[:8], 16)
         else:
-            userID = int(hashlib.md5(userIP).hexdigest()[:8], 16)
+            userID = int(hashlib.md5(py3bstr(userIP)).hexdigest()[:8], 16)
 
         self.__data = {
             'service': service,
@@ -75,7 +53,7 @@ class Tracker(object):
             self.__data['userLocation']['institution'] = "GFZ"
 
     def line_status(self, start_time, end_time, network, station, channel,
-        location, restricted, net_class, shared, constraints, volume, status, size, message):
+                    location, restricted, net_class, shared, constraints, volume, status, size, message):
 
         try:
             trace = self.__data['trace']
@@ -109,6 +87,7 @@ class Tracker(object):
         with mutex:
             self.__logger.info(json.dumps(self.__data))
 
+
 class RequestLog(object):
     def __init__(self, filename):
         self.__logger = logging.getLogger("seiscomp3.fdsnws.reqlog")
@@ -118,4 +97,3 @@ class RequestLog(object):
 
     def tracker(self, service, userName, userIP, clientID):
         return Tracker(self.__logger, self.__geoip, service, userName, userIP, clientID)
-

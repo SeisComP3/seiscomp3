@@ -60,22 +60,21 @@ string id(const Core::Time &t) {
 
 class InventoryVisitor : public Seiscomp::DataModel::Visitor {
 	public:
-		InventoryVisitor(Seiscomp::DataModel::Inventory *inv,
-		                 InventoryTask::SourceMap *map)
-		: _source(inv), _map(map) {}
+		InventoryVisitor(int id, InventoryTask::SourceMap *map)
+		: _id(id), _map(map) {}
 
 	public:
 		bool visit(PublicObject *po) {
-			(*_map)[po] = _source;
+			(*_map)[po] = _id;
 			return true;
 		}
 
 		virtual void visit(Object *o) {
-			(*_map)[o] = _source;
+			(*_map)[o] = _id;
 		}
 
 	private:
-		Seiscomp::DataModel::Inventory *_source;
+		int _id;
 		InventoryTask::SourceMap *_map;
 };
 
@@ -111,10 +110,10 @@ Merge::Merge(Inventory *inv) : InventoryTask(inv) {}
 	}
 
 
-bool Merge::push(Inventory *inv) {
+bool Merge::push(Inventory *inv, int id) {
 	if ( _inv == NULL ) return false;
 
-	InventoryVisitor bindToSource(inv, &_sources);
+	InventoryVisitor bindToSource(id, &_sources);
 	inv->accept(&bindToSource);
 
 	bool bckReg = PublicObject::IsRegistrationEnabled();

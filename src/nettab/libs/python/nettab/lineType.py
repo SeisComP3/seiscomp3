@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 import decimal
 import shlex
@@ -14,7 +15,7 @@ class Nw(object):
 	def __init__(self, line):
 		self.att = {}
 		try:
-			#print >>sys.stderr,"Network:", line
+			print("Network: %s" % line, file=sys.stderr)
 			items = shlex.split(line)
 			items.reverse()
 			self.code  = items.pop()
@@ -27,7 +28,7 @@ class Nw(object):
 			# Start < End
 			if self.end and self.start > self.end:
 				raise Exception("End Date before Start Date at line, %s %s" % (self.start, self.end))
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Invalid Network header line," + str(e))
 	
 	def getNetworkAttributes(self):
@@ -40,9 +41,9 @@ class Nw(object):
 			raise Exception("Wrong type of Network attribute line")
 		if verboseFlag:
 			if na.Key in self.att:
-				print >>sys.stderr," Overriding key %s=%s with %s" % (na.Key,self.att[na.Key], na.Value)
+				print(" Overriding key %s=%s with %s" % (na.Key,self.att[na.Key], na.Value), file=sys.stderr)
 			else:
-				print >>sys.stderr," Adding key %s to %s" % (na.Key, self.code)
+				print(" Adding key %s to %s" % (na.Key, self.code), file=sys.stderr)
 		self.att[na.Key] = na.Value
 
 class Sg(object):
@@ -52,7 +53,7 @@ class Sg(object):
 	def __init__(self, line):
 		self.att = {}
 		try:
-			#print >>sys.stderr,"Network:", line
+			#print("Network: %s" % line, file=sys.stderr)
 			items = shlex.split(line)
 			items.reverse()
 			self.code  = items.pop()
@@ -65,7 +66,7 @@ class Sg(object):
 			# Start < End
 			if self.end and self.start > self.end:
 				raise Exception("End Date before Start Date at line, %s %s" % (self.start, self.end))
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Invalid Station Group header line," + str(e))
 	
 	def getStationGroupAttributes(self):
@@ -78,9 +79,9 @@ class Sg(object):
 			raise Exception("Wrong type of Network attribute line")
 		if verboseFlag:
 			if na.Key in self.att:
-				print >>sys.stderr," Overriding key %s=%s with %s" % (na.Key,self.att[na.Key], na.Value)
+				print(" Overriding key %s=%s with %s" % (na.Key,self.att[na.Key], na.Value), file=sys.stderr)
 			else:
-				print >>sys.stderr," Adding key %s to %s" % (na.Key, self.code)
+				print(" Adding key %s to %s" % (na.Key, self.code), file=sys.stderr)
 		self.att[na.Key] = na.Value
 
 class Sr(object):
@@ -92,7 +93,7 @@ class Sr(object):
 		self.scode = None
 		self.start = datetime(1980,1,1)
 		self.end = None
-		#print >>sys.stderr,"  Station Attribute:", line
+		#print("  Station Attribute: %s" % line, file=sys.stderr)
 		# Sa: Key=Value Net,Station,Location,Channel to=<Date> from=<Date>
 		try:
 			items = shlex.split(line)
@@ -111,7 +112,7 @@ class Sr(object):
 			if self.start and self.end and self.start > self.end:
 				raise Exception("station reference has invalid dates.")
 			
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Invalid Station Attribute line, " + str(e))
 	
 	def _matchTime(self, start, end):
@@ -209,8 +210,8 @@ class Sl(object):
 			# Parse the Sampling string
 			self._parseSampling(self._sampling)
 
-			if verboseFlag: print >> sys.stderr,"Station Line:", self.code, self.start,"->",self.end, self._sampling, self._orientation
-		except Exception, e:
+			if verboseFlag: print("Station Line:", self.code, self.start,"->",self.end, self._sampling, self._orientation, file=sys.stderr)
+		except Exception as e:
 			raise Exception("Invalid Station line, " + str(e))
 
 	def _parseInstrument(self, inst):
@@ -226,7 +227,7 @@ class Sl(object):
 				gain = parsers.parseGain(items.pop(0))
 			except IndexError:
 				gain = None
-		except Exception,e:			
+		except Exception as e:
 			raise Exception("Invalid Instrument %s" % e)		
 		return (i,sn,gain)
 	
@@ -357,7 +358,7 @@ class Sl(object):
 					raise Exception("channel code %s aready exists for rate %s " % (band_code, sample_rate))
 				try:
 					(numerator, denominator) = parsers._rational(sample_rate)
-				except Exception,e:
+				except Exception as e:
 					raise Exception("Error converting sample_rate (%s)" % e)
 				self.channels[code] = { 'SampleRateNumerator': numerator,
 										'SampleRateDenominator': denominator }
@@ -370,26 +371,26 @@ class Sl(object):
 		if sa.match(self.code, None, None, self.start, self.end):
 			if verboseFlag:
 				if sa.Key in self.attStation:
-					print >>sys.stderr,"Overridding Station key %s=%s with %s" % (sa.Key, self.attStation[sa.Key], sa.Value)
+					print("Overridding Station key %s=%s with %s" % (sa.Key, self.attStation[sa.Key], sa.Value), file=sys.stderr)
 				else:
-					print >>sys.stderr,"Adding Station key %s to %s" % (sa.Key, self.code)
+					print("Adding Station key %s to %s" % (sa.Key, self.code), file=sys.stderr)
 			self.attStation[sa.Key] = sa.Value
 
 		if sa.match(self.code, self.location, None, self.start, self.end):
 			if verboseFlag:
 				if sa.Key in self.attLocation:
-					print >>sys.stderr, "Overriding Location key %s=%s with %s" % (sa.Key, self.attLocation[sa.Key], sa.Value)
+					print("Overriding Location key %s=%s with %s" % (sa.Key, self.attLocation[sa.Key], sa.Value), file=sys.stderr)
 				else:
-					print >>sys.stderr, "Adding Location key %s to %s" % (sa.Key, self.code)
+					print("Adding Location key %s to %s" % (sa.Key, self.code), file=sys.stderr)
 			self.attLocation[sa.Key] = sa.Value
 
 		for channel in self.channels.keys():
 			if sa.match(self.code, self.location, channel, self.start, self.end):
 				if verboseFlag:
 					if sa.Key in self.channels[channel].keys():
-						print >>sys.stderr, "Overriding Channel key %s=%s with %s" % (sa.Key, self.channels[channel][sa.Key], sa.Value)
+						print("Overriding Channel key %s=%s with %s" % (sa.Key, self.channels[channel][sa.Key], sa.Value), file=sys.stderr)
 					else:
-						print >>sys.stderr,"Adding Channel key %s to %s/%s" % (sa.Key, self.code, channel)
+						print("Adding Channel key %s to %s/%s" % (sa.Key, self.code, channel), file=sys.stderr)
 				self.channels[channel][sa.Key] = sa.Value
 	
 	def getStationAttributes(self):
@@ -445,12 +446,12 @@ class Na(object):
 		return "na/%s=%s" % (self.Key, self.Value)
 
 	def __init__(self, line):
-		#print >>sys.stderr,"Network Attribute:", line
+		#print("Network Attribute:", line, file=sys.stderr)
 		try:
 			items = shlex.split(line)
 			(key, value) = items[0].split("=", 1)
 			(self.Key, self.Value) = self._validate(key, value)
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Invalid Na line, " + str(e))
 
 	# Validate the line in terms of the seiscomp3 inventory definition.
@@ -470,7 +471,7 @@ class Sa(object):
 		self.items = []
 		self.start = None
 		self.end = None
-		#print >>sys.stderr,"  Station Attribute:", line
+		#print("  Station Attribute:", line, file=sys.stderr)
 		# Sa: Key=Value Net,Station,Location,Channel to=<Date> from=<Date>
 		try:
 			items = shlex.split(line)
@@ -499,14 +500,14 @@ class Sa(object):
 						channel = None
 
 					(self.Key, self.Value) = self._validate(key, value, station, location, channel)
-					## print >>sys.stderr,"Adding %s: %s %s %s" % (self.Key, station,location,channel)
+					## print("Adding %s: %s %s %s" % (self.Key, station,location,channel), file=sys.stderr)
 					self.items.append((station,location,channel))
 			if self.start and self.end and self.start > self.end:
 				raise Exception("attribute has invalid dates.")
 			if len(self.items) == 0:
 				raise Exception("no channel pattern specified.")
 			
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Invalid Station Attribute line, " + str(e))
 	
 	def _validate(self, key, value, station, location, channel):
@@ -655,7 +656,7 @@ class Ia(object):
 			pass
 
 		try:
-			for (pattern, rs) in self.patterns.iteritems():
+			for (pattern, rs) in self.patterns.items():
 				if self._regexCompare(pattern, elementID):
 					if len(rs) == 0: return True
 					for r in rs:
@@ -704,10 +705,10 @@ class Ia(object):
 						raise Exception("Invalid line restriction type %s" % restriction)
 					try:
 						idList[pattern].append(globals()[restriction])
-					except KeyError,e:
+					except KeyError as e:
 						raise Exception("Invalid restriction type [%s] on instrument attribute %s" % (restriction, self.Key))
 
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Error parsing Instrument Attribution line, %s" % e)
 
 class Se(object):
@@ -722,8 +723,8 @@ class Se(object):
 			self.id = items.pop(0)
 			self.gain = items[0]
 			self._generator = " ".join(items) 
-		except Exception,e:
-			print >> sys.stderr, "Error parsing Seismometer line, %s" % e
+		except Exception as e:
+			print("Error parsing Seismometer line, %s" % e, file=sys.stderr)
 	
 	def getAttributes(self):
 		att = {}
@@ -736,7 +737,7 @@ class Se(object):
 		pazid = "BADpazID"
 		try:
 			pz = Pz(" ".join([pazid, self._generator]), 'A', gain)
-		except Exception,e:
+		except Exception as e:
 			raise Exception("Error %s" % e)
 		
 		for ia in self.iaList:
@@ -757,7 +758,7 @@ class Se(object):
 			return
 	
 		if ia.Key in self.att:
-			if verboseFlag: print >> sys.stderr," [%s] Overriding key %s=%s with %s" % (self.id, ia.Key, self.att[ia.Key], ia.Value)
+			if verboseFlag: print(" [%s] Overriding key %s=%s with %s" % (self.id, ia.Key, self.att[ia.Key], ia.Value), file=sys.stderr)
 
 		self.att[ia.Key] = ia.Value
 
@@ -780,7 +781,7 @@ class Dl(object):
 				filterIndex = items.pop()
 				self.chains = self._parseStages(filterIndex, items.pop())
 			
-		except Exception,e:
+		except Exception as e:
 			raise Exception("[%s] Error parsing Datalogger line, %s" % (self.id, e))
 		
 	def _parseStages(self, filterIndex, line):
@@ -818,7 +819,7 @@ class Dl(object):
 			return
 
 		if ia.Key in self.att:
-			if verboseFlag: print >> sys.stderr," Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value)
+			if verboseFlag: print(" Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value), file=sys.stderr)
 
 		self.att[ia.Key] = ia.Value
 
@@ -827,7 +828,7 @@ class Dl(object):
 		
 		# Check that we can find my stages
 		if self.chains:
-			for chain in self.chains.itervalues():
+			for chain in self.chains.values():
 				for stage in chain:
 					if stage not in instruments.keys:
 						error.append(" [%s] Missing stage %s" % (self.id, stage))
@@ -841,7 +842,7 @@ class Dl(object):
 			return False
 		
 		if isinstance(genericFilter, Ff) or isinstance(genericFilter, Pz):
-			for chain in self.chains.itervalues():
+			for chain in self.chains.values():
 				if genericFilter.id in chain:
 					return True
 
@@ -876,8 +877,8 @@ class Cl(object):
 			if self.type != "S" and self.type != "L":
 				raise Exception("Unknown calibration type %s" % self.type)
 			
-		except Exception,e:
-			print >>sys.stderr, "Error parsing Calibration line, %s" % e
+		except Exception as e:
+			print("Error parsing Calibration line, %s" % e, file=sys.stderr)
 			raise Exception("Error!")
 
 	def check(self, instruments):
@@ -906,7 +907,7 @@ class Cl(object):
 			return
 
 		if ia.Key in self.att:
-			if verboseFlag: print >> sys.stderr," Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value)
+			if verboseFlag: print(" Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value), file=sys.stderr)
 
 		self.att[ia.Key] = ia.Value
 
@@ -919,7 +920,7 @@ class Ff(object):
 			raise Exception("Need a filter folder to load the coeficients files %s" % self.filename)
 		try:
 			fd = open(filterpath.rstrip(" /") + "/" + self.filename)
-		except IOError, e:
+		except IOError as  e:
 			raise Exception("cannot read %s%s: %s" % (filterpath, self.filename, str(e)))
 
 		try:
@@ -938,7 +939,7 @@ class Ff(object):
 				coeff_strlist = [ coeff_split[3 * i + 1] for i in range(real_ncf) ]
 				coeff = map(float, coeff_strlist)
 
-			except (TypeError, ValueError), e:
+			except (TypeError, ValueError) as e:
 				raise Exception("error reading %s/%s: %s"  % (self.id, self.filename, str(e)))
 
 		finally:
@@ -950,7 +951,7 @@ class Ff(object):
 				break
 			i += 1
 
-		#print >>sys.stderr,"I=%s NCF=%s" % (i,real_ncf)
+		#print("I=%s NCF=%s" % (i,real_ncf), file=sys.stderr)
 		if 2 * i > real_ncf:
 			real_ncf = i
 			real_sym = "B"
@@ -962,13 +963,13 @@ class Ff(object):
 			real_sym = "A"
 		
 		if self.sym != real_sym:
-			if verboseFlag: print >> sys.stderr," [%s] Warning: Symmetry code %s doesn't match (%s)" % (self.id, self.sym, self.filename)
+			if verboseFlag: print(" [%s] Warning: Symmetry code %s doesn't match (%s)" % (self.id, self.sym, self.filename), file=sys.stderr)
 			self.sym = real_sym
 			if not relaxed:
 				raise Exception(" [%s] Symmetry code %s doesn't match (%s)" % (self.id, self.sym,self.filename))
 
 		if self.ncf != real_ncf:
-			if verboseFlag: print >> sys.stderr," [%s] Warning: Coefficients number %s differs (%s)" % (self.id, self.ncf, self.filename)
+			if verboseFlag: print(" [%s] Warning: Coefficients number %s differs (%s)" % (self.id, self.ncf, self.filename), file=sys.stderr)
 			self.ncf = real_ncf
 			if not relaxed:
 				raise Exception(" [%s] Coefficients number %s differs (%s)" % (self.id, self.ncf, self.filename))
@@ -994,8 +995,8 @@ class Ff(object):
 			
 			self.gain = float(items.pop())
 			_frg = float(items.pop())
-		except Exception,e:
-			print >> sys.stderr,"[%s] Error parsing FIR Filter line, %s" % (self.id, e)
+		except Exception as e:
+			print("[%s] Error parsing FIR Filter line, %s" % (self.id, e), file=sys.stderr)
 			raise Exception("Error!")
 		
 		# Load the coefficients
@@ -1007,7 +1008,7 @@ class Ff(object):
 			real_delay = (float(self.ncf) - 0.5) / float(_inrate)
 
 		if self.sym in ('B', 'C') and abs(delay - real_delay) > 0.001:
-			if 0: print >> sys.stderr," [%s] Warning: delay=%g (estimated %g)" % (self.id, delay, real_delay)
+			if 0: print(" [%s] Warning: delay=%g (estimated %g)" % (self.id, delay, real_delay), file=sys.stderr)
 
 		self.ratt['Gain'] = self.gain
 		self.ratt['DecimationFactor'] = fac
@@ -1037,7 +1038,7 @@ class Ff(object):
 			raise Exception(" [%s] Cannot override a read-only attribute '%s'" % (self.id, ia.Key))
 
 		if ia.Key in self.att:
-			if verboseFlag: print >> sys.stderr," Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value)
+			if verboseFlag: print(" Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value), file=sys.stderr)
 
 		self.att[ia.Key] = ia.Value
 
@@ -1047,7 +1048,7 @@ class Pz(object):
 
 	def __init__(self, line, pzType = None, gain = None):
 		if not pzType:
-			print >> sys.stderr,"Type should be supplied as 'D' == for Iir filters or type 'A' for digiPaz filter on datalogger"
+			print("Type should be supplied as 'D' == for Iir filters or type 'A' for digiPaz filter on datalogger", file=sys.stderr)
 			raise Exception("Error.")
 
 		## Attributes array
@@ -1091,8 +1092,8 @@ class Pz(object):
 
 			if len(_poles) != _np or len(_zeros) != _nz:
 				raise Exception("Wrong number of poles & Zeros")
-		except Exception,e:
-			print >> sys.stderr,"Error parsing Poles and Zeros Filter line, %s" % e
+		except Exception as e:
+			print("Error parsing Poles and Zeros Filter line, %s" % e, file=sys.stderr)
 			raise Exception("Error!")
 
 	def getAttributes(self):
@@ -1112,6 +1113,6 @@ class Pz(object):
 			raise Exception(" [%s] Cannot override a read-only attribute '%s'" % (self.id, ia.Key))
 
 		if ia.Key in self.att:
-			if verboseFlag: print >> sys.stderr," Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value)
+			if verboseFlag: print(" Overriding key %s=%s with %s" % (ia.Key,self.att[ia.Key], ia.Value), file=sys.stderr)
 
 		self.att[ia.Key] = ia.Value

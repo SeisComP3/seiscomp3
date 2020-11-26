@@ -11,8 +11,8 @@
  ***************************************************************************/
 
 
-#ifndef __SC_CORE_FACTORY_H__
-#define __SC_CORE_FACTORY_H__
+#ifndef SC_CORE_FACTORY_H
+#define SC_CORE_FACTORY_H
 
 #include <map>
 #include <vector>
@@ -192,15 +192,23 @@ class ClassFactory : public ClassFactoryInterface<ROOT_TYPE> {
 };
 
 
-#define REGISTER_ABSTRACT_CLASS(BaseClass, Class) \
+#define REGISTER_ABSTRACT_CLASS_VAR(BaseClass, Class) \
 Seiscomp::Core::Generic::AbstractClassFactory<BaseClass, Class> __##Class##Factory__(#Class)
 
+#define REGISTER_ABSTRACT_CLASS(BaseClass, Class) \
+static REGISTER_ABSTRACT_CLASS_VAR(BaseClass, Class)
 
-#define REGISTER_CLASS(BaseClass, Class) \
+#define REGISTER_CLASS_VAR(BaseClass, Class) \
 Seiscomp::Core::Generic::ClassFactory<BaseClass, Class> __##Class##Factory__(#Class, false)
 
-#define REREGISTER_CLASS(BaseClass, Class) \
+#define REGISTER_CLASS(BaseClass, Class) \
+static REGISTER_CLASS_VAR(BaseClass, Class)
+
+#define REREGISTER_CLASS_VAR(BaseClass, Class) \
 Seiscomp::Core::Generic::ClassFactory<BaseClass, Class> __##Class##Factory__(#Class, true)
+
+#define REREGISTER_CLASS(BaseClass, Class) \
+static REREGISTER_CLASS_VAR(BaseClass, Class)
 
 #define DECLARE_CLASSFACTORY_FRIEND(BaseClass, Class) \
 friend class Seiscomp::Core::Generic::ClassFactory<BaseClass, Class>

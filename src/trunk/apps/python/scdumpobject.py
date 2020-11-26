@@ -1,11 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 import sys
 from seiscomp3 import Client, DataModel, IO
+
 
 class ObjectDumper(Client.Application):
 
     def __init__(self):
-        argv = [ bytes(a.encode()) for a in sys.argv ]
+        argv = [bytes(a.encode()) for a in sys.argv]
         Client.Application.__init__(self, len(argv), argv)
         self.setMessagingEnabled(True)
         self.setDatabaseEnabled(True, False)
@@ -18,9 +19,9 @@ class ObjectDumper(Client.Application):
 
     def loadEventParametersObject(self, publicID):
         for tp in \
-            DataModel.Pick, DataModel.Amplitude, DataModel.Origin, \
-            DataModel.Event, DataModel.FocalMechanism, \
-            DataModel.Magnitude, DataModel.StationMagnitude:
+                DataModel.Pick, DataModel.Amplitude, DataModel.Origin, \
+                DataModel.Event, DataModel.FocalMechanism, \
+                DataModel.Magnitude, DataModel.StationMagnitude:
 
             obj = self.query().loadObject(tp.TypeInfo(), publicID)
             obj = tp.Cast(obj)
@@ -31,14 +32,14 @@ class ObjectDumper(Client.Application):
 
     def loadInventoryObject(self, publicID):
         for tp in \
-            DataModel.Network, DataModel.Station, DataModel.Sensor, \
-            DataModel.SensorLocation, DataModel.Stream:
+                DataModel.Network, DataModel.Station, DataModel.Sensor, \
+                DataModel.SensorLocation, DataModel.Stream:
 
             obj = self.query().loadObject(tp.TypeInfo(), publicID)
             obj = tp.Cast(obj)
             if obj:
                 return obj
-    
+
     def run(self):
         publicID = self.commandline().optionString("public-id")
         obj = self.loadEventParametersObject(publicID)
@@ -54,6 +55,7 @@ class ObjectDumper(Client.Application):
         ar.writeObject(obj)
         ar.close()
         return True
+
 
 if __name__ == "__main__":
     app = ObjectDumper()

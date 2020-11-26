@@ -18,6 +18,7 @@
 #include <seiscomp3/geo/coordinate.h>
 #include <seiscomp3/geo/boundingbox.h>
 
+#include <map>
 
 namespace Seiscomp {
 namespace Geo {
@@ -42,16 +43,22 @@ struct SC_SYSTEM_CORE_API Category {
 
 class SC_SYSTEM_CORE_API GeoFeature : public Core::BaseObject {
 	public:
+		typedef std::map<std::string, std::string> Attributes;
+
 		GeoFeature(const Category* category = NULL, unsigned int rank = 1);
 		GeoFeature(const std::string& name, const Category* category,
 		           unsigned int rank);
+		GeoFeature(const std::string& name, const Category* category,
+		           unsigned int rank, const Attributes& attributes);
 		virtual ~GeoFeature();
 
+	public:
 		void setName(const std::string &name) { _name = name; }
 		const std::string &name() const { return _name; }
 
 		const Category *category() const { return _category; }
 		unsigned int rank() const { return _rank; }
+		const Attributes &attributes() const { return _attributes; }
 
 		/** Adds a vertex to the GeoFeature and changes the BBox if
 		  * applicable. If newSubFeature is set to true */
@@ -68,6 +75,12 @@ class SC_SYSTEM_CORE_API GeoFeature : public Core::BaseObject {
 		// Inverts the point order from counter-clockwise to clockwise or
 		// vice versa.
 		void invertOrder();
+
+		/**
+		 * @brief Sorts all subfeatures according to their area and containment
+		 *        from largest to smallest.
+		 */
+		void sort();
 
 		/**
 		 * @brief Sets an arbitrary pointer for user data. It is not touched
@@ -93,20 +106,21 @@ class SC_SYSTEM_CORE_API GeoFeature : public Core::BaseObject {
 	private:
 		typedef std::vector<GeoCoordinate> GeoCoordinates;
 
-		std::string     _name;
-		const Category *_category;
-		void           *_userData;
-		unsigned int    _rank;
+		std::string          _name;
+		const Category      *_category;
+		void                *_userData;
+		unsigned int         _rank;
+		GeoFeature::Attributes   _attributes;
 
-		GeoCoordinates  _vertices;
-		bool            _closedPolygon;
-		GeoBoundingBox  _bbox;
+		GeoCoordinates       _vertices;
+		bool                 _closedPolygon;
+		GeoBoundingBox       _bbox;
 
 		/** Index of verticies marking the start of a sub feature.
 		 *  E.g. if the GeoFeature defines a main area and a group of
 		 *  islands this vector would contain the indices of the start
 		 *  point of each island */
-		std::vector<size_t> _subFeatures;
+		std::vector<size_t>  _subFeatures;
 };
 
 

@@ -9,7 +9,7 @@ _seiscomp()
 	#
 	#  The basic options we'll complete.
 	#
-	local sc3Commands="install-deps setup shell enable disable start stop restart check status list exec update-config alias print help"
+	local sc3Commands="install-deps setup shell enable disable start stop restart reload check status list exec update-config alias print help"
 
 	#
 	#  Complete the arguments to some of the basic commands.
@@ -45,7 +45,7 @@ _seiscomp()
 			COMPREPLY=( $(compgen -W "crontab env" -- ${cur}) )
 			return 0
 		;;
-		enable|disable|start|stop|restart|check|status|update-config)
+		enable|disable|start|stop|restart|reload|check|status|update-config)
 			COMPREPLY=( $(compgen -W "$(eval $bin list modules | cut -d " " -f1)" -- ${cur}) )
 			return 0
 		;;

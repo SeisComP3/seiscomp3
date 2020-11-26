@@ -1,5 +1,8 @@
-<application xmlns="http://wadl.dev.java.net/2009/02"
-		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://www.w3.org/Submission/wadl/wadl.xsd"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns="http://wadl.dev.java.net/2009/02">
 	<resources base="/fdsnws/station/1">
 		<resource path="query">
 			<method name="GET">
@@ -37,13 +40,13 @@
 						<option value="404"/>
 					</param>
 					<param name="format" style="query" type="xsd:string" default="xml">
-						<option value="xml"/>
-						<option value="text"/>
+						<option value="xml" mediaType="application/xml"/>
+						<option value="text" mediaType="text/plain"/>
 
 						<!-- additional, non standard options -->
-						<option value="fdsnxml"/>
-						<option value="stationxml"/>
-						<option value="sc3ml"/>
+						<option value="fdsnxml" mediaType="application/xml"/>
+						<option value="stationxml" mediaType="application/xml"/>
+						<option value="sc3ml" mediaType="application/xml"/>
 					</param>
 
 					<!-- additional, non standard parameters -->

@@ -130,9 +130,7 @@
 								Postgresql server. There is currently no support in setup to create the
 								database for you. You have to setup the database and user accounts on
 								your own. The database schema is installed under share/db/postgresql.sql.
-								Note that the database encoding should be UTF8 and that you need
-								to set the encoding to 'escape' for PostgreSQL &gt;= 9,
-								e.g. &quot;ALTER DATABASE seiscomp3 SET bytea_output TO 'escape';&quot;
+								Note that the database encoding should be UTF8.
 								</description>
 							</option>
 						</input>

@@ -26,7 +26,7 @@ class SC_GUI_API ZoomRecordFrame : public QFrame {
 	Q_OBJECT
 
 	public:
-		ZoomRecordFrame(QWidget* parent = 0, Qt::WFlags f = 0);
+		ZoomRecordFrame(QWidget* parent = 0, Qt::WindowFlags f = 0);
 
 	protected:
 		void wheelEvent(QWheelEvent* e);

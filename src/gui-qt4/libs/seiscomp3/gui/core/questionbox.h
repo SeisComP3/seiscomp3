@@ -16,11 +16,8 @@
 #define __SEISCOMP_GUI_QUESTIONBOX_H__
 
 
-#include <QtGui>
-
 #include <seiscomp3/gui/core/ui_questionbox.h>
 #include <seiscomp3/gui/qt4.h>
-
 
 namespace Seiscomp {
 namespace Gui {
@@ -31,7 +28,8 @@ class SC_GUI_API QuestionBox {
 	//  X'truction
 	// ------------------------------------------------------------------
 	public:
-		QuestionBox(QWidget* parent = 0, Qt::WFlags f = 0);
+		QuestionBox(QWidget* parent = 0, Qt::WindowFlags = 0);
+
 		~QuestionBox();
 
 
@@ -58,7 +56,7 @@ class SC_GUI_API QuestionBox {
 	// ------------------------------------------------------------------
 	private:
 		QWidget* _parent;
-		Qt::WFlags _flags;
+		Qt::WindowFlags _flags;
 		QString _text;
 		QString _info;
 

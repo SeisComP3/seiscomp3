@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[WS_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for Reinhardt weather station (GITEWS)
 

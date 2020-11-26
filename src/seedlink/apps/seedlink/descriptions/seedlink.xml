@@ -63,6 +63,16 @@
 					Same as window_extraction for trusted IP addresses.
 				</description>
 			</parameter>
+			<parameter name="websocket" type="boolean" default="false">
+				<description>
+					Allow websocket connections.
+				</description>
+			</parameter>
+			<parameter name="websocket_trusted" type="boolean" default="false">
+				<description>
+					Same as websocket for trusted IP addresses.
+				</description>
+			</parameter>
 			<parameter name="msrtsimul" type="boolean" default="false">
 				<description>
 					If activated Seedlink uses the mseedfifo to read records and
@@ -235,6 +245,12 @@
 				<description>
 					Enable backfilling buffer for out-of-order records when raw samples
 					are transmitted. This values defines its capacity in seconds.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+					Name of the proc object (defined in streams.xml); used for processing
+					raw streams (streams submitted by a plugin as raw samples).
 				</description>
 			</parameter>
 		</configuration>

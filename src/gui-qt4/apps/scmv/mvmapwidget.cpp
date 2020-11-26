@@ -77,7 +77,7 @@ class DummyEventLayer : public Gui::Map::Layer {
 
 
 MvMapWidget::MvMapWidget(const Seiscomp::Gui::MapsDesc &maps,
-                         QWidget* parent, Qt::WFlags f)
+                         QWidget* parent, Qt::WindowFlags f)
 : Gui::MapWidget(maps, parent, f) {
 	setMouseTracking(true);
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 
 ############################################################################
 #    Copyright (C) by GFZ Potsdam                                          #
@@ -25,13 +25,15 @@ from seiscomp.keyfile import Keyfile
 from seiscomp.db.seiscomp3.inventory import Inventory
 from nettab.nettab import Instruments, NettabError
 import seiscomp3.Client
+from functools import reduce
 
-if sys.version_info<(2,6,0):
-  from sets import Set as set
+if sys.version_info < (2, 6, 0):
+    from sets import Set as set
+
 
 def sortDictionary(dict):
     newDict = {}
-    sortedKeys = dict.keys()
+    sortedKeys = list(dict.keys())
     sortedKeys.sort()
 
     for key in sortedKeys:
@@ -41,6 +43,7 @@ def sortDictionary(dict):
 
 
 gainTable = {}
+
 
 def loadGains(fileName):
     try:
@@ -57,13 +60,14 @@ def loadGains(fileName):
                     continue
 
                 try:
-                    (deviceName, deviceIdPattern, streamPattern, gain) = line.split()
+                    (deviceName, deviceIdPattern,
+                     streamPattern, gain) = line.split()
                     if deviceName in gainTable:
                         gainTable[deviceName].append((streamPattern, deviceIdPattern,
-                            float(gain)))
+                                                      float(gain)))
                     else:
-                        gainTable[deviceName] = [ (streamPattern, deviceIdPattern,
-                            float(gain)) ]
+                        gainTable[deviceName] = [(streamPattern, deviceIdPattern,
+                                                  float(gain))]
 
                 except (TypeError, ValueError):
                     logs.error("%s:%d: parse error" % (fileName, lineno))
@@ -74,9 +78,10 @@ def loadGains(fileName):
         finally:
             fd.close()
 
-    except IOError, e:
+    except IOError as e:
         logs.error("cannot open %s: %s" % (fileName, str(e)))
         sys.exit(1)
+
 
 def getGain(datalogger, dataloggerId, seismometer, seismometerId, streamCode):
     try:
@@ -86,12 +91,12 @@ def getGain(datalogger, dataloggerId, seismometer, seismometerId, streamCode):
         else:
             for (streamPattern, dataloggerIdPattern, dataloggerGain) in gainTable[datalogger]:
                 if fnmatch.fnmatch(streamCode, streamPattern) and \
-                    fnmatch.fnmatch(dataloggerId, dataloggerIdPattern):
+                        fnmatch.fnmatch(dataloggerId, dataloggerIdPattern):
                     break
 
             else:
                 logs.error("cannot find gain for %s, %s, %s" % (datalogger,
-                    dataloggerId, streamCode))
+                                                                dataloggerId, streamCode))
 
                 return 0
 
@@ -101,22 +106,24 @@ def getGain(datalogger, dataloggerId, seismometer, seismometerId, streamCode):
         else:
             for (streamPattern, seismometerIdPattern, seismometerGain) in gainTable[seismometer]:
                 if fnmatch.fnmatch(streamCode, streamPattern) and \
-                    fnmatch.fnmatch(seismometerId, seismometerIdPattern):
+                        fnmatch.fnmatch(seismometerId, seismometerIdPattern):
                     break
 
             else:
                 logs.error("cannot find gain for %s, %s, %s" % (seismometer,
-                    seismometerId, streamCode))
+                                                                seismometerId, streamCode))
 
                 return 0
 
-    except KeyError, e:
+    except KeyError as e:
         logs.error("cannot find gain for " + str(e))
         return 0
 
     return dataloggerGain * seismometerGain
 
+
 _rx_samp = re.compile(r'(?P<bandCode>[A-Z])?(?P<sampleRate>.*)$')
+
 
 def _normalize(num, denom):
     if num > denom:
@@ -132,6 +139,7 @@ def _normalize(num, denom):
 
     return (num, denom)
 
+
 def _rational(x):
     sign, mantissa, exponent = x.as_tuple()
     sign = (1, -1)[sign]
@@ -140,6 +148,7 @@ def _rational(x):
         return _normalize(mantissa, 10 ** (-exponent))
     else:
         return (mantissa * 10 ** exponent, 1)
+
 
 def parseSampling(sampling):
     compressionLevel = "2"
@@ -187,11 +196,13 @@ def parseSampling(sampling):
             elif sampleRate == decimal.Decimal("0.01"):
                 bandCode = 'U'
             else:
-                logs.error("could not determine band code for %s in %s" (x, sampling))
+                logs.error(
+                    "could not determine band code for %s in %s" (x, sampling))
                 continue
 
-        yield (( bandCode + instrumentCode, locationCode ) +
-            _rational(sampleRate) + ("Steim" + compressionLevel,))
+        yield ((bandCode + instrumentCode, locationCode) +
+               _rational(sampleRate) + ("Steim" + compressionLevel,))
+
 
 def parseOrientation(orientation):
     for x in orientation.split(';'):
@@ -202,13 +213,17 @@ def parseOrientation(orientation):
             logs.error("error parsing orientation %s at %s" % (orientation, x))
             continue
 
+
 _doy = (0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365)
+
 
 def _is_leap(y):
     return (y % 400 == 0 or (y % 4 == 0 and y % 100 != 0))
 
+
 def _ldoy(y, m):
     return _doy[m] + (_is_leap(y) and m >= 2)
+
 
 def _dy2mdy(doy, year):
     month = 1
@@ -218,7 +233,10 @@ def _dy2mdy(doy, year):
     mday = doy - _ldoy(year, month - 1)
     return (month, mday)
 
-_rx_datetime = re.compile(r'(?P<year>[0-9]+)/(?P<doy>[0-9]+)(:(?P<hour>[0-9]{2})(?P<minute>[0-9]{2})(?P<second>[0-9]{2})?)?$')
+
+_rx_datetime = re.compile(
+    r'(?P<year>[0-9]+)/(?P<doy>[0-9]+)(:(?P<hour>[0-9]{2})(?P<minute>[0-9]{2})(?P<second>[0-9]{2})?)?$')
+
 
 def parseDate(datestr):
     m = _rx_datetime.match(datestr)
@@ -250,7 +268,9 @@ def parseDate(datestr):
 
     return (coretime, coretime.toString("%Y-%m-%dT%H:%M:%S.%fZ"))
 
+
 _rx_pkg = re.compile(r'(?P<pkg>[^:\s]+)(:(?P<profile>[^\s]+))?$')
+
 
 def parsePkgstr(pkgstr):
     result = {}
@@ -268,23 +288,22 @@ def parsePkgstr(pkgstr):
     return result
 
 
-
 class StreamWrapper(object):
     def __init__(self, stream):
         self.obj = stream
 
     def update(self, rate, rateDiv, orientation, datalogger, dataloggerId,
-        seismometer, seismometerId, channel, depth, azimuth, dip,
-        gainFreq, gainMult, gainUnit, format, restricted, inv):
+               seismometer, seismometerId, channel, depth, azimuth, dip,
+               gainFreq, gainMult, gainUnit, format, restricted, inv):
 
         errmsg = None
 
         try:
             (smsn, smgain) = (seismometerId.split('/') + [None])[:2]
             (datalogger, dlgain, seismometer, smgain, gainFreq, gainUnit) = instdb.update_inventory(inv,
-                datalogger, dataloggerId, gainMult, seismometer, smsn, smgain, rate, rateDiv)
+                                                                                                    datalogger, dataloggerId, gainMult, seismometer, smsn, smgain, rate, rateDiv)
 
-        except NettabError, e:
+        except NettabError as e:
             errmsg = str(e)
             dlgain = []
             smgain = []
@@ -315,7 +334,7 @@ class StreamWrapper(object):
         except IndexError:
             complete = False
             gain = gainMult * getGain(datalogger, dataloggerId, seismometer,
-                seismometerId, self.obj.code())
+                                      seismometerId, self.obj.code())
 
             if gain == 0 and errmsg:
                 logs.error(errmsg)
@@ -323,6 +342,7 @@ class StreamWrapper(object):
         self.obj.setGain(gain)
 
         return complete
+
 
 class StationWrapper(object):
     def __init__(self, netCode, station):
@@ -332,11 +352,11 @@ class StationWrapper(object):
         self.__loc = {}
         self.__usedStreams = set()
 
-        for i in xrange(station.sensorLocationCount()):
+        for i in range(station.sensorLocationCount()):
             loc = station.sensorLocation(i)
             self.__loc[loc.code()] = loc
 
-            for j in xrange(loc.streamCount()):
+            for j in range(loc.streamCount()):
                 stream = loc.stream(j)
                 try:
                     s = self.streams[(loc.code(), stream.code())]
@@ -346,11 +366,12 @@ class StationWrapper(object):
                 except KeyError:
                     pass
 
-                self.streams[(loc.code(), stream.code())] = StreamWrapper(stream)
+                self.streams[(loc.code(), stream.code())
+                             ] = StreamWrapper(stream)
 
     def __updateStreams(self, sampling, orientation, datalogger, dataloggerId,
-        seismometer, seismometerId, depth, gainFreq, gainMult, gainUnit,
-        startDate, restricted, inv):
+                        seismometer, seismometerId, depth, gainFreq, gainMult, gainUnit,
+                        startDate, restricted, inv):
 
         complete = True
         channel = 0
@@ -392,9 +413,9 @@ class StationWrapper(object):
                     stream.obj.update()
 
                 complete = stream.update(rate, rateDiv, orientation,
-                    datalogger, dataloggerId, seismometer, seismometerId,
-                    channel, depth, azimuth, dip, gainFreq, gainMult, gainUnit,
-                    format, restricted, inv) and complete
+                                         datalogger, dataloggerId, seismometer, seismometerId,
+                                         channel, depth, azimuth, dip, gainFreq, gainMult, gainUnit,
+                                         format, restricted, inv) and complete
 
                 self.__usedStreams.add((locCode, streamCode))
 
@@ -415,12 +436,14 @@ class StationWrapper(object):
         self.__usedStreams = set()
 
         complete = self.__updateStreams(kf.sampling1, kf.orientation1, kf.datalogger,
-            kf.dataloggerSn, kf.seismometer1, kf.seismometerSn1, float(kf.depth1),
-            0.02, float(kf.gainMult1), kf.unit1, kf.startDate, restricted, inv)
+                                        kf.dataloggerSn, kf.seismometer1, kf.seismometerSn1, float(
+                                            kf.depth1),
+                                        0.02, float(kf.gainMult1), kf.unit1, kf.startDate, restricted, inv)
 
         if kf.sampling2:
             if not kf.depth2:
-                logs.warning("missing depth of secondary sensor for %s %s" % (self.netCode, self.obj.code()))
+                logs.warning("missing depth of secondary sensor for %s %s" % (
+                    self.netCode, self.obj.code()))
                 return
 
             if not hasattr(kf, "datalogger2") or not kf.datalogger2:
@@ -430,8 +453,9 @@ class StationWrapper(object):
                 kf.dataloggerSn2 = kf.dataloggerSn
 
             complete = self.__updateStreams(kf.sampling2, kf.orientation2, kf.datalogger2,
-                kf.dataloggerSn2, kf.seismometer2, kf.seismometerSn2, float(kf.depth2),
-                1.0, float(kf.gainMult2), kf.unit2, kf.startDate, restricted, inv) and complete
+                                            kf.dataloggerSn2, kf.seismometer2, kf.seismometerSn2, float(
+                                                kf.depth2),
+                                            1.0, float(kf.gainMult2), kf.unit2, kf.startDate, restricted, inv) and complete
 
         for (locCode, streamCode) in set(self.streams.keys()) - self.__usedStreams:
             self.__loc[locCode].remove(self.streams[(locCode, streamCode)].obj)
@@ -439,6 +463,7 @@ class StationWrapper(object):
 
         inv.flush()
         return complete
+
 
 class NetworkWrapper(object):
     def __init__(self, network):
@@ -448,6 +473,7 @@ class NetworkWrapper(object):
         self.obj.setDescription(kf.netDesc)
         self.obj.setArchive(DCID)
 
+
 class InventoryWrapper(object):
     def __init__(self, inventory, DCID):
         self.obj = inventory
@@ -456,19 +482,20 @@ class InventoryWrapper(object):
         self.networks = {}
         self.stations = {}
 
-        for i in xrange(inventory.networkCount()):
+        for i in range(inventory.networkCount()):
             network = inventory.network(i)
             self.networks[network.code()] = NetworkWrapper(network)
 
-            for j in xrange(network.stationCount()):
+            for j in range(network.stationCount()):
                 station = network.station(j)
-                self.stations[(network.code(), station.code())] = StationWrapper(network.code(), station)
-
+                self.stations[(network.code(), station.code())
+                              ] = StationWrapper(network.code(), station)
 
     def updateNetwork(self, netCode, kf):
         network = self.networks.get(netCode)
         if network is None:
-            network = NetworkWrapper(seiscomp3.DataModel.Network("Network/%s" % (netCode,)))
+            network = NetworkWrapper(
+                seiscomp3.DataModel.Network("Network/%s" % (netCode,)))
             network.obj.setCode(netCode)
             network.obj.setStart(seiscomp3.Core.Time(1980, 1, 1, 0, 0, 0))
             network.obj.setArchive(self.DCID)
@@ -488,9 +515,9 @@ class InventoryWrapper(object):
         station = self.stations.get((netCode, staCode))
         (start, startString) = parseDate(kf.startDate)
         if station and station.obj.start() < start:
-            for i in xrange(station.obj.sensorLocationCount()):
+            for i in range(station.obj.sensorLocationCount()):
                 loc = station.obj.sensorLocation(i)
-                for j in xrange(loc.streamCount()):
+                for j in range(loc.streamCount()):
                     try:
                         loc.stream(j).end()
                         continue
@@ -510,7 +537,8 @@ class InventoryWrapper(object):
             station = None
 
         if station is None:
-            station = StationWrapper(netCode, seiscomp3.DataModel.Station("Station/%s/%s/%s" % (netCode, staCode, startString)))
+            station = StationWrapper(netCode, seiscomp3.DataModel.Station(
+                "Station/%s/%s/%s" % (netCode, staCode, startString)))
             station.obj.setCode(staCode)
             station.obj.setStart(start)
             self.networks[netCode].obj.add(station.obj)
@@ -537,7 +565,7 @@ class InventoryWrapper(object):
             station.obj.setRestricted(state)
             station.obj.update()
 
-        for stream in station.streams.itervalues():
+        for stream in station.streams.values():
             try:
                 if stream.obj.restricted() != state:
                     stream.obj.setRestricted(state)
@@ -556,11 +584,9 @@ class Key2DB(seiscomp3.Client.Application):
         self.setMessagingEnabled(False)
         self.setDatabaseEnabled(False, True)
 
-
     def createCommandLineDescription(self):
         self.commandline().addGroup("Convert")
         self.commandline().addOption("Convert", "formatted,f", "Enable formatted output")
-
 
     def initConfiguration(self):
         if not seiscomp3.Client.Application.initConfiguration(self):
@@ -605,18 +631,24 @@ class Key2DB(seiscomp3.Client.Application):
             global instdb
             instdb = Instruments(DCID)
 
-            self.__load_file(loadGains, os.path.join(seiscompRoot, "config", "gain.dlsv"))
+            self.__load_file(loadGains, os.path.join(
+                seiscompRoot, "config", "gain.dlsv"))
 
             # for backwards compatibility
-            self.__load_file(loadGains, os.path.join(seiscompRoot, "config", "gain.tab.out"))
-            self.__load_file(loadGains, os.path.join(seiscompRoot, "config", "gain.tab"))
+            self.__load_file(loadGains, os.path.join(
+                seiscompRoot, "config", "gain.tab.out"))
+            self.__load_file(loadGains, os.path.join(
+                seiscompRoot, "config", "gain.tab"))
 
             try:
-                self.__load_file(instdb.load_db, os.path.join(seiscompRoot, "resp", "inst.db"))
-                self.__load_file(instdb.load_sensor_attr, os.path.join(seiscompRoot, "resp", "sensor_attr.csv"))
-                self.__load_file(instdb.load_datalogger_attr, os.path.join(seiscompRoot, "resp", "datalogger_attr.csv"))
+                self.__load_file(instdb.load_db, os.path.join(
+                    seiscompRoot, "resp", "inst.db"))
+                self.__load_file(instdb.load_sensor_attr, os.path.join(
+                    seiscompRoot, "resp", "sensor_attr.csv"))
+                self.__load_file(instdb.load_datalogger_attr, os.path.join(
+                    seiscompRoot, "resp", "datalogger_attr.csv"))
 
-            except (IOError, NettabError), e:
+            except (IOError, NettabError) as e:
                 logs.error("fatal error: " + str(e))
                 return False
 
@@ -632,7 +664,7 @@ class Key2DB(seiscomp3.Client.Application):
                     netCode = f.split("/network_")[-1]
                     try:
                         kf = Keyfile(f)
-                    except IOError, e:
+                    except IOError as e:
                         logs.error(str(e))
                         continue
 
@@ -641,7 +673,7 @@ class Key2DB(seiscomp3.Client.Application):
 
                     inventory.updateNetwork(netCode, kf)
 
-                except ValueError, e:
+                except ValueError as e:
                     logs.error("%s: %s" % (f, str(e)))
 
             for f in glob.glob(os.path.join(seiscompRoot, "key", "station_*")):
@@ -650,50 +682,59 @@ class Key2DB(seiscomp3.Client.Application):
                     (netCode, staCode) = f.split("/station_")[-1].split('_', 1)
                     try:
                         kf = Keyfile(f)
-                    except IOError, e:
+                    except IOError as e:
                         logs.error(str(e))
                         continue
 
                     existingStations.add((netCode, staCode))
 
                     if netCode not in existingNetworks:
-                        logs.warning("network %s does not exist, ignoring station %s" % (netCode, staCode))
+                        logs.warning(
+                            "network %s does not exist, ignoring station %s" % (netCode, staCode))
                         continue
 
                     if not hasattr(kf, "latitude") or not kf.latitude:
-                        logs.warning("missing latitude for %s %s" % (netCode, staCode))
+                        logs.warning("missing latitude for %s %s" %
+                                     (netCode, staCode))
                         continue
 
                     if not hasattr(kf, "longitude") or not kf.longitude:
-                        logs.warning("missing longitude for %s %s" % (netCode, staCode))
+                        logs.warning("missing longitude for %s %s" %
+                                     (netCode, staCode))
                         continue
 
                     if not hasattr(kf, "elevation") or not kf.elevation:
-                        logs.warning("missing elevation for %s %s" % (netCode, staCode))
+                        logs.warning("missing elevation for %s %s" %
+                                     (netCode, staCode))
                         continue
 
                     if not hasattr(kf, "depth1") or not kf.depth1:
-                        logs.warning("missing depth of primary sensor for %s %s" % (netCode, staCode))
+                        logs.warning(
+                            "missing depth of primary sensor for %s %s" % (netCode, staCode))
                         continue
 
                     if decimal.Decimal(kf.latitude) == decimal.Decimal("0.0") and \
-                        decimal.Decimal(kf.longitude) == decimal.Decimal("0.0"):
-                        logs.warning("missing coordinates for %s %s" % (netCode, staCode))
+                            decimal.Decimal(kf.longitude) == decimal.Decimal("0.0"):
+                        logs.warning("missing coordinates for %s %s" %
+                                     (netCode, staCode))
                         continue
 
                     if not hasattr(kf, "orientation1") or not kf.orientation1:
-                        logs.warning("missing orientation of primary sensor for %s %s, using default" % (netCode, staCode))
+                        logs.warning("missing orientation of primary sensor for %s %s, using default" % (
+                            netCode, staCode))
                         kf.orientation1 = "Z 0.0 -90.0; N 0.0 0.0; E 90.0 0.0"
 
                     if not hasattr(kf, "orientation2"):
                         kf.orientation2 = ""
 
                     if not hasattr(kf, "unit1") or not kf.unit1:
-                        logs.warning("missing unit of primary sensor for %s %s, using M/S" % (netCode, staCode))
+                        logs.warning(
+                            "missing unit of primary sensor for %s %s, using M/S" % (netCode, staCode))
                         kf.unit1 = "M/S"
 
                     if not hasattr(kf, "unit2"):
-                        logs.warning("missing unit of secondary sensor for %s %s, using M/S**2" % (netCode, staCode))
+                        logs.warning(
+                            "missing unit of secondary sensor for %s %s, using M/S**2" % (netCode, staCode))
                         kf.unit2 = "M/S**2"
 
                     if not hasattr(kf, "type"):
@@ -713,30 +754,33 @@ class Key2DB(seiscomp3.Client.Application):
 
                         incNet.add(staCode)
 
-                except ValueError, e:
+                except ValueError as e:
                     logs.error("%s: %s" % (f, str(e)))
 
-            for (netCode, restricted) in networkRestricted.iteritems():
+            for (netCode, restricted) in networkRestricted.items():
                 inventory.setNetworkRestricted(netCode, restricted)
 
-            for (netCode, network) in inventory.networks.iteritems():
+            for (netCode, network) in inventory.networks.items():
                 if netCode not in existingNetworks:
-                    logs.notice("deleting network %s from inventory" % (netCode,))
+                    logs.notice("deleting network %s from inventory" %
+                                (netCode,))
                     inventory.obj.remove(network.obj)
 
-            for ((netCode, staCode), station) in inventory.stations.iteritems():
+            for ((netCode, staCode), station) in inventory.stations.items():
                 if netCode in existingNetworks and (netCode, staCode) not in existingStations:
-                    logs.notice("deleting station %s_%s from inventory" % (netCode, staCode))
+                    logs.notice("deleting station %s_%s from inventory" %
+                                (netCode, staCode))
                     inventory.networks[netCode].obj.remove(station.obj)
 
             if incompleteResponse:
-                logs.info("The following stations are missing full response data")
+                logs.info(
+                    "The following stations are missing full response data")
                 logs.info("Use dlsv2inv if needed")
 
-                #for netCode in sorted(incompleteResponse.keys()):
+                # for netCode in sorted(incompleteResponse.keys()):
                 #    logs.info("%s: %s" % (netCode, " ".join(sorted(list(incompleteResponse[netCode])))))
                 tmpDict = sortDictionary(incompleteResponse)
-                for netCode in tmpDict.keys():
+                for netCode in list(tmpDict.keys()):
                     tmpSortedList = list(tmpDict[netCode])
                     tmpSortedList.sort()
                     logs.info("%s: %s" % (netCode, " ".join(tmpSortedList)))
@@ -756,7 +800,6 @@ class Key2DB(seiscomp3.Client.Application):
             ar.setFormattedOutput(self.commandline().hasOption("formatted"))
             ar.writeObject(sc3Inv)
 
-
         except Exception:
             logs.print_exc()
 
@@ -771,4 +814,3 @@ if __name__ == "__main__":
     logs.error = seiscomp3.Logging.error
     app = Key2DB(len(sys.argv), sys.argv)
     sys.exit(app())
-

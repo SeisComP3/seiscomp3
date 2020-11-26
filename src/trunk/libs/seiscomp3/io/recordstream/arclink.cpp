@@ -277,7 +277,7 @@ Record *ArclinkConnection::next() {
 			_sock.open(_serverloc);
 			handshake();
 		}
-		catch ( GeneralException ) {
+		catch ( GeneralException & ) {
 			_sock.close();
 			return NULL;
 		}
@@ -343,7 +343,7 @@ Record *ArclinkConnection::next() {
 				return rec;
 		}
 	}
-	catch ( GeneralException ) {
+	catch ( GeneralException & ) {
 		_sock.close();
 	}
 

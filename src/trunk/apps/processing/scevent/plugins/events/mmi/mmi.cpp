@@ -83,7 +83,7 @@ class MMIProcessor : public Seiscomp::Client::EventProcessor {
 		}
 
 
-		bool process(Event *event) {
+		bool process(Event *event, const Journal &journal) {
 			Origin *org = Origin::Find(event->preferredOriginID());
 			Magnitude *mag = Magnitude::Find(event->preferredMagnitudeID());
 

@@ -354,9 +354,24 @@ class SC_GUI_API Canvas : public QObject {
 
 
 	private:
-		typedef QVector<Legend*> Legends;
+		struct LegendItem {
+			LegendItem() : legend(0), dirty(true) {}
+			LegendItem(Legend *legend) : legend(legend), dirty(true) {}
+			Legend *legend;
+			bool    dirty;
+		};
+
+		typedef QVector<LegendItem> Legends;
 		struct LegendArea : public Legends {
 			LegendArea() : currentIndex(-1) {}
+
+			int find(Legend *legend) const {
+				for ( int i = 0; i < count(); ++i ) {
+					if ( at(i).legend == legend )
+						return i;
+				}
+				return -1;
+			}
 
 			bool hasIndex(int index) {
 				return ( index >= 0 && index < count() );

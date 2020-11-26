@@ -252,7 +252,7 @@ bool HCApp::validateParameters() {
 		_streamCodes.push_back(_streamID);
 	}
 
-	if ( (type() == QApplication::Tty) && _outputFilename.empty() ) {
+	if ( (type() == Tty) && _outputFilename.empty() ) {
 		std::cerr << "ERROR: Output filename empty" << std::endl;
 		return false;
 	}
@@ -289,7 +289,7 @@ bool HCApp::validateParameters() {
 
 
 bool HCApp::handleInitializationError(Stage stage) {
-	if ( type() == QApplication::Tty )
+	if ( type() == Tty )
 		return false;
 	return Application::handleInitializationError(stage);
 }
@@ -308,7 +308,7 @@ bool HCApp::init() {
 
 
 bool HCApp::run() {
-	if ( type() == QApplication::Tty ) {
+	if ( type() == Tty ) {
 		Core::Time endTime = _endTime.valid()?_endTime:Core::Time::GMT();
 
 		for ( size_t i = 0; i < _streamCodes.size(); ++i ) {
@@ -549,14 +549,14 @@ int main(int argc, char** argv) {
 
 	{
 		int flags = Gui::Application::DEFAULT | Gui::Application::LOAD_STATIONS;
-		Gui::Application::Type type = QApplication::GuiClient;
+		Gui::Application::Type type = Gui::Application::GuiClient;
 
 		if ( argc >= 2 && strcmp(argv[1], "capture") == 0 ) {
 			if ( Gui::Application::minQtVersion("4.3.0") )
 				// Qt 4.2.x crashes when rendering text with console
 				// applications so we enable console application only if
 				// at least Qt 4.3.0 is installed.
-				type = QApplication::Tty;
+				type = Gui::Application::Tty;
 			else
 				std::cerr << "WARNING: Need Qt 4.3.0 to capture images without "
 				             "a running X session." << std::endl;

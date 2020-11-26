@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[sadc_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for SADC10/18/20/30 digitizer
 

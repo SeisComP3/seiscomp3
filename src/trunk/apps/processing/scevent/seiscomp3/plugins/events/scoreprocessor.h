@@ -10,6 +10,7 @@
 *   SeisComP Public License for more details.                             *
 ***************************************************************************/
 
+
 #ifndef __SEISCOMP_APPLICATIONS_SCOREPROCESSOR_H__
 #define __SEISCOMP_APPLICATIONS_SCOREPROCESSOR_H__
 

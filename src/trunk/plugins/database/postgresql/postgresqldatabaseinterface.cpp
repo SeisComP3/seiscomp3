@@ -274,7 +274,7 @@ void PostgreSQLDatabase::endQuery() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-unsigned long PostgreSQLDatabase::lastInsertId(const char* table) {
+IO::DatabaseInterface::OID PostgreSQLDatabase::lastInsertId(const char* table) {
 	if ( !beginQuery((std::string("select currval('") + table + "_seq')").c_str()) )
 		return 0;
 
@@ -282,7 +282,7 @@ unsigned long PostgreSQLDatabase::lastInsertId(const char* table) {
 
 	endQuery();
 
-	return value?atoi(value):0;
+	return OID(value?atoll(value):IO::DatabaseInterface::INVALID_OID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -381,6 +381,21 @@ size_t PostgreSQLDatabase::getRowFieldSize(int index) {
 	}
 
 	return PQgetlength(_result, _row, index);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PostgreSQLDatabase::escape(std::string &out, const std::string &in) {
+	if ( !_handle ) return false;
+	int error;
+	out.resize(in.size()*2);
+	size_t l = PQescapeStringConn(_handle, &out[0], in.c_str(), in.size(), &error);
+	out[l] = '\0';
+	out.resize(l);
+	return !error;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

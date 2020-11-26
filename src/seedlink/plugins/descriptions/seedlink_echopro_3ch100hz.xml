@@ -3,10 +3,6 @@
 	<binding module="seedlink" name="echopro_3ch100hz" category="sources">
 		<description>Kelunji Echo/EchoPro serial plugin (3 Ch, 200 Hz)</description>
 		<configuration>
-			<parameter name="station" type="string" default="BER">
-				<description>Station code.</description>
-			</parameter>
-
 			<parameter name="comport" type="string" default="/dev/ttyS0">
 				<description>Serial Port.</description>
 			</parameter>

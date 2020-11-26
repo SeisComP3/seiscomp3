@@ -1,10 +1,8 @@
 Part of the :ref:`VS` package.
 
-scvsmag is part of a new SeisComp3 implementation of the
-`Virtual Seismologist <http://www.seismo.ethz.ch/research/vs>`_
-(VS) Earthquake Early Warning algorithm (Cua, 2005; Cua and Heaton, 2007) released
-under the `'SED Public License for SeisComP3 Contributions'
-<http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt>`_. For a
+scvsmag is part of a new SeisComP implementation of the
+`Virtual Seismologist`_ (VS) Earthquake Early Warning algorithm (Cua, 2005; Cua and Heaton, 2007) released
+under the `SED Public License for SeisComP Contributions`_. For a
 given origin it estimates single station magnitudes and a network magnitude
 based on  the envelope attenuation relationship and ground motion amplitude
 ratio derived  by Cua (2005). The original VS algorithm applies the Bayesian
@@ -105,16 +103,16 @@ The following table comments each line in the above output.
 
 Logging envelope messages
 -------------------------
-The envelope messages received by scvsmag can optionally be written to the log-file 
+The envelope messages received by scvsmag can optionally be written to the log-file
 :file:`envelope-logging-info.log` by setting:
 
 .. code-block:: sh
 
-   vsmag.logenvelopes=true 
+   vsmag.logenvelopes=true
 
-The format of :file:`envelope-logging-info.log` is self-explanatory, note however 
-that the timestamp of the envelope value marks the start time of the 1 s waveform 
-window over which the envelope value was computed. Depending on the size of your 
+The format of :file:`envelope-logging-info.log` is self-explanatory, note however
+that the timestamp of the envelope value marks the start time of the 1 s waveform
+window over which the envelope value was computed. Depending on the size of your
 seismic network, :file:`envelope-logging-info.log` might quickly use a lot of disk
 space.
 
@@ -127,7 +125,7 @@ The likelihood is computed as follows:
 .. code-block:: sh
 
    likelihood = Magnitude check * Arrivals check * Azimuthal Gap Check
-   
+
 If the magnitude check exceeds a magnitude dependent threshold its value is set
 to 0.4, otherwise it is 1.0. The thresholds are defined as follows:
 
@@ -147,23 +145,37 @@ to 0.4, otherwise it is 1.0. The thresholds are defined as follows:
 | >4.0      | 0.18      |
 +-----------+-----------+
 
-If the arrivals check exceeds a value of 0.5 (i.e. more than half of the real-time 
+If the arrivals check exceeds a value of 0.5 (i.e. more than half of the real-time
 stations within a certain epicentral distance have not contributed picks to the
 location) its value is set to 0.3, otherwise it is 1.0. The epicentral distance
-threshold is the middle between the maximum and the average epicentral distance 
+threshold is the middle between the maximum and the average epicentral distance
 of the stations contributing picks to the location.
 
-The permissible azimuthal gap can be configured (default is 300). If it is 
-exceeded, 'Azimuthal Gap Check' is set to 0.2, otherwise it is set to 1.0. 
+The permissible azimuthal gap can be configured (default is 300). If it is
+exceeded, 'Azimuthal Gap Check' is set to 0.2, otherwise it is set to 1.0.
 
-A likelihood of 0.024, therefore, indicates, that all three quality checks failed. 
+A likelihood of 0.024, therefore, indicates, that all three quality checks failed.
 If all quality checks succeeded the likelihood is set to 0.99.
- 
-scautoloc and scevent configuration
-===================================
 
-Because :ref:`scautoloc` was not designed with EEW in mind, there are a few 
-settings necessary to ensure that location estimates are sent to scvsmag as 
+scvsmag configuration
+---------------------
+
+scvsmag receives the amplitudes from :ref:`scenvelope` via the messaging system.
+When the scenvelope is configured to send the amplitudes to the "VS" group
+instead of "AMPLITUDE", the configuration must be adjusted.
+In this case, replace the "AMPLITUDE" group with the "VS" message group in :confval:`connection.subscriptions`:
+
+.. code:: sh
+
+   connection.subscriptions = VS, EVENT, LOCATION, PICK
+
+Consider also the remaining :ref:`configuration parameters <scvsmag_configuration>`.
+
+scautoloc configuration
+=======================
+
+Because :ref:`scautoloc` was not designed with EEW in mind, there are a few
+settings necessary to ensure that location estimates are sent to scvsmag as
 quickly as possible:
 
 .. code-block:: sh
@@ -174,19 +186,35 @@ quickly as possible:
    # this string is empty, then the amplitude is set to 0.5 * thresholdXXL, and 1
    # is used for the period.
    autoloc.amplTypeAbs = snr
-   
+
    # This is the parameter "a" in the equation Δt = aN + b for the time interval
    # between origin updates.
    autoloc.publicationIntervalTimeSlope = 0
-   
+
    # This is the parameter "b" in the above mentioned equation for the update
    # interval Δt.
    autoloc.publicationIntervalTimeIntercept = 0
-   
+
    # Minimum number of phases.
    autoloc.minPhaseCount = 6
 
-For :ref:`scevent` to create an event from an origin with 6 phases requires the 
+For :ref:`scautoloc` to provide locations with 6 stations, its grid configuration file 
+requires to be setup with equal or lower minimum pick count, and with a corresponding 
+maximum station distance to avoid false alerts.
+
+For :ref:`scautopick` to provide snr amplitudes quickly requires the following 
+setting:
+
+.. code-block:: sh
+
+   # The time window used to compute a maximum (snr) amplitude on the filtered
+   # waveforms.
+   thresholds.amplMaxTimeWindow = 1
+
+scevent configuration
+=====================
+
+For :ref:`scevent` to create an event from an origin with 6 phases requires the
 following setting:
 
 .. code-block:: sh
@@ -195,21 +223,26 @@ following setting:
    # associated with an Event to be allowed to form an new Event.
    eventAssociation.minimumDefiningPhases = 6
 
-:ref:`scautoloc` also has a so-called XXL feature that allows you to create a 
-location estimate with 4 P-wave detections (otherwise 6 is the minimum). 
-Although this feature is reserved for large magnitude events you can, in 
-principle, adapt the XXL thresholds to also locate moderate seismicity with the 
-first four picks. This may, however, lead to a larger number of false alerts 
+:ref:`scautoloc` also has a so-called XXL feature that allows you to create a
+location estimate with 4 P-wave detections (otherwise 6 is the minimum).
+Although this feature is reserved for large magnitude events you can, in
+principle, adapt the XXL thresholds to also locate moderate seismicity with the
+first four picks. This may, however, lead to a larger number of false alerts
 and it is, therefore, recommended to used this feature only as intended.
+
+.. note::
+   If scvsmag receives identical picks from different pipelines, the internal
+   buffering fails. The missing picks are automatically retrieved from the
+   database if necessary and if a connection to the database has been established.
+   Alternatively, if picking is done on the same streams in several pipelines, they
+   can be distinguished by modifying their respective public IDs.
 
 References
 ==========
 
 Borcherdt, R. D., 1994: Estimates of Site-Dependent Response Spectra for Design (Methodology and Justification), Earthquake Spectra
 
-.. note::
-   If scvsmag receives identical picks from different pipelines, the internal 
-   buffering fails. The missing picks are automatically retrieved from the 
-   database if necessary and if a connection to the database has been established. 
-   Alternatively, if picking is done on the same streams in several pipelines they
-   can be distinguished by modifying their respective public IDs.
+.. target-notes::
+
+.. _`Virtual Seismologist` : http://www.seismo.ethz.ch/en/research-and-teaching/products-software/EEW/Virtual-Seismologist/
+.. _`SED Public License for SeisComP Contributions` : http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt

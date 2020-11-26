@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="ML_IDC">
+		<extends>global</extends>
+		<description>
+		CTBTO/IDC local magnitude.
+		</description>
+	</plugin>
+	<binding name="ML_IDC" module="global">
+		<description>
+		CTBTO/IDC local magnitude.
+		</description>
+		<configuration>
+			<group name="magnitudes">
+				<group name="ML(IDC)">
+					<parameter name="A" type="path">
+						<description>
+						Location of the station specific attenuation table. If not
+						specified then @DATADIR@/magnitudes/IDC/global.ml will be
+						used as fallback. {net}, {sta} and {loc} are placeholders
+						which will be replaced with the concrete network code,
+						station code and location code.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

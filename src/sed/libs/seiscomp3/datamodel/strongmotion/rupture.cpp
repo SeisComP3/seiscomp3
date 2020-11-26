@@ -187,7 +187,7 @@ void Rupture::setWidth(const OPT(RealQuantity)& width) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::width() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::width() {
 	if ( _width )
 		return *_width;
 	throw Seiscomp::Core::ValueException("Rupture.width is not set");
@@ -198,7 +198,7 @@ RealQuantity& Rupture::width() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::width() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::width() const {
 	if ( _width )
 		return *_width;
 	throw Seiscomp::Core::ValueException("Rupture.width is not set");
@@ -218,7 +218,7 @@ void Rupture::setDisplacement(const OPT(RealQuantity)& displacement) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::displacement() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::displacement() {
 	if ( _displacement )
 		return *_displacement;
 	throw Seiscomp::Core::ValueException("Rupture.displacement is not set");
@@ -229,7 +229,7 @@ RealQuantity& Rupture::displacement() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::displacement() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::displacement() const {
 	if ( _displacement )
 		return *_displacement;
 	throw Seiscomp::Core::ValueException("Rupture.displacement is not set");
@@ -249,7 +249,7 @@ void Rupture::setRiseTime(const OPT(RealQuantity)& riseTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::riseTime() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::riseTime() {
 	if ( _riseTime )
 		return *_riseTime;
 	throw Seiscomp::Core::ValueException("Rupture.riseTime is not set");
@@ -260,7 +260,7 @@ RealQuantity& Rupture::riseTime() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::riseTime() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::riseTime() const {
 	if ( _riseTime )
 		return *_riseTime;
 	throw Seiscomp::Core::ValueException("Rupture.riseTime is not set");
@@ -280,7 +280,7 @@ void Rupture::setVtToVs(const OPT(RealQuantity)& vtToVs) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::vtToVs() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::vtToVs() {
 	if ( _vtToVs )
 		return *_vtToVs;
 	throw Seiscomp::Core::ValueException("Rupture.vtToVs is not set");
@@ -291,7 +291,7 @@ RealQuantity& Rupture::vtToVs() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::vtToVs() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::vtToVs() const {
 	if ( _vtToVs )
 		return *_vtToVs;
 	throw Seiscomp::Core::ValueException("Rupture.vtToVs is not set");
@@ -311,7 +311,7 @@ void Rupture::setShallowAsperityDepth(const OPT(RealQuantity)& shallowAsperityDe
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::shallowAsperityDepth() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::shallowAsperityDepth() {
 	if ( _shallowAsperityDepth )
 		return *_shallowAsperityDepth;
 	throw Seiscomp::Core::ValueException("Rupture.shallowAsperityDepth is not set");
@@ -322,7 +322,7 @@ RealQuantity& Rupture::shallowAsperityDepth() throw(Seiscomp::Core::ValueExcepti
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::shallowAsperityDepth() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::shallowAsperityDepth() const {
 	if ( _shallowAsperityDepth )
 		return *_shallowAsperityDepth;
 	throw Seiscomp::Core::ValueException("Rupture.shallowAsperityDepth is not set");
@@ -342,7 +342,7 @@ void Rupture::setShallowAsperity(const OPT(bool)& shallowAsperity) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Rupture::shallowAsperity() const throw(Seiscomp::Core::ValueException) {
+bool Rupture::shallowAsperity() const {
 	if ( _shallowAsperity )
 		return *_shallowAsperity;
 	throw Seiscomp::Core::ValueException("Rupture.shallowAsperity is not set");
@@ -362,7 +362,7 @@ void Rupture::setLiteratureSource(const OPT(LiteratureSource)& literatureSource)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-LiteratureSource& Rupture::literatureSource() throw(Seiscomp::Core::ValueException) {
+LiteratureSource& Rupture::literatureSource() {
 	if ( _literatureSource )
 		return *_literatureSource;
 	throw Seiscomp::Core::ValueException("Rupture.literatureSource is not set");
@@ -373,7 +373,7 @@ LiteratureSource& Rupture::literatureSource() throw(Seiscomp::Core::ValueExcepti
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const LiteratureSource& Rupture::literatureSource() const throw(Seiscomp::Core::ValueException) {
+const LiteratureSource& Rupture::literatureSource() const {
 	if ( _literatureSource )
 		return *_literatureSource;
 	throw Seiscomp::Core::ValueException("Rupture.literatureSource is not set");
@@ -393,7 +393,7 @@ void Rupture::setSlipVelocity(const OPT(RealQuantity)& slipVelocity) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::slipVelocity() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::slipVelocity() {
 	if ( _slipVelocity )
 		return *_slipVelocity;
 	throw Seiscomp::Core::ValueException("Rupture.slipVelocity is not set");
@@ -404,7 +404,7 @@ RealQuantity& Rupture::slipVelocity() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::slipVelocity() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::slipVelocity() const {
 	if ( _slipVelocity )
 		return *_slipVelocity;
 	throw Seiscomp::Core::ValueException("Rupture.slipVelocity is not set");
@@ -424,7 +424,7 @@ void Rupture::setStrike(const OPT(RealQuantity)& strike) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::strike() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::strike() {
 	if ( _strike )
 		return *_strike;
 	throw Seiscomp::Core::ValueException("Rupture.strike is not set");
@@ -435,7 +435,7 @@ RealQuantity& Rupture::strike() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::strike() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::strike() const {
 	if ( _strike )
 		return *_strike;
 	throw Seiscomp::Core::ValueException("Rupture.strike is not set");
@@ -455,7 +455,7 @@ void Rupture::setLength(const OPT(RealQuantity)& length) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::length() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::length() {
 	if ( _length )
 		return *_length;
 	throw Seiscomp::Core::ValueException("Rupture.length is not set");
@@ -466,7 +466,7 @@ RealQuantity& Rupture::length() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::length() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::length() const {
 	if ( _length )
 		return *_length;
 	throw Seiscomp::Core::ValueException("Rupture.length is not set");
@@ -486,7 +486,7 @@ void Rupture::setArea(const OPT(RealQuantity)& area) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::area() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::area() {
 	if ( _area )
 		return *_area;
 	throw Seiscomp::Core::ValueException("Rupture.area is not set");
@@ -497,7 +497,7 @@ RealQuantity& Rupture::area() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::area() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::area() const {
 	if ( _area )
 		return *_area;
 	throw Seiscomp::Core::ValueException("Rupture.area is not set");
@@ -517,7 +517,7 @@ void Rupture::setRuptureVelocity(const OPT(RealQuantity)& ruptureVelocity) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::ruptureVelocity() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::ruptureVelocity() {
 	if ( _ruptureVelocity )
 		return *_ruptureVelocity;
 	throw Seiscomp::Core::ValueException("Rupture.ruptureVelocity is not set");
@@ -528,7 +528,7 @@ RealQuantity& Rupture::ruptureVelocity() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::ruptureVelocity() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::ruptureVelocity() const {
 	if ( _ruptureVelocity )
 		return *_ruptureVelocity;
 	throw Seiscomp::Core::ValueException("Rupture.ruptureVelocity is not set");
@@ -548,7 +548,7 @@ void Rupture::setStressdrop(const OPT(RealQuantity)& stressdrop) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::stressdrop() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::stressdrop() {
 	if ( _stressdrop )
 		return *_stressdrop;
 	throw Seiscomp::Core::ValueException("Rupture.stressdrop is not set");
@@ -559,7 +559,7 @@ RealQuantity& Rupture::stressdrop() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::stressdrop() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::stressdrop() const {
 	if ( _stressdrop )
 		return *_stressdrop;
 	throw Seiscomp::Core::ValueException("Rupture.stressdrop is not set");
@@ -579,7 +579,7 @@ void Rupture::setMomentReleaseTop5km(const OPT(RealQuantity)& momentReleaseTop5k
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Rupture::momentReleaseTop5km() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Rupture::momentReleaseTop5km() {
 	if ( _momentReleaseTop5km )
 		return *_momentReleaseTop5km;
 	throw Seiscomp::Core::ValueException("Rupture.momentReleaseTop5km is not set");
@@ -590,7 +590,7 @@ RealQuantity& Rupture::momentReleaseTop5km() throw(Seiscomp::Core::ValueExceptio
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Rupture::momentReleaseTop5km() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Rupture::momentReleaseTop5km() const {
 	if ( _momentReleaseTop5km )
 		return *_momentReleaseTop5km;
 	throw Seiscomp::Core::ValueException("Rupture.momentReleaseTop5km is not set");
@@ -610,7 +610,7 @@ void Rupture::setFwHwIndicator(const OPT(FwHwIndicator)& fwHwIndicator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-FwHwIndicator Rupture::fwHwIndicator() const throw(Seiscomp::Core::ValueException) {
+FwHwIndicator Rupture::fwHwIndicator() const {
 	if ( _fwHwIndicator )
 		return *_fwHwIndicator;
 	throw Seiscomp::Core::ValueException("Rupture.fwHwIndicator is not set");
@@ -666,7 +666,7 @@ void Rupture::setSurfaceRupture(const OPT(SurfaceRupture)& surfaceRupture) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SurfaceRupture& Rupture::surfaceRupture() throw(Seiscomp::Core::ValueException) {
+SurfaceRupture& Rupture::surfaceRupture() {
 	if ( _surfaceRupture )
 		return *_surfaceRupture;
 	throw Seiscomp::Core::ValueException("Rupture.surfaceRupture is not set");
@@ -677,7 +677,7 @@ SurfaceRupture& Rupture::surfaceRupture() throw(Seiscomp::Core::ValueException) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const SurfaceRupture& Rupture::surfaceRupture() const throw(Seiscomp::Core::ValueException) {
+const SurfaceRupture& Rupture::surfaceRupture() const {
 	if ( _surfaceRupture )
 		return *_surfaceRupture;
 	throw Seiscomp::Core::ValueException("Rupture.surfaceRupture is not set");
@@ -859,7 +859,7 @@ void Rupture::accept(Visitor* visitor) {
 void Rupture::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,12>() ) {
+	if ( ar.isHigherVersion<0,11>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Rupture skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

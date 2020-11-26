@@ -72,9 +72,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>663</y>
+     <y>660</y>
      <width>712</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -84,7 +84,7 @@
      <x>0</x>
      <y>0</y>
      <width>712</width>
-     <height>28</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings" >
@@ -116,6 +116,9 @@
     <addaction name="actionUndo" />
     <addaction name="actionRedo" />
     <addaction name="separator" />
+    <addaction name="actionPreviousEvent" />
+    <addaction name="actionNextEvent" />
+    <addaction name="separator" />
     <addaction name="actionCreateArtificialOrigin" />
    </widget>
    <addaction name="menu_File" />
@@ -141,6 +144,8 @@
    </attribute>
    <addaction name="actionUndo" />
    <addaction name="actionRedo" />
+   <addaction name="actionPreviousEvent" />
+   <addaction name="actionNextEvent" />
   </widget>
   <action name="actionShowStations" >
    <property name="checkable" >
@@ -231,6 +236,46 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Shift+Z</string>
+   </property>
+  </action>
+  <action name="actionPreviousEvent" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>Previous event</string>
+   </property>
+   <property name="iconText" >
+    <string>Previous event</string>
+   </property>
+   <property name="toolTip" >
+    <string>Load previous event of the event list</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+PgUp</string>
+   </property>
+  </action>
+  <action name="actionNextEvent" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>Next event</string>
+   </property>
+   <property name="iconText" >
+    <string>Next event</string>
+   </property>
+   <property name="toolTip" >
+    <string>Go to next event of the event list</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+PgDown</string>
    </property>
   </action>
   <action name="actionShowSummary" >

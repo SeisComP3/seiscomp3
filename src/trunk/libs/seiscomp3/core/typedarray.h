@@ -87,7 +87,7 @@ class TypedArray : public Array {
 		int size() const;
 
 		//! Returns the number of bytes of an array element.
-		int bytes() const;
+		int elementSize() const;
 
 		//! Resizes the array
 		void resize(int size);

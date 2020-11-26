@@ -16,6 +16,11 @@
 					is set to true.
 				</description>
 			</parameter>
+			<parameter name="visibleMagnitudes" type="list:string" default="M,MLv,mb,mB,Mw(mB)">
+				<description>
+					A list of magnitude types to be displayed in the summary widget (F8).
+				</description>
+			</parameter>
 			<group name="scripts">
 				<parameter name="export" type="string">
 					<description>
@@ -36,12 +41,12 @@
 				</group>
 				<parameter name="script0" type="string">
 					<description>
-						User defined script0.
+					Full path to the script executed when hitting the button labeled with button0.
 					</description>
 				</parameter>
 				<parameter name="script1" type="string">
 					<description>
-						User defined script1.
+					Full path to the script executed when hitting the button labeled with button1.
 					</description>
 				</parameter>
 			</group>
@@ -218,14 +223,121 @@
 					</parameter>
 					<parameter name="eventCommentOptions" type="list:string">
 						<description>
-							Turns the event comment input field into a drop down box
-							allowing the user to select from a list a predefined comment
-							values which may be changed if required.
+						Turns the event comment input field into a drop down box
+						allowing the user to select from a list a predefined comment
+						values which may be changed if required.
 						</description>
 					</parameter>
 				</group>
+				<group name="customCommits">
+					<description>
+					Configure custom commit buttons which
+					behave like shortcuts to &quot;Commit with additional options&quot;.
+					Pressing a custom button does not open a popup window. Instead
+					it reads the configured profile and applies the options to the event
+					and origin. Each commit button can be coloured and labeled.
+					</description>
+					<struct name="CommitButton">
+						<parameter name="enable" type="boolean" default="true">
+							<description>
+							Enable this commit button.
+							</description>
+						</parameter>
+						<parameter name="askForConfirmation" type="boolean" default="false">
+							<description>
+							Ask for confirmation by presenting the &quot;commit with options&quot;
+							dialog with the options pre-populated from this configuration.
+							Cancelling the dialog aborts the commit procedure.
+							</description>
+						</parameter>
+						<parameter name="forceEventAssociation" type="boolean" default="false">
+							<description>
+							Associate a new origin to the currently active event or not.
+							</description>
+						</parameter>
+						<parameter name="fixOrigin" type="boolean" default="false">
+							<description>
+							Fix the origin as preferred
+							solution in the event it is associated to.
+							</description>
+						</parameter>
+						<parameter name="eventType" type="string" default="">
+							<description>
+							The event type to be set of the event associated with
+							the committed origin. If unset, the type remains unchanged.
+							Use quotes for event types with spaces, e.g.
+							&quot;not existing&quot;.
+							</description>
+						</parameter>
+						<parameter name="eventTypeCertainty" type="string" default="">
+							<description>
+							The event type certainty to be set of the event
+							associated with the committed origin. If unset,
+							the type certainty remains unchanged.
+							</description>
+						</parameter>
+						<parameter name="originStatus" type="string" default="">
+							<description>
+							The status to be set of the origin being
+							committed. If unset, the status remains unchanged.
+							If empty, the origin status will be set to none.
+							</description>
+						</parameter>
+						<parameter name="magnitudeType" type="string" default="">
+							<description>
+							Sets the preferred magnitude type of the event. If
+							unset, no changes will be requested. If empty,
+							the currently fixed preferred magnitude type will
+							be reset.
+							</description>
+						</parameter>
+						<parameter name="eventName" type="string" default="">
+							<description>
+							Optional event name which will be set. This option
+							exists for completeness and does not make much
+							sense to be applied on any event. Use quotes for event
+							names with spaces, e.g. &quot;Quarry XYZ&quot;.
+							</description>
+						</parameter>
+						<parameter name="eventComment" type="string" default="">
+							<description>
+							Optional event comment which will be set. Use quotes for event
+							comments with spaces, e.g. &quot;Blast on Monday morning&quot;.
+							</description>
+						</parameter>
+						<parameter name="returnToEventList" type="boolean" default="false">
+							<description>
+							Return to the event list after committing or not.
+							</description>
+						</parameter>
+						<parameter name="label" type="string" default="Commit+">
+							<description>
+							The commit button label. Use quotes for labels with
+							spaces, e.g. &quot;Earthquake reported&quot;.
+							</description>
+						</parameter>
+						<parameter name="color" type="color" default="">
+							<description>
+						 	Optional primary color for the bulk commit button.
+							Use hexadecimal values.
+							</description>
+						</parameter>
+						<parameter name="colorText" type="color" default="">
+							<description>
+							Optional text color for the bulk commit button.
+							Use hexadecimal values.
+							</description>
+						</parameter>
+						<parameter name="tooltip" type="boolean" default="false">
+							<description>
+							Add a summary of the actions to the button's tooltip.
+							</description>
+						</parameter>
+					</struct>
+				</group>
 			</group>
 			<group name="picker">
+				<description>Parameters controlling the phase picker window.</description>
 				<parameter name="showCrossHairCursor" type="boolean" default="false">
 					<description>
 						Activates a cross hair cursor showing the configured uncertainties
@@ -340,18 +452,24 @@
 				<group name="phases">
 					<parameter name="favourites" type="list:string">
 						<description>
+						Phase types available for rapid picking by hot keys and in the Picking menu.
+						Make sure, the locator can handle all phases. Separate phase types by comma.
 						</description>
 					</parameter>
 				</group>
 				<parameter name="phases" type="list:string">
 					<description>
-					A list of phases that is available in the picker. This is a fallback
+					A list of phases that is available for picking in the Picking menu.
+					This is a fallback
 					for the more complex phase group definition &quot;picker.phases.groups&quot;
 					which is not part of this module description.
+					The phases are not accessible through hot keys as for
+					&quot;picker.phases.favorites&quot;.
 					</description>
 				</parameter>
 				<parameter name="showPhases" type="list:string">
 					<description>
+					Phases for which the theoretical arrival times are shown.
 					</description>
 				</parameter>
 				<parameter name="filters" type="list:string">
@@ -398,6 +516,7 @@
 				</group>
 			</group>
 			<group name="amplitudePicker">
+				<description>Parameters controlling the amplitude picker window for computing station magnitudes.</description>
 				<parameter name="preOffset" type="int" unit="s" default="300">
 					<description>
 						Time span in seconds to be added to the left of the used

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, glob
 
 '''
@@ -187,13 +188,13 @@ class SeedlinkPluginHandler:
     # Find out what chain.xml instance to use
     station_key = seedlink.net + "." + seedlink.sta
     chain_instance = 0
-    if self.stations.has_key(station_key):
+    if station_key in self.stations:
       chain_instance = self.stations[station_key]+1
 
     self.stations[station_key] = chain_instance
 
     # Register the new chainX.xml instance
-    if not self.chain_group.has_key(chain_instance):
+    if chain_instance not in self.chain_group:
       self.chain_group[chain_instance] = {}
 
     chain_group = self.chain_group[chain_instance]
@@ -240,9 +241,9 @@ class SeedlinkPluginHandler:
         else:
           fd.write(seedlink._process_template("chain_head_notimetable.tpl", "chain", False))
         first = True
-        for ((g,s),i) in chain_group.items():
+        for ((g,s),i) in sorted(chain_group.items()):
           if not first: fd.write('\n')
-          if status_map.has_key(s):
+          if s in status_map:
             status_map[s] += 1
             s += ".%d" % status_map[s]
           else:
@@ -256,10 +257,10 @@ class SeedlinkPluginHandler:
       else:
         # If no groups are configured, delete chainX.xml
         try: os.remove(chainxml)
-        except: print "Warning: %s could not be removed" % chainxml
+        except: print("Warning: %s could not be removed" % chainxml)
 
     files = glob.glob(os.path.join(seedlink.config_dir, "chain*"))
     for f in files:
-      if chains.has_key(f): continue
+      if f in chains: continue
       try: os.remove(f)
-      except: print "Warning: %s could not be removed" % f
+      except: print("Warning: %s could not be removed" % f)

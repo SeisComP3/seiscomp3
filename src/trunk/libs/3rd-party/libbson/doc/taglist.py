@@ -32,11 +32,7 @@ except ImportError:
 
 
 def get_tags(s):
-    return list(filter(lambda x: x,
-                       map(lambda x: x.strip(),
-                           s.split(' ')
-                           )
-                       )
+    return list([x for x in [x.strip() for x in s.split(' ')] if x]
                 )
 
 
@@ -67,7 +63,7 @@ class TaglistDirective(Directive):
         section += nodes.title(title, title)
 
         text = nodes.paragraph()
-        text += [nodes.Text(":tag:`%s`"%t) for t in tl.tags ]
+        text += [nodes.Text(":tag:`%s`" % t) for t in tl.tags]
         self.state.nested_parse(text, 0, section)
 
         section += [tl]

@@ -102,10 +102,110 @@ bool fromString(std::vector<T> &vec, const std::string &str);
  */
 SC_SYSTEM_CORE_API std::string stringify(const char *fmt, ...);
 
-
+/**
+ * @brief Splits a string into several tokens separated by one of the specified
+ *        delimiter characters.
+ * @param tokens Result vector containing the individual tokens
+ * @param source The source string
+ * @param delimiter Sequence of characters to spit the string at
+ * @param compressOn If enabled, adjacent separators are merged together.
+ *        Otherwise, every two separators delimit a token.
+ */
 SC_SYSTEM_CORE_API
 int split(std::vector<std::string> &tokens, const char *source,
           const char *delimiter, bool compressOn = true);
+
+/**
+ * @brief Splits a string into several tokens separated by one of the specified
+ *        delimiter characters. A delimiter character is ignored if it occurs in
+ *        a quoted string or if it is protected by a backslash. Likewise quotes
+ *        may be protected by a backslash. By default, leading and trailing
+ *        whitespaces will be trimmed if they occur outside of a quoted string
+ *        and if they are not protected by a backslash.
+ * @param tokens Result vector containing the individual tokens
+ * @param source The source string
+ * @param delimiter Sequence of characters to spit the string at
+ * @param compressOn If enabled, adjacent separators are merged together.
+ *        Otherwise, every two separators delimit a token.
+ * @param unescape Request removal of surrounding quotes and unescape of certain
+ *        characters.
+ *        In particular a backslash outside quotes is removed if it protects a
+ *        backslash, a whitespace, a quote or a delimiter character. While a
+ *        backslash inside quotes only is removed if it protects a backslash or
+ *        the beginning quote character.
+ * @param trim Request trimming of whitespaces
+ * @param whitespace Sequence of characters to interpret as a whitespace
+ * @param quotes Sequence of characters to interpret as a quote
+ * @return Number of tokens found
+ */
+SC_SYSTEM_CORE_API
+size_t splitExt(std::vector<std::string> &tokens, const char *source,
+                const char *delimiter = ",", bool compressOn = true,
+                bool unescape = false, bool trim = true,
+                const char *whitespaces = " \t\n\v\f\r",
+                const char *quotes = "\"'");
+
+
+/**
+ * @brief Splits a string into several tokens separated by one of the specified
+ *        delimiter characters. A delimiter character is ignored if it occurs in
+ *        a quoted string or if it is protected by a backslash. Likewise quotes
+ *        may be protected by a backslash. By default, leading and trailing
+ *        whitespaces will be trimmed if they occur outside of a quoted string
+ *        and if they are not protected by a backslash.
+ *        In contrast to the splitExt method this function operates entirely on
+ *        the source string without modifying it or creating any copies.
+ * @param lenSource Returns remaining length of source string
+ * @param lenTok Returns length of current token
+ * @param source The source string
+ * @param delimFound Returns the delimiter character found or 0 if the end of
+ *        the source string was reached
+ * @param delimiter Sequence of characters to spit the string at
+ * @param trim Request trimming of whitespaces
+ * @param whitespace Sequence of characters to interpret as a whitespace
+ * @param quotes Sequence of characters to interpret as a quote
+ * @return Pointer to the next token within the source string, length of the
+ *         token and number of remaining characters in the source string.
+ */
+SC_SYSTEM_CORE_API
+const char *tokenizeExt(size_t &lenTok, size_t &lenSource, const char *&source,
+                        char &delimFound, const char *delimiter = ",",
+                        bool trim = true,
+                        const char *whitespaces = " \t\n\v\f\r",
+                        const char *quotes = "\"'");
+
+/**
+ * @brief Splits a string into several tokens separated by one of the specified
+ *        delimiter characters. A delimiter character is ignored if it occurs in
+ *        a quoted string or if it is protected by a backslash. Likewise quotes
+ *        may be protected by a backslash. By default, leading and trailing
+ *        whitespaces will be trimmed if they occur outside of a quoted string
+ *        and if they are not protected by a backslash.
+ *        Unlike the tokenizeExt variant this function will modify the source
+ *        string and remove surrounding quotes and will unescape certain
+ *        characters.
+ *        In particular a backslash outside quotes is removed if it protects a
+ *        backslash, a whitespace, a quote or a delimiter character. While a
+ *        backslash inside quotes only is removed if it protects a backslash or
+ *        the beginning quote character.
+ * @param lenSource Returns remaining length of source string
+ * @param lenTok Returns length of current token
+ * @param source The source string
+ * @param delimFound Returns the delimiter character found or 0 if the end of
+ *        the source string was reached
+ * @param delimiter Sequence of characters to spit the string at
+ * @param trim Request trimming of whitespaces
+ * @param whitespace Sequence of characters to interpret as a whitespace
+ * @param quotes Sequence of characters to interpret as a quote
+ * @return Pointer to the next token within the source string, length of the
+ *         token and number of remaining characters in the source string.
+ */
+SC_SYSTEM_CORE_API
+const char *tokenizeUnescape(size_t &lenTok, size_t &lenSource, char *&source,
+                             char &delimFound, const char *delimiter = ",",
+                             bool trim = true,
+                             const char *whitespaces = " \t\n\v\f\r",
+                             const char *quotes = "\"'");
 
 SC_SYSTEM_CORE_API bool isEmpty(const char*);
 
@@ -141,7 +241,6 @@ SC_SYSTEM_CORE_API bool wildcmp(const char *wild, const char *str);
 SC_SYSTEM_CORE_API bool wildcmp(const std::string &wild, const std::string &str);
 SC_SYSTEM_CORE_API bool wildicmp(const char *wild, const char *str);
 SC_SYSTEM_CORE_API bool wildicmp(const std::string &wild, const std::string &str);
-
 
 }
 }

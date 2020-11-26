@@ -170,7 +170,7 @@ import seiscomp3.Logging
 import seiscomp3.Config
 import seiscomp3.Communication
 import seiscomp3.Core
-import DataModel
+import seiscomp3.DataModel
 import seiscomp3.IO
 import seiscomp3.Math
 import seiscomp3.Utils
@@ -203,6 +203,10 @@ class CommandLine(_object):
 
     def parse(self, argc, argv):
         """parse(CommandLine self, int argc, char ** argv) -> bool"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         return _Client.CommandLine_parse(self, argc, argv)
 
 
@@ -593,6 +597,10 @@ class Application(seiscomp3.Core.InterruptibleObject):
 
     def __init__(self, argc, argv):
         """__init__(Seiscomp::Client::Application self, int argc, char ** argv) -> Application"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         if self.__class__ == Application:
             _self = None
         else:
@@ -784,6 +792,11 @@ class Application(seiscomp3.Core.InterruptibleObject):
         sync(Application self) -> bool
         """
         return _Client.Application_sync(self, syncID)
+
+
+    def waitEvent(self):
+        """waitEvent(Application self) -> bool"""
+        return _Client.Application_waitEvent(self)
 
 
     def setDaemonEnabled(self, enable):
@@ -1351,6 +1364,10 @@ class StreamApplication(Application):
 
     def __init__(self, argc, argv):
         """__init__(Seiscomp::Client::StreamApplication self, int argc, char ** argv) -> StreamApplication"""
+
+        argv = [ bytes(a.encode()) for a in argv ]
+
+
         if self.__class__ == StreamApplication:
             _self = None
         else:
@@ -1716,14 +1733,6 @@ class Inventory(_object):
         return _Client.Inventory_stationLocation(self, networkCode, stationCode, arg4)
 
 
-    def getStream(self, networkCode, stationCode, locationCode, channelCode, arg6, error=None):
-        """
-        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6, Seiscomp::DataModel::InventoryError * error=None) -> Stream
-        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6) -> Stream
-        """
-        return _Client.Inventory_getStream(self, networkCode, stationCode, locationCode, channelCode, arg6, error)
-
-
     def getStation(self, *args):
         """
         getStation(Inventory self, std::string const & networkCode, std::string const & stationCode, Time arg4, Seiscomp::DataModel::InventoryError * error=None) -> Station
@@ -1740,6 +1749,15 @@ class Inventory(_object):
         getSensorLocation(Inventory self, Pick arg2) -> SensorLocation
         """
         return _Client.Inventory_getSensorLocation(self, *args)
+
+
+    def getStream(self, *args):
+        """
+        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6, Seiscomp::DataModel::InventoryError * error=None) -> Stream
+        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, std::string const & channelCode, Time arg6) -> Stream
+        getStream(Inventory self, Pick arg2) -> Stream
+        """
+        return _Client.Inventory_getStream(self, *args)
 
 
     def getThreeComponents(self, *args):

@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/ewexport_pasv_plugin -v -s 
              timeout = 600
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.ewexport_pasv.proc"
 

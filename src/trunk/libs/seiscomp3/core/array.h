@@ -73,7 +73,7 @@ class SC_SYSTEM_CORE_API Array : public Seiscomp::Core::BaseObject {
 		virtual void clear() = 0;
 	
 		//! Returns the number of bytes of an array element.
-		virtual int bytes() const = 0;
+		virtual int elementSize() const = 0;
 
 		//! Appends the given array to this array.
 		virtual void append(const Array*) = 0;

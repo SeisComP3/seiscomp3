@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os, string, time, re, glob, shutil, sys, imp, resource
 import seiscomp3.Kernel, seiscomp3.Config
 try:
@@ -39,7 +40,7 @@ def _loadDatabase(dbUrl):
         registry = seiscomp3.Client.PluginRegistry.Instance()
         registry.addPluginName("db" + db["dbDriverName"])
         registry.loadPlugins()
-    except Exception, e:
+    except Exception as e:
         raise(e) ### "Cannot load database driver: %s" % e)
     dbDriver = seiscomp3.IO.DatabaseInterface.Create(db["dbDriverName"])
     if dbDriver is None:
@@ -49,12 +50,12 @@ def _loadDatabase(dbUrl):
     dbQuery = seiscomp3.DataModel.DatabaseQuery(dbDriver)
     if dbQuery is None:
         raise Exception("Cannot get DB query object")
-    print >> sys.stderr, " Loading inventory from database ... ",
+    print(" Loading inventory from database ... ", file=sys.stderr)
     inventory = seiscomp3.DataModel.Inventory()
     dbQuery.loadNetworks(inventory)
-    for ni in xrange(inventory.networkCount()):
+    for ni in range(inventory.networkCount()):
         dbQuery.loadStations(inventory.network(ni))
-    print >> sys.stderr, "Done."
+    print("Done.", file=sys.stderr)
     return inventory
 
 
@@ -66,13 +67,13 @@ def _loadStationDescriptions(inv):
     """
     d = dict()
 
-    for ni in xrange(inv.networkCount()):
+    for ni in range(inv.networkCount()):
         n = inv.network(ni)
         net = n.code()
-        if not d.has_key(net):
+        if net not in d:
             d[net] = {}
 
-            for si in xrange(n.stationCount()):
+            for si in range(n.stationCount()):
                 s = n.station(si)
                 sta = s.code()
                 d[net][sta] = s.description()
@@ -112,7 +113,7 @@ class TemplateModule(seiscomp3.Kernel.Module):
         self.config_dir = os.path.join(self.pkgroot, "var", "lib", self.name)
 
         self.database_str = ""
-        if self.global_params.has_key("inventory_connection"):
+        if "inventory_connection" in self.global_params:
             #WRONG self.database_str = cfg.getStrings("seedlink.readConnection")
             self.database_str = self.global_params["inventory_connection"]
         #self.database_str = cfg.getStrings("seedlink.database.type")+cfg.getStrings("seedlink.database.parameters")
@@ -150,7 +151,7 @@ class TemplateModule(seiscomp3.Kernel.Module):
 
         params['pkgroot'] = self.pkgroot
 
-        #for (p,v) in params_ex.iteritems():
+        #for (p,v) in params_ex.items():
         #    try:
         #        t2 = seiscomp3.Kernel.Template(v)
         #        params[p] = t2.substitute(params)
@@ -176,9 +177,9 @@ class TemplateModule(seiscomp3.Kernel.Module):
 
         if print_warning:
             if station_scope:
-                print "warning: parameter '%s' is not defined for station %s %s" % (name, self.net, self.sta)
+                print("warning: parameter '%s' is not defined for station %s %s" % (name, self.net, self.sta))
             else:
-                print "warning: parameter '%s' is not defined at global scope" % (name,)
+                print("warning: parameter '%s' is not defined at global scope" % (name,))
 
         raise KeyError
 
@@ -215,25 +216,25 @@ class Module(TemplateModule):
             resource.setrlimit(resource.RLIMIT_NOFILE, (lim[1], lim[1]))
 
             lim = resource.getrlimit(resource.RLIMIT_NOFILE)
-            print >> sys.stderr, " maximum number of open files set to", lim[0]
+            print(" maximum number of open files set to", lim[0], file=sys.stderr)
 
-        except Exception, e:
-            print >> sys.stderr, " failed to raise the maximum number open files:", str(e)
+        except Exception as e:
+            print(" failed to raise the maximum number open files:", str(e), file=sys.stderr)
 
-        if self.global_params.has_key("sequence_file_cleanup"):
+        if "sequence_file_cleanup" in self.global_params:
             try:
                 max_minutes = int(self.global_params["sequence_file_cleanup"])
                 if max_minutes > 0:
                     files = glob.glob(os.path.join(self.run_dir, "*.seq"))
                     for f in files:
                         if (time.time()-os.path.getmtime(f))/60 >= max_minutes:
-                            print >> sys.stderr, " removing sequence file %s" % f
+                            print(" removing sequence file %s" % f, file=sys.stderr)
                             os.remove(f)
                 else:
-                    print >>sys.stderr, " sequence_file_cleanup disabled"
+                    prin(" sequence_file_cleanup disabled", file=sys.stderr)
 
             except ValueError:
-                print >>sys.stderr, " sequence_file_cleanup parameter is not a number: '%s'" % str(self.global_params["sequence_file_cleanup"])
+                prin(" sequence_file_cleanup parameter is not a number: '%s'" % str(self.global_params["sequence_file_cleanup"]), file=sys.stderr)
                 return 1
 
         return self.env.start(self.name, self.env.binaryFile(self.name), daemon_opt,\
@@ -248,7 +249,7 @@ class Module(TemplateModule):
             except: return None
 
             modname = '__seiscomp_seedlink_plugins_' + source_type
-            if sys.modules.has_key(modname):
+            if modname in sys.modules:
                 mod = sys.modules[modname]
             else:
                 # create a module
@@ -265,7 +266,7 @@ class Module(TemplateModule):
             if not hasattr(mod, 'SeedlinkPluginHandler'):
                 code = f.read()
                 # compile and exec dynamic code in the module
-                exec compile(code, '', 'exec') in namespace
+                exec(compile(code, '', 'exec'), namespace)
 
             mod = namespace.get('SeedlinkPluginHandler')
             handler = mod()
@@ -277,8 +278,6 @@ class Module(TemplateModule):
                (self._get('seedlink.station.id'), self._get('seedlink.station.description'))
         ini += '             name = "%s"\n' % self._get('seedlink.station.code')
         ini += '             network = "%s"\n' % self._get('seedlink.station.network')
-        if self._get('seedlink.station.sproc'):
-            ini += '             proc = "%s"\n' % self._get('seedlink.station.sproc')
         if self._get('seedlink.station.access'):
             ini += '             access = "%s"\n' % self._get('seedlink.station.access').replace(',',' ')
         if self._get('seedlink.station.blanks'):
@@ -293,19 +292,12 @@ class Module(TemplateModule):
             ini += '             segsize = "%s"\n' % self._get('seedlink.station.segsize')
         if self._get('seedlink.station.backfill_buffer'):
             ini += '             backfill_buffer = "%s"\n' % self._get('seedlink.station.backfill_buffer')
+        if self._get('seedlink.station.sproc'):
+            ini += '             proc = "%s"\n' % self._get('seedlink.station.sproc')
         ini += '\n'
         return ini
 
     def __process_station(self, profile):
-        try:
-            station_dict = self.seedlink_station[self.sta]
-            station_id = self.sta + str(len(station_dict))
-
-        except KeyError:
-            station_dict = {}
-            station_id = self.sta
-            self.seedlink_station[self.sta] = station_dict
-
         if profile:
             self.station_config_file = "profile_%s" % (profile,)
         else:
@@ -314,17 +306,17 @@ class Module(TemplateModule):
         self._read_station_config(self.station_config_file)
 
         # Generate plugin independent parameters
-        self._set('seedlink.station.id', station_id)
+        self._set('seedlink.station.id', self.net + '.' + self.sta)
         self._set('seedlink.station.code', self.sta)
         self._set('seedlink.station.network', self.net)
         self._set('seedlink.station.access', self._get('access'))
-        self._set('seedlink.station.sproc', self._get('proc'))
         self._set('seedlink.station.blanks', self._get('blanks'))
         self._set('seedlink.station.encoding', self._get('encoding'))
         self._set('seedlink.station.buffers', self._get('buffers'))
         self._set('seedlink.station.segments', self._get('segments'))
         self._set('seedlink.station.segsize', self._get('segsize'))
         self._set('seedlink.station.backfill_buffer', self._get('backfill_buffer'))
+        self._set('seedlink.station.sproc', self._get('proc'))
 
         # Supply station description:
         # 1. try getting station description from a database
@@ -344,7 +336,7 @@ class Module(TemplateModule):
                 rc = seiscomp3.Config.Config()
                 rc.readConfig(os.path.join(self.rc_dir, "station_%s_%s" % (self.net, self.sta)))
                 description = rc.getString("description")
-            except Exception, e:
+            except Exception as e:
                 # Maybe the rc file doesn't exist, maybe there's no readable description.
                 pass
 
@@ -356,20 +348,18 @@ class Module(TemplateModule):
         self.station_count += 1
 
         if self._last_net != self.net:
-            print "+ network %s" % self.net
+            print("+ network %s" % self.net)
             self._last_net = self.net
 
-        print "  + station %s %s" % (self.sta, description)
+        print("  + station %s %s" % (self.sta, description))
 
         # If real-time simulation is activated do not parse the sources
         # and force the usage of the mseedfifo_plugin
         if self.msrtsimul:
             self._set('seedlink.station.sproc', '')
-            station_dict[(self.net, self.sta)] = self._generateStationForIni()
+            self.seedlink_station[(self.net, self.sta)] = self._generateStationForIni()
             self._getPluginHandler('mseedfifo')
             return
-
-        station_sproc = set()
 
         for source_type in self._get('sources').split(','):
             if not source_type: continue
@@ -377,7 +367,7 @@ class Module(TemplateModule):
             source_alias = source_type
             toks = source_type.split(':')
             if len(toks) > 2:
-                print "Error: invalid source identifier '%s', expected '[alias:]type'"
+                print("Error: invalid source identifier '%s', expected '[alias:]type'")
                 continue
             elif len(toks) == 2:
                 source_alias = toks[0]
@@ -389,14 +379,14 @@ class Module(TemplateModule):
             # share/templates/seedlink/$type/setup.py
             pluginHandler = self._getPluginHandler(source_type)
             if pluginHandler is None:
-                print "Error: no handler for plugin %s defined" % source_type
+                print("Error: no handler for plugin %s defined" % source_type)
                 continue
 
             stat = source_type
             if source_alias != source_type:
                 stat += " as " + source_alias
 
-            print "    + source %s" % stat
+            print("    + source %s" % stat)
 
             # Backup original binding parameters
             station_params = self.station_params.copy()
@@ -440,7 +430,7 @@ class Module(TemplateModule):
             else:
                 source_key = (source_type, source_key)
 
-            if not source_dict.has_key(source_key):
+            if source_key not in source_dict:
                 source_id = source_type + str(len(source_dict))
 
             else:
@@ -452,17 +442,14 @@ class Module(TemplateModule):
             source_dict[source_key] = (source_type, source_id, self.global_params.copy(), self.station_params.copy())
 
             # Create procs for this type for streams.xml
-            sproc_names = self._get('sources.%s.proc' % (source_type)) or self._get('proc')
-            if sproc_names:
-                sproc_names = [x.strip() for x in sproc_names.split(",")]
-                for sproc_name in sproc_names:
-                    self.sproc_used = True
-                    sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
-                    if sproc:
-                        station_sproc.add(sproc_name)
-                        self.sproc[sproc_name] = sproc
-                    else:
-                        print "WARNING: cannot find streams_%s.tpl" % sproc_name
+            sproc_name = self._get('sources.%s.proc' % (source_type))
+            if sproc_name:
+                self.sproc_used = True
+                sproc = self._process_template("streams_%s.tpl" % sproc_name, source_type, True, False)
+                if sproc:
+                    self.sproc[sproc_name] = sproc
+                else:
+                    print("WARNING: cannot find streams_%s.tpl" % sproc_name)
 
             # Read plugins.ini template for this source and store content
             # under the provided key for this binding
@@ -481,28 +468,24 @@ class Module(TemplateModule):
             # Set original parameters
             self.station_params = station_params
 
-        if len(station_sproc) > 1:
-            data = '  <proc name="%s">\n' % (",".join(station_sproc),)
-            for name in station_sproc:
-                data += '    <using proc="%s"/>\n' % (name,)
-
-            data += '  </proc>\n'
-
-            self._set('seedlink.station.sproc', ",".join(station_sproc))
-            self.combined_sproc[",".join(station_sproc)] = data
-
-        elif station_sproc:
-            self._set('seedlink.station.sproc', list(station_sproc)[0])
+        # Add station procs
+        sproc_name = self._get('proc')
+        if sproc_name:
+            self.sproc_used = True
+            sproc = self._process_template("streams_%s.tpl" % sproc_name, None, True, False)
+            if sproc:
+                self.sproc[sproc_name] = sproc
+            else:
+                print("WARNING: cannot find streams_%s.tpl" % sproc_name)
 
         # Create station section for seedlink.ini
-        station_dict[(self.net, self.sta)] = self._generateStationForIni()
+        self.seedlink_station[(self.net, self.sta)] = self._generateStationForIni()
 
     def __load_stations(self):
         self.seedlink_source = {}
         self.seedlink_station = {}
         self.plugins_ini = {}
         self.sproc = {}
-        self.combined_sproc = {}
         self.plugins = {}
         self.sproc_used = False
         self.station_count = 0
@@ -519,7 +502,7 @@ class Module(TemplateModule):
         self._set('seedlink.streams', os.path.join(self.config_dir, "streams.xml"), False)
 
         self.templates = set()
-        self.templates.add(("backup_seqfiles", None, 0755))
+        self.templates.add(("backup_seqfiles", None, 0o755))
 
         rx_binding = re.compile(r'(?P<module>[A-Za-z0-9_\.-]+)(:(?P<profile>[A-Za-z0-9_-]+))?$')
 
@@ -531,10 +514,10 @@ class Module(TemplateModule):
             try:
                 (path, net, sta) = f.split('_')[-3:]
                 if not path.endswith("station"):
-                    print "invalid path", f
+                    print("invalid path", f)
 
             except ValueError:
-                print "invalid path", f
+                print("invalid path", f)
                 continue
 
             self.net = net
@@ -550,7 +533,7 @@ class Module(TemplateModule):
 
                 m = rx_binding.match(line)
                 if not m:
-                    print "invalid binding in %s: %s" % (f, line)
+                    print("invalid binding in %s: %s" % (f, line))
                     line = fd.readline()
                     continue
 
@@ -588,6 +571,8 @@ class Module(TemplateModule):
         self._set_default("stream_check", "true", False)
         self._set_default("window_extraction", "true", False)
         self._set_default("window_extraction_trusted", "true", False)
+        self._set_default("websocket", "false", False)
+        self._set_default("websocket_trusted", "false", False)
 
         self._set_default("buffers", "100", False)
         self._set_default("segments", "50", False)
@@ -629,14 +614,12 @@ class Module(TemplateModule):
         # Load descriptions from inventory:
         if self.database_str:
             if dbAvailable == True:
-                print >>sys.stderr, " Loading station descriptions from %s" % self.database_str
+                print(" Loading station descriptions from %s" % self.database_str, file=sys.stderr)
                 inv = _loadDatabase(self.database_str)
                 self.seedlink_station_descr = _loadStationDescriptions(inv)
             else:
-                print >>sys.stderr, " Database configured but trunk is not installed"
+                print(" Database configured but trunk is not installed", file=sys.stderr)
                 self.seedlink_station_descr = dict()
-
-        self.__load_stations()
 
         try: os.makedirs(self.config_dir)
         except: pass
@@ -644,7 +627,9 @@ class Module(TemplateModule):
         try: os.makedirs(self.run_dir)
         except: pass
 
-        for p in self.plugins.itervalues():
+        self.__load_stations()
+
+        for p in self.plugins.values():
             p.flush(self)
 
         if self.msrtsimul:
@@ -665,6 +650,16 @@ class Module(TemplateModule):
         else:
             self._set("window_extraction_trusted", "disabled", False)
 
+        if self._get("websocket", False).lower() == "true":
+            self._set("websocket", "enabled", False)
+        else:
+            self._set("websocket", "disabled", False)
+
+        if self._get("websocket_trusted", False).lower() == "true":
+            self._set("websocket_trusted", "enabled", False)
+        else:
+            self._set("websocket_trusted", "disabled", False)
+
         if self._get("request_log", False).lower() == "true":
             self._set("request_log", "enabled", False)
         else:
@@ -677,23 +672,22 @@ class Module(TemplateModule):
         if self.sproc_used:
             fd.write(self._process_template("seedlink_sproc.tpl", None, False))
 
-        for i in self.seedlink_source.itervalues():
-            for (source_type, source_id, self.global_params, self.station_params) in i.itervalues():
+        for i in self.seedlink_source.values():
+            for (source_type, source_id, self.global_params, self.station_params) in i.values():
                 source = self._process_template("seedlink_plugin.tpl", source_type)
                 if source:
                     fd.write(source)
 
         fd.write(self._process_template("seedlink_station_head.tpl", None, False))
 
-        for i in self.seedlink_station.itervalues():
-            for j in i.itervalues():
-                fd.write(j)
+        for k in sorted(self.seedlink_station.keys()):
+            fd.write(self.seedlink_station[k])
 
         fd.close()
 
         if self.plugins_ini:
             fd = open(os.path.join(self.config_dir, "plugins.ini"), "w")
-            for i in self.plugins_ini.itervalues():
+            for i in self.plugins_ini.values():
                 fd.write(i)
 
             fd.close()
@@ -706,10 +700,7 @@ class Module(TemplateModule):
             fd = open(self._get('seedlink.streams', False), "w")
             fd.write('<streams>\n')
 
-            for i in self.sproc.itervalues():
-                fd.write(i)
-
-            for i in self.combined_sproc.itervalues():
+            for i in self.sproc.values():
                 fd.write(i)
 
             fd.write('</streams>\n')
@@ -738,5 +729,5 @@ class Module(TemplateModule):
 
 
     def printCrontab(self):
-        print "55 23 * * * %s >/dev/null 2>&1" % (os.path.join(self.config_dir, "backup_seqfiles"),)
+        print("55 23 * * * %s >/dev/null 2>&1" % (os.path.join(self.config_dir, "backup_seqfiles"),))
 

@@ -172,7 +172,7 @@ SwigPyIterator_swigregister(SwigPyIterator)
 import seiscomp3.IO
 import seiscomp3.Math
 import seiscomp3.Core
-import DataModel
+import seiscomp3.DataModel
 import seiscomp3.Config
 class TravelTimeList_internal(_object):
     """Proxy of C++ std::list<(Seiscomp::TravelTime)> class."""

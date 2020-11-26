@@ -1,7 +1,7 @@
 * Generated at $date - Do not edit!
 * template: $template
 
-[hrd24_$seedlink.station.id]
+[$seedlink.source.id]
 
 * Settings for Nanometrics HRD24 digitizer
 

@@ -373,7 +373,8 @@ void SLConnection::handshake() {
 				_sock.sendRequest("DATA", !batchmode);
 				SEISCOMP_DEBUG("Seedlink command: DATA");
 			}
-		} catch (SocketCommandException) {}
+		}
+		catch ( SocketCommandException & ) {}
 	}
 	_sock.sendRequest("END",false);
 

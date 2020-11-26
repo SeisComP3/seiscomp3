@@ -11,6 +11,7 @@ SET(GUI_DATAMODEL_SOURCES
 	publicobjectevaluator.cpp
 	importpicks.cpp
 	originsymbol.cpp
+	advancedoriginsymbol.cpp
 	origintime.cpp
 	origindialog.cpp
 	pickerview.cpp
@@ -63,6 +64,7 @@ SET(GUI_DATAMODEL_MOC_HEADERS
 )
 
 SET(GUI_DATAMODEL_UI
+	eventfilterwidget.ui
 	eventlistview.ui
 	eventlistviewregionfilterdialog.ui
 	eventsummaryview.ui

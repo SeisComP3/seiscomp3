@@ -6,8 +6,8 @@
  *
  ***************************************************************************/
 
-#ifndef __SEISCOMP_FDSNXML_DATE_H__
-#define __SEISCOMP_FDSNXML_DATE_H__
+#ifndef SEISCOMP_FDSNXML_DATE_H__
+#define SEISCOMP_FDSNXML_DATE_H__
 
 
 #include <seiscomp3/core/datetime.h>

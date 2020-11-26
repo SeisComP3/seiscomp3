@@ -146,6 +146,7 @@ EvaluationStatusFormatter __evaluationStatus;
 
 struct EventTypeFormatter : Formatter {
 	void to(std::string &v) {
+		if ( v.empty() ) return;
 		EventType type;
 		if ( !type.fromString(v) ) {
 			SEISCOMP_WARNING("unknown event type '%s' found, mapping to "

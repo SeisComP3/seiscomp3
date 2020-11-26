@@ -1982,7 +1982,7 @@ void WFParam::handleRecord(Record *rec) {
 
 	if ( _config.dumpRecords ) {
 		if ( rec->raw() ) {
-			size_t bytes = rec->raw()->bytes()*rec->raw()->size();
+			size_t bytes = rec->raw()->elementSize()*rec->raw()->size();
 			_recordDumpOutput.write((const char*)rec->raw()->data(), bytes);
 		}
 	}

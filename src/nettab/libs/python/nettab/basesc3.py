@@ -1,15 +1,16 @@
+from __future__ import print_function
 from seiscomp3 import DataModel, Core, Config
-from helpers import parsers
+from .helpers import parsers
 import datetime
 
 class sc3(object):
 	def _fillSc3(self, obj, att):
-		for (k, p) in att.iteritems():
+		for (k, p) in att.items():
 			try:
 				p = self.sc3Valid['attributes'][k]['validator'](p)
 				getattr(obj, 'set'+k)(p)
-			except Exception, e:
-				print >> sys.stderr,"[Error] %s = %s (%s)" % (k,p,e)
+			except Exception as e:
+				print("[Error] %s = %s (%s)" % (k,p,e), file=sys.stderr)
 
 	@staticmethod
 	def getBool(val):
@@ -18,7 +19,7 @@ class sc3(object):
 		elif val == "False" or val == 0:
 			return False
 		else:
-			raise Exception ("Invalid Boolean Value")
+			raise Exception("Invalid Boolean Value")
 
 	@staticmethod
 	def getString(data):
@@ -60,7 +61,7 @@ class sc3(object):
 		elif val == "DEPLOYMENT":
 			return DataModel.DEPLOYMENT
 		else:
-			raise Exception ("Invalid station group type")
+			raise Exception("Invalid station group type")
 
 	@staticmethod	
 	def _findValidOnes(mode):

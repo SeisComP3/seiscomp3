@@ -1,6 +1,7 @@
 * template: $template
-plugin MK6_$seedlink.station.id cmd = "/umss/source/umsseedl"
+plugin $seedlink.source.id cmd = "/umss/source/umsseedl"
              timeout = 0
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.mk6.proc"
 

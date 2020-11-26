@@ -34,17 +34,29 @@
 #include <seiscomp3/gui/core/infotext.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/datamodel/inventorylistview.h>
+
+#include <QFileDialog>
+#include <QLineEdit>
+#include <QMessageBox>
+
 #include <set>
 #include <fstream>
 
 
 using namespace std;
 using namespace Seiscomp;
+using namespace Seiscomp::Gui;
 using namespace Seiscomp::IO;
 using namespace Seiscomp::DataModel;
 
 
 namespace {
+
+
+bool isWildcard(const string &s) {
+	return s.find('*') != string::npos || s.find('?') != string::npos;
+}
+
 
 QString waveformIDToString(const WaveformStreamID& id) {
 	return (id.networkCode() + "." + id.stationCode() + "." +
@@ -271,7 +283,7 @@ void TraceViewTabBar::textChanged() {
 
 
 TraceView::TraceView(const Seiscomp::Core::TimeSpan& span,
-                     QWidget *parent, Qt::WFlags f)
+                     QWidget *parent, Qt::WindowFlags f)
 : Seiscomp::Gui::RecordView(span, parent, f) {
 	_timeSpan = (double)span;
 }
@@ -936,6 +948,7 @@ TraceView* MainWindow::createTraceView() {
 	        this, SLOT(filterChanged(const QString&)));
 
 	connect(_ui.actionToggleAllRecords, SIGNAL(toggled(bool)), traceView, SLOT(showAllRecords(bool)));
+	connect(_ui.actionToggleRecordBorders, SIGNAL(toggled(bool)), traceView, SLOT(showRecordBorders(bool)));
 
 	connect(_ui.actionHorZoomIn, SIGNAL(triggered()), traceView, SLOT(horizontalZoomIn()));
 	connect(_ui.actionHorZoomOut, SIGNAL(triggered()), traceView, SLOT(horizontalZoomOut()));
@@ -1364,10 +1377,9 @@ void MainWindow::openAcquisition() {
 		_recordStreamThread->setTimeWindow(Core::TimeWindow(_originTime - Core::TimeSpan(_bufferSize), _endTime));
 
 	if ( _inventoryEnabled ) {
-		typedef QPair<QString,int> ChannelEntry;
-		
-		QMap<QString, QMap<QString, QMultiMap<QString, ChannelEntry> > > streamMap;
-		QList<WaveformStreamID> requestMap;
+		typedef QPair<WaveformStreamID, int> WIDWithIndex;
+		QList<WIDWithIndex> requestMap;
+		QList<WaveformStreamID> resolvedStationRequestMap;
 
 		bool usePreconfigured = false;
 
@@ -1397,17 +1409,18 @@ void MainWindow::openAcquisition() {
 						cerr << "error in entry '" << stream.toStdString() << "': too many tokens, missing ',' ? -> ignoring" << endl;
 						continue;
 					}
-					else
-						requestMap.append(WaveformStreamID(tokens[0].toStdString(),
-						                                   tokens.count()>1?tokens[1].toStdString():"*",
-						                                   tokens.count()>2?tokens[2].toStdString():"*",
-						                                   tokens.count()>3?tokens[3].toStdString():"*",""));
-
-					QMap<QString, QMultiMap<QString, ChannelEntry> > & stationMap = streamMap[requestMap.last().networkCode().c_str()];
-					stationMap[requestMap.last().stationCode().c_str()].insert(requestMap.last().locationCode().c_str(), ChannelEntry(requestMap.last().channelCode().c_str(),index));
+					else {
+						requestMap.append(
+							WIDWithIndex(
+								WaveformStreamID(tokens[0].toStdString(),
+								                 tokens.count()>1?tokens[1].toStdString():"*",
+								                 tokens.count()>2?tokens[2].toStdString():"*",
+								                 tokens.count()>3?tokens[3].toStdString():"*",""),
+								index++
+							)
+						);
+					}
 				}
-
-				++index;
 			}
 		}
 		catch ( ... ) {
@@ -1463,10 +1476,7 @@ void MainWindow::openAcquisition() {
 							if ( isStreamBlacklisted(streamsBlackList, net, sta, loc, cha) )
 								continue;
 
-							requestMap.append(WaveformStreamID(net, sta, loc, cha, ""));
-							QMap<QString, QMultiMap<QString, ChannelEntry> > & stationMap = streamMap[requestMap.last().networkCode().c_str()];
-							stationMap[requestMap.last().stationCode().c_str()].insert(requestMap.last().locationCode().c_str(), ChannelEntry(requestMap.last().channelCode().c_str(),index));
-							++index;
+							requestMap.append(WIDWithIndex(WaveformStreamID(net, sta, loc, cha, ""), index++));
 						}
 					}
 				}
@@ -1505,19 +1515,13 @@ void MainWindow::openAcquisition() {
 			}
 			catch ( ... ) {}
 
-			foreach ( const WaveformStreamID& wfsi, requestMap ) {
-				if ( wfsi.networkCode() == "*" ) {
-					WaveformStreamID nwfsi(net->code(), wfsi.stationCode(),
-					                       wfsi.locationCode(), wfsi.channelCode(), "");
-					if ( requestMap.contains(nwfsi) ) continue;
-					requestMap.append(nwfsi);
+			QList<WIDWithIndex> staRequests;
+			foreach ( const WIDWithIndex &wfsi, requestMap ) {
+				if ( Core::wildcmp(wfsi.first.networkCode(), net->code()) ) {
+					staRequests.append(wfsi);
 				}
 			}
-
-			QMap<QString, QMultiMap<QString, ChannelEntry> >& staCodes = streamMap[net->code().c_str()];
-			if ( staCodes.isEmpty() ) staCodes = streamMap["*"];
-
-			if ( staCodes.isEmpty() ) continue;
+			if ( staRequests.isEmpty() ) continue;
 
 			for ( size_t j = 0; j < net->stationCount(); ++j ) {
 				Station* sta = net->station(j);
@@ -1536,19 +1540,30 @@ void MainWindow::openAcquisition() {
 					}
 				}
 
-				foreach ( const WaveformStreamID& wfsi, requestMap ) {
-					if ( wfsi.stationCode() == "*" && wfsi.networkCode() == net->code() ) {
-						WaveformStreamID nwfsi(wfsi.networkCode(), sta->code(),
-						                       wfsi.locationCode(), wfsi.channelCode(), "");
-						if ( requestMap.contains(nwfsi) ) continue;
-						requestMap.append(nwfsi);
+				QList<WIDWithIndex> locRequests;
+				foreach ( const WIDWithIndex &wfsi, staRequests ) {
+					if ( isWildcard(wfsi.first.stationCode()) ) {
+						if ( Core::wildcmp(wfsi.first.stationCode(), sta->code()) ) {
+							locRequests.append(wfsi);
+
+							WaveformStreamID nwfsi(wfsi.first);
+							nwfsi.setNetworkCode(net->code());
+							nwfsi.setStationCode(sta->code());
+							resolvedStationRequestMap.append(nwfsi);
+						}
+					}
+					else {
+						if ( wfsi.first.stationCode() == sta->code() ) {
+							locRequests.append(wfsi);
+
+							WaveformStreamID nwfsi(wfsi.first);
+							nwfsi.setNetworkCode(net->code());
+							nwfsi.setStationCode(sta->code());
+							resolvedStationRequestMap.append(nwfsi);
+						}
 					}
 				}
-
-				QMultiMap<QString, ChannelEntry>& locCodes = staCodes[sta->code().c_str()];
-				if ( locCodes.isEmpty() ) locCodes = staCodes["*"];
-
-				if ( locCodes.isEmpty() ) continue;
+				if ( locRequests.isEmpty() ) continue;
 
 				for ( size_t l = 0; l < sta->sensorLocationCount(); ++l ) {
 					SensorLocation *loc = sta->sensorLocation(l);
@@ -1558,9 +1573,13 @@ void MainWindow::openAcquisition() {
 					}
 					catch ( ... ) {}
 
-					QList<ChannelEntry> chaCodes = locCodes.values(loc->code().c_str());
-					if ( chaCodes.isEmpty() ) chaCodes = locCodes.values("*");
-					if ( chaCodes.isEmpty() ) continue;
+					QList<WIDWithIndex> chaRequests;
+					foreach ( const WIDWithIndex &wfsi, locRequests ) {
+						if ( Core::wildcmp(wfsi.first.locationCode(), loc->code()) ) {
+							chaRequests.append(wfsi);
+						}
+					}
+					if ( chaRequests.isEmpty() ) continue;
 
 					for ( size_t s = 0; s < loc->streamCount(); ++s ) {
 						Stream* stream = loc->stream(s);
@@ -1570,15 +1589,14 @@ void MainWindow::openAcquisition() {
 						}
 						catch ( ... ) {}
 
-						QString compCode;
-
 						bool foundChaCode = false;
 						int index = 0;
 
-						foreach ( const ChannelEntry& chaCode, chaCodes ) {
-							if ( chaCode.first == "*" || Core::wildcmp(chaCode.first.toStdString(), stream->code()) ) {
+						foreach ( const WIDWithIndex &wfsi, chaRequests ) {
+							if ( Core::wildcmp(wfsi.first.channelCode(), stream->code()) ) {
 								foundChaCode = true;
-								index = chaCode.second;
+								index = wfsi.second;
+								break;
 							}
 						}
 
@@ -1591,8 +1609,10 @@ void MainWindow::openAcquisition() {
 							                          WaveformStreamID(net->code(), sta->code(),
 							                                           loc->code(), stream->code(),
 							                                           ""), index, scale));
+							/*
 							cerr << " + " << net->code() << "." << sta->code()
 							     << "." << loc->code() << "." << stream->code() << endl;
+							*/
 						}
 					}
 				}
@@ -1606,7 +1626,7 @@ void MainWindow::openAcquisition() {
 		//progress.setRange(0, _waveformStreams.size());
 
 		SCApp->showMessage(QString("Added 0/%1 streams")
-		                   .arg(_waveformStreams.size()).toAscii());
+		                   .arg(_waveformStreams.size()).toLatin1());
 		cout << "Adding " << _waveformStreams.size() << " streams" << endl;
 
 		//ofstream of("streams");
@@ -1664,13 +1684,13 @@ void MainWindow::openAcquisition() {
 
 			SCApp->showMessage(QString("Added %1/%2 streams")
 			                   .arg(count+1)
-			                   .arg(_waveformStreams.size()).toAscii());
+			                   .arg(_waveformStreams.size()).toLatin1());
 			//progress.setValue(progress.value()+1);
 			//progress.update();
 		}
 
-		foreach ( const WaveformStreamID& wfsi, requestMap ) {
-			if ( wfsi.networkCode() == "*" || wfsi.stationCode() == "*" ) continue;
+		foreach ( const WaveformStreamID &wfsi, resolvedStationRequestMap ) {
+			if ( isWildcard(wfsi.networkCode()) || isWildcard(wfsi.stationCode()) ) continue;
 			_recordStreamThread->addStream(wfsi.networkCode(), wfsi.stationCode(),
 			                               wfsi.locationCode(), wfsi.channelCode());
 		}
@@ -1735,7 +1755,7 @@ void MainWindow::openAcquisition() {
 				addPick(pick.get());
 		}
 
-		SCApp->showMessage(QString("Loaded %1 picks").arg(it.count()).toAscii());
+		SCApp->showMessage(QString("Loaded %1 picks").arg(it.count()).toLatin1());
 		cout << "Added " << it.count() << " picks from database" << endl;
 	}
 

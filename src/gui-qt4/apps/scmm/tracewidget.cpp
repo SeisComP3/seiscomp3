@@ -18,7 +18,7 @@ namespace Seiscomp {
 namespace Gui {
 
 
-TraceWidget::TraceWidget(QWidget *parent, Qt::WFlags f)
+TraceWidget::TraceWidget(QWidget *parent, Qt::WindowFlags f)
 : QFrame(parent, f) {
 	_max = 0;
 	_count = 0;

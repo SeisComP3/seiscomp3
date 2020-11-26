@@ -104,13 +104,13 @@ class SC_SYSTEM_CORE_API GeoFeatureSet : public Core::BaseObject {
 		                             unsigned int fileCount) const;
 
 		/** Reads the BNA-header */
-		bool readBNAHeader(std::string& segment, unsigned int& rank,
-		                   unsigned int& points, bool& isClosed, std::string& error,
+		bool readBNAHeader(std::string &segment, unsigned int &rank,
+		                   GeoFeature::Attributes &attributes,
+		                   unsigned int &points, bool &isClosed, std::string &error,
 		                   const std::string &line) const;
 
 		/** Compares two GeoFeatures by their rank */
-		static const bool compareByRank(const GeoFeature* gf1,
-		                                const GeoFeature* gf2);
+		static bool compareByRank(const GeoFeature* gf1, const GeoFeature* gf2);
 
 		/**
 		 * Creates and inserts a new Category object into the Category vector.

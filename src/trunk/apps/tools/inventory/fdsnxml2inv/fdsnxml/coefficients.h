@@ -21,8 +21,8 @@
 namespace Seiscomp {
 namespace FDSNXML {
 
-DEFINE_SMARTPOINTER(FloatType);
-DEFINE_SMARTPOINTER(FloatType);
+DEFINE_SMARTPOINTER(FloatNoUnitWithNumberType);
+DEFINE_SMARTPOINTER(FloatNoUnitWithNumberType);
 
 
 
@@ -84,8 +84,8 @@ class Coefficients : public BaseFilter {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
-		bool addNumerator(FloatType *obj);
-		bool addDenominator(FloatType *obj);
+		bool addNumerator(FloatNoUnitWithNumberType *obj);
+		bool addDenominator(FloatNoUnitWithNumberType *obj);
 
 		/**
 		 * Removes an object.
@@ -94,8 +94,8 @@ class Coefficients : public BaseFilter {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
-		bool removeNumerator(FloatType *obj);
-		bool removeDenominator(FloatType *obj);
+		bool removeNumerator(FloatNoUnitWithNumberType *obj);
+		bool removeDenominator(FloatNoUnitWithNumberType *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -112,8 +112,8 @@ class Coefficients : public BaseFilter {
 
 		//! Index access
 		//! @return The object at index i
-		FloatType* numerator(size_t i) const;
-		FloatType* denominator(size_t i) const;
+		FloatNoUnitWithNumberType* numerator(size_t i) const;
+		FloatNoUnitWithNumberType* denominator(size_t i) const;
 
 
 	// ------------------------------------------------------------------
@@ -124,8 +124,8 @@ class Coefficients : public BaseFilter {
 		CfTransferFunctionType _cfTransferFunctionType;
 
 		// Aggregations
-		std::vector<FloatTypePtr> _numerators;
-		std::vector<FloatTypePtr> _denominators;
+		std::vector<FloatNoUnitWithNumberTypePtr> _numerators;
+		std::vector<FloatNoUnitWithNumberTypePtr> _denominators;
 };
 
 

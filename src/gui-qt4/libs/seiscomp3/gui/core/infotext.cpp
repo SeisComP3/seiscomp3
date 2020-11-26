@@ -13,6 +13,7 @@
 
 
 #include <seiscomp3/gui/core/infotext.h>
+
 #include <iostream>
 
 
@@ -24,7 +25,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-InfoText::InfoText(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
+InfoText::InfoText(QWidget* parent, Qt::WindowFlags f) : QDialog(parent, f) {
 	_ui.setupUi(this);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

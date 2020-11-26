@@ -62,18 +62,18 @@ class SC_GUI_API RecordView : public QWidget {
 		//! Default c'tor
 		//! The mode defaults to ringbuffer with a buffer
 		//! size of 30 minutes
-		RecordView(QWidget *parent = 0, Qt::WFlags f = 0,
+		RecordView(QWidget *parent = 0, Qt::WindowFlags f = 0,
 		           TimeScale *timeScale = 0);
 
 		//! Creates a RecordView using a time window
 		RecordView(const Seiscomp::Core::TimeWindow&,
-		           QWidget *parent = 0, Qt::WFlags f = 0,
+		           QWidget *parent = 0, Qt::WindowFlags f = 0,
 		           TimeScale *timeScale = 0);
 
 		//! Creates a RecordView using a timespan and
 		//! a ringbuffer
 		RecordView(const Seiscomp::Core::TimeSpan&,
-		           QWidget *parent = 0, Qt::WFlags f = 0,
+		           QWidget *parent = 0, Qt::WindowFlags f = 0,
 		           TimeScale *timeScale = 0);
 
 		~RecordView();
@@ -284,6 +284,9 @@ class SC_GUI_API RecordView : public QWidget {
 		//! both recordstreams
 		void showAllRecords(bool enable);
 
+		//! Whether to show record borders
+		void showRecordBorders(bool enable);
+
 		//! Whether to draw the background using alternating colors
 		//! The item background will be drawn using QPalette::Base and
 		//! QPalette::AlternateBase
@@ -416,6 +419,8 @@ class SC_GUI_API RecordView : public QWidget {
 		Seiscomp::Math::Filtering::InPlaceFilter<float>* filter() const;
 
 		void updateRecords();
+
+		void setRecordBorderDrawMode(RecordWidget::RecordBorderDrawMode mode);
 
 
 	signals:
@@ -566,6 +571,7 @@ class SC_GUI_API RecordView : public QWidget {
 		bool _filtering;      // the filter state
 		bool _alternatingColors;
 		bool _showAllRecords;
+		bool _showRecordBorders;
 		bool _autoInsertItems;
 		bool _autoScale;
 		bool _autoMaxScale;
@@ -577,6 +583,8 @@ class SC_GUI_API RecordView : public QWidget {
 
 		int  _labelWidth;
 		int  _labelColumns;
+
+		RecordWidget::RecordBorderDrawMode _recordBorderDrawMode;
 
 		Seiscomp::Math::Filtering::InPlaceFilter<float> *_filter;
 

@@ -351,7 +351,7 @@ void SpectrumWidget::exportSpectra() {
 	if ( fn.isEmpty() ) return;
 
 	ofstream ofs;
-	ofs.open(fn.toAscii());
+	ofs.open(fn.toLatin1());
 	if ( !ofs.is_open() ) {
 		QMessageBox::critical(this, tr("Save spectra"), tr("Failed to open/create %1").arg(fn));
 		return;

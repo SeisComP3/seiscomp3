@@ -47,6 +47,7 @@ class QLClient : public IO::QuakeLink::Connection {
 		Seiscomp::Core::Time lastUpdate() const;
 		void setLastUpdate(const Seiscomp::Core::Time &time);
 
+		int notificationID() const { return _notificationID; }
 
 	protected:
 		void processResponse(IO::QuakeLink::Response *response);

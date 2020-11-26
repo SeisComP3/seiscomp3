@@ -6,40 +6,71 @@
 		<configuration>
 			<group name="rc">
 				<description>
-				Set the event type to &quot;outside of network interest&quot;
-				if the location is inside or outside preconfigured regions of
-				rejection or acceptance, respectively. The regions are defined by
-				BNA polygons. Add the plugin &quot;evrc&quot; to the  plugins
+				Test if events lie within or outside a region.
+				Events within a region are flagged as positive, outside as negative.
+				The event type is set accordingly.
+				Add the plugin &quot;evrc&quot; to the  plugins
 				parameter to make this feature available.
 				</description>
-				<parameter name="regions" type="list:string" default="reject">
+				<parameter name="regions" type="list:string" default="!reject">
 					<description>
-					The list of closed BNA polygon names defining regions of
-					acceptance or rejection of events. The polygon names define
-					regions of event acceptance but names with prefix !  (exclamation mark)
-					define regions of rejection. Evaluation is done in the order of the
-					polygons. The last matching criteria applies. If events ARE NOT
-					within regions of acceptance or ARE within regions of
-					rejection their type is set to &quot;outside of network interest&quot;.
-					Default: &quot;reject&quot;, use &quot;accecpt&quot; to overwrite the default.
+					The list of closed BNA polygon names defining regions for
+					flagging event as positive or negative.
+					A polygon name defines a positive region but names with prefix !  (exclamation mark)
+					define negative regions. Evaluation is done in the order of the
+					polygons. The last matching criteria applies and the event type
+					is set accordingly.
+
+					Default: If events are not positive or are negative regions the
+					event type is set to &quot;outside of network interest&quot;.
+					Default: &quot;!reject&quot;, use &quot;accecpt&quot; to overwrite the default.
 
 					Examples:
 
-					Accept events within the polygon &quot;germany&quot;:
+					Events are flagged positive within the polygon &quot;germany&quot;:
 
 					germany
 
-					Accept all events but reject events within the polygon &quot;quarries&quot;:
+					All events are flagged positive but events within the polygon &quot;quarries&quot; are negative:
 
 					accept,!quarries
 
-					Accept events within the polygon &quot;germany&quot; but reject events within the polygon &quot;quarries&quot;:
+					Events within the polygon &quot;germany&quot; are flagged positive but
+					all other events and events within the polygon &quot;quarries&quot; are negaitve:
 
 					germany,!quarries
 
-					Accept all events but reject events within the polygon &quot;germany&quot; and accept events within the polygon &quot;saxony&quot;:
+					All events are flagged positive but events within the polygon &quot;germany&quot;
+					are negative and all events within the polygon &quot;saxony&quot; are positive:
 
 					accept,!germany,saxony
+					</description>
+				</parameter>
+				<parameter name="readEventTypeFromBNA" type="boolean" default="false">
+					<description>
+						Read the event type, minDepth and maxDepth from the BNA polygon header. The header may contain
+						the values, e.g. header of a polygon with name &quot;quarry&quot;:
+
+						&quot;quarry&quot;,&quot;rank 1&quot;,&quot;eventType: quarry blast, minDepth: -5, maxDepth: 10&quot;,13
+
+						When eventType is set, it superseeds eventTypePositive and eventTypeNegative.
+						When not set, eventTypePositive and eventTypeNegative are considered.
+					</description>
+				</parameter>
+				<parameter name="eventTypePositive" type="string" default="">
+					<description>
+						New type of an event which is flagged positive. Ignored
+						if readEventTypeFromBNA is active.
+
+						Empty: Do not set type
+					</description>
+				</parameter>
+				<parameter name="eventTypeNegative" type="string" default="&quot;outside of network interest&quot;">
+					<description>
+						New type of an event which is flagged negative. Ignored
+						if readEventTypeFromBNA is active.
+
+						Empty means default: &quot;outside of network interest&quot;
 					</description>
 				</parameter>
 			</group>

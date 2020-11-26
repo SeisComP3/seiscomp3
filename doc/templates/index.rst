@@ -7,6 +7,11 @@ This is the documentation for the SeisComP3 release |release| version |version|.
 For examples and tutorials please check the `SeisComP3 wiki <http://www.seiscomp3.org/>`_.
 Please consider :doc:`contributing</base/contributing-docs>` to this documentation.
 
+.. note::
+
+   Support for 64bit ids has been added to the SeisComP3. To migrate an existing
+   MYSQL SeisComP3 database please check the :ref:`upgrade-mysql`.
+
 Contents:
 
 .. toctree::

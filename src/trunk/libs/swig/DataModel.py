@@ -863,11 +863,6 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
         return _DataModel.DatabaseIterator_valid(self)
 
 
-    def next(self):
-        """next(DatabaseIterator self) -> bool"""
-        return _DataModel.DatabaseIterator_next(self)
-
-
     def close(self):
         """close(DatabaseIterator self)"""
         return _DataModel.DatabaseIterator_close(self)
@@ -884,12 +879,12 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
 
 
     def oid(self):
-        """oid(DatabaseIterator self) -> int"""
+        """oid(DatabaseIterator self) -> Seiscomp::DataModel::DatabaseIterator::OID"""
         return _DataModel.DatabaseIterator_oid(self)
 
 
     def parentOid(self):
-        """parentOid(DatabaseIterator self) -> int"""
+        """parentOid(DatabaseIterator self) -> Seiscomp::DataModel::DatabaseIterator::OID"""
         return _DataModel.DatabaseIterator_parentOid(self)
 
 
@@ -906,13 +901,17 @@ class DatabaseIterator(seiscomp3.Core.BaseObject):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         o = self.get()
         if not o:
             raise StopIteration
 
         self.step()
         return o
+
+    # for Python 2 compatibility
+    def next(self):
+        return self.__next__()
 
 DatabaseIterator_swigregister = _DataModel.DatabaseIterator_swigregister
 DatabaseIterator_swigregister(DatabaseIterator)
@@ -1052,7 +1051,7 @@ class DatabaseArchive(Observer):
 
 
     def getCachedId(self, arg2):
-        """getCachedId(DatabaseArchive self, Object arg2) -> int"""
+        """getCachedId(DatabaseArchive self, Object arg2) -> Seiscomp::DataModel::DatabaseArchive::OID"""
         return _DataModel.DatabaseArchive_getCachedId(self, arg2)
 
 
@@ -1940,6 +1939,26 @@ class Diff2(_object):
 
 Diff2_swigregister = _DataModel.Diff2_swigregister
 Diff2_swigregister(Diff2)
+
+class Diff3(Diff2):
+    """Proxy of C++ Seiscomp::DataModel::Diff3 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Diff2]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Diff3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Diff2]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Diff3, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _DataModel.delete_Diff3
+    __del__ = lambda self: None
+Diff3_swigregister = _DataModel.Diff3_swigregister
+Diff3_swigregister(Diff3)
 
 HORIZONTAL = _DataModel.HORIZONTAL
 ELLIPSE = _DataModel.ELLIPSE

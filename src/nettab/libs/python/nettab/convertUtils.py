@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import csv
 import re
@@ -29,7 +30,7 @@ def parseDate(val):
             len("YYYY-MM-DDTHH:MM:SS") : "%Y-%m-%dT%H:%M:%S"}
     try:
         return datetime.strptime(date, formats[len(date)])
-    except Exception, e:
+    except Exception as e:
         raise ValueError, "invalid date: " + date + str(e)
 
 def formatDate(date):
@@ -99,22 +100,22 @@ class StationMappings:
                     line = fd.readline()
                     lineno += 1
 
-            except (Exception, TypeError, ValueError), e:
+            except (Exception, TypeError, ValueError) as e:
                 raise Exception("%s:%d: %s" % (file, lineno, str(e)))
 
         finally:
             fd.close()
             
         if len(stationMapping):
-            print >> sys.stderr, "Found %d station mappings" % len(stationMapping)
+            print("Found %d station mappings" % len(stationMapping), file=sys.stderr)
             self.stationMapping = stationMapping
         else:
-            ## print >> sys.stderr, "No station mappings found"
+            ## print("No station mappings found", file=sys.stderr)
             pass
     
     def dump(self, fdo, stationCode):
         items = []
-        for (code, mapping) in self.stationMapping.iteritems():
+        for (code, mapping) in self.stationMapping.items():
             if stationCode and stationCode != code: continue
             items.append(code)
             for (fromDate, toDate, network) in mapping:
@@ -149,7 +150,7 @@ class StationMappings:
             end = None
     
         if stationCode not in self.stationMapping:
-            ## print >> sys.stderr, "Skipping %s not in mapping list" % stationCode
+            ## print("Skipping %s not in mapping list" % stationCode, file=sys.stderr)
             return self.getMappings(stationCode, start, end)
     
         for (fDate, tDate, archiveNet) in self.stationMapping[stationCode]:
@@ -158,33 +159,33 @@ class StationMappings:
             elif fDate:
                 if fDate >= start:
                     if (end and fDate <= end) or not end:
-                        ## print >> sys.stderr, "Processing fDate %s %s %s [%s]" % (stationCode, start, end, fDate)
+                        ## print("Processing fDate %s %s %s [%s]" % (stationCode, start, end, fDate), file=sys.stderr)
                         if (stationCode, start, end) in self.stationBreak:
                             raise Exception("Crazy multiple station mapping for the same station line")
                         self.stationBreak[(stationCode, start, end)] = []
                         self.stationBreak[(stationCode, start, end)].append((self.networkCode, start, fDate, fDate, tDate))
                         self.stationBreak[(stationCode, start, end)].append((archiveNet, fDate, end, fDate, tDate))
-                        ## print >>sys.stderr, " found mapping From -> %s (%s,%s)" % (fDate, stationCode, formatDate(start))
+                        ## prin( " found mapping From -> %s (%s,%s)" % (fDate, stationCode, formatDate(start)), file=sys.stderr)
                         return self.getMappings(stationCode, start, end)
             elif tDate:
                 if tDate >= start:
                     if (end and tDate <= end) or not end:
-                        ## print >> sys.stderr, "Processing tDate %s %s %s [%s]" % (stationCode, start, end, tDate)
+                        ## print("Processing tDate %s %s %s [%s]" % (stationCode, start, end, tDate), file=sys.stderr)
                         if (stationCode, start, end) in self.stationBreak:
                             raise Exception("Crazy multiple station mapping for the same station line")
                         self.stationBreak[(stationCode, start, end)] = []
                         self.stationBreak[(stationCode, start, end)].append((archiveNet, start, tDate, fDate, tDate))
                         self.stationBreak[(stationCode, start, end)].append((self.networkCode, tDate, end, fDate, tDate))
-                        ## print >>sys.stderr, " found mapping To -> %s (%s,%s)" % (tDate, stationCode, formatDate(start))
+                        ## print(" found mapping To -> %s (%s,%s)" % (tDate, stationCode, formatDate(start)), file=sys.stderr)
                         return self.getMappings(stationCode, start, end)
             else:
                 if (stationCode, start, end) in self.stationBreak:
                     raise Exception("Crazy multiple station mapping for the same station line")
                 self.stationBreak[(stationCode, start, end)] = []
                 self.stationBreak[(stationCode, start, end)].append((archiveNet, start, end, fDate, tDate))
-                ## print >>sys.stderr, " found mapping ALL (%s,%s)" % (stationCode, formatDate(start))
+                ## print(" found mapping ALL (%s,%s)" % (stationCode, formatDate(start)), file=sys.stderr)
                 return self.getMappings(stationCode, start, end)
-        ## print >> sys.stderr, "Ignored %s" % " ".join(items)
+        ## print("Ignored %s" % " ".join(items), file=sys.stderr)
         return self.getMappings(stationCode, start, end)
     
 class StationAttributes:
@@ -232,27 +233,27 @@ class StationAttributes:
                     if row:
                         attributes[sta_code] = row
 
-            except KeyError, e:
+            except KeyError as e:
                 raise Exception("column %s missing in %s" % (str(e), filename))
     
-            except (TypeError, ValueError), e:
+            except (TypeError, ValueError) as e:
                 raise Exception("error reading %s: %s" % (filename, str(e)))
             
         finally:
             fd.close()
         self.stationAttributeList = self.__build__(attributes)
-        print  >> sys.stderr," loaded attributes for %d stations on network %s (%s)" % (len(self.stationAttributeList), self.networkCode, filename)
+        print(" loaded attributes for %d stations on network %s (%s)" % (len(self.stationAttributeList), self.networkCode, filename), file=sys.stderr)
 
     def __build__(self, attributes):
         newat = {}
 
         if not attributes:
-            ## print >> sys.stderr, "no station attributes found for network %s" % self.networkCode
+            ## print("no station attributes found for network %s" % self.networkCode, file=sys.stderr)
             return newat
         
-        for (code,row) in attributes.iteritems():
+        for (code,row) in attributes.items():
             nr = {}
-            for (k,v) in row.iteritems():
+            for (k,v) in row.items():
                 if k == 'country': k = 'Country'
                 if k == 'place': k = 'Place'
                 if k == 'affiliation': k = 'Affiliation'
@@ -289,9 +290,9 @@ class StationAttributes:
         else:
             place = ",".join(parts)
         
-#        print >> sys.stderr, "Country:", country
-#        print >> sys.stderr, "Place:", place
-#        print >> sys.stderr, "Affiliation:", affiliation
+#        print("Country:", country, file=sys.stderr)
+#        print("Place:", place, file=sys.stderr)
+#        print("Affiliation:", affiliation, file=sys.stderr)
 
         oui = {}
         if country:
@@ -307,8 +308,8 @@ class StationAttributes:
         if not self.stationAttributeList:
             return None
         
-        for (code, row) in self.stationAttributeList.iteritems():
-            for (k, v) in row.iteritems():
+        for (code, row) in self.stationAttributeList.items():
+            for (k, v) in row.items():
                 if k == 'restricted_exc':
                     k = 'Restricted'
                     extra=',*,'+str(v)
@@ -347,9 +348,9 @@ class StationAttributes:
         
         oui = None
         at = self.get(stationCode)
-        #print >>sys.stderr,items, at
+        #print >>sys.stderr,items, at, file=sys.stderr)
         if not at:
-            ## print >>sys.stderr, " Deriving attributes from description %s " % " ".join(items)
+            ## print(" Deriving attributes from description %s " % " ".join(items), file=sys.stderr)
             at = self.__parseDescription__(description)
             if at:
                 self.stationAttributeList[stationCode] = at
@@ -358,13 +359,13 @@ class StationAttributes:
                 if item in at:
                     continue
                 if not oui:
-                    ## print >> sys.stderr, " Deriving attribute (%s) from description %s " % (item, " ".join(items))
+                    ## print(" Deriving attribute (%s) from description %s " % (item, " ".join(items)), file=sys.stderr)
                     oui = self.__parseDescription__(description)
                 if item in oui:
-                    ## print >>sys.stderr, " Setting attribute (%s) from description for %s = %s" % (item, stationCode, oui[item])
+                    ## print(" Setting attribute (%s) from description for %s = %s" % (item, stationCode, oui[item]), file=sys.stderr)
                     at[item] = oui[item]
                 else:
-                    ## print >> sys.stderr, " Empty %s for %s" % (item, stationCode)
+                    ## print(" Empty %s for %s" % (item, stationCode), file=sys.stderr)
                     pass
         
         country = at['Country'] if 'Country' in at else None
@@ -374,9 +375,9 @@ class StationAttributes:
     def dump(self, fdo, code):
         if not code:
             att = self.reorder_station_attr()
-            for (key,v) in att.iteritems():
+            for (key,v) in att.items():
                 if key in ['Country', 'Place']: continue
-                for (value, s) in v.iteritems():
+                for (value, s) in v.items():
                     fdo.write("Sa: %s=%s" % (key, quote(value)))
                     for station in s:
                             fdo.write(" %s" % (station))
@@ -386,7 +387,7 @@ class StationAttributes:
             if not at: return
             if 'done' in at: return
             at['done'] = 1 # Mark the item as printed
-            for (k,v) in at.iteritems():
+            for (k,v) in at.items():
                 extra = ''
                 if k in [ 'done', 'Place', 'Country']: continue
                 if k in ['Affiliation']: v = quote(v)
@@ -454,7 +455,7 @@ class NetworkAttributes:
         self.networkAttributes.update(attList)
 
     def dump(self, fdo):
-        for (k,v) in self.networkAttributes.iteritems():
+        for (k,v) in self.networkAttributes.items():
             if k in ['Description', 'Remark', 'Region', 'Institutions']:
                 v = quote(v)
             fdo.write("Na: %s=%s\n" % (k,v))
@@ -494,12 +495,12 @@ class NetworkAttributes:
                     self.__build__(row)
                     break
 
-            except KeyError, e:
+            except KeyError as e:
                 raise Exception("column %s missing in %s" % (str(e), filename))
 
-            except (TypeError, ValueError), e:
+            except (TypeError, ValueError) as e:
                 raise Exception("error reading %s: %s" % (filename, str(e)))
 
         finally:
             fd.close()
-        print >> sys.stderr, " found %d Attribute for network %s (%s)" % (len(self.networkAttributes), self.networkCode, filename)
+        print(" found %d Attribute for network %s (%s)" % (len(self.networkAttributes), self.networkCode, filename), file=sys.stderr)

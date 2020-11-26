@@ -36,7 +36,9 @@ MAKEENUM(
 		RDS,
 		RDD,
 		TSS,
-		TDS
+		TDS,
+		ZEP,
+		REP
 	),
 	ENAMES(
 		"ZSS",
@@ -46,7 +48,9 @@ MAKEENUM(
 		"RDS",
 		"RDD",
 		"TSS",
-		"TDS"
+		"TDS",
+		"ZEP",
+		"REP"
 	)
 );
 

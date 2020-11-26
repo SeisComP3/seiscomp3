@@ -69,49 +69,50 @@ const char *PRIORITY_TOKENS[] = {
 // Global region class defining a rectangular region
 // by latmin, lonmin, latmax, lonmax.
 DEFINE_SMARTPOINTER(GlobalRegion);
-struct GlobalRegion : public Client::Config::Region {
-	GlobalRegion() {}
+class GlobalRegion : public Client::Config::Region {
+	public:
+		GlobalRegion() {}
 
-	bool init(const Seiscomp::Config::Config &config, const std::string &prefix) {
-		vector<double> region;
-		try { region = config.getDoubles(prefix + "rect"); }
-		catch ( ... ) {
-			return false;
+		bool init(const Seiscomp::Config::Config &config, const std::string &prefix) {
+			vector<double> region;
+			try { region = config.getDoubles(prefix + "rect"); }
+			catch ( ... ) {
+				return false;
+			}
+
+			// Parse region
+			if ( region.size() != 4 ) {
+				SEISCOMP_ERROR("%srect: expected 4 values in region definition, got %d",
+							   prefix.c_str(), (int)region.size());
+				return false;
+			}
+
+			latMin = region[0];
+			lonMin = region[1];
+			latMax = region[2];
+			lonMax = region[3];
+
+			return true;
 		}
 
-		// Parse region
-		if ( region.size() != 4 ) {
-			SEISCOMP_ERROR("%srect: expected 4 values in region definition, got %d",
-			               prefix.c_str(), (int)region.size());
-			return false;
+		bool isInside(double lat, double lon) const {
+			double len, dist;
+
+			if ( lat < latMin || lat > latMax ) return false;
+
+			len = lonMax - lonMin;
+			if ( len < 0 )
+				len += 360.0;
+
+			dist = lon - lonMin;
+			if ( dist < 0 )
+				dist += 360.0;
+
+			return dist <= len;
 		}
 
-		latMin = region[0];
-		lonMin = region[1];
-		latMax = region[2];
-		lonMax = region[3];
-
-		return true;
-	}
-
-	bool isInside(double lat, double lon) const {
-		double len, dist;
-
-		if ( lat < latMin || lat > latMax ) return false;
-
-		len = lonMax - lonMin;
-		if ( len < 0 )
-			len += 360.0;
-
-		dist = lon - lonMin;
-		if ( dist < 0 )
-			dist += 360.0;
-
-		return dist <= len;
-	}
-
-	double latMin, lonMin;
-	double latMax, lonMax;
+		double latMin, lonMin;
+		double latMax, lonMax;
 };
 
 
@@ -133,7 +134,7 @@ class SC_SYSTEM_CLIENT_API ClearCacheRequestMessage : public Seiscomp::Core::Mes
 		virtual bool empty() const  { return false; }
 };
 
-void ClearCacheRequestMessage::serialize(Archive& ar) {}
+void ClearCacheRequestMessage::serialize(Archive &) {}
 
 IMPLEMENT_SC_CLASS_DERIVED(
 	ClearCacheRequestMessage, Message, "clear_cache_request_message"
@@ -156,7 +157,7 @@ class SC_SYSTEM_CLIENT_API ClearCacheResponseMessage : public Seiscomp::Core::Me
 		virtual bool empty() const  { return false; }
 };
 
-void ClearCacheResponseMessage::serialize(Archive& ar) {}
+void ClearCacheResponseMessage::serialize(Archive &) {}
 
 IMPLEMENT_SC_CLASS_DERIVED(
 	ClearCacheResponseMessage, Message, "clear_cache_response_message"
@@ -262,6 +263,7 @@ bool EventTool::initConfiguration() {
 	try { _config.matchingPicksTimeDiffAND = configGetBool("eventAssociation.compareAllArrivalTimes"); } catch (...) {}
 	try { _config.matchingLooseAssociatedPicks = configGetBool("eventAssociation.allowLooseAssociatedArrivals"); } catch (...) {}
 	try { _config.minAutomaticArrivals = configGetInt("eventAssociation.minimumDefiningPhases"); } catch (...) {}
+	try { _config.minAutomaticScore = configGetDouble("eventAssociation.minimumScore"); } catch (...) {}
 
 	Config::RegionFilter regionFilter;
 	GlobalRegionPtr region = new GlobalRegion;
@@ -359,6 +361,7 @@ bool EventTool::init() {
 	_config.eventIDPrefix = "gfz";
 	_config.eventIDPattern = "%p%Y%04c";
 	_config.minAutomaticArrivals = 10;
+	_config.minAutomaticScore = Core::None;
 	_config.minStationMagnitudes = 4;
 	_config.minMatchingPicks = 3;
 	_config.maxMatchingPicksTimeDiff = -1;
@@ -388,7 +391,12 @@ bool EventTool::init() {
 
 	if ( !Application::init() ) return false;
 
-	if ( !_config.score.empty() ) {
+	if ( !_config.score.empty() || _config.minAutomaticScore ) {
+		if ( _config.score.empty() ) {
+			SEISCOMP_ERROR("No score processor configured, eventAssociation.score is empty or not set");
+			return false;
+		}
+
 		_score = ScoreProcessorFactory::Create(_config.score.c_str());
 		if ( !_score ) {
 			SEISCOMP_ERROR("Score method '%s' is not available. Is the correct plugin loaded?",
@@ -677,7 +685,19 @@ void EventTool::handleTimeout() {
 			if ( org ) {
 				SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s",
 				             org->publicID().c_str());
-				associateOrigin(org.get(), true);
+				bool createdEvent;
+				associateOrigin(org.get(), true, &createdEvent);
+				if ( createdEvent ) {
+					// In case an event was created based on a delayed origin
+					// then we immediately release this information. All other
+					// origins will be associated in a row without intermediate
+					// messages.
+					NotifierMessagePtr nmsg = Notifier::GetMessage(true);
+					if ( nmsg ) {
+						SEISCOMP_DEBUG("%d notifier available", (int)nmsg->size());
+						if ( !_testMode ) connection()->send(nmsg.get());
+					}
+				}
 			}
 			else {
 				FocalMechanismPtr fm = FocalMechanism::Cast(it->obj);
@@ -700,8 +720,9 @@ void EventTool::handleTimeout() {
 		OriginPtr org = Origin::Cast(it->obj);
 		EventInformationPtr info;
 		if ( org ) {
-			SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s",
-			             org->publicID().c_str());
+			SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s (no event "
+			             "creation before %i s)", org->publicID().c_str(),
+			             it->timeout + DELAY_CHECK_INTERVAL);
 			info = associateOrigin(org.get(), false);
 		}
 		else {
@@ -978,6 +999,8 @@ void EventTool::updateObject(const std::string &parentID, Object* object) {
 	OriginPtr org = Origin::Cast(object);
 	if ( org ) {
 		logObject(_inputOrigin, Core::Time::GMT());
+		if ( !org->registered() )
+			org = Origin::Find(org->publicID());
 		_updates.insert(TodoEntry(org));
 		_realUpdates.insert(TodoEntry(org));
 		SEISCOMP_DEBUG("* queued updated origin %s (%d/%lu)",
@@ -990,6 +1013,8 @@ void EventTool::updateObject(const std::string &parentID, Object* object) {
 	FocalMechanismPtr fm = FocalMechanism::Cast(object);
 	if ( fm ) {
 		logObject(_inputFocalMechanism, Core::Time::GMT());
+		if ( !fm->registered() )
+			fm = FocalMechanism::Find(fm->publicID());
 		_updates.insert(TodoEntry(fm));
 		_realUpdates.insert(TodoEntry(fm));
 		SEISCOMP_DEBUG("* queued updated focalmechanism %s",
@@ -1001,6 +1026,8 @@ void EventTool::updateObject(const std::string &parentID, Object* object) {
 	MagnitudePtr mag = Magnitude::Cast(object);
 	if ( mag ) {
 		logObject(_inputMagnitude, Core::Time::GMT());
+		if ( !mag->registered() )
+			mag = Magnitude::Find(mag->publicID());
 		SEISCOMP_LOG(_infoChannel, "Received updated magnitude %s (%s %.2f)",
 		             mag->publicID().c_str(), mag->type().c_str(), mag->magnitude().value());
 		org = _cache.get<Origin>(parentID);
@@ -1012,6 +1039,8 @@ void EventTool::updateObject(const std::string &parentID, Object* object) {
 	EventPtr evt = Event::Cast(object);
 	if ( evt ) {
 		logObject(_inputEvent, Core::Time::GMT());
+		if ( !evt->registered() )
+			evt = Event::Find(evt->publicID());
 		SEISCOMP_LOG(_infoChannel, "Received updated event %s", evt->publicID().c_str());
 		EventInformationPtr info = cachedEvent(evt->publicID());
 		if ( !info ) {
@@ -1316,7 +1345,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 				}
 
 				Notifier::Enable();
-				updateEvent(info->event.get());
+				updateEvent(info.get());
 				Notifier::Disable();
 			}
 		}
@@ -1350,7 +1379,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 					response = createEntry(entry->objectID(), entry->action() + OK, ":unset:");
 				}
 				Notifier::Enable();
-				updateEvent(info->event.get());
+				updateEvent(info.get());
 				Notifier::Disable();
 			}
 		}
@@ -1407,7 +1436,7 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 			}
 		}
 		Notifier::Enable();
-		updateEvent(info->event.get());
+		updateEvent(info.get());
 		Notifier::Disable();
 	}
 	else if ( entry->action() == "EvPrefMw" ) {
@@ -1588,7 +1617,8 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 					if ( newInfo ) {
 						// Remove origin reference
 						Notifier::SetEnabled(true);
-						info->event->removeOriginReference(org->publicID());
+						if ( info->event->removeOriginReference(org->publicID()) )
+							info->dirtyPickSet = true;
 
 						// Remove all focal mechanism references that
 						// used this origin as trigger
@@ -1742,7 +1772,8 @@ EventInformationPtr EventTool::associateOriginCheckDelay(DataModel::Origin *orig
 		}
 
 		// Filter to delay the origin passes
-		SEISCOMP_LOG(_infoChannel, "Origin %s delayed", origin->publicID().c_str());
+		SEISCOMP_LOG(_infoChannel, "Origin %s delayed for %i s",
+		             origin->publicID().c_str(), _config.delayTimeSpan);
 		_delayBuffer.push_back(DelayedObject(origin, _config.delayTimeSpan));
 
 		return NULL;
@@ -1757,7 +1788,10 @@ EventInformationPtr EventTool::associateOriginCheckDelay(DataModel::Origin *orig
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *origin,
-                                               bool allowEventCreation) {
+                                               bool allowEventCreation,
+                                               bool *createdEvent) {
+	if ( createdEvent ) *createdEvent = false;
+
 	// Default origin status
 	EvaluationMode status = AUTOMATIC;
 	try {
@@ -1826,13 +1860,32 @@ EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *orig
 				return NULL;
 			}
 
-			if ( status == AUTOMATIC
-				&& definingPhaseCount(origin) < (int)_config.minAutomaticArrivals ) {
-				SEISCOMP_DEBUG("... rejecting automatic origin %s (phaseCount: %d < %lu)",
-				               origin->publicID().c_str(), definingPhaseCount(origin), (unsigned long)_config.minAutomaticArrivals);
-				SEISCOMP_LOG(_infoChannel, "Origin %s skipped: phaseCount too low (%d < %lu) to create a new event",
-				             origin->publicID().c_str(), definingPhaseCount(origin), (unsigned long)_config.minAutomaticArrivals);
-				return NULL;
+			if ( status == AUTOMATIC ) {
+				if ( _config.minAutomaticScore ) {
+					double score = _score->evaluate(origin);
+					if ( score < *_config.minAutomaticScore ) {
+						SEISCOMP_DEBUG("... rejecting automatic origin %s (score: %f < %f)",
+						               origin->publicID().c_str(),
+						               score, *_config.minAutomaticScore);
+						SEISCOMP_LOG(_infoChannel,
+						             "Origin %s skipped: score too low (%f < %f) to create a new event",
+						             origin->publicID().c_str(),
+						             score, *_config.minAutomaticScore);
+						return NULL;
+					}
+				}
+				else if ( definingPhaseCount(origin) < int(_config.minAutomaticArrivals) ) {
+					SEISCOMP_DEBUG("... rejecting automatic origin %s (phaseCount: %d < %zu)",
+					               origin->publicID().c_str(),
+					               definingPhaseCount(origin),
+					               _config.minAutomaticArrivals);
+					SEISCOMP_LOG(_infoChannel,
+					             "Origin %s skipped: phaseCount too low (%d < %zu) to create a new event",
+					             origin->publicID().c_str(),
+					             definingPhaseCount(origin),
+					             _config.minAutomaticArrivals);
+					return NULL;
+				}
 			}
 
 			if ( !checkRegionFilter(_config.regionFilter, origin) )
@@ -1840,6 +1893,7 @@ EventInformationPtr EventTool::associateOrigin(Seiscomp::DataModel::Origin *orig
 
 			info = createEvent(origin);
 			if ( info ) {
+				if ( createdEvent ) *createdEvent = true;
 				SEISCOMP_INFO("%s: created", info->event->publicID().c_str());
 				SEISCOMP_LOG(_infoChannel, "Origin %s created a new event %s",
 				             origin->publicID().c_str(), info->event->publicID().c_str());
@@ -2294,6 +2348,7 @@ EventInformationPtr EventTool::createEvent(Origin *origin) {
 
 		info->event->setCreationInfo(ci);
 		info->created = true;
+		info->dirtyPickSet = true;
 
 		cacheEvent(info);
 
@@ -3204,7 +3259,7 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 		// Call registered processors
 		EventProcessors::iterator it;
 		for ( it = _processors.begin(); it != _processors.end(); ++it ) {
-			if ( it->second->process(info->event.get()) )
+			if ( it->second->process(info->event.get(), info->journal) )
 				update = true;
 		}
 
@@ -3266,14 +3321,14 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 		               Notifier::IsEnabled());
 
 		if ( !info->created )
-			updateEvent(info->event.get(), callProcessors);
+			updateEvent(info, callProcessors);
 		else {
 			info->created = false;
 
 			// Call registered processors
 			EventProcessors::iterator it;
 			for ( it = _processors.begin(); it != _processors.end(); ++it )
-				it->second->process(info->event.get());
+				it->second->process(info->event.get(), info->journal);
 		}
 	}
 }
@@ -3702,14 +3757,14 @@ void EventTool::choosePreferred(EventInformation *info, DataModel::FocalMechanis
 			choosePreferred(info, info->preferredOrigin.get(), NULL);
 
 		if ( !info->created )
-			updateEvent(info->event.get());
+			updateEvent(info);
 		else {
 			info->created = false;
 
 			// Call registered processors
 			EventProcessors::iterator it;
 			for ( it = _processors.begin(); it != _processors.end(); ++it )
-				it->second->process(info->event.get());
+				it->second->process(info->event.get(), info->journal);
 		}
 	}
 }
@@ -3914,7 +3969,8 @@ void EventTool::removedFromCache(Seiscomp::DataModel::PublicObject *po) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void EventTool::updateEvent(DataModel::Event *ev, bool callProcessors) {
+void EventTool::updateEvent(EventInformation *info, bool callProcessors) {
+	DataModel::Event *ev = info->event.get();
 	Core::Time now = Core::Time::GMT();
 	// Set the modification to current time
 	try {
@@ -3939,7 +3995,7 @@ void EventTool::updateEvent(DataModel::Event *ev, bool callProcessors) {
 		// Call registered processors
 		EventProcessors::iterator it;
 		for ( it = _processors.begin(); it != _processors.end(); ++it )
-			it->second->process(ev);
+			it->second->process(ev, info->journal);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

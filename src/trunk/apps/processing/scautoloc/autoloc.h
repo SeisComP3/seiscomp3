@@ -11,16 +11,14 @@
  ***************************************************************************/
 
 
-
-
-#ifndef __SEISCOMP_AUTOLOC_AUTOLOC3__
-#define __SEISCOMP_AUTOLOC_AUTOLOC3__
+#ifndef SEISCOMP_AUTOLOC_AUTOLOC3
+#define SEISCOMP_AUTOLOC_AUTOLOC3
 
 #include <string>
 #include <map>
 #include <set>
 
-#include <seiscomp3/seismology/locsat.h>
+#include <seiscomp3/seismology/locator/locsat.h>
 
 #include "datamodel.h"
 #include "nucleator.h"

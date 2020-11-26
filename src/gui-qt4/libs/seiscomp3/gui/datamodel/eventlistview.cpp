@@ -20,6 +20,7 @@
 #include <seiscomp3/gui/core/scheme.h>
 #include <seiscomp3/gui/datamodel/publicobjectevaluator.h>
 #include <seiscomp3/gui/datamodel/utils.h>
+#include <seiscomp3/gui/datamodel/ui_eventfilterwidget.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -41,6 +42,14 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/seismology/regions.h>
+
+#include <QHeaderView>
+#include <QMenu>
+#include <QMessageBox>
+#include <QProgressBar>
+#include <QProgressDialog>
+#include <QTreeWidgetItem>
+#include <QHeaderView>
 
 
 using namespace Seiscomp::Core;
@@ -75,6 +84,7 @@ MAKEENUM(
 		COL_LAT,
 		COL_LON,
 		COL_DEPTH,
+		COL_DEPTH_TYPE,
 		COL_TYPE,
 		COL_FM,
 		COL_AGENCY,
@@ -87,12 +97,13 @@ MAKEENUM(
 		"Certainty",
 		"Type",
 		"M",
-		"TP",
+		"MType",
 		"Phases",
 		"RMS",
 		"Lat",
 		"Lon",
 		"Depth",
+		"DType",
 		"Stat",
 		"FM",
 		"Agency",
@@ -114,6 +125,7 @@ bool colVisibility[EventListColumns::Quantity] = {
 	true,
 	true,
 	true,
+	false,
 	true,
 	false,
 	true,
@@ -737,6 +749,7 @@ class SchemeTreeItem : public TreeItem {
 			setTextAlignment(config.columnMap[COL_LAT], Qt::AlignRight | Qt::AlignVCenter);
 			setTextAlignment(config.columnMap[COL_LON], Qt::AlignRight | Qt::AlignVCenter);
 			setTextAlignment(config.columnMap[COL_DEPTH], Qt::AlignRight | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_DEPTH_TYPE], Qt::AlignCenter);
 			setTextAlignment(config.columnMap[COL_REGION], Qt::AlignLeft | Qt::AlignVCenter);
 
 			if ( config.customColumn != -1 )
@@ -824,6 +837,7 @@ class OriginTreeItem : public SchemeTreeItem {
 			setData(config.columnMap[COL_LAT], Qt::UserRole, lat);
 			setText(config.columnMap[COL_LON], QString("%1 %2").arg(fabs(lon), 0, 'f', SCScheme.precision.location).arg(lon < 0?"W":"E")); // Lon
 			setData(config.columnMap[COL_LON], Qt::UserRole, lon);
+
 			try {
 				setText(config.columnMap[COL_DEPTH], depthToString(ori->depth(), SCScheme.precision.depth) + " km");
 				setData(config.columnMap[COL_DEPTH], Qt::UserRole, ori->depth().value());
@@ -831,6 +845,13 @@ class OriginTreeItem : public SchemeTreeItem {
 			catch ( ... ) {
 				setText(config.columnMap[COL_DEPTH], "-"); // Depth
 				setData(config.columnMap[COL_DEPTH], Qt::UserRole, QVariant());
+			}
+
+			try {
+				setText(config.columnMap[COL_DEPTH_TYPE], ori->depthType().toString());
+			}
+			catch ( ... ) {
+				setText(config.columnMap[COL_DEPTH_TYPE], "-"); // Depth
 			}
 
 			char stat = objectStatusToChar(ori);
@@ -989,6 +1010,13 @@ class FocalMechanismTreeItem : public SchemeTreeItem {
 					setText(config.columnMap[COL_DEPTH], "-"); // Depth
 				}
 
+				try {
+					setText(config.columnMap[COL_DEPTH_TYPE], fmBaseOrg->depthType().toString());
+				}
+				catch ( ... ) {
+					setText(config.columnMap[COL_DEPTH_TYPE], "-"); // Depth
+				}
+
 				setText(config.columnMap[COL_REGION], Regions::getRegionName(lat, lon).c_str()); // Region
 			}
 
@@ -1042,6 +1070,7 @@ class EventTreeItem : public SchemeTreeItem {
 			setText(config.columnMap[COL_M], "-");
 			setText(config.columnMap[COL_MTYPE], "-");
 			setText(config.columnMap[COL_DEPTH], "-");
+			setText(config.columnMap[COL_DEPTH_TYPE], "-");
 
 			QFont f = SCApp->font();
 			f.setUnderline(true);
@@ -1430,6 +1459,14 @@ class EventTreeItem : public SchemeTreeItem {
 					try {
 						setText(column, QString("%1 km").arg(depthToString(origin->depth(), SCScheme.precision.depth))); // Depth
 						setData(column, Qt::UserRole, origin->depth().value());
+					}
+					catch ( ... ) {
+						setText(column, "-");
+					}
+
+					column = config.columnMap[COL_DEPTH_TYPE];
+					try {
+						setText(column, origin->depthType().toString()); // Depth type
 					}
 					catch ( ... ) {
 						setText(column, "-");
@@ -1865,6 +1902,63 @@ struct ConfigProcessColumn {
 };
 
 
+class EventFilterWidget : public QWidget {
+	public:
+		EventFilterWidget(QWidget *parent = 0)
+		: QWidget(parent) {
+			_ui.setupUi(this);
+		}
+
+	public:
+		void setFilter(const EventListView::Filter &filter) {
+			_ui.fromLatitude->setValue(filter.minLatitude ? *filter.minLatitude : _ui.fromLatitude->minimum());
+			_ui.fromLongitude->setValue(filter.minLongitude ? *filter.minLongitude : _ui.fromLongitude->minimum());
+			_ui.fromDepth->setValue(filter.minDepth ? *filter.minDepth : _ui.fromDepth->minimum());
+			_ui.fromMagnitude->setValue(filter.minMagnitude ? *filter.minMagnitude : _ui.fromMagnitude->minimum());
+		}
+
+		/**
+		 * Returns a filter structure according to the current settings.
+		 */
+		EventListView::Filter filter() const {
+			EventListView::Filter f;
+
+			if ( _ui.fromLatitude->isValid() )
+				f.minLatitude = _ui.fromLatitude->value();
+			if ( _ui.toLatitude->isValid() )
+				f.maxLatitude = _ui.toLatitude->value();
+
+			if ( _ui.fromLongitude->isValid() )
+				f.minLongitude = _ui.fromLongitude->value();
+			if ( _ui.toLongitude->isValid() )
+				f.maxLongitude = _ui.toLongitude->value();
+
+			if ( _ui.fromDepth->isValid() )
+				f.minDepth = _ui.fromDepth->value();
+			if ( _ui.toDepth->isValid() )
+				f.maxDepth = _ui.toDepth->value();
+
+			if ( _ui.fromMagnitude->isValid() )
+				f.minMagnitude = _ui.fromMagnitude->value();
+			if ( _ui.toMagnitude->isValid() )
+				f.maxMagnitude = _ui.toMagnitude->value();
+
+			return f;
+		}
+
+	private:
+		Ui::EventFilter _ui;
+};
+
+
+// Helper class to allow proper positioning of the tool buttons menu
+class CustomWidgetMenu : public QMenu {
+	public:
+		CustomWidgetMenu(QWidget *parent = 0) : QMenu(parent) {}
+
+	public:
+		QSize sizeHint() const { return QWidget::sizeHint(); }
+};
 
 
 }
@@ -1874,12 +1968,11 @@ using namespace Private;
 
 
 EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool withOrigins,
-                             bool withFocalMechanisms, QWidget * parent, Qt::WFlags f)
+                             bool withFocalMechanisms, QWidget * parent, Qt::WindowFlags f)
  : QWidget(parent, f), _reader(reader),
    _withOrigins(withOrigins), _withFocalMechanisms(withFocalMechanisms),
    _blockSelection(false), _blockRemovingOfExpiredEvents(false) {
 	_ui.setupUi(this);
-	_ui.btnFilter->setVisible(false);
 
 	_regionIndex = 0;
 	_commandWaitDialog = NULL;
@@ -1927,9 +2020,17 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 		for ( size_t i = 0; i < cols.size(); ++i ) {
 			EventListColumns v;
 			if ( !v.fromString(cols[i]) ) {
-				std::cerr << "ERROR: eventlist.visibleColumns: invalid column name '"
-				          << cols[i] << "' at index " << i << ", ignoring" << std::endl;
-				continue;
+				if ( cols[i] != "TP" ) {
+					std::cerr << "ERROR: eventlist.visibleColumns: invalid column name '"
+					          << cols[i] << "' at index " << i << ", ignoring" << std::endl;
+					continue;
+				}
+				else {
+					v = COL_MTYPE;
+					std::cerr << "WARNING: eventlist.visibleColumns: name 'TP' "
+					             "has changed to 'MType', please update your configuration"
+					          << std::endl;
+				}
 			}
 
 			colVisibility[v] = true;
@@ -2240,6 +2341,24 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	}
 	catch ( ... ) {}
 
+	// Initialize database filter
+	try { _filter.minLatitude = SCApp->configGetDouble("eventlist.filter.database.minlat"); }
+	catch ( ... ) {}
+	try { _filter.maxLatitude = SCApp->configGetDouble("eventlist.filter.database.maxlat"); }
+	catch ( ... ) {}
+	try { _filter.minLongitude = SCApp->configGetDouble("eventlist.filter.database.minlon"); }
+	catch ( ... ) {}
+	try { _filter.maxLongitude = SCApp->configGetDouble("eventlist.filter.database.maxlon"); }
+	catch ( ... ) {}
+	try { _filter.minDepth = SCApp->configGetDouble("eventlist.filter.database.mindepth"); }
+	catch ( ... ) {}
+	try { _filter.maxDepth = SCApp->configGetDouble("eventlist.filter.database.maxdepth"); }
+	catch ( ... ) {}
+	try { _filter.minMagnitude = SCApp->configGetDouble("eventlist.filter.database.minmag"); }
+	catch ( ... ) {}
+	try { _filter.maxMagnitude = SCApp->configGetDouble("eventlist.filter.database.maxmag"); }
+	catch ( ... ) {}
+
 	for ( int i = 0; i < _filterRegions.size(); ++i )
 		_ui.lstFilterRegions->addItem(_filterRegions[i].name);
 
@@ -2248,6 +2367,18 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 		_ui.lstFilterRegions->setCurrentIndex(_regionIndex);
 		_ui.btnChangeRegion->hide();
 	}
+
+	_ui.btnFilter->setPopupMode(QToolButton::InstantPopup);
+
+	_filterWidget = new EventFilterWidget;
+	_filterWidget->setFilter(_filter);
+
+	QVBoxLayout *vl = new QVBoxLayout;
+	vl->addWidget(_filterWidget);
+
+	QMenu *menu = new CustomWidgetMenu(_ui.btnFilter);
+	menu->setLayout(vl);
+	_ui.btnFilter->setMenu(menu);
 
 	connect(_ui.lstFilterRegions, SIGNAL(currentIndexChanged(int)),
 	        this, SLOT(regionSelectionChanged(int)));
@@ -2344,12 +2475,16 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	// Stop movie and hide label when the thread finishes
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(finished()),
 	        _busyIndicatorLabel, SLOT(hide()));
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(terminated()),
 	        _busyIndicatorLabel, SLOT(hide()));
+#endif
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(finished()),
 	        _busyIndicator, SLOT(stop()));
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(terminated()),
 	        _busyIndicator, SLOT(stop()));
+#endif
 
 	setFMLinkEnabled(_itemConfig.createFMLink);
 
@@ -2465,13 +2600,20 @@ bool EventListView::updateHideState(QTreeWidgetItem *item) {
 
 	if ( !hide && _hideOutsideRegion && _regionIndex >= 0 ) {
 		const Region &reg = _filterRegions[_regionIndex];
-		Origin *org = Origin::Find(event->preferredOriginID());
-		if ( !org )
+		double lat = item->data(_itemConfig.columnMap[COL_LAT], Qt::UserRole).toDouble();
+		double lon = item->data(_itemConfig.columnMap[COL_LON], Qt::UserRole).toDouble();
+		if ( lat < reg.minLat || lat > reg.maxLat )
 			hide = true;
-		else
-			if ( org->latitude().value() < reg.minLat || org->latitude().value() > reg.maxLat ||
-			     org->longitude().value() < reg.minLong || org->longitude().value() > reg.maxLong )
-				hide = true;
+		else {
+			if ( reg.minLong <= reg.maxLong ) {
+				if ( lon < reg.minLong || lon > reg.maxLong )
+					hide = true;
+			}
+			else {
+				if ( lon < reg.minLong && lon > reg.maxLong )
+					hide = true;
+			}
+		}
 	}
 
 	if ( hide != _treeWidget->isItemHidden(item) ) {
@@ -2789,7 +2931,30 @@ void EventListView::selectEventID(const std::string& publicID) {
 }
 
 
+void EventListView::setPreviousEvent() {
+	int idx = _treeWidget->currentIndex().row();
+	if ( idx > 0 ) {
+		QAbstractItemView::SelectionMode oldMode = _treeWidget->selectionMode();
+		_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+		selectEvent(idx-1);
+		_treeWidget->setSelectionMode(oldMode);
+	}
+}
+
+
+void EventListView::setNextEvent() {
+	int idx = _treeWidget->currentIndex().row();
+	if ( idx < _treeWidget->topLevelItemCount()-1 ) {
+		QAbstractItemView::SelectionMode oldMode = _treeWidget->selectionMode();
+		_treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+		selectEvent(idx+1);
+		_treeWidget->setSelectionMode(oldMode);
+	}
+}
+
+
 void EventListView::readLastDays() {
+	_filter = _filterWidget->filter();
 	_filter.endTime = Core::Time::GMT();
 	_filter.startTime = _filter.endTime - Core::TimeSpan(_ui.spinBox->value()*86400);
 	setInterval(Core::TimeWindow(_filter.startTime, _filter.endTime));
@@ -2797,6 +2962,7 @@ void EventListView::readLastDays() {
 }
 
 void EventListView::readInterval() {
+	_filter = _filterWidget->filter();
 	_filter.startTime = Core::Time(_ui.dateTimeEditStart->date().year(),
 	                               _ui.dateTimeEditStart->date().month(),
 	                               _ui.dateTimeEditStart->date().day(),
@@ -3899,7 +4065,7 @@ void EventListView::updateOrigin(Seiscomp::DataModel::Origin* origin) {
 
 	bool wasEnabled = Notifier::IsEnabled();
 
-	if ( !_updateLocalEPInstance || origin->parent()->parent() == NULL ) {
+	if ( !_updateLocalEPInstance || origin->parent() == NULL ) {
 		Notifier::Disable();
 		ep->add(origin);
 		Notifier::Enable();
@@ -4388,12 +4554,20 @@ void EventListView::setSortingEnabled(bool enable) {
 	if ( enable ) {
 		header->setSortIndicator(0, Qt::DescendingOrder);
 		header->setSortIndicatorShown(true);
+#if QT_VERSION >= 0x050000
+		header->setSectionsClickable(true);
+#else
 		header->setClickable(true);
+#endif
 	}
 	else {
 		header->setSortIndicator(-1, Qt::DescendingOrder);
 		header->setSortIndicatorShown(false);
-		header->setClickable(false);
+#if QT_VERSION >= 0x050000
+		header->setSectionsClickable(true);
+#else
+		header->setClickable(true);
+#endif
 	}
 }
 

@@ -4,6 +4,8 @@ SET(
 		fdsnxml/xml.h
 		fdsnxml/inttype.h
 		fdsnxml/floatnounittype.h
+		fdsnxml/countertype.h
+		fdsnxml/floatnounitwithnumbertype.h
 		fdsnxml/floattype.h
 		fdsnxml/latitudetype.h
 		fdsnxml/longitudetype.h
@@ -15,7 +17,6 @@ SET(
 		fdsnxml/unitstype.h
 		fdsnxml/sampleratetype.h
 		fdsnxml/samplerateratiotype.h
-		fdsnxml/countertype.h
 		fdsnxml/frequencytype.h
 		fdsnxml/site.h
 		fdsnxml/stringtype.h
@@ -32,6 +33,7 @@ SET(
 		fdsnxml/gain.h
 		fdsnxml/sensitivity.h
 		fdsnxml/decimation.h
+		fdsnxml/identifier.h
 		fdsnxml/basefilter.h
 		fdsnxml/poleandzero.h
 		fdsnxml/polesandzeros.h
@@ -62,6 +64,8 @@ SET(
 		fdsnxml/xml.cpp
 		fdsnxml/inttype.cpp
 		fdsnxml/floatnounittype.cpp
+		fdsnxml/countertype.cpp
+		fdsnxml/floatnounitwithnumbertype.cpp
 		fdsnxml/floattype.cpp
 		fdsnxml/latitudetype.cpp
 		fdsnxml/longitudetype.cpp
@@ -73,7 +77,6 @@ SET(
 		fdsnxml/unitstype.cpp
 		fdsnxml/sampleratetype.cpp
 		fdsnxml/samplerateratiotype.cpp
-		fdsnxml/countertype.cpp
 		fdsnxml/frequencytype.cpp
 		fdsnxml/site.cpp
 		fdsnxml/stringtype.cpp
@@ -90,6 +93,7 @@ SET(
 		fdsnxml/gain.cpp
 		fdsnxml/sensitivity.cpp
 		fdsnxml/decimation.cpp
+		fdsnxml/identifier.cpp
 		fdsnxml/basefilter.cpp
 		fdsnxml/poleandzero.cpp
 		fdsnxml/polesandzeros.cpp

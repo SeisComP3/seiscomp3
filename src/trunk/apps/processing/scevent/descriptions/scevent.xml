@@ -110,6 +110,19 @@
 					</description>
 				</parameter>
 
+				<parameter name="minimumScore" type="double">
+					<description>
+						Minimum score of an automatic origin to be allowed to
+						form an new Event. This requires an activated score
+						plugin and a score processor. Configure score for defining the
+						score processor and the score processor parameters.
+						If minimumScore is defined, minimumDefiningPhases has no effect at as
+						this phase check will be superseded by the score check. It is
+						the task of the score processor to evaluate a proper
+						score for all input origins.
+					</description>
+				</parameter>
+
 				<parameter name="eventTimeBefore" type="double" unit="s" default="1800">
 					<description>
 						Time range before the origin time of an incoming origin to search for

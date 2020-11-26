@@ -1,11 +1,11 @@
 Amplitude
 ---------
-The MLr amplitude calculation is that of the Mlv amplitude computation.
+The MLr amplitude calculation is that of the :ref:`MLv<global_mlv>` amplitude computation.
 
 Station Magnitude
 -----------------
 
-Magnitude based on SED MLh magnitude
+Magnitude based on SED :ref:`MLh<global_mlh>` magnitude
 The MLr plugin calculates the individual station local magnitude using the following formula:
 
 .. math::
@@ -32,7 +32,7 @@ Overall Event Magnitude
 -----------------------
 
 The GNS/Geonet Mlr local magnitude is using the default Sc3 behaviour for the automatic network magnitudes.
-Hard coded range are 0-20 degrees maximum distance and 800 km maximum depth.
+Hard-coded ranges are 0-20 degrees maximum distance and 800 km maximum depth.
 
 Configuration
 -------------

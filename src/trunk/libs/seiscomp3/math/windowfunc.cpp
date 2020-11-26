@@ -34,7 +34,7 @@ WindowFunc<TYPE>::~WindowFunc() {}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
 void WindowFunc<TYPE>::apply(int n, TYPE *inout, double width) const {
-	process(n, inout, width);
+	checkAndProcess(n, inout, width, width);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -44,7 +44,7 @@ void WindowFunc<TYPE>::apply(int n, TYPE *inout, double width) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
 void WindowFunc<TYPE>::apply(std::vector<TYPE> &inout, double width) const {
-	process(inout.size(), &inout[0], width);
+	checkAndProcess(inout.size(), &inout[0], width, width);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -54,7 +54,7 @@ void WindowFunc<TYPE>::apply(std::vector<TYPE> &inout, double width) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
 void WindowFunc<TYPE>::apply(TypedArray<TYPE> &inout, double width) const {
-	process(inout.size(), inout.typedData(), width);
+	checkAndProcess(inout.size(), inout.typedData(), width, width);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -64,7 +64,61 @@ void WindowFunc<TYPE>::apply(TypedArray<TYPE> &inout, double width) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename TYPE>
 void WindowFunc<TYPE>::apply(TypedArray<TYPE> *inout, double width) const {
-	apply(*inout, width);
+	apply(*inout, width, width);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename TYPE>
+void WindowFunc<TYPE>::apply(int n, TYPE *inout, double left, double right) const {
+	checkAndProcess(n, inout, left, right);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename TYPE>
+void WindowFunc<TYPE>::apply(std::vector<TYPE> &inout, double left, double right) const {
+	checkAndProcess(inout.size(), &inout[0], left, right);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename TYPE>
+void WindowFunc<TYPE>::apply(TypedArray<TYPE> &inout, double left, double right) const {
+	process(inout.size(), inout.typedData(), left, right);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename TYPE>
+void WindowFunc<TYPE>::apply(TypedArray<TYPE> *inout, double left, double right) const {
+	apply(*inout, left, right);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename TYPE>
+void WindowFunc<TYPE>::checkAndProcess(int n, TYPE *inout,
+                                       double left, double right) const {
+	if ( left > 0.5 ) left = 0.5; else if ( left < 0 ) left = 0;
+	if ( right > 0.5 ) right = 0.5; else if ( right < 0 ) right = 0;
+
+	process(n, inout, left, right);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

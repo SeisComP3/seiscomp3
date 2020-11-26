@@ -2,16 +2,329 @@
 
 ## Release YYYY.ddd
 
+```SC_API_VERSION 13.0.0```
+
+This release adds support for Qt5 and Python3.
+
+* Ms_20
+
+  * Added new surface waves magnitude Ms_20 according to IASPEI standard
+  * Make Ms_20 parameters configurable
+
+* scautopick
+
+  * Add amplitudes.enableUpdate to descriptions
+  * Add support for an additional processing stage called FX which means
+    feature extraction and is applied on top of an existing pick. A
+    first implementation ported from CTBTO/IDC's DFX code has been added
+    to extract back azimuth and slowness for three-component stations.
+    ```
+    fx = DFX
+    ``` 
+
+* scevent
+
+  * Fix bug with respect to event splitting. New origins were not associated
+    correctly with the neither the split nor the new event in combination
+    with the matching picks criterion.
+  * Fix reading of origins withouth depth in evrc plugin
+  * Fix setting no event type for region 'world' in evrc plugin
+
+* scrttv
+
+  * Add option `Toggle record borders` which shows/hides the borders of records.
+
+* scesv
+
+  * Added configuration parameter 'recenterMap' to control map centering
+
+* scolv
+
+  * Add event type to left hand summary panel
+  * Add option to show record borders in zoom trace (hotkey: 'B')
+  * Add `visibleMagnitudes` to description
+  * Add option to change origin depth type when depth is fixed
+  * Add shortcuts to go to previous/next event (ctrl+pgup/pgdown)
+
+* scqc
+
+  * Added description of plugin configuration parameters. Default for writing
+    to the database is false.
+  * Added more QC parameters to the documentation
+
+* scxmldump
+
+  * Fixed bug that caused missing focal mechanism if only preferred
+    solutions should be exported
+
+* trunk
+
+  * Add database support for 64bit ids. The old MYSQL schema scripts used
+    32bit integers for table ids. The new MYSQL schema scripts are using
+    64bit integers. Both version are supported by the code. To migrate an
+    existing MYSQL database to 64bit integers requires rather expensive
+    table conversions. For more details can be found in the documentation.
+  * Fixed Buttworth bandpass amplitude damping and made `BW = BW_BP`
+  * Added Butterworth bandstop filter (`BW_BS`)
+  * Added Array.bytes() to Python wrappers (only)
+  * QuakeLink client lib
+    * Add support for QuakeLink API 2 which introduces format specific version
+      numbers in general and in particular SUMMARY/2 format
+    * Add hello(), serverID() and serverAPI() methods to query and retrieve the
+      server ID and API version
+    * Add isSupported() and maximumSupportedVersion() methods to check if a specific
+      format version is supported respectively to return the maximum supported
+      format version
+    * Add support for ORDER BY, LIMIT and OFFSET parameters to select() and
+      selectArchived() queries introduced by QuakeLink API 1
+  * Fixed inf/nan amplitudes which were caused by paz responses with more zeros
+    than poles
+  * Added FixedHypocenter locator which just inverts for origin time by fixing
+    the hypocenter. Any travel time tables available in SeisComP are supported.
+  * Added A5/2 amplitude implementation ported from the CTBTO/IDC codebase
+  * Added SBSNR amplitude implementation ported from the CTBTO/IDC codebase
+  * Added DFX polar analysis for three-component stations implementation from
+    the CTBTO/IDC codebase
+  * Added `mb_idc` magnitude implementation (derived from `mb_ave` from CTBTO/IDC)
+    based on A5/2 amplitudes
+  * Added `ML_idc` magnitude implementation (derived from `ML` from CTBTO/IDC)
+    based on SBSNR amplitudes
+
 * seedlink
 
-  * Fix duplicate mapping detection in scream_plugin_ring plugin. Whenever a duplicate stream
+  * Support websocket connections from https://github.com/crotwell/seisplotjs-seedlink
+  * Fix config to properly support multiple sources (plugins) per station
+  * Use unambiguous station ID (net.station)
+  * Fix parsing of global `backfill_buffer` variable. Up to this
+    fix the variable was always considered out of bounds and apart from using
+    backfill buffer settings in the bindings the global value had no effect.
+
+* fdsnws
+
+  * Fix bug if useArclinkAccess is enabled
+
+* scinv
+
+  * Correct output of associated filenames in case of a conflict
+
+* fdsnxml
+
+  * Supported schema version is 1.1
+  * Convert from/to SC3 by encoding additional attributes as comments
+
+* GUI
+
+  * Add support to show record borders in the record widget. The style of the border
+    can be changed with the configuration option `scheme.records.recordBorders.drawMode`
+    whereas the following options are available:
+    * TopLine (default)
+    * BottomLine
+    * Box
+
+    Additionally it is possible to select the pen and brush for the options
+    * `scheme.colors.records.borders.standard`
+    * `scheme.colors.records.borders.signatureValid`
+    * `scheme.colors.records.borders.signatureInvalid`
+
+    For example:
+    ```
+    scheme.colors.records.borders.standard.pen.color = FF0000FF
+    ```
+  * Fix filter string drop to widgets with Qt5
+  * Quit application if an error occurred during initialization
+    and if the setup dialog is cancelled or closed by hitting
+    the X icon
+  * Rename item `TP` to `MType` of parameter `eventlist.visibleColumns`
+  * Add option to define symbol images for layer points defined in
+    either BNA or FEP
+  * Add nodal planes and some more quality parameters to event edit focal
+    mechanism table
+  * Fix setting the depth type in the origin locator panel
+
+## Release 2018.327 patch23
+
+* scolv
+
+  * Fix latency display for time spans larger than an hour
+
+
+## Release 2018.327 patch22
+
+* fseed
+
+  * Fix print statement for Python2
+
+## Release 2018.327 patch21
+
+* trunk
+
+  * Fixed SDSArchive binary search
+
+## Release 2018.327 patch20
+
+* scolv
+
+  * Add control to set evaluation status of a network magnitude
+  * Show magnitude evaluation status in event edit table and details
+
+## Release 2018.327 patch19
+
+* scautopick
+
+  * Add extraComments option to allow adding more comments to the pick, e.g. SNR
+
+* scevent
+
+  * Add option to allow event creation based on origin score instead of a
+    minimum phase count.
+  * Release created event immediately if origins configured to be delayed
+    and associate all other queued origins in a batch and emit only one
+    additional event.
+
+* system
+
+  * Fix error message on attempt to create existing alias
+
+* scart
+
+  * Add option `--with-filename` which outputs of all accessed archive files
+    after import
+  * Fix crash if a data file is not writable
+
+* fdsnws
+
+  * Fix bug if useArclinkAccess is enabled
+
+* scinv
+
+  * Correct output of associated filenames in case of a conflict
+
+* scsohlog
+
+  * Add database tests
+
+* trunk
+
+  * Fixed MSEED parser to also accept records if blockette 1000 is not within
+    the first 64 bytes
+
+## Release 2018.327 patch18
+
+* system
+
+  * Add dependencies for Debian 9 and Debian 10
+
+* scevent/evrc
+
+  * Do not process delayed objects on update
+  * Add delay time information to the event processing log
+  * The plugin evrc for scevent allows the configuration of event types for
+    events within positive or negative regions
+  * Provide support for reading the event type from BNA file header
+  * Provide support for reading the depth limits from BNA file header
+
+* scqcv
+
+  * Expose more configuration parameters to scconfig
+  * Change the default value of streams.cumulative to false to show
+    only stream configured in streams.codes
+  * Correct some default values of the parameter "parameter"
+
+* scesv
+
+  * Fixed region filter with event list which did not work correctly
+
+* scolv
+
+  * Add option `askForConfirmation` to custom commits to allow
+    inspection of the options to be applied.
+  * Open dialog when a custom commit is activated together with shift key.
+  * Add `visibleMagnitudes` to description
+
+* scconfig
+
+  * Added "Check inventory" button to inventory panel of scconfig
+
+* scsendjournal
+
+  * Added documentation
+
+* screloc
+
+  * Added option --origin-id-suffix to name relocated origins
+    using the original publicID plus the specified suffix
+
+## Release 2018.327 patch17
+
+* fdsnws
+
+  * Implement fdsnws-availability-1.0.0
+  * Add event type filter and text output column
+  * Fix crash if database is not configured correctly
+  * Add tests
+  * Bug fixes
+
+* scolv
+
+  * Enable custom commit profiles to be added as buttons
+  * Allow to select the preferred magnitude prior to committing
+    a solution in the magnitude tab
+  * Fix picker metadata resolver if pick has been made on a single
+    component
+
+* GUI
+
+  * Increase default maximum map tile cache to 128mb
+  * Fix rendering of geofeatures with more than one subfeature
+  * Add lat/lon, depth and magnitude database filter to event list
+  * Add `scheme.precision.magnitude` configuration option
+
+* ql2sc
+
+  * Add --ep option and fix ping-pong effect with two cross-connected systems
+
+* system
+
+  * Fix error message on attempt to create existing alias
+
+* scart
+
+  * Add option `--with-filename` which outputs of all accessed archive files
+    after import
+  * Fix crash if a data file is not writable
+
+## Release 2018.327 patch16
+
+* fdsnws
+
+  * Fix regression with respect to event type mapping. An empty event type
+    was mapped to "other event".
+
+* trunk
+
+  * Renamed Array::bytes() -> elementSize()
+  * Added Array.bytes() to Python wrappers (only)
+
+## Release 2018.327 patch15
+
+* fdsnws
+
+  * Reduce QuakeML exporter warnings: do not report a warning if the event does not reference
+    a preferred magnitude and reduce log level of event type mapping from warning to debug
+  * Expose matchtimeseries WADL parameter only if data availability information is enabled
+    via config
+  * Disable data availability information by default
+  * Add request logging for dataselect
+
+* seedlink
+
+  * Fix duplicate mapping detection in scream\_plugin\_ring plugin. Whenever a duplicate stream
     id was given then it was ignored regardless of the attached sysid.
+  * Work around EarthData WNRO bug
 
 * scolv
 
   * Fix event type list preparation in combination with `olv.commonEventTypes`.
-
-## Release 2018.327 patch15
 
 * ql2sc
 
@@ -19,10 +332,31 @@
     on long idle periods.
   * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
     which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
+  * Add event attribute synchronization per input host
+
+* scamp
+
+  * Add geomtric\_mean method for combining ML amplitudes measured on both horizontals.
+    This corresponds to averaging the single-component station magnitudes instead of the amplitudes.
 
 * python-apps
 
   * Add simple script to dump public objects
+
+* Nuttli magnitude
+
+  * Fix phase priority parsing and fix crash
+  * Do not apply default uncertainties to Vmin/Vmax 
+
+* scdispatch
+
+  * Fix routing table lookup when dealing with merge operation
+
+* trunk
+
+  * Migration scripts for scwfparam db extension added thanks to Philipp Kaestli / ETHZ
+  * Fix LocSAT locator implementation to correctly send the initial hypocenter
+    parameters to libloc
 
 * scmag
 
@@ -38,23 +372,11 @@
   * Normalize spectrogram spectral amplitudes with respect to
     sampling rate
 
-* scdispatch
-
-  * Fix routing table lookup when dealing with merge operation
-
-* ql2sc
-
-  * Enable sending of keep-alive messages by default. This prevents connection resets by firewall
-    on long idle periods.
-  * Fix bug that prevents forwarding updates if the routing must be resolved via the parent object
-    which hasn't updated. A workaround is to explicitly specify routing rules on all object levels.
-  * Add event attribute synchronization per input host
-
 ## Release 2018.327 patch14
 
 * sh2proc
 
-  * Add parameters parsed from Seismic Handler to SeisComP3.·
+  * Add parameters parsed from Seismic Handler to SeisComP3. 
     Thanks to Klaus Stammler for providing valuable information on Seismic Handler.
 
 * trunk
@@ -67,7 +389,7 @@
 
 * scevtstreams
 
-  * Add ```--input``` and ```--format``` options to read event parameters·
+  * Add ```--input``` and ```--format``` options to read event parameters 
     from file
   * Add asymmetric time margins
 
@@ -102,14 +424,6 @@
 
   * Fix station lookup with inventories with overlapping network epochs
   * Do not use database if inventory should be read from a file
-
-* fdsnws
-
-  * Fix dataselect restricted handling with respect to station service
-
-    * Require valid user if network or station is restricted
-    * Stop iteration at network or station level if restricted flag but
-      no user is present 
 
 * fdsnws
 
@@ -187,7 +501,7 @@
 
 * scquery
 
-  * Add more examples to query events and some statistics from the database 
+  * Add more examples to query events and some statistics from the database
 
 * scmag
 
@@ -405,7 +719,7 @@ magnitude correction. Note that **it only affects ML, not MLv and not MLh**.
     }
     ```
     Namespaces can be nested.
-  * Remov LocSAT unused configuration option to use the location rms as
+  * Remove LocSAT unused configuration option to use the location rms as
     time error
   * Add LocSAT options ```defaultTimeError``` and ```usePickUncertainties```
     which can be configured via the configuration files or during runtime in

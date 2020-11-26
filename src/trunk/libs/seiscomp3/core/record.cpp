@@ -31,8 +31,10 @@ IMPLEMENT_INTERFACE_FACTORY(Record, SC_SYSTEM_CORE_API);
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Record::Record(Array::DataType datatype, Hint h)
- : _net(""), _sta(""), _loc(""), _cha(""), _stime(Core::Time(0,0)),
-   _datatype(datatype), _hint(h), _nsamp(0), _fsamp(0), _timequal(-1) {}
+: _net(""), _sta(""), _loc(""), _cha("")
+, _stime(Core::Time(0,0)), _datatype(datatype)
+, _hint(h), _nsamp(0), _fsamp(0), _timequal(-1)
+, _authenticationStatus(NOT_SIGNED) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -42,8 +44,10 @@ Record::Record(Array::DataType datatype, Hint h)
 Record::Record(Array::DataType datatype, Hint h,
                std::string net, std::string sta, std::string loc, std::string cha,
                Core::Time stime, int nsamp, double fsamp, int tqual)
- : _net(net), _sta(sta), _loc(loc), _cha(cha), _stime(stime),
-   _datatype(datatype), _hint(h), _nsamp(nsamp), _fsamp(fsamp), _timequal(tqual) {}
+: _net(net), _sta(sta), _loc(loc), _cha(cha)
+, _stime(stime), _datatype(datatype)
+, _hint(h), _nsamp(nsamp), _fsamp(fsamp), _timequal(tqual)
+, _authenticationStatus(NOT_SIGNED) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -51,11 +55,13 @@ Record::Record(Array::DataType datatype, Hint h,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Record::Record(const Record &rec)
- : Core::BaseObject(), 
-   _net(rec.networkCode()), _sta(rec.stationCode()), _loc(rec.locationCode()),
-   _cha(rec.channelCode()), _stime(rec.startTime()), _datatype(rec.dataType()),
-   _hint(rec._hint), _nsamp(rec.sampleCount()),
-   _fsamp(rec.samplingFrequency()), _timequal(rec.timingQuality()) {}
+: Core::BaseObject()
+, _net(rec.networkCode()), _sta(rec.stationCode()), _loc(rec.locationCode())
+, _cha(rec.channelCode()), _stime(rec.startTime()), _datatype(rec.dataType())
+, _hint(rec._hint), _nsamp(rec.sampleCount())
+, _fsamp(rec.samplingFrequency()), _timequal(rec.timingQuality())
+, _authenticationStatus(rec._authenticationStatus)
+, _authority(rec._authority) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -70,7 +76,7 @@ Record::~Record () {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Record& Record::operator=(const Record &rec) {
-	if (&rec != this) {
+	if ( &rec != this ) {
 		_datatype = rec.dataType();
 		_hint = rec._hint;
 		_net = rec.networkCode();
@@ -81,9 +87,11 @@ Record& Record::operator=(const Record &rec) {
 		_nsamp = rec.sampleCount();
 		_fsamp = rec.samplingFrequency();
 		_timequal = rec.timingQuality();
+		_authenticationStatus = rec._authenticationStatus;
+		_authority = rec._authority;
 	}
 
-	return (*this);
+	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -271,6 +279,24 @@ void Record::setDataType(Array::DataType dt) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Record::setHint(Hint h) {
 	_hint = h;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Record::setAuthentication(Authentication authStatus) {
+	_authenticationStatus = authStatus;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Record::setAuthority(const std::string &authority) {
+	_authority = authority;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

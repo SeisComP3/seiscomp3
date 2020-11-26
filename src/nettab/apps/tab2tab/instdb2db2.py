@@ -17,7 +17,7 @@ class base(object):
                 for row in csv.DictReader(fd, fieldNames):
                     id = row['id']
                     if id in self.att:
-                        print "multiple %s found in %s" % (id, filename)
+                        print("multiple %s found in %s" % (id, filename))
                         continue
 
                     for key in fields:
@@ -38,17 +38,17 @@ class base(object):
 
                     self.att[id] = row
 
-            except KeyError, e:
+            except KeyError as e:
                 raise Exception("column %s missing in %s" % (str(e), filename))
 
-            except (TypeError, ValueError), e:
+            except (TypeError, ValueError) as e:
                 raise Exception("error reading %s: %s" % (filename, str(e)))
 
         finally:
             fd.close()
 
     def keys(self):
-        return self.att.keys()
+        return list(self.att.keys())
 
     def screname(self, what):
         nc = ""
@@ -73,8 +73,8 @@ class base(object):
         if not self.att:
             return None
         
-        for (code, row) in self.att.iteritems():
-            for (k, v) in row.iteritems():
+        for (code, row) in self.att.items():
+            for (k, v) in row.items():
                 k = self.screname(k)
                 try:
                     dk = att[k]
@@ -95,11 +95,11 @@ class base(object):
         att = self.reorder()
         lastK=None
 
-        for (k, v) in att.iteritems():
+        for (k, v) in att.items():
             if not lastK: lastK = k
             if lastK != k:
                 fdo.write("\n")
-            for (kv, ids) in v.iteritems():
+            for (kv, ids) in v.items():
                 fdo.write("Ia: %s=%s" % (k,quote(kv)))
                 for id in ids:
                     fdo.write(" %s" % id)
@@ -163,10 +163,10 @@ class INST(object):
             if line['type'] != 'U':  continue
             id = self.cleanID(line['id'])
 
-            if id in self.sensorA.keys():
+            if id in list(self.sensorA.keys()):
                 line['type'] = 'S'
                 line['id'] = id
-            elif id in self.dataloggerA.keys():
+            elif id in list(self.dataloggerA.keys()):
                 line['type'] = 'D'
                 line['id'] = id
             # Those we are forcing !
@@ -179,7 +179,7 @@ class INST(object):
 
         for line in self.lines:
             if line['type'] == 'U':
-                print "'"+self.cleanID(line['id'])+"', ",
+                print("'"+self.cleanID(line['id'])+"', ", end=' ')
 
     def dump(self, fdo):
         sa = False
@@ -262,9 +262,9 @@ def main():
         errors.append("output file already exists, will not overwrite.")
 
     if errors:
-        print >> sys.stderr, "Found error while processing the command line:"
+        print("Found error while processing the command line:", file=sys.stderr)
         for error in errors:
-            print >> sys.stderr, "  %s" % error
+            print("  %s" % error, file=sys.stderr)
         return 1
 
     inputName = args[0]

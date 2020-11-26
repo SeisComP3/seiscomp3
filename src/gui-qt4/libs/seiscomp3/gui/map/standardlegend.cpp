@@ -228,7 +228,7 @@ void StandardLegend::updateLayout(const QSize &size) {
 	_columnWidth = 0;
 
 	for ( int i = 0; i < _items.count(); ++i ) {
-		int itemWidth = fm.width(_items[i]->label);
+		int itemWidth = fm.boundingRect(_items[i]->label).width();
 		if ( itemWidth > _columnWidth )
 			_columnWidth = itemWidth;
 

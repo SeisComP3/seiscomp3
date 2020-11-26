@@ -36,6 +36,7 @@
 #endif
 
 #define STATLEN   5
+#define NETLEN    2
 #define LOGMSGLEN 150
 
 static const char *const ident_str = "SeedLink MSEED-FIFO Plugin v" MYVERSION;
@@ -137,7 +138,7 @@ int main(int argc, char **argv)
     char *fifo_path = NULL;
     struct sl_fsdh_s *fsdh = NULL;
     struct stat st;
-    char station[STATLEN+1];
+    char sta_id[11];
     char buf[512];
     int fd, n;
 
@@ -253,15 +254,22 @@ int main(int argc, char **argv)
 
         fsdh = (struct sl_fsdh_s *)buf;
         
+        for(n = NETLEN; n > 0; --n)
+            if(fsdh->network[n - 1] != ' ')
+              {
+                strncpy(sta_id, fsdh->network, n);
+                sta_id[n] = '.';
+                sta_id[n+1] = 0;
+                break;
+              }
         for(n = STATLEN; n > 0; --n)
             if(fsdh->station[n - 1] != ' ')
               {
-                strncpy(station, fsdh->station, n);
-                station[n] = 0;
+                strncat(sta_id, fsdh->station, n);
                 break;
               }
 
-        int r = send_mseed(station, buf, 512);
+        int r = send_mseed(sta_id, buf, 512);
         if(r < 0)
           {
             log_printf("error sending data to seedlink: %s", strerror(errno));

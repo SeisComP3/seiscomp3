@@ -3,4 +3,5 @@ plugin $seedlink.source.id cmd="$seedlink.plugin_dir/win_plugin$seedlink._daemon
              timeout = 3600
              start_retry = 60
              shutdown_wait = 10
+             proc = "$sources.win.proc"
 

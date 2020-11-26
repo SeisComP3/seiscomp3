@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
 	<module name="scqc" category="Processing">
-		<description>Derives quality parameters from waveforms.</description>
+		<description>Derives quality control (QC) parameters from waveforms.</description>
 		<configuration>
 			<parameter name="CreatorId" type="string" default="smi://de.gfz-potsdam/QcTool_0.3.1">
 				<description>ID of QC message creator</description>
@@ -14,16 +14,16 @@
 			</parameter>
 			<parameter name="use3Components" type="boolean" default="false">
 				<description>
-					If useConfiguredStreams is true then this parameter decides whether
+					If useConfiguredStreams == true, then this parameter decides whether
 					to use only the vertical component (default) or all three
 					components. The 3 components are collected from the inventory
-					according to channel orientation. If that is not possible
+					according to channel orientation. If that is not possible,
 					then the fixed components N and E will be used.
 				</description>
 			</parameter>
 			<parameter name="streamMask" type="string">
 				<description>
-					If useConfiguredStreams == False then
+					If useConfiguredStreams == false, then
 					load (from inventory) only those streams, matching the streamMask
 
 					RegEx e.g. &quot;^(NET1|NET2)\.(STA1|STA2|STA3)\.(LOC)\.((BH)|(LH)|(HH))Z$&quot;
@@ -33,32 +33,746 @@
 					streamMask = &quot;^(.+)\.(.+)\.(.*)\.(BHZ)$&quot;
 				</description>
 			</parameter>
-			<parameter name="dbLookBack" type="int" default="7">
+			<parameter name="dbLookBack" type="int" default="7" unit="days">
 				<description>
 					Database look up for past entries not older than x days
 					(to determine the last QC parameter calculated).
 				</description>
 			</parameter>
 			<group name="plugins">
+				<description>Control parameters for individual QC plugins.</description>
 				<group name="default">
-					<parameter name="reportInterval" type="int" default="60" unit="s">
-						<description>Interval for sending the report messages.</description>
+					<description>
+						Default configuration parameters for the plugins.
+						Can be overwritten by the individual plugin configurations.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
 					</parameter>
-					<parameter name="alertInterval" type="int" default="30" unit="s">
-						<description>Interval for checking the alert thresholds.</description>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
 					</parameter>
-					<parameter name="staBufferLength" type="int" default="600" unit="s">
-						<description>Short Term Average (STA) buffer length.</description>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>
+							Control sending QC reports as notifier to the messaging where
+							scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval to send the QC reports.
+
+								Default [-1]: Do not send any QC report. This will prevent writing
+								QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcLatency">
+					<description>
+						Configuration parameters for the plugin qcplugin_latency. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="true">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
 					</parameter>
-					<parameter name="ltaBufferLength" type="int" default="600" unit="s">
-						<description>Long Term Average (LTA) buffer length.</description>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
 					</parameter>
-					<parameter name="timeout" type="int" default="0" unit="s">
-						<description>Generate a report message in case no data is received since timeout.</description>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which, e.g.,
+								can be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcDelay">
+					<description>
+						Configuration parameters for the plugin qcplugin_delay. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="true">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to processd data AND realtime data streams.
+						</description>
 					</parameter>
-					<parameter name="thresholds" type="int" default="100">
-						<description>Alert thresholds in percent, single value [or list 25,50,75 ... not yet implemented].</description>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
 					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcGap">
+					<description>
+						Configuration parameters for the plugin qcplugin_gap. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcOffset">
+					<description>
+						Configuration parameters for the plugin qcplugin_offset. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcOverlap">
+					<description>
+						Configuration parameters for the plugin qcplugin_overlap. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcRms">
+					<description>
+						Configuration parameters for the plugin qcplugin_rms. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcSpike">
+					<description>
+						Configuration parameters for the plugin qcplugin_spike. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcTiming">
+					<description>
+						Configuration parameters for the plugin qcplugin_timing. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcAvailability">
+					<description>
+						Configuration parameters for the plugin qcplugin_availability. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="QcOutage">
+					<description>
+						Configuration parameters for the plugin qcplugin_outage. Overwrites the parameters from the default section.
+					</description>
+					<parameter name="realTimeOnly" type="boolean" default="false">
+						<description>
+							Enable to use this plugin only for realtime processing.
+
+							Default [disable]: plugin is able to process archived data AND realtime data streams.
+						</description>
+					</parameter>
+					<parameter name="buffer" type="int" default="4000" unit="s">
+						<description>
+							Qc-Buffer Length [s] (aka LTA-Buffer). Must be >= plugins.*.bufferLength.
+						</description>
+					</parameter>
+					<parameter name="notifyDB" type="int" default="1800" unit="s">
+						<description>
+							If there is a gap of more than notifyDB [s], write an OUTAGE entry into the database.
+						</description>
+					</parameter>
+					<group name="report">
+						<description>Control interactions with the messaging system.</description>
+						<parameter name="interval" type="int" default="60" unit="s">
+							<description>
+								Interval for sending report messages which e.g.
+								will be  may be displayed by scqcv.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="timeout" type="int" default="0" unit="s">
+							<description>
+								Report messages are generated in case no data
+								is received since timeout. Only in real-time processing.
+								</description>
+						</parameter>
+					</group>
+					<group name="archive">
+						<description>Control sending QC reports as notifier to the messaging where
+						scmaster will write them to the database.
+						</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+							Interval to send the QC reports.
+
+							Default [-1]: Do not send any QC report. This will prevent writing
+							QC reports into the database.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="3600" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+					</group>
+					<group name="alert">
+						<description>Control for sending alerts based on QC reports.</description>
+						<parameter name="interval" type="int" default="-1" unit="s">
+							<description>
+								Interval for checking and sending alert thresholds.
+								-1 disables threshold checking.
+							</description>
+						</parameter>
+						<parameter name="buffer" type="int" default="1800" unit="s">
+							<description>Time window for calculating QC reports.</description>
+						</parameter>
+						<parameter name="thresholds" type="int" default="150">
+							<description>List of thresholds for sending QC reports. Use comma to separate values.</description>
+						</parameter>
+					</group>
 				</group>
 			</group>
 		</configuration>

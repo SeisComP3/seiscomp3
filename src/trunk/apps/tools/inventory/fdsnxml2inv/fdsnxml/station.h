@@ -13,8 +13,9 @@
 
 #include <fdsnxml/metadata.h>
 #include <string>
-#include <fdsnxml/countertype.h>
+#include <fdsnxml/floattype.h>
 #include <fdsnxml/basenode.h>
+#include <fdsnxml/countertype.h>
 #include <fdsnxml/longitudetype.h>
 #include <fdsnxml/distancetype.h>
 #include <vector>
@@ -96,6 +97,13 @@ class Station : public BaseNode {
 		Site& site();
 		const Site& site() const;
 
+		//! Elevation of the water surface in meters for underwater sites, where 0
+		//! is sea level.
+		//! XML tag: waterLevel
+		void setWaterLevel(const OPT(FloatType)& waterLevel);
+		FloatType& waterLevel();
+		const FloatType& waterLevel() const;
+
 		//! Type of vault, e.g. WWSSN, tunnel, transportable array, etc.
 		//! XML tag: Vault
 		void setVault(const std::string& vault);
@@ -108,7 +116,7 @@ class Station : public BaseNode {
 
 		//! Date and time (UTC) when the station was first installed.
 		//! XML tag: CreationDate
-		void setCreationDate(DateTime creationDate);
+		void setCreationDate(const OPT(DateTime)& creationDate);
 		DateTime creationDate() const;
 
 		//! Date and time (UTC) when the station was terminated or will be
@@ -195,9 +203,10 @@ class Station : public BaseNode {
 		LongitudeType _longitude;
 		DistanceType _elevation;
 		Site _site;
+		OPT(FloatType) _waterLevel;
 		std::string _vault;
 		std::string _geology;
-		DateTime _creationDate;
+		OPT(DateTime) _creationDate;
 		OPT(DateTime) _terminationDate;
 		OPT(CounterType) _totalNumberChannels;
 		OPT(CounterType) _selectedNumberChannels;

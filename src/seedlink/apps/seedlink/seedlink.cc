@@ -57,7 +57,7 @@
 #include "plugin.h"
 #include "diag.h"
 
-#define MYVERSION "3.2 (2019.199)"
+#define MYVERSION "3.3 (2020.203)"
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "/home/sysop/config/seedlink.ini"
@@ -146,6 +146,8 @@ string gap_check_pattern;
 int gap_treshold = 10000;
 bool trusted_window_extraction = false;
 bool untrusted_window_extraction = false;
+bool trusted_websocket = false;
+bool untrusted_websocket = false;
 
 string daemon_name;
 int verbosity = 0;
@@ -263,6 +265,15 @@ class LogFunc
 // Plugin
 //*****************************************************************************
 
+class PluginPartner
+  {
+  public:
+    virtual rc_ptr<StreamProcessor> get_plugin_sproc(const string &plugin_name,
+      rc_ptr<StreamProcessorSpec> spspec) =0;
+    virtual rc_ptr<StreamProcessor> get_station_sproc() =0;
+    virtual ~PluginPartner() {};
+  };
+
 class Plugin
   {
   private:
@@ -285,6 +296,9 @@ class Plugin
     ssize_t nread;
     size_t nleft;
     char *ptr;
+    bool raw_ignored;
+    set<string> missing_inputs;
+    rc_ptr<StreamProcessorSpec> spspec;
      
     bool check_child();
     bool read_helper();
@@ -302,13 +316,13 @@ class Plugin
     const string name;
   
     Plugin(const string name_init, const string &cmdline_init, int read_timeout,
-      int start_retry, int shutdown_wait):
+      int start_retry, int shutdown_wait, rc_ptr<StreamProcessorSpec> spspec_init):
       cmdline(cmdline_init), pid(0), parent_fd(-1), child_active(true),
       sigterm_sent(false), sigkill_sent(false), data_available(false),
       shutdown_requested(false), restart_requested(false), read_timer(read_timeout, 0),
       start_retry_timer(start_retry, 0), shutdown_timer(shutdown_wait, 0),
       read_state(ReadInit), data_bytes(0), nread(0), nleft(0), ptr(NULL),
-      name(name_init) {}
+      raw_ignored(false), spspec(spspec_init), name(name_init) {}
 
     ~Plugin()
       {
@@ -317,6 +331,7 @@ class Plugin
         
     void start();
     bool read(PluginPacketHeader &head, void *data);
+    rc_ptr<Input> get_input(const string &input_name, PluginPartner &station);
     
     void shutdown(bool restart = false)
       {
@@ -568,6 +583,48 @@ bool Plugin::read(PluginPacketHeader &head, void *data)
     return false;
   }
 
+rc_ptr<Input> Plugin::get_input(const string &input_name, PluginPartner &partner)
+  {
+    if(raw_ignored || missing_inputs.find(input_name) != missing_inputs.end())
+        return NULL;
+
+    rc_ptr<Input> input;
+
+    if(spspec != NULL)
+      {
+        rc_ptr<StreamProcessor> sproc = partner.get_plugin_sproc(name, spspec);
+        input = sproc->get_input(input_name);
+      }
+
+    if(input == NULL)
+      {
+        rc_ptr<StreamProcessor> sproc = partner.get_station_sproc();
+
+        if(sproc == NULL)
+          {
+            if(spspec == NULL && !raw_ignored)
+              {
+                logs(LOG_WARNING) << name << " raw data ignored" << endl;
+                raw_ignored = true;
+              }
+
+            return NULL;
+          }
+
+        input = sproc->get_input(input_name);
+      }
+
+    if(input == NULL)
+      {
+        logs(LOG_WARNING) << name << " channel " << input_name <<
+          " ignored" << endl;
+        missing_inputs.insert(input_name);
+        return NULL;
+      }
+
+    return input;
+  }
+
 list<rc_ptr<Plugin> > plugins;
 
 
@@ -606,24 +663,30 @@ bool lt(const INT_TIME &it1, const INT_TIME &it2)
     return false;
   }
 
-class Station : public StreamProcessor::InputVisitor
+class Station: public StreamProcessor::InputVisitor, private PluginPartner
   {
   private:
     typedef SProc::Backfilling<MSEEDPacket> MSEEDBackfilling;
 
     rc_ptr<BufferStore> bufs;
     rc_ptr<Format> log_format;
+    rc_ptr<StreamProcessorSpec> spspec;
     rc_ptr<StreamProcessor> sproc;
+    string station_name;
+    string network_id;
+    string seed_encoding;
     int proc_gap_warn;
     int proc_gap_flush;
     int proc_gap_reset;
-    bool raw_ignored;
+    int minbufs;
     double backfill_capacity;
+    map<string, rc_ptr<StreamProcessor> > plugin_sproc;
     map<string, rc_ptr<MSEEDBackfilling> > mseed_backfilling;
-    set<string> missing_inputs;
 
     INT_TIME pt_to_it(const ptime &pt);
-    rc_ptr<Input> get_input(const string &channel_name);
+    rc_ptr<StreamProcessor> get_plugin_sproc(const string &plugin_name,
+      rc_ptr<StreamProcessorSpec> spspec);
+    rc_ptr<StreamProcessor> get_station_sproc();
     void visit(const string &channel_name, rc_ptr<Input> input, void *data);
 
     rc_ptr<MSEEDBackfilling> get_mseed_backfilling(const char *id)
@@ -642,37 +705,32 @@ class Station : public StreamProcessor::InputVisitor
     const string name;
 
     Station(const string &name_init, rc_ptr<BufferStore> bufs_init,
-      rc_ptr<Format> log_format_init, rc_ptr<StreamProcessor> sproc_init,
-      int proc_gap_warn_init, int proc_gap_flush_init, int proc_gap_reset_init,
-      double backfill_capacity_init):
-      bufs(bufs_init), log_format(log_format_init), sproc(sproc_init),
-      proc_gap_warn(proc_gap_warn_init), proc_gap_flush(proc_gap_flush_init),
-      proc_gap_reset(proc_gap_reset_init), raw_ignored(false),
-      backfill_capacity(backfill_capacity_init), name(name_init) {
-      // initialize inputs regarding backfilling
-      if (sproc != NULL) sproc->visit_inputs(*this, (void*)0x01);
-    }
+      rc_ptr<Format> log_format_init, rc_ptr<StreamProcessorSpec> spspec_init,
+      const string &station_name_init, const string &network_id_init,
+      const string &seed_encoding_init, int proc_gap_warn_init,
+      int proc_gap_flush_init, int proc_gap_reset_init, double backfill_capacity_init):
+      bufs(bufs_init), log_format(log_format_init), spspec(spspec_init),
+      station_name(station_name_init), network_id(network_id_init),
+      seed_encoding(seed_encoding_init), proc_gap_warn(proc_gap_warn_init),
+      proc_gap_flush(proc_gap_flush_init), proc_gap_reset(proc_gap_reset_init), minbufs(0),
+      backfill_capacity(backfill_capacity_init), name(name_init) {}
 
     Station(const string &name_init):
-      bufs(NULL), log_format(NULL), sproc(NULL), proc_gap_warn(0),
-      proc_gap_flush(0), proc_gap_reset(0), raw_ignored(true),
-      backfill_capacity(-1.0), name(name_init) {
-      // initialize inputs regarding backfilling
-      if (sproc != NULL) sproc->visit_inputs(*this, (void*)0x01);
-      }
+      bufs(NULL), log_format(NULL), proc_gap_warn(0), proc_gap_flush(0),
+      proc_gap_reset(0), minbufs(0), backfill_capacity(-1.0), name(name_init) {}
 
     virtual ~Station() {}
 
     void send_mseed(const void *rec);
     void send_log(const ptime &pt, const char *msg, int msglen);
-    void send_raw_with_time(const string &input_name, const ptime &pt,
-      int usec_correction, int timing_quality, const int32_t *data,
-      int number_of_samples);
-    void send_raw(const string &input_name, const int32_t *data,
-      int number_of_samples);
-    void send_gap(const string &input_name, int usec_correction,
-      int timing_quality, int number_of_samples);
-    void send_flush(const string &input_name);
+    void send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name,
+      const ptime &pt, int usec_correction, int timing_quality,
+      const int32_t *data, int number_of_samples);
+    void send_raw(rc_ptr<Plugin> plugin, const string &input_name,
+      const int32_t *data, int number_of_samples);
+    void send_gap(rc_ptr<Plugin> plugin, const string &input_name,
+      int usec_correction, int timing_quality, int number_of_samples);
+    void send_flush(rc_ptr<Plugin> plugin, const string &input_name);
 
     void commit_mseed(const void *rec);
     void commit_data(const string &input_name, rc_ptr<Input> input,
@@ -687,8 +745,10 @@ class Station : public StreamProcessor::InputVisitor
     void flush()
       {
         // Visit all inputs and flush the backfilling buffer
-        if(sproc != NULL)
+        map<string, rc_ptr<StreamProcessor> >::iterator it1;
+        for(it1 = plugin_sproc.begin(); it1 != plugin_sproc.end(); ++it1)
           {
+            rc_ptr<StreamProcessor> sproc = it1->second;
             sproc->visit_inputs(*this, NULL);
             sproc->flush();
           }
@@ -720,21 +780,72 @@ INT_TIME Station::pt_to_it(const ptime &pt)
     return ext_to_int(et);
   }
 
-rc_ptr<Input> Station::get_input(const string &input_name)
+rc_ptr<StreamProcessor> Station::get_plugin_sproc(const string &plugin_name,
+  rc_ptr<StreamProcessorSpec> spspec)
   {
-    if(missing_inputs.find(input_name) != missing_inputs.end())
-        return NULL;
+    map<string, rc_ptr<StreamProcessor> >::iterator it = plugin_sproc.find(plugin_name);
+    if(it != plugin_sproc.end())
+        return it->second;
 
-    rc_ptr<Input> input;
-    if((input = sproc->get_input(input_name)) == NULL)
+    minbufs += 3 * spspec->number_of_streams();
+    if(bufs->size() < minbufs)
       {
-        logs(LOG_WARNING) << name << " channel " << input_name <<
-          " ignored" << endl;
-        missing_inputs.insert(input_name);
-        return NULL;
+        bufs->enlarge(minbufs);
+        logs(LOG_INFO) << "increased the number of buffers for station " <<
+          network_id << "." << station_name << " to " << minbufs << endl;
       }
 
-    return input;
+    rc_ptr<StreamProcessor> sproc;
+    if(!strcasecmp(seed_encoding.c_str(), "steim1"))
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim1Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim1Packet, station_name, network_id));
+      }
+    else
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim2Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim2Packet, station_name, network_id));
+      }
+
+    plugin_sproc.insert(make_pair(plugin_name, sproc));
+
+    // initialize inputs regarding backfilling
+    sproc->visit_inputs(*this, (void*)0x01);
+
+    return sproc;
+  }
+
+rc_ptr<StreamProcessor> Station::get_station_sproc()
+  {
+    if(sproc != NULL)
+        return sproc;
+
+    if(spspec == NULL)
+        return NULL;
+
+    minbufs += 3 * spspec->number_of_streams();
+    if(bufs->size() < minbufs)
+      {
+        bufs->enlarge(minbufs);
+        logs(LOG_INFO) << "increased the number of buffers for station " <<
+          network_id << "." << station_name << " to " << minbufs << endl;
+      }
+
+    if(!strcasecmp(seed_encoding.c_str(), "steim1"))
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim1Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim1Packet, station_name, network_id));
+      }
+    else
+      {
+        sproc = spspec->instance(make_encoder_spec<Steim2Encoder, MSEEDFormat>(bufs,
+          MSEED_RECLEN, Steim2Packet, station_name, network_id));
+      }
+
+    // initialize inputs regarding backfilling
+    sproc->visit_inputs(*this, (void*)0x01);
+
+    return sproc;
   }
 
 void Station::visit(const string &channel_name, rc_ptr<Input> input, void *data)
@@ -768,7 +879,7 @@ void Station::send_mseed(const void *rec)
       {
         const sl_fsdh_s* fsdh = static_cast<const sl_fsdh_s *>(rec);
 
-	if(packet_type(fsdh, MAX_HEADER_LEN) != SLDATA)
+        if(packet_type(fsdh, MAX_HEADER_LEN) != SLDATA)
           {
             commit_mseed(rec);
             return;
@@ -782,7 +893,7 @@ void Station::send_mseed(const void *rec)
         memcpy(id+2, fsdh->channel, 3);
         rc_ptr<MSEEDBackfilling> backfilling = get_mseed_backfilling(id);
 
-        if(backfilling->comitted)
+        if(backfilling->committed)
           {
             double gap = tdiff(stime, backfilling->last_commit)*1E-6;
             // A gap larger than one sample?
@@ -813,7 +924,7 @@ void Station::send_mseed(const void *rec)
                   }
 
                 backfilling->last_commit = etime;
-                backfilling->comitted = true;
+                backfilling->committed = true;
                 commit_mseed(rec);
 
                 sync_buffer(id, backfilling);
@@ -839,7 +950,7 @@ void Station::send_mseed(const void *rec)
 
             // Release the packet
             backfilling->last_commit = etime;
-            backfilling->comitted = true;
+            backfilling->committed = true;
             commit_mseed(rec);
           }
         return;
@@ -867,30 +978,21 @@ void Station::send_log(const ptime &pt, const char *msg, int msglen)
     log_format->queue_packet(pckt, msglen1, 0);
   }
 
-void Station::send_raw_with_time(const string &input_name, const ptime &pt,
-  int usec_correction, int timing_quality, const int32_t *data,
+void Station::send_raw_with_time(rc_ptr<Plugin> plugin, const string &input_name,
+  const ptime &pt, int usec_correction, int timing_quality, const int32_t *data,
   int number_of_samples)
   {
-    if(sproc == NULL)
-      {
-        if(!raw_ignored)
-          {
-            logs(LOG_WARNING) << name << " raw data ignored" << endl;
-            raw_ignored = true;
-          }
+    if(bufs == NULL) return;
 
-        return;
-      }
-    
     rc_ptr<Input> input;
-    if((input = get_input(input_name)) == NULL)
+    if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
 
     INT_TIME stime = pt_to_it(pt);
 
     if(input->backfilling.is_enabled())
       {
-        if(input->backfilling.comitted)
+        if(input->backfilling.committed)
           {
             double gap = tdiff(stime, input->backfilling.last_commit)*1E-6;
             // A gap larger than one sample?
@@ -931,7 +1033,7 @@ void Station::send_raw_with_time(const string &input_name, const ptime &pt,
                   }
 
                 input->backfilling.last_commit = etime;
-                input->backfilling.comitted = true;
+                input->backfilling.committed = true;
                 commit_data(input_name, input, stime, usec_correction,
                             timing_quality, data, number_of_samples);
 
@@ -963,7 +1065,7 @@ void Station::send_raw_with_time(const string &input_name, const ptime &pt,
             etime = add_dtime(stime, 1000000 * (double(number_of_samples) * double(input->clk.freqd) / double(input->clk.freqn)));
 
             input->backfilling.last_commit = etime;
-            input->backfilling.comitted = true;
+            input->backfilling.committed = true;
             commit_data(input_name, input, stime, usec_correction,
                         timing_quality, data, number_of_samples);
           }
@@ -974,22 +1076,13 @@ void Station::send_raw_with_time(const string &input_name, const ptime &pt,
                 timing_quality, data, number_of_samples);
   }
 
-void Station::send_raw(const string &input_name, const int32_t *data,
+void Station::send_raw(rc_ptr<Plugin> plugin, const string &input_name, const int32_t *data,
   int number_of_samples)
   {
-    if(sproc == NULL)
-      {
-        if(!raw_ignored)
-          {
-            logs(LOG_WARNING) << name << " raw data ignored" << endl;
-            raw_ignored = true;
-          }
+    if(bufs == NULL) return;
 
-        return;
-      }
-    
     rc_ptr<Input> input;
-    if((input = get_input(input_name)) == NULL)
+    if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
 
     if(input->backfilling.current != NULL)
@@ -1008,22 +1101,13 @@ void Station::send_raw(const string &input_name, const int32_t *data,
             add_dtime(input->backfilling.last_commit, 1000000 * (double(number_of_samples) * double(input->clk.freqd) / double(input->clk.freqn)));
   }
 
-void Station::send_gap(const string &input_name, int usec_correction,
+void Station::send_gap(rc_ptr<Plugin> plugin, const string &input_name, int usec_correction,
   int timing_quality, int number_of_samples)
   {
-    if(sproc == NULL)
-      {
-        if(!raw_ignored)
-          {
-            logs(LOG_WARNING) << name << " raw data ignored" << endl;
-            raw_ignored = true;
-          }
+    if(bufs == NULL) return;
 
-        return;
-      }
-    
     rc_ptr<Input> input;
-    if((input = get_input(input_name)) == NULL)
+    if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
 
     input->add_ticks(number_of_samples, usec_correction, timing_quality);
@@ -1043,21 +1127,12 @@ void Station::send_gap(const string &input_name, int usec_correction,
         input->flush();
   }
 
-void Station::send_flush(const string &input_name)
+void Station::send_flush(rc_ptr<Plugin> plugin, const string &input_name)
   {
-    if(sproc == NULL)
-      {
-        if(!raw_ignored)
-          {
-            logs(LOG_WARNING) << name << " raw data ignored" << endl;
-            raw_ignored = true;
-          }
+    if(bufs == NULL) return;
 
-        return;
-      }
-    
     rc_ptr<Input> input;
-    if((input = get_input(input_name)) == NULL)
+    if((input = plugin->get_input(input_name, *this)) == NULL)
         return;
 
     if(input->backfilling.current!=NULL)
@@ -1095,25 +1170,12 @@ void Station::commit_packet(const string &input_name, rc_ptr<Input> input,
                             const InputBackfilling::PacketPtr &pkt)
   {
     input->backfilling.last_commit = pkt->etime;
-	input->backfilling.comitted = true;
+	input->backfilling.committed = true;
     commit_data(input_name, input, pkt->stime, pkt->usec_correction,
                 pkt->timing_quality, pkt->data.data(), pkt->data.size());
 
     if(pkt->flush)
-      {
-        if(sproc == NULL)
-          {
-            if(!raw_ignored)
-              {
-                logs(LOG_WARNING) << name << " raw data ignored" << endl;
-                raw_ignored = true;
-              }
-
-            return;
-          }
-
         input->flush();
-      }
   }
 
 
@@ -1134,7 +1196,7 @@ void Station::sync_buffer(const string &input_name, rc_ptr<Input> input)
                         << endl;
       }
 
-    if(!input->backfilling.comitted) return;
+    if(!input->backfilling.committed) return;
 
     // Check if this packet filled a gap to the buffer
     while(!input->backfilling.buffer.empty())
@@ -1167,7 +1229,7 @@ void Station::sync_buffer(const char* cha, rc_ptr<MSEEDBackfilling> bf)
         MSEEDBackfilling::PacketPtr &pkt = bf->buffer.front();
         commit_mseed(pkt->data);
         bf->last_commit = pkt->etime;
-        bf->comitted = true;
+        bf->committed = true;
         bf->buffer.pop_front();
 
         logs(LOG_DEBUG) << name << " channel " << cha
@@ -1177,7 +1239,7 @@ void Station::sync_buffer(const char* cha, rc_ptr<MSEEDBackfilling> bf)
                         << endl;
       }
 
-    if(!bf->comitted) return;
+    if(!bf->committed) return;
 
     // Check if this packet filled a gap to the buffer
     while(!bf->buffer.empty())
@@ -1210,15 +1272,18 @@ map<string, rc_ptr<Station> > stations;
 class PluginDef: public CfgElement
   {
   private:
+    const map<string, rc_ptr<StreamProcessorSpec> > sproc_defs;
     string plugin_name;
     string cmd;
     int timeout;
     int start_retry;
     int shutdown_wait;
+    string sproc_name;
     set<string> plugins_defined;
     
   public:
-    PluginDef(const string &name): CfgElement(name) {}
+    PluginDef(const string &name, const map<string, rc_ptr<StreamProcessorSpec> > &sproc_defs_init):
+      CfgElement(name), sproc_defs(sproc_defs_init) {}
     rc_ptr<CfgAttributeMap> start_attributes(ostream &cfglog, const string &name);
     void end_attributes(ostream &cfglog);
   };
@@ -1236,12 +1301,14 @@ rc_ptr<CfgAttributeMap> PluginDef::start_attributes(ostream &cfglog,
     timeout = plugin_timeout;
     start_retry = plugin_start_retry;
     shutdown_wait = plugin_shutdown_wait;
+    sproc_name = "";
     
     rc_ptr<CfgAttributeMap> atts = new CfgAttributeMap;
     atts->add_item(StringAttribute("cmd", cmd));
     atts->add_item(IntAttribute("timeout", timeout, 0, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("start_retry", start_retry, 0, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("shutdown_wait", shutdown_wait, 0, IntAttribute::lower_bound));
+    atts->add_item(StringAttribute("proc", sproc_name));
     return atts;
   }
 
@@ -1253,7 +1320,15 @@ void PluginDef::end_attributes(ostream &cfglog)
         return;
       }
     
-    plugins.push_back(new Plugin(plugin_name, cmd, timeout, start_retry, shutdown_wait));
+    rc_ptr<StreamProcessorSpec> spspec;
+    if(sproc_name.length() != 0 &&
+      (spspec = get_object(sproc_defs, sproc_name)) == NULL)
+      {
+        cfglog << "stream processor '" << sproc_name << "' is not defined" << endl;
+        return;
+      }
+
+    plugins.push_back(new Plugin(plugin_name, cmd, timeout, start_retry, shutdown_wait, spspec));
     plugins_defined.insert(plugin_name);
   }
 
@@ -1351,6 +1426,12 @@ try
         return;
       }
 
+    if(seed_encoding != "steim1" and seed_encoding != "steim2")
+      {
+        cfglog << "unsupported encoding '" << seed_encoding << "'" << endl;
+        return;
+      }
+
     const string station_dir = seedlink_dir + "/" + station_key;
     const string segment_dir = station_dir + "/segments";
     const string test_file1 = station_dir + "/test";
@@ -1397,14 +1478,7 @@ try
         cfglog << "stream processor '" << sproc_name << "' is not defined" << endl;
         return;
       }
-    
-    if(spspec != NULL && no_of_buffers < (3 * spspec->number_of_streams()))
-      {
-        no_of_buffers = 3 * spspec->number_of_streams();
-        cfglog << "increased the number of buffers for station " <<
-          station_key << " to " << no_of_buffers << endl;
-      }
-    
+
     if(connectionManager == NULL)
       {
         rc_ptr<MasterMonitor> monitor = make_master_monitor(MSEED_RECLEN,
@@ -1412,8 +1486,8 @@ try
         connectionManager = make_conn_manager(daemon_name, ident_str,
           ::network_id, monitor, ::request_log, max_connections,
           max_connections_per_ip, trusted_info_level, untrusted_info_level,
-          trusted_window_extraction, untrusted_window_extraction, bytespersec,
-          0, 100000);
+          trusted_window_extraction, untrusted_window_extraction,
+          trusted_websocket, untrusted_websocket, bytespersec, 0, 100000);
       }
     
     rc_ptr<BufferStore> bufs = connectionManager->register_station(station_key,
@@ -1433,28 +1507,9 @@ try
     rc_ptr<Format> log_format = new MSEEDFormat(bufs, MSEED_RECLEN, LogPacket,
       station_name, network_id, "", LOG_STREAM, 0, 0);
 
-    rc_ptr<StreamProcessor> sp;
-
-    if(spspec != NULL)
-      {
-        if(!strcasecmp(seed_encoding.c_str(), "steim1"))
-          {
-            sp = spspec->instance(make_encoder_spec<Steim1Encoder, MSEEDFormat>(bufs,
-              MSEED_RECLEN, Steim1Packet, station_name, network_id));
-          }
-        else if(!strcasecmp(seed_encoding.c_str(), "steim2"))
-          {
-            sp = spspec->instance(make_encoder_spec<Steim2Encoder, MSEEDFormat>(bufs,
-              MSEED_RECLEN, Steim2Packet, station_name, network_id));
-          }
-        else
-          {
-            cfglog << "unsupported encoding '" << seed_encoding << "'" << endl;
-          }
-      }
-    
-    insert_object(stations, new Station(station_key, bufs, log_format, sp,
-      proc_gap_warn, proc_gap_flush, proc_gap_reset, backfill_capacity));
+    insert_object(stations, new Station(station_key, bufs, log_format, spspec,
+      station_name, network_id, seed_encoding, proc_gap_warn, proc_gap_flush,
+      proc_gap_reset, backfill_capacity));
   }
 catch(MonitorRegexError &e)
   {
@@ -1694,7 +1749,7 @@ rc_ptr<CfgAttributeMap> SeedlinkDef::start_attributes(ostream &cfglog,
     atts->add_item(IntAttribute("proc_gap_warn", proc_gap_warn_default, 0, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("proc_gap_flush", proc_gap_flush_default, 0, 100, IntAttribute::lower_bound));
     atts->add_item(IntAttribute("proc_gap_reset", proc_gap_reset_default, 0, 100, IntAttribute::lower_bound));
-    atts->add_item(FloatAttribute("backfill_buffer", backfill_capacity,  86400, 0, FloatAttribute::upper_bound));
+    atts->add_item(FloatAttribute("backfill_buffer", backfill_capacity,  0, 86400, FloatAttribute::upper_bound));
     atts->add_item(IntAttribute("port", tcp_port, 1, 65535));
     atts->add_item(BoolAttribute("request_log", request_log, "enabled", "disabled"));
     atts->add_item(BoolAttribute("stream_check", stream_check, "enabled", "disabled"));
@@ -1702,6 +1757,8 @@ rc_ptr<CfgAttributeMap> SeedlinkDef::start_attributes(ostream &cfglog,
     atts->add_item(InfoLevelAttribute("info_trusted", trusted_info_level));
     atts->add_item(BoolAttribute("window_extraction", untrusted_window_extraction, "enabled", "disabled"));
     atts->add_item(BoolAttribute("window_extraction_trusted", trusted_window_extraction, "enabled", "disabled"));
+    atts->add_item(BoolAttribute("websocket", untrusted_websocket, "enabled", "disabled"));
+    atts->add_item(BoolAttribute("websocket_trusted", trusted_websocket, "enabled", "disabled"));
 
     return atts;
   }
@@ -1764,7 +1821,7 @@ rc_ptr<CfgElementMap> SeedlinkDef::start_children(ostream &cfglog,
       }
     
     rc_ptr<CfgElementMap> elms = new CfgElementMap;
-    elms->add_item(PluginDef("plugin"));
+    elms->add_item(PluginDef("plugin", sproc_defs));
     elms->add_item(StationDef("station", sproc_defs, ip_trusted, ip_access));
 
     return elms;
@@ -1853,7 +1910,7 @@ bool IOHandler::operator()(Fdset &fds)
                 logs(LOG_ERR) << "[" << (*p)->name << "]"
                   " station " << station_key << " is not configured" << endl;
 
-                st = new Station(string(head.station, 0, PLUGIN_SIDLEN));
+                st = new Station(station_key);
                 insert_object(stations, st);
               }
             
@@ -1882,7 +1939,7 @@ bool IOHandler::operator()(Fdset &fds)
               case PluginRawDataTimePacket:
                 DEBUG_MSG("PluginRawDataTimePacket (" << station_key << ", " <<
                   string(head.channel, 0, PLUGIN_CIDLEN) << ")" << endl);
-                st->send_raw_with_time(string(head.channel, 0, PLUGIN_CIDLEN),
+                st->send_raw_with_time(*p, string(head.channel, 0, PLUGIN_CIDLEN),
                   head.pt, head.usec_correction, head.timing_quality,
                   reinterpret_cast<int32_t *>(data_buf), head.data_size);
                 break;
@@ -1890,21 +1947,21 @@ bool IOHandler::operator()(Fdset &fds)
               case PluginRawDataPacket:
                 DEBUG_MSG("PluginRawDataPacket (" << station_key << ", " <<
                   string(head.channel, 0, PLUGIN_CIDLEN) << ")" << endl);
-                st->send_raw(string(head.channel, 0, PLUGIN_CIDLEN),
+                st->send_raw(*p, string(head.channel, 0, PLUGIN_CIDLEN),
                   reinterpret_cast<int32_t *>(data_buf), head.data_size);
                 break;
 
               case PluginRawDataGapPacket:
                 DEBUG_MSG("PluginRawDataGapPacket (" << station_key << ", " <<
                   string(head.channel, 0, PLUGIN_CIDLEN) << ")" << endl);
-                st->send_gap(string(head.channel, 0, PLUGIN_CIDLEN),
+                st->send_gap(*p, string(head.channel, 0, PLUGIN_CIDLEN),
                   head.usec_correction, head.timing_quality, head.data_size);
                 break;
 
               case PluginRawDataFlushPacket:
                 DEBUG_MSG("PluginRawDataFlushPacket (" << station_key << ", " <<
                   string(head.channel, 0, PLUGIN_CIDLEN) << ")" << endl);
-                st->send_flush(string(head.channel, 0, PLUGIN_CIDLEN));
+                st->send_flush(*p, string(head.channel, 0, PLUGIN_CIDLEN));
                 break;
 
               default:

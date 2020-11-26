@@ -6,6 +6,8 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
+
+from __future__ import absolute_import, division, print_function
 import re
 import datetime
 
@@ -106,10 +108,10 @@ def _datetime_fromxml(val = ""):
 		return None
 		
 	m = _rx_datetime.match(val)
-	if m is None:
+	if m == None:
 		m = _rx_date.match(val)
-		if m is None:
-			raise ValueError, "invalid datetime: " + val
+		if m == None:
+			raise ValueError("invalid datetime: " + val)
 
 		(year, month, mday, tz, plusminus, tzhours, tzminutes) = m.groups()
 
@@ -117,7 +119,7 @@ def _datetime_fromxml(val = ""):
 			# ignore time zone
 			obj = datetime.datetime(int(year), int(month), int(mday), 0, 0, 0)
 		except ValueError:
-			raise ValueError, "invalid datetime: " + val
+			raise ValueError("invalid datetime: " + val)
 	else:
 		(year, month, mday, hour, min, sec, sfdot, sfract,
 			tz, plusminus, tzhours, tzminutes) = m.groups()
@@ -137,7 +139,7 @@ def _datetime_fromxml(val = ""):
 					obj += delta
 				
 		except ValueError:
-			raise ValueError, "invalid datetime: " + val
+			raise ValueError("invalid datetime: " + val)
 
 	return obj
 
@@ -151,7 +153,7 @@ def _datetime_toxml(val):
 	elif val is None:
 		return ""
 
-	raise ValueError, "invalid date or datetime object"
+	raise ValueError("invalid date or datetime object")
 
 def _get_blob(e, name):
 	return _string_fromxml(e.findtext(name)).strip()

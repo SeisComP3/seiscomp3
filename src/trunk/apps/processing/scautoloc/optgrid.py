@@ -1,23 +1,32 @@
 #!/usr/bin/env python
 
-import sys, seiscomp3.Client, seiscomp3.DataModel, seis.geo
+import sys
+import seiscomp3.Client
+import seiscomp3.DataModel
+import seis.geo
 
 nearestStations = 300
 
-class _Station:   pass
-class _GridPoint: pass
+
+class _Station:
+    pass
+
+
+class _GridPoint:
+    pass
+
 
 def readGrid(gridfile):
     gridfile = file(gridfile)
     grid = []
-    for line in gridfile.xreadlines():
+    for line in gridfile:
         line = line.strip()
         if line.startswith("#"):
             continue
         line = line.split()
 
         p = _GridPoint()
-        p.lat,p.lon,p.dep,p.rad,p.dist = tuple(map(float, line[:5]))
+        p.lat, p.lon, p.dep, p.rad, p.dist = tuple(map(float, line[:5]))
         p.nmin = int(line[5])
 
 #       print p.lat,p.lon,p.dep,p.rad,p.dist,p.nmin
@@ -31,8 +40,10 @@ def writeGrid(grid, gridfile):
         dist = int(p.dist+1)
         if dist > 180:
             dist = 180
-        gridfile.write("%6.2f %6.2f %5.1f %5.2f %5.1f %d\n" % (p.lat, p.lon, p.dep, p.rad, dist, p.nmin))
+        gridfile.write("%6.2f %6.2f %5.1f %5.2f %5.1f %d\n" %
+                       (p.lat, p.lon, p.dep, p.rad, dist, p.nmin))
     gridfile.close()
+
 
 class InvApp(seiscomp3.Client.Application):
     def __init__(self, argc, argv):
@@ -50,7 +61,8 @@ class InvApp(seiscomp3.Client.Application):
 
         except:
             info = traceback.format_exception(*sys.exc_info())
-            for i in info: sys.stderr.write(i)
+            for i in info:
+                sys.stderr.write(i)
             sys.exit(-1)
 
     def run(self):
@@ -62,15 +74,16 @@ class InvApp(seiscomp3.Client.Application):
             _stations = []
             dbr = seiscomp3.DataModel.DatabaseReader(self.database())
             inv = seiscomp3.DataModel.Inventory()
-            dbr.loadNetworks(inv) 
+            dbr.loadNetworks(inv)
             nnet = inv.networkCount()
-            for inet in xrange(nnet):
+            for inet in range(nnet):
                 net = inv.network(inet)
-                dbr.load(net);
+                dbr.load(net)
                 nsta = net.stationCount()
-                for ista in xrange(nsta):
+                for ista in range(nsta):
                     sta = net.station(ista)
-                    line = "%-2s %-5s %9.4f %9.4f %6.1f" % ( net.code(), sta.code(), sta.latitude(), sta.longitude(), sta.elevation() )
+                    line = "%-2s %-5s %9.4f %9.4f %6.1f" % (
+                        net.code(), sta.code(), sta.latitude(), sta.longitude(), sta.elevation())
 #                   print dir(sta)
                     try:
                         start = sta.start()
@@ -94,7 +107,7 @@ class InvApp(seiscomp3.Client.Application):
             for p in grid:
                 distances = []
                 for s in _stations:
-                    d,a,b = seis.geo.delazi(p.lat,p.lon,s.lat,s.lon)
+                    d, a, b = seis.geo.delazi(p.lat, p.lon, s.lat, s.lon)
                     distances.append(d)
                 distances.sort()
                 if len(distances) >= nearestStations:
@@ -108,13 +121,15 @@ class InvApp(seiscomp3.Client.Application):
 
         except:
             info = traceback.format_exception(*sys.exc_info())
-            for i in info: sys.stderr.write(i)
+            for i in info:
+                sys.stderr.write(i)
             sys.exit(-1)
+
 
 def main():
     app = InvApp(len(sys.argv), sys.argv)
     app()
 
+
 if __name__ == "__main__":
     main()
-

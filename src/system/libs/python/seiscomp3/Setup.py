@@ -10,6 +10,8 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
+from __future__ import division, print_function
+
 import os
 import sys
 import glob
@@ -18,21 +20,19 @@ import getpass
 try:
     # Python 2.5
     from xml.etree import ElementTree
-    from xml.etree.ElementTree import Element
     from xml.parsers.expat import ExpatError as ParseError
 except ImportError:
     from elementtree import ElementTree
-    from elementtree.ElementTree import Element
     from xml.parsers.expat import ExpatError as ParseError
 
-try:
-    import readline
-except:
-    pass
+# Python version depended string conversion
+if sys.version_info[0] < 3:
+    py3input = raw_input #pylint: disable=E0602
+else:
+    py3input = input
 
 
-import seiscomp3.Config
-
+from seiscomp3 import Config
 
 def tagname(element):
     names = element.tag.split("}")
@@ -104,9 +104,9 @@ class Input:
     Setup input wrapper.
     """
 
-    def __init__(self, name, type, default_value=None):
+    def __init__(self, name, t, default_value=None):
         self.name = name
-        self.type = type
+        self.type = t
         self.default_value = default_value
         self.text = None
         self.desc = None
@@ -132,6 +132,11 @@ class Simple:
     passed to all init modules that have a setup method.
     """
 
+    def __init__(self):
+        self.setupTree = SetupNode(None, None, None, None)
+        self.paths = []
+        self.currentNode = None
+
     def run(self, env):
         desc_pattern = os.path.join(
             env.SEISCOMP_ROOT, "etc", "descriptions", "*.xml")
@@ -142,8 +147,8 @@ class Simple:
         for f in xmls:
             try:
                 tree = ElementTree.parse(f)
-            except ParseError, (err):
-                sys.stderr.write("%s: parsing XML failed: %s\n" % (f, err))
+            except ParseError as e:
+                sys.stderr.write("%s: parsing XML failed: %s\n" % (f, e))
                 continue
 
             root = tree.getroot()
@@ -161,7 +166,7 @@ class Simple:
                     sys.stderr.write("%s: skipping module without name\n" % f)
                     continue
 
-                if setup_groups.has_key(modname):
+                if modname in setup_groups:
                     raise Exception(
                         "%s: duplicate module name: %s" % (f, modname))
 
@@ -200,13 +205,12 @@ class Simple:
                 if len(groups) == 0:
                     continue
 
-                try:
+                if modname in setup_groups:
                     setup_groups[modname] += groups
-                except:
+                else:
                     setup_groups[modname] = groups
 
-        self.setupTree = SetupNode(None, None, None, None)
-        self.paths = []
+
 
         for name, groups in sorted(setup_groups.items()):
             self.addGroups(self.setupTree, name, groups)
@@ -215,8 +219,7 @@ class Simple:
         self.setupTree.activeChild = self.setupTree.child
         self.currentNode = self.setupTree.activeChild
 
-        sys.stdout.write(
-            '''\
+        sys.stdout.write('''
 ====================================================================
 SeisComP setup
 ====================================================================
@@ -243,10 +246,10 @@ Hint: Entered values starting with a dot (.) are handled
 
         try:
             self.fillTree()
-        except StopIteration, e:
+        except StopIteration:
             raise Exception("aborted by user")
 
-        cfg = seiscomp3.Config.Config()
+        cfg = Config.Config()
         dumpTree(cfg, self.setupTree)
 
         return cfg
@@ -291,7 +294,7 @@ Hint: Entered values starting with a dot (.) are handled
             node.path = prefix + input_.name
             node.value = input_.default_value
             node.modname = modname
-            node.group = group
+            node.groupname = group
 
             if not last is None:
                 last.next = node
@@ -326,18 +329,18 @@ Hint: Entered values starting with a dot (.) are handled
                 sys.stdout.write("B) Back to last parameter\n")
                 sys.stdout.write("Q) Quit without changes\n")
 
-                value = raw_input('Command? [P]: ').upper()
+                value = py3input('Command? [P]: ').upper()
                 if value == "Q":
                     raise StopIteration()
-                elif value == "P" or not value:
+                if value == "P" or not value:
                     sys.stdout.write("\nRunning setup\n-------------\n\n")
                     return
-                elif value == "B":
+                if value == "B":
                     self.prevStep()
                     continue
-                else:
-                    sys.stdout.write("\nEnter either p, b or q\n")
-                    continue
+
+                sys.stdout.write("\nEnter either p, b or q\n")
+                continue
 
             if not self.currentNode.input:
                 self.nextStep()
@@ -357,7 +360,8 @@ Hint: Entered values starting with a dot (.) are handled
                 node_text = '*' * len(node_text)
                 prompt += " (input not echoed)"
 
-            if (not self.currentNode.input.type or self.currentNode.input.type != "boolean") and len(self.currentNode.input.options) > 0:
+            if (not self.currentNode.input.type or self.currentNode.input.type != "boolean") \
+                and len(self.currentNode.input.options) > 0:
                 idx = 0
                 def_idx = 0
                 for opt in self.currentNode.input.options:
@@ -375,7 +379,7 @@ Hint: Entered values starting with a dot (.) are handled
             if self.currentNode.input.echo == "password":
                 value = getpass.getpass(prompt)
             else:
-                value = raw_input(prompt)
+                value = py3input(prompt)
 
             if not value:
                 value = default_value
@@ -425,7 +429,8 @@ Hint: Entered values starting with a dot (.) are handled
             self.currentNode.value = value
             self.nextStep()
 
-    def valueToString(self, node):
+    @staticmethod
+    def valueToString(node):
         if not node.input.type:
             if node.value is None:
                 return ""
@@ -434,10 +439,9 @@ Hint: Entered values starting with a dot (.) are handled
         if node.input.type == "boolean":
             if node.value == "true":
                 return "yes"
-            elif node.value == "false":
+            if node.value == "false":
                 return "no"
-            else:
-                return "yes"
+            return "yes"
 
         if node.value is None:
             return ""

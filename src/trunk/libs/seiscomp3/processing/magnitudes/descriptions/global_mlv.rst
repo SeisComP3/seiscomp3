@@ -1,8 +1,8 @@
 Amplitude
 ---------
 
-The MLv amplitude calculation is very similar to the original ML, except that
-it is measured on the vertical component.
+The MLv amplitude calculation is very similar to the original :ref:`ML<global_ml>`,
+except that the amplitude is measured on the vertical component.
 
 Station Magnitude
 -----------------
@@ -60,5 +60,5 @@ per network or per station using the configuration variables, e.g.
 | module.trunk.GR.MOX.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
 | module.trunk.GR.MOX.MLv.maxDistanceKm = -1
 
-Set the calibration parameters in the global bindings. By deault MLv is computed
+Set the configuration and calibration parameters in the global bindings. By deault MLv is computed
 by :ref:`scautopick` and is visible in the GUI.

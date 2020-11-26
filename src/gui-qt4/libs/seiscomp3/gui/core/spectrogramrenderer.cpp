@@ -425,7 +425,7 @@ void SpectrogramRenderer::fillRow(SpecImage &img, ComplexDoubleArray *spec,
 	int ofs = img.data.width();
 	int n = spec->size();
 	double maxFreq = img.maximumFrequency;
-	double norm = _scale * double(img.dt);
+	double norm = _scale * 0.5 / img.maximumFrequency;
 
 	// Goto nth column
 	rgb += column;
@@ -587,8 +587,9 @@ void SpectrogramRenderer::fillRow(SpecImage &img, ComplexDoubleArray *spec,
 void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
                                  bool labelLeftAlign, bool renderLabels) {
 	SpecImageList::iterator it;
-	double fmin = -1;
-	double fmax = -1;
+	double fmin = -1, lfmin = 0;
+	double fmax = -1, lfmax = 0;
+
 	double frange;
 
 	_renderedFmin = fmin;
@@ -632,7 +633,13 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 
 	if ( fmin > fmax ) std::swap(fmin, fmax);
 
-	frange = fmax - fmin;
+	if ( _logarithmic ) {
+		lfmin = log10(fmin);
+		lfmax = log10(fmax);
+		frange = lfmax - lfmin;
+	}
+	else
+		frange = fmax - fmin;
 
 	_renderedFmin = fmin;
 	_renderedFmax = fmax;
@@ -672,8 +679,6 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 		double x0 = startTime - t0;
 		double x1 = endTime - t0;
 
-		double ifw = img.maximumFrequency-img.minimumFrequency;
-
 		// Convert start and end time into widget coordinates
 		int ix0 = (int)(x0*dx*w);
 		int ix1 = (int)(x1*dx*w);
@@ -686,26 +691,34 @@ void SpectrogramRenderer::render(QPainter &p, const QRect &rect,
 		int ty1 = h;
 
 		if ( _logarithmic ) {
-			if ( fmin < img.minimumFrequency )
-				ty0 = (int)(log10(((img.minimumFrequency-fmin)/frange)*h)/log(h)*h);
-			else
-				sy0 = (int)(log10(((fmin-img.minimumFrequency)/ifw)*img.data.height())/log10(img.data.height())*img.data.height());
+			if ( img.minimumFrequency > fmin  ) {
+				// Map screen to image
+				ty0 = (log10(img.minimumFrequency) - lfmin) / frange * h;
+			}
+			else /* fmin >= img.minimumFrequency */ {
+				// Map image to screen
+				sy0 = (lfmin - log10(img.minimumFrequency)) / (log10(img.maximumFrequency) - log10(img.minimumFrequency)) * img.data.height();
+			}
 
-			if ( fmax > img.maximumFrequency )
-				ty1 = (int)(log10((1.0-(fmax-img.maximumFrequency)/frange)*h)/log10(h)*h);
-			else
-				sy1 = (int)(log10((1.0-(img.maximumFrequency-fmax)/ifw)*img.data.height())/log10(img.data.height())*img.data.height());
+			if ( img.maximumFrequency < fmax  ) {
+				// Map screen to image
+				ty1 = (log10(img.maximumFrequency) - lfmin) / frange * h;
+			}
+			else /* fmax <= img.maximumFrequency */ {
+				// Map image to screen
+				sy1 = (lfmax - log10(img.minimumFrequency)) / (log10(img.maximumFrequency) - log10(img.minimumFrequency)) * img.data.height();
+			}
 		}
 		else {
-			if ( fmin < img.minimumFrequency )
-				ty0 = (int)((img.minimumFrequency-fmin)/frange * h);
-			else
-				sy0 = (int)((fmin-img.minimumFrequency)/ifw * img.data.height());
+			if ( img.minimumFrequency > fmin )
+				ty0 = (img.minimumFrequency - fmin) / frange * h;
+			else /* fmin >= img.minimumFrequency */
+				sy0 = (fmin - img.minimumFrequency) / (img.maximumFrequency - img.minimumFrequency) * img.data.height();
 
-			if ( fmax > img.maximumFrequency )
-				ty1 = (int)((1.0-(fmax-img.maximumFrequency)/frange) * h);
-			else
-				sy1 = (int)((1.0-(img.maximumFrequency-fmax)/ifw) * img.data.height());
+			if ( img.maximumFrequency < fmax )
+				ty1 = (img.maximumFrequency - fmin) / frange * h;
+			else /* fmax <= img.maximumFrequency */
+				sy1 = (fmax - img.minimumFrequency) / (img.maximumFrequency - img.minimumFrequency) * img.data.height();
 		}
 
 		QRect sourceRect(0,img.data.height()-sy1,img.width,sy1-sy0),

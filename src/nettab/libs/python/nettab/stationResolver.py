@@ -19,9 +19,9 @@ class StationResolver(object):
 		self.initialStations = set()
 
 	def collectStations(self, inventory, initial = False):
-		for ni in xrange(inventory.networkCount()):
+		for ni in range(inventory.networkCount()):
 			n = inventory.network(ni)
-			for si in xrange(n.stationCount()):
+			for si in range(n.stationCount()):
 				s = n.station(si)
 
 				try:

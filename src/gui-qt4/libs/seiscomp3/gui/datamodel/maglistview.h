@@ -62,7 +62,7 @@ class SC_GUI_API MagListView : public QWidget {
 	public:
 		MagListView(Seiscomp::DataModel::DatabaseQuery* reader,
 		              bool withOrigins = true,
-		              QWidget * parent = 0, Qt::WFlags f = 0);
+		              QWidget * parent = 0, Qt::WindowFlags f = 0);
 		~MagListView();
 
 

@@ -155,7 +155,7 @@ class TileDirectory : public TileStore {
 		bool validate(int level, int column, int row) const {
 			QString id = generatePath(level, column, row, _filePattern);
 
-			FILE* fp = fopen(id.toAscii(), "rb");
+			FILE* fp = fopen(id.toLatin1(), "rb");
 			if ( fp == NULL ) return false;
 			fclose(fp);
 
@@ -197,7 +197,7 @@ ImageTree::ImageTree(const MapsDesc &meta) {
 	if ( meta.type.isEmpty() )
 		_store = new TileDirectory;
 	else
-		_store = TileStoreFactory::Create(meta.type.toAscii());
+		_store = TileStoreFactory::Create(meta.type.toLatin1());
 
 	if ( _store ) {
 		_store->setImageTree(this);
@@ -208,7 +208,7 @@ ImageTree::ImageTree(const MapsDesc &meta) {
 
 		if ( !_store->open(desc) ) {
 			SEISCOMP_ERROR("Failed to open tile store at %s",
-			               (const char*)desc.location.toAscii());
+			               (const char*)desc.location.toLatin1());
 			_store = NULL;
 		}
 		else {
@@ -220,7 +220,7 @@ ImageTree::ImageTree(const MapsDesc &meta) {
 	}
 	else {
 		SEISCOMP_ERROR("Could not create tile store: %s",
-		               (const char*)meta.type.toAscii());
+		               (const char*)meta.type.toLatin1());
 	}
 }
 

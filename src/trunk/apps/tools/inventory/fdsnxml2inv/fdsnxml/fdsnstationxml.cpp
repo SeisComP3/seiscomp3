@@ -35,7 +35,7 @@ IMPLEMENT_METAOBJECT(FDSNStationXML)
 
 
 FDSNStationXML::FDSNStationXML() {
-	_schemaVersion = "1.0";
+	_schemaVersion = "1.1";
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

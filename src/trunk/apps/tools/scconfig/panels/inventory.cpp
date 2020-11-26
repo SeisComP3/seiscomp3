@@ -18,7 +18,17 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <locale.h>
 
-#include <QtGui>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDirModel>
+#include <QFileDialog>
+#include <QFileSystemWatcher>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QToolBar>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 
 /** The code to parse VT100 escape sequences is taken from KSysGuard,
@@ -177,7 +187,7 @@ class LogDialog : public QTextEdit {
 			else if ( !c.isNull() ) {
 				insertPlainText("[");
 				QByteArray num;
-				num.setNum(c.toAscii());
+				num.setNum(c.toLatin1());
 				insertPlainText(num);
 				insertPlainText("]");
 			}
@@ -559,16 +569,24 @@ InventoryPanel::InventoryPanel(QWidget *parent)
 	folderViewTools->addSeparator();
 
 	a = folderViewTools->addAction("Import");
+	a->setToolTip("Import inventory files in SC3ML or other supported formats.");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(import()));
 
 	folderViewTools->addSeparator();
 
+	a = folderViewTools->addAction("Check inventory");
+	a->setToolTip("Check consistency of all inventory files and report conflicts.\nApplies: scinv check");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(testInventory()));
+	a = folderViewTools->addAction("Sync keys");
+	a->setToolTip("Synchronize key files from inventory. Delete key files from non-existing stations.\nApplies: scinv keys");
+	connect(a, SIGNAL(triggered(bool)), this, SLOT(syncKeys()));
+	folderViewTools->addSeparator();
 	a = folderViewTools->addAction("Test sync");
+	a->setToolTip("Test synchronization of key files and sending to the messaging.\nApplies: scinv sync --test");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(testSync()));
 	a = folderViewTools->addAction("Sync");
+	a->setToolTip("Synchronize all key files and send to the messaging.\nApplies: scinv sync");
 	connect(a, SIGNAL(triggered(bool)), this, SLOT(sync()));
-	a = folderViewTools->addAction("Sync keys");
-	connect(a, SIGNAL(triggered(bool)), this, SLOT(syncKeys()));
 
 	l->addWidget(folderViewTools);
 	l->addWidget(_folderView);
@@ -692,7 +710,7 @@ void InventoryPanel::inspectFile() {
 	target = QDir::toNativeSeparators(target + "/" + indexes[0].data().toString());
 
 	Seiscomp::IO::XMLArchive ar;
-	if ( !ar.open(target.toAscii()) ) {
+	if ( !ar.open(target.toLatin1()) ) {
 		QMessageBox::critical(NULL, tr("Show content"),
 		                      tr("Could not open file"));
 		return;
@@ -768,6 +786,12 @@ void InventoryPanel::import() {
 	refresh();
 }
 
+
+
+
+void InventoryPanel::testInventory() {
+	runSCProc("scinv", QStringList() << "check");
+}
 
 void InventoryPanel::testSync() {
 	runSCProc("scinv", QStringList() << "sync" << "--test");

@@ -1,4 +1,4 @@
-.TH SL_NEWSLCD 3 2003/11/03
+.TH SL_NEWSLCD 3 2010/03/10
 .SH NAME
 sl_newslcd, sl_freeslcd \- initialize and free SeedLink Connection Description
 
@@ -31,6 +31,7 @@ typedef struct slcd_s
   short int   resume;         /* Boolean flag to control resuming with seq. nums */
   short int   multistation;   /* Boolean flag to indicate multistation mode */
   short int   dialup;         /* Boolean flag to indicate dial-up mode */
+  short int   batchmode;      /* Batch mode (1 - requested, 2 - activated) */
   short int   lastpkttime;    /* Boolean flag to control last packet time usage */
   short int   terminate;      /* Boolean flag to control connection termination */
 

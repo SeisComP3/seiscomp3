@@ -53,6 +53,8 @@ class Reloc : public Client::Application {
 
 			_useWeight = false;
 			_originEvaluationMode = "AUTOMATIC";
+			_adoptFixedDepth = false;
+			_repeatedRelocationCount = 1;
 		}
 
 
@@ -71,6 +73,11 @@ class Reloc : public Client::Application {
 			                                       "This option should not be mixed with --dump.", &_epFile);
 			commandline().addOption("Input", "replace", "Used in combination with --ep and defines if origins are to be replaced "
 			                                            "by their relocated counterparts or just added to the output.");
+			commandline().addGroup("Output");
+			commandline().addOption("Output", "origin-id-suffix", "create origin ID from that of the onput origin plus the specfied suffix", &_originIDSuffix);
+			commandline().addGroup("Profiling");
+			commandline().addOption("Profiling", "measure-relocation-time", "measure and log the time it takes to run each relocation");
+			commandline().addOption("Profiling", "repeated-relocations", "improve measurement of relocation time by running each relocation multiple times", &_repeatedRelocationCount);
 		}
 
 
@@ -81,6 +88,8 @@ class Reloc : public Client::Application {
 
 			_ignoreRejected = false;
 			_allowPreliminary = false;
+			if (_repeatedRelocationCount < 1)
+				_repeatedRelocationCount = 1;
 
 			try { _locatorType = configGetString("reloc.locator"); }
 			catch ( ... ) {}
@@ -94,7 +103,13 @@ class Reloc : public Client::Application {
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
 			catch ( ... ) {}
 
+			try { _adoptFixedDepth = configGetBool("reloc.adoptFixedDepth"); }
+			catch ( ... ) {}
+
 			try { _useWeight = configGetBool("reloc.useWeight"); }
+			catch ( ... ) {}
+
+			try { _originIDSuffix = configGetString("reloc.originIDSuffix"); }
 			catch ( ... ) {}
 
 			if ( !_epFile.empty() )
@@ -138,13 +153,15 @@ class Reloc : public Client::Application {
 		bool run() {
 			if ( !_originIDs.empty() ) {
 				for ( size_t i = 0; i < _originIDs.size(); ++i ) {
-					OriginPtr org = Origin::Cast(query()->getObject(Origin::TypeInfo(), _originIDs[i]));
+					OriginPtr org = _cache.get<Origin>(_originIDs[i]);
 					if ( !org ) {
 						cerr << "ERROR: Origin with id '" << _originIDs[i] << "' has not been found" << endl;
 						continue;
 					}
 
+					std::string publicID = org->publicID();
 					OriginPtr newOrg;
+					SEISCOMP_INFO_S("Processing origin " + publicID);
 					try {
 						newOrg = process(org.get());
 						if ( !newOrg ) {
@@ -155,6 +172,11 @@ class Reloc : public Client::Application {
 					catch ( std::exception &e ) {
 						std::cerr << "ERROR: " << e.what() << std::endl;
 						continue;
+					}
+					if ( !_originIDSuffix.empty()) {
+						SEISCOMP_DEBUG_S("Changed origin ID from " + publicID);
+						newOrg->setPublicID(publicID+_originIDSuffix);
+						SEISCOMP_DEBUG_S("                    to " + newOrg->publicID());
 					}
 
 					// Log warning messages
@@ -207,7 +229,8 @@ class Reloc : public Client::Application {
 
 				for ( int i = 0; i < numberOfOrigins; ++i ) {
 					OriginPtr org = ep->origin(i);
-					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+					std::string publicID = org->publicID();
+					SEISCOMP_INFO_S("Processing origin " + publicID);
 					try {
 						org = process(org.get());
 					}
@@ -215,6 +238,12 @@ class Reloc : public Client::Application {
 						std::cerr << "ERROR: " << e.what() << std::endl;
 						continue;
 					}
+					if ( !_originIDSuffix.empty()) {
+						SEISCOMP_DEBUG_S("Changed origin ID from " + publicID);
+						org->setPublicID(publicID+_originIDSuffix);
+						SEISCOMP_DEBUG_S("                    to " + org->publicID());
+					}
+
 
 					if ( org ) {
 						if ( replace ) {
@@ -357,7 +386,30 @@ class Reloc : public Client::Application {
 				picks.push_back(pick.get());
 			}
 
-			OriginPtr newOrg = _locator->relocate(org);
+			_locator->useFixedDepth(false);
+
+			if ( _adoptFixedDepth ) {
+				try {
+					if ( org->depthType() == OPERATOR_ASSIGNED )
+						_locator->setFixedDepth(org->depth().value());
+				}
+				catch ( ... ) {}
+
+				try {
+					if ( org->depth().uncertainty() == 0.0 )
+						_locator->setFixedDepth(org->depth().value());
+				}
+				catch ( ... ) {}
+			}
+
+			OriginPtr newOrg;
+			Seiscomp::Util::StopWatch timer;
+			timer.restart();
+
+			for (size_t i=0; i<_repeatedRelocationCount; i++)
+				newOrg = _locator->relocate(org);
+			double seconds = (double) timer.elapsed() / _repeatedRelocationCount;
+
 			if ( newOrg ) {
 				if ( _originEvaluationMode == "AUTOMATIC" )
 					newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
@@ -377,6 +429,11 @@ class Reloc : public Client::Application {
 
 				ci->setAgencyID(agencyID());
 				ci->setAuthor(author());
+			}
+
+			if ( commandline().hasOption("measure-relocation-time") ) {
+				double milliseconds = 1000.*seconds;
+				SEISCOMP_INFO("relocation of %s took %.3f ms", org->publicID().c_str(), milliseconds);
 			}
 
 			if ( commandline().hasOption("dump") ) {
@@ -428,10 +485,12 @@ class Reloc : public Client::Application {
 
 	private:
 		std::vector<std::string>   _originIDs;
+		std::string                _originIDSuffix;
 		std::string                _locatorType;
 		std::string                _locatorProfile;
 		bool                       _ignoreRejected;
 		bool                       _allowPreliminary;
+		bool                       _adoptFixedDepth;
 		LocatorInterfacePtr        _locator;
 		PublicObjectTimeSpanBuffer _cache;
 		ObjectLog                 *_inputOrgs;
@@ -439,6 +498,7 @@ class Reloc : public Client::Application {
 		bool                       _useWeight;
 		std::string                _originEvaluationMode;
 		std::string                _epFile;
+		size_t                     _repeatedRelocationCount;
 };
 
 

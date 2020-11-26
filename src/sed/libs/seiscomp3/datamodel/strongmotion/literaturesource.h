@@ -106,7 +106,7 @@ class SC_STRONGMOTION_API LiteratureSource : public Core::BaseObject {
 		const std::string& doi() const;
 
 		void setYear(const OPT(int)& year);
-		int year() const throw(Seiscomp::Core::ValueException);
+		int year() const;
 
 		void setInTitle(const std::string& inTitle);
 		const std::string& inTitle() const;
@@ -121,13 +121,13 @@ class SC_STRONGMOTION_API LiteratureSource : public Core::BaseObject {
 		const std::string& language() const;
 
 		void setTome(const OPT(int)& tome);
-		int tome() const throw(Seiscomp::Core::ValueException);
+		int tome() const;
 
 		void setPageFrom(const OPT(int)& pageFrom);
-		int pageFrom() const throw(Seiscomp::Core::ValueException);
+		int pageFrom() const;
 
 		void setPageTo(const OPT(int)& pageTo);
-		int pageTo() const throw(Seiscomp::Core::ValueException);
+		int pageTo() const;
 
 
 	// ------------------------------------------------------------------

@@ -30,6 +30,8 @@ Furthermore the precision of various values can be configured:
    scheme.precision.depth = 0
    # Precision of latitude/longitude values.
    scheme.precision.location = 2
+   # Precision of magnitude values.
+   scheme.precision.magnitude = 2
    # Precision of pick times (fractions of seconds).
    scheme.precision.pickTime = 1
 
@@ -423,18 +425,35 @@ event list is activated after pressing OK to select another event quickly.
 *Comment*
  contains an optional event comment added as comment with ID *Operator*.
 
+.. _sec-scolv-custom-commit:
+
+As a shortcut for committing with additional options,
+:ref:`custom commit buttons <fig-scolv-custom-commit>` can be added by
+configuration: Add, enable and configure a custom commit profile in
+:confval:`olv.customCommits`.
+With custom commit buttons origin and event paramters can be set, e.g.:
+
+* origin status
+* fixing the origin
+* event type
+* event type certainty
+* magnitude type of the :term:`preferred magnitude`. The preferred magnitude
+  can also be set in the :ref:`magnitude tab <_scolv-sec-magnitude-summary>`.
+* event comments
+
+.. _fig-scolv-custom-commit:
+
+.. figure:: media/scolv/commit-custom.png
+   :width: 16cm
+
+   Custom commit buttons in the Location tab for configured actions and with specific label and color.
+
+
 Magnitudes tab
 ==============
 
 The Magnitude tab shows all available magnitude information for the current
-origin. For each of the different magnitude types (e.g. mb, mB, MLv, Mw(mB)),
-the station magnitudes are shown in the magnitude residual plot and the table.
-The residual plot visualizes the difference between the station magnitude and
-the network magnitude for the different station distances. After relocation the
-magnitude can be recalculated by the "Compute Magnitudes" button in the
-Location tab. Station magnitudes can be deselected for computation.
-Normally, the 25%-trimmed mean is calculated as network magnitude to stabilize
-the result against a few outliers.
+origin. They can be recomputed after creating a new origin, e.g. by relocating.
 
 .. _fig-scolv-magnitudes:
 
@@ -459,19 +478,64 @@ the result against a few outliers.
    (**B1**) Recalculation of the network magnitudes
    (**B2**) Open waveform review
 
+.. _scolv-sec-magnitude-station:
 
-.. important:: Magnitudes can not be recalculated for origins loaded from
+Station magnitudes
+------------------
+
+For each of the different magnitude types (e.g. mb, mB, MLv, Mw(mB)),
+the station magnitudes are shown in the magnitude residual plot and the table.
+The residual plot visualizes the difference between the station magnitude and
+the network magnitude for the different station distances. After relocation the
+magnitudes can be recalculated by the "Compute Magnitudes" button in the
+Location tab.
+
+The station magnitudes can also be recalculated by
+:ref:`interactive waveform analysis<scolv-sec-amplitude-review>`. Press the B2 button to
+start the interactive analysis.
+
+.. important:: Magnitudes cannot be recalculated for origins loaded from
    database. To review magnitudes, create a new origin (relocate), recompute
    magnitudes and then change into this tab to open either the waveform
    review window or to just remove outliers.
+
+.. _scolv-sec-magnitude-network:
+
+Network magnitudes
+------------------
+
+Station magnitudes can be selected or unselected in the list and in the plot of
+station magnitudes for computating the
+corresponding network magntiude. The method and the margins to disregard outliers
+can be selected.
+Normally, the 25%-trimmed mean is calculated as network magnitude to stabilize
+the result against a few outliers.
 
 Magnitudes that were not computed due to missing data or low signa-to-noise
 ratios have a cross button rendered in their tab headers and their value is
 nan (not a number). Furthermore was the status of the magnitude set to
 rejected. To manually review the waveforms and to fine tune the
 parameters, open the waveforms and add at least one station magnitude. Otherwise
-the rejected magnitude will be removed from the origin prio to committing it.
+the rejected magnitude will be removed from the origin prio to committing it. 
 
+.. _scolv-sec-magnitude-summary:
+
+Summary magnitude
+-----------------
+
+The summary magnitude typically is calculated from all network magnitudes
+by :ref:`scmag` and set as preferred magnitude type by :ref:`scevent` after committing
+or confirming an origin. The defaults can be changed by configuring :ref:`scmag`
+and :ref:`scevent`.
+
+However, in combination with :ref:`custom commit buttons <sec-scolv-custom-commit>`,
+the network magnitude to be considered as the preferred can be set by hitting this
+configured button or interactively in the :ref:`magnitude tab <fig-scolv-magnitudes>`
+of scolv. Interactively check the box in the network magnitudes tab, then press the
+custom commit button. Setting the preferred magnitude interactively in the magnitude
+tab takes priority over the configuration of the custom commit button.
+
+.. _scolv-sec-amplitude-review:
 
 Waveform review
 ---------------
@@ -566,7 +630,7 @@ configuration file similar to the manual picker filters:
 
 .. code-block:: sh
 
-   # Define a list of available filters for amplitude picking.
+   # Define a list of available filters for amplitude picking in :confval:`amplitude.filters`.
    # The format is "name1;filter-definition1", "name2;filter-definition2"
    amplitudePicker.filters = "4 pole HP @2s;BW_HP(4,0.5)"
 
@@ -1051,6 +1115,10 @@ actions in scolv.
 | Ctrl+Z               | Go back to last origin (if available)                       |
 +----------------------+-------------------------------------------------------------+
 | Ctrl+Shift+Z         | Go to next origin (if available)                            |
++----------------------+-------------------------------------------------------------+
+| Ctrl+PgUp            | Load previous event from the event list                     |
++----------------------+-------------------------------------------------------------+
+| Ctrl+PgDown          | Load next event from the event list                         |
 +----------------------+-------------------------------------------------------------+
 | Mouse wheel          | Zoom map in/out                                             |
 +----------------------+-------------------------------------------------------------+

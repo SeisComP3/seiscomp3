@@ -71,12 +71,12 @@ CREATE TABLE Meta (
 
 
 CREATE TABLE Object (
-	_oid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	_oid BIGINT PRIMARY KEY AUTOINCREMENT NOT NULL,
 	_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE PublicObject (
-	_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
 	publicID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
 	UNIQUE(publicID),
@@ -106,15 +106,15 @@ INSERT INTO Object(_oid) VALUES (NULL);
 INSERT INTO PublicObject(_oid,publicID) VALUES ((SELECT MAX(_oid) FROM Object),'DataAvailability');
 
 CREATE TABLE EventDescription (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	text VARCHAR NOT NULL,
 	type VARCHAR(64) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,type)
 );
 
@@ -122,12 +122,12 @@ CREATE INDEX EventDescription__parent_oid ON EventDescription(_parent_oid);
 
 CREATE TRIGGER EventDescriptionUpdate UPDATE ON EventDescription
 BEGIN
-  UPDATE EventDescription SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE EventDescription SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Comment (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	text BLOB NOT NULL,
 	id VARCHAR,
@@ -147,8 +147,8 @@ CREATE TABLE Comment (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,id)
 );
 
@@ -156,12 +156,12 @@ CREATE INDEX Comment__parent_oid ON Comment(_parent_oid);
 
 CREATE TRIGGER CommentUpdate UPDATE ON Comment
 BEGIN
-  UPDATE Comment SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Comment SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataUsed (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveType VARCHAR(64) NOT NULL,
 	stationCount INT UNSIGNED NOT NULL,
@@ -169,20 +169,20 @@ CREATE TABLE DataUsed (
 	shortestPeriod DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX DataUsed__parent_oid ON DataUsed(_parent_oid);
 
 CREATE TRIGGER DataUsedUpdate UPDATE ON DataUsed
 BEGIN
-  UPDATE DataUsed SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE DataUsed SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE CompositeTime (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	year_value INT,
 	year_uncertainty INT UNSIGNED,
@@ -225,26 +225,26 @@ CREATE TABLE CompositeTime (
 	second_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX CompositeTime__parent_oid ON CompositeTime(_parent_oid);
 
 CREATE TRIGGER CompositeTimeUpdate UPDATE ON CompositeTime
 BEGIN
-  UPDATE CompositeTime SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE CompositeTime SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE PickReference (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	pickID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,pickID)
 );
 
@@ -253,18 +253,18 @@ CREATE INDEX PickReference_pickID ON PickReference(pickID);
 
 CREATE TRIGGER PickReferenceUpdate UPDATE ON PickReference
 BEGIN
-  UPDATE PickReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE PickReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE AmplitudeReference (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	amplitudeID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,amplitudeID)
 );
 
@@ -273,28 +273,28 @@ CREATE INDEX AmplitudeReference_amplitudeID ON AmplitudeReference(amplitudeID);
 
 CREATE TRIGGER AmplitudeReferenceUpdate UPDATE ON AmplitudeReference
 BEGIN
-  UPDATE AmplitudeReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE AmplitudeReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Reading (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Reading__parent_oid ON Reading(_parent_oid);
 
 CREATE TRIGGER ReadingUpdate UPDATE ON Reading
 BEGIN
-  UPDATE Reading SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Reading SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE MomentTensorComponentContribution (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	phaseCode CHAR NOT NULL,
 	component INT NOT NULL,
@@ -306,8 +306,8 @@ CREATE TABLE MomentTensorComponentContribution (
 	snr DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,phaseCode,component)
 );
 
@@ -315,12 +315,12 @@ CREATE INDEX MomentTensorComponentContribution__parent_oid ON MomentTensorCompon
 
 CREATE TRIGGER MomentTensorComponentContributionUpdate UPDATE ON MomentTensorComponentContribution
 BEGIN
-  UPDATE MomentTensorComponentContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE MomentTensorComponentContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE MomentTensorStationContribution (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	active INTEGER(1) NOT NULL,
 	waveformID_networkCode CHAR,
@@ -333,20 +333,20 @@ CREATE TABLE MomentTensorStationContribution (
 	timeShift DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX MomentTensorStationContribution__parent_oid ON MomentTensorStationContribution(_parent_oid);
 
 CREATE TRIGGER MomentTensorStationContributionUpdate UPDATE ON MomentTensorStationContribution
 BEGIN
-  UPDATE MomentTensorStationContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE MomentTensorStationContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE MomentTensorPhaseSetting (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	lowerPeriod DOUBLE NOT NULL,
@@ -355,8 +355,8 @@ CREATE TABLE MomentTensorPhaseSetting (
 	maximumTimeShift DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code)
 );
 
@@ -364,12 +364,12 @@ CREATE INDEX MomentTensorPhaseSetting__parent_oid ON MomentTensorPhaseSetting(_p
 
 CREATE TRIGGER MomentTensorPhaseSettingUpdate UPDATE ON MomentTensorPhaseSetting
 BEGIN
-  UPDATE MomentTensorPhaseSetting SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE MomentTensorPhaseSetting SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE MomentTensor (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	derivedOriginID VARCHAR NOT NULL,
 	momentMagnitudeID VARCHAR,
@@ -460,8 +460,8 @@ CREATE TABLE MomentTensor (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX MomentTensor__parent_oid ON MomentTensor(_parent_oid);
@@ -469,12 +469,12 @@ CREATE INDEX MomentTensor_derivedOriginID ON MomentTensor(derivedOriginID);
 
 CREATE TRIGGER MomentTensorUpdate UPDATE ON MomentTensor
 BEGIN
-  UPDATE MomentTensor SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE MomentTensor SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE FocalMechanism (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	triggeringOriginID VARCHAR,
 	nodalPlanes_nodalPlane1_strike_value DOUBLE,
@@ -622,8 +622,8 @@ CREATE TABLE FocalMechanism (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX FocalMechanism__parent_oid ON FocalMechanism(_parent_oid);
@@ -631,12 +631,12 @@ CREATE INDEX FocalMechanism_triggeringOriginID ON FocalMechanism(triggeringOrigi
 
 CREATE TRIGGER FocalMechanismUpdate UPDATE ON FocalMechanism
 BEGIN
-  UPDATE FocalMechanism SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE FocalMechanism SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Amplitude (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type CHAR NOT NULL,
 	amplitude_value DOUBLE,
@@ -697,8 +697,8 @@ CREATE TABLE Amplitude (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
@@ -707,20 +707,20 @@ CREATE INDEX Amplitude_pickID ON Amplitude(pickID);
 
 CREATE TRIGGER AmplitudeUpdate UPDATE ON Amplitude
 BEGIN
-  UPDATE Amplitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Amplitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE StationMagnitudeContribution (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	stationMagnitudeID VARCHAR NOT NULL,
 	residual DOUBLE,
 	weight DOUBLE UNSIGNED,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,stationMagnitudeID)
 );
 
@@ -729,12 +729,12 @@ CREATE INDEX StationMagnitudeContribution_stationMagnitudeID ON StationMagnitude
 
 CREATE TRIGGER StationMagnitudeContributionUpdate UPDATE ON StationMagnitudeContribution
 BEGIN
-  UPDATE StationMagnitudeContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE StationMagnitudeContribution SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Magnitude (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	magnitude_value DOUBLE NOT NULL,
 	magnitude_uncertainty DOUBLE UNSIGNED,
@@ -762,20 +762,20 @@ CREATE TABLE Magnitude (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Magnitude__parent_oid ON Magnitude(_parent_oid);
 
 CREATE TRIGGER MagnitudeUpdate UPDATE ON Magnitude
 BEGIN
-  UPDATE Magnitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Magnitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE StationMagnitude (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	originID VARCHAR,
 	magnitude_value DOUBLE NOT NULL,
@@ -808,8 +808,8 @@ CREATE TABLE StationMagnitude (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX StationMagnitude__parent_oid ON StationMagnitude(_parent_oid);
@@ -817,12 +817,12 @@ CREATE INDEX StationMagnitude_amplitudeID ON StationMagnitude(amplitudeID);
 
 CREATE TRIGGER StationMagnitudeUpdate UPDATE ON StationMagnitude
 BEGIN
-  UPDATE StationMagnitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE StationMagnitude SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Pick (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	time_value DATETIME NOT NULL,
 	time_value_ms INTEGER NOT NULL,
@@ -877,8 +877,8 @@ CREATE TABLE Pick (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
@@ -886,18 +886,18 @@ CREATE INDEX Pick_time_value_time_value_ms ON Pick(time_value,time_value_ms);
 
 CREATE TRIGGER PickUpdate UPDATE ON Pick
 BEGIN
-  UPDATE Pick SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Pick SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE OriginReference (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	originID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,originID)
 );
 
@@ -906,18 +906,18 @@ CREATE INDEX OriginReference_originID ON OriginReference(originID);
 
 CREATE TRIGGER OriginReferenceUpdate UPDATE ON OriginReference
 BEGIN
-  UPDATE OriginReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE OriginReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE FocalMechanismReference (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	focalMechanismID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,focalMechanismID)
 );
 
@@ -926,12 +926,12 @@ CREATE INDEX FocalMechanismReference_focalMechanismID ON FocalMechanismReference
 
 CREATE TRIGGER FocalMechanismReferenceUpdate UPDATE ON FocalMechanismReference
 BEGIN
-  UPDATE FocalMechanismReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE FocalMechanismReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Event (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	preferredOriginID VARCHAR,
 	preferredMagnitudeID VARCHAR,
@@ -950,8 +950,8 @@ CREATE TABLE Event (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Event__parent_oid ON Event(_parent_oid);
@@ -961,12 +961,12 @@ CREATE INDEX Event_preferredFocalMechanismID ON Event(preferredFocalMechanismID)
 
 CREATE TRIGGER EventUpdate UPDATE ON Event
 BEGIN
-  UPDATE Event SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Event SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Arrival (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	pickID VARCHAR NOT NULL,
 	phase_code CHAR NOT NULL,
@@ -995,8 +995,8 @@ CREATE TABLE Arrival (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,pickID)
 );
 
@@ -1005,12 +1005,12 @@ CREATE INDEX Arrival_pickID ON Arrival(pickID);
 
 CREATE TRIGGER ArrivalUpdate UPDATE ON Arrival
 BEGIN
-  UPDATE Arrival SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Arrival SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Origin (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	time_value DATETIME NOT NULL,
 	time_value_ms INTEGER NOT NULL,
@@ -1093,8 +1093,8 @@ CREATE TABLE Origin (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
@@ -1102,31 +1102,31 @@ CREATE INDEX Origin_time_value_time_value_ms ON Origin(time_value,time_value_ms)
 
 CREATE TRIGGER OriginUpdate UPDATE ON Origin
 BEGIN
-  UPDATE Origin SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Origin SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Parameter (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	value BLOB,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX Parameter__parent_oid ON Parameter(_parent_oid);
 
 CREATE TRIGGER ParameterUpdate UPDATE ON Parameter
 BEGIN
-  UPDATE Parameter SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Parameter SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ParameterSet (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	baseID VARCHAR,
 	moduleID VARCHAR,
@@ -1134,8 +1134,8 @@ CREATE TABLE ParameterSet (
 	created_ms INTEGER,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX ParameterSet__parent_oid ON ParameterSet(_parent_oid);
@@ -1143,20 +1143,20 @@ CREATE INDEX ParameterSet_baseID ON ParameterSet(baseID);
 
 CREATE TRIGGER ParameterSetUpdate UPDATE ON ParameterSet
 BEGIN
-  UPDATE ParameterSet SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ParameterSet SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Setup (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	parameterSetID VARCHAR,
 	enabled INTEGER(1) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1165,12 +1165,12 @@ CREATE INDEX Setup_parameterSetID ON Setup(parameterSetID);
 
 CREATE TRIGGER SetupUpdate UPDATE ON Setup
 BEGIN
-  UPDATE Setup SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Setup SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ConfigStation (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1187,8 +1187,8 @@ CREATE TABLE ConfigStation (
 	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode)
 );
 
@@ -1196,20 +1196,20 @@ CREATE INDEX ConfigStation__parent_oid ON ConfigStation(_parent_oid);
 
 CREATE TRIGGER ConfigStationUpdate UPDATE ON ConfigStation
 BEGIN
-  UPDATE ConfigStation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ConfigStation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ConfigModule (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	parameterSetID VARCHAR,
 	enabled INTEGER(1) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX ConfigModule__parent_oid ON ConfigModule(_parent_oid);
@@ -1217,12 +1217,12 @@ CREATE INDEX ConfigModule_parameterSetID ON ConfigModule(parameterSetID);
 
 CREATE TRIGGER ConfigModuleUpdate UPDATE ON ConfigModule
 BEGIN
-  UPDATE ConfigModule SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ConfigModule SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE QCLog (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1239,8 +1239,8 @@ CREATE TABLE QCLog (
 	message BLOB NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
 );
 
@@ -1248,12 +1248,12 @@ CREATE INDEX QCLog__parent_oid ON QCLog(_parent_oid);
 
 CREATE TRIGGER QCLogUpdate UPDATE ON QCLog
 BEGIN
-  UPDATE QCLog SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE QCLog SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE WaveformQuality (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1275,8 +1275,8 @@ CREATE TABLE WaveformQuality (
 	windowLength DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,type,parameter)
 );
 
@@ -1286,12 +1286,12 @@ CREATE INDEX WaveformQuality_end_end_ms ON WaveformQuality(end,end_ms);
 
 CREATE TRIGGER WaveformQualityUpdate UPDATE ON WaveformQuality
 BEGIN
-  UPDATE WaveformQuality SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE WaveformQuality SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Outage (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1307,8 +1307,8 @@ CREATE TABLE Outage (
 	end_ms INTEGER,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,start,start_ms)
 );
 
@@ -1316,18 +1316,18 @@ CREATE INDEX Outage__parent_oid ON Outage(_parent_oid);
 
 CREATE TRIGGER OutageUpdate UPDATE ON Outage
 BEGIN
-  UPDATE Outage SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Outage SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE StationReference (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	stationID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,stationID)
 );
 
@@ -1336,12 +1336,12 @@ CREATE INDEX StationReference_stationID ON StationReference(stationID);
 
 CREATE TRIGGER StationReferenceUpdate UPDATE ON StationReference
 BEGIN
-  UPDATE StationReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE StationReference SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE StationGroup (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type VARCHAR(64),
 	code CHAR,
@@ -1355,8 +1355,8 @@ CREATE TABLE StationGroup (
 	elevation DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code)
 );
 
@@ -1364,12 +1364,12 @@ CREATE INDEX StationGroup__parent_oid ON StationGroup(_parent_oid);
 
 CREATE TRIGGER StationGroupUpdate UPDATE ON StationGroup
 BEGIN
-  UPDATE StationGroup SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE StationGroup SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE AuxSource (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1381,8 +1381,8 @@ CREATE TABLE AuxSource (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1390,12 +1390,12 @@ CREATE INDEX AuxSource__parent_oid ON AuxSource(_parent_oid);
 
 CREATE TRIGGER AuxSourceUpdate UPDATE ON AuxSource
 BEGIN
-  UPDATE AuxSource SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE AuxSource SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE AuxDevice (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1405,8 +1405,8 @@ CREATE TABLE AuxDevice (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1414,12 +1414,12 @@ CREATE INDEX AuxDevice__parent_oid ON AuxDevice(_parent_oid);
 
 CREATE TRIGGER AuxDeviceUpdate UPDATE ON AuxDevice
 BEGIN
-  UPDATE AuxDevice SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE AuxDevice SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE SensorCalibration (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
@@ -1433,8 +1433,8 @@ CREATE TABLE SensorCalibration (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
@@ -1442,12 +1442,12 @@ CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
 
 CREATE TRIGGER SensorCalibrationUpdate UPDATE ON SensorCalibration
 BEGIN
-  UPDATE SensorCalibration SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE SensorCalibration SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Sensor (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1462,8 +1462,8 @@ CREATE TABLE Sensor (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1471,12 +1471,12 @@ CREATE INDEX Sensor__parent_oid ON Sensor(_parent_oid);
 
 CREATE TRIGGER SensorUpdate UPDATE ON Sensor
 BEGIN
-  UPDATE Sensor SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Sensor SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ResponsePAZ (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
@@ -1497,8 +1497,8 @@ CREATE TABLE ResponsePAZ (
 	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1506,12 +1506,12 @@ CREATE INDEX ResponsePAZ__parent_oid ON ResponsePAZ(_parent_oid);
 
 CREATE TRIGGER ResponsePAZUpdate UPDATE ON ResponsePAZ
 BEGIN
-  UPDATE ResponsePAZ SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ResponsePAZ SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ResponsePolynomial (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1528,8 +1528,8 @@ CREATE TABLE ResponsePolynomial (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1537,12 +1537,12 @@ CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 
 CREATE TRIGGER ResponsePolynomialUpdate UPDATE ON ResponsePolynomial
 BEGIN
-  UPDATE ResponsePolynomial SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ResponsePolynomial SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ResponseFAP (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1554,8 +1554,8 @@ CREATE TABLE ResponseFAP (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1563,12 +1563,12 @@ CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
 
 CREATE TRIGGER ResponseFAPUpdate UPDATE ON ResponseFAP
 BEGIN
-  UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ResponseFIR (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1584,8 +1584,8 @@ CREATE TABLE ResponseFIR (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1593,12 +1593,12 @@ CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
 
 CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
 BEGIN
-  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ResponseIIR (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
@@ -1617,8 +1617,8 @@ CREATE TABLE ResponseIIR (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1626,12 +1626,12 @@ CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
 
 CREATE TRIGGER ResponseIIRUpdate UPDATE ON ResponseIIR
 BEGIN
-  UPDATE ResponseIIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ResponseIIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataloggerCalibration (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
@@ -1645,8 +1645,8 @@ CREATE TABLE DataloggerCalibration (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
@@ -1654,12 +1654,12 @@ CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_
 
 CREATE TRIGGER DataloggerCalibrationUpdate UPDATE ON DataloggerCalibration
 BEGIN
-  UPDATE DataloggerCalibration SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE DataloggerCalibration SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Decimation (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	sampleRateNumerator INT UNSIGNED NOT NULL,
 	sampleRateDenominator INT UNSIGNED NOT NULL,
@@ -1669,8 +1669,8 @@ CREATE TABLE Decimation (
 	digitalFilterChain_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,sampleRateNumerator,sampleRateDenominator)
 );
 
@@ -1678,12 +1678,12 @@ CREATE INDEX Decimation__parent_oid ON Decimation(_parent_oid);
 
 CREATE TRIGGER DecimationUpdate UPDATE ON Decimation
 BEGIN
-  UPDATE Decimation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Decimation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Datalogger (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	description VARCHAR,
@@ -1700,8 +1700,8 @@ CREATE TABLE Datalogger (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 );
 
@@ -1709,12 +1709,12 @@ CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 
 CREATE TRIGGER DataloggerUpdate UPDATE ON Datalogger
 BEGIN
-  UPDATE Datalogger SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Datalogger SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE AuxStream (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1730,8 +1730,8 @@ CREATE TABLE AuxStream (
 	shared INTEGER(1),
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
@@ -1739,12 +1739,12 @@ CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
 
 CREATE TRIGGER AuxStreamUpdate UPDATE ON AuxStream
 BEGIN
-  UPDATE AuxStream SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE AuxStream SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Stream (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1772,8 +1772,8 @@ CREATE TABLE Stream (
 	shared INTEGER(1),
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
@@ -1781,12 +1781,12 @@ CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
 
 CREATE TRIGGER StreamUpdate UPDATE ON Stream
 BEGIN
-  UPDATE Stream SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Stream SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE SensorLocation (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1798,8 +1798,8 @@ CREATE TABLE SensorLocation (
 	elevation DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
@@ -1807,12 +1807,12 @@ CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
 
 CREATE TRIGGER SensorLocationUpdate UPDATE ON SensorLocation
 BEGIN
-  UPDATE SensorLocation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE SensorLocation SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Station (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1835,8 +1835,8 @@ CREATE TABLE Station (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
@@ -1844,12 +1844,12 @@ CREATE INDEX Station__parent_oid ON Station(_parent_oid);
 
 CREATE TRIGGER StationUpdate UPDATE ON Station
 BEGIN
-  UPDATE Station SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Station SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Network (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1868,8 +1868,8 @@ CREATE TABLE Network (
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
@@ -1877,12 +1877,12 @@ CREATE INDEX Network__parent_oid ON Network(_parent_oid);
 
 CREATE TRIGGER NetworkUpdate UPDATE ON Network
 BEGIN
-  UPDATE Network SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Network SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE RouteArclink (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	address VARCHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1890,8 +1890,8 @@ CREATE TABLE RouteArclink (
 	priority TINYINT UNSIGNED,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,address,start)
 );
 
@@ -1899,19 +1899,19 @@ CREATE INDEX RouteArclink__parent_oid ON RouteArclink(_parent_oid);
 
 CREATE TRIGGER RouteArclinkUpdate UPDATE ON RouteArclink
 BEGIN
-  UPDATE RouteArclink SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE RouteArclink SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE RouteSeedlink (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	address VARCHAR NOT NULL,
 	priority TINYINT UNSIGNED,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,address)
 );
 
@@ -1919,12 +1919,12 @@ CREATE INDEX RouteSeedlink__parent_oid ON RouteSeedlink(_parent_oid);
 
 CREATE TRIGGER RouteSeedlinkUpdate UPDATE ON RouteSeedlink
 BEGIN
-  UPDATE RouteSeedlink SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE RouteSeedlink SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Route (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1932,8 +1932,8 @@ CREATE TABLE Route (
 	streamCode CHAR NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode)
 );
 
@@ -1941,12 +1941,12 @@ CREATE INDEX Route__parent_oid ON Route(_parent_oid);
 
 CREATE TRIGGER RouteUpdate UPDATE ON Route
 BEGIN
-  UPDATE Route SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Route SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE Access (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1957,8 +1957,8 @@ CREATE TABLE Access (
 	end DATETIME,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode,user,start)
 );
 
@@ -1966,12 +1966,12 @@ CREATE INDEX Access__parent_oid ON Access(_parent_oid);
 
 CREATE TRIGGER AccessUpdate UPDATE ON Access
 BEGIN
-  UPDATE Access SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE Access SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE JournalEntry (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	created DATETIME,
 	created_ms INTEGER,
@@ -1981,8 +1981,8 @@ CREATE TABLE JournalEntry (
 	parameters VARCHAR,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE
 );
 
 CREATE INDEX JournalEntry__parent_oid ON JournalEntry(_parent_oid);
@@ -1990,20 +1990,20 @@ CREATE INDEX JournalEntry_objectID ON JournalEntry(objectID);
 
 CREATE TRIGGER JournalEntryUpdate UPDATE ON JournalEntry
 BEGIN
-  UPDATE JournalEntry SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE JournalEntry SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ArclinkUser (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	email VARCHAR,
 	password VARCHAR,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name,email)
 );
 
@@ -2011,12 +2011,12 @@ CREATE INDEX ArclinkUser__parent_oid ON ArclinkUser(_parent_oid);
 
 CREATE TRIGGER ArclinkUserUpdate UPDATE ON ArclinkUser
 BEGIN
-  UPDATE ArclinkUser SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ArclinkUser SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ArclinkStatusLine (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type VARCHAR NOT NULL,
 	status VARCHAR NOT NULL,
@@ -2025,8 +2025,8 @@ CREATE TABLE ArclinkStatusLine (
 	volumeID VARCHAR,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,volumeID,type,status)
 );
 
@@ -2034,12 +2034,12 @@ CREATE INDEX ArclinkStatusLine__parent_oid ON ArclinkStatusLine(_parent_oid);
 
 CREATE TRIGGER ArclinkStatusLineUpdate UPDATE ON ArclinkStatusLine
 BEGIN
-  UPDATE ArclinkStatusLine SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ArclinkStatusLine SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ArclinkRequestLine (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2061,8 +2061,8 @@ CREATE TABLE ArclinkRequestLine (
 	status_volumeID VARCHAR,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,end,end_ms,streamID_networkCode,streamID_stationCode,streamID_locationCode,streamID_channelCode,streamID_resourceURI)
 );
 
@@ -2070,12 +2070,12 @@ CREATE INDEX ArclinkRequestLine__parent_oid ON ArclinkRequestLine(_parent_oid);
 
 CREATE TRIGGER ArclinkRequestLineUpdate UPDATE ON ArclinkRequestLine
 BEGIN
-  UPDATE ArclinkRequestLine SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ArclinkRequestLine SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE ArclinkRequest (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	requestID VARCHAR NOT NULL,
 	userID VARCHAR NOT NULL,
@@ -2095,8 +2095,8 @@ CREATE TABLE ArclinkRequest (
 	summary_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,created,created_ms,requestID,userID)
 );
 
@@ -2104,12 +2104,12 @@ CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 
 CREATE TRIGGER ArclinkRequestUpdate UPDATE ON ArclinkRequest
 BEGIN
-  UPDATE ArclinkRequest SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE ArclinkRequest SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataSegment (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2122,8 +2122,8 @@ CREATE TABLE DataSegment (
 	outOfOrder INTEGER(1) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms)
 );
 
@@ -2134,12 +2134,12 @@ CREATE INDEX DataSegment_updated_updated_ms ON DataSegment(updated,updated_ms);
 
 CREATE TRIGGER DataSegmentUpdate UPDATE ON DataSegment
 BEGIN
-  UPDATE DataSegment SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE DataSegment SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataAttributeExtent (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2152,8 +2152,8 @@ CREATE TABLE DataAttributeExtent (
 	segmentCount INT UNSIGNED NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,sampleRate,quality)
 );
 
@@ -2164,12 +2164,12 @@ CREATE INDEX DataAttributeExtent_updated_updated_ms ON DataAttributeExtent(updat
 
 CREATE TRIGGER DataAttributeExtentUpdate UPDATE ON DataAttributeExtent
 BEGIN
-  UPDATE DataAttributeExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE DataAttributeExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataExtent (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -2187,8 +2187,8 @@ CREATE TABLE DataExtent (
 	segmentOverflow INTEGER(1) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
 	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
 );
 
@@ -2201,5 +2201,5 @@ CREATE INDEX DataExtent_lastScan_lastScan_ms ON DataExtent(lastScan,lastScan_ms)
 
 CREATE TRIGGER DataExtentUpdate UPDATE ON DataExtent
 BEGIN
-  UPDATE DataExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+	UPDATE DataExtent SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;

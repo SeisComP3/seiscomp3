@@ -19,10 +19,16 @@
 #include <fdsnxml/station.h>
 #include <fdsnxml/channel.h>
 #include <fdsnxml/comment.h>
+#include <fdsnxml/agency.h>
+#include <fdsnxml/email.h>
+#include <fdsnxml/name.h>
+#include <fdsnxml/person.h>
+#include <fdsnxml/identifier.h>
 #include <fdsnxml/response.h>
 #include <fdsnxml/responsestage.h>
 #include <fdsnxml/coefficients.h>
 #include <fdsnxml/fir.h>
+#include <fdsnxml/floatnounitwithnumbertype.h>
 #include <fdsnxml/numeratorcoefficient.h>
 #include <fdsnxml/polynomial.h>
 #include <fdsnxml/polynomialcoefficient.h>
@@ -38,6 +44,7 @@
 #include <seiscomp3/datamodel/inventory_package.h>
 #include <seiscomp3/datamodel/dataavailability_package.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <seiscomp3/io/archive/jsonarchive.h>
 #include <seiscomp3/logging/log.h>
 
 #include <rapidjson/document.h>
@@ -122,6 +129,73 @@ void populateStageGain(FDSNXML::ResponseStage *stage, T *resp) {
 	}
 	else
 		stage->setStageGain(Core::None);
+}
+
+
+template<typename T1, typename T2>
+void populateComments(T1 sc, T2 sx) {
+	for ( size_t c = 0; c < sc->commentCount(); ++c ) {
+		DataModel::Comment *comment = sc->comment(c);
+
+		if ( comment->id().substr(0, 19) == "FDSNXML:Identifier/" ) {
+			IO::JSONArchive ar;
+
+			if (!ar.from(comment->text().c_str())) {
+				SEISCOMP_ERROR("failed to parse identifier \"%s\"", comment->text().c_str());
+				continue;
+			}
+
+			string type, value;
+			ar & NAMED_OBJECT_HINT("type", type, Core::Archive::STATIC_TYPE);
+			ar & NAMED_OBJECT_HINT("value", value, Core::Archive::STATIC_TYPE);
+
+			FDSNXML::IdentifierPtr sx_identifier = new FDSNXML::Identifier;
+			sx_identifier->setType(type);
+			sx_identifier->setValue(value);
+			sx->addIdentifier(sx_identifier.get());
+			continue;
+		}
+
+		FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
+		int id;
+		if ( Core::fromString(id, comment->id()) )
+			sx_comment->setId(id);
+		else
+			sx_comment->setId(c+1);
+		sx_comment->setValue(comment->text());
+		try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
+		catch ( ... ) {}
+		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
+		catch ( ... ) {}
+
+		try {
+			DataModel::CreationInfo ci = comment->creationInfo();
+			FDSNXML::PersonPtr author = new FDSNXML::Person;
+
+			if ( ci.author().length() > 0 ) {
+				FDSNXML::NamePtr name = new FDSNXML::Name;
+				name->setText(ci.author());
+				author->addName(name.get());
+			}
+
+			if ( ci.authorURI().length() > 0 ) {
+				FDSNXML::EmailPtr email = new FDSNXML::Email;
+				email->setText(ci.authorURI());
+				author->addEmail(email.get());
+			}
+
+			if ( ci.agencyID().length() > 0 ) {
+				FDSNXML::AgencyPtr agency = new FDSNXML::Agency;
+				agency->setText(ci.agencyID());
+				author->addAgency(agency.get());
+			}
+
+			sx_comment->addAuthor(author.get());
+		}
+		catch ( ... ) {}
+
+		sx->addComment(sx_comment.get());
+	}
 }
 
 
@@ -254,7 +328,7 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseIIR *iir,
 	try {
 		const vector<double> &numerators = iir->numerators().content();
 		for ( size_t c = 0; c < numerators.size(); ++c ) {
-			FDSNXML::FloatTypePtr fv = new FDSNXML::FloatType;
+			FDSNXML::FloatNoUnitWithNumberTypePtr fv = new FDSNXML::FloatNoUnitWithNumberType;
 			fv->setValue(numerators[c]);
 			sx_iir.addNumerator(fv.get());
 		}
@@ -264,7 +338,7 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseIIR *iir,
 	try {
 		const vector<double> &denominators = iir->denominators().content();
 		for ( size_t c = 0; c < denominators.size(); ++c ) {
-			FDSNXML::FloatTypePtr fv = new FDSNXML::FloatType;
+			FDSNXML::FloatNoUnitWithNumberTypePtr fv = new FDSNXML::FloatNoUnitWithNumberType;
 			fv->setValue(denominators[c]);
 			sx_iir.addDenominator(fv.get());
 		}
@@ -558,21 +632,7 @@ bool Convert2FDSNStaXML::push(const DataModel::Inventory *inv) {
 		// SelectedNumberOfStations is updated at the end to reflect the
 		// numbers of stations added to this network in this run
 
-		for ( size_t c = 0; c < net->commentCount(); ++c ) {
-			DataModel::Comment *comment = net->comment(c);
-			FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
-			int id;
-			if ( Core::fromString(id, comment->id()) )
-				sx_comment->setId(id);
-			else
-				sx_comment->setId(c+1);
-			sx_comment->setValue(comment->text());
-			try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
-			catch ( ... ) {}
-			try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
-			catch ( ... ) {}
-			sx_net->addComment(sx_comment.get());
-		}
+		populateComments(net, sx_net);
 
 		for ( size_t s = 0; s < net->stationCount(); ++s ) {
 			DataModel::Station *sta = net->station(s);
@@ -636,21 +696,7 @@ bool Convert2FDSNStaXML::process(FDSNXML::Network *sx_net,
 		site.setName(sta->description());
 	sx_sta->setSite(site);
 
-	for ( size_t c = 0; c < sta->commentCount(); ++c ) {
-		DataModel::Comment *comment = sta->comment(c);
-		FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
-		int id;
-		if ( Core::fromString(id, comment->id()) )
-			sx_comment->setId(id);
-		else
-			sx_comment->setId(c+1);
-		sx_comment->setValue(comment->text());
-		try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
-		catch ( ... ) {}
-		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
-		catch ( ... ) {}
-		sx_sta->addComment(sx_comment.get());
-	}
+	populateComments(sta, sx_sta);
 
 	for ( size_t l = 0; l < sta->sensorLocationCount(); ++l ) {
 		if ( _interrupted ) break;
@@ -733,8 +779,6 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 		sx_chan->setSampleRate(Core::None);
 		sx_chan->setSampleRateRatio(Core::None);
 	}
-
-	sx_chan->setStorageFormat(stream->format());
 
 	// Remove all existing responses and regenerate them with the
 	// following information
@@ -880,21 +924,7 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 	}
 	catch ( ... ) {}
 
-	for ( size_t c = 0; c < stream->commentCount(); ++c ) {
-		DataModel::Comment *comment = stream->comment(c);
-		FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
-		int id;
-		if ( Core::fromString(id, comment->id()) )
-			sx_comment->setId(id);
-		else
-			sx_comment->setId(c+1);
-		sx_comment->setValue(comment->text());
-		try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
-		catch ( ... ) {}
-		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
-		catch ( ... ) {}
-		sx_chan->addComment(sx_comment.get());
-	}
+	populateComments(stream, sx_chan);
 
 	// Populate availability if available
 	if ( !_dataAvailabilityLookup.empty() ) {
@@ -1127,7 +1157,7 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
-                                 const DataModel::Stream *stream,
+                                 const DataModel::Stream *,
                                  const DataModel::Sensor *sensor) {
 	FDSNXML::Response *resp = NULL;
 	try { resp = &sx_chan->response(); } catch ( ...) {}

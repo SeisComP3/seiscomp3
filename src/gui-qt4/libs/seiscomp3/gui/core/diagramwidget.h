@@ -59,7 +59,7 @@ class SC_GUI_API DiagramWidget : public QWidget {
 	//  X'truction
 	// ------------------------------------------------------------------
 	public:
-		DiagramWidget(QWidget * parent = 0, Type type = Rectangular, Qt::WFlags f = 0);
+		DiagramWidget(QWidget * parent = 0, Type type = Rectangular, Qt::WindowFlags f = 0);
 		~DiagramWidget();
 
 

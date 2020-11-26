@@ -2535,98 +2535,69 @@ class InitialTaperFilterD(InPlaceFilterD):
 InitialTaperFilterD_swigregister = _Math.InitialTaperFilterD_swigregister
 InitialTaperFilterD_swigregister(InitialTaperFilterD)
 
-class _Biquad(_object):
-    """Proxy of C++ Seiscomp::Math::Filtering::IIR::_Biquad class."""
+class BiquadCoefficients(_object):
+    """Proxy of C++ Seiscomp::Math::Filtering::IIR::BiquadCoefficients class."""
 
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _Biquad, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BiquadCoefficients, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, _Biquad, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, BiquadCoefficients, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1, double _a1=0, double _a2=0, double _b0=1, double _b1=0, double _b2=0) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1, double _a1=0, double _a2=0, double _b0=1, double _b1=0) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1, double _a1=0, double _a2=0, double _b0=1) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1, double _a1=0, double _a2=0) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1, double _a1=0) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, double _a0=1) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self) -> _Biquad
-        __init__(Seiscomp::Math::Filtering::IIR::_Biquad self, _Biquad other) -> _Biquad
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0, double b1=0, double b2=0, double a0=1, double a1=0, double a2=0) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0, double b1=0, double b2=0, double a0=1, double a1=0) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0, double b1=0, double b2=0, double a0=1) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0, double b1=0, double b2=0) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0, double b1=0) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, double b0=0) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self) -> BiquadCoefficients
+        __init__(Seiscomp::Math::Filtering::IIR::BiquadCoefficients self, BiquadCoefficients bq) -> BiquadCoefficients
         """
-        this = _Math.new__Biquad(*args)
+        this = _Math.new_BiquadCoefficients(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
 
-    def set(self, _a0, _a1, _a2, _b0, _b1, _b2):
-        """set(_Biquad self, double _a0, double _a1, double _a2, double _b0, double _b1, double _b2)"""
-        return _Math._Biquad_set(self, _a0, _a1, _a2, _b0, _b1, _b2)
+    def set(self, b0, b1, b2, a0, a1, a2):
+        """set(BiquadCoefficients self, double b0, double b1, double b2, double a0, double a1, double a2)"""
+        return _Math.BiquadCoefficients_set(self, b0, b1, b2, a0, a1, a2)
 
-
-    def delay(self, nsamp, delay_val):
-        """delay(_Biquad self, int nsamp, double * delay_val) -> int"""
-        return _Math._Biquad_delay(self, nsamp, delay_val)
-
-
-    def delay2(self, nsamp, delay_val):
-        """delay2(_Biquad self, int nsamp, double * delay_val) -> int"""
-        return _Math._Biquad_delay2(self, nsamp, delay_val)
-
-
-    def delay_one(self, freq, delay):
-        """delay_one(_Biquad self, double freq, double * delay) -> int"""
-        return _Math._Biquad_delay_one(self, freq, delay)
-
-
-    def reset(self):
-        """reset(_Biquad self)"""
-        return _Math._Biquad_reset(self)
-
-
-    def _print(self):
-        """_print(_Biquad self) -> std::string"""
-        return _Math._Biquad__print(self)
-
-    __swig_setmethods__["a0"] = _Math._Biquad_a0_set
-    __swig_getmethods__["a0"] = _Math._Biquad_a0_get
+    __swig_setmethods__["b0"] = _Math.BiquadCoefficients_b0_set
+    __swig_getmethods__["b0"] = _Math.BiquadCoefficients_b0_get
     if _newclass:
-        a0 = _swig_property(_Math._Biquad_a0_get, _Math._Biquad_a0_set)
-    __swig_setmethods__["a1"] = _Math._Biquad_a1_set
-    __swig_getmethods__["a1"] = _Math._Biquad_a1_get
+        b0 = _swig_property(_Math.BiquadCoefficients_b0_get, _Math.BiquadCoefficients_b0_set)
+    __swig_setmethods__["b1"] = _Math.BiquadCoefficients_b1_set
+    __swig_getmethods__["b1"] = _Math.BiquadCoefficients_b1_get
     if _newclass:
-        a1 = _swig_property(_Math._Biquad_a1_get, _Math._Biquad_a1_set)
-    __swig_setmethods__["a2"] = _Math._Biquad_a2_set
-    __swig_getmethods__["a2"] = _Math._Biquad_a2_get
+        b1 = _swig_property(_Math.BiquadCoefficients_b1_get, _Math.BiquadCoefficients_b1_set)
+    __swig_setmethods__["b2"] = _Math.BiquadCoefficients_b2_set
+    __swig_getmethods__["b2"] = _Math.BiquadCoefficients_b2_get
     if _newclass:
-        a2 = _swig_property(_Math._Biquad_a2_get, _Math._Biquad_a2_set)
-    __swig_setmethods__["b0"] = _Math._Biquad_b0_set
-    __swig_getmethods__["b0"] = _Math._Biquad_b0_get
+        b2 = _swig_property(_Math.BiquadCoefficients_b2_get, _Math.BiquadCoefficients_b2_set)
+    __swig_setmethods__["a0"] = _Math.BiquadCoefficients_a0_set
+    __swig_getmethods__["a0"] = _Math.BiquadCoefficients_a0_get
     if _newclass:
-        b0 = _swig_property(_Math._Biquad_b0_get, _Math._Biquad_b0_set)
-    __swig_setmethods__["b1"] = _Math._Biquad_b1_set
-    __swig_getmethods__["b1"] = _Math._Biquad_b1_get
+        a0 = _swig_property(_Math.BiquadCoefficients_a0_get, _Math.BiquadCoefficients_a0_set)
+    __swig_setmethods__["a1"] = _Math.BiquadCoefficients_a1_set
+    __swig_getmethods__["a1"] = _Math.BiquadCoefficients_a1_get
     if _newclass:
-        b1 = _swig_property(_Math._Biquad_b1_get, _Math._Biquad_b1_set)
-    __swig_setmethods__["b2"] = _Math._Biquad_b2_set
-    __swig_getmethods__["b2"] = _Math._Biquad_b2_get
+        a1 = _swig_property(_Math.BiquadCoefficients_a1_get, _Math.BiquadCoefficients_a1_set)
+    __swig_setmethods__["a2"] = _Math.BiquadCoefficients_a2_set
+    __swig_getmethods__["a2"] = _Math.BiquadCoefficients_a2_get
     if _newclass:
-        b2 = _swig_property(_Math._Biquad_b2_get, _Math._Biquad_b2_set)
-    __swig_setmethods__["v1"] = _Math._Biquad_v1_set
-    __swig_getmethods__["v1"] = _Math._Biquad_v1_get
-    if _newclass:
-        v1 = _swig_property(_Math._Biquad_v1_get, _Math._Biquad_v1_set)
-    __swig_setmethods__["v2"] = _Math._Biquad_v2_set
-    __swig_getmethods__["v2"] = _Math._Biquad_v2_get
-    if _newclass:
-        v2 = _swig_property(_Math._Biquad_v2_get, _Math._Biquad_v2_set)
-    __swig_destroy__ = _Math.delete__Biquad
+        a2 = _swig_property(_Math.BiquadCoefficients_a2_get, _Math.BiquadCoefficients_a2_set)
+    __swig_destroy__ = _Math.delete_BiquadCoefficients
     __del__ = lambda self: None
-_Biquad_swigregister = _Math._Biquad_swigregister
-_Biquad_swigregister(_Biquad)
+BiquadCoefficients_swigregister = _Math.BiquadCoefficients_swigregister
+BiquadCoefficients_swigregister(BiquadCoefficients)
 
+
+def __lshift__(os, biq):
+    """__lshift__(std::ostream & os, BiquadCoefficients biq) -> std::ostream &"""
+    return _Math.__lshift__(os, biq)
 class BiquadCascadeF(InPlaceFilterF):
     """Proxy of C++ Seiscomp::Math::Filtering::IIR::BiquadCascade<(float)> class."""
 
@@ -2650,12 +2621,25 @@ class BiquadCascadeF(InPlaceFilterF):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _Math.delete_BiquadCascadeF
-    __del__ = lambda self: None
 
     def size(self):
         """size(BiquadCascadeF self) -> int"""
         return _Math.BiquadCascadeF_size(self)
+
+
+    def reset(self):
+        """reset(BiquadCascadeF self)"""
+        return _Math.BiquadCascadeF_reset(self)
+
+
+    def append(self, biq):
+        """append(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquad< float > const & biq)"""
+        return _Math.BiquadCascadeF_append(self, biq)
+
+
+    def set(self, biquads):
+        """set(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquads const & biquads)"""
+        return _Math.BiquadCascadeF_set(self, biquads)
 
 
     def apply(self, n, inout):
@@ -2668,21 +2652,6 @@ class BiquadCascadeF(InPlaceFilterF):
         return _Math.BiquadCascadeF_clone(self)
 
 
-    def filter(self, f):
-        """filter(BiquadCascadeF self, vectorf f) -> vectorf"""
-        return _Math.BiquadCascadeF_filter(self, f)
-
-
-    def reset(self):
-        """reset(BiquadCascadeF self)"""
-        return _Math.BiquadCascadeF_reset(self)
-
-
-    def _print(self):
-        """_print(BiquadCascadeF self) -> std::string"""
-        return _Math.BiquadCascadeF__print(self)
-
-
     def setSamplingFrequency(self, arg2):
         """setSamplingFrequency(BiquadCascadeF self, double arg2)"""
         return _Math.BiquadCascadeF_setSamplingFrequency(self, arg2)
@@ -2692,11 +2661,8 @@ class BiquadCascadeF(InPlaceFilterF):
         """setParameters(BiquadCascadeF self, int n, double const * params) -> int"""
         return _Math.BiquadCascadeF_setParameters(self, n, params)
 
-
-    def append(self, biq):
-        """append(BiquadCascadeF self, Seiscomp::Math::Filtering::IIR::Biquad< float > const & biq)"""
-        return _Math.BiquadCascadeF_append(self, biq)
-
+    __swig_destroy__ = _Math.delete_BiquadCascadeF
+    __del__ = lambda self: None
 BiquadCascadeF_swigregister = _Math.BiquadCascadeF_swigregister
 BiquadCascadeF_swigregister(BiquadCascadeF)
 
@@ -2723,12 +2689,25 @@ class BiquadCascadeD(InPlaceFilterD):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _Math.delete_BiquadCascadeD
-    __del__ = lambda self: None
 
     def size(self):
         """size(BiquadCascadeD self) -> int"""
         return _Math.BiquadCascadeD_size(self)
+
+
+    def reset(self):
+        """reset(BiquadCascadeD self)"""
+        return _Math.BiquadCascadeD_reset(self)
+
+
+    def append(self, biq):
+        """append(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquad< double > const & biq)"""
+        return _Math.BiquadCascadeD_append(self, biq)
+
+
+    def set(self, biquads):
+        """set(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquads const & biquads)"""
+        return _Math.BiquadCascadeD_set(self, biquads)
 
 
     def apply(self, n, inout):
@@ -2741,21 +2720,6 @@ class BiquadCascadeD(InPlaceFilterD):
         return _Math.BiquadCascadeD_clone(self)
 
 
-    def filter(self, f):
-        """filter(BiquadCascadeD self, vectord f) -> vectord"""
-        return _Math.BiquadCascadeD_filter(self, f)
-
-
-    def reset(self):
-        """reset(BiquadCascadeD self)"""
-        return _Math.BiquadCascadeD_reset(self)
-
-
-    def _print(self):
-        """_print(BiquadCascadeD self) -> std::string"""
-        return _Math.BiquadCascadeD__print(self)
-
-
     def setSamplingFrequency(self, arg2):
         """setSamplingFrequency(BiquadCascadeD self, double arg2)"""
         return _Math.BiquadCascadeD_setSamplingFrequency(self, arg2)
@@ -2765,11 +2729,8 @@ class BiquadCascadeD(InPlaceFilterD):
         """setParameters(BiquadCascadeD self, int n, double const * params) -> int"""
         return _Math.BiquadCascadeD_setParameters(self, n, params)
 
-
-    def append(self, biq):
-        """append(BiquadCascadeD self, Seiscomp::Math::Filtering::IIR::Biquad< double > const & biq)"""
-        return _Math.BiquadCascadeD_append(self, biq)
-
+    __swig_destroy__ = _Math.delete_BiquadCascadeD
+    __del__ = lambda self: None
 BiquadCascadeD_swigregister = _Math.BiquadCascadeD_swigregister
 BiquadCascadeD_swigregister(BiquadCascadeD)
 
@@ -2786,14 +2747,14 @@ class ButterworthLowpassF(BiquadCascadeF):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthLowpassF, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fc=0.7, fsamp=0):
+    def __init__(self, order=3, fmax=0.7, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self, int order=3, double fc=0.7, double fsamp=0) -> ButterworthLowpassF
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self, int order=3, double fc=0.7) -> ButterworthLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self, int order=3, double fmax=0.7, double fsamp=0) -> ButterworthLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self, int order=3, double fmax=0.7) -> ButterworthLowpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self, int order=3) -> ButterworthLowpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(float)> self) -> ButterworthLowpassF
         """
-        this = _Math.new_ButterworthLowpassF(order, fc, fsamp)
+        this = _Math.new_ButterworthLowpassF(order, fmax, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2831,14 +2792,14 @@ class ButterworthLowpassD(BiquadCascadeD):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthLowpassD, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fc=0.7, fsamp=0):
+    def __init__(self, order=3, fmax=0.7, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self, int order=3, double fc=0.7, double fsamp=0) -> ButterworthLowpassD
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self, int order=3, double fc=0.7) -> ButterworthLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self, int order=3, double fmax=0.7, double fsamp=0) -> ButterworthLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self, int order=3, double fmax=0.7) -> ButterworthLowpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self, int order=3) -> ButterworthLowpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthLowpass<(double)> self) -> ButterworthLowpassD
         """
-        this = _Math.new_ButterworthLowpassD(order, fc, fsamp)
+        this = _Math.new_ButterworthLowpassD(order, fmax, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2876,14 +2837,14 @@ class ButterworthHighpassF(BiquadCascadeF):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthHighpassF, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fc=2.0, fsamp=0):
+    def __init__(self, order=3, fmin=2.0, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self, int order=3, double fc=2.0, double fsamp=0) -> ButterworthHighpassF
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self, int order=3, double fc=2.0) -> ButterworthHighpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self, int order=3, double fmin=2.0, double fsamp=0) -> ButterworthHighpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self, int order=3, double fmin=2.0) -> ButterworthHighpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self, int order=3) -> ButterworthHighpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(float)> self) -> ButterworthHighpassF
         """
-        this = _Math.new_ButterworthHighpassF(order, fc, fsamp)
+        this = _Math.new_ButterworthHighpassF(order, fmin, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2921,14 +2882,14 @@ class ButterworthHighpassD(BiquadCascadeD):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthHighpassD, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fc=2.0, fsamp=0):
+    def __init__(self, order=3, fmin=2.0, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self, int order=3, double fc=2.0, double fsamp=0) -> ButterworthHighpassD
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self, int order=3, double fc=2.0) -> ButterworthHighpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self, int order=3, double fmin=2.0, double fsamp=0) -> ButterworthHighpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self, int order=3, double fmin=2.0) -> ButterworthHighpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self, int order=3) -> ButterworthHighpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighpass<(double)> self) -> ButterworthHighpassD
         """
-        this = _Math.new_ButterworthHighpassD(order, fc, fsamp)
+        this = _Math.new_ButterworthHighpassD(order, fmin, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2966,16 +2927,15 @@ class ButterworthBandpassF(BiquadCascadeF):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthBandpassF, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0, init=False):
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0, bool init=False) -> ButterworthBandpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthBandpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthBandpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self, int order=3, double fmin=0.7) -> ButterworthBandpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self, int order=3) -> ButterworthBandpassF
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(float)> self) -> ButterworthBandpassF
         """
-        this = _Math.new_ButterworthBandpassF(order, fmin, fmax, fsamp, init)
+        this = _Math.new_ButterworthBandpassF(order, fmin, fmax, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -2995,24 +2955,6 @@ class ButterworthBandpassF(BiquadCascadeF):
         """clone(ButterworthBandpassF self) -> InPlaceFilterF"""
         return _Math.ButterworthBandpassF_clone(self)
 
-
-    def apply(self, n, inout):
-        """apply(ButterworthBandpassF self, int n, float * inout)"""
-        return _Math.ButterworthBandpassF_apply(self, n, inout)
-
-
-    def reset(self):
-        """reset(ButterworthBandpassF self)"""
-        return _Math.ButterworthBandpassF_reset(self)
-
-
-    def handleGap(self, n=0):
-        """
-        handleGap(ButterworthBandpassF self, int n=0)
-        handleGap(ButterworthBandpassF self)
-        """
-        return _Math.ButterworthBandpassF_handleGap(self, n)
-
     __swig_destroy__ = _Math.delete_ButterworthBandpassF
     __del__ = lambda self: None
 ButterworthBandpassF_swigregister = _Math.ButterworthBandpassF_swigregister
@@ -3031,16 +2973,15 @@ class ButterworthBandpassD(BiquadCascadeD):
     __getattr__ = lambda self, name: _swig_getattr(self, ButterworthBandpassD, name)
     __repr__ = _swig_repr
 
-    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0, init=False):
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
         """
-        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0, bool init=False) -> ButterworthBandpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthBandpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthBandpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self, int order=3, double fmin=0.7) -> ButterworthBandpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self, int order=3) -> ButterworthBandpassD
         __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandpass<(double)> self) -> ButterworthBandpassD
         """
-        this = _Math.new_ButterworthBandpassD(order, fmin, fmax, fsamp, init)
+        this = _Math.new_ButterworthBandpassD(order, fmin, fmax, fsamp)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -3060,28 +3001,194 @@ class ButterworthBandpassD(BiquadCascadeD):
         """clone(ButterworthBandpassD self) -> InPlaceFilterD"""
         return _Math.ButterworthBandpassD_clone(self)
 
-
-    def apply(self, n, inout):
-        """apply(ButterworthBandpassD self, int n, double * inout)"""
-        return _Math.ButterworthBandpassD_apply(self, n, inout)
-
-
-    def reset(self):
-        """reset(ButterworthBandpassD self)"""
-        return _Math.ButterworthBandpassD_reset(self)
-
-
-    def handleGap(self, n=0):
-        """
-        handleGap(ButterworthBandpassD self, int n=0)
-        handleGap(ButterworthBandpassD self)
-        """
-        return _Math.ButterworthBandpassD_handleGap(self, n)
-
     __swig_destroy__ = _Math.delete_ButterworthBandpassD
     __del__ = lambda self: None
 ButterworthBandpassD_swigregister = _Math.ButterworthBandpassD_swigregister
 ButterworthBandpassD_swigregister(ButterworthBandpassD)
+
+class ButterworthHighLowpassF(BiquadCascadeF):
+    """Proxy of C++ Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [BiquadCascadeF]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ButterworthHighLowpassF, name, value)
+    __swig_getmethods__ = {}
+    for _s in [BiquadCascadeF]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ButterworthHighLowpassF, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
+        """
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthHighLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthHighLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> self, int order=3, double fmin=0.7) -> ButterworthHighLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> self, int order=3) -> ButterworthHighLowpassF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(float)> self) -> ButterworthHighLowpassF
+        """
+        this = _Math.new_ButterworthHighLowpassF(order, fmin, fmax, fsamp)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def setSamplingFrequency(self, fsamp):
+        """setSamplingFrequency(ButterworthHighLowpassF self, double fsamp)"""
+        return _Math.ButterworthHighLowpassF_setSamplingFrequency(self, fsamp)
+
+
+    def setParameters(self, n, params):
+        """setParameters(ButterworthHighLowpassF self, int n, double const * params) -> int"""
+        return _Math.ButterworthHighLowpassF_setParameters(self, n, params)
+
+
+    def clone(self):
+        """clone(ButterworthHighLowpassF self) -> InPlaceFilterF"""
+        return _Math.ButterworthHighLowpassF_clone(self)
+
+    __swig_destroy__ = _Math.delete_ButterworthHighLowpassF
+    __del__ = lambda self: None
+ButterworthHighLowpassF_swigregister = _Math.ButterworthHighLowpassF_swigregister
+ButterworthHighLowpassF_swigregister(ButterworthHighLowpassF)
+
+class ButterworthHighLowpassD(BiquadCascadeD):
+    """Proxy of C++ Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [BiquadCascadeD]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ButterworthHighLowpassD, name, value)
+    __swig_getmethods__ = {}
+    for _s in [BiquadCascadeD]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ButterworthHighLowpassD, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
+        """
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthHighLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthHighLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> self, int order=3, double fmin=0.7) -> ButterworthHighLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> self, int order=3) -> ButterworthHighLowpassD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthHighLowpass<(double)> self) -> ButterworthHighLowpassD
+        """
+        this = _Math.new_ButterworthHighLowpassD(order, fmin, fmax, fsamp)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def setSamplingFrequency(self, fsamp):
+        """setSamplingFrequency(ButterworthHighLowpassD self, double fsamp)"""
+        return _Math.ButterworthHighLowpassD_setSamplingFrequency(self, fsamp)
+
+
+    def setParameters(self, n, params):
+        """setParameters(ButterworthHighLowpassD self, int n, double const * params) -> int"""
+        return _Math.ButterworthHighLowpassD_setParameters(self, n, params)
+
+
+    def clone(self):
+        """clone(ButterworthHighLowpassD self) -> InPlaceFilterD"""
+        return _Math.ButterworthHighLowpassD_clone(self)
+
+    __swig_destroy__ = _Math.delete_ButterworthHighLowpassD
+    __del__ = lambda self: None
+ButterworthHighLowpassD_swigregister = _Math.ButterworthHighLowpassD_swigregister
+ButterworthHighLowpassD_swigregister(ButterworthHighLowpassD)
+
+class ButterworthBandstopF(BiquadCascadeF):
+    """Proxy of C++ Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [BiquadCascadeF]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ButterworthBandstopF, name, value)
+    __swig_getmethods__ = {}
+    for _s in [BiquadCascadeF]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ButterworthBandstopF, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
+        """
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthBandstopF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthBandstopF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> self, int order=3, double fmin=0.7) -> ButterworthBandstopF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> self, int order=3) -> ButterworthBandstopF
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(float)> self) -> ButterworthBandstopF
+        """
+        this = _Math.new_ButterworthBandstopF(order, fmin, fmax, fsamp)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def setSamplingFrequency(self, fsamp):
+        """setSamplingFrequency(ButterworthBandstopF self, double fsamp)"""
+        return _Math.ButterworthBandstopF_setSamplingFrequency(self, fsamp)
+
+
+    def setParameters(self, n, params):
+        """setParameters(ButterworthBandstopF self, int n, double const * params) -> int"""
+        return _Math.ButterworthBandstopF_setParameters(self, n, params)
+
+
+    def clone(self):
+        """clone(ButterworthBandstopF self) -> InPlaceFilterF"""
+        return _Math.ButterworthBandstopF_clone(self)
+
+    __swig_destroy__ = _Math.delete_ButterworthBandstopF
+    __del__ = lambda self: None
+ButterworthBandstopF_swigregister = _Math.ButterworthBandstopF_swigregister
+ButterworthBandstopF_swigregister(ButterworthBandstopF)
+
+class ButterworthBandstopD(BiquadCascadeD):
+    """Proxy of C++ Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [BiquadCascadeD]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ButterworthBandstopD, name, value)
+    __swig_getmethods__ = {}
+    for _s in [BiquadCascadeD]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ButterworthBandstopD, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, order=3, fmin=0.7, fmax=2.0, fsamp=0):
+        """
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> self, int order=3, double fmin=0.7, double fmax=2.0, double fsamp=0) -> ButterworthBandstopD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> self, int order=3, double fmin=0.7, double fmax=2.0) -> ButterworthBandstopD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> self, int order=3, double fmin=0.7) -> ButterworthBandstopD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> self, int order=3) -> ButterworthBandstopD
+        __init__(Seiscomp::Math::Filtering::IIR::ButterworthBandstop<(double)> self) -> ButterworthBandstopD
+        """
+        this = _Math.new_ButterworthBandstopD(order, fmin, fmax, fsamp)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def setSamplingFrequency(self, fsamp):
+        """setSamplingFrequency(ButterworthBandstopD self, double fsamp)"""
+        return _Math.ButterworthBandstopD_setSamplingFrequency(self, fsamp)
+
+
+    def setParameters(self, n, params):
+        """setParameters(ButterworthBandstopD self, int n, double const * params) -> int"""
+        return _Math.ButterworthBandstopD_setParameters(self, n, params)
+
+
+    def clone(self):
+        """clone(ButterworthBandstopD self) -> InPlaceFilterD"""
+        return _Math.ButterworthBandstopD_clone(self)
+
+    __swig_destroy__ = _Math.delete_ButterworthBandstopD
+    __del__ = lambda self: None
+ButterworthBandstopD_swigregister = _Math.ButterworthBandstopD_swigregister
+ButterworthBandstopD_swigregister(ButterworthBandstopD)
 
 class ChainFilterF(InPlaceFilterF):
     """Proxy of C++ Seiscomp::Math::Filtering::ChainFilter<(float)> class."""

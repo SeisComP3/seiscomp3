@@ -31,7 +31,7 @@ class SC_SYSTEM_CORE_API BlackmanWindow : public WindowFunc<TYPE> {
 
 
 	protected:
-		virtual void process(int n, TYPE *inout, double width = 0.5) const;
+		virtual void process(int n, TYPE *inout, double left = 0.5, double right = 0.5) const;
 
 
 	private:

@@ -104,36 +104,36 @@ class SC_STRONGMOTION_API Record : public PublicObject {
 	// ------------------------------------------------------------------
 	public:
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 		void setGainUnit(const std::string& gainUnit);
 		const std::string& gainUnit() const;
 
 		void setDuration(const OPT(double)& duration);
-		double duration() const throw(Seiscomp::Core::ValueException);
+		double duration() const;
 
 		void setStartTime(const TimeQuantity& startTime);
 		TimeQuantity& startTime();
 		const TimeQuantity& startTime() const;
 
 		void setOwner(const OPT(Contact)& owner);
-		Contact& owner() throw(Seiscomp::Core::ValueException);
-		const Contact& owner() const throw(Seiscomp::Core::ValueException);
+		Contact& owner();
+		const Contact& owner() const;
 
 		void setResampleRateNumerator(const OPT(int)& resampleRateNumerator);
-		int resampleRateNumerator() const throw(Seiscomp::Core::ValueException);
+		int resampleRateNumerator() const;
 
 		void setResampleRateDenominator(const OPT(int)& resampleRateDenominator);
-		int resampleRateDenominator() const throw(Seiscomp::Core::ValueException);
+		int resampleRateDenominator() const;
 
 		void setWaveformID(const WaveformStreamID& waveformID);
 		WaveformStreamID& waveformID();
 		const WaveformStreamID& waveformID() const;
 
 		void setWaveformFile(const OPT(FileResource)& waveformFile);
-		FileResource& waveformFile() throw(Seiscomp::Core::ValueException);
-		const FileResource& waveformFile() const throw(Seiscomp::Core::ValueException);
+		FileResource& waveformFile();
+		const FileResource& waveformFile() const;
 
 	
 	// ------------------------------------------------------------------

@@ -11,11 +11,16 @@
 # version. For more information, see http://www.gnu.org/
 #*****************************************************************************
 
+from __future__ import absolute_import, division, print_function
+
+try: str = unicode
+except NameError: pass
+
 import sys
 import re
 import json
 import datetime
-import mseedlite as mseed
+import seiscomp.mseedlite as mseed
 from tempfile import TemporaryFile
 from shutil import copyfileobj
 from seiscomp import logs
@@ -41,19 +46,19 @@ def _mkseedcoeff_fir(nblk, nfld, ncoeff, s):
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
         if m is None:
-            raise SEEDError, "blockette %d, field %d: error parsing FIR coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing FIR coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         try:
             v = float(m.group(1))
         except ValueError:
-            raise SEEDError, "blockette %d, field %d: error parsing FIR coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing FIR coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         c += "%14.7E" % (v,)
         n += 1
         pos = m.end()
 
     if n != ncoeff:
-        raise SEEDError, "blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n)
+        raise SEEDError("blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n))
 
     return c
 
@@ -65,19 +70,19 @@ def _mkseedcoeff_iir(nblk, nfld, ncoeff, s):
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
         if m is None:
-            raise SEEDError, "blockette %d, field %d: error parsing IIR coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing IIR coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         try:
             v = float(m.group(1))
         except ValueError:
-            raise SEEDError, "blockette %d, field %d: error parsing IIR coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing IIR coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         c += "%12.5E%12.5E" % (v,0)
         n += 1
         pos = m.end()
 
     if n != ncoeff:
-        raise SEEDError, "blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n)
+        raise SEEDError("blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n))
 
     return c
 
@@ -89,19 +94,19 @@ def _mkseedcoeff_polynomial(nblk, nfld, ncoeff, s, gain=1.0):
     while pos < len(s):
         m = _rx_coeff.match(s, pos)
         if m is None:
-            raise SEEDError, "blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         try:
             v = float(m.group(1))
         except ValueError:
-            raise SEEDError, "blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:]))
 
         c += "%12.5E%12.5E" % (v/(gain**n),0)
         n += 1
         pos = m.end()
 
     if n != ncoeff:
-        raise SEEDError, "blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n)
+        raise SEEDError("blockette %d, field %d: expected %d coefficients, found %d" % (nblk, nfld, ncoeff, n))
 
     return c
 
@@ -118,7 +123,7 @@ def _mkseedpaz(nblk, nfld, npaz, s):
     while pos < l:
         m = _rx_paz.match(s, pos)
         if m is None:
-            raise SEEDError, "blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:]))
 
         try:
             if len(m.group(1)) > 0:
@@ -130,16 +135,16 @@ def _mkseedpaz(nblk, nfld, npaz, s):
             iv = float(m.group(3))
 
         except ValueError:
-            raise SEEDError, "blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:])
+            raise SEEDError("blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:]))
 
-        for i in xrange(0, x):
+        for i in range(0, x):
             c += "%12.5E%12.5E 0.00000E-00 0.00000E-00" % (rv, iv)
 
         n += x
         pos = m.end()
 
     if not npaz is None and (n != npaz):
-        raise SEEDError, "blockette %d, field %d: expected %d PAZ, found %d" % (nblk, nfld, npaz, n)
+        raise SEEDError("blockette %d, field %d: expected %d PAZ, found %d" % (nblk, nfld, npaz, n))
 
     return (c,n)
 
@@ -154,21 +159,21 @@ def _mkseedfap(nblk, nfld, nfap, s):
       try:
         f = float(values[pos])
       except:
-        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+        raise SEEDError("blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos]))
 
       pos += 1
 
       try:
         a = float(values[pos])
       except:
-        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+        raise SEEDError("blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos]))
 
       pos += 1
 
       try:
         p = float(values[pos])
       except:
-        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+        raise SEEDError("blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos]))
 
       pos += 1
 
@@ -177,7 +182,7 @@ def _mkseedfap(nblk, nfld, nfap, s):
       n += 1
 
     if not nfap is None and (n != nfap):
-        raise SEEDError, "blockette %d, field %d: expected %d FAP, found %d" % (nblk, nfld, nfap, n)
+        raise SEEDError("blockette %d, field %d: expected %d FAP, found %d" % (nblk, nfld, nfap, n))
 
     return (c,n)
 
@@ -225,20 +230,20 @@ def _mkseedstring(nblk, nfld, s, min_length, max_length, flags):
     sn = "".join(re.findall(rx, sn))
 
     if re.match("(" + rx + ")*$", sn) is None:
-        raise SEEDError, "blockette %d, field %d: cannot convert string \"%s\" with flags %s" % \
-          (nblk, nfld, s, flags)
+        raise SEEDError("blockette %d, field %d: cannot convert string \"%s\" with flags %s" % \
+          (nblk, nfld, s, flags))
 
     if len(sn) < min_length:
         if min_length != max_length:
-            raise SEEDError, "blockette %d, field %d: cannot extend string \"%s\" to minimum length %d with flags %s" % \
-              (nblk, nfld, s, min_length, flags)
+            raise SEEDError("blockette %d, field %d: cannot extend string \"%s\" to minimum length %d with flags %s" % \
+              (nblk, nfld, s, min_length, flags))
         else:
             sn = (sn + min_length * " ")[:min_length]
 
     if min_length != max_length:
         sn += "~"
 
-    return sn
+    return str(sn)
 
 def _mkseedtime(nblk, nfld, t):
     if t is None:
@@ -252,7 +257,7 @@ def _mkseedtime(nblk, nfld, t):
         tt = datetime.datetime.combine(t, datetime.time(0, 0, 0)).utctimetuple()
         return "%04d,%03d~" % (t.year, tt[7])
 
-    raise SEEDError, "blockette %d, field %d: invalid time object: %s" % (nblk, nfld, str(t))
+    raise SEEDError("blockette %d, field %d: invalid time object: %s" % (nblk, nfld, str(t)))
 
 def _cmptime(t1, t2):
     if t1 is None and t2 is None:
@@ -298,7 +303,7 @@ class _Blockette10(object):
             self.__organization, self.__label)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 10 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 10 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -323,7 +328,7 @@ class _Blockette11(object):
                 ((blen, ns) + self.__stat_rec[2*n:2*(n+ns)])
 
             if len(blk) != blen:
-                raise SEEDError, "blockette 11 has invalid length: %d instead of %d" % (len(blk), blen)
+                raise SEEDError("blockette 11 has invalid length: %d instead of %d" % (len(blk), blen))
 
             f.write_blk(blk)
             n += ns
@@ -337,7 +342,7 @@ class _Blockette11(object):
             ((self.__len, self.__nstations) + self.__stat_rec)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 11 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 11 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -362,7 +367,7 @@ class _Blockette12(object):
                 ((blen, ns) + self.__span_rec[3*n:3*(n+ns)])
 
             if len(blk) != blen:
-                raise SEEDError, "blockette 12 has invalid length: %d instead of %d" % (len(blk), blen)
+                raise SEEDError("blockette 12 has invalid length: %d instead of %d" % (len(blk), blen))
 
             f.write_blk(blk)
             n += ns
@@ -376,7 +381,7 @@ class _Blockette12(object):
             ((self.__len, self.__nspans) + self.__span_rec)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 12 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 12 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -394,7 +399,7 @@ class _Blockette30(object):
             self.__key, self.__family, self.__nddl, self.__ddl)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 30 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 30 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -409,7 +414,7 @@ class _Blockette31(object):
         blk = "031%4d%4d%s%s  0" % (self.__len, self.__key, self.__cclass, self.__comment)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 31 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 31 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -423,7 +428,7 @@ class _Blockette33(object):
         blk = "033%4d%3d%s" % (self.__len, self.__key, self.__desc)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 33 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 33 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -439,7 +444,7 @@ class _Blockette34(object):
             self.__desc)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 34 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 34 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -467,7 +472,7 @@ class _Blockette41(object):
                 self.__output_units, self.__ncoeff, self.__coeff[14*n:14*(n+nc)])
 
             if len(blk) != blen:
-                raise SEEDError, "blockette 41 has invalid length: %d instead of %d" % (len(blk), blen)
+                raise SEEDError("blockette 41 has invalid length: %d instead of %d" % (len(blk), blen))
 
             f.write_blk(blk)
             n += nc
@@ -482,7 +487,7 @@ class _Blockette41(object):
             self.__output_units, self.__ncoeff, self.__coeff)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 41 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 41 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -514,7 +519,7 @@ class _Blockette42(object):
             self.__ncoeff, self.__coeff)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 42 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 42 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -543,7 +548,7 @@ class _Blockette43(object):
             self.__poles)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 43 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 43 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -568,7 +573,7 @@ class _Blockette44(object):
             self.__n_numerators, self.__numerators, self.__n_denominators, self.__denominators)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 44 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 44 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -591,7 +596,7 @@ class _Blockette45(object):
                  self.__ntuples, self.__tuples)
 
             if len(blk) != self.__len:
-                raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), self.__len)
+                raise SEEDError("blockette 45 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
             f.write_blk(blk)
         else:
@@ -603,7 +608,7 @@ class _Blockette45(object):
                  btuples, self.__tuples[:btuples*60])
 
             if len(blk) != l:
-                raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), l)
+                raise SEEDError("blockette 45 has invalid length: %d instead of %d" % (len(blk), l))
 
             f.write_blk(blk)
 
@@ -621,7 +626,7 @@ class _Blockette45(object):
                  ntuples, self.__tuples[ofs:ofs+ntuples*60])
 
                 if len(blk) != l:
-                    raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), l)
+                    raise SEEDError("blockette 45 has invalid length: %d instead of %d" % (len(blk), l))
 
                 f.write_blk(blk)
 
@@ -647,7 +652,7 @@ class _Blockette47(object):
             self.__deci_offset, self.__delay, self.__correction)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 47 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 47 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -664,7 +669,7 @@ class _Blockette48(object):
             self.__name, self.__gain, self.__gain_freq)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 48 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 48 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -685,20 +690,20 @@ class _Blockette50(object):
 
         error = False
         if not isinstance(self.__stat_code, str):
-            print >> sys.stderr, "blockette 50 - station code not set or not of type string"
+            print("blockette 50 - station code not set or not of type string", file=sys.stderr)
             error = True
         if not isinstance(self.__latitude, float):
-            print >> sys.stderr, "blockette 50 - latitude not set or not of type float"
+            print("blockette 50 - latitude not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__longitude, float):
-            print >> sys.stderr, "blockette 50 - longitude not set or not of type float"
+            print("blockette 50 - longitude not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__elevation, float):
-            print >> sys.stderr, "blockette 50 - elevation not set or not of type float"
+            print("blockette 50 - elevation not set or not of type float", file=sys.stderr)
             error = True
 
         if error:
-            raise SEEDError, "blockette 50 - provide correct values. Adjust your inventory XML!"
+            raise SEEDError("blockette 50 - provide correct values. Adjust your inventory XML!")
 
     def output(self, f):
         blk = "050%4d%s%10.6f%11.6f%7.1f       %s%3d321010%s%sN%s" % \
@@ -707,7 +712,7 @@ class _Blockette50(object):
             self.__start_date, self.__end_date, self.__net_code)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 50 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 50 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -723,7 +728,7 @@ class _Blockette51(object):
             self.__end_time, self.__comment_key)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 51 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 51 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -755,59 +760,59 @@ class _Blockette52(object):
 
         error = False
         if not isinstance(self.__loc_id, str):
-            print >> sys.stderr, "blockette 52 - location ID not set or not of type string"
+            print("blockette 52 - location ID not set or not of type string", file=sys.stderr)
             error = True
         if not isinstance(self.__chan_id, str):
-            print >> sys.stderr, "blockette 52 - channel ID not set or not of type string"
+            print("blockette 52 - channel ID not set or not of type string", file=sys.stderr)
             error = True
         if not isinstance(self.__len, int):
-            print >> sys.stderr, "blockette 52 - len not set or not of type int"
+            print("blockette 52 - len not set or not of type int", file=sys.stderr)
             error = True
         if not isinstance(self.__instr_id, int):
-            print >> sys.stderr, "blockette 52 - instrument ID not set or not of type integer"
+            print("blockette 52 - instrument ID not set or not of type integer", file=sys.stderr)
             error = True
         if not isinstance(self.__comment, str):
-            print >> sys.stderr, "blockette 52 - comment not set or not of type sting"
+            print("blockette 52 - comment not set or not of type sting", file=sys.stderr)
             error = True
         if not isinstance(self.__signal_units, int):
-            print >> sys.stderr, "blockette 52 - signal_units not set or not of type integer"
+            print("blockette 52 - signal_units not set or not of type integer", file=sys.stderr)
             error = True
         if not isinstance(self.__calibration_units, int):
-            print >> sys.stderr, "blockette 52 - calibration units not set or not of type integer"
+            print("blockette 52 - calibration units not set or not of type integer", file=sys.stderr)
             error = True
         if not isinstance(self.__latitude, float):
-            print >> sys.stderr, "blockette 52 - latitude not set or not of type float"
+            print("blockette 52 - latitude not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__longitude, float):
-            print >> sys.stderr, "blockette 52 - longitude not set or not of type float"
+            print("blockette 52 - longitude not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__elevation, float):
-            print >> sys.stderr, "blockette 52 - elevation not set or not of type float"
+            print("blockette 52 - elevation not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__local_depth, float):
-            print >> sys.stderr, "Warning: blockette 52 - local depth not set or not of type float"
+            print("Warning: blockette 52 - local depth not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__azimuth, float):
-            print >> sys.stderr, "blockette 52 - azimuth not set or not of type float"
+            print("blockette 52 - azimuth not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__dip, float):
-            print >> sys.stderr, "blockette 52 - dip not set or not of type float"
+            print("blockette 52 - dip not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__data_format, int):
-            print >> sys.stderr, "blockette 52 - data format not set or not of type integer"
+            print("blockette 52 - data format not set or not of type integer", file=sys.stderr)
             error = True
         if not isinstance(self.__record_length, int):
-            print >> sys.stderr, "blockette 52 - record length not set or not of type integer"
+            print("blockette 52 - record length not set or not of type integer", file=sys.stderr)
             error = True
         if not isinstance(self.__sample_rate, float):
-            print >> sys.stderr, "blockette 52 - sample rate not set or not of type float"
+            print("blockette 52 - sample rate not set or not of type float", file=sys.stderr)
             error = True
         if not isinstance(self.__clock_drift, float):
-            print >> sys.stderr, "Warning: blockette 52 - clock drift not set or not of type float"
+            print("Warning: blockette 52 - clock drift not set or not of type float", file=sys.stderr)
             error = True
 
         if error:
-            raise SEEDError, "blockette 52 - provide correct values. Adjust your inventory XML!"
+            raise SEEDError("blockette 52 - provide correct values. Adjust your inventory XML!")
 
     def set_vol_span(self, vol_start, vol_end):
         # make verseed happy
@@ -823,16 +828,25 @@ class _Blockette52(object):
         self.__len = 99 + len(self.__comment) + len(self.__flags) + \
             len(self.__start_date) + len(self.__end_date)
 
-        blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.1f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
-            (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
-            self.__comment, self.__signal_units, self.__calibration_units,
-            self.__latitude, self.__longitude, self.__elevation,
-            self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
-            self.__record_length, self.__sample_rate, self.__clock_drift,
-            self.__flags, self.__start_date, self.__end_date)
+        if self.__local_depth >= 1000:
+            blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.0f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
+                (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
+                self.__comment, self.__signal_units, self.__calibration_units,
+                self.__latitude, self.__longitude, self.__elevation,
+                self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
+                self.__record_length, self.__sample_rate, self.__clock_drift,
+                self.__flags, self.__start_date, self.__end_date)
+        else:
+            blk = "052%4d%s%s   0%3d%s%3d%3d%10.6f%11.6f%7.1f%5.1f%5.1f%5.1f%4d%2d%10.4E%10.4E    %s%s%sN" % \
+                (self.__len, self.__loc_id, self.__chan_id, self.__instr_id,
+                self.__comment, self.__signal_units, self.__calibration_units,
+                self.__latitude, self.__longitude, self.__elevation,
+                self.__local_depth, self.__azimuth, self.__dip, self.__data_format,
+                self.__record_length, self.__sample_rate, self.__clock_drift,
+                self.__flags, self.__start_date, self.__end_date)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 52 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 52 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -863,7 +877,7 @@ class _Blockette53(object):
             self.__poles)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 53 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 53 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -890,7 +904,7 @@ class _Blockette54(object):
             self.__n_numerators, self.__numerators, self.__n_denominators, self.__denominators)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 54 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 54 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -914,7 +928,7 @@ class _Blockette55(object):
                  self.__ntuples, self.__tuples)
 
             if len(blk) != self.__len:
-                raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), self.__len)
+                raise SEEDError("blockette 55 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
             f.write_blk(blk)
         else:
@@ -925,7 +939,7 @@ class _Blockette55(object):
                  166, self.__tuples[:166*60])
 
             if len(blk) != l:
-                raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), l)
+                raise SEEDError("blockette 55 has invalid length: %d instead of %d" % (len(blk), l))
 
             f.write_blk(blk)
 
@@ -943,7 +957,7 @@ class _Blockette55(object):
                  ntuples, self.__tuples[ofs:ofs+ntuples*60])
 
                 if len(blk) != l:
-                    raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), l)
+                    raise SEEDError("blockette 55 has invalid length: %d instead of %d" % (len(blk), l))
 
                 f.write_blk(blk)
 
@@ -969,7 +983,7 @@ class _Blockette57(object):
             self.__deci_offset, self.__delay, self.__correction)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 57 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 57 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -984,11 +998,12 @@ class _Blockette58(object):
         self.__stage = stage
 
     def output(self, f):
+        if self.__gain is None or self.__gain_freq is None: return
         blk = "058%4d%2d%12.5E%12.5E 0" % (self.__len, self.__stage,
             self.__gain, self.__gain_freq)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 58 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 58 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1004,7 +1019,7 @@ class _Blockette59(object):
             self.__end_time, self.__comment_key)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 59 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 59 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1026,7 +1041,7 @@ class _Blockette60(object):
                ((self.__start_stage + n, len(r)) + r)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 60 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 60 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1057,7 +1072,7 @@ class _Blockette61(object):
                 self.__output_units, nc, self.__coeff[14*n:14*(n+nc)])
 
             if len(blk) != blen:
-                raise SEEDError, "blockette 61 has invalid length: %d instead of %d" % (len(blk), self.__len)
+                raise SEEDError("blockette 61 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
             f.write_blk(blk)
             n += nc
@@ -1072,7 +1087,7 @@ class _Blockette61(object):
             self.__output_units, self.__ncoeff, self.__coeff)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 61 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 61 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1106,7 +1121,7 @@ class _Blockette62(object):
             self.__ncoeff, self.__coeff)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 62 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 62 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1122,7 +1137,7 @@ class _Blockette70(object):
             self.__end)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 70 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 70 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1149,7 +1164,7 @@ class _Blockette74(object):
             self.__end_recno, self.__net_code)
 
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 74 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError("blockette 74 has invalid length: %d instead of %d" % (len(blk), self.__len))
 
         f.write_blk(blk)
 
@@ -1363,7 +1378,7 @@ class _GenericAbbreviationDict(object):
     def lookup_sensor(self, name):     # instrument id for blk52
         sensor = self.__inventory.object.get(name)
         if sensor is None:
-            raise SEEDError, "unknown sensor: " + name
+            raise SEEDError("unknown sensor: " + name)
 
         desc = sensor.description
         if not desc:
@@ -1391,12 +1406,12 @@ class _GenericAbbreviationDict(object):
 
         net_tp = self.__inventory.network.get(code)
         if net_tp is None:
-            raise SEEDError, "unknown network: %s" % (code,)
+            raise SEEDError("unknown network: %s" % (code,))
 
         netcfg = net_tp.get(start)
         if net_tp is None:
-            raise SEEDError, "unknown network: %s.%s" % \
-                (code, start.isoformat())
+            raise SEEDError("unknown network: %s.%s" % \
+                (code, start.isoformat()))
 
         self.__blk.append(_Blockette33(k, netcfg.description))
         return k
@@ -1490,7 +1505,9 @@ class _Response5xContainer(_ResponseContainer):
 
     def output(self, f):
         for b in self.__blk:
-            b.output(f)
+            try: b.output(f)
+            except Exception as e:
+                print("Skipped invalid blockette: %s" % str(e), file=sys.stderr)
 
 class _Response4xFactory(object):
     def __init__(self, inventory, unit_dict):
@@ -1522,11 +1539,11 @@ class _Response4xFactory(object):
     def _lookup_sensor(self, name, dev_id, compn):
         sensor = self.__inventory.object.get(name)
         if sensor is None:
-            raise SEEDError, "unknown sensor: " + name
+            raise SEEDError("unknown sensor: " + name)
 
         resp = self.__inventory.object.get(sensor.response)
         if resp is None:
-            raise SEEDError, "cannot find response for sensor " + sensor.name
+            raise SEEDError("cannot find response for sensor " + sensor.name)
 
         k1 = self.__used_sensor.get(name)
         if k1 is None:
@@ -1550,7 +1567,7 @@ class _Response4xFactory(object):
 
             if _is_paz_response(resp):
                 if resp.type != "A" and resp.type != "B":
-                    raise SEEDError, "invalid PAZ response type of " + resp.name
+                    raise SEEDError("invalid PAZ response type of " + resp.name)
 
                 b1 = _Blockette43(key = k1,
                     name = "RS" + name,
@@ -1568,7 +1585,7 @@ class _Response4xFactory(object):
 
             elif _is_iir_response(resp):
                 if resp.type != "A" and resp.type != "B":
-                    raise SEEDError, "invalid IIR response type of " + resp.name
+                    raise SEEDError("invalid IIR response type of " + resp.name)
 
                 b1 = _Blockette44(key = k1,
                     name = "RS" + name,
@@ -1610,7 +1627,7 @@ class _Response4xFactory(object):
                 self.__blk45.append(b1)
 
             else:
-                raise SEEDError, "unknown response type of sensor " + sensor.name
+                raise SEEDError("unknown response type of sensor " + sensor.name)
 
             self.__num += 1
             self.__used_sensor[name] = k1
@@ -1622,7 +1639,7 @@ class _Response4xFactory(object):
             calib = None
 
         if calib is not None and len(calib) > 0:
-            calib_list = calib.items()
+            calib_list = list(calib.items())
             calib_list.sort()
             resp_name = "GS" + sensor.name + "_" + dev_id
             gain = calib_list[-1][1].gain
@@ -1656,7 +1673,7 @@ class _Response4xFactory(object):
     def _lookup_analogue_paz(self, name):
         resp_paz = self.__inventory.object.get(name)
         if resp_paz is None:
-            raise SEEDError, "unknown PAZ response: " + name
+            raise SEEDError("unknown PAZ response: " + name)
 
         k = self.__used_analogue_paz.get(name)
         if k is not None:
@@ -1664,10 +1681,10 @@ class _Response4xFactory(object):
             return (k1, k2, resp_paz.gain)
 
         #if resp_paz.deci_fac is not None:
-        #    raise SEEDError, "expected analogue response, found digital"
+        #    raise SEEDError("expected analogue response, found digital")
 
         if resp_paz.type != "A" and resp_paz.type != "B":
-            raise SEEDError, "invalid PAZ response type of " + resp_paz.name
+            raise SEEDError("invalid PAZ response type of " + resp_paz.name)
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1698,7 +1715,7 @@ class _Response4xFactory(object):
     def _lookup_analogue_iir(self, name):
         resp_iir = self.__inventory.object.get(name)
         if resp_iir is None:
-            raise SEEDError, "unknown IIR response: " + name
+            raise SEEDError("unknown IIR response: " + name)
 
         k = self.__used_analogue_iir.get(name)
         if k is not None:
@@ -1706,10 +1723,10 @@ class _Response4xFactory(object):
             return (k1, k2, resp_iir.gain)
 
         #if resp_iir.deci_fac is not None:
-        #    raise SEEDError, "expected analogue response, found digital"
+        #    raise SEEDError("expected analogue response, found digital")
 
         if resp_iir.type != "A" and resp_iir.type != "B":
-            raise SEEDError, "invalid IIR response type of " + resp_iir.name
+            raise SEEDError("invalid IIR response type of " + resp_iir.name)
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1738,7 +1755,7 @@ class _Response4xFactory(object):
     def _lookup_analogue_fap(self, name):
         resp_fap = self.__inventory.object.get(name)
         if resp_fap is None:
-            raise SEEDError, "unknown FAP response: " + name
+            raise SEEDError("unknown FAP response: " + name)
 
         k = self.__used_analogue_fap.get(name)
         if k is not None:
@@ -1769,7 +1786,7 @@ class _Response4xFactory(object):
     def _lookup_digitizer(self, name, dev_id, compn, sample_rate, sample_rate_div):
         digi = self.__inventory.object.get(name)
         if digi is None:
-            raise SEEDError, "unknown datalogger: " + name
+            raise SEEDError("unknown datalogger: " + name)
 
         input_rate = float(sample_rate) / float(sample_rate_div)
 
@@ -1817,7 +1834,7 @@ class _Response4xFactory(object):
             calib = None
 
         if calib is not None and len(calib) > 0:
-            calib_list = calib.items()
+            calib_list = list(calib.items())
             calib_list.sort()
             resp_name = "GL" + digi.name + "_" + dev_id
             gain = calib_list[-1][1].gain
@@ -1848,7 +1865,7 @@ class _Response4xFactory(object):
     def _lookup_digital_paz(self, name, input_rate):
         resp_paz = self.__inventory.object.get(name)
         if resp_paz is None:
-            raise SEEDError, "unknown PAZ response: " + name
+            raise SEEDError("unknown PAZ response: " + name)
 
         deci_fac = resp_paz.decimationFactor or 1
         delay = (resp_paz.delay or 0.0) / input_rate
@@ -1862,10 +1879,10 @@ class _Response4xFactory(object):
             return (k1, k2, k3, input_rate / deci_fac, resp_paz.gain)
 
         #if resp_paz.deci_fac is None:
-        #    raise SEEDError, "expected digital response, found analogue"
+        #    raise SEEDError("expected digital response, found analogue")
 
         if resp_paz.type != "D":
-            raise SEEDError, "invalid PAZ response type of " + resp_paz.name
+            raise SEEDError("invalid PAZ response type of " + resp_paz.name)
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1906,7 +1923,7 @@ class _Response4xFactory(object):
     def _lookup_digital_iir(self, name, input_rate):
         resp_iir = self.__inventory.object.get(name)
         if resp_iir is None:
-            raise SEEDError, "unknown IIR response: " + name
+            raise SEEDError("unknown IIR response: " + name)
 
         deci_fac = resp_iir.decimationFactor or 1
         delay = (resp_iir.delay or 0.0) / input_rate
@@ -1920,10 +1937,10 @@ class _Response4xFactory(object):
             return (k1, k2, k3, input_rate / deci_fac, resp_iir.gain)
 
         #if resp_iir.deci_fac is None:
-        #    raise SEEDError, "expected digital response, found analogue"
+        #    raise SEEDError("expected digital response, found analogue")
 
         if resp_iir.type != "D":
-            raise SEEDError, "invalid IIR response type of " + resp_iir.name
+            raise SEEDError("invalid IIR response type of " + resp_iir.name)
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1962,7 +1979,7 @@ class _Response4xFactory(object):
     def _lookup_fir(self, name, input_rate):
         resp_fir = self.__inventory.object.get(name)
         if resp_fir is None:
-            raise SEEDError, "unknown FIR response: " + name
+            raise SEEDError("unknown FIR response: " + name)
 
         deci_fac = resp_fir.decimationFactor or 1
         delay = (resp_fir.delay or 0.0) / input_rate
@@ -2045,11 +2062,11 @@ class _Response5xFactory(object):
     def _lookup_sensor(self, name, dev_id, compn):
         sensor = self.__inventory.object.get(name)
         if sensor is None:
-            raise SEEDError, "unknown sensor: " + name
+            raise SEEDError("unknown sensor: " + name)
 
         resp = self.__inventory.object.get(sensor.response)
         if resp is None:
-            raise SEEDError, "cannot find response for sensor " + sensor.name
+            raise SEEDError("cannot find response for sensor " + sensor.name)
 
         unit = None
         try:
@@ -2069,7 +2086,7 @@ class _Response5xFactory(object):
 
         if _is_paz_response(resp):
             if resp.type != "A" and resp.type != "B":
-                raise SEEDError, "invalid PAZ response type of " + resp.name
+                raise SEEDError("invalid PAZ response type of " + resp.name)
 
             b1 = _Blockette53(type = resp.type,
                 input_units = input_units,
@@ -2083,7 +2100,7 @@ class _Response5xFactory(object):
 
         elif _is_iir_response(resp):
             if resp.type != "A" and resp.type != "B":
-                raise SEEDError, "invalid IIR response type of " + resp.name
+                raise SEEDError("invalid IIR response type of " + resp.name)
 
             b1 = _Blockette54(type = resp.type,
                 input_units = input_units,
@@ -2115,7 +2132,7 @@ class _Response5xFactory(object):
                 tuples = resp.tuples)
 
         else:
-            raise SEEDError, "unknown response type of sensor " + sensor.name
+            raise SEEDError("unknown response type of sensor " + sensor.name)
 
         try:
             calib = sensor.calibration[dev_id][compn]
@@ -2124,7 +2141,7 @@ class _Response5xFactory(object):
             calib = None
 
         if calib is not None and len(calib) > 0:
-            calib_list = calib.items()
+            calib_list = list(calib.items())
             calib_list.sort()
             gain = calib_list[-1][1].gain
         else:
@@ -2145,10 +2162,10 @@ class _Response5xFactory(object):
     def _lookup_analogue_paz(self, name):
         resp_paz = self.__inventory.object.get(name)
         if resp_paz is None:
-            raise SEEDError, "unknown PAZ response: " + name
+            raise SEEDError("unknown PAZ response: " + name)
 
         if resp_paz.type != "A" and resp_paz.type != "B":
-            raise SEEDError, "invalid PAZ response type of " + resp_paz.name
+            raise SEEDError("invalid PAZ response type of " + resp_paz.name)
 
         b1 = _Blockette53(type = resp_paz.type,
             input_units = self.__unit_dict.lookup("V"),
@@ -2168,10 +2185,10 @@ class _Response5xFactory(object):
     def _lookup_analogue_iir(self, name):
         resp_iir = self.__inventory.object.get(name)
         if resp_iir is None:
-            raise SEEDError, "unknown IIR response: " + name
+            raise SEEDError("unknown IIR response: " + name)
 
         if resp_iir.type != "A" and resp_iir.type != "B":
-            raise SEEDError, "invalid IIR response type of " + resp_iir.name
+            raise SEEDError("invalid IIR response type of " + resp_iir.name)
 
         b1 = _Blockette54(type = resp_iir.type,
             input_units = self.__unit_dict.lookup("V"),
@@ -2189,7 +2206,7 @@ class _Response5xFactory(object):
     def _lookup_analogue_fap(self, name):
         resp_fap = self.__inventory.object.get(name)
         if resp_fap is None:
-            raise SEEDError, "unknown FAP response: " + name
+            raise SEEDError("unknown FAP response: " + name)
 
         gain = resp_fap.gain
         if gain is None: gain = 1.0
@@ -2206,7 +2223,7 @@ class _Response5xFactory(object):
     def _lookup_digitizer(self, name, dev_id, compn, sample_rate, sample_rate_div):
         digi = self.__inventory.object.get(name)
         if digi is None:
-            raise SEEDError, "unknown datalogger: " + name
+            raise SEEDError("unknown datalogger: " + name)
 
         input_rate = float(sample_rate) / float(sample_rate_div)
 
@@ -2238,7 +2255,7 @@ class _Response5xFactory(object):
             calib = None
 
         if calib is not None and len(calib) > 0:
-            calib_list = calib.items()
+            calib_list = list(calib.items())
             calib_list.sort()
             gain = calib_list[-1][1].gain
         else:
@@ -2256,10 +2273,10 @@ class _Response5xFactory(object):
     def _lookup_digital_paz(self, name, input_rate):
         resp_paz = self.__inventory.object.get(name)
         if resp_paz is None:
-            raise SEEDError, "unknown PAZ response: " + name
+            raise SEEDError("unknown PAZ response: " + name)
 
         if resp_paz.type != "D":
-            raise SEEDError, "invalid PAZ response type of " + resp_paz.name
+            raise SEEDError("invalid PAZ response type of " + resp_paz.name)
 
         deci_fac = resp_paz.decimationFactor or 1
         delay = (resp_paz.delay or 0.0) / input_rate
@@ -2291,10 +2308,10 @@ class _Response5xFactory(object):
     def _lookup_digital_iir(self, name, input_rate):
         resp_iir = self.__inventory.object.get(name)
         if resp_iir is None:
-            raise SEEDError, "unknown IIR response: " + name
+            raise SEEDError("unknown IIR response: " + name)
 
         if resp_iir.type != "D":
-            raise SEEDError, "invalid IIR response type of " + resp_iir.name
+            raise SEEDError("invalid IIR response type of " + resp_iir.name)
 
         deci_fac = resp_iir.decimationFactor or 1
         delay = (resp_iir.delay or 0.0) / input_rate
@@ -2324,7 +2341,7 @@ class _Response5xFactory(object):
     def _lookup_fir(self, name, input_rate):
         resp_fir = self.__inventory.object.get(name)
         if resp_fir is None:
-            raise SEEDError, "unknown FIR response: " + name
+            raise SEEDError("unknown FIR response: " + name)
 
         deci_fac = resp_fir.decimationFactor or 1
         delay = (resp_fir.delay or 0.0) / input_rate
@@ -2368,15 +2385,15 @@ class _Channel(object):
 
         sensor = inventory.object.get(strmcfg.sensor)
         if sensor is None:
-            raise SEEDError, "unknown sensor: " + strmcfg.sensor
+            raise SEEDError("unknown sensor: " + strmcfg.sensor)
 
         resp = inventory.object.get(sensor.response)
         if resp is None:
-            raise SEEDError, "cannot find response for sensor " + sensor.name
+            raise SEEDError("cannot find response for sensor " + sensor.name)
 
         digi = inventory.object.get(strmcfg.datalogger)
         #if digi is None:
-        #    raise SEEDError, "unknown datalogger referenced in channel %s: %s" % (strmcfg.code, strmcfg.datalogger)
+        #    raise SEEDError("unknown datalogger referenced in channel %s: %s" % (strmcfg.code, strmcfg.datalogger))
 
         stream_deci = None
         if digi:
@@ -2384,10 +2401,10 @@ class _Channel(object):
                 stream_deci = digi.decimation[strmcfg.sampleRateNumerator][strmcfg.sampleRateDenominator]
 
             except KeyError:
-                raise SEEDError, "cannot find filter chain for stream " + \
+                raise SEEDError("cannot find filter chain for stream " + \
                     str(strmcfg.sampleRateNumerator) + "/" + \
                     str(strmcfg.sampleRateDenominator) + " of datalogger " + \
-                    digi.name
+                    digi.name)
 
         unit = None
         try:
@@ -2407,13 +2424,13 @@ class _Channel(object):
 
         if strmcfg.sampleRateNumerator == 0 or \
             strmcfg.sampleRateDenominator == 0:
-            raise SEEDError, "invalid sample rate %d/%d" % \
-                (strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator)
+            raise SEEDError("invalid sample rate %d/%d" % \
+                (strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator))
 
         sample_rate = float(strmcfg.sampleRateNumerator) / \
             float(strmcfg.sampleRateDenominator)
 
-        clock_drift = 0
+        clock_drift = float(0)
         if digi:
             if digi.maxClockDrift is not None:
                 clock_drift = digi.maxClockDrift / sample_rate
@@ -2448,21 +2465,25 @@ class _Channel(object):
                         obj = inventory.object[f]
                         if _is_paz_response(obj):
                             gain = resp_container.add_analogue_paz(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         elif _is_iir_response(obj):
                             gain = resp_container.add_analogue_iir(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         elif _is_fap_response(obj):
                             gain = resp_container.add_analogue_fap(f)
-                            sens *= gain
+                            if gain is not None:
+                                sens *= gain
                         else:
-                            raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
+                            raise SEEDError("invalid filter type: %s (%s)" % (f, obj.name))
 
             (rate, gain) = resp_container.add_digitizer(strmcfg.datalogger,
                 strmcfg.dataloggerSerialNumber, strmcfg.dataloggerChannel,
                 strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator)
 
-            sens *= gain
+            if gain is not None:
+                sens *= gain
 
             if stream_deci.digitalFilterChain:
                 if len(stream_deci.digitalFilterChain) > 0:
@@ -2475,9 +2496,10 @@ class _Channel(object):
                         elif _is_fir_response(obj):
                             (rate, gain) = resp_container.add_fir(f, rate)
                         else:
-                            raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
+                            raise SEEDError("invalid filter type: %s (%s)" % (f, obj.name))
 
-                        sens *= gain
+                        if gain is not None:
+                            sens *= gain
 
             if sens_freq > rate / 5:
                 sens_freq = rate / 5
@@ -2508,15 +2530,6 @@ class _Channel(object):
         else:
             self.__stage0_blk = _Blockette58(gain = strmcfg.gain,
                 gain_freq = strmcfg.gainFrequency)
-
-    def __cmp__(self, other):
-        if(self.__id < other.__id):
-            return -1
-
-        if(self.__id > other.__id):
-            return 1
-
-        return 0
 
     def add_comment(self, com):
         self.__comment_blk.append(_Blockette59(start_time = com.start,
@@ -2566,19 +2579,10 @@ class _Station(object):
             start_date = statcfg.start,
             end_date = statcfg.end)
 
-        for com in statcfg.comment.itervalues():
+        for com in statcfg.comment.values():
             self.__comment_blk.append(_Blockette51(start_time = com.start,
                 end_time = com.end,
                 comment_key = self.__comment_dict.lookup('S', com.text)))
-
-    def __cmp__(self, other):
-        if(self.__id < other.__id):
-            return -1
-
-        if(self.__id > other.__id):
-            return 1
-
-        return 0
 
     def add_chan(self, strmcfg):
         loccfg = strmcfg.mySensorLocation
@@ -2592,7 +2596,7 @@ class _Station(object):
 
         self.__channel[(loccfg.code, strmcfg.code, strmcfg.start)] = cha
 
-        for com in strmcfg.comment.itervalues():
+        for com in strmcfg.comment.values():
             cha.add_comment(com)
 
     def get_id(self):
@@ -2607,8 +2611,8 @@ class _Station(object):
         for b in self.__comment_blk:
             b.output(f)
 
-        chan_list = self.__channel.values()
-        chan_list.sort()
+        chan_list = [self.__channel[k] for k in sorted(self.__channel.keys())]
+
         for c in chan_list:
             c.output(f, vol_start, vol_end)
 
@@ -2819,7 +2823,7 @@ class _RecordBuilder(object):
     def flush(self):
         if self.__buf is not None:
             self.__buf += ((1 << _RECLEN_EXP) - len(self.__buf)) * " "
-            self.__fd.write(self.__buf)
+            self.__fd.write(self.__buf.encode("ascii", "replace"))
             self.__buf = None
 
     def reset(self, type, fd, recno = None):
@@ -2841,7 +2845,7 @@ class _RecordBuilder(object):
         while len(s) - b > (1 << _RECLEN_EXP) - len(self.__buf):
             e = b + (1 << _RECLEN_EXP) - len(self.__buf)
             self.__buf += s[b:e]
-            self.__fd.write(self.__buf)
+            self.__fd.write(self.__buf.encode("ascii", "replace"))
 
             self.__buf = "%06d%c*" % (self.__recno, self.__type)
             self.__recno += 1
@@ -2877,13 +2881,13 @@ class SEEDVolume(object):
 
         net_tp = self.__inventory.network.get(net_code)
         if net_tp is not None:
-            for netcfg in net_tp.itervalues():
+            for netcfg in net_tp.values():
 #               if _cmptime(start_time, netcfg.end) <= 0 and \
 #                   _cmptime(end_time, netcfg.start) >= 0:
 
                     sta_tp = netcfg.station.get(stat_code)
                     if sta_tp is not None:
-                        for statcfg in sta_tp.itervalues():
+                        for statcfg in sta_tp.values():
 #                           if _cmptime(start_time, statcfg.end) <= 0 and \
 #                               _cmptime(end_time, statcfg.start) >= 0:
 
@@ -2896,13 +2900,13 @@ class SEEDVolume(object):
 
                                 loc_tp = statcfg.sensorLocation.get(loc_id)
                                 if loc_tp is not None:
-                                    for loccfg in loc_tp.itervalues():
+                                    for loccfg in loc_tp.values():
 #                                       if _cmptime(start_time, strmcfg.end) <= 0 and \
 #                                           _cmptime(end_time, strmcfg.start) >= 0:
 
                                             strm_tp = loccfg.stream.get(chan_id)
                                             if strm_tp is not None:
-                                                for strmcfg in strm_tp.itervalues():
+                                                for strmcfg in strm_tp.values():
                                                     if _cmptime(start_time, strmcfg.end) <= 0 and \
                                                         _cmptime(end_time, strmcfg.start) >= 0:
 
@@ -2917,8 +2921,8 @@ class SEEDVolume(object):
 
         if not found:
             if strict:
-                raise SEEDError, "cannot find %s %s %s %s %s %s" % \
-                    (net_code, stat_code, loc_id, chan_id, start_time, end_time)
+                raise SEEDError("cannot find %s %s %s %s %s %s" % \
+                    (net_code, stat_code, loc_id, chan_id, start_time, end_time))
             else:
                 logs.warning("cannot find %s %s %s %s %s %s" %
                     (net_code, stat_code, loc_id, chan_id, start_time, end_time))
@@ -2962,21 +2966,20 @@ class SEEDVolume(object):
 
                 except SEEDError as e:
                     if strict:
-                        raise SEEDError, "%s.%s.%s.%s.%s: %s" % \
-                            (net_code, stat_code, loc_id, chan_id, start_time.isoformat(), e)
+                        raise SEEDError("%s.%s.%s.%s.%s: %s" % \
+                            (net_code, stat_code, loc_id, chan_id, start_time.isoformat(), e))
 
                     logs.warning("%s.%s.%s.%s.%s: %s" %
                         (net_code, stat_code, loc_id, chan_id, start_time.isoformat(), e))
 
-        sta_list = self.__station.values()
-        sta_list.sort()
+        sta_list = [self.__station[k] for k in sorted(self.__station.keys())]
 
-        if isinstance(dest, basestring):
-            fd = file(dest, "w")
+        if isinstance(dest, str):
+            fd = open(dest, "wb")
         elif hasattr(dest, "write"):
             fd = dest
         else:
-            raise TypeError, "invalid file object"
+            raise TypeError("invalid file object")
 
         try:
             filename = fd.name
@@ -3013,5 +3016,6 @@ class SEEDVolume(object):
         rb.reset("V", fd, 1)
         self.__output_vol(vol_creat_time, sta_list, rb)
 
-        if isinstance(dest, basestring):
+        if isinstance(dest, str):
             fd.close()
+

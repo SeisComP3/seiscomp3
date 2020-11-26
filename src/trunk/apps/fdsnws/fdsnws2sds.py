@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env seiscomp-python
 # -*- coding: utf-8 -*-
 
 ###############################################################################
@@ -7,8 +7,7 @@
 # License: LGPLv3 (https://www.gnu.org/copyleft/lesser.html)                  #
 ###############################################################################
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import absolute_import, division, print_function
 
 import sys
 import os
@@ -175,7 +174,8 @@ def main():
     param0 = ["-y", "station", "-q", "format=text", "-q", "level=network"]
     param1 = ["-y", "station", "-q", "format=text", "-q", "level=channel"]
     param2 = ["-y", "dataselect", "-z"]
-    times = {"starttime": datetime.datetime(1900, 1, 1), "endtime": datetime.datetime(2100, 1, 1)}
+    times = {"starttime": datetime.datetime(
+        1900, 1, 1), "endtime": datetime.datetime(2100, 1, 1)}
     nets = set()
 
     def add_param0(option, opt_str, value, parser):
@@ -202,7 +202,8 @@ def main():
             t = dateutil.parser.parse(value)
 
         except ValueError as e:
-            raise optparse.OptionValueError("option '%s': invalid time value: '%s'" % (opt_str, value))
+            raise optparse.OptionValueError(
+                "option '%s': invalid time value: '%s'" % (opt_str, value))
 
         if t.tzinfo is not None:
             t = t.astimezone(dateutil.tz.tzutc()).replace(tzinfo=None)
@@ -210,17 +211,17 @@ def main():
         times[option.dest] = t
 
     parser = optparse.OptionParser(
-            usage="Usage: %prog [-h|--help] [OPTIONS] -o directory",
-            version="%prog " + VERSION)
+        usage="Usage: %prog [-h|--help] [OPTIONS] -o directory",
+        version="%prog " + VERSION)
 
     parser.set_defaults(
-            url="http://geofon.gfz-potsdam.de/eidaws/routing/1/",
-            timeout=600,
-            retries=10,
-            retry_wait=60,
-            threads=5,
-            max_lines=1000,
-            max_timespan=1440)
+        url="http://geofon.gfz-potsdam.de/eidaws/routing/1/",
+        timeout=600,
+        retries=10,
+        retry_wait=60,
+        threads=5,
+        max_lines=1000,
+        max_timespan=1440)
 
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="verbose mode")
@@ -343,14 +344,18 @@ def main():
             if not line or line.startswith('#'):
                 continue
 
-            starttime = max(dateutil.parser.parse(line.split('|')[15]), times['starttime'])
-            endtime = min(dateutil.parser.parse(line.split('|')[16]), times['endtime'])
+            starttime = max(dateutil.parser.parse(
+                line.split('|')[15]), times['starttime'])
+            endtime = min(dateutil.parser.parse(
+                line.split('|')[16]), times['endtime'])
 
             if starttime.tzinfo is not None:
-                starttime = starttime.astimezone(dateutil.tz.tzutc()).replace(tzinfo=None)
+                starttime = starttime.astimezone(
+                    dateutil.tz.tzutc()).replace(tzinfo=None)
 
             if endtime.tzinfo is not None:
-                endtime = endtime.astimezone(dateutil.tz.tzutc()).replace(tzinfo=None)
+                endtime = endtime.astimezone(
+                    dateutil.tz.tzutc()).replace(tzinfo=None)
 
             try:
                 ts = timespan[tuple(line.split('|')[:4])]
@@ -363,7 +368,8 @@ def main():
                     ts.end = endtime
 
             except KeyError:
-                timespan[tuple(line.split('|')[:4])] = Timespan(starttime, endtime)
+                timespan[tuple(line.split('|')[:4])] = Timespan(
+                    starttime, endtime)
 
         proc.stdout.close()
         proc.wait()
@@ -378,10 +384,12 @@ def main():
         while len(timespan) > 0:
             postdata = ""
 
-            ts_used = random.sample(timespan.items(), min(len(timespan), options.max_lines))
+            ts_used = random.sample(timespan.items(), min(
+                len(timespan), options.max_lines))
 
             for ((net, sta, loc, cha), ts) in ts_used:
-                te = min(ts.end, ts.start + datetime.timedelta(minutes=options.max_timespan))
+                te = min(ts.end, ts.start +
+                         datetime.timedelta(minutes=options.max_timespan))
 
                 if loc == '':
                     loc = '--'
@@ -393,7 +401,8 @@ def main():
                 postdata = postdata.encode('utf-8')
 
             try:
-                proc = exec_fetch(param2, postdata, options.verbose, options.no_check)
+                proc = exec_fetch(param2, postdata,
+                                  options.verbose, options.no_check)
 
             except OSError as e:
                 logs.error(str(e))
@@ -408,7 +417,8 @@ def main():
                         ts = timespan[(rec.net, rec.sta, rec.loc, rec.cha)]
 
                     except KeyError:
-                        logs.warning("unexpected data: %s.%s.%s.%s" % (rec.net, rec.sta, rec.loc, rec.cha))
+                        logs.warning("unexpected data: %s.%s.%s.%s" %
+                                     (rec.net, rec.sta, rec.loc, rec.cha))
                         continue
 
                     if rec.end_time <= ts.current:
@@ -418,7 +428,7 @@ def main():
                               % (options.output_dir, rec.begin_time.year, rec.net, rec.sta, rec.cha)
 
                     sds_file = "%s.%s.%s.%s.D.%s" \
-                              % (rec.net, rec.sta, rec.loc, rec.cha, rec.begin_time.strftime('%Y.%j'))
+                        % (rec.net, rec.sta, rec.loc, rec.cha, rec.begin_time.strftime('%Y.%j'))
 
                     if not os.path.exists(sds_dir):
                         os.makedirs(sds_dir)
@@ -443,7 +453,8 @@ def main():
             for ((net, sta, loc, cha), ts) in ts_used:
                 if not got_data:
                     # no progress, skip to next segment
-                    ts.start += datetime.timedelta(minutes=options.max_timespan)
+                    ts.start += datetime.timedelta(
+                        minutes=options.max_timespan)
 
                 else:
                     # continue from current position
@@ -466,4 +477,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-
