@@ -138,12 +138,12 @@ bool RegionCheckProcessor::setup(const Config::Config &config) {
 			}
 
 			if ( regionName == "accept" ) {
-				_regions.push_back(RegionCheck(nullptr, true));
+				_regions.push_back(RegionCheck(NULL, true));
 				_hasPositiveRegions = true;
 				SEISCOMP_DEBUG(" + evrc: %s - add world as positive region", regionName.c_str());
 			}
 			else if ( regionName == "!reject" || regionName == "reject" ) {
-				_regions.push_back(RegionCheck(nullptr, false));
+				_regions.push_back(RegionCheck(NULL, false));
 				_hasNegativeRegions = true;
 				SEISCOMP_DEBUG(" + evrc: %s - add world as negative region",regionName.c_str());
 			}
