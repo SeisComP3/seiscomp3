@@ -1,10 +1,13 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2020.330
 
 ```SC_API_VERSION 13.0.0```
 
-This release adds support for Qt5 and Python3.
+This release adds support for Qt5 and Python3. It is the last official
+SeisComP3 release and will be maintained with bugfixes and security
+fixes until 2022. All feature work continues on SeisComP, see
+http://www.seiscomp.de.
 
 * Ms_20
 
