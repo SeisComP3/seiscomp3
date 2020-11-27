@@ -6,8 +6,7 @@ from seiscomp3 import Client, DataModel, IO
 class ObjectDumper(Client.Application):
 
     def __init__(self):
-        argv = [bytes(a.encode()) for a in sys.argv]
-        Client.Application.__init__(self, len(argv), argv)
+        Client.Application.__init__(self, len(sys.argv), sys.argv)
         self.setMessagingEnabled(True)
         self.setDatabaseEnabled(True, False)
         self.setMessagingUsername("")
