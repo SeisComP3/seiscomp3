@@ -1038,8 +1038,7 @@ class BulletinApp(seiscomp3.Client.Application):
 
 
 def main():
-    argv = [ bytes(a.encode()) for a in sys.argv ]
-    app = BulletinApp(len(argv), argv)
+    app = BulletinApp(len(sys.argv), sys.argv)
     return app()
 
 
