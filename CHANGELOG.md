@@ -1,5 +1,15 @@
 # Jakarta
 
+## Release 2020.330 patch1
+
+* cmake
+
+  * Port FindNumpy macro to Python3
+
+* scbulletin, scdumpobject
+
+  * Fix crash at start
+
 ## Release 2020.330
 
 ```SC_API_VERSION 13.0.0```
