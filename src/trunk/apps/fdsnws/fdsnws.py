@@ -592,7 +592,7 @@ class FDSNWS(Application):
                                   "list takes precedence" % overlapCount,
                                   file=sys.stderr)
                 except Exception as e:
-                    print("error parsing eventType.whitelist: %s" % str(e),
+                    print("error parsing eventType.blacklist: %s" % str(e),
                           file=sys.stderr)
                     return False
         except Exception:
@@ -942,7 +942,7 @@ configuration read:
 
             # query
             event1.putChild(b'query', FDSNEvent(
-                self._hideAuthor, self._evaluationMode,
+                self._hideAuthor, self._hideComments, self._evaluationMode,
                 self._eventTypeWhitelist, self._eventTypeBlacklist,
                 self._eventFormats))
 

@@ -10,6 +10,10 @@
 
   * Fix crash at start
 
+* fdsnws
+
+  * Fix fdsnws/event event type and evaluation mode filter
+
 ## Release 2020.330
 
 ```SC_API_VERSION 13.0.0```
