@@ -1028,6 +1028,7 @@ StationGroup::StationGroup(const string &address, bool multi_init, bool batch_in
     slcd->keepalive = keepalive;
     slcd->netto = netto;
     slcd->netdly = netdly;
+    slcd->lastpkttime = 0;
   }
 
 StationGroup::~StationGroup()
