@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release 2020.330 patch2
+
+* seedlink
+
+  * Fixed data continuation bug with seedlink sources,
+    e.g. chain_plugin, slarchive, slinktool
+
 ## Release 2020.330 patch1
 
 * cmake
