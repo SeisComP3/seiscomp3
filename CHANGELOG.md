@@ -6,6 +6,9 @@
 
   * Fixed data continuation bug with seedlink sources,
     e.g. chain_plugin, slarchive, slinktool
+  * Add `composed_station_id` global setup parameter which can be used by
+    3rd-party plugins in their setup script to decide whether to composed
+    station ids or just the station code.
 
 ## Release 2020.330 patch1
 
