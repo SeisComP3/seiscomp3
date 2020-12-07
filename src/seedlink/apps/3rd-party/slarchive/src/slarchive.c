@@ -102,6 +102,10 @@ int main (int argc, char **argv) {
 
 	/* Allocate and initialize a new connection description */
 	slconn = sl_newslcd();
+	if ( slconn ) {
+		// Change default from libslink >= 2.6
+		slconn->lastpkttime = 0;
+	}
 
 	/* Process given parameters (command line and parameter file) */
 	if ( parameter_proc (argc, argv) < 0 ) {

@@ -282,6 +282,7 @@ int main(int argc, char **argv)
     slcd->netdly = 1;
     slcd->keepalive = 0;
     slcd->sladdr = address;
+    slcd->lastpkttime = 0;
   
     /* If no host is given for the SeedLink server, add 'localhost' */
     if(*slcd->sladdr == ':')

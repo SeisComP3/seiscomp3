@@ -106,6 +106,9 @@ main (int argc, char **argv)
 
   /* Allocate and initialize a new connection description */
   slconn = sl_newslcd();
+  if ( slconn ) {
+    slconn->lastpkttime = 0;
+  }
   
   /* Process given parameters (command line and parameter file) */
   if ( parameter_proc (argc, argv) < 0 )
