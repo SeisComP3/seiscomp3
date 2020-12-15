@@ -1,0 +1,190 @@
+.container
+{
+    width: 90%;
+    margin: 10px auto;
+    background-color: #fff;
+    color: #333;
+    line-height: 130%;
+}
+
+.top
+{
+    padding: .5em;
+}
+
+.vheading {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: verdana, sans-serif;
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.vitem {
+    padding-left: 25px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-family: verdana, sans-serif;
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.vsubitem {
+    padding-left: 40px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-family: verdana, sans-serif;
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.top h1
+{
+    padding: 0;
+    margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 24px;
+    font-weight: normal;
+    color: #00529b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.leftnav
+{
+    float: left;
+    width: 110px;
+    margin: 0;
+    padding: 1em;
+    border-left: dotted black;
+}
+
+.navlink {
+    font-family: verdana, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    color: #00529b; 
+}
+
+.leftnav a {
+    font-family: verdana, sans-serif;
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.leftnav a:hover {
+    border-bottom: 1px solid #00529b;
+}
+
+.cap {
+    font-style: italic;
+    margin: 2px;
+    width: 200px;
+}
+
+.capfig2 {
+    float: left;
+    margin: 5px;
+}
+
+.capfig2 img {
+    border: 1px solid black;
+}
+
+.capfig {
+    float: right;
+    margin: 5px;
+}
+
+.capfig img {
+    border: 1px solid black;
+}
+
+.content
+{
+    margin-left: 150px;
+    padding: 1em;
+    max-width: 36em;
+}
+
+.content h2 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+    font-weight: normal;
+    color: #00529b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.content h3 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: #00529b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.content a {
+    color: #000;
+    text-decoration: none;
+    border-bottom: dotted 1px #000;
+}
+
+.content textarea {
+    width: 350px;
+}
+
+
+.content p {
+    font-family: verdana, sans-serif;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.content ol {
+    font-family: verdana, sans-serif;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.content ul {
+    font-family: verdana, sans-serif;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.code {
+    font-family: Courier, Monospace;
+    font-size: 12px;
+    overflow: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px black dotted;
+    background-color: #EEE;
+}
+
+.footer
+{
+    clear: both;
+    margin: 0;
+    padding: .5em;
+}
+
+.footer p {
+    font-family: verdana, sans-serif;
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+
