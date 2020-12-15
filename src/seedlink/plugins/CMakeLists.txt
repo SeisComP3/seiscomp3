@@ -26,6 +26,7 @@ IF ( NOT MACOSX )
 			sockplugin
 			wave24_plugin
 			win_plugin
+			seismicpi_plugin
 	) 
 ENDIF ( NOT MACOSX )
 
