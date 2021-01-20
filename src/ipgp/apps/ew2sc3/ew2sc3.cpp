@@ -956,13 +956,13 @@ int EW2SC3::extractOrigin(char* msg) {
 				for (size_t i = 0; i < inv->networkCount(); ++i) {
 					NetworkPtr n = inv->network(i);
 
-					if ( n->code() != network )
+					if ( n->code() != strip_space(network) )
 						continue;
 
 					for (size_t j = 0; j < n->stationCount(); ++j) {
 						StationPtr station = n->station(j);
 
-						if ( station->code() != site )
+						if ( station->code() != strip_space(site) )
 							continue;
 
 						for (size_t l = 0; l < station->sensorLocationCount();
@@ -979,9 +979,39 @@ int EW2SC3::extractOrigin(char* msg) {
 							if ( sloc->start() > ot )
 								continue;
 
-							sensor = sloc;
+							for (size_t c = 0; c < sloc->streamCount();
+											++c) {
+								StreamPtr schan = sloc->stream(c);
+
+								// channel's is finished (out of date)
+								try {
+									if ( schan->end() <= ot )
+										continue;
+								} catch ( ... ) {}
+
+								// channel's hasn't even begin yet
+								if ( schan->start() > ot )
+									continue;
+
+								if ( schan->code() != strip_space(component) )
+									continue;
+
+								// channel found, store sensor location code and break channel loop
+								sensor = sloc;
+								SEISCOMP_DEBUG("Loccode sensor found : %s.%s.%s", network.c_str(),station->code().c_str(),sensor->code().c_str());
+								break;
+							}
+							// sensor location code found, break sensor loop
+							if ( sensor )
+								break;
 						}
+						// sensor location code found, break station loop
+						if ( sensor )
+							break;
 					}
+					// sensor location code found, break network loop
+					if ( sensor )
+						break;
 				}
 			}
 			else
@@ -1369,4 +1399,3 @@ void EW2SC3::strExplode(const string& s, char c, vector<string>& v) {
 	}
 }
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
