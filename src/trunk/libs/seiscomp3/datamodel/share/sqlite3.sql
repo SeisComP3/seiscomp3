@@ -71,12 +71,12 @@ CREATE TABLE Meta (
 
 
 CREATE TABLE Object (
-	_oid BIGINT PRIMARY KEY AUTOINCREMENT NOT NULL,
+	_oid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE PublicObject (
-	_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
 	publicID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
 	UNIQUE(publicID),
@@ -106,8 +106,8 @@ INSERT INTO Object(_oid) VALUES (NULL);
 INSERT INTO PublicObject(_oid,publicID) VALUES ((SELECT MAX(_oid) FROM Object),'DataAvailability');
 
 CREATE TABLE EventDescription (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	text VARCHAR NOT NULL,
 	type VARCHAR(64) NOT NULL,
@@ -126,8 +126,8 @@ BEGIN
 END;
 
 CREATE TABLE Comment (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	text BLOB NOT NULL,
 	id VARCHAR,
@@ -160,8 +160,8 @@ BEGIN
 END;
 
 CREATE TABLE DataUsed (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveType VARCHAR(64) NOT NULL,
 	stationCount INT UNSIGNED NOT NULL,
@@ -181,8 +181,8 @@ BEGIN
 END;
 
 CREATE TABLE CompositeTime (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	year_value INT,
 	year_uncertainty INT UNSIGNED,
@@ -237,8 +237,8 @@ BEGIN
 END;
 
 CREATE TABLE PickReference (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	pickID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
@@ -257,8 +257,8 @@ BEGIN
 END;
 
 CREATE TABLE AmplitudeReference (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	amplitudeID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
@@ -277,8 +277,8 @@ BEGIN
 END;
 
 CREATE TABLE Reading (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 		REFERENCES Object(_oid)
@@ -293,8 +293,8 @@ BEGIN
 END;
 
 CREATE TABLE MomentTensorComponentContribution (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	phaseCode CHAR NOT NULL,
 	component INT NOT NULL,
@@ -319,8 +319,8 @@ BEGIN
 END;
 
 CREATE TABLE MomentTensorStationContribution (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	active INTEGER(1) NOT NULL,
 	waveformID_networkCode CHAR,
@@ -345,8 +345,8 @@ BEGIN
 END;
 
 CREATE TABLE MomentTensorPhaseSetting (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	lowerPeriod DOUBLE NOT NULL,
@@ -368,8 +368,8 @@ BEGIN
 END;
 
 CREATE TABLE MomentTensor (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	derivedOriginID VARCHAR NOT NULL,
 	momentMagnitudeID VARCHAR,
@@ -473,8 +473,8 @@ BEGIN
 END;
 
 CREATE TABLE FocalMechanism (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	triggeringOriginID VARCHAR,
 	nodalPlanes_nodalPlane1_strike_value DOUBLE,
@@ -635,8 +635,8 @@ BEGIN
 END;
 
 CREATE TABLE Amplitude (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type CHAR NOT NULL,
 	amplitude_value DOUBLE,
@@ -711,8 +711,8 @@ BEGIN
 END;
 
 CREATE TABLE StationMagnitudeContribution (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	stationMagnitudeID VARCHAR NOT NULL,
 	residual DOUBLE,
@@ -733,8 +733,8 @@ BEGIN
 END;
 
 CREATE TABLE Magnitude (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	magnitude_value DOUBLE NOT NULL,
 	magnitude_uncertainty DOUBLE UNSIGNED,
@@ -774,8 +774,8 @@ BEGIN
 END;
 
 CREATE TABLE StationMagnitude (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	originID VARCHAR,
 	magnitude_value DOUBLE NOT NULL,
@@ -821,8 +821,8 @@ BEGIN
 END;
 
 CREATE TABLE Pick (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	time_value DATETIME NOT NULL,
 	time_value_ms INTEGER NOT NULL,
@@ -890,8 +890,8 @@ BEGIN
 END;
 
 CREATE TABLE OriginReference (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	originID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
@@ -910,8 +910,8 @@ BEGIN
 END;
 
 CREATE TABLE FocalMechanismReference (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	focalMechanismID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
@@ -930,8 +930,8 @@ BEGIN
 END;
 
 CREATE TABLE Event (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	preferredOriginID VARCHAR,
 	preferredMagnitudeID VARCHAR,
@@ -965,8 +965,8 @@ BEGIN
 END;
 
 CREATE TABLE Arrival (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	pickID VARCHAR NOT NULL,
 	phase_code CHAR NOT NULL,
@@ -1009,8 +1009,8 @@ BEGIN
 END;
 
 CREATE TABLE Origin (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	time_value DATETIME NOT NULL,
 	time_value_ms INTEGER NOT NULL,
@@ -1106,8 +1106,8 @@ BEGIN
 END;
 
 CREATE TABLE Parameter (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	value BLOB,
@@ -1125,8 +1125,8 @@ BEGIN
 END;
 
 CREATE TABLE ParameterSet (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	baseID VARCHAR,
 	moduleID VARCHAR,
@@ -1147,8 +1147,8 @@ BEGIN
 END;
 
 CREATE TABLE Setup (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	parameterSetID VARCHAR,
@@ -1169,8 +1169,8 @@ BEGIN
 END;
 
 CREATE TABLE ConfigStation (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1200,8 +1200,8 @@ BEGIN
 END;
 
 CREATE TABLE ConfigModule (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	parameterSetID VARCHAR,
@@ -1221,8 +1221,8 @@ BEGIN
 END;
 
 CREATE TABLE QCLog (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1252,8 +1252,8 @@ BEGIN
 END;
 
 CREATE TABLE WaveformQuality (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1290,8 +1290,8 @@ BEGIN
 END;
 
 CREATE TABLE Outage (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
@@ -1320,8 +1320,8 @@ BEGIN
 END;
 
 CREATE TABLE StationReference (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	stationID VARCHAR NOT NULL,
 	PRIMARY KEY(_oid),
@@ -1340,8 +1340,8 @@ BEGIN
 END;
 
 CREATE TABLE StationGroup (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type VARCHAR(64),
 	code CHAR,
@@ -1368,8 +1368,8 @@ BEGIN
 END;
 
 CREATE TABLE AuxSource (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1394,8 +1394,8 @@ BEGIN
 END;
 
 CREATE TABLE AuxDevice (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1418,8 +1418,8 @@ BEGIN
 END;
 
 CREATE TABLE SensorCalibration (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
@@ -1446,8 +1446,8 @@ BEGIN
 END;
 
 CREATE TABLE Sensor (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	description VARCHAR,
@@ -1475,8 +1475,8 @@ BEGIN
 END;
 
 CREATE TABLE ResponsePAZ (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
@@ -1510,8 +1510,8 @@ BEGIN
 END;
 
 CREATE TABLE ResponsePolynomial (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1541,8 +1541,8 @@ BEGIN
 END;
 
 CREATE TABLE ResponseFAP (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1567,8 +1567,8 @@ BEGIN
 END;
 
 CREATE TABLE ResponseFIR (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	gain DOUBLE,
@@ -1597,8 +1597,8 @@ BEGIN
 END;
 
 CREATE TABLE ResponseIIR (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
@@ -1630,8 +1630,8 @@ BEGIN
 END;
 
 CREATE TABLE DataloggerCalibration (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
@@ -1658,8 +1658,8 @@ BEGIN
 END;
 
 CREATE TABLE Decimation (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	sampleRateNumerator INT UNSIGNED NOT NULL,
 	sampleRateDenominator INT UNSIGNED NOT NULL,
@@ -1682,8 +1682,8 @@ BEGIN
 END;
 
 CREATE TABLE Datalogger (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	description VARCHAR,
@@ -1713,8 +1713,8 @@ BEGIN
 END;
 
 CREATE TABLE AuxStream (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1743,8 +1743,8 @@ BEGIN
 END;
 
 CREATE TABLE Stream (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1785,8 +1785,8 @@ BEGIN
 END;
 
 CREATE TABLE SensorLocation (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1811,8 +1811,8 @@ BEGIN
 END;
 
 CREATE TABLE Station (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1848,8 +1848,8 @@ BEGIN
 END;
 
 CREATE TABLE Network (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1881,8 +1881,8 @@ BEGIN
 END;
 
 CREATE TABLE RouteArclink (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	address VARCHAR NOT NULL,
 	start DATETIME NOT NULL,
@@ -1903,8 +1903,8 @@ BEGIN
 END;
 
 CREATE TABLE RouteSeedlink (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	address VARCHAR NOT NULL,
 	priority TINYINT UNSIGNED,
@@ -1923,8 +1923,8 @@ BEGIN
 END;
 
 CREATE TABLE Route (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1945,8 +1945,8 @@ BEGIN
 END;
 
 CREATE TABLE Access (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
@@ -1970,8 +1970,8 @@ BEGIN
 END;
 
 CREATE TABLE JournalEntry (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	created DATETIME,
 	created_ms INTEGER,
@@ -1994,8 +1994,8 @@ BEGIN
 END;
 
 CREATE TABLE ArclinkUser (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR NOT NULL,
 	email VARCHAR,
@@ -2015,8 +2015,8 @@ BEGIN
 END;
 
 CREATE TABLE ArclinkStatusLine (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	type VARCHAR NOT NULL,
 	status VARCHAR NOT NULL,
@@ -2038,8 +2038,8 @@ BEGIN
 END;
 
 CREATE TABLE ArclinkRequestLine (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2074,8 +2074,8 @@ BEGIN
 END;
 
 CREATE TABLE ArclinkRequest (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	requestID VARCHAR NOT NULL,
 	userID VARCHAR NOT NULL,
@@ -2108,8 +2108,8 @@ BEGIN
 END;
 
 CREATE TABLE DataSegment (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2138,8 +2138,8 @@ BEGIN
 END;
 
 CREATE TABLE DataAttributeExtent (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	start DATETIME NOT NULL,
 	start_ms INTEGER NOT NULL,
@@ -2168,8 +2168,8 @@ BEGIN
 END;
 
 CREATE TABLE DataExtent (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
