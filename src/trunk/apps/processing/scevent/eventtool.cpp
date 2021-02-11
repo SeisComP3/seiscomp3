@@ -849,8 +849,14 @@ void EventTool::addObject(const string &parentID, Object* object) {
 			if ( org != mag->origin() )
 				org->add(mag);
 
-			SEISCOMP_LOG(_infoChannel, "Received new magnitude %s (%s %.2f)",
-			             mag->publicID().c_str(), mag->type().c_str(), mag->magnitude().value());
+			try {
+				SEISCOMP_LOG(_infoChannel, "Received new magnitude %s (%s %.2f)",
+				             mag->publicID().c_str(), mag->type().c_str(), mag->magnitude().value());
+			}
+			catch ( ... ) {
+				SEISCOMP_LOG(_infoChannel, "Received new magnitude %s (%s -.--)",
+				             mag->publicID().c_str(), mag->type().c_str());
+			}
 
 			_updates.insert(TodoEntry(org));
 		}
@@ -1028,8 +1034,15 @@ void EventTool::updateObject(const std::string &parentID, Object* object) {
 		logObject(_inputMagnitude, Core::Time::GMT());
 		if ( !mag->registered() )
 			mag = Magnitude::Find(mag->publicID());
-		SEISCOMP_LOG(_infoChannel, "Received updated magnitude %s (%s %.2f)",
-		             mag->publicID().c_str(), mag->type().c_str(), mag->magnitude().value());
+		try{
+			SEISCOMP_LOG(_infoChannel, "Received updated magnitude %s (%s %.2f)",
+			             mag->publicID().c_str(), mag->type().c_str(), mag->magnitude().value());
+		}
+		catch ( ... ) {
+			SEISCOMP_LOG(_infoChannel, "Received updated magnitude %s (%s -.--)",
+			             mag->publicID().c_str(), mag->type().c_str());
+		}
+
 		org = _cache.get<Origin>(parentID);
 		if ( org )
 			_updates.insert(TodoEntry(org, mag));
