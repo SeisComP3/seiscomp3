@@ -1,6 +1,10 @@
 from __future__ import print_function
-import configparser
 import xml.dom.minidom
+try:
+    import configparser
+
+except ImportError:
+    import ConfigParser as configparser
 
 def parseXMLnode(root):
     """
