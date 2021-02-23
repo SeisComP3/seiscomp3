@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <algorithm>
 
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/math.h>
@@ -44,6 +45,7 @@ static int _delazi(double lat1,  double lon1, double lat2, double lon2,
 	sina  = sin(a);
 	sinb  = sin(b);
 	cosc  = cosa*cosb + sinb*sina*cos(gam);
+	cosc  = std::min(1.0, std::max(-1.0, cosc));
 	delta = acos(cosc);
 	sinc  = sin(delta);
 	azi1  = acos((cosa-cosb*cosc)/(sinb*sinc));

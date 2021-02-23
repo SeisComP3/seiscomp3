@@ -61,8 +61,8 @@ class SC_CONFIG_API SyntaxException : public Exception {
 
 class SC_CONFIG_API CaseSensitivityException : public Exception {
 	public:
-		CaseSensitivityException() : Exception("Case-insensitiv names are ambigous") { }
-		CaseSensitivityException(const std::string &str) : Exception("Case-insensitiv names are ambigous: " + str) { }
+		CaseSensitivityException() : Exception("Case-insensitiv names are ambiguous") { }
+		CaseSensitivityException(const std::string &str) : Exception("Case-insensitiv names are ambiguous: " + str) { }
 };
 
 

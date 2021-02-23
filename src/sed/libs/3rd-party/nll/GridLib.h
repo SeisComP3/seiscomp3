@@ -667,7 +667,7 @@ EXTERN_TXT int NumQuality2ErrorLevels;
 /* model coordinates */
 #define COORDS_RECT	0
 #define COORDS_LATLON	1
-int ModelCoordsMode;
+EXTERN_TXT int ModelCoordsMode;
 
 /* */
 /*------------------------------------------------------------/ */

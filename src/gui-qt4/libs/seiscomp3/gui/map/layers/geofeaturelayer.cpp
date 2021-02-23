@@ -280,9 +280,9 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 				string fn = cfg.getString(cfgSymbolIcon);
 				if ( !fn.empty() ) {
 					if ( fn[0] == '/' )
-						symbolIcon = QPixmap(fn.c_str());
+						symbolIcon = QImage(fn.c_str());
 					else
-						symbolIcon = QPixmap((dataDir + '/' + fn).c_str());
+						symbolIcon = QImage((dataDir + '/' + fn).c_str());
 				}
 			}
 			catch( ... ) {}
@@ -316,9 +316,9 @@ void GeoFeatureLayer::LayerProperties::read(const string &dataDir) {
 			string fn = SCApp->configGetString(query + cfgSymbolIcon);
 			if ( !fn.empty() ) {
 				if ( fn[0] == '/' )
-					symbolIcon = QPixmap(fn.c_str());
+					symbolIcon = QImage(fn.c_str());
 				else
-					symbolIcon = QPixmap((dataDir + '/' + fn).c_str());
+					symbolIcon = QImage((dataDir + '/' + fn).c_str());
 			}
 		}
 		catch( ... ) {}
@@ -561,7 +561,7 @@ bool GeoFeatureLayer::drawFeature(Canvas *canvas, QPainter *painter,
 			if ( width < 0 ) width = 8;
 
 			if ( !props->symbolIcon.isNull() ) {
-				painter->drawPixmap(p - props->symbolIconHotspot, props->symbolIcon);
+				painter->drawImage(p - props->symbolIconHotspot, props->symbolIcon);
 				p.setY(p.y() - props->symbolIconHotspot.y() + props->symbolIcon.height());
 			}
 			else {
