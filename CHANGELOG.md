@@ -1,5 +1,24 @@
 # Jakarta
 
+## Release 2020.330 patch3
+
+* trunk
+
+  * Fixed crash of distance computation if distance is close to zero
+  * Fixed SQLite3 database schema
+
+* slmon
+
+  * Fixed import of configparser for Python 2
+
+* scevent
+
+  * Fixed crash if magnitude value is unset
+
+* ew2sc3
+
+  * Correct location code search algorithm
+
 ## Release 2020.330 patch2
 
 * seedlink
