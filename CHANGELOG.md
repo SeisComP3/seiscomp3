@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2020.330 patch4
+
+* nll
+
+  * Re-activate plugin which has been disabled in p3 by accident
+
 ## Release 2020.330 patch3
 
 * trunk
