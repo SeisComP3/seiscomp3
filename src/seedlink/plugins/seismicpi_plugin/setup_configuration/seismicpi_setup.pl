@@ -84,15 +84,26 @@ print "\n*Warning* UPDATE.pl sets new configuration and old must be removed in o
 $del_choice = <STDIN>;
 chomp $del_choice;
 if ($del_choice eq "Y") {
-`rm $sr/etc/key/station*`;
+	# Make new key file
+$sc3_key = "$sr/etc/key/station\_$net\_$station";
+$sc3_arch = "$sr/etc/key/slarchive/profile_90d";
+if (!-e "$sr/etc/key/slarchive") {`mkdir -p $sr/etc/key/slarchive`;}
+
+if (!-e "$sc3_arch") {
+open(SC3,"+>$sc3_arch") or die "Cannot open $sc3_arch\n";
+printf SC3 "keep = 90";
+}
+close(SC3);
+
+open(SC3,"+>$sc3_key") or die "Cannot open $sc3_key\n";
+printf SC3 "seedlink:seismicpi\n";
+printf SC3 "slarchive:90d";
+close(SC3);
 } elsif ($del_choice eq "N") {
 	print "Keeping old station info. Acquisition may not run with new settings.\n";
 } else { print "(Y/N) must be selected, exiting.\n"; exit; }
-# Make new key file
-$sc3_key = "$sr/etc/key/station\_$net\_$station";
-open(SC3,"+>$sc3_key") or die "Cannot open $sc3_key\n";
-printf SC3 "seedlink:seismicpi";
-close(SC3);
+
+
 print "$sc3_key\n";
 `$sr/bin/seiscomp update-config`;
 # Make plugin configuration file
@@ -206,3 +217,4 @@ Source: $src_msg
 ";
 sleep(5);
 } else { print "Global variable \$SEISCOMP_ROOT must be defined.\n"; }
+
