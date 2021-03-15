@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release 2020.330 patch5
+
+* trunk
+
+  * Fix SDSArchive recordstream if no data is available for the
+    first day requested
+
 ## Release 2020.330 patch4
 
 * nll
