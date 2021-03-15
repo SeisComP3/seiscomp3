@@ -839,7 +839,10 @@ int EW2SC3::extractOrigin(char* msg) {
 			eventMin = line.substr(10, 2);
 			eventSec = line.substr(12, 2) + "." + line.substr(14, 2);
 			eventSec = blank_replace(eventSec, zero);
-			eventAmplitudeMagnitude = line.substr(36, 1) + "." + line.substr(37, 2);
+			if ( line.substr(36, 3) == "   " )
+				eventAmplitudeMagnitude = "NaN";
+			else
+				eventAmplitudeMagnitude = line.substr(36, 1) + "." + line.substr(37, 2);
 			eventAmplitudeMagnitude = blank_replace(eventAmplitudeMagnitude, zero);
 			neventMonth = blank_replace(eventMonth, zero);
 			neventDay = blank_replace(eventDay, zero);
@@ -865,8 +868,10 @@ int EW2SC3::extractOrigin(char* msg) {
 			eventLonMin = line.substr(27, 4);
 			eventErh = line.substr(85, 2) + "." + line.substr(87, 2);
 			eventErz = line.substr(89, 2) + "." + line.substr(91, 2);
-
-			eventCodaDurationMagnitude = line.substr(70, 1) + "." + line.substr(71, 2);
+			if ( line.substr(70, 3) == "   " )
+				eventCodaDurationMagnitude = "NaN";
+			else
+				eventCodaDurationMagnitude = line.substr(70, 1) + "." + line.substr(71, 2);
 			eventCodaDurationMagnitude = blank_replace(eventCodaDurationMagnitude, zero);
 			eventPreferredMagnitude = line.substr(147, 1) + "." + line.substr(148, 2);
 			eventPreferredMagnitude = blank_replace(eventPreferredMagnitude, zero);
@@ -1178,24 +1183,28 @@ int EW2SC3::extractOrigin(char* msg) {
 	mci.setModificationTime(Time::GMT());
 
 	// Amplitude magnitude
-	MagnitudePtr amag = Magnitude::Create();
-	amag->setType("ML");
-	amag->setOriginID(origin->publicID());
-	amag->setMagnitude(RealQuantity(to_double(eventAmplitudeMagnitude)));
-	amag->setMethodID("mean");
-	amag->setStationCount(idx);
-	amag->setCreationInfo(mci);
-	origin->add(amag.get());
+	if ( eventAmplitudeMagnitude != "NaN" ) {
+		MagnitudePtr amag = Magnitude::Create();
+		amag->setType("ML");
+		amag->setOriginID(origin->publicID());
+		amag->setMagnitude(RealQuantity(to_double(eventAmplitudeMagnitude)));
+		amag->setMethodID("mean");
+		amag->setStationCount(idx);
+		amag->setCreationInfo(mci);
+		origin->add(amag.get());
+	}
 
 	// Coda duration magnitude
-	MagnitudePtr dmag = Magnitude::Create();
-	dmag->setType("Md");
-	dmag->setOriginID(origin->publicID());
-	dmag->setMagnitude(RealQuantity(to_double(eventCodaDurationMagnitude)));
-	dmag->setMethodID("mean");
-	dmag->setStationCount(idx);
-	dmag->setCreationInfo(mci);
-	origin->add(dmag.get());
+	if ( eventCodaDurationMagnitude != "NaN" ) {
+		MagnitudePtr dmag = Magnitude::Create();
+		dmag->setType("Md");
+		dmag->setOriginID(origin->publicID());
+		dmag->setMagnitude(RealQuantity(to_double(eventCodaDurationMagnitude)));
+		dmag->setMethodID("mean");
+		dmag->setStationCount(idx);
+		dmag->setCreationInfo(mci);
+		origin->add(dmag.get());
+	}
 
 	OriginQuality oq;
 	if ( to_double(eventRms) != .0 )
