@@ -252,9 +252,9 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.cbRemoveAllAutomaticPicks->setChecked(_pickerConfig.removeAutomaticPicks);
 
 	_ui.cbUsePerStreamTimeWindow->setChecked(_pickerConfig.usePerStreamTimeWindows);
-	_ui.preTimeEdit->setTime(QTime().addSecs(_pickerConfig.preOffset.seconds()));
-	_ui.postTimeEdit->setTime(QTime().addSecs(_pickerConfig.postOffset.seconds()));
-	_ui.minimumLengthTimeEdit->setTime(QTime().addSecs(_pickerConfig.minimumTimeWindow.seconds()));
+	_ui.preTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.preOffset.seconds()));
+	_ui.postTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.postOffset.seconds()));
+	_ui.minimumLengthTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.minimumTimeWindow.seconds()));
 
 	_ui.slWaveformAlignment->setValue(_pickerConfig.alignmentPosition*100);
 	_ui.waveformAlignmentEdit->setValue(_pickerConfig.alignmentPosition*100);
@@ -264,8 +264,8 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 
 	_ui.editRecordSource->setText(_pickerConfig.recordURL);
 
-	_ui.preAmplitudeTimeEdit->setTime(QTime().addSecs(_amplitudeConfig.preOffset.seconds()));
-	_ui.postAmplitudeTimeEdit->setTime(QTime().addSecs(_amplitudeConfig.postOffset.seconds()));
+	_ui.preAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_amplitudeConfig.preOffset.seconds()));
+	_ui.postAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_amplitudeConfig.postOffset.seconds()));
 
 	QFont font;
 
@@ -294,12 +294,12 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.labelPickUncertainties->setEnabled(_ui.listPickUncertainties->count() > 0);
 
 	if ( _pickerConfig.repickerSignalStart ) {
-		_ui.cbRepickerStart->setChecked(Qt::Checked);
+		_ui.cbRepickerStart->setChecked(true);
 		_ui.editRepickerStart->setValue(*_pickerConfig.repickerSignalStart);
 	}
 
 	if ( _pickerConfig.repickerSignalEnd ) {
-		_ui.cbRepickerEnd->setChecked(Qt::Checked);
+		_ui.cbRepickerEnd->setChecked(true);
 		_ui.editRepickerEnd->setValue(*_pickerConfig.repickerSignalEnd);
 	}
 
@@ -333,17 +333,17 @@ bool PickerSettings::saveSettings() const {
 
 
 void PickerSettings::adjustPreTime(int value) {
-	_ui.preTimeEdit->setTime(QTime().addSecs(_ui.slPreOffset->value()*60));
+	_ui.preTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_ui.slPreOffset->value()*60));
 }
 
 
 void PickerSettings::adjustPostTime(int value) {
-	_ui.postTimeEdit->setTime(QTime().addSecs(_ui.slPostOffset->value()*60));
+	_ui.postTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_ui.slPostOffset->value()*60));
 }
 
 
 void PickerSettings::adjustLength(int value) {
-	_ui.minimumLengthTimeEdit->setTime(QTime().addSecs(_ui.slMinimumLength->value()*60));
+	_ui.minimumLengthTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_ui.slMinimumLength->value()*60));
 }
 
 
@@ -366,12 +366,12 @@ void PickerSettings::adjustLengthSlider(const QTime &t) {
 
 
 void PickerSettings::adjustAmplitudePreTime(int value) {
-	_ui.preAmplitudeTimeEdit->setTime(QTime().addSecs(_ui.slAmplitudePreOffset->value()*60));
+	_ui.preAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_ui.slAmplitudePreOffset->value()*60));
 }
 
 
 void PickerSettings::adjustAmplitudePostTime(int value) {
-	_ui.postAmplitudeTimeEdit->setTime(QTime().addSecs(_ui.slAmplitudePostOffset->value()*60));
+	_ui.postAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_ui.slAmplitudePostOffset->value()*60));
 }
 
 
