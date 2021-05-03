@@ -1,5 +1,13 @@
 # Jakarta
 
+## Release 2020.330 patch7
+
+* GUI
+
+  * Fix picker settings with Qt5 which set preOffset
+    and postOffset always to zero after accepting or
+    saving the settings
+
 ## Release 2020.330 patch6
 
 * slmon
