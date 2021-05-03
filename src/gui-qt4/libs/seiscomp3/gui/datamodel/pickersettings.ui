@@ -1258,7 +1258,7 @@
          <item>
           <widget class="QSlider" name="slAmplitudePreOffset" >
            <property name="maximum" >
-            <number>60</number>
+            <number>300</number>
            </property>
            <property name="sliderPosition" >
             <number>1</number>
@@ -1327,7 +1327,7 @@
          <item>
           <widget class="QSlider" name="slAmplitudePostOffset" >
            <property name="maximum" >
-            <number>60</number>
+            <number>300</number>
            </property>
            <property name="sliderPosition" >
             <number>2</number>
