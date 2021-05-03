@@ -252,9 +252,11 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.cbRemoveAllAutomaticPicks->setChecked(_pickerConfig.removeAutomaticPicks);
 
 	_ui.cbUsePerStreamTimeWindow->setChecked(_pickerConfig.usePerStreamTimeWindows);
-	_ui.preTimeEdit->setTime(QTime().addSecs(_pickerConfig.preOffset.seconds()));
-	_ui.postTimeEdit->setTime(QTime().addSecs(_pickerConfig.postOffset.seconds()));
-	_ui.minimumLengthTimeEdit->setTime(QTime().addSecs(_pickerConfig.minimumTimeWindow.seconds()));
+	_ui.preTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.preOffset.seconds()));
+	adjustPreSlider(_ui.preTimeEdit->time());
+	_ui.postTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.postOffset.seconds()));
+	adjustPostSlider(_ui.postTimeEdit->time());
+	_ui.minimumLengthTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_pickerConfig.minimumTimeWindow.seconds()));
 
 	_ui.slWaveformAlignment->setValue(_pickerConfig.alignmentPosition*100);
 	_ui.waveformAlignmentEdit->setValue(_pickerConfig.alignmentPosition*100);
@@ -264,8 +266,10 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 
 	_ui.editRecordSource->setText(_pickerConfig.recordURL);
 
-	_ui.preAmplitudeTimeEdit->setTime(QTime().addSecs(_amplitudeConfig.preOffset.seconds()));
-	_ui.postAmplitudeTimeEdit->setTime(QTime().addSecs(_amplitudeConfig.postOffset.seconds()));
+	_ui.preAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_amplitudeConfig.preOffset.seconds()));
+	adjustAmplitudePreSlider(_ui.preAmplitudeTimeEdit->time());
+	_ui.postAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(_amplitudeConfig.postOffset.seconds()));
+	adjustAmplitudePostSlider(_ui.postAmplitudeTimeEdit->time());
 
 	QFont font;
 
@@ -294,12 +298,12 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.labelPickUncertainties->setEnabled(_ui.listPickUncertainties->count() > 0);
 
 	if ( _pickerConfig.repickerSignalStart ) {
-		_ui.cbRepickerStart->setChecked(Qt::Checked);
+		_ui.cbRepickerStart->setChecked(true);
 		_ui.editRepickerStart->setValue(*_pickerConfig.repickerSignalStart);
 	}
 
 	if ( _pickerConfig.repickerSignalEnd ) {
-		_ui.cbRepickerEnd->setChecked(Qt::Checked);
+		_ui.cbRepickerEnd->setChecked(true);
 		_ui.editRepickerEnd->setValue(*_pickerConfig.repickerSignalEnd);
 	}
 
@@ -333,56 +337,56 @@ bool PickerSettings::saveSettings() const {
 
 
 void PickerSettings::adjustPreTime(int value) {
-	_ui.preTimeEdit->setTime(QTime().addSecs(_ui.slPreOffset->value()*60));
+	_ui.preTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(value*60));
 }
 
 
 void PickerSettings::adjustPostTime(int value) {
-	_ui.postTimeEdit->setTime(QTime().addSecs(_ui.slPostOffset->value()*60));
+	_ui.postTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(value*60));
 }
 
 
 void PickerSettings::adjustLength(int value) {
-	_ui.minimumLengthTimeEdit->setTime(QTime().addSecs(_ui.slMinimumLength->value()*60));
+	_ui.minimumLengthTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(value*60));
 }
 
 
 void PickerSettings::adjustPreSlider(const QTime &t) {
-	int value = QTime().secsTo(t) / 60;
+	int value = QTime(0, 0, 0, 0).secsTo(t) / 60;
 	_ui.slPreOffset->setValue(value);
 }
 
 
 void PickerSettings::adjustPostSlider(const QTime &t) {
-	int value = QTime().secsTo(t) / 60;
+	int value = QTime(0, 0, 0, 0).secsTo(t) / 60;
 	_ui.slPostOffset->setValue(value);
 }
 
 
 void PickerSettings::adjustLengthSlider(const QTime &t) {
-	int value = QTime().secsTo(t) / 60;
+	int value = QTime(0, 0, 0, 0).secsTo(t) / 60;
 	_ui.slMinimumLength->setValue(value);
 }
 
 
 void PickerSettings::adjustAmplitudePreTime(int value) {
-	_ui.preAmplitudeTimeEdit->setTime(QTime().addSecs(_ui.slAmplitudePreOffset->value()*60));
+	_ui.preAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(value*60));
 }
 
 
 void PickerSettings::adjustAmplitudePostTime(int value) {
-	_ui.postAmplitudeTimeEdit->setTime(QTime().addSecs(_ui.slAmplitudePostOffset->value()*60));
+	_ui.postAmplitudeTimeEdit->setTime(QTime(0, 0, 0, 0).addSecs(value*60));
 }
 
 
 void PickerSettings::adjustAmplitudePreSlider(const QTime &t) {
-	int value = QTime().secsTo(t) / 60;
+	int value = QTime(0, 0, 0, 0).secsTo(t) / 60;
 	_ui.slAmplitudePreOffset->setValue(value);
 }
 
 
 void PickerSettings::adjustAmplitudePostSlider(const QTime &t) {
-	int value = QTime().secsTo(t) / 60;
+	int value = QTime(0, 0, 0, 0).secsTo(t) / 60;
 	_ui.slAmplitudePostOffset->setValue(value);
 }
 
@@ -509,9 +513,9 @@ PickerView::Config PickerSettings::pickerConfig() const {
 	_pickerConfig.removeAutomaticPicks = _ui.cbRemoveAllAutomaticPicks->isChecked();
 
 	_pickerConfig.usePerStreamTimeWindows = _ui.cbUsePerStreamTimeWindow->isChecked();
-	_pickerConfig.preOffset = Core::TimeSpan(QTime().secsTo(_ui.preTimeEdit->time()));
-	_pickerConfig.postOffset = Core::TimeSpan(QTime().secsTo(_ui.postTimeEdit->time()));
-	_pickerConfig.minimumTimeWindow = Core::TimeSpan(QTime().secsTo(_ui.minimumLengthTimeEdit->time()));
+	_pickerConfig.preOffset = Core::TimeSpan(QTime(0, 0, 0, 0).secsTo(_ui.preTimeEdit->time()));
+	_pickerConfig.postOffset = Core::TimeSpan(QTime(0, 0, 0, 0).secsTo(_ui.postTimeEdit->time()));
+	_pickerConfig.minimumTimeWindow = Core::TimeSpan(QTime(0, 0, 0, 0).secsTo(_ui.minimumLengthTimeEdit->time()));
 
 	_pickerConfig.alignmentPosition = _ui.slWaveformAlignment->value()*0.01;
 	if ( _pickerConfig.alignmentPosition < 0 )
@@ -546,8 +550,8 @@ PickerView::Config PickerSettings::pickerConfig() const {
 
 AmplitudeView::Config PickerSettings::amplitudeConfig() const {
 	_amplitudeConfig.recordURL = _ui.editRecordSource->text();
-	_amplitudeConfig.preOffset = Core::TimeSpan(QTime().secsTo(_ui.preAmplitudeTimeEdit->time()));
-	_amplitudeConfig.postOffset = Core::TimeSpan(QTime().secsTo(_ui.postAmplitudeTimeEdit->time()));
+	_amplitudeConfig.preOffset = Core::TimeSpan(QTime(0, 0, 0, 0).secsTo(_ui.preAmplitudeTimeEdit->time()));
+	_amplitudeConfig.postOffset = Core::TimeSpan(QTime(0, 0, 0, 0).secsTo(_ui.postAmplitudeTimeEdit->time()));
 	_amplitudeConfig.defaultAddStationsDistance = _ui.spinAddStationsDistance->value();
 	_amplitudeConfig.hideStationsWithoutData = _ui.cbHideStationsWithoutData->isChecked();
 	_amplitudeConfig.loadStrongMotionData = _ui.cbStrongMotion->isChecked();

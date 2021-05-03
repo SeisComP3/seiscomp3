@@ -4376,6 +4376,11 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 	minTime -= _config.preOffset;
 	maxTime += _config.postOffset;
 
+	if ( (maxTime - minTime) < Core::TimeSpan(0,100000) ) {
+		minTime -= Core::TimeSpan(10 * _config.alignmentPosition,0);
+		maxTime += Core::TimeSpan(10 * (1-_config.alignmentPosition),0);
+	}
+
 	relTimeWindowStart = minTime - originTime;
 	relTimeWindowEnd = maxTime - originTime;
 
