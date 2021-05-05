@@ -1,5 +1,30 @@
 # Jakarta
 
+## Release 2020.330 patch7
+
+* GUI
+
+  * Fix picker settings with Qt5 which set preOffset
+    and postOffset always to zero after accepting or
+    saving the settings
+
+## Release 2020.330 patch6
+
+* slmon
+
+  * Fix Python2 processing with non ASCII characters
+
+* system
+
+  * Add Ubuntu 20.04 depencencies
+
+## Release 2020.330 patch5
+
+* trunk
+
+  * Fix SDSArchive recordstream if no data is available for the
+    first day requested
+
 ## Release 2020.330 patch4
 
 * nll

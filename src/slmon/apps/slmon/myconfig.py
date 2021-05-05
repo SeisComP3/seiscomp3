@@ -1,10 +1,23 @@
 from __future__ import print_function
-import xml.dom.minidom
-try:
-    import configparser
 
-except ImportError:
-    import ConfigParser as configparser
+import sys
+
+import xml.dom.minidom
+
+if sys.version_info[0] >= 3:
+    from configparser import RawConfigParser
+else:
+    from ConfigParser import RawConfigParser
+
+def readConfig(fileName):
+    cp = RawConfigParser()
+    fp = open(fileName, 'r')
+    if sys.version_info < (3, 2):
+        cp.readfp(fp) # pylint: disable=W1505
+    else:
+        cp.read_file(fp, fileName)
+    return cp
+
 
 def parseXMLnode(root):
     """
@@ -55,8 +68,7 @@ class MyConfig(dict):
         else: print("XXXXXXXXXXXXXXX")
 
     def readINI(self, filename):
-        config = configparser.RawConfigParser()
-        config.read(filename)
+        config = readConfig(filename)
 
         for sec in config.sections():
             d = self[sec] = {}
@@ -101,8 +113,7 @@ class ConfigINI(dict):
         self.mandatory = mandatory
 
     def read(self, filename):
-        config = configparser.RawConfigParser()
-        config.read(filename)
+        config = readConfig(filename)
 
         for sec in config.sections():
             d = self[sec] = {}

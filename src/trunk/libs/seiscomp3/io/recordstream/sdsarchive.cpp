@@ -524,6 +524,8 @@ bool SDSArchive::stepStream() {
 				_currentArchive = _arcroots.begin();
 			}
 
+			vector<string>::iterator tmpIt = _currentArchive;
+
 			for ( ; _currentArchive != _arcroots.end(); ++_currentArchive ) {
 				_currentFilename = *_currentArchive + relativeFilename;
 				_recstream.close();
@@ -547,6 +549,9 @@ bool SDSArchive::stepStream() {
 
 				if ( !_recstream.eof() && !isEnd() )
 					return true;
+			}
+			else {
+				_currentArchive = tmpIt;
 			}
 
 			first = false;
