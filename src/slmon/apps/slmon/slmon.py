@@ -137,7 +137,8 @@ def colorLegend(htmlfile):
     htmlfile.write("<p><center>Latencies:<br>\n" \
         "<table cellpadding='2' cellspacing='1' border='0'" \
 	      " bgcolor='#000000'>\n<tr>\n" \
-        "<td bgcolor='#cc99ff'>&nbsp;&lt;30 m&nbsp;</td>\n" \
+        "<td bgcolor='#ffffff'>&nbsp;&lt; 3 m&nbsp;</td>\n" \
+	"<td bgcolor='#cc99ff'>&nbsp;&lt;30 m&nbsp;</td>\n" \
         "<td bgcolor='#3399ff'>&nbsp;&lt; 1 h&nbsp;</td>\n" \
         "<td bgcolor='#00ff00'>&nbsp;&lt; 2 h&nbsp;</td>\n" \
         "<td bgcolor='#ffff00'>&nbsp;&lt; 6 h&nbsp;</td>\n" \
@@ -175,7 +176,8 @@ def getColor(delta):
     elif delay >  7200: return '#ffff00'
     elif delay >  3600: return '#00ff00'
     elif delay >  1800: return '#3399ff'
-    else:               return '#cc99ff'
+    elif delay >   180: return '#cc99ff'
+    else:               return '#ffffff'
 
 TDdummy = "<td align='center' bgcolor='%s'><tt>n/a</tt></td>"
 
