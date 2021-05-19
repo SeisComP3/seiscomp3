@@ -1,0 +1,35 @@
+# PI HAT SEISCOMP3 CONFIGURATION #
+# ENTER SETTINGS AFTER '=' without using spaced #
+
+# STATION NAME (4 Characters maximum). Default is TEST
+STATION=TES
+
+# NETWORK NAME (2 Characters maximum). Default is UK.
+NETWORK=HL
+
+# CHANNEL NAME (2 Characters maximum). Default is BH. When using internal input the channels are BHE,BHN,BHZ, while when using the external input are BH1,BH2,BH3,BH4
+CHANNEL=BH
+
+# LOCATION CODE (2 Characters). Default is 00
+LOCATION=01
+
+# GAIN. Default is '1'.
+#          ‘1’: ×1 = 0.64μV/count
+#          ‘2’: ×2 = 0.32μV/count
+#          ‘4’: ×2 = 0.16μV/count
+#          ‘8’: ×2 = 0.08μV/count
+#
+GAIN=1
+
+#Component of seismogram, one of Z, N or E. Default is Z. This is used in single channel mode.
+COMPONENT=Z
+
+# SINGLE or MULTI Channel Mode. Default is '2'.
+#          ‘1’: Single Channel Mode
+#          ‘2’: Multi Channel Mode
+MODE=2
+
+#Internal or External Source. Deault is 1.
+#          ‘1’: Use Internal Accelerometer
+#          ‘2’: Use external inputs
+SOURCE=1
