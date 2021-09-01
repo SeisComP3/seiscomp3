@@ -522,7 +522,12 @@ void GeoFeatureLayer::drawFeatures(CategoryNode *node, Canvas *canvas,
 	else
 		painter.setBrush(Qt::NoBrush);
 
+#if BOOST_VERSION < 106000
+	node->quadtree.query(proj->boundingBox(), boost::bind(&GeoFeatureLayer::drawFeature, this, canvas, &painter, &debugPen, layProp, boost::_1), true);
+#else
 	node->quadtree.query(proj->boundingBox(), boost::bind(&GeoFeatureLayer::drawFeature, this, canvas, &painter, &debugPen, layProp, boost::placeholders::_1), true);
+#endif
+
 	/*
 	for ( size_t i = 0; i < node->features.size(); ++i ) {
 		Geo::GeoFeature *f = node->features[i];
