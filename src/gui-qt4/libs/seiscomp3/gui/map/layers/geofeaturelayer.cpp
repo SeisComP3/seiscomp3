@@ -523,7 +523,7 @@ void GeoFeatureLayer::drawFeatures(CategoryNode *node, Canvas *canvas,
 		painter.setBrush(Qt::NoBrush);
 
 #if BOOST_VERSION < 106000
-	node->quadtree.query(proj->boundingBox(), boost::bind(&GeoFeatureLayer::drawFeature, this, canvas, &painter, &debugPen, layProp, boost::_1), true);
+	node->quadtree.query(proj->boundingBox(), boost::bind(&GeoFeatureLayer::drawFeature, this, canvas, &painter, &debugPen, layProp, _1), true);
 #else
 	node->quadtree.query(proj->boundingBox(), boost::bind(&GeoFeatureLayer::drawFeature, this, canvas, &painter, &debugPen, layProp, boost::placeholders::_1), true);
 #endif
