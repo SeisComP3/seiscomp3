@@ -87,7 +87,7 @@ $ make install
    sysop@host:~/sc3-src/build$ make
    ```
    
-   If `make` finished without errors, install SeisComp3 with
+   If `make` finished without errors, install SeisComP3 with
    
    ```
    sysop@host:~/sc3-src/build$ make install
