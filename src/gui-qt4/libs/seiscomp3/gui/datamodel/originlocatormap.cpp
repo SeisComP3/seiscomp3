@@ -42,6 +42,25 @@ using namespace Seiscomp::Math;
 
 namespace Seiscomp {
 namespace Gui {
+
+
+namespace {
+
+
+class StationSymbolLayer : public Map::Layer {
+	public:
+		StationSymbolLayer(OriginLocatorMap *map)
+		: Map::Layer(map) {}
+
+	public:
+		bool isInside(const QMouseEvent *, const QPointF &) override {
+			setToolTip(static_cast<OriginLocatorMap*>(parent())->stationSymbolToolTip());
+			return !toolTip().isEmpty();
+		}
+};
+
+
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -54,6 +73,7 @@ OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
 , _origin(NULL), _drawStations(false)
 , _drawStationsLines(true), _interactive(true)
 {
+	canvas().addLayer(new StationSymbolLayer(this));
 	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
@@ -73,6 +93,7 @@ OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
 , _drawStations(false), _drawStationsLines(true)
 , _interactive(true)
 {
+	canvas().addLayer(new StationSymbolLayer(this));
 	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
@@ -226,14 +247,9 @@ void OriginLocatorMap::mouseMoveEvent(QMouseEvent *event) {
 		if ( _hoverId != -1 ) {
 			int arrivalId = _stations[_hoverId].arrivalId;
 			hoverArrival(arrivalId);
-			if ( toolTip().isEmpty()
-			  && !_stations[_hoverId].net.empty()
-			  && !_stations[_hoverId].code.empty() )
-				setToolTip((_stations[_hoverId].net + "." + _stations[_hoverId].code).c_str());
 		}
 		else {
 			hoverArrival(-1);
-			setToolTip(QString());
 		}
 	}
 
@@ -600,6 +616,22 @@ void OriginLocatorMap::setStationState(int i, bool state) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorMap::setOriginCreationEnabled(bool enable) {
 	_enabledCreateOrigin = enable;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QString OriginLocatorMap::stationSymbolToolTip() const {
+	if ( (_hoverId != -1)
+	  && !_stations[_hoverId].net.empty()
+	  && !_stations[_hoverId].code.empty() ) {
+		return (_stations[_hoverId].net + "." + _stations[_hoverId].code).c_str();
+	}
+	else {
+		return QString();
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
