@@ -61,6 +61,8 @@ class SC_GUI_API OriginLocatorMap : public MapWidget {
 
 		void setOriginCreationEnabled(bool enable);
 
+		QString stationSymbolToolTip() const;
+
 	public slots:
 		void setDrawStations(bool);
 		void setDrawStationLines(bool);

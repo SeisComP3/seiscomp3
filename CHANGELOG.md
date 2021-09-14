@@ -1,5 +1,11 @@
 # Jakarta
 
+## Release 2020.330 patchX
+
+* scolv
+
+  * Fix display of tooltips in origin map and magnitude map
+
 ## Release 2020.330 patch7
 
 * GUI
