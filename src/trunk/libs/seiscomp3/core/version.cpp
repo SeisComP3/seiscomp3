@@ -45,7 +45,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-	_text = "Jakarta 2020.330.p7";
+	_text = "Jakarta 2020.330.p8";
 }
 
 
