@@ -335,7 +335,7 @@ bool Timer::isActive() const {
 #ifdef WIN32
 	return _isActive;
 #else
-	return _timerID > 0;
+	return _timerID != 0;
 #endif
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
