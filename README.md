@@ -1,3 +1,7 @@
+> **Note**  
+> This project is archived and will not longer be supported. The successor of SeisComP3 is **SeisComP** which
+> is being continued at https://github.com/seiscomp. The current homepage can be found at https://www.seiscomp.de.
+
 # About
 
 Project homepage: http://www.seiscomp3.org
