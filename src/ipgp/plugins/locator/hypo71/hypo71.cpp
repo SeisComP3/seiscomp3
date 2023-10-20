@@ -1437,7 +1437,7 @@ Origin* Hypo71::locate(PickList& pickList) {
 		    pick->waveformID().stationCode());
 
 		char buffer[10];
-		double pmin, psec, ssec;
+		double pmin, psec, ssec, ptime;
 
 		if ( pick->phaseHint().code().find("P") != string::npos ) {
 
@@ -1454,49 +1454,55 @@ Origin* Hypo71::locate(PickList& pickList) {
 				double newmin = (pmin / 60) - (int) (sharedTime / 3600) * 60;
 				pMinute = toString((int) newmin);
 
-				psec = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "P", 0) - pmin;
-				if ( psec > 99.99 )
-					sprintf(buffer, "%#03.1f", ssec);
-				else
-					sprintf(buffer, "%#02.2f", psec);
-				pSec = toString(buffer);
-
-				pPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(),
-				    pick->waveformID().stationCode(), "P");
-
-				try {
-					if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
-						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
-					}
-					else
-						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
-				}
-				catch ( ... ) {
-					h71PWeight = maxWeight;
-				}
-
-				ssec = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "S", 0) - pmin;
-				if ( ssec > 0. ) {
-					//! if ssec > 99.99 then it won't fit into a F5.2 so we convert it into a F5.1
-					if ( ssec > 99.99 )
+				ptime = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "P", 0);
+				if ( ptime != -1 ) {
+					psec = ptime - pmin;
+					if ( psec > 99.99 )
 						sprintf(buffer, "%#03.1f", ssec);
 					else
-						sprintf(buffer, "%#02.2f", ssec);
-					sSec = toString(buffer);
+						sprintf(buffer, "%#02.2f", psec);
+					pSec = toString(buffer);
 
-					sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(),
-					    pick->waveformID().stationCode(), "S");
+					pPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(),
+					    pick->waveformID().stationCode(), "P");
 
-					isSPhase = true;
 					try {
 						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
-							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
 						}
 						else
-							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 					}
 					catch ( ... ) {
-						h71SWeight = maxWeight;
+						h71PWeight = maxWeight;
+					}
+				}
+
+				ptime = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "S", 0);
+				if ( ptime != -1 ) {
+					ssec = ptime - pmin;
+					if ( ssec > 0. ) {
+						//! if ssec > 99.99 then it won't fit into a F5.2 so we convert it into a F5.1
+						if ( ssec > 99.99 )
+							sprintf(buffer, "%#03.1f", ssec);
+						else
+							sprintf(buffer, "%#02.2f", ssec);
+						sSec = toString(buffer);
+
+						sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(),
+						    pick->waveformID().stationCode(), "S");
+
+						isSPhase = true;
+						try {
+							if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+							}
+							else
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+						}
+						catch ( ... ) {
+							h71SWeight = maxWeight;
+						}
 					}
 				}
 			}
@@ -2732,7 +2738,7 @@ Hypo71::getZTR(const PickList& pickList) {
 			string stationMappedName = getStationMappedCode(pick->waveformID().networkCode(),
 			    pick->waveformID().stationCode());
 			char buffer[10];
-			double pmin, psec, ssec;
+			double pmin, psec, ssec, ptime;
 
 			string tmpDate = pick->time().value().toString("%Y").substr(2, 2)
 			        + pick->time().value().toString("%m") + pick->time().value().toString("%d");
@@ -2753,46 +2759,51 @@ Hypo71::getZTR(const PickList& pickList) {
 					double newmin = pmin / 60 - (int) (sharedTime / 3600) * 60;
 					pMinute = toString((int) newmin);
 
-					psec = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "P", 0) - pmin;
-					pPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "P");
-					if ( psec > 99.99 )
-						sprintf(buffer, "%#03.1f", ssec);
-					else
-						sprintf(buffer, "%#02.2f", psec);
-					pSec = toString(buffer);
-
-					try {
-						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
-							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
-						}
-						else
-							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
-					}
-					catch ( ... ) {
-						h71PWeight = maxWeight;
-					}
-
-					ssec = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "S", 0) - pmin;
-
-					if ( ssec > 0. ) {
-						// If ssec > 99.99 then it won't fit into a F5.2
-						// so we convert it into a F5.1
-						if ( ssec > 99.99 )
+					ptime = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "P", 0);
+					if ( ptime != -1 ) {
+						psec = ptime - pmin;
+						pPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "P");
+						if ( psec > 99.99 )
 							sprintf(buffer, "%#03.1f", ssec);
 						else
-							sprintf(buffer, "%#02.2f", ssec);
-						sSec = toString(buffer);
-						sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "S");
-						isSPhase = true;
+							sprintf(buffer, "%#02.2f", psec);
+						pSec = toString(buffer);
+
 						try {
 							if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
-								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+								h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
 							}
 							else
-								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+								h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 						}
 						catch ( ... ) {
-							h71SWeight = maxWeight;
+							h71PWeight = maxWeight;
+						}
+					}
+
+					ptime = getTimeValue(pickList, pick->waveformID().networkCode(), staName, "S", 0);
+					if ( ptime != -1 ) {
+						ssec = ptime - pmin;
+						if ( ssec > 0. ) {
+							// If ssec > 99.99 then it won't fit into a F5.2
+							// so we convert it into a F5.1
+							if ( ssec > 99.99 )
+								sprintf(buffer, "%#03.1f", ssec);
+							else
+								sprintf(buffer, "%#02.2f", ssec);
+							sSec = toString(buffer);
+							sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "S");
+							isSPhase = true;
+							try {
+								if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+									h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+								}
+								else
+									h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+							}
+							catch ( ... ) {
+								h71SWeight = maxWeight;
+							}
 						}
 					}
 				}
@@ -3040,7 +3051,7 @@ Hypo71::getZTR(const PickList& pickList) {
 							minDepth = depth;
 							minRMS = toDouble(rms);
 							minER = ER;
-							
+
 							_trialLatDeg = latDeg;
 							_trialLatMin = latMin;
 							_trialLonDeg = lonDeg;
@@ -3369,6 +3380,3 @@ void Hypo71::updateProfile(const string& name) {
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
